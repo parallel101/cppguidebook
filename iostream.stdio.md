@@ -1,6 +1,6 @@
 [toc]
 
-# 标准输入输出流 <sup>[iostream.stdio](iostream.stdio)</sup>
+# 标准输入输出流 ^[iostream.stdio]
 
 流是 C++ 中处理输入输出的机制。
 
@@ -11,11 +11,11 @@ C++ 标准库提供了四个流对象，分别是：
 - `std::cerr`：标准错误输出流（无缓冲）
 - `std::clog`：标准错误输出流
 
-它们都定义在命名空间 `std` 中。
+它们都定义在标准库专属命名空间 `std` 中。
 
 ## 头文件
 
-使用前，导入头文件 <sup>[pp.header](pp.header)</sup>：
+使用前，导入头文件 ^[pp.header]：
 
 ```cpp
 #include <iostream>
@@ -23,22 +23,28 @@ C++ 标准库提供了四个流对象，分别是：
 
 ## 全局变量
 
-该头文件将引入下列全局变量 <sup>[lang.global](lang.global)</sup>：
+该头文件将引入下列全局变量 ^[lang.global]：
 
 ```cpp
 std::istream std::cin;
 std::ostream std::cout;
 std::ostream std::cerr;
 std::ostream std::clog;
+std::wistream std::cin;
+std::wostream std::cout;
+std::wostream std::cerr;
+std::wostream std::clog;
 ```
+
+宽字符流的讲解将放到一个专题中，见 ^[locale.wide.stdio]。
 
 ## 介绍
 
-`std::cin` 是输入流 <sup>[iostream.istream](iostream.istream)</sup>。
+`std::cin` 是输入流 ^[iostream.istream]。
 
-`std::cout`、`std::cerr`、`std::clog` 是输出流 <sup>[iostream.ostream](iostream.ostream)</sup>。
+`std::cout`、`std::cerr`、`std::clog` 是输出流 ^[iostream.ostream]。
 
-一般来说，这些流操作的对象是终端 <sup>[os.terminal](os.terminal)</sup>，用于在终端上输入和输出文本 <sup>[comp.text](comp.text)</sup>。
+一般来说，这些流操作的对象是终端 ^[os.terminal]，用于在终端上输入和输出文本 ^[string.text]。
 
 > 终端 (terminal) 就是那个 “C 语言程序启动后弹出的黑色窗口”，有时也被称为控制台 (console)。
 
@@ -46,13 +52,13 @@ std::ostream std::clog;
 
 用户在终端上键盘输入文本或数字等内容后，程序使用输入流对象 `std::cin` 读取，就可以把用户的输入读取到变量中。
 
-> 关于流内部如何将用户输入的文本解析为数字变量，参见 <sup>[iostream.format.in](iostream.format.in)</sup>。
+> 关于流内部如何将用户输入的文本解析为数字变量，参见 ^[iostream.format.in]。
 
 输出流的用法是 `std::cout << 变量` 或 `std::cout << "字符串"`。
 
 程序使用输出流后，变量或字符串的内容将会追加到终端光标处。通常用于向用户反馈程序运行进度，计算结果等。
 
-此处的 `<<` 是 C++ 的运算符重载 <sup>[lang.class.operator](lang.class.operator)</sup> 语法。
+此处的 `<<` 是 C++ 的运算符重载 ^[lang.class.operator] 语法。
 
 标准库为 `std::istream` 类重载了 `>>` 运算符，目的是为了看起来更“高级感”，就好像是移位运算符在“搬运”出东西来一样。
 
@@ -60,7 +66,7 @@ std::ostream std::clog;
 
 同样地，标准库为 `std::ostream` 类重载了 `<<` 运算符，而 `std::cout` 都是 `std::ostream` 类，因此他们都支持 `>>` 运算符。
 
-这是一个糟糕的设计 <sup>[design.misuse](design.misuse)</sup>，带来了巨大的混淆。看起来是“移位”的运算符，实际上做的事却与“移位”毫无关系：输入/输出变量。
+这是一个糟糕的设计 ^[design.bad]，带来了巨大的混淆。看起来是“移位”的运算符，实际上做的事却与“移位”毫无关系：输入/输出变量。
 
 ```cpp
 int i;
@@ -76,9 +82,9 @@ std::cin.operator>>(i);
 std::cout.operator<<(i);
 ```
 
-此处 `std::cin` 的 `operator>>` 接受的参数是引用 <sup>[lang.ref](lang.ref)</sup>，为的是让 `operator>>` 函数内部可以修改 i 的值，这种传参方式称为按引用传参 (pass-by-reference) <sup>[lang.func.call.arg](lang.func.call.arg)</sup>，此处按引用传参是为了让 cin 可以返回读到的整数值写入 i 变量。
+此处 `std::cin` 的 `operator>>` 接受的参数是引用 ^[lang.ref]，为的是让 `operator>>` 函数内部可以修改 i 的值，这种传参方式称为按引用传参 (pass-by-reference) ^[lang.func.call.arg]，此处按引用传参是为了让 cin 可以返回读到的整数值写入 i 变量。
 
-如果让我来设计 `<iostream>` 的话，我会这样设计接口 <sup>[design.api](design.api)</sup>：
+如果让我来设计 `<iostream>` 的话，我会这样设计接口 ^[design.api]：
 
 ```cpp
 // 理想中的 iostream，现实中并不存在这样的写法
@@ -106,7 +112,7 @@ int main() {
 
 程序运行时会在终端上显示出 `你好，世界`。
 
-此处程序源码中的 `"你好，世界"` 是字符串字面量 <sup>[string.literial](string.literial)</sup>。
+此处程序源码中的 `"你好，世界"` 是字符串字面量 ^[string.literial]。
 
 运行结果：
 
@@ -158,7 +164,7 @@ int main() {
 
 ### 更多转义符
 
-换行符 `\n` 是字符串字面量所支持的转义符的一种，详见 <sup>[string.literial.escape](string.literial.escape)</sup>。
+换行符 `\n` 是字符串字面量所支持的转义符的一种，详见 ^[string.literial.escape]。
 
 如果真的要输出 `\n` 的话，需要写 `"\\n"`，此处 `\\` 也是一种转义符，表示原原本本的 `\` 自己。
 
@@ -233,13 +239,13 @@ int main() {
 
 ### 连续使用 `<<` 运算符
 
-> 小贴士：如果在多线程中并行 `<<` 输出到 cout，可能会出现黏行现象，这是因为每一条单独的 `<<` 操作是原子的（cout 是自带锁的同步流），而连续多条 `<<` 之间并不，即使是同一行上写的连续 `<<` 也不行，原因分析和解决方案见 <sup>[thread.osyncstream](thread.osyncstream)</sup>。
+> 小贴士：如果在多线程中并行 `<<` 输出到 cout，可能会出现黏行现象，这是因为每一条单独的 `<<` 操作是原子的（cout 是自带锁的同步流），而连续多条 `<<` 之间并不，即使是同一行上写的连续 `<<` 也不行，原因分析和解决方案见 ^[thread.osyncstream]。
 
 ### 不推荐 `std::endl`
 
 ## 输入流
 
-`std::cin` 是标准输入流，只读。对应于 C 语言的 `stdin` <sup>[cstdio.stdio](cstdio.stdio)</sup>。
+`std::cin` 是标准输入流，只读。对应于 C 语言的 `stdin` ^[cstdio.stdio]。
 
 通常用于读取用户在终端输入的文本。
 
@@ -267,7 +273,7 @@ $ 1 2
 
 ### 输入流重定向
 
-在操作系统提供的命令提示符或 Shell <sup>[os.shell](os.shell)</sup> 中，输入流可以被重定向 <sup>[os.io.redirect](os.io.redirect)</sup> 到指定文件。
+在操作系统提供的命令提示符或 Shell ^[os.shell] 中，输入流可以被重定向 ^[os.io.redirect] 到指定文件。
 
 创建一个文件 `file.txt`，其内容为：
 
@@ -285,9 +291,9 @@ $ ./myprogram < file.txt
 
 这样用户就无需在终端键入任何内容，程序自动从指定的输入文件 `file.txt` 读取了输入。
 
-> 操作系统实现重定向的机制和原理详见 <sup>[os.io.redirect](os.io.redirect)</sup>。
+> 操作系统实现重定向的机制和原理详见 ^[os.io.redirect]。
 
-> 进一步，还可以利用操作系统的管道机制，把一个程序的输出流作为另一个程序的输入流，详见 <sup>[os.io.pipe](os.io.pipe)</sup>。
+> 进一步，还可以利用操作系统的管道机制，把一个程序的输出流作为另一个程序的输入流，详见 ^[os.io.pipe]。
 
 ## 输出流
 
@@ -303,7 +309,7 @@ $ ./myprogram < file.txt
 
 ### 输出流的行缓冲机制
 
-`std::cout` 和 `std::clog` 输出流具有行缓冲 <sup>[iostream.buf](iostream.buf)</sup>。
+`std::cout` 和 `std::clog` 输出流具有行缓冲 ^[iostream.buf]。
 
 ### `std::cerr` 与 `std::clog` 的区别
 
@@ -315,13 +321,13 @@ $ ./myprogram < file.txt
 
 这样设计的初衷是方便程序要打印的错误信息及时输出到终端上显示，让用户及时看到。
 
-否则如果程序调用 clog 来输出，由于 clog 会把文本缓冲起来，稍后才一次性提交给操作系统，如果程序在缓冲尚未提交期间异常崩溃而不是正常退出 <sup>[life.atexit](life.atexit)</sup>，clog 缓冲的部分文本就会丢失。
+否则如果程序调用 clog 来输出，由于 clog 会把文本缓冲起来，稍后才一次性提交给操作系统，如果程序在缓冲尚未提交期间异常崩溃而不是正常退出 ^[life.atexit]，clog 缓冲的部分文本就会丢失。
 
-关于输出流的缓冲与刷新机制，以及关闭输出缓冲的方法，参见 <sup>[iostream.buf](iostream.buf)</sup>。
+关于输出流的缓冲与刷新机制，以及关闭输出缓冲的方法，参见 ^[iostream.buf]。
 
 ### 输出流重定向
 
-在操作系统提供的命令提示符或 Shell <sup>[os.shell](os.shell)</sup> 中，输入流可以被重定向 <sup>[os.io.redirect](os.io.redirect)</sup> 到指定文件。
+在操作系统提供的命令提示符或 Shell ^[os.shell] 中，输入流可以被重定向 ^[os.io.redirect] 到指定文件。
 
 创建一个文件 `file.txt`，其内容为：
 
@@ -339,9 +345,9 @@ $ ./myprogram < file.txt
 
 用户无需在终端键入任何内容，程序自动从指定的输入文件 `file.txt` 读取了输入。
 
-> 操作系统实现重定向的机制和原理详见 <sup>[os.io.redirect](os.io.redirect)</sup>。
+> 操作系统实现重定向的机制和原理详见 ^[os.io.redirect]。
 
-> 进一步，还可以利用操作系统的管道机制，把一个程序的输出流作为另一个程序的输入流，详见 <sup>[os.io.pipe](os.io.pipe)</sup>。
+> 进一步，还可以利用操作系统的管道机制，把一个程序的输出流作为另一个程序的输入流，详见 ^[os.io.pipe]。
 
 ### 分离常规输出与错误输出的意义
 
@@ -356,7 +362,7 @@ int main() {
 
 
 
-输入流的行缓冲 <sup>[os.terminal.buf](os.terminal.buf)</sup> 指的是，由于操作系统的设计原因：
+输入流的行缓冲 ^[os.terminal.buf] 指的是，由于操作系统的设计原因：
 
 用户输入的字符，并不会马上被 `std::cin` 收到，而是等用户按下回车键 (enter) 后才会把输入的文本发送给程序。
 
@@ -368,15 +374,15 @@ int main() {
 
 - 输出流的缓冲机制是标准库实现的，可以通过调用 `std::ostream` 的接口关闭缓冲。
 
-- 输入流的缓冲机制是操作系统实现的，需要调用操作系统的底层 API 才能关闭，例如利用 termios <sup>[os.terminal.termios](os.terminal.termios)</sup>。
+- 输入流的缓冲机制是操作系统实现的，需要调用操作系统的底层 API 才能关闭，例如利用 termios ^[os.terminal.termios]。
 
-关于输入流缓冲机制的进一步详细说明，以及关闭输入缓冲的方法，参见 <sup>[os.terminal.buf](os.terminal.buf)</sup>。对于 Windows 系统，可以用无缓冲的 getch 系列函数，参见 <sup>[win.crt.conio](win.crt.conio)</sup>。
+关于输入流缓冲机制的进一步详细说明，以及关闭输入缓冲的方法，参见 ^[os.terminal.buf]。对于 Windows 系统，可以用无缓冲的 getch 系列函数，参见 ^[win.crt.conio]。
 
 ## 不推荐 `using namespace std`
 
 你可能看到有些人的 C++ 代码中使用 `cout` 时不用加 `std::` 前缀。
 
-这是因为他们在导入头文件后加入了一行 `using namespace std` <sup>[namespace.using](namespace.using)</sup>，使 `std::` 名字空间下的所有符号都暴露到了全局名字空间。
+这是因为他们在导入头文件后加入了一行 `using namespace std` ^[namespace.using]，使 `std::` 命名空间下的所有符号都暴露到了全局命名空间。
 
 ```cpp
 #include <iostream>
@@ -398,3 +404,11 @@ int main() {
 不推荐 `using namespace std`，因为 `std::` 中的符号又多又杂，可能与你的程序中定义的符号冲突。
 
 现实工程中人们都会写出 `std::` 前缀，这有助于你区分哪些是标准库的，哪些是自己定义的符号。
+
+## 行缓冲升级为全缓冲
+
+```cpp
+std::ios::sync_with_stdio(false);
+```
+
+TODO
