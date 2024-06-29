@@ -36,7 +36,7 @@ std::wostream std::cerr;
 std::wostream std::clog;
 ```
 
-宽字符流的讲解将放到一个专题中，见 ^[locale.wide.stdio]。
+宽字符流的讲解将放到一个专题中，见 ^[locale.iostream.wide]。
 
 ## 介绍
 
@@ -305,7 +305,28 @@ $ 1 2
 
 `std::cout` 和 `std::clog` 输出流具有行缓冲 ^[iostream.buf]。
 
-TODO
+```cpp
+#include <iostream>
+#include <thread>
+#include <chrono>
+
+int main() {
+    std::cout << "第一条消息\n";
+    int i;
+    std::cout << "第二条消息开始...";
+    std::cin >> i;
+    std::cout << "结束\n";
+    return 0;
+}
+```
+
+运行结果（Linux）：
+
+```
+第一条消息
+$ 1234
+第二条消息开始...结束
+```
 
 ### `std::cerr` 与 `std::clog` 的区别
 
@@ -369,6 +390,18 @@ TODO
 ### 程序内主动重定向
 
 TODO
+
+## 输入字符串
+
+TODO
+
+## 自定义分隔符
+
+见 ^[locale.iostream.imbue]。
+
+## 输入一整行
+
+见 ^[iostream.getline]。
 
 ## 行缓冲升级为全缓冲
 
