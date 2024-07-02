@@ -9,7 +9,7 @@
 
 可以前往 [Release 页面](https://github.com/parallel101/cppguidebook/releases) 免费下载本书的完整 PDF 文件。
 
-Release 页面太慢？GitHub 卡顿，无法下载？访问 [小彭老师自己维护的镜像](https://142857.red/cppguidebook.pdf)。
+Release 页面太慢？GitHub 卡顿，无法下载？访问 [小彭老师自己维护的镜像](https://142857.red/files/cppguidebook.pdf)。
 
 > [!NOTE]
 > 感谢 [Derived Cat](https://github.com/hooyuser) 大佬提供智能脚本！每当小彭老师推送了修改后，该 PDF 文件都会自动更新。只要看到小彭老师提交新 commit，你就可以随时重新下载最新版。

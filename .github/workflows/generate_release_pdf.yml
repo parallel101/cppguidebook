@@ -12,7 +12,7 @@ on:
 env:
   TYPST_FILE_NAME: cppguidebook
   TYPST_FONT_PATH: fonts
-  MIRROR_SITE_URL: https://142857.red
+  MIRROR_SITE_URL: https://142857.red/files
   MIRROR_SITE_TOKEN: ${{ env.SEVEN_TOKEN }}
 
 jobs:
@@ -39,7 +39,7 @@ jobs:
           else
             # Download font metadata
             mkdir -p cv
-            curl -s "https://fonts.google.com/download/list?family=Noto%20Sans%20SC" > cv/noto_sans_sc_raw.txt
+            curl -sL "https://fonts.google.com/download/list?family=Noto%20Sans%20SC" > cv/noto_sans_sc_raw.txt
 
             # Remove ")]}'" from the beginning of the file
             tail -c +5 cv/noto_sans_sc_raw.txt > cv/noto_sans_sc_metadata.json
@@ -73,7 +73,7 @@ jobs:
       - name: Publish to mirror site
         continue-on-error: true
         run: |
-          curl -X PUT -L ${{ env.MIRROR_SITE_URL }}/${{ env.TYPST_FILE_NAME }}.pdf -d @file=${{ env.TYPST_FILE_NAME }}.pdf -d token=${{ env.MIRROR_SITE_TOKEN }}
+          curl -L -X PUT ${{ env.MIRROR_SITE_URL }}/${{ env.TYPST_FILE_NAME }}.pdf -F file=@${{ env.TYPST_FILE_NAME }}.pdf -F token=${{ env.MIRROR_SITE_TOKEN }}
 
       - name: Delete old Release
         uses: actions/github-script@v5
