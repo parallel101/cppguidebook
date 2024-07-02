@@ -44,7 +44,7 @@ Keywords: 小女孩贴贴, 春卷饭, 实现, 性能测试, 可爱, 艺术表现
 他可以体现出女孩的想象力和创造力，特别是在冬天。
 
 #figure(
-  image("cover.png", width: 70%),
+  image("pic/cover.png", width: 70%),
   caption: [
     #count 个可爱的小女孩正在贴贴
   ],
