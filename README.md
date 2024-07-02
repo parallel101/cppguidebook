@@ -16,7 +16,7 @@ Release 页面太慢？GitHub 卡顿，无法下载？访问 [小彭老师自己
 
 ## 你也可以参与编写的开源小册
 
-本书完全开源，源文件为 [`book.typ`](book.typ)。
+本书完全开源，源文件为 [`cppguidebook.typ`](cppguidebook.typ)。
 
 如果发现书写问题，或者你有想加入的新章节，有关于 C++ 新想法，新技巧分享给大家，可以提交 [Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) 来帮助小彭老师一起写书。
 
@@ -28,7 +28,7 @@ Release 页面太慢？GitHub 卡顿，无法下载？访问 [小彭老师自己
 
 Typst 语言书写的 `.typ` 源文件编译后，得到可供阅读的 `.pdf` 文件。
 
-克隆本仓库后，可以用 `typst compile book.typ` 命令编译生成 `book.pdf` 文件，也可以用 [`typst-preview`](https://github.com/Enter-tainer/typst-preview`) 等工具，一边修改源文件，一边实时预览效果。
+克隆本仓库后，可以用 `typst compile cppguidebook.typ` 命令编译生成 `cppguidebook.pdf` 文件，也可以用 [`typst-preview`](https://github.com/Enter-tainer/typst-preview`) 等工具，一边修改源文件，一边实时预览效果。
 
 > 以下是第一章节的内容预览，要查看全文，请前往 Release 页面下载完整 PDF 文件。
 

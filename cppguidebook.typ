@@ -1,5 +1,3 @@
-// https://www.fonts.net.cn/fonts-zh/tag-kaiti-1.html
-
 #set text(
   font: "Noto Serif CJK SC",
   size: 7pt,
