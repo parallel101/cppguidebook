@@ -13,6 +13,7 @@ env:
   TYPST_FILE_NAME: cppguidebook
   TYPST_FONT_PATH: fonts
   MIRROR_SITE_URL: https://142857.red/files
+  MIRROR_SITE_TOKEN: ${{ secrets.SEVEN_TOKEN }}
 
 jobs:
   build_typst:
