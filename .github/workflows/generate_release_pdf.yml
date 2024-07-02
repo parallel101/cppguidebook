@@ -90,7 +90,7 @@ jobs:
         id: tag
         run: |
           echo "::set-output name=release_date::$(date +"%Y 年 %m 月 %d 日 %H 点 %M 分")"
-          echo "::set-output name=release_date::latest_$(date +"%Y-%m-%d_%H-%M")"
+          echo "::set-output name=release_tag::latest_$(date +"%Y-%m-%d_%H-%M")"
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -99,5 +99,5 @@ jobs:
           body: |
             小彭老师发布的最新 C++ 大典，更新时间 ${{ steps.tag.outputs.release_date }}
             > Release 页面太慢？GitHub 卡顿，无法下载？访问 [小彭老师自己维护的镜像](${{ env.MIRROR_SITE_URL }}/${{ env.TYPST_FILE_NAME }}.pdf)。
-          tag_name: ${{ steps.tag.outputs.release_date }}
+          tag_name: ${{ steps.tag.outputs.release_tag }}
           files: ${{ env.TYPST_FILE_NAME }}.pdf
