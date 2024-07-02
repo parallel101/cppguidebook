@@ -12,7 +12,7 @@
 也可以前往 [GitHub Release 页面](https://github.com/parallel101/cppguidebook/releases) 下载 PDF 文件。
 
 > [!NOTE]
-> 感谢 [Derived Cat](https://github.com/hooyuser) 大佬提供智能脚本！每当小彭老师推送了修改后，Release 页面和小水管服务器上的 PDF 文件都会自动更新。只要看到小彭老师提交新 commit，你就可以随时重新下载最新版。
+> 感谢 [Derived Cat](https://github.com/hooyuser) 大佬提供智能脚本！每当小彭老师推送了修改后，Release 页面和小水管服务器上的 PDF 文件都会自动更新。只要看到小彭老师提交新 commit，你就可以随时重新下载最新版。（如果看到没有变化,是浏览器缓存导致的，建议电脑端按 F5 或者手机屏幕下拉刷新一下）
 
 ## 你也可以参与编写的开源小册
 
