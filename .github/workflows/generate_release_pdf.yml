@@ -1,4 +1,5 @@
 name: Generate Release PDF
+# 感谢 Derived Cat (@hooyuser) 提供的自动发布小脚本！
 
 on: 
   push:
@@ -81,12 +82,13 @@ jobs:
       - name: Generate release tag
         id: tag
         run: |
-          echo "::set-output name=release_tag::latest_$(date +"%Y-%m-%d_%H-%M")"
+          echo "::set-output name=release_date::$(date +"%Y 年 %m 月 %d 日 %H 点 %M 分")"
+          echo "::set-output name=release_date::latest_$(date +"%Y-%m-%d_%H-%M")"
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          name: latest version
-          body: Latest version of `${{ env.TYPST_FILE_NAME }}.pdf`
-          tag_name: ${{ steps.tag.outputs.release_tag }}
+          name: 伟大，无需多言
+          body: 小彭老师发布的最新 C++ 大典，更新时间 ${{ steps.tag.outputs.release_date }}
+          tag_name: ${{ steps.tag.outputs.release_date }}
           files: ${{ env.TYPST_FILE_NAME }}.pdf
