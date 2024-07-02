@@ -55,6 +55,9 @@ jobs:
             done <<< "$file_refs"
             ls -l ${{ env.TYPST_FONT_PATH }}
           fi
+          for form in Light Regular Bold; do
+              curl -sSL "https://github.com/lxgw/LxgwWenKai/releases/download/v1.330/LXGWWenKai-$form.ttf" -o "${{ env.TYPST_FONT_PATH }}/LXGWWenKai-$form.ttf"
+          done
 
       - name: Prepare Typst environment
         uses: typst-community/setup-typst@v3
