@@ -1,0 +1,89 @@
+name: Generate Release PDF
+
+on: 
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '.gitignore'
+      - '**.md'
+
+env:
+  TYPST_FILE_NAME: book
+  TYPST_FONT_PATH: fonts
+
+jobs:
+  build_typst:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Set up Git repository for secondary repo
+        uses: actions/checkout@v4
+
+      - name: Cache Fonts
+        uses: actions/cache@v4
+        id: cache-fonts
+        with:
+          path: fonts
+          key: ${{ runner.os }}-fonts-noto_sans_sc
+
+      - name: Download Fonts
+        if: steps.cache-fonts.outputs.cache-hit != 'true'
+        run: |
+          if [ -f "${{ env.TYPST_FONT_PATH }}/NotoSansSC-Regular.ttf" ]; then
+            echo "Font already existed."
+          else
+            # Download font metadata
+            mkdir -p cv
+            curl -s "https://fonts.google.com/download/list?family=Noto%20Sans%20SC" > cv/noto_sans_sc_raw.txt
+
+            # Remove ")]}'" from the beginning of the file
+            tail -c +5 cv/noto_sans_sc_raw.txt > cv/noto_sans_sc_metadata.json
+
+            # Extract the necessary information from the JSON file
+            file_refs=$(jq -rc '.manifest.fileRefs[]' cv/noto_sans_sc_metadata.json)
+
+            # Download, save the font file to /fonts
+            mkdir -p ${{ env.TYPST_FONT_PATH }}
+            while IFS= read -r file_ref; do
+                filename=$(echo "$file_ref" | jq -r '.filename')
+                url=$(echo "$file_ref" | jq -r '.url')
+                fontname=$(basename "$filename")
+                echo $url $fontname
+                curl "$url" -o "${{ env.TYPST_FONT_PATH }}/$fontname"
+            done <<< "$file_refs"
+            ls -l ${{ env.TYPST_FONT_PATH }}
+          fi
+
+      - name: Prepare Typst environment
+        uses: typst-community/setup-typst@v3
+
+      - name: Compile Typst document
+        run: |
+          typst fonts --variants --font-path ${{ env.TYPST_FONT_PATH }}
+          typst compile ${{ env.TYPST_FILE_NAME }}.typ ${{ env.TYPST_FILE_NAME }}.pdf --font-path ${{ env.TYPST_FONT_PATH }}
+
+      - name: Delete old Release
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo
+            try {
+              const { data: { id } } = await github.rest.repos.getLatestRelease({ owner, repo })
+              await github.rest.repos.deleteRelease({ owner, repo, release_id: id })
+            } catch {}
+
+      - name: Generate release tag
+        id: tag
+        run: |
+          echo "::set-output name=release_tag::latest_$(date +"%Y-%m-%d_%H-%M")"
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: latest version
+          body: Latest version of `${{ env.TYPST_FILE_NAME }}.pdf`
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          files: ${{ env.TYPST_FILE_NAME }}.pdf
