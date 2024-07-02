@@ -76,7 +76,7 @@ jobs:
           curl -L -X PUT ${{ env.MIRROR_SITE_URL }}/${{ env.TYPST_FILE_NAME }}.pdf -F file=@${{ env.TYPST_FILE_NAME }}.pdf -F token=${{ env.MIRROR_SITE_TOKEN }}
 
       - name: Delete old Release
-        uses: actions/github-script@v5
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -89,11 +89,11 @@ jobs:
       - name: Generate release tag
         id: tag
         run: |
-          echo "::set-output name=release_date::$(date +"%Y 年 %m 月 %d 日 %H 点 %M 分")"
-          echo "::set-output name=release_tag::latest_$(date +"%Y-%m-%d_%H-%M")"
+          echo "release_date=$(date +"%Y 年 %m 月 %d 日 %H 点 %M 分")" >> $GITHUB_OUTPUT
+          echo "release_tag=latest_$(date +"%Y-%m-%d_%H-%M")" >> $GITHUB_OUTPUT
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           name: 伟大，无需多言
           body: |
