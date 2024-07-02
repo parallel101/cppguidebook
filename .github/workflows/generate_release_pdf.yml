@@ -29,7 +29,7 @@ jobs:
         id: cache-fonts
         with:
           path: fonts
-          key: ${{ runner.os }}-fonts-noto_sans_sc
+          key: ${{ runner.os }}-fonts-noto_sans_sc-lxgwwenkai
 
       - name: Download Fonts
         if: steps.cache-fonts.outputs.cache-hit != 'true'

@@ -67,4 +67,4 @@ Typst 语言书写的 `.typ` 源文件编译后，得到可供阅读的 `.pdf` �
 
 ## 开发环境与平台选择
 
-[>> 继续阅读剩余章节](https://github.com/parallel101/cppguidebook/releases)
+[>> 继续阅读剩余章节](https://142857.red/files/cppguidebook.pdf)
