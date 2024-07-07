@@ -10,8 +10,11 @@ else()
     add_compile_options(-Wall -Wextra -Werror=return-type)
 endif()
 
+find_package(fmt REQUIRED)
+
 file(GLOB sources CONFIGURE_DEPENDS "*.cpp")
 foreach(source IN LISTS sources)
     get_filename_component(name ${source} NAME_WE)
     add_executable(${name} ${source})
+    target_link_libraries(${name} PRIVATE fmt)
 endforeach()
