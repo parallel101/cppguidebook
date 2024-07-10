@@ -74,7 +74,7 @@
 
 就好比一个*老外*想要学习汉语，他首先肯定是从*现代汉语*学起！而不是上来就教他*文言文*。
 
-#tip[即使这个老外的职业就是“考古”，或者他对“古代文学”感兴趣，也不可能自学文言文的同时完全跳过现代汉语。]
+#fun[即使这个老外的职业就是“考古”，或者他对“古代文学”感兴趣，也不可能自学文言文的同时完全跳过现代汉语。]
 
 当我们学习中文时，你肯定希望先学现代汉语，再学文言文，再学甲骨文，再学 brainf\*\*k，而不是反过来。
 
@@ -565,11 +565,11 @@ void compute()
 ```cpp
 int main() {
     std::vector<int> a = {1, 2, 3, 4};
-    int sum = 0;
+    int s = 0;
     for (int i = 0; i < a.size(); i++) {
-        sum += a[i];
+        s += a[i];
     }
-    fmt::println("sum = {}", sum);
+    fmt::println("sum = {}", s);
     return 0;
 }
 ```
@@ -583,17 +583,17 @@ int main() {
 ```cpp
 int main() {
     std::vector<int> a = {1, 2, 3, 4};
-    int sum = 0;
+    int s = 0;
     for (int i = 0; i < a.size(); i++) {
-        sum += a[i];
+        s += a[i];
     }
-    fmt::println("sum of a = {}", sum);
+    fmt::println("sum of a = {}", s);
     std::vector<int> b = {5, 6, 7, 8};
-    sum = 0;
+    s = 0;
     for (int i = 0; i < a.size(); i++) {
-        sum += b[i];
+        s += b[i];
     }
-    fmt::println("sum of b = {}", sum);
+    fmt::println("sum of b = {}", s);
     return 0;
 }
 ```
@@ -606,8 +606,8 @@ int main() {
 
 + 看起来乱糟糟的，信息密度低，让人一眼看不出代码在干什么的功能
 + 很容易写错，看走眼，难调试
-+ 复制粘贴过程中，容易漏改，比如这里的 `sum += b[i]` 可能写成 `sum += a[i]` 而自己不发现
-+ 改起来不方便，当我们的需求变更时，需要多处修改，比如当我需要改为计算乘积时，需要把两个地方都改成 `sum *=`
++ 复制粘贴过程中，容易漏改，比如这里的 `s += b[i]` 可能写成 `s += a[i]` 而自己不发现
++ 改起来不方便，当我们的需求变更时，需要多处修改，比如当我需要改为计算乘积时，需要把两个地方都改成 `s *=`
 + 改了以后可能漏改一部分，留下 Bug 隐患
 + 敏捷开发需要反复修改代码，比如你正在调试 `+=` 和 `-=` 的区别，看结果变化，如果一次切换需要改多处，就影响了调试速度
 
@@ -626,9 +626,9 @@ int main() {
     a[1] = 2;
     a[2] = 3;
     a[3] = 4;
-    int sum = 0;
+    int s = 0;
     for (int i = 0; i < 4; i++) {
-        sum += a[i];
+        s += a[i];
     }
     char buffer[64];
     buffer[0] = 's';
@@ -638,7 +638,7 @@ int main() {
     buffer[4] = '=';
     buffer[5] = ' '; // 例如，如果要修改此处的提示文本，甚至需要修改后面的 len 变量...
     int len = 6;
-    int x = sum;
+    int x = s;
     do {
         buffer[len++] = '0' + x % 10;
         x /= 10;
@@ -654,12 +654,12 @@ int main() {
     b[1] = 5;
     b[2] = 6;
     b[3] = 7;
-    int sum = 0;
+    int s = 0;
     for (int i = 0; i < 4; i++) {
-        sum += b[i];
+        s += b[i];
     }
     len = 6;
-    x = sum;
+    x = s;
     do {
         buffer[len++] = '0' + x % 10;
         x /= 10;
@@ -760,11 +760,11 @@ struct Level {
 
 ```cpp
 void sum(std::vector<int> const &v) {
-    int sum = 0;
+    int s = 0;
     for (int i = 0; i < v.size(); i++) {
-        sum += v[i];
+        s += v[i];
     }
-    fmt::println("sum of v = {}", sum);
+    fmt::println("sum of v = {}", s);
 }
 
 int main() {
@@ -800,11 +800,11 @@ sum 计算出求和结果后，直接 return 即可。
 
 ```cpp
 int sum(std::vector<int> const &v) {
-    int sum = 0;
+    int s = 0;
     for (int i = 0; i < v.size(); i++) {
-        sum += v[i];
+        s += v[i];
     }
-    return sum;
+    return s;
 }
 
 int main() {
@@ -824,15 +824,15 @@ int main() {
 
 ```cpp
 int sum(std::vector<int> const &v) {
-    int sum = 0;
+    int s = 0;
     for (int i = 0; i < v.size(); i++) {
-        sum += v[i];
+        s += v[i];
     }
-    return sum;
+    return s;
 }
 
-int average(std::vector<int> const &v) {
-    return sum(v) / v.size();
+double average(std::vector<int> const &v) {
+    return (double)sum(v) / v.size();
 }
 
 int main() {
@@ -844,11 +844,443 @@ int main() {
 }
 ```
 
+进一步封装一个打印数组所有统计学信息的函数：
+
+```cpp
+void print_statistics(std::vector<int> const &v) {
+    if (v.empty()) {
+        fmt::println("this is empty...");
+    } else {
+        fmt::println("sum: {}", sum(v));
+        fmt::println("average: {}", average(v));
+        fmt::println("min: {}", min(v));
+        fmt::println("max: {}", max(v));
+    }
+}
+
+int main() {
+    std::vector<int> a = {1, 2, 3, 4};
+    print_statistics(a);
+    std::vector<int> b = {5, 6, 7, 8};
+    print_statistics(b);
+    return 0;
+}
+```
+
+暴露 API 时，要同时提供底层的 API 和高层封装的 API。用户如果想要控制更多细节可以调用底层 API，想要省事的用户可以调用高层封装好的 API。
+
+#tip[高层封装 API 应当可以完全通过调用底层 API 实现，提供高层 API 只是方便初级用户使用和理解。]
+
+例如 `libcurl` 就提供了 `curl_easy` 和 `curl_multi` 两套 API。
+
+- `curl_multi` 提供了超详细的参数，把每个操作分拆成多步，方便用户插手细节，满足高级用户的定制化需求，但太过复杂，难以学习。
+- `curl_easy` 是对 `curl_multi` 的再封装，提供了更简单的 API，但是对具体细节就难以操控了，适合初学者上手。
+
+=== Linus 的最佳实践：每个函数不要超过 3 层嵌套，函数体不要超过 24 行
+
+Linux 内核为什么坚持使用 `TAB=8` 为代码风格？
+
+TODO：还在写
+
 == 为什么需要函数式？
 
-== 函数对象
+你产生了两个需求，分别封装了两个函数：
 
-== bind
+- `sum` 求所有元素的和
+- `product` 求所有元素的积
+
+```cpp
+int sum(std::vector<int> const &v) {
+    int ret = v[0];
+    for (int i = 1; i < v.size(); i++) {
+        ret += v[i];
+    }
+    return ret;
+}
+
+int product(std::vector<int> const &v) {
+    int ret = v[0];
+    for (int i = 1; i < v.size(); i++) {
+        ret *= v[i];
+    }
+    return ret;
+}
+
+int main() {
+    std::vector<int> a = {1, 2, 3, 4};
+    fmt::println("sum: {}", sum(a));
+    fmt::println("product: {}", product(a));
+    return 0;
+}
+```
+
+注意到 `sum` 和 `product` 的内容几乎如出一辙，唯一的区别在于：
+
+- `sum` 的循环体为 `+=`；
+- `product` 的循环体为 `*=`。
+
+这种函数体内有部分代码重复，但又有特定部分不同，难以抽离。
+
+该怎么复用这重复的部分代码呢？
+
+我们要把 `sum` 和 `product` 合并成一个函数 `generic_sum`。然后通过函数参数，把差异部分（0、`+=`）“注入”到两个函数原本不同地方。
+
+=== 枚举的糟糕用法
+
+如何表示我这个函数是要做求和 `+=` 还是求积 `*=`？
+
+让我们定义枚举：
+
+```cpp
+enum Mode {
+    ADD, // 求和操作
+    MUL, // 求积操作
+};
+
+int generic_sum(std::vector<int> const &v, Mode mode) {
+    int ret = v[0];
+    for (int i = 1; i < v.size(); i++) {
+        if (mode == ADD) { // 函数内判断枚举，决定要做什么操作
+            ret += v[i];
+        } else if (mode == MUL) {
+            ret *= v[i];
+        }
+    }
+    return ret;
+}
+
+int main() {
+    std::vector<int> a = {1, 2, 3, 4};
+    fmt::println("sum: {}", generic_sum(a, ADD)); // 用户指定他想要的操作
+    fmt::println("product: {}", generic_sum(a, MUL));
+    return 0;
+}
+```
+
+然而，如果用户现在想要求数组的*最大值*呢？
+
+枚举中还没有实现最大值的操作。如果要支持，就得手忙脚乱地去修改 `generic_sum` 函数和 `Mode` 枚举原本的定义。
+
+```cpp
+enum Mode {
+    ADD,
+    MUL,
+    MAX, // **改**
+};
+
+int generic_sum(std::vector<int> const &v, Mode mode) {
+    int ret = v[0];
+    for (int i = 1; i < v.size(); i++) {
+        if (mode == ADD) {
+            ret += v[i];
+        } else if (mode == MUL) {
+            ret *= v[i];
+        } else if (mode == MAX) { // **改**
+            ret = std::max(ret, v[i]); // **改**
+        }
+    }
+    return ret;
+}
+
+int main() {
+    std::vector<int> a = {1, 2, 3, 4};
+    generic_sum(a, MAX); // **改**
+    return 0;
+}
+```
+
+#tip[我用 `// **改**` 指示了所有需要改动的地方。]
+
+为了增加一个求最大值的操作，就需要三处分散在各地的改动！
+
+不仅如此，还容易抄漏，抄错，比如 `MAX` 不小心打错成 `MUL` 了，自己却没发现，留下 BUG 隐患。
+
+这样写代码的方式，心智负担极大，整天就提心吊胆着东一块，西一块的散装代码，担心着有没有哪个地方写错写漏，严重妨碍了开发效率。
+
+并且写出来的代码也不能适应需求的变化：假如我需要支持 `MIN` 呢？又得改三个地方！这违背了设计模式的*开闭原则*。
+
+/ 开闭原则: 对扩展开放，对修改封闭。指的是软件在适应需求变化时，应尽量通过*扩展代码*来实现变化，而不是通过*修改已有代码*来实现变化。
+
+使用枚举尴尬的 if-else，难以扩展，还要一直去修改原函数的底层实现，就违背了*开闭原则*。
+
+=== 函数式编程光荣救场
+
+如果我们可以“注入”代码就好了！能否把一段“代码”作为 `generic_sum` 函数的参数呢？
+
+代码，实际上就是函数。我们先定义出三个不同操作对应的函数：
+
+```cpp
+int add(int a, int b) {
+    return a + b;
+}
+
+int mul(int a, int b) {
+    return a * b;
+}
+
+int max(int a, int b) {
+    return std::max(a, b);
+}
+```
+
+然后，把这三个小函数，作为另一个大函数 `generic_sum` 的参数就行！
+
+```cpp
+int generic_sum(std::vector<int> const &v, auto op) {
+    int ret = v[0];
+    for (int i = 1; i < v.size(); i++) {
+        // 函数作者无需了解用户指定的“操作”具体是什么
+        // 只需要调用这一“操作”，得到结果就行
+        ret = op(ret, v[i]);
+    }
+    return ret;
+}
+
+int main() {
+    std::vector<int> a = {1, 2, 3, 4};
+    // 用户无需关心函数的具体实现是什么
+    // 只需随心所欲指定他的“操作”作为参数
+    generic_sum(a, add);
+    generic_sum(a, product);
+    generic_sum(a, max);
+    return 0;
+}
+```
+
+#tip[这里声明为 auto 的参数 op，可以接受任意类型的对象传入（包括函数）
+
+=== 我用了 C++20 的函数参数 auto 语法糖
+
+这里的 op 类型声明为 auto，效果是使 `generic_sum` 变为一个*模板函数*。
+
+效果就是，op 这个参数现在能接受任意类型的对象了（包括函数！）
+
+```cpp
+int generic_sum(std::vector<int> const &v, auto op) {
+    ...
+}
+```
+
+#fun[C++11：auto 只能用于定义变量；C++14：函数返回类型可以是 auto；C++17：模板参数也可以 auto；C++20：函数参数也可以是 auto 了；（狂想）C++47：auto 现在是 C++47 的唯一关键字，用户只需不断输入 auto-auto-auto，编译器内建人工智能自动识别你的意图生成机器码。]
+
+如果你没有 C++20 的话，需要显式写出 `template` 和 `typename`，才能实现同样的效果：
+
+```cpp
+template <typename Op>
+int generic_sum(std::vector<int> const &v, Op op) {
+    ...
+}
+```
+
+=== 函数也是对象！
+
+在过去的*面向对象编程范式*中，函数（代码）和对象（数据）被*割裂*开来，他们愚昧地认为*函数不是对象*。
+
+*函数式编程范式*则认为：*函数也是一种变量，函数可以作为另一个函数的参数！*
+
+#fun[Function lives matter!]
+
+#tip[面向对象就好比计算机的“哈佛架构”，代码和数据割裂，代码只能单方面操作数据。函数式就好比“冯诺依曼架构”，代码也是数据。看似会导致低效，实则大大方便了动态加载新程序，因而现在的计算机基本都采用了“冯诺依曼架构”。]
+
+总之，函数也是对象，被亲切地尊称为*函数对象*。
+
+=== C++11 引入 Lambda 语法糖
+
+C++98 还需要单独跑到 `main` 外面，专门定义 `add`、`mul`、`max`，弄得整个代码乱哄哄的，非常麻烦。
+
+```cpp
+int add(int a, int b) {
+    return a + b;
+}
+
+int mul(int a, int b) {
+    return a * b;
+}
+
+int max(int a, int b) {
+    return std::max(a, b);
+}
+
+int main() {
+    std::vector<int> a = {1, 2, 3, 4};
+    generic_sum(a, add);
+    generic_sum(a, product);
+    generic_sum(a, max);
+    return 0;
+}
+```
+
+C++11 引入了 *Lambda 表达式*语法，允许你就地创建一个函数对象。
+
+```cpp
+int main() {
+    std::vector<int> a = {1, 2, 3, 4};
+
+    auto add = [](int a, int b) {
+        return a + b;
+    };
+    auto mul = [](int a, int b) {
+        return a * b;
+    };
+    auto max = [](int a, int b) {
+        return std::max(a, b);
+    };
+
+    generic_sum(a, add);
+    generic_sum(a, product);
+    generic_sum(a, max);
+    return 0;
+}
+```
+
+不用往 `main` 外面塞垃圾了，一清爽。
+
+更进一步，我们甚至不用定义变量，直接把 Lambda 表达式写在 `generic_sum` 的参数里就行了！
+
+```cpp
+int main() {
+    std::vector<int> a = {1, 2, 3, 4};
+
+    generic_sum(a, [](int a, int b) {
+        return a + b;
+    });
+    generic_sum(a, [](int a, int b) {
+        return a * b;
+    });
+    generic_sum(a, [](int a, int b) {
+        return std::max(a, b);
+    });
+    return 0;
+}
+```
+
+#tip[以上写法都是等价的，随时随地创建一个函数对象，不用纠结于“起名强迫症”，是不是很方便呢？]
+
+其实 C++98 时代人们就已经大量在用 `operator()()` 模拟函数对象了，著名的第三方库 Boost 也封装了各种函数式常用的容器和工具。C++11 才终于把*函数对象*这个概念转正，并引入了更方便的 Lambda 语法糖。
+
+#fun[即使是面向对象的头号孝子 Java，也已经开始引入函数式的 Lambda 语法糖，C\# 的 LINQ 更是明目张胆的致敬 map-reduce 全家桶，甚至 C 语言用户也开始玩各种函数指针回调……没办法，函数式确实就方便呀！]
+
+=== 依赖注入原则
+
+函数对象 `op` 作为参数传入，让 `generic_sum` 内部去调用，就像往 `generic_sum` 体内“注入”了一段自定义代码一样。
+
+这可以让 `generic_sum` 在不修改本体的情况下，通过修改“注入”部分，轻松扩展，满足*开闭原则*。
+
+更准确的说，这体现的是设计模式所要求的*依赖注入原则*。
+
+/ 依赖注入原则: 一个封装好的函数或类，应该尽量依赖于抽象接口，而不是依赖于具体实现。这可以提高程序的灵活性和可扩展性。
+
+四大编程范式都各自发展出了*依赖注入原则*的解决方案：
+
+- 面向过程编程范式中，*函数指针*就是那个抽象接口。
+- 面向对象编程范式中，*虚函数*就是那个抽象接口。
+- 函数式编程范式中，*函数对象*就是那个抽象接口。
+- 模板元编程范式中，*模板参数*就是那个抽象接口。
+
+同样是把抽象接口作为参数，同样解决可扩展问题。
+
+函数指针贴近底层硬件，虚函数方便整合多个接口，函数对象轻量级、随地取用，模板元有助高性能优化，不同的编程范式殊途同归。
+
+=== 低耦合，高内聚
+
+依赖注入原则可以减少代码之间的耦合度，大大提高代码的灵活性和可扩展性。
+
+/ 耦合度: 指的是一个模块、类、函数和其他模块、类、函数之间的关联程度。耦合度越低，越容易进行单元测试、重构、复用和扩展。
+
+#fun[高耦合度的典型是“牵一发而动全身”。低耦合的典范是蚯蚓，因为蚯蚓可以在任意断面切开，还能活下来，看来蚯蚓的身体设计非常“模块化”呢。]
+
+通常来说，软件应当追求低耦合度，适度解耦的软件能更快适应需求变化。但过度的低耦合也会导致代码过于分散，不易阅读和修改，甚至可能起到反效果。
+
+若你解耦后，每次需求变化要改动的地方变少了，那就是合理的解耦。若你过分解耦，代码东一块西一块，以至于需求变化时需要到处改，比不解耦时浪费的时间还要多，那就是解耦过度。
+
+#fun[完全零耦合的程序每个函数互不联系，就像把蚯蚓拆散成一个个独立的细胞一样。连初始需求“活着”都实现不了，谈何适应需求变化？所以解耦也切勿矫枉过正。]
+
+为了避免解耦矫枉过正，人们又提出了内聚的概念，并规定解耦不得耽误内聚。
+
+/ 内聚: 指的是同一个模块、类、函数内部各个元素之间的关联程度。内聚度越高，功能越独立，越易维护。
+
+#fun[例如，人体的心脏专门负责泵血，肝脏只负责解毒，这就是高内聚的人体器官。若人的心脏还要兼职解毒，肝脏还兼职泵血，看似好像是增加了“万一心脏坏掉”的冗余性，实际上把“泵血”这一功能拆散到各地，无法“集中力量泵大血”了。]
+
+好的软件要保持低耦合，同时高内聚。就像“民主集中制”一样，既要监督防止大权独揽滋生腐败，又要集中力量办一个人办不成的大事。
+
+=== 与传统面向对象的对比
+
+传统的面向对象同样可以用*虚函数接口类*模拟*函数对象*一样的功能，只不过没有 lambda 和闭包的语法加持，写起来非常繁琐，就和在 C 语言里“模拟”面向对象一样。
+
+#fun[为了这么小的一个代码块，单独定义一个类，就像妈妈开一架“空中战车” A380 只是为了接你放学一样，等你值好机的时间我自己走都走到了。而函数式中，用 lambda 就地定义函数对象，相当于随地抓来一台共享单车开走。]
+
+```cpp
+struct OpBase {
+    virtual int operate(int a, int b) = 0;
+    virtual ~OpBase() = default;
+};
+
+struct OpAdd : OpBase {
+    int compute(int a, int b) override {
+        return a + b;
+    }
+};
+
+struct OpMul : OpBase {
+    int compute(int a, int b) override {
+        return a * b;
+    }
+};
+
+struct OpMax : OpBase {
+    int compute(int a, int b) override {
+        return std::max(a, b);
+    }
+};
+
+int generic_sum(std::vector<int> const &v, OpBase *op) {
+    int ret = v[0];
+    for (int i = 1; i < v.size(); ++i) {
+        ret = op.compute(ret, v[i]);
+    }
+    delete op;
+    return ret;
+}
+
+int main() {
+    std::vector<int> a = {1, 2, 3, 4};
+
+    generic_sum(a, new OpAdd());
+    generic_sum(a, new OpMul());
+    generic_sum(a, new OpMax());
+    return 0;
+}
+```
+
+不仅需要定义一堆类，接口类，实现类，继承来继承去，还需要管理讨厌的指针，代码量翻倍，没什么可读性，又影响运行效率。
+
+#fun[3 年 2 班小彭同学，你的妈妈开着 A380 来接你了。]
+
+而现代 C++ 只需 Lambda 语法就地定义函数对象，爽。
+
+```cpp
+    generic_sum(a, [](int a, int b) {
+        return a + b;
+    });
+    generic_sum(a, [](int a, int b) {
+        return a * b;
+    });
+    generic_sum(a, [](int a, int b) {
+        return std::max(a, b);
+    });
+```
+
+=== 函数式与模板元轻松结合
+
+TODO
+
+#fun[而我们称之为高效。]
+
+=== 函数对象的重要机制：闭包
+
+=== 函数对象用于多线程任务队列
+
+== bind 为函数对象绑定参数
 
 ```cpp
 int hello(int x, int y) {
