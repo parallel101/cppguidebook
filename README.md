@@ -37,6 +37,27 @@
 - 自定义模板 (待认领)
 - TODO: 更多章节
 
+## 赞助名单
+
+感谢以下小彭友的赞助！
+
+[![Thanks list](pic/thanks.png)](https://afdian.net/a/archibate)
+
+小彭老师的大典是免费下载的，不用赞助也可以查看哦。
+
+> [!NOTE]
+> 但是小彭老师遭到“白眼狼”脑板开除，目前处于失业状态。不得不寻求各位小彭友的赞助，保障小彭老师的基本生命体征。
+
+如果你觉得本书对你有所帮助，可以通过 [爱发电](https://afdian.net/a/archibate) 赞助小彭老师，以便小彭老师有更多的精力继续编写和维护本书。
+
+> [!TIP]
+> 每有一位小彭友赞助 `26.90`，小彭老师一天的食品安全就有了着落。
+
+<a href="https://afdian.net/a/archibate"><img src="https://142857.red/afdian-qrcode.jpg?y" alt="https://afdian.net/a/archibate" width="400px"/></a>
+
+> [!TIP]
+> 如果你也处于失业状态，就不用勉强赞助了……也可以先给小彭老师点一颗⭐Star⭐表示心意。
+
 ## Typst 真好用，家人们
 
 本书使用 [Typst 语言](https://github.com/typst/typst) 书写，类似于 LaTeX 或 Markdown。和 Markdown 相比，Typst 的排版功能更加丰富。和 LaTeX 相比，Typst 更加轻量级，语法简单明了。最重要的是，Typst 支持宏编程，可以在文本中书写代码，实现批量生成结构化的文本。
