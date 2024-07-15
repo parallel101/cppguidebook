@@ -23,17 +23,19 @@ def afd_query(which, **params):
 
 def afd_query_sponsors():
     i = 1
+    res = []
     while True:
         page = afd_query('query-sponsor', page=i)
         n = page['total_page']
         for user in page['list']:
-            yield user
+            res.append(user)
         if i >= n:
             break
         i += 1
+    return res
 
 def afd_gen_thank_list():
-    sponsors = list(reversed(list(afd_query_sponsors())))
+    sponsors = list(reversed(afd_query_sponsors()))
     max_y = 30
     for user in sponsors:
         max_y += 100
@@ -50,6 +52,7 @@ def afd_gen_thank_list():
         draw.text((x + 100, y), f'{user['user']['name']}', fill='white', font=font)
         draw.text((x + 100, y + 30), f'￥{user['all_sum_amount']}', fill='#aaaaaa', font=font)
         print(f'{user['user']['name']} ￥{user['all_sum_amount']}')
+        print(user)
         y += 100
     return img
 
