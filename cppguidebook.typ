@@ -1898,6 +1898,12 @@ UTF-16 就是利用了这一段空间，他规定：0xD800 到 0xDFFF 之间的�
 
 可见，UTF-16 和 UTF-8 一样，都是“小火车”式的变长编码，UTF-16 同样也有着类似于 UTF-8 的抗干扰机制。
 
+=== UTF-16 和 UTF-32 存在大小端问题
+
+TODO
+
+由于压缩率低，又存在大小端不同的问题。而互联网数据需要保证相同的大小端（通常都会约定统一采用大端），在收发包时需要额外转换，因而可能不太适合网络。而 UTF-8 的存储单位是字节，天生没有大小端困扰，且完全兼容 ASCII，而互联网又是老古董中间件最多的地方……总之 UTF-8 是最适合网络通信和共享的文本编码格式。
+
 == C/C++ 中的字符
 
 === 字符类型
@@ -2002,7 +2008,7 @@ std::u32string s = U"你好";
 fmt::println("s 的长度：{}", s.size());
 ```
 
-如果你的操作只涉及字符串查拼接与查找，那就可以用 UTF-8。如果大量涉及索引，切片，单个字符的操作，那就必须用 UTF-32！否则一遇到汉字就会出错。
+如果你的操作只涉及字符串查拼接与查找，那就可以用 UTF-8。如果大量涉及索引，切片，单个字符的操作，那就必须用 UTF-32（否则一遇到汉字就会出错）。
 
 ```cpp
 std::vector<std::string> slogan = {
@@ -2012,6 +2018,50 @@ std::string joined;
 for (auto const &s: slogan) {
     joined += s; // 只是拼接而已，没问题
 }
+```
+
+UTF-8 按索引切片的出错案例：
+
+```cpp
+std::string s = "小彭老师公开课万岁";
+fmt::println("UTF-8 下，前四个字节：{}", s.substr(0, 4));
+// 会打印 “小�”
+```
+
+```cpp
+std::u32string s = U"小彭老师公开课万岁";
+fmt::println("UTF-32 下，前四个字符：{}", s.substr(0, 4));
+// 会打印 “小彭老师”
+```
+
+只有当索引来自 `find` 的结果时，UTF-8 字符串的切片才能正常工作：
+
+```cpp
+std::string s = "小彭老师公开课万岁";
+size_t pos = s.find("公"); // pos = 12
+fmt::println("UTF-8 下，“公”前的所有字节：{}", s.substr(0, pos));
+// 会打印 “小彭老师”
+```
+
+```cpp
+std::u32string s = U"小彭老师公开课万岁";
+size_t pos = s.find(U'公'); // pos = 4
+fmt::println("UTF-32 下，“公”前的所有字符：{}", s.substr(0, pos));
+// 会打印 “小彭老师”
+```
+
+UTF-8 无法取出单个非 ASCII 字符，对于单个中文字符，仍然只能以字符串形式表达（由多个字节组成）。
+
+```cpp
+std::string s = "小彭老师公开课万岁";
+fmt::print("UTF-8 下第一个字符：{}", s[0]);
+// 可能会打印 ‘å’ (0xE5)，因为“小”的 UTF-8 编码是 0xE5 0xB0 0x8F，也可能是其他乱码，取决于终端的编码格式
+```
+
+```cpp
+std::u32string s = U"小彭老师公开课万岁";
+fmt::print("UTF-32 下第一个字符：{}", s[0]);
+// 会打印 ‘小’
 ```
 
 === 轶事：“ANSI” 与 “Unicode” 是什么
@@ -2068,6 +2118,53 @@ for (auto const &s: slogan) {
 
 #fun[许多糟糕的博客声称：是因为“UTF-16 最有利于中文压缩”，所以 Java 和 Windows 才采用的？然而就我了解到的实际情况是因为他们错误的以为 0xFFFF 是 Unicode 的上限才错误采用了，不然为什么后来的新语言都采用了 UTF-32 内码 + UTF-8 外码的组合？而且在外码中采用 UTF-8 或 UTF-16 压缩确实没问题，但是 Java 和 Windows 的失误在于把 UTF-16 当作内码了！内码就理应是定长编码的才方便，如果你有不同想法，欢迎留言讨论。]
 
+总之，UTF-16 是糟粕，但他是 Windows 唯一完整支持的 Unicode 接口。不建议软件内部用 UTF-16 存储文字，你可以用更紧凑的 UTF-8 或更方便切片的 UTF-32，只需在调用操作系统 API 前临时转换成 UTF-16 就行。
+
+=== 强类型系统只是君子协议
+
+必须指出：在 `std::string` 中装 UTF-8 并不是未定义行为，在 `std::u8string` 里同样可以装 GBK。这就好比一个名叫 `Age` 的枚举类型，实际却装着性别一样。
+
+```cpp
+enum Age { // 错误示范
+    Male,
+    Female,
+    Custom,
+};
+// 除了迷惑同事外，把年龄和性别的类型混用没有好处
+void registerStudent(Age age, Age sex);
+```
+
+区分类型只是大多数人设计接口的规范，只是方便你通过看函数接口一眼区分这个函数接受的是什么格式的字符串，并没有强制性。例如下面这段代码一看就知道这些函数需要的是什么编码的字符串。
+
+```cpp
+void thisFuncAcceptsANSI(std::string msg);
+void thisFuncAcceptsUTF8(std::u8string msg);
+void thisFuncAcceptsUTF16(std::u16string msg);
+void thisFuncAcceptsUnicode(std::wstring msg);
+void thisFuncAcceptsUTF32(std::u32string msg);
+```
+
+用类型别名同样可以起到差不多的说明效果（缺点是无法重载）：
+
+```cpp
+using ANSIString = std::string;
+using UTF8String = std::string;
+using UTF16String = std::vector<uint16_t>;
+void thisFuncAcceptsANSI(ANSIString msg);
+void thisFuncAcceptsUTF8(UTF8String msg);
+void thisFuncAcceptsUTF16(UTF16String msg);
+```
+
+之所以我会说，`std::string` 应该装 ANSI 字符串，是因为所有标准库官方提供的函数，都会假定 `std::string` 类型是 ANSI 编码格式（GBK）。并不是说，你不能用 `std::string` 存其他编码格式的内容。
+
+如果你就是想用 `std::string` 装 UTF-8 也可以，只不过你要注意在传入所有使用了文件路径的函数，如 `fopen`，`std::ifstream` 的构造函数前，需要做一个转换，转成 GBK 的 `std::string` 或 UTF-16 的 `std::wstring` 后，才能使用，很容易忘记。
+
+而如果你始终用 `std::u8string` 装 UTF-8，那么当你把它输入一个接受 ANSI 的普通 `std::string` 参数时，就会发生类型不匹配错误，强迫你过一个 sanity-check，或是强迫你使用一个转换函数，稍后会介绍这个转换函数的写法。
+
+例如当你使用 `std::cout << u8string` 时会报错，迫使你改为 `std::cout << u8toansi(u8string)` 才能编译通过，从而避免了把 UTF-8 的字符串打印到了只支持 GBK 的控制台上。
+
+#detail[其中转换函数签名为 `std::string u8toansi(std::u8string s)`，很可惜，标准库并没有提供这个函数，直到 C++26 转正前，标准库对 UTF 全家桶的支持一直很差，你不得不自己实现或依赖第三方库。]
+
 == 选择你的阵营！
 
 #image("pic/utfwar.png")
@@ -2123,11 +2220,13 @@ MessageBoxW(NULL, L"你好", L"标题", MB_OK);
 
 当调用 `A` 系函数时，他们内部会把 GBK 编码转换为 UTF-16 编码，然后调用 Windows 内核。
 
-这是一个糟糕的设计，而所有的 C/C++ 标准库都是基于 `A` 函数的！如果你用 UTF-8 字符串调用 C 标准库，相当于调用了 `A` 函数，从而 UTF-8 中所有除 ASCII 以外的，各种中文字符、Emoji 都会变成乱码。
+这是一个糟糕的设计，而所有的 C/C++ 标准库都是基于 `A` 函数的！如果你用 `const char *` 字符串调用 C 标准库，相当于调用了 `A` 函数。而 `A` 函数只接受 GBK，但你却输入了 UTF-8！从而 UTF-8 中所有除 ASCII 以外的，各种中文字符、Emoji 都会变成乱码。
 
 例如 `fopen` 函数，只有 `fopen(const char *path, const char *mode)` 这一个基于 `char` 的版本，里面也是直接调用的 `A` 函数，完全不给我选择的空间。虽然 Windows 也提供了 `_wfopen(const wchar_t *path, const wchar_t *mode)`，但那既不是 POSIX 标准的一部分，也不是 C 语言标准的一部分，使用这样的函数就意味着无法跨平台。
 
 #fun[Windows 官方认为：`W` 函数才是真正的 API，`A` 函数只是应付不听话的宝宝。可你就没发现你自己的 C/C++ 标准库也全部在调用的 `A` 函数么？]
+
+总之，`A` 函数是残废的，我们只能用 `W` 函数，尽管 UTF-16 是历史债，但我们别无选择，`W` 函数是唯一能支持完整 Unicode 字符输入的方式。
 
 ```cpp
 // 假设这段 C++ 代码使用 /utf-8 选项编译：
@@ -2135,17 +2234,19 @@ std::ifstream f("你好.txt"); // 找不到文件，即使“你好.txt”存在
 std::ofstream f("你好.txt"); // 会创建一个乱码文件
 ```
 
-必须使用 `std::filesystem::u8path` 才行：
+正确的做法是采用 `std::filesystem::u8path` 这个函数做 UTF-8 到 UTF-16 的转换：
 
 ```cpp
-// C++17，需要用 u8path 这个静态成员构造 path 对象：
+// C++17，需要用 u8path 这个函数构造 path 对象：
 std::ifstream f(std::filesystem::u8path("你好.txt"));
 std::ofstream f(std::filesystem::u8path("你好.txt"));
 
-// C++20 引入 char8_t，path 有 const char8_t * 的重载：
+// C++20 引入 char8_t，区分于普通 char，path 类也有了针对 const char8_t * 的构造函数重载：
 std::ifstream f(std::filesystem::path(u8"你好.txt"));
 std::ofstream f(std::filesystem::path(u8"你好.txt"));
 ```
+
+#detail[`std::filesystem::path` 类的 `c_str()` 在 Windows 上返回 `const wchar_t *`，在 Linux 上返回 `const char *`。这很合理，因为 Windows 文件系统确实以 `wchar_t` 存储路径名，而 Linux 文件系统完全用 `char`。]
 
 每次需要加 `std::filesystem::u8path` 也挺麻烦的，容易忘记，一忘记就无法访问中文目录。
 
