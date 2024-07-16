@@ -1464,7 +1464,7 @@ int generic_sum(std::vector<int> const &v,
 
 而虚函数一旦用了，基本就只能动态分发了，即使能被 IPO 优化掉，虚表指针也永远占据着一个 8 字节的空间，且永远只能以指针形式传来传去。
 
-#detail[一种静态分发版的虚函数替代品是 CRTP，他基于模板元编程，但与虚函数之间切换困难，不像函数对象那么无感，之后的模板元专题章节中会专门介绍。]
+#detail[一种静态分发版的虚函数替代品是 CRTP，他基于模板元编程，但与虚函数之间切换困难，不像函数对象那么无感，之后的模板元专题课中会专门介绍。]
 
 === 案例：函数对象的动态分发用于多线程任务队列
 
@@ -1488,7 +1488,7 @@ void thread2() {
 }
 ```
 
-#detail[`mt_queue` 是小彭老师封装的多线程安全的消息队列，实现原理会在稍后的多线程专题章节中详细讲解。]
+#detail[`mt_queue` 是小彭老师封装的多线程安全的消息队列，实现原理会在稍后的多线程专题课中详细讲解。]
 
 === 函数对象的重要机制：闭包
 
@@ -1583,7 +1583,10 @@ Unicode 经过了许多版本的发展，早期的 Unicode 只收录了 65536 (0
 
 #tip[虽然占用了 1114112 这多格码点空间，不过其中很多都是空号，留待未来扩充使用。]
 
-Unicode 字符映射表：https://symbl.cc/en/unicode-table/
+Unicode 字符映射表可以在网上找到：
+
+- https://symbl.cc/en/unicode-table/
+- https://www.compart.com/en/unicode/
 
 === 总结
 
@@ -1898,11 +1901,90 @@ UTF-16 就是利用了这一段空间，他规定：0xD800 到 0xDFFF 之间的�
 
 可见，UTF-16 和 UTF-8 一样，都是“小火车”式的变长编码，UTF-16 同样也有着类似于 UTF-8 的抗干扰机制。
 
-=== UTF-16 和 UTF-32 存在大小端问题
+=== 字节序问题，大小端之争
 
-TODO
+在计算机中，多字节的整数类型（如 `uint16_t` 和 `uint32_t`）需要被拆成多个字节来存储。拆开后的高位和低位按什么顺序存入内存？不同的硬件架构产生了争执：
 
-由于压缩率低，又存在大小端不同的问题。而互联网数据需要保证相同的大小端（通常都会约定统一采用大端），在收发包时需要额外转换，因而可能不太适合网络。而 UTF-8 的存储单位是字节，天生没有大小端困扰，且完全兼容 ASCII，而互联网又是老古董中间件最多的地方……总之 UTF-8 是最适合网络通信和共享的文本编码格式。
+- 大端派 (bit endian)：低地址存放整数的高位，高地址存放整数的低位，也就是大数靠前！这样数值的高位和低位和人类的书写习惯一致。例如，0x12345678，在内存中就是：
+
+```
+0x12 0x34 0x56 0x78
+```
+
+- 小端派 (little endian)：低地址存放整数的低位，高地址存放整数的高位，也就是小数靠前！这样数值的高位和低位和计算机电路的计算习惯一致。例如，0x12345678，在内存中就是：
+
+```
+0x78 0x56 0x34 0x12
+```
+
+例如，Intel 的 x86 架构和 ARM 公司的 ARM 架构都是小端派，而 Motorola 公司的 68k 架构和 Sun 公司的 SPARC 架构都是大端派。
+
+#tip[这其实是很无聊的争执，为人类的书写习惯改变计算机的设计毫无道理，毕竟世界上也有从右往左书写的文字和从上往下书写的文字，甚至有左右来回书写的文字……如果要伺候人类，你怎么不改成十进制呢？总之，我认为小端才是最适合计算机的，市面上大多数主流硬件都是小端架构。]
+
+在网络通信时，发消息和收消息的可能是不同的架构，如果发消息的是小端架构，收消息的是大端架构，那么发出去的是 0x12345678，收到的就会变成 0x78563421 了。
+
+因此互联网一般规定，所有多字节的数据在网络包中统一采用大端。对于大端架构，他们什么都不需要做，对于小端架构，在发包前需要把自己的小端数据做字节序反转，变成大端的以后，再发送。之后的网络专题课中我们会详解这一块。
+
+#story[基于字节码的虚拟机语言通常会规定一个字节序：像 Java 这种面向互联网语言，索性也规定了统一采用大端，无论 JVM 运行在大端机器还是小端机器上。这使得他与互联网通信比较方便，而在 x86 和 ARM 架构上，与本地只接受小端数据的 API，例如 OpenGL，沟通较为困难，需要做额外的字节序转换。而 C\# 主打游戏业务（例如 Unity），需要考虑性能，所以规定全部采用小端。作为底层编程语言的 C++ 则是入乡随俗，你的硬件是什么端，他就是什么端，不主动做任何额外的转换。]
+
+UTF-16 和 UTF-32 的码位都是多字节的，也会有大小端问题。例如，UTF-16 中的 `uint16_t` 序列：
+
+```
+0x1234 0x5678
+```
+
+在大端派的机器中，就是：
+
+```
+0x12 0x34 0x56 0x78
+```
+
+在小端派的机器中，就是：
+
+```
+0x34 0x12 0x78 0x56
+```
+
+这样一来，UTF-16 和 UTF-32 的字节流，在不同的机器上，可能会有不同的顺序。这给跨平台的文本处理带来了麻烦。
+
+所以当你需要把 UTF-16 存入硬盘和在网络发送时，还需要额外指明你用的是大端的 UTF-16 还是小端的 UTF-16。
+
+因此 UTF-16 和 UTF-32 进一步分裂为：
+
+- UTF-16LE：小端的 UTF-16
+- UTF-16BE：大端的 UTF-16
+- UTF-32LE：小端的 UTF-32
+- UTF-32BE：大端的 UTF-32
+
+如果只在内存的 `wchar_t` 中使用就不用区分，默认跟随当前机器的大小端。所以 UTF-16 和 UTF-32 通常只会出现在内存中用于快速处理和计算，很少用在存储和通信中。
+
+UTF-8 是基于单字节的码位，火车头的顺序也有严格规定，火车头总是在最前，根本不受字节序大小端影响，也就没有影响。
+
+由于压缩率低，又存在大小端字节序不同的问题。而互联网数据需要保证相同的大小端，在收发包时需要额外转换，因而可能不太适合网络。而 UTF-8 的存储单位是字节，天生没有大小端困扰。更妙的是，他且完全兼容 ASCII，而互联网又是古董中间件最多的地方……
+
+总之，完全基于字节的 UTF-8 是最适合网络通信和硬盘存储的文本编码格式，而 UTF-32 是最适合在内存中处理的格式。
+
+=== BOM 标记
+
+0xFEFF 是一个特殊的不可见字符“﻿”，这是一个零宽空格，没有任何效果。
+
+你可以把这个字符加在文本文件的头部，告诉读取该文件的软件，这个文件是用什么编码的。
+
+如果是 UTF-16 和 UTF-32，因为 0xFEFF 不对称，他还能告诉你是大端还是小端。因此 0xFEFF 被称为字节序标志（Byte-order-mark，BOM）。
+
+如果读取该文件的软件不支持解析 BOM，那么他照常读出 0xFEFF，一个零宽空格，在文本中不显示，不影响视觉结果。
+
+#story[一些老的编译器（远古 MinGW，现在已经没有了）不支持解析 BOM，会把带有 BOM 的 UTF-8 的 .cpp 源码文件，当作头部带有错误字符的乱码文件，从而报错。这是因为 Windows 的记事本保存为 UTF-8 时，总是会加上 BOM。如果记事本发现一个文件没有 BOM，会当作 ANSI（GBK）来读取。]
+
+0xFEFF 在不同的编码下会产生不同的结果：
+
++ UTF-8：`0xEF 0xBB 0xBF`，他会占用 3 字节，而且不会告诉你是大端还是小端，因为 UTF-8 是没有大小端问题的。
++ UTF-16：如果是大端，就是 `0xFE 0xFF`，如果是小端，就是 `0xFF 0xFE`。
++ UTF-32：如果是大端，就是 `0x00 0x00 0xFE 0xFF`，如果是小端，就是 `0xFF 0xFE 0x00 0x00`。
+
+因此，在文本头部加上 BOM 有助于软件推测该文件是什么编码的（如果那软件支持解析 BOM 的话）。
+
+#story[例如 Windows 环境中，所有的文本文件都被默认假定为 ANSI（GBK）编码，如果你要保存文本文件为 UTF-8 编码，就需要加上 BOM 标志。当 MSVC 读取时，看到开头是 `0xEF 0xBB 0xBF`，就明白这是一个 UTF-8 编码的文件。这样，MSVC 就能正确地处理中文字符串常量了。如果 MSVC 没看到 BOM，会默认以为是 ANSI（GBK）编码的，从而中文字符串常量会乱码。开启 `/utf-8` 选项也能让 MSVC 把没有 BOM 的源码文件当作 UTF-8 来解析，适合跨平台宝宝体质。]
 
 == C/C++ 中的字符
 
@@ -1960,9 +2042,9 @@ std::u32string path = "一个老伯.txt";
 
 为了能让针对 ASCII 设计的操作系统 API 支持中文文件名，就只能绕开所有 0x7F 以下的值。这就是为什么 UTF-8 对车厢也全部抬高到 0x80 以上，避免操作系统不慎把车厢当作是 `'/'` 或 `'\0'`。
 
-=== UTF-8 几乎完美支持字符串所有操作
+=== UTF-8 确实几乎完美支持字符串所有操作
 
-由于巨大的惯性，很多人都想当然的把 `std::string` 当作 UTF-8 来使用。
+由于巨大的惯性，很多人都想当然的把 `std::string` 当作 UTF-8 来使用。对于简单的打印，常规的字符串操作，是没问题的。
 
 字符串操作有下面这几种，得益于 UTF-8 优秀的序列化涉及和冗余抗干扰机制，绝大多数 ASCII 支持的操作，UTF-8 字符串都能轻松胜任，唯独其中*涉及“索引”和“长度”的*一部分操作不行。这是由于变长编码的固有缺陷，如果需要做“索引”类操作，还是建议先转换成定长的 UTF-32 编码。
 
@@ -2016,7 +2098,7 @@ std::vector<std::string> slogan = {
 };
 std::string joined;
 for (auto const &s: slogan) {
-    joined += s; // 只是拼接而已，没问题
+    joined += s; // 只是拼接而已，UTF-8 没问题
 }
 ```
 
@@ -2050,12 +2132,15 @@ fmt::println("UTF-32 下，“公”前的所有字符：{}", s.substr(0, pos));
 // 会打印 “小彭老师”
 ```
 
+#tip[注意到这里 UTF-8 的 `"公"` 需要是字符串，而不是单个字符。]
+
 UTF-8 无法取出单个非 ASCII 字符，对于单个中文字符，仍然只能以字符串形式表达（由多个字节组成）。
 
 ```cpp
 std::string s = "小彭老师公开课万岁";
-fmt::print("UTF-8 下第一个字符：{}", s[0]);
-// 可能会打印 ‘å’ (0xE5)，因为“小”的 UTF-8 编码是 0xE5 0xB0 0x8F，也可能是其他乱码，取决于终端的编码格式
+fmt::print("UTF-8 下第一个字节：{}", s[0]);
+// 可能会打印 ‘å’ (0xE5)，因为“小”的 UTF-8 编码是 0xE5 0xB0 0x8F
+// 也可能是乱码“�”，取决于终端理解的编码格式
 ```
 
 ```cpp
@@ -2063,6 +2148,22 @@ std::u32string s = U"小彭老师公开课万岁";
 fmt::print("UTF-32 下第一个字符：{}", s[0]);
 // 会打印 ‘小’
 ```
+
+UTF-8 字符串的反转也会出问题：
+
+```cpp
+std::string s = "小彭老师公开课万岁";
+strrev(s.data()); // 会以字节为单位反转，导致乱码
+```
+
+```cpp
+std::u32string s = U"小彭老师公开课万岁";
+strrev(s.data()); // 会把按字符正常反转，得到 “岁万课开公师老彭小”
+```
+
+*总结：UTF-8 只能拼接、查找、打印。不能索引、切片、反转。*
+
+#tip[按索引切片不行，但如果索引是 find 出来的就没问题。]
 
 === 轶事：“ANSI” 与 “Unicode” 是什么
 
@@ -2159,11 +2260,11 @@ void thisFuncAcceptsUTF16(UTF16String msg);
 
 如果你就是想用 `std::string` 装 UTF-8 也可以，只不过你要注意在传入所有使用了文件路径的函数，如 `fopen`，`std::ifstream` 的构造函数前，需要做一个转换，转成 GBK 的 `std::string` 或 UTF-16 的 `std::wstring` 后，才能使用，很容易忘记。
 
-而如果你始终用 `std::u8string` 装 UTF-8，那么当你把它输入一个接受 ANSI 的普通 `std::string` 参数时，就会发生类型不匹配错误，强迫你过一个 sanity-check，或是强迫你使用一个转换函数，稍后会介绍这个转换函数的写法。
+而如果你始终用 `std::u8string` 装 UTF-8，那么当你把它输入一个接受 ANSI 的普通 `std::string` 参数时，就会发生类型不匹配错误，强迫你重新清醒，或是强迫你使用一个转换函数，稍后会介绍这个转换函数的写法。
 
 例如当你使用 `std::cout << u8string` 时会报错，迫使你改为 `std::cout << u8toansi(u8string)` 才能编译通过，从而避免了把 UTF-8 的字符串打印到了只支持 GBK 的控制台上。
 
-#detail[其中转换函数签名为 `std::string u8toansi(std::u8string s)`，很可惜，标准库并没有提供这个函数，直到 C++26 转正前，标准库对 UTF 全家桶的支持一直很差，你不得不自己实现或依赖第三方库。]
+#detail[其中转换函数签名为 `std::string u8toansi(std::u8string s)`，很可惜，标准库并没有提供这个函数，直到 C++26 前，标准库对字符编码支持一直很差，你不得不自己实现或依赖第三方库。]
 
 == 选择你的阵营！
 
@@ -2305,6 +2406,8 @@ for b in s.bytes() {
 在 C++ 中，若要采用这种 UTF-8 方案，可以使用 `utfcpp` 这个库：
 
 https://github.com/nemtrif/utfcpp
+
+#tip[稍后我们会以案例详细演示这个库的用法，也会尝试自己手搓。]
 
 方法1：使用 `utf8to32` 一次性完成转换，用完后再转回去。
 
@@ -2455,9 +2558,482 @@ fmt::println("{}", s.size());   // 3
 
 *总结：要支持 UTF-32 阵营，请全部使用 `char32_t` 和 `std::u32string`。字面量全用 `U"你好"` 的形式书写，读文件时转为 UTF-32，写文件时转回 UTF-8。*
 
-== 文字处理
+=== 善用第三方库
+
+由于 C++26 前标准库对编码转换几乎没有支持，在 C++ 中转换编码格式，通常都需要第三方库。
+
+=== 不同 UTF 之间互转：`utfcpp`
+
+如果你只是需要不同 UTF 格式之间的转换，没有处理 GBK 等的需求：那么之前已经介绍了 `utfcpp` 这个方便的库，已经够用。
+
+```cpp
+```
+
+缺点是他不能处理 GBK、Shift-JIS 等非 Unicode 编码，也不能自动检测当前的 ANSI 区域设置。
+
+=== 跨平台的任意编码转换：`boost::locale`
+
+如果你还要支持其他编码格式，比如 GBK、Shift-JIS、Latin-1。
+
+一种是 C 语言的 `iconv`，另一种是现代 C++ 的 `boost::locale`。
+
+虽然功能差不多，底层都是调用 `icu` 的。`boost::locale` 的 API 更加友好，而且是现代 C++ 风格的。
+
+```bash
+# Ubuntu 用户安装 Boost.locale 方法：
+$ sudo apt-get install libboost-locale-dev
+# Arch Linux 用户安装 Boost 全家桶方法：
+$ sudo pacman -S boost
+```
+
+#fun[不喜欢 Boost 的人有难了。]
+
+==== UTF 之间互转
+
+使用 `boost::locale::conv::utf_to_utf` 就能轻易做到。
+
+```cpp
+#include <boost/locale.hpp>
+#include <iostream>
+
+using boost::locale::conv::utf_to_utf;
+
+int main() {
+    std::u8string s8 = u8"你好";
+    // UTF-8 转 UTF-32：
+    std::u32string s32 = utf_to_utf<char32_t>(s8);
+    // UTF-32 转 UTF-16：
+    std::u16string s16 = utf_to_utf<char16_t>(s8);
+    // UTF-32 转 UTF-8：
+    s8 = utf_to_utf<char8_t>(s32);
+    // UTF-32 转 UTF-8 (但以 char 存储)：
+    std::string s8c = utf_to_utf<char>(s32);
+    std::cout << s8c << '\n';
+    return 0;
+}
+```
+
+模板参数中，只需指定转换到的是什么类型就行，来自什么类型，他自己会重载的。
+
+比如从 `char32_t` 转到 `char16_t`，只需要 `utf_to_utf<char32_t>` 就可以，非常方便。
+
+编译：
+
+```bash
+$ g++ -std=c++20 -lboost_locale main.cpp
+```
+
+输出：
+
+```
+你好
+```
+
+建议用同样跨平台的 CMake 链接 Boost，否则 Windows 用户要有难了……
+
+```cmake
+find_package(Boost REQUIRED COMPONENTS locale)
+target_link_libraries(your_target Boost::locale)
+```
+
+#fun[如果你的项目要支持多语言，那么 Boost.Locale 就可以帮你做到。]
+
+==== GBK 和 UTF 互转
+
+使用 `boost::locale::conv::to/from_utf` 就能轻易做到。
+
+```cpp
+#include <boost/locale.hpp>
+#include <iostream>
+
+using boost::locale::conv::to_utf;
+using boost::locale::conv::from_utf;
+
+int main() {
+    std::string s = "你好";
+    // 从 GBK 转到 UTF-16
+    std::wstring ws = to_utf<wchar_t>(s, "GBK");
+    std::wcout << ws << '\n';
+    // 从 UTF-16 转回 GBK
+    s = from_utf<char>(ws, "GBK");
+    std::wcout << s << '\n';
+    return 0;
+}
+```
+
+第二个参数可以是 `GBK`、`Shift-JIS`、`Latin1` 等其他编码格式，完整的列表可以在看到。
+
+这里 `to_utf<wchar_t>` 会自动判断 `wchar_t` 的大小。如果是 2 字节（Windows 平台情况）会认为你要转为 UTF-16，如果是 4 字节（Linux 平台情况），会认为你要转为 UTF-32。
+
+而 `to_char<char16_t>` 则是无论什么平台，都会转为 UTF-16。
+
+==== UTF 和 ANSI 互转
+
+我们程序的用户不一定是中国用户（GBK），也可能是俄罗斯用户（CP1251）、日本用户（Shift-JIS）、西班牙用户（CP1252）等。
+
+如果要采用用户的区域设置，即“ANSI”，可以把字符串留空（`""`）。
+
+空字符串就表示当前系统区域设置了，在中国大区等价于 `"GBK"`，俄罗斯大区等价于 `"CP1251"` 等。
+
+```cpp
+#include <boost/locale.hpp>
+#include <iostream>
+
+using boost::locale::conv::from_utf;
+using boost::locale::conv::to_utf;
+
+int main() {
+    std::u8string u8s = u8"你好";
+    // UTF-8 转 ANSI
+    std::string s = from_utf<char>(u8s, "");
+    // ANSI 转 UTF-8
+    u8s = to_utf<char8_t>(s, "");
+    return 0;
+}
+```
+
+==== 大总结
+
+#table(
+    columns: 3,
+    inset: 3pt,
+    align: horizon,
+    [函数名称], [从], [到],
+    [`utf_to_utf<char>`], [UTF-x], [UTF-8],
+    [`utf_to_utf<char8_t>`], [UTF-x], [UTF-8],
+    [`utf_to_utf<char16_t>`], [UTF-x], [UTF-16],
+    [`utf_to_utf<char32_t>`], [UTF-x], [UTF-32],
+    [`utf_to_utf<wchar_t>`], [UTF-x], [Linux 上UTF-32 \ Win 上 UTF-16],
+)
+
+#tip[UTF-x 表示取决于参数类型的大小，如果参数是 `char16_t` 的字符串 `std::u16string`，那 x 就是 16。]
+
+#table(
+    columns: 3,
+    inset: 3pt,
+    align: horizon,
+    [函数名称], [从], [到],
+    [`to_utf<char>("GBK", string)`], [GBK], [UTF-8],
+    [`to_utf<char8_t>("GBK", string)`], [GBK], [UTF-8],
+    [`to_utf<char16_t>("GBK", string)`], [GBK], [UTF-16],
+    [`to_utf<char32_t>("GBK", string)`], [GBK], [UTF-32],
+    [`to_utf<wchar_t>("GBK", string)`], [GBK], [Linux 上UTF-32 \ Win 上 UTF-16],
+    [`to_utf<char>("", string)`], [区域设置], [UTF-8],
+    [`to_utf<char8_t>("", string)`], [区域设置], [UTF-8],
+    [`to_utf<char16_t>("", string)`], [区域设置], [UTF-16],
+    [`to_utf<char32_t>("", string)`], [区域设置], [UTF-32],
+    [`to_utf<wchar_t>("", string)`], [区域设置], [Linux 上UTF-32 \ Win 上 UTF-16],
+)
+
+#table(
+    columns: 3,
+    inset: 3pt,
+    align: horizon,
+    [函数名称], [从], [到],
+    [`from_utf<char>("GBK", string)`], [UTF-8], [GBK],
+    [`from_utf<char>("GBK", u8string)`], [UTF-8], [GBK],
+    [`from_utf<char>("GBK", u16string)`], [UTF-16], [GBK],
+    [`from_utf<char>("GBK", u32string)`], [UTF-32], [GBK],
+    [`from_utf<char>("GBK", wstring)`], [Linux 上UTF-32 \ Win 上 UTF-16], [GBK],
+    [`from_utf<char>("", string)`], [UTF-8], [区域设置],
+    [`from_utf<char>("", u8string)`], [UTF-8], [区域设置],
+    [`from_utf<char>("", u16string)`], [UTF-16], [区域设置],
+    [`from_utf<char>("", u32string)`], [UTF-32], [区域设置],
+    [`from_utf<char>("", wstring)`], [Linux 上UTF-32 \ Win 上 UTF-16], [区域设置],
+)
+
+==== 指定处理错误的方法
+
+如果遇到无法编码的字符，该如何处置？
+
+默认情况下 Boost 会忽视错误，编码失败的字符会被丢弃。
+
+```cpp
+#include <boost/locale.hpp>
+#include <iostream>
+
+using boost::locale::conv::from_utf;
+
+int main() {
+    std::u8string utf8 = u8"我爱𰻞𰻞面";
+    // UTF-8 转 GBK
+    std::string gbk = from_utf<char>(utf8, "GBK");
+    // 错误，“𰻞”无法用 GBK 表示！
+    std::cout << gbk << '\n';
+    // 在 Windows 的 GBK 终端上，只显示“我爱面”
+    return 0;
+}
+```
+
+可以用 `method_type` 这个枚举来指定错误处理的方式。
+
+默认是 `skip`，跳过所有解码出错的地方（导致“𰻞”丢失）。
+
+我们可以切换到 `stop`，当遇到解码错误时，会直接抛出异常，终止程序执行。
+
+```cpp
+#include <boost/locale.hpp>
+#include <iostream>
+
+using boost::locale::conv::from_utf;
+using boost::locale::conv::method_type;
+
+int main() {
+    std::u8string utf8 = u8"我爱𰻞𰻞面";
+    // UTF-8 转 GBK
+    std::string gbk = from_utf<char>(utf8, "GBK",
+                                     method_type::stop);
+    // 错误，“𰻞”无法用 GBK 表示！
+    // from_utf 会抛出 `conversion_error` 异常
+    std::cout << gbk << '\n';
+    return 0;
+}
+```
+
+举例：尝试以 GBK 保存，如果失败，则改为带有 BOM 的 UTF-8。
+
+```cpp
+#include <boost/locale.hpp>
+#include <fstream>
+
+using boost::locale::conv::from_utf;
+using boost::locale::conv::method_type;
+using boost::locale::conv::conversion_error;
+
+void try_save(std::u32string content, std::wstring path) {
+    std::string binary;
+    try {
+        // 尝试将 UTF-32 转成 GBK 编码
+        binary = from_utf<char>(content, "GBK",
+                                method_type::stop);
+    } catch (conversion_error const &e) { // 若 GBK 无法表示
+        // 改用前面带有 BOM 的 UTF-8 编码
+        binary = "\xEF\xBB\xBF" + utf_to_utf<char>(content);
+    }
+    std::ofstream(path) << binary;
+}
+```
+
+举例：支持 UTF-8 字符串（而不是 ANSI 字符串）的打印函数。
+
+```cpp
+#include <boost/locale.hpp>
+#include <iostream>
+
+using boost::locale::conv::from_utf;
+using boost::locale::conv::utf_to_utf;
+
+void print(std::u8string msg) {
+    std::cout << from_utf<char>(msg, "");
+    // 或者：
+    // std::wcout << utf_to_utf<wchar_t>(msg, "");
+}
+```
+
+#detail[更多细节详见官方文档：https://www.boost.org/doc/libs/1_81_0/libs/locale/doc/html/group__codepage.html]
+
+==== 更多功能？！
+
+编码转换只是 `boost::locale::conv` 这个子模块下的一个小功能而已！`boost::locale` 还提供了更多功能，如按照地域语言规范格式化数字、货币、日期、时间等，下一小节中我们继续介绍。完全是 `std::locale` 的上位替代。
+
+#fun[Boost 哪里都好，你想要的功能应有尽有。而且不需要 C++20，很低版本的 C++ 也能用。唯一缺点可能就是太肥了，编译慢。]
+
+=== Windows 用户：MultiByteToWideChar
+
+如果你是 Windows 程序员，没有跨平台需求，不想用 Boost，且需要在 Windows 系统区域设置规定的 ANSI（在中国区是 GBK）编码和 UTF-16 之间转换：
+
+可以用 Windows 官方提供的 `MultiByteToWideChar` 和 `WideCharToMultiByte` 函数。
+
+这两个函数因为 C 语言特色的缘故，参数比较多而杂，建议自己动手封装成更易用的 C++ 函数：
+
+```cpp
+std::wstring ansi_to_wstring(const std::string &s) {
+    // ACP = ANSI Code Page，指定 s 里的是当前区域设置指定的编码（在中国区，ANSI 就是 GBK 了）
+    int len = MultiByteToWideChar(CP_ACP, 0,
+                                  s.c_str(), s.size(),
+                                  nullptr, 0);
+    std::wstring ws(len, 0);
+    MultiByteToWideChar(CP_ACP, 0,
+                        s.c_str(), s.size(), 
+                        ws.data(), ws.size());
+    return ws;
+}
+
+std::string wstring_to_ansi(const std::wstring &ws) {
+    int len = WideCharToMultiByte(CP_ACP, 0,
+                                  ws.c_str(), ws.size(),
+                                  nullptr, 0,
+                                  nullptr, nullptr);
+    std::string s(len, 0);
+    WideCharToMultiByte(CP_ACP, 0,
+                        ws.c_str(), ws.size(),
+                        s.data(), s.size(),
+                        nullptr, nullptr);
+    return s;
+}
+
+std::wstring utf8_to_wstring(const std::string &s) {
+    int len = MultiByteToWideChar(CP_UTF8, 0,
+                                  s.c_str(), s.size(),
+                                  nullptr, 0);
+    std::wstring ws(len, 0);
+    MultiByteToWideChar(CP_UTF8, 0,
+                        s.c_str(), s.size(), 
+                        ws.data(), ws.size());
+    return ws;
+}
+
+std::string wstring_to_utf8(const std::wstring &ws) {
+    int len = WideCharToMultiByte(CP_UTF8, 0,
+                                  ws.c_str(), ws.size(),
+                                  nullptr, 0,
+                                  nullptr, nullptr);
+    std::string s(len, 0);
+    WideCharToMultiByte(CP_UTF8, 0,
+                        ws.c_str(), ws.size(),
+                        s.data(), s.size(),
+                        nullptr, nullptr);
+    return s;
+}
+```
+
+#detail[C 语言特色：所有要返回字符串的函数，都需要调用两遍，第一波先求出长度，第二波才写入。这是为了避免与内存分配器耦合，所有的 C 风格 API 都是这样。]
+
+=== Linux 用户：`iconv`
+
+如果你是 Linux 用户，且没有跨平台需求，不想用 Boost，可以使用 C 语言的 `iconv` 库。
+
+#tip[`iconv` 也有 Windows 的版本，但安装比较困难。如果你连 `iconv` 都搞得定，没理由 Boost 搞不定。]
+
+```cpp
+#include <iconv.h>
+#include <string>
+
+std::string convert(std::string const &s,
+                    char const *from, char const *to) {
+    iconv_t cd = iconv_open(to, from);
+    if (cd == (iconv_t)-1) {
+        throw std::runtime_error("iconv_open failed");
+    }
+    auto in = s.data();
+    auto inbytesleft = s.size();
+    size_t outbytesleft = inbytesleft * 4;
+    std::string buffer(outbytesleft, 0);
+    auto out = buffer.data();
+    iconv(cd, &in, &inbytesleft, &out, &outbytesleft);
+    iconv_close(cd);
+    buffer.resize(buffer.size() - outbytesleft);
+    return buffer;
+}
+
+// 举例：UTF-8 转 GBK
+std::string utf8_to_gbk(std::string const &s) {
+    return convert(s, "UTF-8", "GBK");
+}
+
+// 举例：GBK 转 UTF-8
+std::string gbk_to_utf8(std::string const &s) {
+    return convert(s, "GBK", "UTF-8");
+}
+```
+
+=== `iconv` 命令行工具
+
+`iconv` 不仅是一个库，也是一个命令行工具（大多 Linux 发行版都自带了）。用法如下：
+
+```bash
+iconv -f 来自什么编码 -t 到什么编码 (输入文件名...) > 输出文件名
+```
+
+如不指定输入文件名，默认从终端输入流读取。
+
+如不使用 `> 输出文件名` 重定向输出，则默认输出到终端。
+
+可以用 `echo` 配合管道来创建输入流：
+
+```bash
+$ echo 我爱小彭老师 | iconv -f UTF-8 -t GBK
+�Ұ�С����ʦ
+```
+
+#tip[此处显示乱码是因为我的终端是 UTF-8 格式，无法正确解析 iconv 输出的 GBK 格式数据。]
+
+把“我爱小彭老师”转换为 GBK 格式写入 `gbk.txt`，然后再重新还原回 UTF-8 格式查看：
+
+```bash
+$ echo 我爱小彭老师 | iconv -f UTF-8 -t GBK > gbk.txt
+$ cat gbk.txt
+�Ұ�С����ʦ
+$ iconv -f GBK -t UTF-8 gbk.txt
+我爱小彭老师
+```
+
+#fun[Windows 可能也有类似的工具，比如 `iconv.exe`，但我没找到。]
+
+=== Latin-1 神教
+
+Latin-1 是一个 8 位编码，能表示 256 个字符，包括了拉丁字母、阿拉伯数字、标点符号、常用的西欧字符，以及一些特殊字符。
+
+#image("pic/latin1.svg")
+
+因此，如果你需要把一个 Latin-1 编码的 `char` 字符串转换为 `wchar_t` 字符串，可以直接强转，然后用 `std::wstring` 来存储。
+
+```cpp
+std::string latin1 = "I love Péng";
+std::wstring wstr = reinterpret_cast<wchar_t *>(latin1.data());
+std::wcout << wstr << '\n';
+```
+
+== 本地化
+
+本地化是指根据用户的语言、地区等环境，显示不同的界面。比如说，同样是文件菜单，中文用户看到的是“文件”、英文用户看到的是“File”。
 
 === 区分字符类型
+
+C 语言提供了 `<ctype.h>` 头文件，里面封装了大量形如 `isspace`、`isdigit` 这样的判断字符分类的函数。
+
+```c
+#include <ctype.h>
+```
+
+C++ 对其实施了再封装，改名为 `<cctype>`。若你导入的是该头文件，那么这些函数可以带有 `std` 名字空间前缀的方式 `std::isspace`，`std::isdigit` 访问了，看起来更加专业（确信）。
+
+```cpp
+#include <cctype>
+```
+
+函数清单：
+
+#table(
+    columns: 2,
+    inset: 3pt,
+    align: horizon,
+    [函数名称], [判断的字符类型],
+    [isascii], [0 到 0x7F 的所有 ASCII 字符],
+    [isalpha], [大小写字母 A-Z a-z],
+    [isupper], [大写字母 A-Z],
+    [islower], [小写字母 a-z],
+    [isdigit], [数字 0-9],
+    [isxdigit], [十六进制数字 A-F a-f 0-9],
+    [isprint], [可打印字符，包括字母、数字和标点等],
+    [isgraph], [可打印字符，不包括空格],
+    [iscntrl], [控制字符，除可打印字符外的全部],
+    [isspace], [空白字符，如空格、换行、回车、制表符等],
+    [ispunct], [标点符号],
+    [isalnum], [字母或数字],
+)
+
+更详细的表格可以看：
+
+https://en.cppreference.com/w/cpp/string/byte/isspace
+
+#image("pic/cctype.png")
+
+=== 区域设置与 `std::locale`
+
+=== 字符串编码转换 `<codecvt>`
+
+=== 时间日期格式化
 
 === 正则表达式匹配汉字？
 
@@ -2465,6 +3041,49 @@ fmt::println("{}", s.size());   // 3
 - 广义的汉字：0x2E80 到 0x9FFF（“⺀”到“鿿”）
 
 广义的汉字包含了几乎所有中日韩使用的汉字字符，而狭义的汉字只是中文里最常用的一部分。
+
+=== 根据编号输入 Unicode 字符
+
+== 宽字符流
+
+之所以把宽字符流放到最后，是因为，首先 `iostream` 本来就是一个失败的设计。
+
+#fun[小彭老师在本书开头就多次强调过他是 `format` 孝子。]
+
+而宽字符 `wchar_t` 本身就充斥着历史遗留糟粕（例如 Windows 被 UTF-16 背刺）。
+
+现在 `iostream` 与 `wchar_t` 一起出现在我面前，不能说是梦幻联动吧，至少也可以说是答辩超人了。
+
+总之，我个人还是推荐程序内部以 UTF-8（`char8_t`）或 UTF-32（`char32_t`）的字符串来处理万物。
+
+#tip[UTF-8 或 UTF-32 的选择取决于你的中文处理需求是否旺盛，是否在乎空间，是否需要切片和索引等。]
+
+当需要调用操作系统 API 读写文件时，再用 `boost::locale`、`utfcpp` 等工具转换成 ANSI（`char`）或 UTF-16（`wchar_t`）。
+
+对于 Linux 用户，也可以检测如果是 Linux 系统，则什么转换都不做，因为 Linux 用户几乎都是 UTF-8，那么 `const char8_t *` 可以强转为 `const char *` 而不用任何额外开销。
+
+```cpp
+std::string to_os_string(std::u8string const &u8s) {
+#if _WIN32
+    // UTF-8 到 ANSI
+    return boost::locale::conv::from_utf<char>(u8s, "");
+#elif __linux__
+    return std::string(
+        reinterpret_cast<const char *>(u8s.c_str()),
+        u8s.size());
+#else
+#error "Unsupported system."
+#endif
+}
+```
+
+总之，如果你实在要学糟糕的宽字符流，那我也奉陪到底。
+
+=== `wchar_t` 系列函数
+
+=== `std::wcout` 的使用
+
+=== `std::wfstream` 的使用
 
 //=== 跨平台软件何去何从？
 //
