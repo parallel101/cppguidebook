@@ -58,6 +58,11 @@
 
 <a href="https://afdian.net/a/archibate"><img src="https://142857.red/afdian-qrcode.jpg?y" alt="https://afdian.net/a/archibate" width="400px"/></a>
 
+> [!WARN]
+> 救命……爱发电似乎关停了！？小彭老师赶紧贴出支付宝收款码作为替代……
+
+[![Zhifu Code](misc/zfb-qrcode.jpg)]
+
 > [!TIP]
 > 如果你也处于失业状态，就不用勉强赞助了……也可以先给小彭老师点一颗⭐Star⭐表示心意。
 
