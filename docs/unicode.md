@@ -660,7 +660,7 @@ strrev(s.data()); // 会把按字符正常反转，得到 “岁万课开公师�
 
 但由于当时各国迫切需要支持自己本国的文字，就在兼容 ASCII 的基础上，发展出了自己的字符集和字符编码。这些当地特供的字符集里只包含了本国文字，所有这些各国的字符编码也都和 UTF-8 类似，采用火车头式的变长编码，对 0 开头的 ASCII 部分也都是兼容。所以 Windows 索性把 ANSI 当作“各国本地文字编码”的简称了。但后来互联网的出现，“区域设置”带来了巨大的信息交换困难。
 
-> {{ icon.fun }} 例如你在玩一些日本的 galgame 时，会发现里面文字全部乱码。这是因为 Windows 在各个地区发行的是“特供版”：在中国大陆地区，他发行的 Windows 采用 GBK 字符集，在日本地区，他发行的 Windows 采用 Shift-JIS 字符集。日本程序员编译程序时，程序内部存储的是 Shift-JIS 的那些“整数”。这导致日本的 galgame 在中国大陆特供的 Windows 中，把 Shift-JIS 的“整数”用 GBK 的表来解读了，从而乱码（GBK 里的日文区域并没有和 Shift-JIS 重叠）。需要用 Locale Emulator 把 Shit-JIS 翻译成 Unicode 读给 Windows 听。如果日本程序员从一开始就统一用 Unicode 来存储，中国区玩家的 Windows 也统一用 Unicode 解析，就没有这个问题。
+> {{ icon.fun }} 例如你在玩一些日本的 galgame 时，会发现里面文字全部乱码。这是因为 Windows 在各个地区发行的是“特供版”：在中国大陆地区，他发行的 Windows 采用 GBK 字符集，在日本地区，他发行的 Windows 采用 Shift-JIS 字符集。日本程序员编译程序时，程序内部存储的是 Shift-JIS 的那些“整数”。这导致日本的 galgame 在中国大陆特供的 Windows 中，把 Shift-JIS 的“整数”用 GBK 的表来解读了，从而乱码（GBK 里的日文区域并没有和 Shift-JIS 重叠）。需要用 Locale Emulator 把 Shift-JIS 翻译成 Unicode 读给 Windows 听。如果日本程序员从一开始就统一用 Unicode 来存储，中国区玩家的 Windows 也统一用 Unicode 解析，就没有这个问题。
 
 这种情况下，Unicode 组织出现了，他的使命就是统一全世界的字符集，保证全世界所有的文字都能在全世界所有的计算机上显示出来。首先创办了 Unicode 字符集，然后规定了 UTF-8、UTF-16、UTF-32 三种字符编码，最终 UTF-8 成为外码的主流，UTF-32 成为内码的主流。
 
@@ -1214,6 +1214,30 @@ int main() {
 |`from_utf("", u16string)`|UTF-16|区域设置|
 |`from_utf("", u32string)`|UTF-32|区域设置|
 |`from_utf("", wstring)`|Linux 上 UTF-32；Win 上 UTF-16|区域设置|
+
+#### GBK 和 Shift-JIS 互转
+
+```cpp
+#include <boost/locale.hpp>
+#include <iostream>
+
+using boost::locale::conv::between;
+using boost::locale::conv::from_utf;
+
+int main() {
+    // 创建一个 Shift-JIS 字符串
+    std::string jis = from_utf(u8"日本語", "Shift-JIS");
+    // 从 Shift-JIS 转到 GBK
+    std::string gbk = between(jis, "GBK", "Shift-JIS");
+    std::cout << gbk << '\n';
+    // 从 GBK 转回 Shift-JIS
+    jis = between(gbk, "Shift-JIS", "GBK");
+    std::cout << jis << '\n';
+    return 0;
+}
+```
+
+> {{ icon.warn }} 注意！是目标编码在前！如果你要从 Shift-JIS 转成 GBK，那么需要 `between(jis, "GBK", "Shift-JIS")`，这真是一个糟糕的设计。不仅 GBK 和 Shift-JIS 可能不小心弄反了，编译器，一点提示都没有，而且 jis 和 "GBK" 都是字符串，很容易大脑搞混。让我来设计的话，我会这样提供 API：`decode(jis, Encoding::ShiftJIS).encode(Encoding::GBK)`，其中 `Encoding` 是一个枚举，强大的类型系统，不仅避免犯错的机会，看起来也更轻松。之后的设计模式专题课中，会再详细讲解什么是好的 API 设计。
 
 #### 指定处理错误的方法
 
