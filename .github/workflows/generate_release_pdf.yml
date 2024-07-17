@@ -72,8 +72,8 @@ jobs:
 
       - name: Install Fonts
         run: |
-            apt-get install -yq --allow-unauthenticated ttf-mscorefonts-installer
-            apt-get install -yyq fonts-liberation
+            sudo apt-get install -yq --allow-unauthenticated ttf-mscorefonts-installer
+            sudo apt-get install -yyq fonts-liberation
 
       - name: Prepare Puppeteer environment
         run: |
@@ -108,7 +108,7 @@ jobs:
       - name: Generate release tag
         id: tag
         run: |
-          echo "release_date=$(date +"%Y 年 %m 月 %d 日 %H 点 %M 分")" >> $GITHUB_OUTPUT
+          echo "release_date=$(TZ=Asia/Shanghai date +"%Y 年 %m 月 %d 日 %H 点 %M 分")" >> $GITHUB_OUTPUT
           echo "release_tag=latest_$(date +"%Y-%m-%d_%H-%M")" >> $GITHUB_OUTPUT
 
       - name: Release
