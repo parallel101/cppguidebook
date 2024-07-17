@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>开发环境与平台选择 - ✝️小彭大典✝️</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../css/print-site-enum-headings1.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings2.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings3.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings4.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings5.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings6.css" rel="stylesheet">
+        <link href="../css/print-site.css" rel="stylesheet">
+        <link href="../css/print-site-mkdocs.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">✝️小彭大典✝️</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">前言</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">大典</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../helloworld/" class="dropdown-item">你好，世界</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active" aria-current="page">开发环境与平台选择</a>
+</li>
+                                    
+<li>
+    <a href="../vartypes/" class="dropdown-item">变量与类型 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../functions/" class="dropdown-item">自定义函数 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../functional/" class="dropdown-item">函数式编程</a>
+</li>
+                                    
+<li>
+    <a href="../unicode/" class="dropdown-item">字符编码那些事</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/parallel101/cppguidebook" class="nav-link">GitHub</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://space.bilibili.com/263032155" class="nav-link">Bilibili</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../helloworld/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../vartypes/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">开发环境与平台选择</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#ide" class="nav-link">IDE 不是编译器！</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_2" class="nav-link">编译器是？</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_3" class="nav-link">编译器御三家</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_4" class="nav-link">使用编译器编译源码</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_5" class="nav-link">编译器选项</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_13" class="nav-link">标准库御三家</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">开发环境与平台选择</h1>
+<p>TODO</p>
+<h2 id="ide">IDE 不是编译器！</h2>
+<p>TODO</p>
+<h2 id="_2">编译器是？</h2>
+<p>编译器是将源代码 (<code>.cpp</code>) 编译成可执行程序 (<code>.exe</code>) 的工具。</p>
+<blockquote>
+<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> C++ 是<strong>编译型语言</strong>，源代码不能直接执行哦！刚开始学编程的小彭老师曾经把网上的 “Hello, World” 代码拷贝到 <code>.c</code> 源码文件中，然后把后缀名改成 <code>.exe</code>，发现这样根本执行不了……后来才知道需要通过一种叫做<strong>编译器</strong>编译 <code>.c</code> 文件，才能得到计算机可以直接执行的 <code>.exe</code> 文件。</p>
+</blockquote>
+<p>C++ 源码 <code>.cpp</code> 是写给人类看的！计算机并不认识，计算机只认识二进制的机器码。要把 C++ 源码转换为计算机可以执行的机器码。</p>
+<h2 id="_3">编译器御三家</h2>
+<p>最常见的编译器有：GCC、Clang、MSVC</p>
+<blockquote>
+<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 俗称“御三家”。</p>
+</blockquote>
+<p>这些编译器都支持了大部分 C++20 标准和小部分 C++23 标准，而 C++17 标准都是完全支持的。</p>
+<blockquote>
+<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 有人说过：“如果你不知道一个人是用的什么编译器，那么你可以猜他用的是 GCC。”</p>
+</blockquote>
+<ul>
+<li>GCC 主要只在 Linux 和 MacOS 等 Unix 类系统可用，不支持 Windows 系统。但是 GCC 有着大量好用的扩展功能，例如大名鼎鼎的 <code>pbds</code>（基于策略的数据结构），还有各种 <code>__attribute__</code>，各种 <code>__builtin_</code> 系列函数。不过随着新标准的出台，很多原本属于 GCC 的功能都成了标准的一部分，例如 <code>__attribute__((warn_unused))</code> 变成了标准的 <code>[[nodiscard]]</code>，<code>__builtin_clz</code> 变成了标准的 <code>std::countl_zero</code>，<code>__VA_OPT__</code> 名字都没变就进了 C++20 标准。</li>
+</ul>
+<blockquote>
+<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> PBDS 又称 “平板电视”</p>
+</blockquote>
+<ul>
+<li>
+<p>也有 MinGW 这样的魔改版 GCC 编译器，把 GCC 移植到了 Windows 系统上，同时也能用 GCC 的一些特性。不过 MinGW 最近已经停止更新，最新的 GCC Windows 移植版由 MinGW-w64 继续维护。</p>
+</li>
+<li>
+<p>Clang 是跨平台的编译器，支持大多数主流平台，包括操作系统界的御三家：Linux、MacOS、Windows。Clang 支持了很大一部分 GCC 特性和部分 MSVC 特性。其所属的 LLVM 项目更是编译器领域的中流砥柱，不仅支持 C、C++、Objective-C、Fortran 等，Rust 和 Swift 等语言也是基于 LLVM 后端编译的，不仅如此，还有很多显卡厂商的 OpenGL 驱动也是基于 LLVM 实现编译的。并且 Clang 身兼数职，不仅可以编译，还支持静态分析。许多 IDE 常见的语言服务协议 (LSP) 就是基于 Clang 的服务版————Clangd 实现的 (例如你可以按 Ctrl 点击，跳转到函数定义，这样的功能就是 IDE 通过调用 Clangd 的 LSP 接口实现）。不过 Clang 的性能优化比较激进，虽然有助于性能提升，如果你不小心犯了未定义行为，Clang 可能优化出匪夷所思的结果，如果你要实验未定义行为，Clang 是最擅长复现的。且 Clang 对一些 C++ 新标准特性支持相对较慢，没有 GCC 和 MSVC 那么上心。</p>
+</li>
+</ul>
+<blockquote>
+<p><img src="/img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如 C++20 早已允许 lambda 表达式捕获 structural-binding 变量，而 Clang 至今还没有支持，尽管 Clang 已经支持了很多其他 C++20 特性。</p>
+</blockquote>
+<ul>
+<li>Apple Clang 是苹果公司自己魔改的 Clang 版本，只在 MacOS 系统上可用，支持 Objective-C 和 Swift 语言。但是版本较官方 Clang 落后一些，很多新特性都没有跟进，基本上只有专门伺候苹果的开发者会用。</li>
+</ul>
+<blockquote>
+<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> GCC 和 Clang 也支持 Objective-C。</p>
+</blockquote>
+<ul>
+<li>
+<p>MSVC 是 Windows 限定的编译器，提供了很多 MSVC 特有的扩展。也有人在 Clang 上魔改出了 MSVC 兼容模式，兼顾 Clang 特性的同时，支持了 MSVC 的一些特性（例如 <code>__declspec</code>），可以编译用了 MSVC 特性的代码，即 <code>clang-cl</code>，在最新的 VS2022 IDE 中也集成了 <code>clang-cl</code>。值得注意的是，MSVC 的优化能力是比较差的，比 GCC 和 Clang 都差，例如 MSVC 几乎总是假定所有指针 aliasing，这意味着当遇到很多指针操作的循环时，几乎没法做循环矢量化。但是也使得未定义行为不容易产生 Bug，另一方面，这也导致一些只用 MSVC 的人不知道某些写法是未定义行为。</p>
+</li>
+<li>
+<p>Intel C++ compiler 是英特尔开发的 C++ 编译器，由于是硬件厂商开发的，特别擅长做性能优化。但由于更新较慢，基本没有更上新特性，也没什么人在用了。</p>
+</li>
+</ul>
+<blockquote>
+<p><img src="/img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 最近他们又出了个 Intel DPC++ compiler，支持最新的并行编程领域特定语言 SyCL。</p>
+</blockquote>
+<h2 id="_4">使用编译器编译源码</h2>
+<h3 id="msvc">MSVC</h3>
+<pre><code class="language-cmd">cl.exe /c main.cpp 
+</code></pre>
+<p>这样就可以得到可执行文件 <code>main.exe</code> 了。</p>
+<h3 id="gcc">GCC</h3>
+<pre><code class="language-bash">g++ -c main.cpp -o main
+</code></pre>
+<p>这样就可以得到可执行文件 <code>main</code> 了。</p>
+<blockquote>
+<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> Linux 系统的可执行文件并没有后缀名，所以没有 <code>.exe</code> 后缀。</p>
+</blockquote>
+<h3 id="clang">Clang</h3>
+<p>Windows 上：</p>
+<pre><code class="language-bash">clang++.exe -c main.cpp -o main.exe
+</code></pre>
+<p>Linux / MacOS 上：</p>
+<pre><code class="language-bash">clang++ -c main.cpp -o main
+</code></pre>
+<h2 id="_5">编译器选项</h2>
+<p>编译器选项是用来控制编译器的行为的。不同的编译器有不同的选项，语法有微妙的不同，但大致功效相同。</p>
+<p>例如当我们说“编译这个源码时，我用了 GCC 编译器，<code>-O3</code> 和 <code>-std=c++20</code> 选项”，说的就是把这些选项加到了 <code>g++</code> 的命令行参数中：</p>
+<pre><code class="language-bash">g++ -O3 -std=c++20 -c main.cpp -o main
+</code></pre>
+<p>其中 Clang 和 GCC 的编译器选项有很大交集。而 MSVC 基本自成一派。</p>
+<p>Clang 和 GCC 的选项都是 <code>-xxx</code> 的形式，MSVC 的选项是 <code>/xxx</code> 的形式。</p>
+<p>常见的编译器选项有：</p>
+<h3 id="c">C++ 标准</h3>
+<p>指定要选用的 C++ 标准。</p>
+<p>Clang 和 GCC：<code>-std=c++98</code>、<code>-std=c++03</code>、<code>-std=c++11</code>、<code>-std=c++14</code>、<code>-std=c++17</code>、<code>-std=c++20</code>、<code>-std=c++23</code></p>
+<p>MSVC：<code>/std:c++98</code>、<code>/std:c++11</code>、<code>/std:c++14</code>、<code>/std:c++17</code>、<code>/std:c++20</code>、<code>/std:c++latest</code></p>
+<p>例如要编译一个 C++20 源码文件，分别用 GCC、Clang、MSVC：</p>
+<p>GCC（Linux）：</p>
+<pre><code class="language-bash">g++ -std=c++20 -c main.cpp -o main
+</code></pre>
+<p>Clang（Linux）：</p>
+<pre><code class="language-bash">clang++ -std=c++20 -c main.cpp -o main
+</code></pre>
+<p>MSVC（Windows）：</p>
+<pre><code class="language-bash">cl.exe /std:c++20 /c main.cpp
+</code></pre>
+<h3 id="_6">优化等级</h3>
+<p>Clang 和 GCC：<code>-O0</code>、<code>-O1</code>、<code>-O2</code>、<code>-O3</code>、<code>-Ofast</code>、<code>-Os</code>、<code>-Oz</code>、<code>-Og</code></p>
+<ul>
+<li><code>-O0</code>：不进行任何优化，编译速度最快，忠实复刻你写的代码，未定义行为不容易产生诡异的结果，一般用于开发人员内部调试阶段。</li>
+<li><code>-O1</code>：最基本的优化，会把一些简单的死代码（编译器检测到的不可抵达代码）删除，去掉没有用的变量，把部分变量用寄存器代替等，编译速度较快，执行速度也比 <code>-O0</code> 快。但是会丢失函数的行号信息，影响诸如 gdb 等调试，如需快速调试可以用 <code>-Og</code> 选项。</li>
+<li><code>-O2</code>：比 <code>-O1</code> 更强的优化，会把一些循环展开，把一些函数内联，减少函数调用，把一些简单的数组操作用更快的指令替代等，执行速度更快。</li>
+<li><code>-O3</code>：比 <code>-O2</code> 更激进的优化，会把一些复杂的循环用 SIMD 矢量指令优化加速，把一些复杂的数组操作用更快的指令替代等。性能提升很大，但是如果你的程序有未定义行为，可能会导致一些 Bug。如果你的代码没有未定义行为则绝不会有问题，对自己的代码质量有自信就可以放心开，编译速度也会很慢，一般用于程序最终成品发布阶段。</li>
+<li><code>-Ofast</code>：在 <code>-O3</code> 的基础上，进一步对浮点数的运算进行更深层次的优化，但是可能会导致一些浮点数计算结果不准确。如果你的代码不涉及到 NaN 和 Inf 的处理，那么 <code>-Ofast</code> 不会有太大的问题，一般用于科学计算领域的终极性能优化。</li>
+<li><code>-Os</code>：在 <code>-O2</code> 的基础上，专门优化代码大小，性能被当作次要需求，但是会禁止会导致可执行文件变大的优化。会把一些循环展开、内联等优化关闭，把一些代码用更小的指令实现，尽可能减小可执行文件的尺寸，比 <code>-O0</code>、<code>-O1</code>、<code>-O2</code> 都要小，通常用于需要节省内存的嵌入式系统开发。</li>
+<li><code>-Oz</code>：在 <code>-Os</code> 的基础上，进一步把代码压缩，可能把本可以一条大指令完成的任务也拆成多条小指令，为了尺寸完全性能，大幅减少了函数内联的机会，有时用于嵌入式系统开发。</li>
+<li><code>-Og</code>：在 <code>-O0</code> 的基础上，尽可能保留更多调试信息，不做破坏函数行号等信息的优化，建议配合产生更多调试信息的 <code>-g</code> 选项使用。但还是会做一些简单的优化，比 <code>-O0</code> 执行速度更快。但 <code>-Og</code> 的所有优化都不会涉及到未定义行为，因此非常适合调试未定义行为。但是由于插入了调试信息，最终的可执行文件会变得很大，一般在开发人员调试时使用。</li>
+</ul>
+<p>MSVC：<code>/Od</code>、<code>/O1</code>、<code>/O2</code>、<code>/Ox</code>、<code>/Ob1</code>、<code>/Ob2</code>、<code>/Os</code></p>
+<ul>
+<li><code>/Od</code>：不进行任何优化，忠实复刻你写的代码，未定义行为不容易产生诡异的结果，一般用于调试阶段。</li>
+<li><code>/O1</code>：最基本的优化，会把一些简单的死代码删除，去掉没有用的变量，把变量用寄存器代替等。</li>
+<li><code>/O2</code>：比 <code>/O1</code> 更强的优化，会把一些循环展开，把一些函数内联，减少函数调用，还会尝试把一些循环矢量化，把一些简单的数组操作用更快的指令替代等。一般用于发布阶段。</li>
+<li><code>/Ox</code>：在 <code>/O2</code> 的基础上，进一步优化，但是不会导致未定义行为，一般用于发布阶段。</li>
+<li><code>/Ob1</code>：启用函数内联。</li>
+<li><code>/Ob2</code>：启用函数内联，但是会扩大内联范围，一般比 <code>/Ob1</code> 更快，但是也会导致可执行文件变大。</li>
+<li><code>/Os</code>：在 <code>/O2</code> 的基础上，专门优化代码大小，性能被当作次要需求，但是会禁止会导致可执行文件变大的优化。会把一些循环展开、内联等优化关闭，把一些代码用更小的指令实现，尽可能减小可执行文件的尺寸，通常用于需要节省内存的嵌入式系统开发。</li>
+</ul>
+<h3 id="_7">调试信息</h3>
+<p>Clang 和 GCC：<code>-g</code>、<code>-g0</code>、<code>-g1</code>、<code>-g2</code>、<code>-g3</code></p>
+<p>MSVC：<code>/Z7</code>、<code>/Zi</code></p>
+<h3 id="_8">头文件搜索路径</h3>
+<h3 id="_9">指定要链接的库</h3>
+<h3 id="_10">库文件搜索路径</h3>
+<h3 id="_11">定义宏</h3>
+<p>Clang 和 GCC：<code>-Dmacro=value</code></p>
+<p>MSVC：<code>/Dmacro=value</code></p>
+<p>例如：</p>
+<h3 id="_12">警告开关</h3>
+<h2 id="_13">标准库御三家</h2>
+<ul>
+<li>
+<p>libstdc++ 是 GCC 官方的 C++ 标准库实现，由于 GCC 是 Linux 系统的主流编译器，所以 libstdc++ 也是 Linux 上最常用的标准库。你可以在这里看到他的源码：https://github.com/gcc-mirror/gcc/tree/master/libstdc%2B%2B-v3</p>
+</li>
+<li>
+<p>libc++ 是 Clang 官方编写的 C++ 标准库实现，由于 Clang 是 MacOS 系统的主流编译器，所以 libc++ 也是 MacOS 上最常用的标准库。libc++ 也是 C++ 标准库中最早实现 C++11 标准的。项目的开源地址是：https://github.com/llvm/llvm-project/tree/main/libcxx</p>
+</li>
+<li>
+<p>MSVC STL 是 MSVC 官方的 C++ 标准库实现，由于 MSVC 是 Windows 系统的主流编译器，所以 MSVC STL 也是 Windows 上最常用的标准库。MSVC STL 也是 C++ 标准库中最晚实现 C++11 标准的，但是现在他已经完全支持 C++20，并且也完全开源了：https://github.com/microsoft/STL</p>
+</li>
+</ul>
+<p>值得注意的是，标准库和编译器并不是绑定的，例如 Clang 可以用 libstdc++ 或 MSVC STL，GCC 也可以被配置使用 libc++。</p>
+<p>在 Linux 系统中，Clang 默认用的就是 libstdc++。需要为 Clang 指定 <code>-stdlib=libc++</code> 选项，才能使用。</p>
+<blockquote>
+<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 牛头人笑话：“如果你不知道一个人是用的什么标准库，那么你可以猜他用的是 libstdc++。因为即使他的编译器是 Clang，他用的大概率依然是 libstdc++。”</p>
+</blockquote>
+<h3 id="_14">标准库的调试模式</h3>
+<p>TODO</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../js/print-site.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

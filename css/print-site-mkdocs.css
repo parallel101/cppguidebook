@@ -1,0 +1,44 @@
+/* Print styles for default MkDocs theme  */
+
+#print-site-banner { 
+    padding-top: 1em;
+ }
+
+
+ /* Table of contents, proper padding */
+.print-page-toc-title {
+    padding-bottom: 0em;
+    margin-bottom: 1em;
+}
+ /* Table of contents, compatible with dark theme */
+ #print-site-page ul.toc-section-line-border { 
+    border-left: 5px solid rgb(225, 225, 225);
+ }
+
+@media print {
+
+    /* Hide side TOC banner 
+    Note the side will also disappear when printing other pages,
+    but it doesn't print well so I see this as acceptable behaviour
+    */
+    .col-md-3 { display: none !important; }
+}
+
+@page {
+
+    /* 
+        Note this CSS file is added to all MkDocs pages
+        So this @page logic will affect print of all pages
+    */
+
+    size: a4 portrait;
+    margin: 15mm 10mm 15mm 10mm;
+    counter-increment: page;
+
+    @bottom-center {
+        content: string(chapter);
+    }
+    @bottom-right {
+        content: 'Page ' counter(page);
+    }
+}
