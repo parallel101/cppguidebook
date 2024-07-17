@@ -57,6 +57,5 @@ def afd_gen_thank_list():
     return img
 
 img = afd_gen_thank_list()
-file = 'pic/thanks.png'
+file = 'docs/img/thanks.png'
 img.save(file)
-os.system(f'curl -L -X PUT https://142857.red/files/afdian-thanks.png -F file=@{file} -F token={os.environ['SEVEN_TOKEN']}')
