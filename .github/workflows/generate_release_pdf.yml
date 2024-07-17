@@ -72,8 +72,7 @@ jobs:
 
       - name: Install Fonts
         run: |
-            sudo apt-get install -yq --allow-unauthenticated ttf-mscorefonts-installer
-            sudo apt-get install -yyq fonts-liberation
+            sudo apt-get install -y fonts-noto-cjk
 
       - name: Prepare Puppeteer environment
         run: |

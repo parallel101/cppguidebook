@@ -14,3 +14,5 @@ plugins:
   - search
   - print-site
   - macros
+extra_css:
+  - stylesheets/extra.css
