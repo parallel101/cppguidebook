@@ -91,7 +91,7 @@ jobs:
 
       - name: Generate ZIP archive
         run: |
-          cd site && zip -r cppguidebook-site.zip .
+          cd site && zip -r ../cppguidebook-site.zip .
 
       - name: Delete old Release
         uses: actions/github-script@v7
