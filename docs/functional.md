@@ -670,7 +670,7 @@ int main() {
 
 ```cpp
 struct OpBase { // 面向对象：遇事不决先定义接口……
-    virtual int operate(int a, int b) = 0;
+    virtual int compute(int a, int b) = 0;
     virtual ~OpBase() = default;
 };
 
@@ -695,7 +695,7 @@ struct OpMax : OpBase {
 int generic_sum(std::vector<int> const &v, OpBase *op) {
     int ret = v[0];
     for (int i = 1; i < v.size(); ++i) {
-        ret = op.compute(ret, v[i]); // 写起来也麻烦，需要调用他的成员函数，成员函数又要起名……
+        ret = op->compute(ret, v[i]); // 写起来也麻烦，需要调用他的成员函数，成员函数又要起名……
     }
     delete op;
     return ret;
