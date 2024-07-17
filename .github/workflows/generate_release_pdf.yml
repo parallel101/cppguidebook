@@ -41,6 +41,12 @@ jobs:
           ls site site/print_page
           node misc/export_to_pdf.js file://$PWD/site/print_page/index.html cppguidebook.pdf "小彭老师的现代 C++ 大典"
 
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+
       - name: Delete old Release
         uses: actions/github-script@v7
         with:
@@ -65,15 +71,9 @@ jobs:
           body: |
             小彭老师发布的最新 C++ 大典，更新时间 ${{ steps.tag.outputs.release_date }}
             > 在线阅读？访问 [GitHub Pages](https://parallel101.github.io/cppguidebook)
-            > Release 页面太慢？GitHub 卡顿，无法下载？访问 [小彭老师自己维护的镜像](${{ env.MIRROR_SITE_URL }}/cppguidebook.pdf)。
+            > GitHub 卡顿，无法下载？访问 [小彭老师自己维护的镜像](${{ env.MIRROR_SITE_URL }}/cppguidebook.pdf)。
           tag_name: ${{ steps.tag.outputs.release_tag }}
           files: cppguidebook.pdf
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
 
       - name: Publish to mirror site
         continue-on-error: true

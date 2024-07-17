@@ -5,18 +5,25 @@
 > [!NOTE]
 > 敢承诺：土木老哥也能看懂！
 
-## 下载 PDF
+## 在哪里可以看？
 
-[点击开始在线阅读](https://142857.red/files/cppguidebook.pdf)
+本书托管在 GitHub Pages，[点击开始在线阅读](https://parallel101.github.io/cppguidebook)。
+
+> [!TIP]
+> GitHub Pages 是实时更新的，每当小彭老师推送了新章节，网页都会自动更新。
 
 也可以前往 [GitHub Release 页面](https://github.com/parallel101/cppguidebook/releases) 下载 PDF 文件。
 
+GitHub Release 太慢？[访问小彭老师维护的镜像](https://142857.red/files/cppguidebook.pdf)
+
 > [!NOTE]
-> 感谢 [Derived Cat](https://github.com/hooyuser) 大佬提供智能脚本！每当小彭老师推送了修改后，Release 页面和小水管服务器上的 PDF 文件都会自动更新。只要看到小彭老师提交新 commit，你就可以随时重新下载最新版。（如果看到没有变化,是浏览器缓存导致的，建议电脑端按 F5 或者手机屏幕下拉刷新一下）
+> 感谢 [Derived Cat](https://github.com/hooyuser) 大佬提供智能脚本！每当小彭老师推送了修改后，Release 页面、GitHub Pages、和小水管服务器上的 PDF 文件都会自动更新。
+
+要追番的话，点一下 GitHub 右上角的 `Watch` 按钮，每当小彭老师提交新 Release，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。
 
 ## 你也可以参与编写的开源小册
 
-本书完全开源，源文件为 [`cppguidebook.typ`](cppguidebook.typ)。
+本书完全开源，Markdown 源文件在 [`docs/`](docs/) 文件夹下。
 
 如果发现书写问题，或者你有想加入的新章节，有关于 C++ 新想法，新技巧分享给大家，可以提交 [Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) 来帮助小彭老师一起写书。合并后，GitHub 的机器人讲自动重新编译出 PDF。
 
@@ -65,15 +72,11 @@
 > [!TIP]
 > 如果你也处于失业状态，就不用勉强赞助了……也可以先给小彭老师点一颗⭐Star⭐表示心意。
 
-## Typst 真好用，家人们
+## Mkdocs 真好用，家人们
 
-本书使用 [Typst 语言](https://github.com/typst/typst) 书写，类似于 LaTeX 或 Markdown。和 Markdown 相比，Typst 的排版功能更加丰富。和 LaTeX 相比，Typst 更加轻量级，语法简单明了。最重要的是，Typst 支持宏编程，可以在文本中书写代码，实现批量生成结构化的文本。
+本书使用 [Mkdocs](https://www.mkdocs.org/) 构建，是一种基于 Markdown 的
 
-![Typst](https://user-images.githubusercontent.com/17899797/228031796-ced0e452-fcee-4ae9-92da-b9287764ff25.png)
-
-Typst 语言书写的 `.typ` 源文件编译后，得到可供阅读的 `.pdf` 文件。
-
-克隆本仓库后，可以用 `typst compile cppguidebook.typ` 命令编译生成 `cppguidebook.pdf` 文件，也可以用 [`typst-preview`](https://github.com/Enter-tainer/typst-preview`) 等工具，一边修改源文件，一边实时预览效果。
+克隆本仓库后，可以用 `mkdocs build` 命令编译生成 `site` 文件夹，打开其中的 `site/index.html` 就可以开始看了。也可以用 `mkdocs serve` 命令，在 `http://127.0.0.1:8000` 开启实时预览服务，每当你修改 `.md` 文件时都会自动刷新。
 
 > 以下是第一章节的内容预览，要查看全文，请前往 Release 页面下载完整 PDF 文件。
 

@@ -1,7 +1,7 @@
 site_name: ✝️小彭大典✝️
 nav:
-  - 前言: index.md
-  - 大典:
+  - 章节列表:
+    - start.md
     - helloworld.md
     - platform.md
     - vartypes.md
