@@ -54,9 +54,11 @@
 
 ## Mkdocs 真好用，家人们
 
-本书使用 [Mkdocs](https://www.mkdocs.org/) 构建，是一种基于 Markdown 的
+本书使用 [Mkdocs](https://www.mkdocs.org/) 构建，是一种基于 Markdown 的静态网站生成器，可以把一堆 Markdown 文件编译成一个网站，非常适合用于写书。
 
 克隆本仓库后，可以用 `mkdocs build` 命令编译生成 `site` 文件夹，打开其中的 `site/index.html` 就可以开始看了。也可以用 `mkdocs serve` 命令，在 `http://127.0.0.1:8000` 开启实时预览服务，每当你修改 `.md` 文件时都会自动刷新。
+
+每当小彭老师提交新的代码，GitHub 的机器人就会自动调用 Mkdocs 重新编译和部署网页。这样，小彭老师只需要关心写作本书，不用再操心排版、发布等问题。
 
 > 以下是第一章节的内容预览，要查看全文，请前往 Release 页面下载完整 PDF 文件。
 
