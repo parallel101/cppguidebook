@@ -5,43 +5,31 @@
 > [!NOTE]
 > 敢承诺：土木老哥也能看懂！
 
-## 下载 PDF
+## 在哪里可以看？
 
-[点击开始在线阅读](https://142857.red/files/cppguidebook.pdf)
+无需下载，[点击开始在线阅读](https://parallel101.github.io/cppguidebook)。
+
+> [!TIP]
+> GitHub Pages 是实时更新的，每当小彭老师推送了新章节，网页都会自动更新哦。
 
 也可以前往 [GitHub Release 页面](https://github.com/parallel101/cppguidebook/releases) 下载 PDF 文件。
 
 > [!NOTE]
-> 感谢 [Derived Cat](https://github.com/hooyuser) 大佬提供智能脚本！每当小彭老师推送了修改后，Release 页面和小水管服务器上的 PDF 文件都会自动更新。只要看到小彭老师提交新 commit，你就可以随时重新下载最新版。（如果看到没有变化,是浏览器缓存导致的，建议电脑端按 F5 或者手机屏幕下拉刷新一下）
+> 要追番的话，点一下 GitHub 右上角的 `Watch` 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。
+
+如果你在阅读过程中遇到任何问题，可以在 [GitHub Issues](https://github.com/parallel101/cppguidebook/issues) 中提出，小彭老师会尽力解答。
 
 ## 你也可以参与编写的开源小册
 
-本书完全开源，源文件为 [`cppguidebook.typ`](cppguidebook.typ)。
+本书完全开源，Markdown 源文件在 [`docs/`](docs/) 文件夹下。
 
-如果发现书写问题，或者你有想加入的新章节，有关于 C++ 新想法，新技巧分享给大家，可以提交 [Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) 来帮助小彭老师一起写书。合并后，GitHub 的机器人讲自动重新编译出 PDF。
-
-添加新章节，可以从下面的“大纲 / Roadmap”中挑选，认领其中的一个章节，开始编写。也可以选择一个大纲里没有，但你认为很重要的方面来写。
-
-# 大纲 / Roadmap
-
-- 前言 (完成)
-- 开发环境与平台选择 (小彭老师施工中)
-- 你好，世界 (小彭老师施工中)
-- 变量与类型 (待认领)
-- 认识标准库 (待认领)
-- 自定义函数 (待认领)
-- 自定义类型 (待认领)
-- 标准库容器 (待认领)
-- 成员函数 (待认领)
-- 我们需要多态 (待认领)
-- 自定义模板 (待认领)
-- TODO: 更多章节
+如果发现书写问题，或者你有想加入的新章节，有关于 C++ 新想法，新技巧分享给大家，可以提交 [Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) 来帮助小彭老师一起写书。合并后，GitHub 的机器人将自动重新编译和部署网页。
 
 ## 赞助名单
 
-感谢以下小彭友的赞助！
+小彭大典的持续编写离不开以下小彭友的赞助！
 
-[![Thanks list](pic/thanks.png)](https://afdian.net/a/archibate)
+[![Thanks list](docs/img/thanks.png)](https://afdian.net/a/archibate)
 
 > [!NOTE]
 > 小彭老师的大典是免费下载的，不用赞助也可以查看哦。
@@ -60,20 +48,18 @@
 
 > 救命……爱发电似乎关停了！？小彭老师赶紧贴出支付宝收款码作为替代……
 
-<img src="misc/zfb-qrcode.jpg" alt="misc/zfb-qrcode.jpg" width="400px"/>
+<img src="docs/img/zfb-qrcode.jpg" alt="docs/img/zfb-qrcode.jpg" width="400px"/>
 
 > [!TIP]
 > 如果你也处于失业状态，就不用勉强赞助了……也可以先给小彭老师点一颗⭐Star⭐表示心意。
 
-## Typst 真好用，家人们
+## Mkdocs 真好用，家人们
 
-本书使用 [Typst 语言](https://github.com/typst/typst) 书写，类似于 LaTeX 或 Markdown。和 Markdown 相比，Typst 的排版功能更加丰富。和 LaTeX 相比，Typst 更加轻量级，语法简单明了。最重要的是，Typst 支持宏编程，可以在文本中书写代码，实现批量生成结构化的文本。
+本书使用 [Mkdocs](https://www.mkdocs.org/) 构建，是一种基于 Markdown 的静态网站生成器，可以把一堆 Markdown 文件编译成一个网站，非常适合用于写书。
 
-![Typst](https://user-images.githubusercontent.com/17899797/228031796-ced0e452-fcee-4ae9-92da-b9287764ff25.png)
+克隆本仓库后，可以用 `mkdocs build` 命令编译生成 `site` 文件夹，打开其中的 `site/index.html` 就可以开始看了。也可以用 `mkdocs serve` 命令，在 `http://127.0.0.1:8000` 开启实时预览服务，每当你修改 `.md` 文件时都会自动刷新。
 
-Typst 语言书写的 `.typ` 源文件编译后，得到可供阅读的 `.pdf` 文件。
-
-克隆本仓库后，可以用 `typst compile cppguidebook.typ` 命令编译生成 `cppguidebook.pdf` 文件，也可以用 [`typst-preview`](https://github.com/Enter-tainer/typst-preview`) 等工具，一边修改源文件，一边实时预览效果。
+每当小彭老师提交新的代码，GitHub 的机器人就会自动调用 Mkdocs 重新编译和部署网页。这样，小彭老师只需要关心写作本书，不用再操心排版、发布等问题。
 
 > 以下是第一章节的内容预览，要查看全文，请前往 Release 页面下载完整 PDF 文件。
 
@@ -83,7 +69,7 @@ Typst 语言书写的 `.typ` 源文件编译后，得到可供阅读的 `.pdf` �
 
 用电脑看的话，可以按 `WIN + ←`，把本书的浏览器窗口放在屏幕左侧，右侧是你的 IDE。一边看一边自己动手做实验。
 
-![split view](pic/slide.jpg)
+![split view](docs/img/slide.jpg)
 
 > 请坐和放宽。
 
@@ -120,4 +106,4 @@ Typst 语言书写的 `.typ` 源文件编译后，得到可供阅读的 `.pdf` �
 
 # 开发环境与平台选择
 
-[>> 继续阅读剩余章节](https://142857.red/files/cppguidebook.pdf)
+[>> 继续阅读剩余章节](https://parallel101.github.io/cppguidebook)

@@ -1,0 +1,16 @@
+site_name: ✝️小彭大典✝️
+nav:
+  - 章节列表:
+    - start.md
+    - helloworld.md
+    - platform.md
+    - vartypes.md
+    - functions.md
+    - functional.md
+    - unicode.md
+  - GitHub: https://github.com/parallel101/cppguidebook
+  - Bilibili: https://space.bilibili.com/263032155
+plugins:
+  - search
+  - print-site
+  - macros
