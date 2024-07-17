@@ -17,7 +17,7 @@
 ]
 #let fun = body => box[
     #box(image(
-        "pic/awesomeface.png",
+        "pic/ height="1em"awesomeface.png",
         height: 1em,
     ))
     #text(font: "LXGWWenKai", size: 1em, fill: rgb("#cd9f0f"))[#body]

@@ -13,7 +13,7 @@ endif()
 find_package(fmt REQUIRED)
 find_package(Boost REQUIRED COMPONENTS locale)
 
-file(GLOB sources CONFIGURE_DEPENDS "*.cpp")
+file(GLOB sources CONFIGURE_DEPENDS "examples/*.cpp")
 foreach(source IN LISTS sources)
     get_filename_component(name ${source} NAME_WE)
     add_executable(${name} ${source})

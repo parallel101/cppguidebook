@@ -1,5 +1,11 @@
 site_name: 小彭老师的现代 C++ 大典
 nav:
-  - 开始: index.md
+  - 前言: index.md
+  - 大典:
+    - unicode.md
   - GitHub: https://github.com/parallel101/cppguidebook
   - Bilibili: https://space.bilibili.com/263032155
+plugins:
+  - search
+  - print-site
+  - macros

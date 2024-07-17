@@ -10,8 +10,6 @@ on:
       - '**.md'
 
 env:
-  TYPST_FILE_NAME: cppguidebook
-  TYPST_FONT_PATH: fonts
   MIRROR_SITE_URL: https://142857.red/files
   MIRROR_SITE_HOOK: https://142857.red/hooks/update_cppguidebook
   MIRROR_SITE_TOKEN: ${{ secrets.SEVEN_TOKEN }}
@@ -22,54 +20,20 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Set up Git repository for secondary repo
+      - name: Set up Git repository
         uses: actions/checkout@v4
 
-      - name: Cache Fonts
-        uses: actions/cache@v4
-        id: cache-fonts
-        with:
-          path: fonts
-          key: ${{ runner.os }}-fonts-noto_sans_sc-lxgwwenkai
-
-      - name: Download Fonts
-        if: steps.cache-fonts.outputs.cache-hit != 'true'
+      - name: Prepare environment
         run: |
-          if [ -f "${{ env.TYPST_FONT_PATH }}/NotoSansSC-Regular.ttf" ]; then
-            echo "Font already existed."
-          else
-            # Download font metadata
-            mkdir -p cv
-            curl -sL "https://fonts.google.com/download/list?family=Noto%20Sans%20SC" > cv/noto_sans_sc_raw.txt
+          pip install mkdocs
+          pip install mkdocs-print-site-plugin
+          pip install mkdocs-macros-plugin
+          npm i -g puppeteer
 
-            # Remove ")]}'" from the beginning of the file
-            tail -c +5 cv/noto_sans_sc_raw.txt > cv/noto_sans_sc_metadata.json
-
-            # Extract the necessary information from the JSON file
-            file_refs=$(jq -rc '.manifest.fileRefs[]' cv/noto_sans_sc_metadata.json)
-
-            # Download, save the font file to /fonts
-            mkdir -p ${{ env.TYPST_FONT_PATH }}
-            while IFS= read -r file_ref; do
-                filename=$(echo "$file_ref" | jq -r '.filename')
-                url=$(echo "$file_ref" | jq -r '.url')
-                fontname=$(basename "$filename")
-                echo $url $fontname
-                curl -L "$url" -o "${{ env.TYPST_FONT_PATH }}/$fontname"
-            done <<< "$file_refs"
-            ls -l ${{ env.TYPST_FONT_PATH }}
-          fi
-          for form in Light Regular Bold; do
-              curl -L "https://github.com/lxgw/LxgwWenKai/releases/download/v1.330/LXGWWenKai-$form.ttf" -o "${{ env.TYPST_FONT_PATH }}/LXGWWenKai-$form.ttf"
-          done
-
-      - name: Prepare Typst environment
-        uses: typst-community/setup-typst@v3
-
-      - name: Compile Typst document
+      - name: Compile document
         run: |
-          typst fonts --variants --font-path ${{ env.TYPST_FONT_PATH }}
-          typst compile ${{ env.TYPST_FILE_NAME }}.typ ${{ env.TYPST_FILE_NAME }}.pdf --font-path ${{ env.TYPST_FONT_PATH }}
+          mkdocs build
+          node export_to_pdf.js files://$PWD/site/print_page.html cppguidebook.pdf "小彭老师的现代 C++ 大典"
 
       - name: Delete old Release
         uses: actions/github-script@v7
@@ -94,9 +58,9 @@ jobs:
           name: 伟大，无需多言
           body: |
             小彭老师发布的最新 C++ 大典，更新时间 ${{ steps.tag.outputs.release_date }}
-            > Release 页面太慢？GitHub 卡顿，无法下载？访问 [小彭老师自己维护的镜像](${{ env.MIRROR_SITE_URL }}/${{ env.TYPST_FILE_NAME }}.pdf)。
+            > Release 页面太慢？GitHub 卡顿，无法下载？访问 [小彭老师自己维护的镜像](${{ env.MIRROR_SITE_URL }}/cppguidebook.pdf)。
           tag_name: ${{ steps.tag.outputs.release_tag }}
-          files: ${{ env.TYPST_FILE_NAME }}.pdf
+          files: cppguidebook.pdf
 
       - name: Publish to mirror site
         continue-on-error: true
