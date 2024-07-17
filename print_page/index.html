@@ -1138,7 +1138,7 @@ int main() {
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 为了这么小的一个代码块，单独定义一个类，就像妈妈开一架“空中战车” A380 只是为了接你放学一样，等你值好机的时间我自己走都走到了。而函数式中，用 lambda 就地定义函数对象，相当于随地抓来一台共享单车开走。</p>
 </blockquote>
 <pre><code class="language-cpp">struct OpBase { // 面向对象：遇事不决先定义接口……
-    virtual int operate(int a, int b) = 0;
+    virtual int compute(int a, int b) = 0;
     virtual ~OpBase() = default;
 };
 
@@ -1163,7 +1163,7 @@ struct OpMax : OpBase {
 int generic_sum(std::vector&lt;int&gt; const &amp;v, OpBase *op) {
     int ret = v[0];
     for (int i = 1; i &lt; v.size(); ++i) {
-        ret = op.compute(ret, v[i]); // 写起来也麻烦，需要调用他的成员函数，成员函数又要起名……
+        ret = op-&gt;compute(ret, v[i]); // 写起来也麻烦，需要调用他的成员函数，成员函数又要起名……
     }
     delete op;
     return ret;
