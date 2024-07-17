@@ -22,6 +22,16 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v4
 
+      - name: Prepare Mkdocs environment
+        run: |
+          pip install mkdocs
+          pip install mkdocs-print-site-plugin
+          pip install mkdocs-macros-plugin
+
+      - name: Compile Mkdocs document
+        run: |
+          mkdocs build
+
       - name: Cache Fonts
         uses: actions/cache@v4
         id: cache-fonts
@@ -60,15 +70,10 @@ jobs:
               curl -L "https://github.com/lxgw/LxgwWenKai/releases/download/v1.330/LXGWWenKai-$form.ttf" -o "${{ env.TYPST_FONT_PATH }}/LXGWWenKai-$form.ttf"
           done
 
-      - name: Prepare Mkdocs environment
+      - name: Install Fonts
         run: |
-          pip install mkdocs
-          pip install mkdocs-print-site-plugin
-          pip install mkdocs-macros-plugin
-
-      - name: Compile Mkdocs document
-        run: |
-          mkdocs build
+            apt-get install -yq --allow-unauthenticated ttf-mscorefonts-installer
+            apt-get install -yyq fonts-liberation
 
       - name: Prepare Puppeteer environment
         run: |
