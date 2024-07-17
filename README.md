@@ -58,7 +58,6 @@
 
 <a href="https://afdian.net/a/archibate"><img src="https://142857.red/afdian-qrcode.jpg?y" alt="https://afdian.net/a/archibate" width="400px"/></a>
 
-> [!WARN]
 > 救命……爱发电似乎关停了！？小彭老师赶紧贴出支付宝收款码作为替代……
 
 <img src="misc/zfb-qrcode.jpg" alt="misc/zfb-qrcode.jpg" width="400px"/>
