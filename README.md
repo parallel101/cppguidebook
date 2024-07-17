@@ -17,11 +17,12 @@
 
 也可以前往 [GitHub Release 页面](https://github.com/parallel101/cppguidebook/releases) 下载 PDF 文件，方便离线查看。
 
-本书还在持续更新中……要追番的话，点一下 GitHub 右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。
-
 如果你在阅读过程中遇到任何问题，可以在 [GitHub Issues](https://github.com/parallel101/cppguidebook/issues) 中提出，小彭老师会尽力解答。
 
-也可以在 [B 站](https://space.bilibili.com/263032155) 发私信给小彭老师哦。
+> [!TIP]
+> 也可以在 [B 站](https://space.bilibili.com/263032155) 发私信给小彭老师哦。
+
+本书还在持续更新中……要追番的话，点一下 GitHub 右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。
 
 ## 你也可以参与编写的开源小册
 
