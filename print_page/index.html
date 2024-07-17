@@ -57,10 +57,6 @@
 </li>
                                     
 <li>
-    <a href="../start/" class="dropdown-item">前言</a>
-</li>
-                                    
-<li>
     <a href="../helloworld/" class="dropdown-item">你好，世界</a>
 </li>
                                     
@@ -123,31 +119,27 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#start" class="nav-link">2. 前言</a>
+            <li class="nav-item" data-bs-level="1"><a href="#helloworld" class="nav-link">2. 你好，世界</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#helloworld" class="nav-link">3. 你好，世界</a>
+            <li class="nav-item" data-bs-level="1"><a href="#platform" class="nav-link">3. 开发环境与平台选择</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#platform" class="nav-link">4. 开发环境与平台选择</a>
+            <li class="nav-item" data-bs-level="1"><a href="#vartypes" class="nav-link">4. 变量与类型 (未完工)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#vartypes" class="nav-link">5. 变量与类型 (未完工)</a>
+            <li class="nav-item" data-bs-level="1"><a href="#functions" class="nav-link">5. 自定义函数 (未完工)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#functions" class="nav-link">6. 自定义函数 (未完工)</a>
+            <li class="nav-item" data-bs-level="1"><a href="#functional" class="nav-link">6. 函数式编程</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#functional" class="nav-link">7. 函数式编程</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="1"><a href="#unicode" class="nav-link">8. 字符编码那些事</a>
+            <li class="nav-item" data-bs-level="1"><a href="#unicode" class="nav-link">7. 字符编码那些事</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -172,45 +164,44 @@
                         </h1>
                         <section class="print-page" id="index"><h1 id="index-c">小彭老师现代 C++ 大典</h1>
 <p>小彭大典是一本关于现代 C++ 编程的权威指南，它涵盖了从基础知识到高级技巧的内容，适合初学者和有经验的程序员阅读。本书由小彭老师亲自编写，通过简单易懂的语言和丰富的示例，帮助读者快速掌握 C++ 的核心概念，并学会如何运用它们来解决实际问题。</p>
-<p><a href="#start">点击此处开始阅读第一章</a></p>
-<p>你也可以在本页面上方导航栏的“章节列表”中，选择感兴趣的章节阅读。</p>
-<p>本书完全开源和免费，GitHub 仓库：https://github.com/parallel101/cppguidebook</p>
 <blockquote>
-<p>如果你是在付费群中“买”到本书，或者打着小彭老师名号卖课，说明你可能是私有制的受害者。因为小彭老师从来没有付费才能看的课程，所有小彭老师课程都对全球互联网开放。</p>
+<p><img src="../../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 敢承诺：土木老哥也能看懂！</p>
 </blockquote>
-<p>如果你在阅读过程中遇到任何问题，可以在 <a href="https://github.com/parallel101/cppguidebook/issues">GitHub Issues</a> 中提出，小彭老师会尽力解答。</p></section><section class="print-page" id="start"><h1 id="start-_1">前言</h1>
-<p>小彭大典是一本关于现代 C++ 编程的权威指南，它涵盖了从基础知识到高级技巧的内容，适合初学者和有经验的程序员阅读。本书由小彭老师亲自编写，通过简单易懂的语言和丰富的示例，帮助读者快速掌握 C++ 的核心概念，并学会如何运用它们来解决实际问题。</p>
-<blockquote>
-<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 敢承诺：土木老哥也能看懂！</p>
-</blockquote>
+<h1 id="index-_1">前言</h1>
 <p>推荐用手机或平板<strong>竖屏</strong>观看，可以在床或沙发上躺着。</p>
 <p>用电脑看的话，可以按 <code>WIN + ←</code>，把本书的浏览器窗口放在屏幕左侧，右侧是你的 IDE。一边看一边自己动手做实验。</p>
 <p><img alt="" src="../img/slide.jpg" /></p>
 <blockquote>
-<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 请坐和放宽。</p>
+<p><img src="../../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 请坐和放宽。</p>
 </blockquote>
-<h2 id="start-_2">格式约定</h2>
+<p>可以按顺序阅读，也可以在本页面上方导航栏的“章节列表”中，选择感兴趣的章节阅读。</p>
+<p>本书完全开源和免费，GitHub 仓库：https://github.com/parallel101/cppguidebook</p>
 <blockquote>
-<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是温馨提示</p>
-<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是可能犯错的警告</p>
-<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是笑话或趣味寓言故事</p>
-<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色书写的是补充说明的课外阅读，看不懂也没关系</p>
-<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的是初学者可暂时不用理解的细节</p>
+<p>如果你是在付费群中“买”到本书，或者打着小彭老师名号卖课，说明你可能是私有制的受害者。因为小彭老师从来没有付费才能看的课程，所有小彭老师课程都对全球互联网开放。</p>
+</blockquote>
+<p>如果你在阅读过程中遇到任何问题，可以在 <a href="https://github.com/parallel101/cppguidebook/issues">GitHub Issues</a> 中提出，小彭老师会尽力解答。</p>
+<h2 id="index-_2">格式约定</h2>
+<blockquote>
+<p><img src="../../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是温馨提示</p>
+<p><img src="../../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是可能犯错的警告</p>
+<p><img src="../../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是笑话或趣味寓言故事</p>
+<p><img src="../../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色书写的是补充说明的课外阅读，看不懂也没关系</p>
+<p><img src="../../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的是初学者可暂时不用理解的细节</p>
 </blockquote>
 <ul>
 <li>术语名称: 这里是术语的定义。</li>
 </ul>
-<h2 id="start-_3">观前须知</h2>
+<h2 id="index-_3">观前须知</h2>
 <p>与大多数现有教材不同的是，本课程将会采用“倒叙”的形式，从最新的 <strong>C++23</strong> 讲起！然后讲 C++20、C++17、C++14、C++11，慢慢讲到最原始的 C++98。</p>
 <p>不用担心，越是现代的 C++，学起来反而更容易！反而古代 C++ 才<strong>又臭又长</strong>。</p>
 <p>很多同学想当然地误以为 C++98 最简单，哼哧哼哧费老大劲从 C++98 开始学，才是错误的。</p>
 <p>为了应付缺胳膊少腿的 C++98，人们发明了各种<strong>繁琐无谓</strong>的写法，在现代 C++ 中，早就已经被更<strong>简洁直观</strong>的写法替代了。</p>
 <blockquote>
-<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如所谓的 safe-bool idiom，写起来又臭又长，C++11 引入一个 <code>explicit</code> 关键字直接就秒了。结果还有一批劳保教材大吹特吹 safe-bool idiom，吹得好像是个什么高大上的设计模式一样，不过是个应付 C++98 语言缺陷的蹩脚玩意。</p>
+<p><img src="../../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如所谓的 safe-bool idiom，写起来又臭又长，C++11 引入一个 <code>explicit</code> 关键字直接就秒了。结果还有一批劳保教材大吹特吹 safe-bool idiom，吹得好像是个什么高大上的设计模式一样，不过是个应付 C++98 语言缺陷的蹩脚玩意。</p>
 </blockquote>
 <p>就好比一个<strong>老外</strong>想要学习汉语，他首先肯定是从<strong>现代汉语</strong>学起！而不是上来就教他<strong>文言文</strong>。</p>
 <blockquote>
-<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 即使这个老外的职业就是“考古”，或者他对“古代文学”感兴趣，也不可能自学文言文的同时完全跳过现代汉语。</p>
+<p><img src="../../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 即使这个老外的职业就是“考古”，或者他对“古代文学”感兴趣，也不可能自学文言文的同时完全跳过现代汉语。</p>
 </blockquote>
 <p>当我们学习中文时，你肯定希望先学现代汉语，再学文言文，再学甲骨文，再学 brainf*<em>*</em>k，而不是反过来。</p>
 <p>对于 C++ 初学者也是如此：我们首先学会简单明了的，符合现代人思维的 C++23，再逐渐回到专为伺候“古代开发环境”的 C++98。</p>
@@ -218,11 +209,11 @@
 <p>别担心，小彭老师教会你 C++23 的正常写法后，会讲解如何在 C++14、C++98 中写出同样的效果。</p>
 <p>这样你学习的时候思路清晰，不用被繁琐的 C++98 “奇技淫巧”干扰，学起来事半功倍；但也“吃过见过”，知道古代 C++98 的应对策略。</p>
 <blockquote>
-<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 目前企业里主流使用的是 C++14 和 C++17。例如谷歌就明确规定要求 C++17。</p>
+<p><img src="../../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 目前企业里主流使用的是 C++14 和 C++17。例如谷歌就明确规定要求 C++17。</p>
 </blockquote>
-<h2 id="start-_4">举个例子</h2>
+<h2 id="index-_4">举个例子</h2>
 <blockquote>
-<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 接下来的例子你可能看不懂，但只需要记住这个例子是向你说明：越是新的 C++ 标准，反而越容易学！</p>
+<p><img src="../../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 接下来的例子你可能看不懂，但只需要记住这个例子是向你说明：越是新的 C++ 标准，反而越容易学！</p>
 </blockquote>
 <p>例如，在模板元编程中，要检测一个类型 T 是否拥有 <code>foo()</code> 这一成员函数。如果存在，才会调用。</p>
 <p>在 C++20 中，可以使用很方便的 <code>requires</code> 语法，轻松检测一个表达式是否能合法通过编译。如果能，<code>requires</code> 语句会返回 <code>true</code>。然后用一个 <code>if constexpr</code> 进行编译期分支判断，即可实现检测到存在则调用。</p>
@@ -313,7 +304,7 @@ void try_call_foo(T &amp;) {
 </code></pre>
 <p>如此冗长难懂的抽象 C++98 代码，仿佛是“加密”过的代码一样，仅仅是为了实现检测是否存在成员函数 foo……</p>
 <blockquote>
-<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 如果回到 C 语言，那么你甚至都不用检测了。因为伟大的 C 语言连成员函数都没有，何谈“检测成员函数是否存在”？</p>
+<p><img src="../../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 如果回到 C 语言，那么你甚至都不用检测了。因为伟大的 C 语言连成员函数都没有，何谈“检测成员函数是否存在”？</p>
 </blockquote>
 <p>反观 C++20 的写法，一眼就看明白代码的逻辑是什么，表达你该表达的，而不是迷失于伺候各种语言缺陷，干扰我们学习。</p>
 <pre><code class="language-cpp">void try_call_foo(auto &amp;t) {
@@ -326,7 +317,7 @@ void try_call_foo(T &amp;) {
 // 从现代的 C++23 学起，先知道正常的写法“理应”是什么样。工作中用不上 C++23？我会向你介绍，如果要倒退回 C++14，古代人都是用什么“奇技淫巧”实现同样的效果。
 // 这样你最后同样可以适应公司要求的 C++14 环境。但是从 C++23 学起，你的思维又不会被应付古代语言缺陷的“奇技淫巧”扰乱，学起来就事半功倍。</p>
 <blockquote>
-<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 既然现代 C++ 这么好，为什么学校不从现代 C++ 教起，教起来还轻松？因为劳保老师保，懒得接触新知识，认为“祖宗之法不可变”，“版号稳定压倒一切”。</p>
+<p><img src="../../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 既然现代 C++ 这么好，为什么学校不从现代 C++ 教起，教起来还轻松？因为劳保老师保，懒得接触新知识，认为“祖宗之法不可变”，“版号稳定压倒一切”。</p>
 </blockquote></section><section class="print-page" id="helloworld"><h1 id="helloworld-_1">你好，世界</h1>
 <h2 id="helloworld-_2">什么是函数</h2>
 <ul>
