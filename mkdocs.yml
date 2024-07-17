@@ -1,6 +1,7 @@
 site_name: ✝️小彭大典✝️
 nav:
   - 章节列表:
+    - index.md
     - start.md
     - helloworld.md
     - platform.md
@@ -15,5 +16,11 @@ plugins:
   - print-site
   - macros
 theme:
+  name: mkdocs
+  palette:
+    primary: blue grey
   font:
     code: Noto Sans Simplified Chinese
+  features:
+    - search.suggest
+    - search.highlight
