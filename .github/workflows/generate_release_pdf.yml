@@ -70,8 +70,8 @@ jobs:
           name: 伟大，无需多言
           body: |
             小彭老师发布的最新 C++ 大典，更新时间 ${{ steps.tag.outputs.release_date }}
-            > 在线阅读？访问 [GitHub Pages](https://parallel101.github.io/cppguidebook)
             > GitHub 卡顿，无法下载？访问 [小彭老师自己维护的镜像](${{ env.MIRROR_SITE_URL }}/cppguidebook.pdf)。
+            > 喜欢在线阅读？访问 [GitHub Pages](https://parallel101.github.io/cppguidebook)
           tag_name: ${{ steps.tag.outputs.release_tag }}
           files: cppguidebook.pdf
 

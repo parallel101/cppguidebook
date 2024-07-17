@@ -7,25 +7,22 @@
 
 ## 在哪里可以看？
 
-本书托管在 GitHub Pages，[点击开始在线阅读](https://parallel101.github.io/cppguidebook)。
+本书托管在 GitHub Pages，无需下载，[点击开始在线阅读](https://parallel101.github.io/cppguidebook)。
 
 > [!TIP]
-> GitHub Pages 是实时更新的，每当小彭老师推送了新章节，网页都会自动更新。
+> GitHub Pages 是实时更新的，每当小彭老师推送了新章节，网页都会自动更新哦。
 
 也可以前往 [GitHub Release 页面](https://github.com/parallel101/cppguidebook/releases) 下载 PDF 文件。
 
-GitHub Release 太慢？[访问小彭老师维护的镜像](https://142857.red/files/cppguidebook.pdf)
+要追番的话，点一下 GitHub 右上角的 `Watch` 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。
 
-> [!NOTE]
-> 感谢 [Derived Cat](https://github.com/hooyuser) 大佬提供智能脚本！每当小彭老师推送了修改后，Release 页面、GitHub Pages、和小水管服务器上的 PDF 文件都会自动更新。
-
-要追番的话，点一下 GitHub 右上角的 `Watch` 按钮，每当小彭老师提交新 Release，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。
+如果你在阅读过程中遇到任何问题，可以在 [GitHub Issues](https://github.com/parallel101/cppguidebook/issues) 中提出，小彭老师会尽力解答。
 
 ## 你也可以参与编写的开源小册
 
 本书完全开源，Markdown 源文件在 [`docs/`](docs/) 文件夹下。
 
-如果发现书写问题，或者你有想加入的新章节，有关于 C++ 新想法，新技巧分享给大家，可以提交 [Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) 来帮助小彭老师一起写书。合并后，GitHub 的机器人讲自动重新编译出 PDF。
+如果发现书写问题，或者你有想加入的新章节，有关于 C++ 新想法，新技巧分享给大家，可以提交 [Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) 来帮助小彭老师一起写书。合并后，GitHub 的机器人将自动重新编译和部署网页。
 
 添加新章节，可以从下面的“大纲 / Roadmap”中挑选，认领其中的一个章节，开始编写。也可以选择一个大纲里没有，但你认为很重要的方面来写。
 
@@ -46,9 +43,9 @@ GitHub Release 太慢？[访问小彭老师维护的镜像](https://142857.red/f
 
 ## 赞助名单
 
-感谢以下小彭友的赞助！
+小彭大典的持续编写离不开以下小彭友的赞助！
 
-[![Thanks list](pic/thanks.png)](https://afdian.net/a/archibate)
+[![Thanks list](docs/img/thanks.png)](https://afdian.net/a/archibate)
 
 > [!NOTE]
 > 小彭老师的大典是免费下载的，不用赞助也可以查看哦。
@@ -67,7 +64,7 @@ GitHub Release 太慢？[访问小彭老师维护的镜像](https://142857.red/f
 
 > 救命……爱发电似乎关停了！？小彭老师赶紧贴出支付宝收款码作为替代……
 
-<img src="misc/zfb-qrcode.jpg" alt="misc/zfb-qrcode.jpg" width="400px"/>
+<img src="docs/img/zfb-qrcode.jpg" alt="docs/img/zfb-qrcode.jpg" width="400px"/>
 
 > [!TIP]
 > 如果你也处于失业状态，就不用勉强赞助了……也可以先给小彭老师点一颗⭐Star⭐表示心意。
@@ -86,7 +83,7 @@ GitHub Release 太慢？[访问小彭老师维护的镜像](https://142857.red/f
 
 用电脑看的话，可以按 `WIN + ←`，把本书的浏览器窗口放在屏幕左侧，右侧是你的 IDE。一边看一边自己动手做实验。
 
-![split view](pic/slide.jpg)
+![split view](docs/img/slide.jpg)
 
 > 请坐和放宽。
 
