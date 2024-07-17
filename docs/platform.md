@@ -48,7 +48,7 @@ C++ 源码 `.cpp` 是写给人类看的！计算机并不认识，计算机只�
 
 ### MSVC
 
-```cmd
+```bash
 cl.exe /c main.cpp 
 ```
 

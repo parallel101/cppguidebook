@@ -7,6 +7,10 @@ on:
       - main
     paths-ignore:
       - '.gitignore'
+      - 'README.md'
+      - 'examples'
+      - 'CMakeLists.txt'
+      - 'misc'
 
 env:
   MIRROR_SITE_URL: https://142857.red/files
