@@ -14,5 +14,6 @@ plugins:
   - search
   - print-site
   - macros
-extra_css:
-  - stylesheets/extra.css
+theme:
+  font:
+    code: Noto Sans Simplified Chinese
