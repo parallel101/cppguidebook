@@ -28,6 +28,8 @@
 
 > {{ icon.tip }} 本书还在持续更新中……要追番的话，可以在 [GitHub](https://github.com/parallel101/cppguidebook) 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。
 
+如需离线查看，可以前往 [GitHub Release 页面](https://github.com/parallel101/cppguidebook/releases) 下载 PDF 文件。
+
 ## 格式约定
 
 > {{ icon.tip }} 用这种颜色字体书写的内容是温馨提示
