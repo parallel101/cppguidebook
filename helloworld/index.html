@@ -167,7 +167,7 @@
 </code></pre>
 <p>上面的代码中，<code>compute</code> 就是函数的名字，<code>int</code> 表示函数的返回类型——整数。</p>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 乃取整数之英文“integer”的“int”而得名（模仿侯捷老师说话）</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 乃取整数之英文“integer”的“int”而得名（模仿侯捷老师说话）</p>
 </blockquote>
 <p>而 <code>{}</code> 包裹的是函数体，是函数被调用时会执行的代码。</p>
 <p>此处 <code>return 42</code> 就是函数体内的唯一一条语句，表示函数立即执行完毕，返回 42。</p>
@@ -175,7 +175,7 @@
 <li>返回值: 当一个函数执行完毕时，会向调用该函数的调用者返回一个值，这个值就是 <code>return</code> 后面的表达式的值。返回值可以有不同的类型，此处 <code>compute</code> 的返回类型是 <code>int</code>，也就是说 <code>compute</code> 需要返回一个整数。</li>
 </ul>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 关于函数的参数我们稍后再做说明。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 关于函数的参数我们稍后再做说明。</p>
 </blockquote>
 <h2 id="main">从 main 函数说起</h2>
 <p>C++ 程序通常由一系列函数组成，其中必须有一个名为 <code>main</code> 的函数作为程序的入口点。</p>
@@ -186,11 +186,11 @@
 </code></pre>
 <p>程序启动时，操作系统会调用 <code>main</code> 函数。</p>
 <blockquote>
-<p><img src="/img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 严格来说，是 C++ 运行时调用了 <code>main</code> 函数，但目前先理解为“操作系统调用了 <code>main</code> 函数”也无妨。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 严格来说，是 C++ 运行时调用了 <code>main</code> 函数，但目前先理解为“操作系统调用了 <code>main</code> 函数”也无妨。</p>
 </blockquote>
 <p>要把程序发展壮大，我们可以让 <code>main</code> 函数调用其他函数，也可以直接在 <code>main</code> 函数中编写整个程序的逻辑（不推荐）。</p>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 因此，<code>main</code> 可以被看作是“宇宙大爆炸”。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 因此，<code>main</code> 可以被看作是“宇宙大爆炸”。</p>
 </blockquote>
 <h2 id="main_1">main 函数的返回值</h2>
 <pre><code class="language-cpp">int main()
@@ -203,7 +203,7 @@
 <p>如果程序正常执行完毕，正常结束退出，那就请返回 0。</p>
 <p>返回一个不为 0 的整数可以表示程序出现了异常，是因为出错了才退出的，值的多少可以用于表明错误的具体原因。</p>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 
     操作系统：我调用了你这个程序的 main 函数，我好奇程序是否正确执行了？让我们约定好：如果你运转正常的话，就返回0表示成功哦！如果有错误的话，就返回一个错误代码，比如返回1表示无权限，2表示找不到文件……之类的。当然，错误代码都是不为0的。</p>
 </blockquote>
 <h2 id="_3">这个黑色的窗口是？</h2>
@@ -239,7 +239,7 @@
 }
 </code></pre>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 
 (*<em>编译器脸红中*</em>)</p>
 </blockquote>
 <h1 id="space">space</h1>
@@ -258,7 +258,7 @@
 }
 </code></pre>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 
     在我们以后的案例代码中，都会像这样注释说明，充当<strong>就地讲解员</strong>的效果。去除这些注释并不影响程序的正常运行，添加文字注释只是小彭老师为了提醒你每一行的代码作用。</p>
 </blockquote></div>
             </div>

@@ -157,23 +157,23 @@
 <h2 id="_2">编译器是？</h2>
 <p>编译器是将源代码 (<code>.cpp</code>) 编译成可执行程序 (<code>.exe</code>) 的工具。</p>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> C++ 是<strong>编译型语言</strong>，源代码不能直接执行哦！刚开始学编程的小彭老师曾经把网上的 “Hello, World” 代码拷贝到 <code>.c</code> 源码文件中，然后把后缀名改成 <code>.exe</code>，发现这样根本执行不了……后来才知道需要通过一种叫做<strong>编译器</strong>编译 <code>.c</code> 文件，才能得到计算机可以直接执行的 <code>.exe</code> 文件。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> C++ 是<strong>编译型语言</strong>，源代码不能直接执行哦！刚开始学编程的小彭老师曾经把网上的 “Hello, World” 代码拷贝到 <code>.c</code> 源码文件中，然后把后缀名改成 <code>.exe</code>，发现这样根本执行不了……后来才知道需要通过一种叫做<strong>编译器</strong>编译 <code>.c</code> 文件，才能得到计算机可以直接执行的 <code>.exe</code> 文件。</p>
 </blockquote>
 <p>C++ 源码 <code>.cpp</code> 是写给人类看的！计算机并不认识，计算机只认识二进制的机器码。要把 C++ 源码转换为计算机可以执行的机器码。</p>
 <h2 id="_3">编译器御三家</h2>
 <p>最常见的编译器有：GCC、Clang、MSVC</p>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 俗称“御三家”。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 俗称“御三家”。</p>
 </blockquote>
 <p>这些编译器都支持了大部分 C++20 标准和小部分 C++23 标准，而 C++17 标准都是完全支持的。</p>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 有人说过：“如果你不知道一个人是用的什么编译器，那么你可以猜他用的是 GCC。”</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 有人说过：“如果你不知道一个人是用的什么编译器，那么你可以猜他用的是 GCC。”</p>
 </blockquote>
 <ul>
 <li>GCC 主要只在 Linux 和 MacOS 等 Unix 类系统可用，不支持 Windows 系统。但是 GCC 有着大量好用的扩展功能，例如大名鼎鼎的 <code>pbds</code>（基于策略的数据结构），还有各种 <code>__attribute__</code>，各种 <code>__builtin_</code> 系列函数。不过随着新标准的出台，很多原本属于 GCC 的功能都成了标准的一部分，例如 <code>__attribute__((warn_unused))</code> 变成了标准的 <code>[[nodiscard]]</code>，<code>__builtin_clz</code> 变成了标准的 <code>std::countl_zero</code>，<code>__VA_OPT__</code> 名字都没变就进了 C++20 标准。</li>
 </ul>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> PBDS 又称 “平板电视”</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> PBDS 又称 “平板电视”</p>
 </blockquote>
 <ul>
 <li>
@@ -184,13 +184,13 @@
 </li>
 </ul>
 <blockquote>
-<p><img src="/img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如 C++20 早已允许 lambda 表达式捕获 structural-binding 变量，而 Clang 至今还没有支持，尽管 Clang 已经支持了很多其他 C++20 特性。</p>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如 C++20 早已允许 lambda 表达式捕获 structural-binding 变量，而 Clang 至今还没有支持，尽管 Clang 已经支持了很多其他 C++20 特性。</p>
 </blockquote>
 <ul>
 <li>Apple Clang 是苹果公司自己魔改的 Clang 版本，只在 MacOS 系统上可用，支持 Objective-C 和 Swift 语言。但是版本较官方 Clang 落后一些，很多新特性都没有跟进，基本上只有专门伺候苹果的开发者会用。</li>
 </ul>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> GCC 和 Clang 也支持 Objective-C。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> GCC 和 Clang 也支持 Objective-C。</p>
 </blockquote>
 <ul>
 <li>
@@ -201,7 +201,7 @@
 </li>
 </ul>
 <blockquote>
-<p><img src="/img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 最近他们又出了个 Intel DPC++ compiler，支持最新的并行编程领域特定语言 SyCL。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 最近他们又出了个 Intel DPC++ compiler，支持最新的并行编程领域特定语言 SyCL。</p>
 </blockquote>
 <h2 id="_4">使用编译器编译源码</h2>
 <h3 id="msvc">MSVC</h3>
@@ -213,7 +213,7 @@
 </code></pre>
 <p>这样就可以得到可执行文件 <code>main</code> 了。</p>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> Linux 系统的可执行文件并没有后缀名，所以没有 <code>.exe</code> 后缀。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> Linux 系统的可执行文件并没有后缀名，所以没有 <code>.exe</code> 后缀。</p>
 </blockquote>
 <h3 id="clang">Clang</h3>
 <p>Windows 上：</p>
@@ -292,7 +292,7 @@
 <p>值得注意的是，标准库和编译器并不是绑定的，例如 Clang 可以用 libstdc++ 或 MSVC STL，GCC 也可以被配置使用 libc++。</p>
 <p>在 Linux 系统中，Clang 默认用的就是 libstdc++。需要为 Clang 指定 <code>-stdlib=libc++</code> 选项，才能使用。</p>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 牛头人笑话：“如果你不知道一个人是用的什么标准库，那么你可以猜他用的是 libstdc++。因为即使他的编译器是 Clang，他用的大概率依然是 libstdc++。”</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 牛头人笑话：“如果你不知道一个人是用的什么标准库，那么你可以猜他用的是 libstdc++。因为即使他的编译器是 Clang，他用的大概率依然是 libstdc++。”</p>
 </blockquote>
 <h3 id="_14">标准库的调试模式</h3>
 <p>TODO</p></div>

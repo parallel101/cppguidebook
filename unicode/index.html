@@ -253,7 +253,7 @@
 <p>Unicode 经过了许多版本的发展，早期的 Unicode 只收录了 65536 (0x10000) 个字符，后来扩充到了 1114112 (0x110000) 个字符。</p>
 <p>总之，现在 Unicode 字符映射的整数范围是 0x0 到 0x10FFFF。</p>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 虽然占用了 1114112 这多格码点空间，不过其中很多都是空号，留待未来扩充使用。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 虽然占用了 1114112 这多格码点空间，不过其中很多都是空号，留待未来扩充使用。</p>
 </blockquote>
 <p>Unicode 字符映射表可以在网上找到：</p>
 <ul>
@@ -365,7 +365,7 @@
 </ul>
 <p>因此，我们推荐在计算机内存中，始终采用 UTF-32 形式处理文字。</p>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> UTF-32 也被称为 UCS-4，他俩是同义词。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> UTF-32 也被称为 UCS-4，他俩是同义词。</p>
 </blockquote>
 <h3 id="utf-8">UTF-8</h3>
 <p>UTF-32 虽然方便了文字处理，然而，却浪费了大量的存储空间，不利于文字存储！一个字符，无论他是常用还是不常用，都要霸占 4 个字节的空间。</p>
@@ -395,7 +395,7 @@
 </code></pre>
 <p>由于 Unicode 在 0 到 0x7F 范围内与 ASCII 表相同，而 UTF-8 又把 0 到 0x7F 的值直接存储，所以说 UTF-8 兼容 ASCII。这使得原本设计于处理 ASCII 的 C 语言函数，例如 strlen、strcat、sprintf 等，都可以直接无缝切换到 UTF-8。反之亦然，任何设计用于 UTF-8 的程序都可以完全接受 ASCII 格式的输入文本。</p>
 <blockquote>
-<p><img src="/img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 但部分涉及字符长度的函数会有些许不兼容，例如 strlen 求出的长度会变成字节的数量而不是字符的数量了，例如 <code>strlen("我们")</code> 会得到 6 而不是 2，稍后讲解。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 但部分涉及字符长度的函数会有些许不兼容，例如 strlen 求出的长度会变成字节的数量而不是字符的数量了，例如 <code>strlen("我们")</code> 会得到 6 而不是 2，稍后讲解。</p>
 </blockquote>
 <h4 id="_5">解码规则</h4>
 <p>UTF-8 的构造就像一列小火车一样，不同范围内的码位会被编码成不同长度的列车，但他们都有一个车头。</p>
@@ -409,7 +409,7 @@
 <li>如果是 <code>10</code> 开头，就说明这是一节车厢，车厢不会单独出现，只会跟在火车头屁股后面。如果你看到一节单独的车厢在前面无头驾驶，就说明出错了。</li>
 </ul>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 小朋友用小号列车装，大朋友用大号列车装。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 小朋友用小号列车装，大朋友用大号列车装。</p>
 </blockquote>
 <p>例如下面这一串二进制：</p>
 <pre><code>11100110 10000010 10000001
@@ -439,14 +439,14 @@
 <li>前缀是 11110 的火车头：火车头直接载客 3 名 + 3 节车厢各载客 6 名 = 共 21 名。</li>
 </ul>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 高级车头装了防弹钢板，载客空间变少，只好匀到后面的车厢。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 高级车头装了防弹钢板，载客空间变少，只好匀到后面的车厢。</p>
 </blockquote>
 <h4 id="utf-8_1">UTF-8 的抗干扰机制</h4>
 <p>如果发现 <code>10</code> 开头的独立车厢，就说明出问题了，可能是火车被错误拦腰截断，也可能是字符串被错误地反转。因为 <code>10</code> 只可能是火车车厢，不可能出现在火车头部。此时解码器应产生一个报错，或者用错误字符“�”替换。</p>
 <pre><code>10000010 10000001
 </code></pre>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 在网络收发包时，如果你不妥善处理 TCP 粘包问题，就可能火车头进去了，火车尾巴还露在隧道外面，一段完整的列车被切断，导致 UTF-8 解读的时候出错。正确的做法是设立一个状态机来解码 UTF-8。C 语言的 <code>mbstate_t</code> 就是这种状态机，稍后讲解。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 在网络收发包时，如果你不妥善处理 TCP 粘包问题，就可能火车头进去了，火车尾巴还露在隧道外面，一段完整的列车被切断，导致 UTF-8 解读的时候出错。正确的做法是设立一个状态机来解码 UTF-8。C 语言的 <code>mbstate_t</code> 就是这种状态机，稍后讲解。</p>
 </blockquote>
 <p>除此之外，如果检测到一个三级火车头，却发现里面装着 0x394 (“Δ”)，这是一个用二级火车头就能装下的欧洲字符，却用了三级火车头装，说明装箱那边的人偷懒滥用资源了！这种情况下 UTF-8 解码器也要产生一个报错，因为 UTF-8 要保证编码的唯一性，0x394 是 0x7F 到 0x7FF 范围的，就应该用二级火车头装。</p>
 <p>以及，如果发现 <code>11111</code> 开头的五级火车头，也要报错，因为 UTF-8 最多只支持四级火车头。</p>
@@ -496,7 +496,7 @@
 <p>UTF-16 就是利用了这一段空间，他规定：0xD800 到 0xDFFF 之间的码点将永远不用来表示字符，而是作为<strong>代理对 (surrogate-pair)</strong>。其中  0xD800 到 0xDBFF 是<strong>高位代理 (high surrogate)</strong>，0xDC00 到 0xDFFF 是<strong>低位代理 (low surrogate)</strong>。高代理在前，低代理在后。</p>
 <p>一个超过 0xFFFF 的稀有字符，会被拆成两段，一段放在高位代理里，一段放在低位代理里，一前一后放入 <code>uint16_t</code> 序列中。</p>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 搭载超宽超限货物的车辆需要被拆分成两段再进入隧道。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 搭载超宽超限货物的车辆需要被拆分成两段再进入隧道。</p>
 </blockquote>
 <p>具体拆分方法如下：</p>
 <p>对于 0xFFFF 到 0x10FFFF 范围的码点，首先将其值减去 0x10000，变成一个范围 0x0 到 0xFFFFF 范围内的数字，这能保证他们只需 20 个二进制位即可表示。</p>
@@ -536,12 +536,12 @@
 </code></pre>
 <p>例如，Intel 的 x86 架构和 ARM 公司的 ARM 架构都是小端派，而 Motorola 公司的 68k 架构和 Sun 公司的 SPARC 架构都是大端派。</p>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 这其实是很无聊的争执，为人类的书写习惯改变计算机的设计毫无道理，毕竟世界上也有从右往左书写的文字和从上往下书写的文字，甚至有左右来回书写的文字……如果要伺候人类，你怎么不改成十进制呢？总之，我认为小端才是最适合计算机的，市面上大多数主流硬件都是小端架构。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 这其实是很无聊的争执，为人类的书写习惯改变计算机的设计毫无道理，毕竟世界上也有从右往左书写的文字和从上往下书写的文字，甚至有左右来回书写的文字……如果要伺候人类，你怎么不改成十进制呢？总之，我认为小端才是最适合计算机的，市面上大多数主流硬件都是小端架构。</p>
 </blockquote>
 <p>在网络通信时，发消息和收消息的可能是不同的架构，如果发消息的是小端架构，收消息的是大端架构，那么发出去的是 0x12345678，收到的就会变成 0x78563421 了。</p>
 <p>因此互联网一般规定，所有多字节的数据在网络包中统一采用大端。对于大端架构，他们什么都不需要做，对于小端架构，在发包前需要把自己的小端数据做字节序反转，变成大端的以后，再发送。之后的网络专题课中我们会详解这一块。</p>
 <blockquote>
-<p><img src="/img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 基于字节码的虚拟机语言通常会规定一个字节序：像 Java 这种面向互联网语言，索性也规定了统一采用大端，无论 JVM 运行在大端机器还是小端机器上。这使得他与互联网通信比较方便，而在 x86 和 ARM 架构上，与本地只接受小端数据的 API，例如 OpenGL，沟通较为困难，需要做额外的字节序转换。而 C# 主打游戏业务（例如 Unity），需要考虑性能，所以规定全部采用小端。作为底层编程语言的 C++ 则是入乡随俗，你的硬件是什么端，他就是什么端，不主动做任何额外的转换。</p>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 基于字节码的虚拟机语言通常会规定一个字节序：像 Java 这种面向互联网语言，索性也规定了统一采用大端，无论 JVM 运行在大端机器还是小端机器上。这使得他与互联网通信比较方便，而在 x86 和 ARM 架构上，与本地只接受小端数据的 API，例如 OpenGL，沟通较为困难，需要做额外的字节序转换。而 C# 主打游戏业务（例如 Unity），需要考虑性能，所以规定全部采用小端。作为底层编程语言的 C++ 则是入乡随俗，你的硬件是什么端，他就是什么端，不主动做任何额外的转换。</p>
 </blockquote>
 <p>UTF-16 和 UTF-32 的码位都是多字节的，也会有大小端问题。例如，UTF-16 中的 <code>uint16_t</code> 序列：</p>
 <pre><code>0x1234 0x5678
@@ -571,7 +571,7 @@
 <p>如果是 UTF-16 和 UTF-32，因为 0xFEFF 不对称，他还能告诉你是大端还是小端。因此 0xFEFF 被称为字节序标志（Byte-order-mark，BOM）。</p>
 <p>如果读取该文件的软件不支持解析 BOM，那么他照常读出 0xFEFF，一个零宽空格，在文本中不显示，不影响视觉结果。</p>
 <blockquote>
-<p><img src="/img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 一些老的编译器（远古 MinGW，现在已经没有了）不支持解析 BOM，会把带有 BOM 的 UTF-8 的 .cpp 源码文件，当作头部带有错误字符的乱码文件，从而报错。这是因为 Windows 的记事本保存为 UTF-8 时，总是会加上 BOM。如果记事本发现一个文件没有 BOM，会当作 ANSI（GBK）来读取。</p>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 一些老的编译器（远古 MinGW，现在已经没有了）不支持解析 BOM，会把带有 BOM 的 UTF-8 的 .cpp 源码文件，当作头部带有错误字符的乱码文件，从而报错。这是因为 Windows 的记事本保存为 UTF-8 时，总是会加上 BOM。如果记事本发现一个文件没有 BOM，会当作 ANSI（GBK）来读取。</p>
 </blockquote>
 <p>0xFEFF 在不同的编码下会产生不同的结果：</p>
 <ul>
@@ -581,7 +581,7 @@
 </ul>
 <p>因此，在文本头部加上 BOM 有助于软件推测该文件是什么编码的（如果那软件支持解析 BOM 的话）。</p>
 <blockquote>
-<p><img src="/img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如 Windows 环境中，所有的文本文件都被默认假定为 ANSI（GBK）编码，如果你要保存文本文件为 UTF-8 编码，就需要加上 BOM 标志。当 MSVC 读取时，看到开头是 <code>0xEF 0xBB 0xBF</code>，就明白这是一个 UTF-8 编码的文件。这样，MSVC 就能正确地处理中文字符串常量了。如果 MSVC 没看到 BOM，会默认以为是 ANSI（GBK）编码的，从而中文字符串常量会乱码。开启 <code>/utf-8</code> 选项也能让 MSVC 把没有 BOM 的源码文件当作 UTF-8 来解析，适合跨平台宝宝体质。</p>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如 Windows 环境中，所有的文本文件都被默认假定为 ANSI（GBK）编码，如果你要保存文本文件为 UTF-8 编码，就需要加上 BOM 标志。当 MSVC 读取时，看到开头是 <code>0xEF 0xBB 0xBF</code>，就明白这是一个 UTF-8 编码的文件。这样，MSVC 就能正确地处理中文字符串常量了。如果 MSVC 没看到 BOM，会默认以为是 ANSI（GBK）编码的，从而中文字符串常量会乱码。开启 <code>/utf-8</code> 选项也能让 MSVC 把没有 BOM 的源码文件当作 UTF-8 来解析，适合跨平台宝宝体质。</p>
 </blockquote>
 <h2 id="cc">C/C++ 中的字符</h2>
 <h3 id="_8">字符类型</h3>
@@ -644,7 +644,7 @@
 <p>对于 Linux 用户来说，如果你没有专门修改过，<code>$LC_ALL</code> 默认是 <code>en_US.UTF-8</code> 或 <code>C.UTF-8</code>。</p>
 <p>这带来了巨大的混淆！很多美国程序员潜意识里会想当然地把 <code>char</code> 当作 UTF-8 来用。很多开源项目，第三方库，甚至很多国人做的项目，都被这种“想当然”传染了。</p>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 好消息是无论“区域设置”是什么，肯定兼容 ASCII。例如 GBK 和 UTF-8 都兼容 ASCII，否则就和所有的 C 语言经典函数如 <code>strlen</code>，换行符 <code>'\n'</code>，路径分隔符 <code>'/'</code> 和 <code>'\\'</code> 冲突了。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 好消息是无论“区域设置”是什么，肯定兼容 ASCII。例如 GBK 和 UTF-8 都兼容 ASCII，否则就和所有的 C 语言经典函数如 <code>strlen</code>，换行符 <code>'\n'</code>，路径分隔符 <code>'/'</code> 和 <code>'\\'</code> 冲突了。</p>
 </blockquote>
 <p><code>wchar_t</code> 就好一些，虽然在 Windows 系统上是糟糕的 UTF-16，但至少稳定了，不会随着系统区域设置而随意改变，只要你不打算跨平台，<code>wchar_t</code> 就是 Windows 程序的标配。</p>
 <h3 id="utf-8-ascii">思考：UTF-8 为什么完美兼容 ASCII</h3>
@@ -806,7 +806,7 @@ fmt::println(&quot;UTF-32 下，“公”前的所有字符：{}&quot;, s.substr
 // 会打印 “小彭老师”
 </code></pre>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意到这里 UTF-8 的 <code>"公"</code> 需要是字符串，而不是单个字符。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意到这里 UTF-8 的 <code>"公"</code> 需要是字符串，而不是单个字符。</p>
 </blockquote>
 <p>UTF-8 无法取出单个非 ASCII 字符，对于单个中文字符，仍然只能以字符串形式表达（由多个字节组成）。</p>
 <pre><code class="language-cpp">std::string s = &quot;小彭老师公开课万岁&quot;;
@@ -827,7 +827,7 @@ strrev(s.data()); // 会把按字符正常反转，得到 “岁万课开公师�
 </code></pre>
 <p><strong>总结：UTF-8 只能拼接、查找、打印。不能索引、切片、反转。</strong></p>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 按索引切片不行，但如果索引是 find 出来的就没问题。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 按索引切片不行，但如果索引是 find 出来的就没问题。</p>
 </blockquote>
 <h3 id="ansi-unicode">轶事：“ANSI” 与 “Unicode” 是什么</h3>
 <p>在 Windows 官方的说辞中，有“Unicode 编码”和“ANSI 编码”的说法。当你使用 Windows 自带的记事本程序，保存文本文件时，就会看到这样的选单：</p>
@@ -843,7 +843,7 @@ strrev(s.data()); // 会把按字符正常反转，得到 “岁万课开公师�
 <p>而 ANSI 本来应该是 ASCII 的意思，<code>char</code> 本来就只支持 ASCII。</p>
 <p>但由于当时各国迫切需要支持自己本国的文字，就在兼容 ASCII 的基础上，发展出了自己的字符集和字符编码。这些当地特供的字符集里只包含了本国文字，所有这些各国的字符编码也都和 UTF-8 类似，采用火车头式的变长编码，对 0 开头的 ASCII 部分也都是兼容。所以 Windows 索性把 ANSI 当作“各国本地文字编码”的简称了。但后来互联网的出现，“区域设置”带来了巨大的信息交换困难。</p>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如你在玩一些日本的 galgame 时，会发现里面文字全部乱码。这是因为 Windows 在各个地区发行的是“特供版”：在中国大陆地区，他发行的 Windows 采用 GBK 字符集，在日本地区，他发行的 Windows 采用 Shift-JIS 字符集。日本程序员编译程序时，程序内部存储的是 Shift-JIS 的那些“整数”。这导致日本的 galgame 在中国大陆特供的 Windows 中，把 Shift-JIS 的“整数”用 GBK 的表来解读了，从而乱码（GBK 里的日文区域并没有和 Shift-JIS 重叠）。需要用 Locale Emulator 把 Shit-JIS 翻译成 Unicode 读给 Windows 听。如果日本程序员从一开始就统一用 Unicode 来存储，中国区玩家的 Windows 也统一用 Unicode 解析，就没有这个问题。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如你在玩一些日本的 galgame 时，会发现里面文字全部乱码。这是因为 Windows 在各个地区发行的是“特供版”：在中国大陆地区，他发行的 Windows 采用 GBK 字符集，在日本地区，他发行的 Windows 采用 Shift-JIS 字符集。日本程序员编译程序时，程序内部存储的是 Shift-JIS 的那些“整数”。这导致日本的 galgame 在中国大陆特供的 Windows 中，把 Shift-JIS 的“整数”用 GBK 的表来解读了，从而乱码（GBK 里的日文区域并没有和 Shift-JIS 重叠）。需要用 Locale Emulator 把 Shit-JIS 翻译成 Unicode 读给 Windows 听。如果日本程序员从一开始就统一用 Unicode 来存储，中国区玩家的 Windows 也统一用 Unicode 解析，就没有这个问题。</p>
 </blockquote>
 <p>这种情况下，Unicode 组织出现了，他的使命就是统一全世界的字符集，保证全世界所有的文字都能在全世界所有的计算机上显示出来。首先创办了 Unicode 字符集，然后规定了 UTF-8、UTF-16、UTF-32 三种字符编码，最终 UTF-8 成为外码的主流，UTF-32 成为内码的主流。</p>
 <p>接下来为了方便记忆，我们索性就顺着微软的这个说法：</p>
@@ -856,21 +856,21 @@ strrev(s.data()); // 会把按字符正常反转，得到 “岁万课开公师�
 <p>因为当年 Unicode 5.0 的时候只有 0 到 0xFFFF 的字符，16 位就装得下，所以当时 UTF-16 还是一个<strong>定长编码</strong>。微软于是决定把 <code>wchar_t</code> 定义成 2 字节，并在 NT 内核中，为每个系统调用都升级成了基于 <code>wchar_t</code> 字符串的 “W 系” API。</p>
 <p>比尔盖子当时以为这样 UTF-16 定长内码就一劳永逸了，并号召所有程序都改用 UTF-16 做内码，别用 “A 系” API 了。</p>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 起初，所有人都以为 UTF-16 就是最终答案。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 起初，所有人都以为 UTF-16 就是最终答案。</p>
 </blockquote>
 <p>没想到后来 Unicode 委员会“背刺”了比尔盖子！偷偷把范围更新到了 0x10FFFF，突破了 16 位整数的容量。原来的 UTF-16 已经容纳不下，只好利用之前预留的 0xD800 到 0xDFFF 空号区间丑陋地实现了变长编码。</p>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 直到 UTF-16 一夜之间成了丑陋的<strong>变长编码</strong>。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 直到 UTF-16 一夜之间成了丑陋的<strong>变长编码</strong>。</p>
 </blockquote>
 <p>闹了半天，Windows 费心费力替 Unicode 委员会好不容易推广的 <code>wchar_t</code>，既没有 UTF-8 兼容 ASCII 的好处，又没有 UTF-32 <strong>定长编码</strong>的好处。可 “W 系” API 却又焊死在了 NT 内核最底层，反复来坑第一次用 Windows 编程的初学者。</p>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 比尔盖子：你这样显得我很小丑诶？</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 比尔盖子：你这样显得我很小丑诶？</p>
 </blockquote>
 <p>除 Windows 外，Java 也是“UTF-16 背刺”的受害者，他们想当然的把 char 定义为 UTF-16，以为这就是未来永久的定长内码，一劳永逸…… 直到 Unicode 加入了 0x10FFFF，Java 不得不重新定义了个 Character 作为 UTF-32 字符，还弄个 char 到 Character 的转换，好不尴尬！</p>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> Linux 成立于 1991 年，当时 Unicode 也才刚刚出现。Unicode 宣布加入 0x10FFFF 后，Linux 才开始引入支持 Unicode。在知道了 Unicode 包含 0x10FFFF 后，他们一开始就把 <code>wchar_t</code> 定义成 4 字节，逃过了 UTF-16 的背刺。</p>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 后来新出的语言，如 Python 3、Go、Rust、Swift、Kotlin，把字符钦定为 UTF-32 了。他们只有在调用 Windows API 时，才会临时转换为 UTF-16 来调用，除此之外再无 UTF-16 出现。</p>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 许多糟糕的博客声称：是因为“UTF-16 最有利于中文压缩”，所以 Java 和 Windows 才采用的？然而就我了解到的实际情况是因为他们错误的以为 0xFFFF 是 Unicode 的上限才错误采用了，不然为什么后来的新语言都采用了 UTF-32 内码 + UTF-8 外码的组合？而且在外码中采用 UTF-8 或 UTF-16 压缩确实没问题，但是 Java 和 Windows 的失误在于把 UTF-16 当作内码了！内码就理应是定长编码的才方便，如果你有不同想法，欢迎留言讨论。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> Linux 成立于 1991 年，当时 Unicode 也才刚刚出现。Unicode 宣布加入 0x10FFFF 后，Linux 才开始引入支持 Unicode。在知道了 Unicode 包含 0x10FFFF 后，他们一开始就把 <code>wchar_t</code> 定义成 4 字节，逃过了 UTF-16 的背刺。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 后来新出的语言，如 Python 3、Go、Rust、Swift、Kotlin，把字符钦定为 UTF-32 了。他们只有在调用 Windows API 时，才会临时转换为 UTF-16 来调用，除此之外再无 UTF-16 出现。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 许多糟糕的博客声称：是因为“UTF-16 最有利于中文压缩”，所以 Java 和 Windows 才采用的？然而就我了解到的实际情况是因为他们错误的以为 0xFFFF 是 Unicode 的上限才错误采用了，不然为什么后来的新语言都采用了 UTF-32 内码 + UTF-8 外码的组合？而且在外码中采用 UTF-8 或 UTF-16 压缩确实没问题，但是 Java 和 Windows 的失误在于把 UTF-16 当作内码了！内码就理应是定长编码的才方便，如果你有不同想法，欢迎留言讨论。</p>
 </blockquote>
 <p>总之，UTF-16 是糟粕，但他是 Windows 唯一完整支持的 Unicode 接口。不建议软件内部用 UTF-16 存储文字，你可以用更紧凑的 UTF-8 或更方便切片的 UTF-32，只需在调用操作系统 API 前临时转换成 UTF-16 就行。</p>
 <h3 id="_9">强类型系统只是君子协议</h3>
@@ -903,7 +903,7 @@ void thisFuncAcceptsUTF16(UTF16String msg);
 <p>而如果你始终用 <code>std::u8string</code> 装 UTF-8，那么当你把它输入一个接受 ANSI 的普通 <code>std::string</code> 参数时，就会发生类型不匹配错误，强迫你重新清醒，或是强迫你使用一个转换函数，稍后会介绍这个转换函数的写法。</p>
 <p>例如当你使用 <code>std::cout &lt;&lt; u8string</code> 时会报错，迫使你改为 <code>std::cout &lt;&lt; u8toansi(u8string)</code> 才能编译通过，从而避免了把 UTF-8 的字符串打印到了只支持 GBK 的控制台上。</p>
 <blockquote>
-<p><img src="/img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 其中转换函数签名为 <code>std::string u8toansi(std::u8string s)</code>，很可惜，标准库并没有提供这个函数，直到 C++26 前，标准库对字符编码支持一直很差，你不得不自己实现或依赖第三方库。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 其中转换函数签名为 <code>std::string u8toansi(std::u8string s)</code>，很可惜，标准库并没有提供这个函数，直到 C++26 前，标准库对字符编码支持一直很差，你不得不自己实现或依赖第三方库。</p>
 </blockquote>
 <h4 id="u8">u8 字符串常量转换问题</h4>
 <p><code>char8_t</code> 是 C++20 引入的新字符类型，用于强类型的君子协议，和 <code>char</code> 并没有实际区别。只是方便了函数类型签名更加一目了然，这个参数只能接受 UTF-8 编码的字符串！</p>
@@ -920,7 +920,7 @@ void thisFuncAcceptsUTF16(UTF16String msg);
 </ul>
 <p>这类软件是最常见的初学者写法，如果你从未想过字符编码问题，从不了解 <code>wchar_t</code>、<code>char32_t</code> 之间的战争，只知道 <code>char</code>，那么你已经自动在此阵营里。</p>
 <blockquote>
-<p><img src="/img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 有人说 Linux 文件系统是 UTF-8？并不是！Linux 文件系统根本不会检验你的文件名是不是合法的 UTF-8，只不过是因为你设定了 <code>export LC_ALL=zh_CN.UTF-8</code>，这会使所有程序（包括终端模拟器）假定文件名和文件内容都按 UTF-8 编码，从而调用操作系统各类 API 时（如 open、write）都会使用 UTF-8 编码的 <code>const char *</code> 输入，在 Linux 系统 API 看来，所谓“文件名”只是纯粹的字节流，只要保证不包含 <code>'/'</code> 和 <code>'\0'</code>，无论你是什么编码，他都不在乎。而所有的 locale 都兼容 ASCII，所以绝不会出现一个中文汉字编码后产生 <code>'/'</code> 的情况（例如 GB2312 会把一个中文编码成两个 0x80 到 0xFF 区间的字节，和 ASCII 的范围没有重叠，更不可能出现 <code>'/'</code>），即使换成 <code>export LC_ALL=zh_CN.GB2312</code>，Linux 文件系统一样能正常工作，只不过读取你之前以 UTF-8 写入的文件会变成乱码而已。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 有人说 Linux 文件系统是 UTF-8？并不是！Linux 文件系统根本不会检验你的文件名是不是合法的 UTF-8，只不过是因为你设定了 <code>export LC_ALL=zh_CN.UTF-8</code>，这会使所有程序（包括终端模拟器）假定文件名和文件内容都按 UTF-8 编码，从而调用操作系统各类 API 时（如 open、write）都会使用 UTF-8 编码的 <code>const char *</code> 输入，在 Linux 系统 API 看来，所谓“文件名”只是纯粹的字节流，只要保证不包含 <code>'/'</code> 和 <code>'\0'</code>，无论你是什么编码，他都不在乎。而所有的 locale 都兼容 ASCII，所以绝不会出现一个中文汉字编码后产生 <code>'/'</code> 的情况（例如 GB2312 会把一个中文编码成两个 0x80 到 0xFF 区间的字节，和 ASCII 的范围没有重叠，更不可能出现 <code>'/'</code>），即使换成 <code>export LC_ALL=zh_CN.GB2312</code>，Linux 文件系统一样能正常工作，只不过读取你之前以 UTF-8 写入的文件会变成乱码而已。</p>
 </blockquote>
 <p>对于中国区的 Windows 而言，他的所有 A 函数只支持 GBK 编码。这意味着如果你 Lua 中把字符串“当作” UTF-8 来用。那么当你在调用 Lua 的 io.open 前，需要先做一个 UTF-8 到 GBK 的转换，这还会导致丢失部分不在 GBK 内的字符，比如如果你的文件名包含 Emoji，那就会变成 <code>???</code> 乱码。而使用 W 函数的 UTF-16 就不会，因为 UTF-16 能容纳完整的 Unicode 映射。而完全摆烂的 Lua，其 <code>io.open</code> 只是使用 C 语言库函数 <code>fopen</code>，<code>fopen</code> 又是基于 Windows 的 A 系列函数，Lua 又没有提供对 Windows C 运行时库特有的 <code>_wfopen</code> 函数的封装，从而永远不可能打开一个带有 Emoji 的文件。</p>
 <p><strong>总结：要支持 ANSI 阵营，你什么都不需要做，char 满天飞摆烂。</strong></p>
@@ -938,20 +938,20 @@ void thisFuncAcceptsUTF16(UTF16String msg);
 <p>假设你通过 <code>/utf-8</code> 或 <code>-fexec-charset=utf-8</code> 搞定了编译期常量字符串的编码。接下来还有一个问题，文件系统。</p>
 <p>Linux 文件系统内部，均使用 8 位类型 <code>char</code> 存储，将文件名当作平凡的字节流，不会做任何转换。因此你用 UTF-8 创建和打开的文件，其他使用 UTF-8 区域设置的软件都可以照常打开，不会有乱码问题。</p>
 <blockquote>
-<p><img src="/img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 其实 Windows 上以 GBK 编码的压缩文件或文本文件，拷贝到 Linux 上打开出现乱码问题，就是因为 Linux 的区域设置默认都是 UTF-8 的。实际上如果把你的文件拷给一个美国的 Windows 用户，他也会看到乱码，因为美国大区的 Windows 区域设置默认是 UTF-8，而中国大区的是 GBK，稍后我们会讲到解决方案。</p>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 其实 Windows 上以 GBK 编码的压缩文件或文本文件，拷贝到 Linux 上打开出现乱码问题，就是因为 Linux 的区域设置默认都是 UTF-8 的。实际上如果把你的文件拷给一个美国的 Windows 用户，他也会看到乱码，因为美国大区的 Windows 区域设置默认是 UTF-8，而中国大区的是 GBK，稍后我们会讲到解决方案。</p>
 </blockquote>
 <p>而 Windows 的 NTFS 文件系统，采用 16 位的 <code>wchar_t</code> 存储，Windows 的所有 API，也都是基于 <code>wchar_t</code> 的，Windows 内核内部也都用 <code>wchar_t</code> 储存文本字符串，只有二进制的字节流会用 <code>char</code> 存储。这类基于 <code>wchar_t</code> 的系统 API 都有一个 <code>W</code> 后缀，例如：</p>
 <pre><code class="language-cpp">MessageBoxW(NULL, L&quot;你好&quot;, L&quot;标题&quot;, MB_OK);
 </code></pre>
 <blockquote>
-<p><img src="/img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 这个 <code>MessageBoxW</code> 函数，只接受 <code>const wchar_t *</code> 类型的字符串。<code>L"你好"</code> 是一个 <code>wchar_t []</code> 类型的字符串常量，它的内部编码类型固定是 UTF-16，不会随着“区域设置”而变。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 这个 <code>MessageBoxW</code> 函数，只接受 <code>const wchar_t *</code> 类型的字符串。<code>L"你好"</code> 是一个 <code>wchar_t []</code> 类型的字符串常量，它的内部编码类型固定是 UTF-16，不会随着“区域设置”而变。</p>
 </blockquote>
 <p>虽然也有提供 <code>A</code> 后缀的系列函数，他们和 <code>W</code> 一样，只不过是接受 <code>const char *</code> 类型的字符串。问题在于，这些字符串都必须是“区域设置”里的那个编码格式，也就是 GBK 编码！而且无法修改。</p>
 <p>当调用 <code>A</code> 系函数时，他们内部会把 GBK 编码转换为 UTF-16 编码，然后调用 Windows 内核。</p>
 <p>这是一个糟糕的设计，而所有的 C/C++ 标准库都是基于 <code>A</code> 函数的！如果你用 <code>const char *</code> 字符串调用 C 标准库，相当于调用了 <code>A</code> 函数。而 <code>A</code> 函数只接受 GBK，但你却输入了 UTF-8！从而 UTF-8 中所有除 ASCII 以外的，各种中文字符、Emoji 都会变成乱码。</p>
 <p>例如 <code>fopen</code> 函数，只有 <code>fopen(const char *path, const char *mode)</code> 这一个基于 <code>char</code> 的版本，里面也是直接调用的 <code>A</code> 函数，完全不给我选择的空间。虽然 Windows 也提供了 <code>_wfopen(const wchar_t *path, const wchar_t *mode)</code>，但那既不是 POSIX 标准的一部分，也不是 C 语言标准的一部分，使用这样的函数就意味着无法跨平台。</p>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> Windows 官方认为：<code>W</code> 函数才是真正的 API，<code>A</code> 函数只是应付不听话的宝宝。可你就没发现你自己的 C/C++ 标准库也全部在调用的 <code>A</code> 函数么？</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> Windows 官方认为：<code>W</code> 函数才是真正的 API，<code>A</code> 函数只是应付不听话的宝宝。可你就没发现你自己的 C/C++ 标准库也全部在调用的 <code>A</code> 函数么？</p>
 </blockquote>
 <p>总之，<code>A</code> 函数是残废的，我们只能用 <code>W</code> 函数，尽管 UTF-16 是历史债，但我们别无选择，<code>W</code> 函数是唯一能支持完整 Unicode 字符输入的方式。</p>
 <pre><code class="language-cpp">// 假设这段 C++ 代码使用 /utf-8 选项编译：
@@ -968,11 +968,11 @@ std::ifstream f(std::filesystem::path(u8&quot;你好.txt&quot;));
 std::ofstream f(std::filesystem::path(u8&quot;你好.txt&quot;));
 </code></pre>
 <blockquote>
-<p><img src="/img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>std::filesystem::path</code> 类的 <code>c_str()</code> 在 Windows 上返回 <code>const wchar_t *</code>，在 Linux 上返回 <code>const char *</code>。这很合理，因为 Windows 文件系统确实以 <code>wchar_t</code> 存储路径名，而 Linux 文件系统完全用 <code>char</code>。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>std::filesystem::path</code> 类的 <code>c_str()</code> 在 Windows 上返回 <code>const wchar_t *</code>，在 Linux 上返回 <code>const char *</code>。这很合理，因为 Windows 文件系统确实以 <code>wchar_t</code> 存储路径名，而 Linux 文件系统完全用 <code>char</code>。</p>
 </blockquote>
 <p>每次需要加 <code>std::filesystem::u8path</code> 也挺麻烦的，容易忘记，一忘记就无法访问中文目录。</p>
 <blockquote>
-<p><img src="/img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 很多软件在 Windows 上无法支持中文路径名，就是因为他们习惯了 Linux 或 MacOS 的全 UTF-8 环境，对文件路径没有任何转换。而 Windows 底层全是 UTF-16，根本没有提供 UTF-8 的 API，你 UTF-8 只能转换成 UTF-16 才能避免中文乱码。个人认为，死活不肯接受明摆着已经是国际通用标准的 UTF-8，A 函数的编码连当前进程切换的方法都不给一个，这个应该由 Windows 全责承担。</p>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 很多软件在 Windows 上无法支持中文路径名，就是因为他们习惯了 Linux 或 MacOS 的全 UTF-8 环境，对文件路径没有任何转换。而 Windows 底层全是 UTF-16，根本没有提供 UTF-8 的 API，你 UTF-8 只能转换成 UTF-16 才能避免中文乱码。个人认为，死活不肯接受明摆着已经是国际通用标准的 UTF-8，A 函数的编码连当前进程切换的方法都不给一个，这个应该由 Windows 全责承担。</p>
 </blockquote>
 <p>好消息是，最近 MSVC 标准库提供了一种方案，在你的程序开头，加上 <code>setlocale(LC_ALL, ".utf8")</code> 就可以让 C 和 C++ 标准库进入 UTF-8 模式：不再调用 <code>A</code> 系函数操作文件，而是会把文件名从 UTF-8 转换成 UTF-16 后再调用真正稳定的 <code>W</code> 系函数。</p>
 <pre><code class="language-cpp">setlocale(LC_ALL, &quot;.utf8&quot;);          // 只需要这一行
@@ -980,7 +980,7 @@ FILE *fp = fopen(u8&quot;你好.txt&quot;, &quot;r&quot;); // 可以了
 std::ifstream fin(u8&quot;你好.txt&quot;);     // 可以了
 </code></pre>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>setlocale(LC_ALL, ".utf8");</code> 只是把 C 标准库的 <code>const char *</code> 参数变成了接受 UTF-8，并不会让系统的 <code>A</code> 函数也变成 UTF-8 哦，调用本地 API 时仍需 UTF-8 到 UTF-16 的转换。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>setlocale(LC_ALL, ".utf8");</code> 只是把 C 标准库的 <code>const char *</code> 参数变成了接受 UTF-8，并不会让系统的 <code>A</code> 函数也变成 UTF-8 哦，调用本地 API 时仍需 UTF-8 到 UTF-16 的转换。</p>
 </blockquote>
 <p><em>总结：要支持 UTF-8 阵营，开启 <code>/utf-8</code>，程序开头写 <code>setlocale(LC_ALL, ".utf8")</code>。Linux 用户则什么都不用做。</em></p>
 <p>看看各大软件站在 UTF-8 阵营的理由：</p>
@@ -1031,7 +1031,7 @@ for b in s.bytes() {
 <p>在 C++ 中，若要采用这种 UTF-8 方案，可以使用 <code>utfcpp</code> 这个库：</p>
 <p>https://github.com/nemtrif/utfcpp</p>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 稍后我们会以案例详细演示这个库的用法，也会尝试自己手搓。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 稍后我们会以案例详细演示这个库的用法，也会尝试自己手搓。</p>
 </blockquote>
 <p>方法1：使用 <code>utf8to32</code> 一次性完成转换，用完后再转回去。</p>
 <pre><code class="language-cpp">std::string s = &quot;你好&quot;;
@@ -1096,7 +1096,7 @@ for (char32_t c : Utf8Range(s)) {
 <p>支持 Unicode 过早，误以为 0xFFFF 就是 Unicode 的上限。</p>
 <p>一开始，人们错误地把 UTF-16 当成永远的定长编码，一劳永逸解决乱码问题，所以那段时期的软件都大举使用 UTF-16 作为内码。没想到后来 Unicode 又引入 0x10FFFF 范围的稀有字符，而现有的已经采用了 16 位内码的软件又已经无法根除，只好使用“代理对”机制，增量更新修复了现有的 16 位内码软件。UTF-16 既没有 UTF-8 兼容 ASCII 的好处，又没有 UTF-32 定长编码的好处，留下历史债。</p>
 <blockquote>
-<p><img src="/img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 事实上，Unicode 已经无法继续扩容突破 0x10FFFF，就是因为双 <code>uint16_t</code> 编码的代理对最多只能容纳额外 0x100000 个字符的空间。本来 UTF-8 一开始的草案是打算最多支持 8 节列车，完全容纳高达 0x7FFFFFFF 范围的字符。为了让 Windows 还能继续用，Unicode 才被迫止步 0x10FFFF，UTF-8 也终结于 4 节列车。</p>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 事实上，Unicode 已经无法继续扩容突破 0x10FFFF，就是因为双 <code>uint16_t</code> 编码的代理对最多只能容纳额外 0x100000 个字符的空间。本来 UTF-8 一开始的草案是打算最多支持 8 节列车，完全容纳高达 0x7FFFFFFF 范围的字符。为了让 Windows 还能继续用，Unicode 才被迫止步 0x10FFFF，UTF-8 也终结于 4 节列车。</p>
 </blockquote>
 <ul>
 <li>应用场景：通常认为，UTF-16 是纯粹的历史遗留糟粕，新软件不应该再使用 UTF-16。只有在和这些糟粕软件的 API 打交道时，才必须转换为 UTF-16。但也有人指出：UTF-16 是纯中文压缩率最高的编码格式，所以 UTF-16 还比较适合纯中文或以中文内容为主的文本数据压缩。</li>
@@ -1124,12 +1124,12 @@ for (char32_t c : Utf8Range(s)) {
 </tbody>
 </table>
 <blockquote>
-<p><img src="/img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> Java 的 <code>Character</code> 类型是一个 32 位的值，这个值包含了一个 Unicode 码位。<code>char</code> 类型是一个 16 位的值，它包含了一个 UTF-16 编码的码点。<code>String</code> 的 <code>charAt()</code> 方法返回的是 <code>char</code> 类型的码位（类似于字节），如果要获取 <code>Character</code> 类型的完整字符，必须使用 <code>codePointAt()</code> 方法。这是 Java 语言设计上的一个失误，已经无法改变。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> Java 的 <code>Character</code> 类型是一个 32 位的值，这个值包含了一个 Unicode 码位。<code>char</code> 类型是一个 16 位的值，它包含了一个 UTF-16 编码的码点。<code>String</code> 的 <code>charAt()</code> 方法返回的是 <code>char</code> 类型的码位（类似于字节），如果要获取 <code>Character</code> 类型的完整字符，必须使用 <code>codePointAt()</code> 方法。这是 Java 语言设计上的一个失误，已经无法改变。</p>
 </blockquote>
 <p>而后续新出的 Kotlin 是 Java 的合法继承者，他果断放弃 UTF-16，加入了 UTF-32 阵营。可见，老软件坚持用 UTF-32 是因为他们积重难返，新软件再 UTF-16 就是自作孽了！</p>
 <p><strong>总结：不要支持 UTF-16 阵营，除非你被迫维护史山。</strong></p>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如小彭老师发微信朋友圈时，输入 Emoji 表情后剪切，再粘贴，就和发现一个 Emoji 被切断成了两个代理对，以乱码的形式显现。估计是因为微信基于 Java 编写，疼逊程序员对 UTF-16 代理对处理的不利索。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如小彭老师发微信朋友圈时，输入 Emoji 表情后剪切，再粘贴，就和发现一个 Emoji 被切断成了两个代理对，以乱码的形式显现。估计是因为微信基于 Java 编写，疼逊程序员对 UTF-16 代理对处理的不利索。</p>
 </blockquote>
 <p>Java 中以码点遍历一个字符串的写法：</p>
 <pre><code class="language-java">String s = &quot;你好&quot;;
@@ -1182,7 +1182,7 @@ std::string s = utf8::utf16to8(s16);
 s8 = utf8::utf16tou8(s16);
 </code></pre>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 最后这两个区别在于，<code>utf16to8</code> 返回 <code>std::string</code>，<code>utf16tou8</code> 返回 <code>std::u8string</code>，里面都是 UTF-8 编码的，不过有的人喜欢用 <code>std::string</code> 来存储 UTF-8，不喜欢 <code>std::u8string</code>，或者说他们没有 C++20，不支持 <code>std::u8string</code>，因此这个库满足他们的不同需要。但是 <code>std::u8string</code> 作为参数时不需要，因为参数可以自动重载，而返回值不行。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 最后这两个区别在于，<code>utf16to8</code> 返回 <code>std::string</code>，<code>utf16tou8</code> 返回 <code>std::u8string</code>，里面都是 UTF-8 编码的，不过有的人喜欢用 <code>std::string</code> 来存储 UTF-8，不喜欢 <code>std::u8string</code>，或者说他们没有 C++20，不支持 <code>std::u8string</code>，因此这个库满足他们的不同需要。但是 <code>std::u8string</code> 作为参数时不需要，因为参数可以自动重载，而返回值不行。</p>
 </blockquote>
 <p>缺点是他不能处理 GBK、Shift-JIS 等非 Unicode 编码，也不能自动检测当前的 ANSI 区域设置。</p>
 <h3 id="boostlocale">跨平台的任意编码转换：<code>boost::locale</code></h3>
@@ -1195,7 +1195,7 @@ $ sudo apt-get install libboost-locale-dev
 $ sudo pacman -S boost
 </code></pre>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 不喜欢 Boost 的人有难了。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 不喜欢 Boost 的人有难了。</p>
 </blockquote>
 <h4 id="utf">UTF 之间互转</h4>
 <p>使用 <code>boost::locale::conv::utf_to_utf</code> 就能轻易做到。</p>
@@ -1229,8 +1229,8 @@ int main() {
 target_link_libraries(你的程序 Boost::locale)
 </code></pre>
 <blockquote>
-<p><img src="/img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 不过 <code>boost::locale</code> 有一个缺点，那就是不支持 <code>char8_t</code> 和 <code>std::u8string</code>。</p>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>char8_t</code> 是 C++20 引入的新字符类型，用于强类型的君子协议，和 <code>char</code> 并没有实际区别。只是方便了函数类型签名更加一目了然，这个参数只能接受 UTF-8 编码的字符串！</p>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 不过 <code>boost::locale</code> 有一个缺点，那就是不支持 <code>char8_t</code> 和 <code>std::u8string</code>。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>char8_t</code> 是 C++20 引入的新字符类型，用于强类型的君子协议，和 <code>char</code> 并没有实际区别。只是方便了函数类型签名更加一目了然，这个参数只能接受 UTF-8 编码的字符串！</p>
 </blockquote>
 <p>由于 Boost 较老，没有及时跟进，所以他并没有实现针对 <code>char8_t</code> 的特化，如果使用了 <code>utf_to_utf&lt;char8_t&gt;</code> 会报 <code>undefined reference</code> 错误，即找不到符号。改成 <code>utf_to_utf&lt;char&gt;</code> 就没问题了。</p>
 <h4 id="gbk-utf">GBK 和 UTF 互转</h4>
@@ -1313,7 +1313,7 @@ int main() {
 </tbody>
 </table>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> UTF-x 表示取决于参数类型的大小，如果参数是 <code>char16_t</code> 的字符串 <code>std::u16string</code>，那 x 就是 16。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> UTF-x 表示取决于参数类型的大小，如果参数是 <code>char16_t</code> 的字符串 <code>std::u16string</code>，那 x 就是 16。</p>
 </blockquote>
 <table>
 <thead>
@@ -1500,12 +1500,12 @@ void u8print(std::string msg) {
 }
 </code></pre>
 <blockquote>
-<p><img src="/img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 更多细节详见官方文档：https://www.boost.org/doc/libs/1_81_0/libs/locale/doc/html/group__codepage.html</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 更多细节详见官方文档：https://www.boost.org/doc/libs/1_81_0/libs/locale/doc/html/group__codepage.html</p>
 </blockquote>
 <h4 id="_14">更多功能？！</h4>
 <p>编码转换只是 <code>boost::locale::conv</code> 这个子模块下的一个小功能而已！<code>boost::locale</code> 还提供了更多功能，如按照地域语言规范格式化数字、货币、日期、时间等，下一小节中我们继续介绍。完全是 <code>std::locale</code> 的上位替代。</p>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> Boost 哪里都好，你想要的功能应有尽有。而且不需要 C++20，很低版本的 C++ 也能用。唯一缺点可能就是太肥了，编译慢。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> Boost 哪里都好，你想要的功能应有尽有。而且不需要 C++20，很低版本的 C++ 也能用。唯一缺点可能就是太肥了，编译慢。</p>
 </blockquote>
 <h3 id="windows-multibytetowidechar">Windows 用户：MultiByteToWideChar</h3>
 <p>如果你是 Windows 程序员，没有跨平台需求，不想用 Boost，且需要在 Windows 系统区域设置规定的 ANSI（在中国区是 GBK）编码和 UTF-16 之间转换：</p>
@@ -1561,12 +1561,12 @@ std::string wstring_to_utf8(const std::wstring &amp;ws) {
 }
 </code></pre>
 <blockquote>
-<p><img src="/img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> C 语言特色：所有要返回字符串的函数，都需要调用两遍，第一波先求出长度，第二波才写入。这是为了避免与内存分配器耦合，所有的 C 风格 API 都是这样。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> C 语言特色：所有要返回字符串的函数，都需要调用两遍，第一波先求出长度，第二波才写入。这是为了避免与内存分配器耦合，所有的 C 风格 API 都是这样。</p>
 </blockquote>
 <h3 id="linux-iconv">Linux 用户：<code>iconv</code></h3>
 <p>如果你是 Linux 用户，且没有跨平台需求，不想用 Boost，可以使用 C 语言的 <code>iconv</code> 库。</p>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>iconv</code> 也有 Windows 的版本，但安装比较困难。如果你连 <code>iconv</code> 都搞得定，没理由 Boost 搞不定。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>iconv</code> 也有 Windows 的版本，但安装比较困难。如果你连 <code>iconv</code> 都搞得定，没理由 Boost 搞不定。</p>
 </blockquote>
 <pre><code class="language-cpp">#include &lt;iconv.h&gt;
 #include &lt;string&gt;
@@ -1609,7 +1609,7 @@ std::string gbk_to_utf8(std::string const &amp;s) {
 �Ұ�С����ʦ
 </code></pre>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 此处显示乱码是因为我的终端是 UTF-8 格式，无法正确解析 iconv 输出的 GBK 格式数据。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 此处显示乱码是因为我的终端是 UTF-8 格式，无法正确解析 iconv 输出的 GBK 格式数据。</p>
 </blockquote>
 <p>把“我爱小彭老师”转换为 GBK 格式写入 <code>gbk.txt</code>，然后再重新还原回 UTF-8 格式查看：</p>
 <pre><code class="language-bash">$ echo 我爱小彭老师 | iconv -f UTF-8 -t GBK &gt; gbk.txt
@@ -1619,7 +1619,7 @@ $ iconv -f GBK -t UTF-8 gbk.txt
 我爱小彭老师
 </code></pre>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> Windows 可能也有类似的工具，比如 <code>iconv.exe</code>，但我没找到。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> Windows 可能也有类似的工具，比如 <code>iconv.exe</code>，但我没找到。</p>
 </blockquote>
 <h2 id="_15">本地化</h2>
 <p>本地化是指根据用户的语言、地区等环境，显示不同的界面。比如说，同样是文件菜单，中文用户看到的是“文件”、英文用户看到的是“File”。</p>
@@ -1645,7 +1645,7 @@ $ iconv -f GBK -t UTF-8 gbk.txt
 |ispunct|标点符号|
 |isalnum|字母或数字|</p>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 更详细的表格可以看：</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 更详细的表格可以看：</p>
 </blockquote>
 <p>https://en.cppreference.com/w/cpp/string/byte/isspace</p>
 <p><img alt="" src="../img/cctype.png" /></p>
@@ -1664,13 +1664,13 @@ $ iconv -f GBK -t UTF-8 gbk.txt
 <h2 id="_20">宽字符流</h2>
 <p>之所以把宽字符流放到最后，是因为，首先 <code>iostream</code> 本来就是一个失败的设计。</p>
 <blockquote>
-<p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 小彭老师在本书开头就多次强调过他是 <code>format</code> 孝子。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 小彭老师在本书开头就多次强调过他是 <code>format</code> 孝子。</p>
 </blockquote>
 <p>而宽字符 <code>wchar_t</code> 本身就充斥着历史遗留糟粕（例如 Windows 被 UTF-16 背刺）。</p>
 <p>现在 <code>iostream</code> 与 <code>wchar_t</code> 一起出现在我面前，不能说是梦幻联动吧，至少也可以说是答辩超人了。</p>
 <p>总之，我个人还是推荐程序内部以 UTF-8（<code>char8_t</code>）或 UTF-32（<code>char32_t</code>）的字符串来处理万物。</p>
 <blockquote>
-<p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> UTF-8 或 UTF-32 的选择取决于你的中文处理需求是否旺盛，是否在乎空间，是否需要切片和索引等。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> UTF-8 或 UTF-32 的选择取决于你的中文处理需求是否旺盛，是否在乎空间，是否需要切片和索引等。</p>
 </blockquote>
 <p>当需要调用操作系统 API 读写文件时，再用 <code>boost::locale</code>、<code>utfcpp</code> 等工具转换成 ANSI（<code>char</code>）或 UTF-16（<code>wchar_t</code>）。</p>
 <p>对于 Linux 用户，也可以检测如果是 Linux 系统，则什么转换都不做，因为 Linux 用户几乎都是 UTF-8，那么 <code>const char8_t *</code> 可以强转为 <code>const char *</code> 而不用任何额外开销。</p>
@@ -1808,7 +1808,7 @@ std::wcout &lt;&lt; wstr &lt;&lt; '\n';
 <pre><code>I love Péng
 </code></pre>
 <blockquote>
-<p><img src="/img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 并不标准的做法，还是建议用 <code>boost::locale::conv::to_utf&lt;char&gt;(latin1, "Latin-1")</code>。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 并不标准的做法，还是建议用 <code>boost::locale::conv::to_utf&lt;char&gt;(latin1, "Latin-1")</code>。</p>
 </blockquote>
 <h3 id="latin-1_2">Latin-1 的妙用</h3>
 <p>由于 Latin-1 覆盖了所有的 256 个 <code>char</code> 的可能值，任何字节流都可以成功解码，不像 GBK 和 UTF-8 有自纠错性，有些输入会被塌缩成错误“�”。</p>
@@ -1834,7 +1834,7 @@ secret = base64.b64encode(&quot;小彭老师&quot;.encode())
 base64.b64decode(secret).decode()
 </code></pre>
 <blockquote>
-<p><img src="/img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 这个方法不仅可以编码 UTF-8 字符串，还可以传输任意非文本的文件！例如，有人利用 Base64 编码，把 jpg 图像文件直接内嵌在 md 文件里！（md 文件只支持包含合法的 UTF-8 文本，不可能包含 jpg 的任意字节流，因此只能用 Base64 先编码成 ASCII 范围内的字母和数字，防止 md 编译器报 UTF-8 解码错误）</p>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 这个方法不仅可以编码 UTF-8 字符串，还可以传输任意非文本的文件！例如，有人利用 Base64 编码，把 jpg 图像文件直接内嵌在 md 文件里！（md 文件只支持包含合法的 UTF-8 文本，不可能包含 jpg 的任意字节流，因此只能用 Base64 先编码成 ASCII 范围内的字母和数字，防止 md 编译器报 UTF-8 解码错误）</p>
 </blockquote>
 <p>总之，如果你输入中文实在有问题，可以考虑先 Base64 转换成纯英文试试看，反正无论谁都兼容 ASCII。如果这个文本框不区分大小写，还可以试试看只有 A-Z 0-9 的 Base32 编码。</p></div>
             </div>
