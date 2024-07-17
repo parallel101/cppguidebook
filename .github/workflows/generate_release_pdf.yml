@@ -68,6 +68,12 @@ jobs:
           tag_name: ${{ steps.tag.outputs.release_tag }}
           files: cppguidebook.pdf
 
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+
       - name: Publish to mirror site
         continue-on-error: true
         run: |
