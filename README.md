@@ -24,23 +24,6 @@
 
 如果发现书写问题，或者你有想加入的新章节，有关于 C++ 新想法，新技巧分享给大家，可以提交 [Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) 来帮助小彭老师一起写书。合并后，GitHub 的机器人将自动重新编译和部署网页。
 
-添加新章节，可以从下面的“大纲 / Roadmap”中挑选，认领其中的一个章节，开始编写。也可以选择一个大纲里没有，但你认为很重要的方面来写。
-
-# 大纲 / Roadmap
-
-- 前言 (完成)
-- 开发环境与平台选择 (小彭老师施工中)
-- 你好，世界 (小彭老师施工中)
-- 变量与类型 (待认领)
-- 认识标准库 (待认领)
-- 自定义函数 (待认领)
-- 自定义类型 (待认领)
-- 标准库容器 (待认领)
-- 成员函数 (待认领)
-- 我们需要多态 (待认领)
-- 自定义模板 (待认领)
-- TODO: 更多章节
-
 ## 赞助名单
 
 小彭大典的持续编写离不开以下小彭友的赞助！
@@ -120,4 +103,4 @@
 
 # 开发环境与平台选择
 
-[>> 继续阅读剩余章节](https://142857.red/files/cppguidebook.pdf)
+[>> 继续阅读剩余章节](https://parallel101.github.io/cppguidebook)
