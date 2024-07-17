@@ -179,12 +179,12 @@
 <blockquote>
 <p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 如果你是在付费群中“买”到本书，或者打着小彭老师名号卖课，说明你可能是私有制的受害者。因为小彭老师从来没有付费才能看的课程，所有小彭老师课程都对全球互联网开放。</p>
 </blockquote>
+<p>如需离线查看，可以前往 <a href="https://github.com/parallel101/cppguidebook/releases">GitHub Release 页面</a> 下载 PDF 文件。</p>
 <p>如果你在阅读过程中遇到任何问题，可以在 <a href="https://github.com/parallel101/cppguidebook/issues">GitHub Issues</a> 中提出，小彭老师会尽力解答。</p>
 <p>也可以在 <a href="https://space.bilibili.com/263032155">B 站</a> 发私信给小彭老师哦。</p>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>如需离线查看，可以前往 <a href="https://github.com/parallel101/cppguidebook/releases">GitHub Release 页面</a> 下载 PDF 文件。</p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是温馨提示</p>
@@ -2841,19 +2841,64 @@ $ iconv -f GBK -t UTF-8 gbk.txt
 <pre><code class="language-cpp">#include &lt;cctype&gt;
 </code></pre>
 <p>函数清单：</p>
-<p>|函数名称|判断的字符类型|
-|isascii|0 到 0x7F 的所有 ASCII 字符|
-|isalpha|大小写字母 A-Z a-z|
-|isupper|大写字母 A-Z|
-|islower|小写字母 a-z|
-|isdigit|数字 0-9|
-|isxdigit|十六进制数字 A-F a-f 0-9|
-|isprint|可打印字符，包括字母、数字和标点等|
-|isgraph|可打印字符，不包括空格|
-|iscntrl|控制字符，除可打印字符外的全部|
-|isspace|空白字符，如空格、换行、回车、制表符等|
-|ispunct|标点符号|
-|isalnum|字母或数字|</p>
+<table>
+<thead>
+<tr>
+<th>函数名称</th>
+<th>判断的字符类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>isascii</td>
+<td>0 到 0x7F 的所有 ASCII 字符</td>
+</tr>
+<tr>
+<td>isalpha</td>
+<td>大小写字母 A-Z a-z</td>
+</tr>
+<tr>
+<td>isupper</td>
+<td>大写字母 A-Z</td>
+</tr>
+<tr>
+<td>islower</td>
+<td>小写字母 a-z</td>
+</tr>
+<tr>
+<td>isdigit</td>
+<td>数字 0-9</td>
+</tr>
+<tr>
+<td>isxdigit</td>
+<td>十六进制数字 A-F a-f 0-9</td>
+</tr>
+<tr>
+<td>isprint</td>
+<td>可打印字符，包括字母、数字和标点等</td>
+</tr>
+<tr>
+<td>isgraph</td>
+<td>可打印字符，不包括空格</td>
+</tr>
+<tr>
+<td>iscntrl</td>
+<td>控制字符，除可打印字符外的全部</td>
+</tr>
+<tr>
+<td>isspace</td>
+<td>空白字符，如空格、换行、回车、制表符等</td>
+</tr>
+<tr>
+<td>ispunct</td>
+<td>标点符号</td>
+</tr>
+<tr>
+<td>isalnum</td>
+<td>字母或数字</td>
+</tr>
+</tbody>
+</table>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 更详细的表格可以看：</p>
 </blockquote>

@@ -1631,19 +1631,64 @@ $ iconv -f GBK -t UTF-8 gbk.txt
 <pre><code class="language-cpp">#include &lt;cctype&gt;
 </code></pre>
 <p>函数清单：</p>
-<p>|函数名称|判断的字符类型|
-|isascii|0 到 0x7F 的所有 ASCII 字符|
-|isalpha|大小写字母 A-Z a-z|
-|isupper|大写字母 A-Z|
-|islower|小写字母 a-z|
-|isdigit|数字 0-9|
-|isxdigit|十六进制数字 A-F a-f 0-9|
-|isprint|可打印字符，包括字母、数字和标点等|
-|isgraph|可打印字符，不包括空格|
-|iscntrl|控制字符，除可打印字符外的全部|
-|isspace|空白字符，如空格、换行、回车、制表符等|
-|ispunct|标点符号|
-|isalnum|字母或数字|</p>
+<table>
+<thead>
+<tr>
+<th>函数名称</th>
+<th>判断的字符类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>isascii</td>
+<td>0 到 0x7F 的所有 ASCII 字符</td>
+</tr>
+<tr>
+<td>isalpha</td>
+<td>大小写字母 A-Z a-z</td>
+</tr>
+<tr>
+<td>isupper</td>
+<td>大写字母 A-Z</td>
+</tr>
+<tr>
+<td>islower</td>
+<td>小写字母 a-z</td>
+</tr>
+<tr>
+<td>isdigit</td>
+<td>数字 0-9</td>
+</tr>
+<tr>
+<td>isxdigit</td>
+<td>十六进制数字 A-F a-f 0-9</td>
+</tr>
+<tr>
+<td>isprint</td>
+<td>可打印字符，包括字母、数字和标点等</td>
+</tr>
+<tr>
+<td>isgraph</td>
+<td>可打印字符，不包括空格</td>
+</tr>
+<tr>
+<td>iscntrl</td>
+<td>控制字符，除可打印字符外的全部</td>
+</tr>
+<tr>
+<td>isspace</td>
+<td>空白字符，如空格、换行、回车、制表符等</td>
+</tr>
+<tr>
+<td>ispunct</td>
+<td>标点符号</td>
+</tr>
+<tr>
+<td>isalnum</td>
+<td>字母或数字</td>
+</tr>
+</tbody>
+</table>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 更详细的表格可以看：</p>
 </blockquote>
