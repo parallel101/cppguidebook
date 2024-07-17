@@ -23,7 +23,7 @@ footerHtml = ` `;
     const browser = await puppeteer.launch({
         headless: true,
         executablePath: process.env.CHROME_BIN || null,
-        args: ['--no-sandbox', '--headless', '--disable-gpu', '--disable-dev-shm-usage']
+        args: ['--no-sandbox', '--headless', '--disable-gpu', '--disable-dev-shm-usage', '--lang=zh-CN']
     });
 
     const page = await browser.newPage();
