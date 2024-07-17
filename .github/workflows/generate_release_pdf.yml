@@ -38,6 +38,7 @@ jobs:
 
       - name: Compile PDF document
         run: |
+          ls site site/print_page
           node misc/export_to_pdf.js files://$PWD/site/print_page/index.html cppguidebook.pdf "小彭老师的现代 C++ 大典"
 
       - name: Delete old Release
