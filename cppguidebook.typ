@@ -2266,6 +2266,10 @@ void thisFuncAcceptsUTF16(UTF16String msg);
 
 #detail[其中转换函数签名为 `std::string u8toansi(std::u8string s)`，很可惜，标准库并没有提供这个函数，直到 C++26 前，标准库对字符编码支持一直很差，你不得不自己实现或依赖第三方库。]
 
+==== u8 字符串常量转换问题
+
+TODO
+
 == 选择你的阵营！
 
 #image("pic/utfwar.png")
@@ -2599,16 +2603,14 @@ $ sudo pacman -S boost
 using boost::locale::conv::utf_to_utf;
 
 int main() {
-    std::u8string s8 = u8"你好";
+    std::string s8 = u8"你好";
     // UTF-8 转 UTF-32：
     std::u32string s32 = utf_to_utf<char32_t>(s8);
     // UTF-32 转 UTF-16：
     std::u16string s16 = utf_to_utf<char16_t>(s8);
     // UTF-32 转 UTF-8：
-    s8 = utf_to_utf<char8_t>(s32);
-    // UTF-32 转 UTF-8 (但以 char 存储)：
-    std::string s8c = utf_to_utf<char>(s32);
-    std::cout << s8c << '\n';
+    s8 = utf_to_utf<char>(s32);
+    std::cout << s8 << '\n';
     return 0;
 }
 ```
@@ -2617,10 +2619,12 @@ int main() {
 
 比如从 `char32_t` 转到 `char16_t`，只需要 `utf_to_utf<char32_t>` 就可以，非常方便。
 
+#warn[`boost::locale` 有一个缺点 TODO]
+
 编译：
 
 ```bash
-$ g++ -std=c++20 -lboost_locale main.cpp
+$ g++ -std=c++17 -lboost_locale main.cpp
 ```
 
 输出：
@@ -2653,7 +2657,7 @@ int main() {
     std::wstring ws = to_utf<wchar_t>(s, "GBK");
     std::wcout << ws << '\n';
     // 从 UTF-16 转回 GBK
-    s = from_utf<char>(ws, "GBK");
+    s = from_utf(ws, "GBK");
     std::wcout << s << '\n';
     return 0;
 }
@@ -2664,6 +2668,8 @@ int main() {
 这里 `to_utf<wchar_t>` 会自动判断 `wchar_t` 的大小。如果是 2 字节（Windows 平台情况）会认为你要转为 UTF-16，如果是 4 字节（Linux 平台情况），会认为你要转为 UTF-32。
 
 而 `to_char<char16_t>` 则是无论什么平台，都会转为 UTF-16。
+
+`from_utf` 不需要指定任何模板参数，因为他总是返回 `std::string`（ANSI 或 GBK 编码的字符串），参数是什么编码，会自动通过重载判断，例如 `from_utf(ws, "GBK")` 这里的参数是 `wchar_t`，那么在 Windows 上，他会检测到 `wchar_t` 是 2 字节，就认为是 UTF-16 到 GBK 的转换。
 
 ==== UTF 和 ANSI 互转
 
@@ -2681,11 +2687,11 @@ using boost::locale::conv::from_utf;
 using boost::locale::conv::to_utf;
 
 int main() {
-    std::u8string u8s = u8"你好";
+    std::string u8s = u8"你好";
     // UTF-8 转 ANSI
-    std::string s = from_utf<char>(u8s, "");
+    std::string s = from_utf(u8s, "");
     // ANSI 转 UTF-8
-    u8s = to_utf<char8_t>(s, "");
+    u8s = to_utf<char>(s, "");
     return 0;
 }
 ```
@@ -2728,16 +2734,14 @@ int main() {
     inset: 3pt,
     align: horizon,
     [函数名称], [从], [到],
-    [`from_utf<char>("GBK", string)`], [UTF-8], [GBK],
-    [`from_utf<char>("GBK", u8string)`], [UTF-8], [GBK],
-    [`from_utf<char>("GBK", u16string)`], [UTF-16], [GBK],
-    [`from_utf<char>("GBK", u32string)`], [UTF-32], [GBK],
-    [`from_utf<char>("GBK", wstring)`], [Linux 上UTF-32 \ Win 上 UTF-16], [GBK],
-    [`from_utf<char>("", string)`], [UTF-8], [区域设置],
-    [`from_utf<char>("", u8string)`], [UTF-8], [区域设置],
-    [`from_utf<char>("", u16string)`], [UTF-16], [区域设置],
-    [`from_utf<char>("", u32string)`], [UTF-32], [区域设置],
-    [`from_utf<char>("", wstring)`], [Linux 上UTF-32 \ Win 上 UTF-16], [区域设置],
+    [`from_utf("GBK", string)`], [UTF-8], [GBK],
+    [`from_utf("GBK", u16string)`], [UTF-16], [GBK],
+    [`from_utf("GBK", u32string)`], [UTF-32], [GBK],
+    [`from_utf("GBK", wstring)`], [Linux 上UTF-32 \ Win 上 UTF-16], [GBK],
+    [`from_utf("", string)`], [UTF-8], [区域设置],
+    [`from_utf("", u16string)`], [UTF-16], [区域设置],
+    [`from_utf("", u32string)`], [UTF-32], [区域设置],
+    [`from_utf("", wstring)`], [Linux 上UTF-32 \ Win 上 UTF-16], [区域设置],
 )
 
 ==== 指定处理错误的方法
@@ -2753,9 +2757,9 @@ int main() {
 using boost::locale::conv::from_utf;
 
 int main() {
-    std::u8string utf8 = u8"我爱𰻞𰻞面";
+    std::string utf8 = u8"我爱𰻞𰻞面";
     // UTF-8 转 GBK
-    std::string gbk = from_utf<char>(utf8, "GBK");
+    std::string gbk = from_utf(utf8, "GBK");
     // 错误，“𰻞”无法用 GBK 表示！
     std::cout << gbk << '\n';
     // 在 Windows 的 GBK 终端上，只显示“我爱面”
@@ -2777,10 +2781,10 @@ using boost::locale::conv::from_utf;
 using boost::locale::conv::method_type;
 
 int main() {
-    std::u8string utf8 = u8"我爱𰻞𰻞面";
+    std::string utf8 = u8"我爱𰻞𰻞面";
     // UTF-8 转 GBK
-    std::string gbk = from_utf<char>(utf8, "GBK",
-                                     method_type::stop);
+    std::string gbk = from_utf(utf8, "GBK",
+                               method_type::stop);
     // 错误，“𰻞”无法用 GBK 表示！
     // from_utf 会抛出 `conversion_error` 异常
     std::cout << gbk << '\n';
@@ -2802,7 +2806,7 @@ void try_save(std::u32string content, std::wstring path) {
     std::string binary;
     try {
         // 尝试将 UTF-32 转成 GBK 编码
-        binary = from_utf<char>(content, "GBK",
+        binary = from_utf(content, "GBK",
                                 method_type::stop);
     } catch (conversion_error const &e) { // 若 GBK 无法表示
         // 改用前面带有 BOM 的 UTF-8 编码
@@ -2821,8 +2825,8 @@ void try_save(std::u32string content, std::wstring path) {
 using boost::locale::conv::from_utf;
 using boost::locale::conv::utf_to_utf;
 
-void print(std::u8string msg) {
-    std::cout << from_utf<char>(msg, "");
+void u8print(std::string msg) {
+    std::cout << from_utf(msg, "");
     // 或者：
     // std::wcout << utf_to_utf<wchar_t>(msg, "");
 }
@@ -3061,14 +3065,13 @@ https://en.cppreference.com/w/cpp/string/byte/isspace
 对于 Linux 用户，也可以检测如果是 Linux 系统，则什么转换都不做，因为 Linux 用户几乎都是 UTF-8，那么 `const char8_t *` 可以强转为 `const char *` 而不用任何额外开销。
 
 ```cpp
-std::string to_os_string(std::u8string const &u8s) {
+std::string to_os_string(std::string const &u8s) {
 #if _WIN32
     // UTF-8 到 ANSI
-    return boost::locale::conv::from_utf<char>(u8s, "");
+    return boost::locale::conv::from_utf(u8s, "");
 #elif __linux__
-    return std::string(
-        reinterpret_cast<const char *>(u8s.c_str()),
-        u8s.size());
+    // 不转换
+    return u8s;
 #else
 #error "Unsupported system."
 #endif
