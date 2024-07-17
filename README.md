@@ -61,7 +61,7 @@
 > [!WARN]
 > 救命……爱发电似乎关停了！？小彭老师赶紧贴出支付宝收款码作为替代……
 
-[![Zhifu Code](misc/zfb-qrcode.jpg)]
+<img src="misc/zfb-qrcode.jpg" alt="misc/zfb-qrcode.jpg" width="400px"/>
 
 > [!TIP]
 > 如果你也处于失业状态，就不用勉强赞助了……也可以先给小彭老师点一颗⭐Star⭐表示心意。
