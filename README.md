@@ -7,7 +7,7 @@
 
 ## 在哪里可以看？
 
-本书托管在 GitHub Pages，无需下载，[点击开始在线阅读](https://parallel101.github.io/cppguidebook)。
+无需下载，[点击开始在线阅读](https://parallel101.github.io/cppguidebook)。
 
 > [!TIP]
 > GitHub Pages 是实时更新的，每当小彭老师推送了新章节，网页都会自动更新哦。
