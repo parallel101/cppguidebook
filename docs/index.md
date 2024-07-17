@@ -1,12 +1,3 @@
----
-icon:
-  fun: '<img src="img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/>'
-  tip: '<img src="img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/>'
-  story: '<img src="img/book.png" height="30px" width="auto" style="margin: 0; border: none"/>'
-  warn: '<img src="img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/>'
-  detail: '<img src="img/question.png" height="30px" width="auto" style="margin: 0; border: none"/>'
----
-
 # 小彭老师的现代 C++ 大典
 
 小彭大典是一本关于现代 C++ 编程的权威指南，它涵盖了从基础知识到高级技巧的内容，适合初学者和有经验的程序员阅读。本书由小彭老师亲自编写，通过简单易懂的语言和丰富的示例，帮助读者快速掌握 C++ 的核心概念，并学会如何运用它们来解决实际问题。
@@ -49,7 +40,7 @@ icon:
 
 > {{ icon.story }} 例如所谓的 safe-bool idiom，写起来又臭又长，C++11 引入一个 `explicit` 关键字直接就秒了。结果还有一批劳保教材大吹特吹 safe-bool idiom，吹得好像是个什么高大上的设计模式一样，不过是个应付 C++98 语言缺陷的蹩脚玩意。
 
-就好比一个**老外*想要学习汉语，他首先肯定是从*现代汉语*学起！而不是上来就教他*文言文**。
+就好比一个**老外**想要学习汉语，他首先肯定是从**现代汉语**学起！而不是上来就教他**文言文**。
 
 > {{ icon.fun }} 即使这个老外的职业就是“考古”，或者他对“古代文学”感兴趣，也不可能自学文言文的同时完全跳过现代汉语。
 

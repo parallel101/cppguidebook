@@ -28,13 +28,31 @@ Latin-1 扩充了 ASCII 字符集，保持 ASCII 原有 0 到 127 的部分映�
 
 Unicode 字符集为全世界的所有字符都对应了一个整数。
 
-#codetab("字符", "编号", ("我", "戒", "戓", "戔", "戕", "或", "戗", "战", "戙", "戚"), ("25105", "25106", "25107", "25108", "25109", "25110", "25111", "25112", "25113", "25114"), 2)
+|字符|编号|
+|----|----|
+|我|25105|
+|戒|25106|
+|戓|25107|
+|戔|25108|
+|戕|25109|
+|或|25110|
+|戗|25111|
+|战|25112|
+|戙|25113|
+|戚|25114|
 
 出于历史兼容性考虑，Unicode 在 0 到 256 区间内的映射和 ASCII、Latin-1 是完全相同的。
 
-#codetab("字符", "编号", ("P", "e", "n", "g"), ("80", "101", "110", "103"), 1)
+|字符|编号|
+|----|----|
+|P|80|
+|e|101|
+|n|110|
+|g|103|
 
 Unicode 经过了许多版本的发展，早期的 Unicode 只收录了 65536 (0x10000) 个字符，后来扩充到了 1114112 (0x110000) 个字符。
+
+总之，现在 Unicode 字符映射的整数范围是 0x0 到 0x10FFFF。
 
 > {{ icon.tip }} 虽然占用了 1114112 这多格码点空间，不过其中很多都是空号，留待未来扩充使用。
 
@@ -52,11 +70,22 @@ Unicode 字符映射表可以在网上找到：
 
 计算机存储字符时，实际上是存储了那个对应的整数。
 
-这些整数就被称为 *码点 (code point)*，每个字符对应一个码点。
+这些整数就被称为 **码点 (code point)**，每个字符对应一个码点。
 
 不过，程序员通常喜欢用十六进制书写数字：
 
-#codetab("字符", "编号", ("我", "戒", "戓", "戔", "戕", "或", "戗", "战", "戙", "戚"), ("0x6211", "0x6212", "0x6213", "0x6214", "0x6215", "0x6216", "0x6217", "0x6218", "0x6219", "0x621A"), 2)
+|字符|编号|
+|----|----|
+|我|0x6211|
+|戒|0x6212|
+|戓|0x6213|
+|戔|0x6214|
+|戕|0x6215|
+|或|0x6216|
+|戗|0x6217|
+|战|0x6218|
+|戙|0x6219|
+|戚|0x621A|
 
 例如“我”这个字，在 Unicode 表中编号为 0x6211。于是当计算机需要表示“我”这个字符时，就用 0x6211 这个整数代替。
 
@@ -82,7 +111,7 @@ Unicode 字符可以选用以下这些字符编码来序列化：
 * UTF-16: 每个 Unicode 字符用 1 至 2 个 `uint16_t` 整数存储。
 * UTF-8: 每个 Unicode 字符用 1 至 4 个 `uint8_t` 整数存储。
 
-翻译出来的这些小整数叫 *码位 (code unit)*。例如对于 UTF-8 而言，每个 `uint8_t` 就是他的码位。
+翻译出来的这些小整数叫 **码位 (code unit)**。例如对于 UTF-8 而言，每个 `uint8_t` 就是他的码位。
 
 ### UTF-32
 
@@ -303,7 +332,7 @@ UTF-16 的策略是：既然大多数常用字符的码点都在 0x0 到 0xFFFF 
 
 ![](img/ucs2range.png)
 
-UTF-16 就是利用了这一段空间，他规定：0xD800 到 0xDFFF 之间的码点将永远不用来表示字符，而是作为*代理对 (surrogate-pair)*。其中  0xD800 到 0xDBFF 是*高位代理 (high surrogate)*，0xDC00 到 0xDFFF 是*低位代理 (low surrogate)*。高代理在前，低代理在后。
+UTF-16 就是利用了这一段空间，他规定：0xD800 到 0xDFFF 之间的码点将永远不用来表示字符，而是作为**代理对 (surrogate-pair)**。其中  0xD800 到 0xDBFF 是**高位代理 (high surrogate)**，0xDC00 到 0xDFFF 是**低位代理 (low surrogate)**。高代理在前，低代理在后。
 
 一个超过 0xFFFF 的稀有字符，会被拆成两段，一段放在高位代理里，一段放在低位代理里，一前一后放入 `uint16_t` 序列中。
 
@@ -445,19 +474,15 @@ UTF-8 是基于单字节的码位，火车头的顺序也有严格规定，火�
 
 ### 字符类型
 
-#table(
-    columns: 4,
-    inset: 3pt,
-    align: horizon,
-    [类型], [大小], [编码], [字面量],
-    [Linux `char`], [1 字节], [取决于 `$LC_ALL`], ["hello"],
-    [Windows `char`], [1 字节], [取决于系统区域设置], ["hello"],
-    [Linux `wchar_t`], [4 字节], [UTF-32], [L"hello"],
-    [Windows `wchar_t`], [2 字节], [UTF-16], [L"hello"],
-    [`char8_t`], [1 字节], [UTF-8], [u8"hello"],
-    [`char16_t`], [2 字节], [UTF-16], [u"hello"],
-    [`char32_t`], [4 字节], [UTF-32], [U"hello"],
-)
+|类型|大小|编码|字面量|
+|---|---|---|---|
+|Linux `char`|1 字节|取决于 `$LC_ALL`|"hello"|
+|Windows `char`|1 字节|取决于系统区域设置|"hello"|
+|Linux `wchar_t`|4 字节|UTF-32|L"hello"|
+|Windows `wchar_t`|2 字节|UTF-16|L"hello"|
+|`char8_t`|1 字节|UTF-8|u8"hello"|
+|`char16_t`|2 字节|UTF-16|u"hello"|
+|`char32_t`|4 字节|UTF-32|U"hello"|
 
 由此可见，`char` 和 `wchar_t` 是不跨平台的。
 
@@ -503,27 +528,23 @@ std::u32string path = "一个老伯.txt";
 
 字符串操作有下面这几种，得益于 UTF-8 优秀的序列化涉及和冗余抗干扰机制，绝大多数 ASCII 支持的操作，UTF-8 字符串都能轻松胜任，唯独其中**涉及“索引”和“长度”的**一部分操作不行。这是由于变长编码的固有缺陷，如果需要做“索引”类操作，还是建议先转换成定长的 UTF-32 编码。
 
-#table(
-    columns: 4,
-    inset: 3pt,
-    align: horizon,
-    [操作], [UTF-8], [UTF-32], [GBK],
-    [求字符串长度], [×], [√], [×],
-    [判断相等], [√], [√], [√],
-    [字典序的大小比较], [√], [√], [×],
-    [字符串拼接], [√], [√], [√],
-    [搜索子字符串], [√], [√], [×],
-    [搜索单个字符], [×], [√], [×],
-    [按索引切下子字符串], [×], [√], [×],
-    [按索引获取单个字符], [×], [√], [×],
-    [遍历所有字符], [×], [√], [×],
-    [按子字符串切片], [√], [√], [×],
-    [按索引切片], [×], [√], [×],
-    [查找并替换子字符串], [√], [√], [×],
-    [查找并删除子字符串], [√], [√], [×],
-    [按索引删除子字符串], [×], [√], [×],
-    [删除单个字符], [×], [√], [×],
-)
+|操作|UTF-8|UTF-32|GBK|
+|---|---|---|---|
+|求字符串长度|×|√|×|
+|判断相等|√|√|√|
+|字典序的大小比较|√|√|×|
+|字符串拼接|√|√|√|
+|搜索子字符串|√|√|×|
+|搜索单个字符|×|√|×|
+|按索引切下子字符串|×|√|×|
+|按索引获取单个字符|×|√|×|
+|遍历所有字符|×|√|×|
+|按子字符串切片|√|√|×|
+|按索引切片|×|√|×|
+|查找并替换子字符串|√|√|×|
+|查找并删除子字符串|√|√|×|
+|按索引删除子字符串|×|√|×|
+|删除单个字符|×|√|×|
 
 为什么？我们来看一个实验：
 
@@ -616,7 +637,7 @@ std::u32string s = U"小彭老师公开课万岁";
 strrev(s.data()); // 会把按字符正常反转，得到 “岁万课开公师老彭小”
 ```
 
-*总结：UTF-8 只能拼接、查找、打印。不能索引、切片、反转。*
+**总结：UTF-8 只能拼接、查找、打印。不能索引、切片、反转。**
 
 > {{ icon.tip }} 按索引切片不行，但如果索引是 find 出来的就没问题。
 
@@ -723,7 +744,7 @@ void thisFuncAcceptsUTF16(UTF16String msg);
 
 #### u8 字符串常量转换问题
 
-TODO
+`char8_t` 是 C++20 引入的新字符类型，用于强类型的君子协议，和 `char` 并没有实际区别。只是方便了函数类型签名更加一目了然，这个参数只能接受 UTF-8 编码的字符串！
 
 ## 选择你的阵营！
 
@@ -745,7 +766,7 @@ TODO
 
 对于中国区的 Windows 而言，他的所有 A 函数只支持 GBK 编码。这意味着如果你 Lua 中把字符串“当作” UTF-8 来用。那么当你在调用 Lua 的 io.open 前，需要先做一个 UTF-8 到 GBK 的转换，这还会导致丢失部分不在 GBK 内的字符，比如如果你的文件名包含 Emoji，那就会变成 `???` 乱码。而使用 W 函数的 UTF-16 就不会，因为 UTF-16 能容纳完整的 Unicode 映射。而完全摆烂的 Lua，其 `io.open` 只是使用 C 语言库函数 `fopen`，`fopen` 又是基于 Windows 的 A 系列函数，Lua 又没有提供对 Windows C 运行时库特有的 `_wfopen` 函数的封装，从而永远不可能打开一个带有 Emoji 的文件。
 
-*总结：要支持 ANSI 阵营，你什么都不需要做，char 满天飞摆烂。*
+**总结：要支持 ANSI 阵营，你什么都不需要做，char 满天飞摆烂。**
 
 ### UTF-8 阵营
 
@@ -836,15 +857,11 @@ Rust 和 Go：严格区分“字符 (32 位)”和“字节 (8 位)”的概念�
 
 这相当于是把 UTF-8 当作了内码，但 UTF-8 是一种变长编码，处理切片和索引时不方便。
 
-#table(
-    columns: 3,
-    inset: 3pt,
-    align: horizon,
-    [编程语言], [字符类型 (32 位)], [字节类型 (8 位)],
-    [Rust], [`char`], [`u8`],
-    [Go], [`rune`], [`byte`],
-    [Julia], [`Char`], [`UInt8`],
-)
+|编程语言|字符类型 (32 位)|字节类型 (8 位)|
+|-|-|-|
+|Rust|`char`|`u8`|
+|Go|`rune`|`byte`|
+|Julia|`Char`|`UInt8`|
 
 为此，这些语言都为字符串提供了两套 API，一种是按字符索引，一种是按字节索引。按字符索引时，会从头开始，逐个解析码位，直到解析到想要的字符为止，复杂度 $O(N)$。按字节索引时，直接跳到指定字节，无需解析，复杂度 $O(1)$。
 
@@ -954,17 +971,15 @@ for (char32_t c : Utf8Range(s)) {
 
 Java 就是受到了 UTF-16 历史债影响，`char` 是 16 位的码位，而不是字符，真正的一个字符是 32 位的 `Character` 类型。
 
-#table(
-    columns: 3,
-    inset: 3pt,
-    align: horizon,
-    [编程语言], [码点类型 (32 位)], [码位类型 (16 位)],
-    [Java], [`Character`], [`char`],
-)
+|编程语言|码点类型 (32 位)|码位类型 (16 位)|
+|-|-|-|
+|Java|`Character`|`char`|
+
+> {{ icon.detail }} Java 的 `Character` 类型是一个 32 位的值，这个值包含了一个 Unicode 码位。`char` 类型是一个 16 位的值，它包含了一个 UTF-16 编码的码点。`String` 的 `charAt()` 方法返回的是 `char` 类型的码位（类似于字节），如果要获取 `Character` 类型的完整字符，必须使用 `codePointAt()` 方法。这是 Java 语言设计上的一个失误，已经无法改变。
 
 而后续新出的 Kotlin 是 Java 的合法继承者，他果断放弃 UTF-16，加入了 UTF-32 阵营。可见，老软件坚持用 UTF-32 是因为他们积重难返，新软件再 UTF-16 就是自作孽了！
 
-*总结：不要支持 UTF-16 阵营，除非你被迫维护史山。*
+**总结：不要支持 UTF-16 阵营，除非你被迫维护史山。**
 
 > {{ icon.fun }} 例如小彭老师发微信朋友圈时，输入 Emoji 表情后剪切，再粘贴，就和发现一个 Emoji 被切断成了两个代理对，以乱码的形式显现。估计是因为微信基于 Java 编写，疼逊程序员对 UTF-16 代理对处理的不利索。
 
@@ -1017,7 +1032,7 @@ fmt::println("{}", s.size());   // 3
 
 *总结：要支持 UTF-32 阵营，请全部使用 `char32_t` 和 `std::u32string`。字面量全用 `U"你好"` 的形式书写，读文件时转为 UTF-32，写文件时转回 UTF-8。*
 
-### 善用第三方库
+## 字符编码的转换
 
 由于 C++26 前标准库对编码转换几乎没有支持，在 C++ 中转换编码格式，通常都需要第三方库。
 
@@ -1026,7 +1041,16 @@ fmt::println("{}", s.size());   // 3
 如果你只是需要不同 UTF 格式之间的转换，没有处理 GBK 等的需求：那么之前已经介绍了 `utfcpp` 这个方便的库，已经够用。
 
 ```cpp
+#include "utf8/cpp20.h"
+
+std::u8string s8 = u8"你好";
+std::u16string s16 = utf8::utf8to16(s8);
+std::u32string s32 = utf8::utf8to32(s8);
+std::string s = utf8::utf16to8(s16);
+s8 = utf8::utf16tou8(s16);
 ```
+
+> {{ icon.tip }} 最后这两个区别在于，`utf16to8` 返回 `std::string`，`utf16tou8` 返回 `std::u8string`，里面都是 UTF-8 编码的，不过有的人喜欢用 `std::string` 来存储 UTF-8，不喜欢 `std::u8string`，或者说他们没有 C++20，不支持 `std::u8string`，因此这个库满足他们的不同需要。但是 `std::u8string` 作为参数时不需要，因为参数可以自动重载，而返回值不行。
 
 缺点是他不能处理 GBK、Shift-JIS 等非 Unicode 编码，也不能自动检测当前的 ANSI 区域设置。
 
@@ -1074,8 +1098,6 @@ int main() {
 
 比如从 `char32_t` 转到 `char16_t`，只需要 `utf_to_utf<char32_t>` 就可以，非常方便。
 
-> {{ icon.warn }} `boost::locale` 有一个缺点 TODO
-
 编译：
 
 ```bash
@@ -1094,6 +1116,12 @@ $ g++ -std=c++17 -lboost_locale main.cpp
 find_package(Boost REQUIRED COMPONENTS locale)
 target_link_libraries(你的程序 Boost::locale)
 ```
+
+> {{ icon.warn }} 不过 `boost::locale` 有一个缺点，那就是不支持 `char8_t` 和 `std::u8string`。
+
+> {{ icon.tip }} `char8_t` 是 C++20 引入的新字符类型，用于强类型的君子协议，和 `char` 并没有实际区别。只是方便了函数类型签名更加一目了然，这个参数只能接受 UTF-8 编码的字符串！
+
+由于 Boost 较老，没有及时跟进，所以他并没有实现针对 `char8_t` 的特化，如果使用了 `utf_to_utf<char8_t>` 会报 `undefined reference` 错误，即找不到符号。改成 `utf_to_utf<char>` 就没问题了。
 
 #### GBK 和 UTF 互转
 
@@ -1153,51 +1181,39 @@ int main() {
 
 #### 大总结
 
-#table(
-    columns: 3,
-    inset: 3pt,
-    align: horizon,
-    [函数名称], [从], [到],
-    [`utf_to_utf<char>`], [UTF-x], [UTF-8],
-    [`utf_to_utf<char8_t>`], [UTF-x], [UTF-8],
-    [`utf_to_utf<char16_t>`], [UTF-x], [UTF-16],
-    [`utf_to_utf<char32_t>`], [UTF-x], [UTF-32],
-    [`utf_to_utf<wchar_t>`], [UTF-x], [Linux 上UTF-32 \ Win 上 UTF-16],
-)
+|函数名称|从|到|
+|-|-|-|
+|`utf_to_utf<char>`|UTF-x|UTF-8|
+|`utf_to_utf<char8_t>`|UTF-x|UTF-8|
+|`utf_to_utf<char16_t>`|UTF-x|UTF-16|
+|`utf_to_utf<char32_t>`|UTF-x|UTF-32|
+|`utf_to_utf<wchar_t>`|UTF-x|Linux 上 UTF-32；Win 上 UTF-16|
 
 > {{ icon.tip }} UTF-x 表示取决于参数类型的大小，如果参数是 `char16_t` 的字符串 `std::u16string`，那 x 就是 16。
 
-#table(
-    columns: 3,
-    inset: 3pt,
-    align: horizon,
-    [函数名称], [从], [到],
-    [`to_utf<char>("GBK", string)`], [GBK], [UTF-8],
-    [`to_utf<char8_t>("GBK", string)`], [GBK], [UTF-8],
-    [`to_utf<char16_t>("GBK", string)`], [GBK], [UTF-16],
-    [`to_utf<char32_t>("GBK", string)`], [GBK], [UTF-32],
-    [`to_utf<wchar_t>("GBK", string)`], [GBK], [Linux 上UTF-32 \ Win 上 UTF-16],
-    [`to_utf<char>("", string)`], [区域设置], [UTF-8],
-    [`to_utf<char8_t>("", string)`], [区域设置], [UTF-8],
-    [`to_utf<char16_t>("", string)`], [区域设置], [UTF-16],
-    [`to_utf<char32_t>("", string)`], [区域设置], [UTF-32],
-    [`to_utf<wchar_t>("", string)`], [区域设置], [Linux 上UTF-32 \ Win 上 UTF-16],
-)
+|函数名称|从|到|
+|-|-|-|
+|`to_utf<char>("GBK", string)`|GBK|UTF-8|
+|`to_utf<char8_t>("GBK", string)`|GBK|UTF-8|
+|`to_utf<char16_t>("GBK", string)`|GBK|UTF-16|
+|`to_utf<char32_t>("GBK", string)`|GBK|UTF-32|
+|`to_utf<wchar_t>("GBK", string)`|GBK|Linux 上 UTF-32；Win 上 UTF-16|
+|`to_utf<char>("", string)`|区域设置|UTF-8|
+|`to_utf<char8_t>("", string)`|区域设置|UTF-8|
+|`to_utf<char16_t>("", string)`|区域设置|UTF-16|
+|`to_utf<char32_t>("", string)`|区域设置|UTF-32|
+|`to_utf<wchar_t>("", string)`|区域设置|Linux 上 UTF-32；Win 上 UTF-16|
 
-#table(
-    columns: 3,
-    inset: 3pt,
-    align: horizon,
-    [函数名称], [从], [到],
-    [`from_utf("GBK", string)`], [UTF-8], [GBK],
-    [`from_utf("GBK", u16string)`], [UTF-16], [GBK],
-    [`from_utf("GBK", u32string)`], [UTF-32], [GBK],
-    [`from_utf("GBK", wstring)`], [Linux 上UTF-32 \ Win 上 UTF-16], [GBK],
-    [`from_utf("", string)`], [UTF-8], [区域设置],
-    [`from_utf("", u16string)`], [UTF-16], [区域设置],
-    [`from_utf("", u32string)`], [UTF-32], [区域设置],
-    [`from_utf("", wstring)`], [Linux 上UTF-32 \ Win 上 UTF-16], [区域设置],
-)
+|函数名称|从|到|
+|-|-|-|
+|`from_utf("GBK", string)`|UTF-8|GBK|
+|`from_utf("GBK", u16string)`|UTF-16|GBK|
+|`from_utf("GBK", u32string)`|UTF-32|GBK|
+|`from_utf("GBK", wstring)`|Linux 上 UTF-32；Win 上 UTF-16|GBK|
+|`from_utf("", string)`|UTF-8|区域设置|
+|`from_utf("", u16string)`|UTF-16|区域设置|
+|`from_utf("", u32string)`|UTF-32|区域设置|
+|`from_utf("", wstring)`|Linux 上 UTF-32；Win 上 UTF-16|区域设置|
 
 #### 指定处理错误的方法
 
@@ -1427,20 +1443,6 @@ $ iconv -f GBK -t UTF-8 gbk.txt
 
 > {{ icon.fun }} Windows 可能也有类似的工具，比如 `iconv.exe`，但我没找到。
 
-### Latin-1 神教
-
-Latin-1 是一个 8 位编码，能表示 256 个字符，包括了拉丁字母、阿拉伯数字、标点符号、常用的西欧字符，以及一些特殊字符。
-
-![](img/latin1.svg)
-
-因此，如果你需要把一个 Latin-1 编码的 `char` 字符串转换为 `wchar_t` 字符串，可以直接强转，然后用 `std::wstring` 来存储。
-
-```cpp
-std::string latin1 = "I love Péng";
-std::wstring wstr = reinterpret_cast<wchar_t *>(latin1.data());
-std::wcout << wstr << '\n';
-```
-
 ## 本地化
 
 本地化是指根据用户的语言、地区等环境，显示不同的界面。比如说，同样是文件菜单，中文用户看到的是“文件”、英文用户看到的是“File”。
@@ -1461,30 +1463,29 @@ C++ 对其实施了再封装，改名为 `<cctype>`。若你导入的是该头�
 
 函数清单：
 
-#table(
-    columns: 2,
-    inset: 3pt,
-    align: horizon,
-    [函数名称], [判断的字符类型],
-    [isascii], [0 到 0x7F 的所有 ASCII 字符],
-    [isalpha], [大小写字母 A-Z a-z],
-    [isupper], [大写字母 A-Z],
-    [islower], [小写字母 a-z],
-    [isdigit], [数字 0-9],
-    [isxdigit], [十六进制数字 A-F a-f 0-9],
-    [isprint], [可打印字符，包括字母、数字和标点等],
-    [isgraph], [可打印字符，不包括空格],
-    [iscntrl], [控制字符，除可打印字符外的全部],
-    [isspace], [空白字符，如空格、换行、回车、制表符等],
-    [ispunct], [标点符号],
-    [isalnum], [字母或数字],
-)
+|函数名称|判断的字符类型|
+|isascii|0 到 0x7F 的所有 ASCII 字符|
+|isalpha|大小写字母 A-Z a-z|
+|isupper|大写字母 A-Z|
+|islower|小写字母 a-z|
+|isdigit|数字 0-9|
+|isxdigit|十六进制数字 A-F a-f 0-9|
+|isprint|可打印字符，包括字母、数字和标点等|
+|isgraph|可打印字符，不包括空格|
+|iscntrl|控制字符，除可打印字符外的全部|
+|isspace|空白字符，如空格、换行、回车、制表符等|
+|ispunct|标点符号|
+|isalnum|字母或数字|
 
-更详细的表格可以看：
+> {{ icon.tip }} 更详细的表格可以看：
 
 https://en.cppreference.com/w/cpp/string/byte/isspace
 
 ![](img/cctype.png)
+
+### 区分宽字符类型
+
+TODO
 
 ### 区域设置与 `std::locale`
 
@@ -1537,9 +1538,15 @@ std::string to_os_string(std::string const &u8s) {
 
 ### `wchar_t` 系列函数
 
+TODO
+
 ### `std::wcout` 的使用
 
+TODO
+
 ### `std::wfstream` 的使用
+
+TODO
 
 <!--
 //=== 跨平台软件何去何从？
@@ -1642,3 +1649,72 @@ std::string to_os_string(std::string const &u8s) {
 //};
 //```
 -->
+
+## 黑暗小技巧
+
+### Latin-1 的转换
+
+Latin-1 是一个 8 位编码，能表示 256 个字符，包括了拉丁字母、阿拉伯数字、标点符号、常用的西欧字符，以及一些特殊字符。
+
+![](img/latin1.svg)
+
+因此，如果你需要把一个 Latin-1 编码的 `char` 字符串转换为 `wchar_t` 字符串，可以通过迭代器接口构造 `std::wstring`，这样 `char` 会被逐个转换为 `wchar_t`。
+
+```cpp
+std::string latin1 = "I love P\xE9ng"; // 0xE9: é
+std::wstring wstr(latin1.begin(), latin1.end());
+std::wcout << wstr << '\n';
+```
+
+输出：
+
+```
+I love Péng
+```
+> {{ icon.detail }} 并不标准的做法，还是建议用 `boost::locale::conv::to_utf<char>(latin1, "Latin-1")`。
+
+### Latin-1 的妙用
+
+由于 Latin-1 覆盖了所有的 256 个 `char` 的可能值，任何字节流都可以成功解码，不像 GBK 和 UTF-8 有自纠错性，有些输入会被塌缩成错误“�”。
+
+因此有时，人们可以欺骗一个编码器，我采用的字符编码是 Latin-1！这样编码器就不会对输入的字节流做任何转换，从而可以把二进制数据当文本来传，解码时也指定 Latin-1，原原本本的取出数据。
+
+### Base64 防乱码
+
+如果要把一串中文输入一个不支持 UTF-8 的软件，发送让对方收到，怎么办？
+
+可以用 Latin-1 编码，骗这个软件，让他以为自己收到的是 Latin-1 字符串，反正他也不看内容，从而让他不要做任何转换操作。
+
+不过有时候，文本框无法输入部分特殊的控制字符，而 UTF-8 字符串编码出来的文本，超过 0x80 的部分，可能落入 Latin-1 的控制字符中，被这个软件错误地做了特殊处理。
+
+为了避免只兼容了 ASCII 的落后软件破坏我们的字符，对于这种只支持 ASCII 文本的编辑框，我们可以用 Base64 编码先把任意二进制数据转换为 ASCII 字符串。
+
+Base64 是一种把二进制数据转换为 ASCII 字符串的算法，原理很简单，就是把每 6 个二进制位转换为一个可打印的 ASCII 字符（用 A-Z a-z 0-9 - / 这 64 个字符表示）。因此，Base64 编码后的文本，每 4 个字符就有 3 个是有效字符，剩下的 1 个字符是填充字符 `=`。
+
+例如，字符串 `"小彭老师"`，你可能想要把它通过邮件发出去。而这个邮件服务器不支持 UTF-8 也不支持 GBK，只支持 ASCII！
+
+首先我们用 UTF-8 编码得到二进制字节流：
+
+```
+0xE5 0xB0 0x8F 0xE5 0xBD 0xAD 0xE8 0x80 0x81 0xE5 0xB8 0x88
+```
+
+然后再用 Base64 二次编码成普通的可打印字母和数字序列：
+
+```
+5bCP5b2t6ICB5biI
+```
+
+对方收到这串神秘字符后，再用 base64 解码，得到二进制字节流，再用支持 UTF-8 的软件解码，就能看到本来的中文了。
+
+```python
+# 发送者：
+import base64
+secret = base64.b64encode("小彭老师".encode())
+# 接收者：
+base64.b64decode(secret).decode()
+```
+
+> {{ icon.story }} 这个方法不仅可以编码 UTF-8 字符串，还可以传输任意非文本的文件！例如，有人利用 Base64 编码，把 jpg 图像文件直接内嵌在 md 文件里！（md 文件只支持包含合法的 UTF-8 文本，不可能包含 jpg 的任意字节流，因此只能用 Base64 先编码成 ASCII 范围内的字母和数字，防止 md 编译器报 UTF-8 解码错误）
+
+总之，如果你输入中文实在有问题，可以考虑先 Base64 转换成纯英文试试看，反正无论谁都兼容 ASCII。如果这个文本框不区分大小写，还可以试试看只有 A-Z 0-9 的 Base32 编码。

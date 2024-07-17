@@ -1,3 +1,4 @@
 build/
 site/
+__pycache__/
 *.pdf
