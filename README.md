@@ -14,7 +14,8 @@
 
 也可以前往 [GitHub Release 页面](https://github.com/parallel101/cppguidebook/releases) 下载 PDF 文件。
 
-要追番的话，点一下 GitHub 右上角的 `Watch` 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。
+> [!NOTE]
+> 要追番的话，点一下 GitHub 右上角的 `Watch` 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。
 
 如果你在阅读过程中遇到任何问题，可以在 [GitHub Issues](https://github.com/parallel101/cppguidebook/issues) 中提出，小彭老师会尽力解答。
 
