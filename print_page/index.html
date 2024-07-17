@@ -48,12 +48,13 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="nav-item">
-                                <a href=".." class="nav-link">前言</a>
-                            </li>
                             <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">大典</a>
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">章节列表</a>
                                 <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../start/" class="dropdown-item">前言</a>
+</li>
                                     
 <li>
     <a href="../helloworld/" class="dropdown-item">你好，世界</a>
@@ -112,13 +113,12 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="0"><a href="#" class="nav-link">1. 前言</a>
+            <li class="nav-item" data-bs-level="0"><a href="#section-章节列表" class="nav-link">I. 章节列表</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="1"><a href="#start" class="nav-link">1. 前言</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            
-            <li class="nav-item" data-bs-level="0"><a href="#section-大典" class="nav-link">I. 大典</a>
-              <ul class="nav flex-column">
             <li class="nav-item" data-bs-level="1"><a href="#helloworld" class="nav-link">2. 你好，世界</a>
               <ul class="nav flex-column">
               </ul>
@@ -158,19 +158,22 @@
                 </nav>
             </div>
         </section>
-        <section class="print-page" id="index"><h1 id="index-c">小彭老师的现代 C++ 大典</h1>
+        
+                        <h1 class='nav-section-title' id='section-章节列表'>
+                            章节列表 <a class='headerlink' href='#section-章节列表' title='Permanent link'>↵</a>
+                        </h1>
+                        <section class="print-page" id="start"><h1 id="start-_1">前言</h1>
 <p>小彭大典是一本关于现代 C++ 编程的权威指南，它涵盖了从基础知识到高级技巧的内容，适合初学者和有经验的程序员阅读。本书由小彭老师亲自编写，通过简单易懂的语言和丰富的示例，帮助读者快速掌握 C++ 的核心概念，并学会如何运用它们来解决实际问题。</p>
 <blockquote>
 <p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 敢承诺：土木老哥也能看懂！</p>
 </blockquote>
-<h1 id="index-_1">前言</h1>
 <p>推荐用手机或平板<strong>竖屏</strong>观看，可以在床或沙发上躺着。</p>
 <p>用电脑看的话，可以按 <code>WIN + ←</code>，把本书的浏览器窗口放在屏幕左侧，右侧是你的 IDE。一边看一边自己动手做实验。</p>
 <p><img alt="" src="../img/slide.jpg" /></p>
 <blockquote>
 <p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 请坐和放宽。</p>
 </blockquote>
-<h2 id="index-_2">格式约定</h2>
+<h2 id="start-_2">格式约定</h2>
 <blockquote>
 <p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是温馨提示</p>
 <p><img src="/img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是可能犯错的警告</p>
@@ -181,7 +184,7 @@
 <ul>
 <li>术语名称: 这里是术语的定义。</li>
 </ul>
-<h2 id="index-_3">观前须知</h2>
+<h2 id="start-_3">观前须知</h2>
 <p>与大多数现有教材不同的是，本课程将会采用“倒叙”的形式，从最新的 <strong>C++23</strong> 讲起！然后讲 C++20、C++17、C++14、C++11，慢慢讲到最原始的 C++98。</p>
 <p>不用担心，越是现代的 C++，学起来反而更容易！反而古代 C++ 才<strong>又臭又长</strong>。</p>
 <p>很多同学想当然地误以为 C++98 最简单，哼哧哼哧费老大劲从 C++98 开始学，才是错误的。</p>
@@ -201,7 +204,7 @@
 <blockquote>
 <p><img src="/img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 目前企业里主流使用的是 C++14 和 C++17。例如谷歌就明确规定要求 C++17。</p>
 </blockquote>
-<h2 id="index-_4">举个例子</h2>
+<h2 id="start-_4">举个例子</h2>
 <blockquote>
 <p><img src="/img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 接下来的例子你可能看不懂，但只需要记住这个例子是向你说明：越是新的 C++ 标准，反而越容易学！</p>
 </blockquote>
@@ -308,11 +311,7 @@ void try_call_foo(T &amp;) {
 // 这样你最后同样可以适应公司要求的 C++14 环境。但是从 C++23 学起，你的思维又不会被应付古代语言缺陷的“奇技淫巧”扰乱，学起来就事半功倍。</p>
 <blockquote>
 <p><img src="/img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 既然现代 C++ 这么好，为什么学校不从现代 C++ 教起，教起来还轻松？因为劳保老师保，懒得接触新知识，认为“祖宗之法不可变”，“版号稳定压倒一切”。</p>
-</blockquote></section>
-                        <h1 class='nav-section-title' id='section-大典'>
-                            大典 <a class='headerlink' href='#section-大典' title='Permanent link'>↵</a>
-                        </h1>
-                        <section class="print-page" id="helloworld"><h1 id="helloworld-_1">你好，世界</h1>
+</blockquote></section><section class="print-page" id="helloworld"><h1 id="helloworld-_1">你好，世界</h1>
 <h2 id="helloworld-_2">什么是函数</h2>
 <ul>
 <li>函数: 一段用 <code>{}</code> 包裹的代码块，有一个独一无二的名字做标识。函数可以被其他函数调用。函数可以有返回值和参数。函数的 <code>{}</code> 代码块内的程序代码，每次该函数被调用时都会执行。</li>
@@ -3036,7 +3035,7 @@ base64.b64decode(secret).decode()
 <blockquote>
 <p><img src="/img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 这个方法不仅可以编码 UTF-8 字符串，还可以传输任意非文本的文件！例如，有人利用 Base64 编码，把 jpg 图像文件直接内嵌在 md 文件里！（md 文件只支持包含合法的 UTF-8 文本，不可能包含 jpg 的任意字节流，因此只能用 Base64 先编码成 ASCII 范围内的字母和数字，防止 md 编译器报 UTF-8 解码错误）</p>
 </blockquote>
-<p>总之，如果你输入中文实在有问题，可以考虑先 Base64 转换成纯英文试试看，反正无论谁都兼容 ASCII。如果这个文本框不区分大小写，还可以试试看只有 A-Z 0-9 的 Base32 编码。</p></section><h1 class='nav-section-title-end'>Ended: 大典</h1></div></div>
+<p>总之，如果你输入中文实在有问题，可以考虑先 Base64 转换成纯英文试试看，反正无论谁都兼容 ASCII。如果这个文本框不区分大小写，还可以试试看只有 A-Z 0-9 的 Base32 编码。</p></section><h1 class='nav-section-title-end'>Ended: 章节列表</h1></div></div>
             </div>
         </div>
 
