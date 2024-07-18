@@ -2497,8 +2497,28 @@ hexdump(s); // E4 BD A0 E5 A5 BD (UTF-8)
 <tbody>
 <tr>
 <td>&ldquo;你好&rdquo;</td>
-<td></td>
-<td></td>
+<td>运行字符集 (ANSI)</td>
+<td><code>const char []</code></td>
+</tr>
+<tr>
+<td>L&rdquo;你好&rdquo;</td>
+<td>Windows 上 UTF-16；Linux 上 UTF-32</td>
+<td><code>const wchar_t []</code></td>
+</tr>
+<tr>
+<td>u8&rdquo;你好&rdquo;</td>
+<td>UTF-8</td>
+<td><code>const char8_t []</code></td>
+</tr>
+<tr>
+<td>u&rdquo;你好&rdquo;</td>
+<td>UTF-16</td>
+<td><code>const char16_t []</code></td>
+</tr>
+<tr>
+<td>U&rdquo;你好&rdquo;</td>
+<td>UTF-32</td>
+<td><code>const char32_t []</code></td>
 </tr>
 </tbody>
 </table>
