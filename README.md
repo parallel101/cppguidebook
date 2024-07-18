@@ -36,7 +36,7 @@
 
 小彭大典的持续编写离不开以下小彭友的赞助！
 
-[![Thanks list](docs/img/thanks.png)](https://afdian.net/a/archibate)
+<a href="https://afdian.net/a/archibate"><img src="docs/img/thanks.png" alt="https://afdian.net/a/archibate" width="400px"/></a>
 
 > [!NOTE]
 > 小彭老师的大典是免费下载的，不用赞助也可以查看哦。
