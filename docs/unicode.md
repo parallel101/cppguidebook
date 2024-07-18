@@ -934,7 +934,11 @@ std::string s = u8"你好";
 
 |前缀|编码|字符类型|
 |----|----|--------|
-|"你好"|
+|"你好"|运行字符集 (ANSI)|`const char []`|
+|L"你好"|Windows 上 UTF-16；Linux 上 UTF-32|`const wchar_t []`|
+|u8"你好"|UTF-8|`const char8_t []`|
+|u"你好"|UTF-16|`const char16_t []`|
+|U"你好"|UTF-32|`const char32_t []`|
 
 ## 选择你的阵营！
 
