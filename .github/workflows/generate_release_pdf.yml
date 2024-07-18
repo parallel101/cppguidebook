@@ -31,6 +31,7 @@ jobs:
           pip install mkdocs
           pip install mkdocs-print-site-plugin
           pip install mkdocs-macros-plugin
+          pip install python-markdown-math
 
       - name: Compile Mkdocs document
         run: |
@@ -90,7 +91,7 @@ jobs:
 
       - name: Compile PDF document
         run: |
-          node misc/export_to_pdf.js file://$PWD/site/print_page/index.html cppguidebook.pdf "小彭老师的现代 C++ 大典"
+          node misc/export_to_pdf.js file://$PWD/site/print_page/index.html cppguidebook.pdf "✝️小彭大典✝️"
           du -h cppguidebook.pdf
 
       - name: Generate ZIP archive

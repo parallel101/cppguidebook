@@ -28,6 +28,18 @@ footerHtml = ` `;
 
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'networkidle2' });
+    await page.evaluate(async () => {
+        var header = document.getElementById('section-章节列表');
+        if (header) {
+            header.parentNode.removeChild(header);
+        }
+        var toc = document.querySelector('h1.print-page-toc-title');
+        if (toc) {
+            toc.parentNode.removeChild(toc);
+        }
+    });
+    await new Promise(r => setTimeout(r, 2000));
+    // sleep for a while to ensure all content is loaded
     await page.pdf({
         path: pdfPath, // path to save pdf file
         format: 'A4', // page format
@@ -41,7 +53,7 @@ footerHtml = ` `;
             top: 80,
             bottom: 80,
             left: 30,
-            right: 30
+            right: 30,
         }
     });
 

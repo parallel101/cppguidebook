@@ -1,4 +1,8 @@
 site_name: ✝️小彭大典✝️
+site_description: 小彭大典是一本关于现代 C++ 编程的权威指南，它涵盖了从基础知识到高级技巧的内容，适合初学者和有经验的程序员阅读。
+site_author: 小彭老师
+copyright: 小彭老师倾 ♥ 制作
+repo_url: https://github.com/parallel101/cppguidebook
 nav:
   - 章节列表:
     - 前言: index.md
@@ -7,6 +11,7 @@ nav:
     - vartypes.md
     - functions.md
     - functional.md
+    - design.md
     - unicode.md
   - GitHub: https://github.com/parallel101/cppguidebook
   - Bilibili: https://space.bilibili.com/263032155
@@ -23,3 +28,13 @@ theme:
   features:
     - search.suggest
     - search.highlight
+extra_javascript:
+    - extra.js
+    - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+extra_css: 
+    - extra.css
+markdown_extensions:
+    - mdx_math
+    - toc
+    - sane_lists
+    - smarty

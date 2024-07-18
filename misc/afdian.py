@@ -11,13 +11,13 @@ class User(namedtuple('User', ['name', 'avatar', 'all_sum_amount'])):
     pass
 
 manual_sponsors = [
-    User('等疾风', 'https://i0.hdslb.com/bfs/face/b658b5ca52f41e53321d04f978be6784ca6f8687.jpg', 1000.00),
-    User('只喝白开水', 'https://i2.hdslb.com/bfs/face/821b88a24c1319d1fb51b3854884e2f829855c75.jpg', 100.00),
-    User('*乾', '', 26.90),
-    User('柿柿如意', '', 20.00),
-    User('Starry', '', 100.00),
-    User('阿哲', '', 100.00),
-    User('Eureka', '', 20.00),
+    User('等疾风', 'https://i0.hdslb.com/bfs/face/b658b5ca52f41e53321d04f978be6784ca6f8687.jpg', '1000.00'),
+    User('只喝白开水', 'https://i2.hdslb.com/bfs/face/821b88a24c1319d1fb51b3854884e2f829855c75.jpg', '100.00'),
+    User('*乾', '', '26.90'),
+    User('柿柿如意', '', '20.00'),
+    User('Starry', '', '100.00'),
+    User('阿哲', '', '100.00'),
+    User('Eureka', '', '20.00'),
 ]
 
 def afd_query(which, **params):
@@ -70,8 +70,11 @@ def afd_gen_thank_list():
     for user in sponsors:
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype('/usr/share/fonts/noto-cjk/NotoSansCJK-Medium.ttc', size=20)
-        avatar = Image.open(BytesIO(requests.get(user.avatar).content)) if user.avatar else Image.open(
-                os.path.join(os.path.dirname(os.path.abspath(__file__)), '../docs/img/favicon.ico'))
+        if user.avatar:
+            avatar = Image.open(BytesIO(requests.get(user.avatar).content))
+        else:
+            this_dir = os.path.dirname(os.path.abspath(__file__))
+            avatar = Image.open(os.path.join(this_dir, '../docs/img/favicon.ico'))
         avatar = avatar.resize((80, 80))
         img.paste(avatar, (x, y))
         draw.text((x + 100, y), f'{user.name}', fill='white', font=font)
