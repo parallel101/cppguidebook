@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        
+        <meta name="author" content="小彭老师">
         
         <link rel="shortcut icon" href="../img/favicon.ico">
         <title>Print Site - ✝️小彭大典✝️</title>
@@ -25,6 +25,7 @@
         <link href="../css/print-site-enum-headings6.css" rel="stylesheet">
         <link href="../css/print-site.css" rel="stylesheet">
         <link href="../css/print-site-mkdocs.css" rel="stylesheet">
+        <link href="../extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <script>hljs.highlightAll();</script> 
     
@@ -69,11 +70,15 @@
 </li>
                                     
 <li>
-    <a href="../functions/" class="dropdown-item">自定义函数 (未完工)</a>
+    <a href="../functions/" class="dropdown-item">认识函数 (未完工)</a>
 </li>
                                     
 <li>
     <a href="../functional/" class="dropdown-item">函数式编程</a>
+</li>
+                                    
+<li>
+    <a href="../design/" class="dropdown-item">设计模式 (未完工)</a>
 </li>
                                     
 <li>
@@ -95,6 +100,9 @@
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/parallel101/cppguidebook" class="nav-link"><i class="fa-brands fa-github"></i> GitHub</a>
+                            </li>
                     </ul>
                 </div>
             </div>
@@ -131,7 +139,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#functions" class="nav-link">5. 自定义函数 (未完工)</a>
+            <li class="nav-item" data-bs-level="1"><a href="#functions" class="nav-link">5. 认识函数 (未完工)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -139,7 +147,11 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#unicode" class="nav-link">7. 字符编码那些事</a>
+            <li class="nav-item" data-bs-level="1"><a href="#design" class="nav-link">7. 设计模式 (未完工)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="1"><a href="#unicode" class="nav-link">8. 字符编码那些事</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -185,6 +197,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
+<p>更新时间：https://github.com/parallel101/cppguidebook</p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是温馨提示</p>
@@ -324,6 +337,19 @@ void try_call_foo(T &amp;) {
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 既然现代 C++ 这么好，为什么学校不从现代 C++ 教起，教起来还轻松？因为劳保老师保，懒得接触新知识，认为“祖宗之法不可变”，“版号稳定压倒一切”。</p>
 </blockquote></section><section class="print-page" id="helloworld"><h1 id="helloworld-_1">你好，世界</h1>
+<div class="toc">
+<ul>
+<li><a href="#helloworld-_1">你好，世界</a><ul>
+<li><a href="#helloworld-_2">什么是函数</a></li>
+<li><a href="#helloworld-main">从 main 函数说起</a></li>
+<li><a href="#helloworld-main_1">main 函数的返回值</a></li>
+<li><a href="#helloworld-_3">这个黑色的窗口是？</a></li>
+<li><a href="#helloworld-_4">打印一些信息</a></li>
+<li><a href="#helloworld-_5">注释</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <h2 id="helloworld-_2">什么是函数</h2>
 <ul>
 <li>函数: 一段用 <code>{}</code> 包裹的代码块，有一个独一无二的名字做标识。函数可以被其他函数调用。函数可以有返回值和参数。函数的 <code>{}</code> 代码块内的程序代码，每次该函数被调用时都会执行。</li>
@@ -335,7 +361,7 @@ void try_call_foo(T &amp;) {
 </code></pre>
 <p>上面的代码中，<code>compute</code> 就是函数的名字，<code>int</code> 表示函数的返回类型——整数。</p>
 <blockquote>
-<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 乃取整数之英文“integer”的“int”而得名（模仿侯捷老师说话）</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 乃取整数之英文“integer”的“int”而得名（模仿侯捷老师说话）</p>
 </blockquote>
 <p>而 <code>{}</code> 包裹的是函数体，是函数被调用时会执行的代码。</p>
 <p>此处 <code>return 42</code> 就是函数体内的唯一一条语句，表示函数立即执行完毕，返回 42。</p>
@@ -343,7 +369,7 @@ void try_call_foo(T &amp;) {
 <li>返回值: 当一个函数执行完毕时，会向调用该函数的调用者返回一个值，这个值就是 <code>return</code> 后面的表达式的值。返回值可以有不同的类型，此处 <code>compute</code> 的返回类型是 <code>int</code>，也就是说 <code>compute</code> 需要返回一个整数。</li>
 </ul>
 <blockquote>
-<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 关于函数的参数我们稍后再做说明。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 关于函数的参数，我们稍后再做说明。</p>
 </blockquote>
 <h2 id="helloworld-main">从 main 函数说起</h2>
 <p>C++ 程序通常由一系列函数组成，其中必须有一个名为 <code>main</code> 的函数作为程序的入口点。</p>
@@ -356,7 +382,7 @@ void try_call_foo(T &amp;) {
 <blockquote>
 <p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 严格来说，是 C++ 运行时调用了 <code>main</code> 函数，但目前先理解为“操作系统调用了 <code>main</code> 函数”也无妨。</p>
 </blockquote>
-<p>要把程序发展壮大，我们可以让 <code>main</code> 函数调用其他函数，也可以直接在 <code>main</code> 函数中编写整个程序的逻辑（不推荐）。</p>
+<p>要把程序发展壮大，我们可以让 <code>main</code> 函数继续调用其他函数，也可以直接在 <code>main</code> 函数中编写整个程序的逻辑（不推荐）。</p>
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 因此，<code>main</code> 可以被看作是“宇宙大爆炸”。</p>
 </blockquote>
@@ -371,8 +397,7 @@ void try_call_foo(T &amp;) {
 <p>如果程序正常执行完毕，正常结束退出，那就请返回 0。</p>
 <p>返回一个不为 0 的整数可以表示程序出现了异常，是因为出错了才退出的，值的多少可以用于表明错误的具体原因。</p>
 <blockquote>
-<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 
-    操作系统：我调用了你这个程序的 main 函数，我好奇程序是否正确执行了？让我们约定好：如果你运转正常的话，就返回0表示成功哦！如果有错误的话，就返回一个错误代码，比如返回1表示无权限，2表示找不到文件……之类的。当然，错误代码都是不为0的。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 操作系统：我调用了你这个程序的 main 函数，我好奇程序是否正确执行了？让我们约定好：如果你运转正常的话，就返回0表示成功哦！如果有错误的话，就返回一个错误代码，比如返回1表示无权限，2表示找不到文件……之类的。当然，错误代码都是不为0的。</p>
 </blockquote>
 <h2 id="helloworld-_3">这个黑色的窗口是？</h2>
 <p>TODO: 介绍控制台</p>
@@ -407,8 +432,7 @@ void try_call_foo(T &amp;) {
 }
 </code></pre>
 <blockquote>
-<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 
-(*<em>编译器脸红中*</em>)</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> (*<em>编译器脸红中*</em>)</p>
 </blockquote>
 <p>C++ 支持行注释 <code>// xx</code> 和块注释 <code>/* xx */</code> 两种语法。</p>
 <pre><code class="language-cpp">int main()
@@ -425,9 +449,39 @@ void try_call_foo(T &amp;) {
 }
 </code></pre>
 <blockquote>
-<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 
-    在我们以后的案例代码中，都会像这样注释说明，充当<strong>就地讲解员</strong>的效果。去除这些注释并不影响程序的正常运行，添加文字注释只是小彭老师为了提醒你每一行的代码作用。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 在我们以后的案例代码中，都会像这样注释说明，充当<strong>就地讲解员</strong>的效果。去除这些注释并不影响程序的正常运行，添加文字注释只是小彭老师为了提醒你每一行的代码作用。</p>
 </blockquote></section><section class="print-page" id="platform"><h1 id="platform-_1">开发环境与平台选择</h1>
+<div class="toc">
+<ul>
+<li><a href="#platform-_1">开发环境与平台选择</a><ul>
+<li><a href="#platform-ide">IDE 不是编译器！</a></li>
+<li><a href="#platform-_2">编译器是？</a></li>
+<li><a href="#platform-_3">编译器御三家</a></li>
+<li><a href="#platform-_4">使用编译器编译源码</a><ul>
+<li><a href="#platform-msvc">MSVC</a></li>
+<li><a href="#platform-gcc">GCC</a></li>
+<li><a href="#platform-clang">Clang</a></li>
+</ul>
+</li>
+<li><a href="#platform-_5">编译器选项</a><ul>
+<li><a href="#platform-c">C++ 标准</a></li>
+<li><a href="#platform-_6">优化等级</a></li>
+<li><a href="#platform-_7">调试信息</a></li>
+<li><a href="#platform-_8">头文件搜索路径</a></li>
+<li><a href="#platform-_9">指定要链接的库</a></li>
+<li><a href="#platform-_10">库文件搜索路径</a></li>
+<li><a href="#platform-_11">定义宏</a></li>
+<li><a href="#platform-_12">警告开关</a></li>
+</ul>
+</li>
+<li><a href="#platform-_13">标准库御三家</a><ul>
+<li><a href="#platform-_14">标准库的调试模式</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
 <p>TODO</p>
 <h2 id="platform-ide">IDE 不是编译器！</h2>
 <p>TODO</p>
@@ -573,7 +627,19 @@ void try_call_foo(T &amp;) {
 </blockquote>
 <h3 id="platform-_14">标准库的调试模式</h3>
 <p>TODO</p></section><section class="print-page" id="vartypes"><h1 id="vartypes-_1">变量与类型 (未完工)</h1>
-<p>TODO</p></section><section class="print-page" id="functions"><h1 id="functions-_1">自定义函数 (未完工)</h1>
+<div class="toc">
+<ul>
+<li><a href="#vartypes-_1">变量与类型 (未完工)</a></li>
+</ul>
+</div>
+<p>TODO</p></section><section class="print-page" id="functions"><h1 id="functions-_1">认识函数 (未完工)</h1>
+<div class="toc">
+<ul>
+<li><a href="#functions-_1">认识函数 (未完工)</a></li>
+<li><a href="#functions-_2">自定义函数</a></li>
+</ul>
+</div>
+<h1 id="functions-_2">自定义函数</h1>
 <p>函数可以没有返回值，只需要返回类型写 <code>void</code> 即可，这样的函数调用的目的只是为了他的副作用（如修改全局变量，输出文本到控制台，修改引用参数等）。</p>
 <pre><code class="language-cpp">void compute()
 {
@@ -585,6 +651,40 @@ void try_call_foo(T &amp;) {
 <p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 对于有返回值的函数，必须写 return 语句，否则程序出错。</p>
 </blockquote>
 <p>TODO：更多介绍函数</p></section><section class="print-page" id="functional"><h1 id="functional-_1">函数式编程</h1>
+<div class="toc">
+<ul>
+<li><a href="#functional-_1">函数式编程</a><ul>
+<li><a href="#functional-_2">为什么需要函数？</a><ul>
+<li><a href="#functional-_3">狂想：没有函数的世界？</a></li>
+<li><a href="#functional-_4">设计模式追求的是“可改”而不是“可读”！</a></li>
+<li><a href="#functional-_5">用函数封装</a></li>
+<li><a href="#functional-_6">要封装，但不要耦合</a></li>
+<li><a href="#functional-_7">每个函数应该职责单一，别一心多用</a></li>
+<li><a href="#functional-_8">二次封装</a></li>
+<li><a href="#functional-linus-3-24">Linus 的最佳实践：每个函数不要超过 3 层嵌套，函数体不要超过 24 行</a></li>
+</ul>
+</li>
+<li><a href="#functional-_9">为什么需要函数式？</a><ul>
+<li><a href="#functional-_10">枚举的糟糕用法</a></li>
+<li><a href="#functional-_11">函数式编程光荣救场</a></li>
+<li><a href="#functional-c20-auto">我用了 C++20 的函数参数 auto 语法糖</a></li>
+<li><a href="#functional-_12">函数也是对象！</a></li>
+<li><a href="#functional-c11-lambda">C++11 引入 Lambda 语法糖</a></li>
+<li><a href="#functional-_13">依赖注入原则</a></li>
+<li><a href="#functional-_14">低耦合，高内聚</a></li>
+<li><a href="#functional-_15">与传统面向对象的对比</a></li>
+<li><a href="#functional-_16">函数对象在模板加持下静态分发</a></li>
+<li><a href="#functional-function">函数对象也可在 function 容器中动态分发</a></li>
+<li><a href="#functional-_17">案例：函数对象的动态分发用于多线程任务队列</a></li>
+<li><a href="#functional-_18">函数对象的重要机制：闭包</a></li>
+<li><a href="#functional-c">函数指针是 C 语言陋习，改掉</a></li>
+</ul>
+</li>
+<li><a href="#functional-bind">bind 为函数对象绑定参数</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <h2 id="functional-_2">为什么需要函数？</h2>
 <pre><code class="language-cpp">int main() {
     std::vector&lt;int&gt; a = {1, 2, 3, 4};
@@ -1368,8 +1468,150 @@ int main() {
     fmt::println(&quot;main 调用 hello2(5) 结果：{}&quot;, hello2(5));
     return 0;
 }
-</code></pre></section><section class="print-page" id="unicode"><h1 id="unicode-_1">字符编码那些事</h1>
+</code></pre></section><section class="print-page" id="design"><h1 id="design-_1">设计模式 (未完工)</h1>
+<div class="toc">
+<ul>
+<li><a href="#design-_1">设计模式 (未完工)</a><ul>
+<li><a href="#design-_2">动态类型的缺点</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>不要去指挥下面怎么做！</p>
+<h2 id="design-_2">动态类型的缺点</h2>
+<div class="arithmatex">
+<div class="MathJax_Preview">x = {-b \pm \sqrt{b^2-4ac} \over 2a}.</div>
+<script type="math/tex; mode=display">x = {-b \pm \sqrt{b^2-4ac} \over 2a}.</script>
+</div>
+<p>你好 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 啊！</p></section><section class="print-page" id="unicode"><h1 id="unicode-_1">字符编码那些事</h1>
+<div class="toc">
+<ul>
+<li><a href="#unicode-_1">字符编码那些事</a><ul>
+<li><a href="#unicode-_2">字符集</a><ul>
+<li><a href="#unicode-ascii">ASCII</a></li>
+<li><a href="#unicode-latin-1">Latin-1</a></li>
+<li><a href="#unicode-unicode">Unicode</a></li>
+<li><a href="#unicode-_3">总结</a></li>
+</ul>
+</li>
+<li><a href="#unicode-_4">字符编码</a><ul>
+<li><a href="#unicode-utf-32">UTF-32</a></li>
+<li><a href="#unicode-utf-8">UTF-8</a><ul>
+<li><a href="#unicode-ascii_1">兼容 ASCII</a></li>
+<li><a href="#unicode-_5">解码规则</a></li>
+<li><a href="#unicode-utf-8_1">UTF-8 的抗干扰能力</a></li>
+<li><a href="#unicode-_6">“我爱𰻞𰻞面!”</a></li>
+</ul>
+</li>
+<li><a href="#unicode-utf-16">UTF-16</a></li>
+<li><a href="#unicode-_7">字节序问题，大小端之争</a></li>
+<li><a href="#unicode-bom">BOM 标记</a></li>
+</ul>
+</li>
+<li><a href="#unicode-cc">C/C++ 中的字符编码</a><ul>
+<li><a href="#unicode-_8">字符类型</a></li>
+<li><a href="#unicode-utf-8-ascii">思考：UTF-8 为什么完美兼容 ASCII</a></li>
+<li><a href="#unicode-utf-8_2">UTF-8 确实几乎完美支持字符串所有操作</a></li>
+<li><a href="#unicode-ansi-unicode">轶事：“ANSI” 与 “Unicode” 是什么</a></li>
+<li><a href="#unicode-utf-16_1">小笑话：UTF-16 的背刺</a></li>
+<li><a href="#unicode-stdu8string">强类型的 std::u8string 只是君子协议</a></li>
+<li><a href="#unicode-_9">源码字符集与运行字符集</a></li>
+<li><a href="#unicode-_10">跨平台程序应该怎么做</a><ul>
+<li><a href="#unicode-utf-8-locale">.utf-8 locale 是如何工作的</a></li>
+<li><a href="#unicode-b-wchar_t">方案 B：投奔 wchar_t 流派</a></li>
+<li><a href="#unicode-u8">u8 字符串常量的作用</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#unicode-_11">选择你的阵营！</a><ul>
+<li><a href="#unicode-ansi">ANSI 阵营</a></li>
+<li><a href="#unicode-utf-8_3">UTF-8 阵营</a></li>
+<li><a href="#unicode-utf-16_2">UTF-16 阵营</a></li>
+<li><a href="#unicode-utf-32_1">UTF-32 阵营</a></li>
+</ul>
+</li>
+<li><a href="#unicode-_12">字符编码的转换</a><ul>
+<li><a href="#unicode-utf-utfcpp">不同 UTF 之间互转：utfcpp</a></li>
+<li><a href="#unicode-boostlocale">跨平台的任意编码转换：boost::locale</a><ul>
+<li><a href="#unicode-utf">UTF 之间互转</a></li>
+<li><a href="#unicode-gbk-utf">GBK 和 UTF 互转</a></li>
+<li><a href="#unicode-utf-ansi">UTF 和 ANSI 互转</a></li>
+<li><a href="#unicode-_13">大总结</a></li>
+<li><a href="#unicode-gbk-shift-jis">GBK 和 Shift-JIS 互转</a></li>
+<li><a href="#unicode-_14">指定处理错误的方法</a></li>
+<li><a href="#unicode-_15">更多功能？！</a></li>
+</ul>
+</li>
+<li><a href="#unicode-windows-multibytetowidechar">Windows 用户：MultiByteToWideChar</a><ul>
+<li><a href="#unicode-messageboxa">MessageBoxA 出现乱码问题解决案例</a></li>
+</ul>
+</li>
+<li><a href="#unicode-linux-iconv">Linux 用户：iconv</a><ul>
+<li><a href="#unicode-iconv">iconv 命令行工具</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#unicode-locale">本地化 (locale)</a><ul>
+<li><a href="#unicode-_16">区分字符类型</a></li>
+<li><a href="#unicode-_17">区分宽字符类型</a></li>
+<li><a href="#unicode-stdlocale">区域设置与 std::locale</a></li>
+<li><a href="#unicode-_18">时间日期格式化</a></li>
+<li><a href="#unicode-_19">正则表达式匹配汉字？</a></li>
+</ul>
+</li>
+<li><a href="#unicode-_20">宽字符流</a><ul>
+<li><a href="#unicode-stdwstring">官方眼中的 std::wstring</a></li>
+<li><a href="#unicode-wchar_t">wchar_t 系列函数</a></li>
+<li><a href="#unicode-stdwcout">std::wcout 的使用</a></li>
+<li><a href="#unicode-stdwfstream">std::wfstream 的使用</a></li>
+<li><a href="#unicode-c">C 语言字符串编码转换</a></li>
+<li><a href="#unicode-c-codecvt">C++ 字符串编码转换 &lt;codecvt&gt;</a></li>
+</ul>
+</li>
+<li><a href="#unicode-windows">Windows 专题</a><ul>
+<li><a href="#unicode-windows-api-w">Windows API 的本源是 W 系函数</a></li>
+<li><a href="#unicode-tchar">TCHAR 流派</a></li>
+<li><a href="#unicode-utf-8_4">UTF-8 派的跨平台软件何去何从？</a></li>
+<li><a href="#unicode-wndproc">WndProc 接受输入法的中文输入</a></li>
+</ul>
+</li>
+<li><a href="#unicode-_21">常见的字符串实现探究</a><ul>
+<li><a href="#unicode-qt-qstring">Qt QString</a><ul>
+<li><a href="#unicode-qtextcodec">QTextCodec</a></li>
+<li><a href="#unicode-fromtolocal8bitsutf8latin1ascii">from/toLocal8Bits/Utf8/Latin1/Ascii</a></li>
+<li><a href="#unicode-_22">字符串常量</a></li>
+<li><a href="#unicode-qtextstream">QTextStream</a></li>
+</ul>
+</li>
+<li><a href="#unicode-python-3-str">Python 3 str</a></li>
+<li><a href="#unicode-rust-str-string">Rust &amp;str 和 String</a></li>
+<li><a href="#unicode-java-string">Java String</a></li>
+<li><a href="#unicode-cow">COW 字符串</a></li>
+</ul>
+</li>
+<li><a href="#unicode-unicode_1">Unicode 知识进阶</a><ul>
+<li><a href="#unicode-_23">字符的显示宽度计算</a></li>
+<li><a href="#unicode-grapheme">Grapheme</a></li>
+<li><a href="#unicode-_24">正规化</a></li>
+<li><a href="#unicode-_25">零宽空格</a></li>
+<li><a href="#unicode-_26">特殊控制字符</a></li>
+<li><a href="#unicode-unicode_2">根据编号输入 Unicode 字符</a></li>
+</ul>
+</li>
+<li><a href="#unicode-_27">黑暗小技巧</a><ul>
+<li><a href="#unicode-latin-1_1">Latin-1 的转换</a></li>
+<li><a href="#unicode-latin-1_2">Latin-1 的妙用</a></li>
+<li><a href="#unicode-base64">Base64 防乱码</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
 <h2 id="unicode-_2">字符集</h2>
+<p>计算机不能直接存储字符，而是用数字来代替，这就是字符集，为每个字符指定一个数字。</p>
 <h3 id="unicode-ascii">ASCII</h3>
 <p>ASCII 为英文字母、阿拉伯数组、标点符号等 128 个字符，每个都用一个 0 到 127 范围内的数字对应。</p>
 <p>如果你想要表示一个字符，就在这个表里寻找到相应的数字编号，然后存这个编号即可。</p>
@@ -1597,10 +1839,10 @@ int main() {
 <li>0x10000 到 0x10FFFF 范围内的字符，用 4 个字节表示。</li>
 </ul>
 <p>序列化规则如下：</p>
-<h4 id="unicode-0-0x7f">0 到 0x7F</h4>
+<h4 id="unicode-ascii_1">兼容 ASCII</h4>
 <p>对于 0 到 0x7F 的字符，这个范围的字符需要 7 位存储。</p>
 <p>我们选择直接存储其值。</p>
-<p>例如 'P' 会被直接存储其 Unicode 值的 80（0x50）：</p>
+<p>例如 &lsquo;P&rsquo; 会被直接存储其 Unicode 值的 80（0x50）：</p>
 <pre><code>01010000
 </code></pre>
 <p>由于 Unicode 在 0 到 0x7F 范围内与 ASCII 表相同，而 UTF-8 又把 0 到 0x7F 的值直接存储，所以说 UTF-8 兼容 ASCII。这使得原本设计于处理 ASCII 的 C 语言函数，例如 strlen、strcat、sprintf 等，都可以直接无缝切换到 UTF-8。反之亦然，任何设计用于 UTF-8 的程序都可以完全接受 ASCII 格式的输入文本。</p>
@@ -1651,7 +1893,7 @@ int main() {
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 高级车头装了防弹钢板，载客空间变少，只好匀到后面的车厢。</p>
 </blockquote>
-<h4 id="unicode-utf-8_1">UTF-8 的抗干扰机制</h4>
+<h4 id="unicode-utf-8_1">UTF-8 的抗干扰能力</h4>
 <p>如果发现 <code>10</code> 开头的独立车厢，就说明出问题了，可能是火车被错误拦腰截断，也可能是字符串被错误地反转。因为 <code>10</code> 只可能是火车车厢，不可能出现在火车头部。此时解码器应产生一个报错，或者用错误字符“�”替换。</p>
 <pre><code>10000010 10000001
 </code></pre>
@@ -1809,43 +2051,43 @@ int main() {
 <td>Linux <code>char</code></td>
 <td>1 字节</td>
 <td>取决于 <code>$LC_ALL</code></td>
-<td>"hello"</td>
+<td>&ldquo;hello&rdquo;</td>
 </tr>
 <tr>
 <td>Windows <code>char</code></td>
 <td>1 字节</td>
 <td>取决于系统区域设置</td>
-<td>"hello"</td>
+<td>&ldquo;hello&rdquo;</td>
 </tr>
 <tr>
 <td>Linux <code>wchar_t</code></td>
 <td>4 字节</td>
 <td>UTF-32</td>
-<td>L"hello"</td>
+<td>L&rdquo;hello&rdquo;</td>
 </tr>
 <tr>
 <td>Windows <code>wchar_t</code></td>
 <td>2 字节</td>
 <td>UTF-16</td>
-<td>L"hello"</td>
+<td>L&rdquo;hello&rdquo;</td>
 </tr>
 <tr>
 <td><code>char8_t</code></td>
 <td>1 字节</td>
 <td>UTF-8</td>
-<td>u8"hello"</td>
+<td>u8&rdquo;hello&rdquo;</td>
 </tr>
 <tr>
 <td><code>char16_t</code></td>
 <td>2 字节</td>
 <td>UTF-16</td>
-<td>u"hello"</td>
+<td>u&rdquo;hello&rdquo;</td>
 </tr>
 <tr>
 <td><code>char32_t</code></td>
 <td>4 字节</td>
 <td>UTF-32</td>
-<td>U"hello"</td>
+<td>U&rdquo;hello&rdquo;</td>
 </tr>
 </tbody>
 </table>
@@ -2254,7 +2496,7 @@ hexdump(s); // E4 BD A0 E5 A5 BD (UTF-8)
 </thead>
 <tbody>
 <tr>
-<td>"你好"</td>
+<td>&ldquo;你好&rdquo;</td>
 <td></td>
 <td></td>
 </tr>
@@ -2283,7 +2525,7 @@ hexdump(s); // E4 BD A0 E5 A5 BD (UTF-8)
 <li>应用场景：常见于文字处理需求不大，但有强烈的跨平台需求，特别是互联网方面的软件。他们通常只用到字符串的拼接、查找、切片通常也只是在固定的位置（例如文件分隔符 <code>'/'</code>）。也非常适合主要面对的是以 ASCII 为主的“代码”类文本，UTF-8 是对英文类文本压缩率最高的，所以也广泛用于编译器、数据库之类的场景。同时因为 UTF-8 完全兼容 ASCII，使得他能轻易适配远古的 C 语言程序和库。</li>
 <li>方法：始终以 UTF-8 编码存储和处理字符串。</li>
 <li>优点：跨平台，在网络传输时无需任何转码，UTF-8 是互联网的主流编码格式，不同平台上运行的 UTF-8 软件可以随意共享文本数据。兼容 ASCII，方便复用现有库和生态。对英文类文本压缩率高，对中文文本也不算太差。</li>
-<li>缺点：对于底层 API 均采用 UTF-16 的 Windows 系统，需要进行字符编码转换，有少量性能损失。且字符串的正确切片、求长度等操作的复杂度会变成 $O(N)$ 而不是通常的 $O(1)$。</li>
+<li>缺点：对于底层 API 均采用 UTF-16 的 Windows 系统，需要进行字符编码转换，有少量性能损失。且字符串的正确切片、求长度等操作的复杂度会变成 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 而不是通常的 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span>。</li>
 <li>代表作：Rust 语言、Go 语言、CMake 构建系统、Julia 语言等。</li>
 </ul>
 <p>在 C++ 中，可以通过 <code>u8"你好"</code> 创建一个保证内部是 UTF-8 编码的字符串常量，类型为 <code>char8_t []</code>。</p>
@@ -2368,7 +2610,7 @@ std::ifstream fin(u8&quot;你好.txt&quot;);     // 可以了
 </tr>
 </tbody>
 </table>
-<p>为此，这些语言都为字符串提供了两套 API，一种是按字符索引，一种是按字节索引。按字符索引时，会从头开始，逐个解析码位，直到解析到想要的字符为止，复杂度 $O(N)$。按字节索引时，直接跳到指定字节，无需解析，复杂度 $O(1)$。</p>
+<p>为此，这些语言都为字符串提供了两套 API，一种是按字符索引，一种是按字节索引。按字符索引时，会从头开始，逐个解析码位，直到解析到想要的字符为止，复杂度 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span>。按字节索引时，直接跳到指定字节，无需解析，复杂度 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span>。</p>
 <pre><code class="language-rust">let s = &quot;你好&quot;;
 // 按字符遍历
 for c in s.chars() {
@@ -2455,7 +2697,7 @@ for (char32_t c : Utf8Range(s)) {
 <li>应用场景：通常认为，UTF-16 是纯粹的历史遗留糟粕，新软件不应该再使用 UTF-16。只有在和这些糟粕软件的 API 打交道时，才必须转换为 UTF-16。但也有人指出：UTF-16 是纯中文压缩率最高的编码格式，所以 UTF-16 还比较适合纯中文或以中文内容为主的文本数据压缩。</li>
 <li>方法：始终以 UTF-16 编码存储和处理字符串。</li>
 <li>优点：调用 Windows 系统 API 时无需任何转换，直接就能调用，最适合 Windows 本地开发，非跨平台。且对纯中文内容可比 UTF-8 额外节省 33% 空间。</li>
-<li>缺点：对于 Windows 以外的系统就需要转换回 UTF-8，有少量性能开销。且如果存储的内容主要是纯英文，如 XML 代码等，内存占用会比 UTF-8 翻倍。而且 UTF-16 仍然是变长编码，虽然出现变长的概率较低，但不为 0，仍需要开发者做特殊处理。字符串的按码位反转会导致生僻字符出错，字符串以码点为单位的的正确切片、求长度等操作的复杂度仍然 $O(N)$ 而不是通常的 $O(1)$。并且 UTF-16 有大小端转换的问题。</li>
+<li>缺点：对于 Windows 以外的系统就需要转换回 UTF-8，有少量性能开销。且如果存储的内容主要是纯英文，如 XML 代码等，内存占用会比 UTF-8 翻倍。而且 UTF-16 仍然是变长编码，虽然出现变长的概率较低，但不为 0，仍需要开发者做特殊处理。字符串的按码位反转会导致生僻字符出错，字符串以码点为单位的的正确切片、求长度等操作的复杂度仍然 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 而不是通常的 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span>。并且 UTF-16 有大小端转换的问题。</li>
 <li>代表作：Windows 系统 API、Java 语言、Windows 文件系统 (NTFS)、Qt、Word、JSON，他们都是 UTF-16 的受害者。</li>
 </ul>
 <p>这相当于是把 UTF-16 当作了内码，但 UTF-16 依然是一种变长编码，对常见的中文处理没问题，生僻字就容易出问题，且因为出现概率低，很容易不发现，埋下隐患。</p>
@@ -2518,7 +2760,7 @@ fmt::println(&quot;{}&quot;, s.size());   // 3
 <ul>
 <li>应用场景：适合需要经常处理文字的领域，如文本编辑器、浏览器等。但不适合存储和传输，因为浪费硬盘和网络带宽。字符串一般都长期以 UTF-8 存储，只有在需要频繁索引码位时，才需要转换为 UTF-32。</li>
 <li>方法：始终以 UTF-32 编码存储和处理字符串。</li>
-<li>优点：字符串的按码位反转、切片、求长度等操作都是 $O(1)$ 的复杂度，可以当作普通数组一样，随意处理。例如你可以设想一个文本编辑框，需要支持“退格”操作，如果是 UTF-8 和 UTF-16 就需要繁琐的判断代理对、各种车厢，而 UTF-32 的字符串只需要一次 <code>pop_back</code> 就搞定了。</li>
+<li>优点：字符串的按码位反转、切片、求长度等操作都是 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span> 的复杂度，可以当作普通数组一样，随意处理。例如你可以设想一个文本编辑框，需要支持“退格”操作，如果是 UTF-8 和 UTF-16 就需要繁琐的判断代理对、各种车厢，而 UTF-32 的字符串只需要一次 <code>pop_back</code> 就搞定了。</li>
 <li>缺点：浪费空间大，通常在保存时，仍然需要转换回 UTF-8 后再写入文件，有一定性能开销。</li>
 </ul>
 <p><em>总结：要支持 UTF-32 阵营，请全部使用 <code>char32_t</code> 和 <code>std::u32string</code>。字面量全用 <code>U"你好"</code> 的形式书写，读文件时转为 UTF-32，写文件时转回 UTF-8。</em></p>
@@ -2800,7 +3042,7 @@ int main() {
 }
 </code></pre>
 <blockquote>
-<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意！是目标编码在前！如果你要从 Shift-JIS 转成 GBK，那么需要 <code>between(jis, "GBK", "Shift-JIS")</code>，这真是一个糟糕的设计。不仅 GBK 和 Shift-JIS 可能不小心弄反了，编译器，一点提示都没有，而且 jis 和 "GBK" 都是字符串，很容易大脑搞混。让我来设计的话，我会这样提供 API：<code>decode(jis, Encoding::ShiftJIS).encode(Encoding::GBK)</code>，其中 <code>Encoding</code> 是一个枚举，强大的类型系统，不仅避免犯错的机会，看起来也更轻松。之后的设计模式专题课中，会再详细讲解什么是好的 API 设计。</p>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意！是目标编码在前！如果你要从 Shift-JIS 转成 GBK，那么需要 <code>between(jis, "GBK", "Shift-JIS")</code>，这真是一个糟糕的设计。不仅 GBK 和 Shift-JIS 可能不小心弄反了，编译器，一点提示都没有，而且 jis 和 &ldquo;GBK&rdquo; 都是字符串，很容易大脑搞混。让我来设计的话，我会这样提供 API：<code>decode(jis, Encoding::ShiftJIS).encode(Encoding::GBK)</code>，其中 <code>Encoding</code> 是一个枚举，强大的类型系统，不仅避免犯错的机会，看起来也更轻松。之后的设计模式专题课中，会再详细讲解什么是好的 API 设计。</p>
 </blockquote>
 <h4 id="unicode-_14">指定处理错误的方法</h4>
 <p>如果遇到无法编码的字符，该如何处置？</p>
@@ -3678,7 +3920,7 @@ stream &lt;&lt; &quot;你好，世界\n&quot;; // 写入 QString，QTextStream �
 </blockquote>
 <p>为了方便文本处理，最好以定长编码，也就是 UTF-32，存储字符串。</p>
 <p>如果用 UTF-8 或 UTF-16 来存储的话，会遇到变长编码的固有缺陷：</p>
-<p>例如像字符串索引，字符串求长度等操作，要么索引出来的是字节而不是字符了；要么就需要 $O(N)$ 的复杂度，逐一遍历每个字节，才能确定真正的位置；哪怕全是 ASCII 也得这么做，因为万一刚好有一个是中文字符呢？</p>
+<p>例如像字符串索引，字符串求长度等操作，要么索引出来的是字节而不是字符了；要么就需要 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 的复杂度，逐一遍历每个字节，才能确定真正的位置；哪怕全是 ASCII 也得这么做，因为万一刚好有一个是中文字符呢？</p>
 <p>所以，对于经常需要处理字符串的 Python 来说，UTF-8 是无法接受的，似乎只能以 UTF-32 来存储？</p>
 <p>Python 想到了一个小妙招：</p>
 <pre><code class="language-c">enum PyUnicodeType {
@@ -3712,7 +3954,7 @@ struct PyUnicodeString {
 <p>对于一个经常需要处理字符串的虚拟机语言来说，反正本来就不在乎 if-else 分支这点小开销，这确实是最好的方案。</p>
 <p>缺点就是，当你往一个完全是 ASCII 的字符串中，突然插入一个“𰻞”时，会产生巨大的内存重分配。虽然只有一个“𰻞”，但为此，其他所有 ASCII 字符都得为他扩张到 32 位的大小。而 UTF-8 和传统的 UTF-32 就没有这个问题，因此我也不建议 C++ 程序员自己手搓个这样的 union 字符串。</p>
 <h3 id="unicode-rust-str-string">Rust <code>&amp;str</code> 和 <code>String</code></h3>
-<p>而 Rust 则采用了字符串全员 UTF-8 的策略，这是因为 Rust 最常用于互联网方面的底层系统软件，互联网最常用的文本编码就是 UTF-8，没有大小端问题，且国际通用。除此之外，互联网基建最常见的平台就是 Linux，使用 UTF-8 存储字符串，调用 Linux 系统 API 无需任何转换。且文本文件基本都可以假定是 UTF-8 编码，写入时无需任何转换，复杂度低至 $O(1)$。作为代价，这导致文本处理上的一些困难，例如字符串的索引，需要区分是按字节索引还是按字符索引，如果确实需要按字符索引的话，复杂度就会是 $O(N)$ 了。</p>
+<p>而 Rust 则采用了字符串全员 UTF-8 的策略，这是因为 Rust 最常用于互联网方面的底层系统软件，互联网最常用的文本编码就是 UTF-8，没有大小端问题，且国际通用。除此之外，互联网基建最常见的平台就是 Linux，使用 UTF-8 存储字符串，调用 Linux 系统 API 无需任何转换。且文本文件基本都可以假定是 UTF-8 编码，写入时无需任何转换，复杂度低至 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span>。作为代价，这导致文本处理上的一些困难，例如字符串的索引，需要区分是按字节索引还是按字符索引，如果确实需要按字符索引的话，复杂度就会是 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 了。</p>
 <p>无论如何，如果你选择了 UTF-8 流派的话，Rust 字符串的“迭代器双轨制”确实值得称道：</p>
 <pre><code class="language-rust">let s = &quot;你好，世界&quot;;
 for c in s.chars() { // 按字符迭代
@@ -3815,6 +4057,7 @@ base64.b64decode(secret).decode()
 
         <footer class="col-md-12">
             <hr>
+                <p>小彭老师倾 ♥ 制作</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script src="../js/bootstrap.bundle.min.js"></script>
@@ -3824,6 +4067,8 @@ base64.b64decode(secret).decode()
         </script>
         <script src="../js/base.js"></script>
         <script src="../js/print-site.js"></script>
+        <script src="../extra.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script src="../search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">

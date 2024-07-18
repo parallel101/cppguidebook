@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        
+        <meta name="author" content="小彭老师">
         
         <link rel="shortcut icon" href="../img/favicon.ico">
         <title>字符编码那些事 - ✝️小彭大典✝️</title>
@@ -25,6 +25,7 @@
         <link href="../css/print-site-enum-headings6.css" rel="stylesheet">
         <link href="../css/print-site.css" rel="stylesheet">
         <link href="../css/print-site-mkdocs.css" rel="stylesheet">
+        <link href="../extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <script>hljs.highlightAll();</script> 
     </head>
@@ -63,11 +64,15 @@
 </li>
                                     
 <li>
-    <a href="../functions/" class="dropdown-item">自定义函数 (未完工)</a>
+    <a href="../functions/" class="dropdown-item">认识函数 (未完工)</a>
 </li>
                                     
 <li>
     <a href="../functional/" class="dropdown-item">函数式编程</a>
+</li>
+                                    
+<li>
+    <a href="../design/" class="dropdown-item">设计模式 (未完工)</a>
 </li>
                                     
 <li>
@@ -90,7 +95,7 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../functional/" class="nav-link">
+                                <a rel="prev" href="../design/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
@@ -98,6 +103,9 @@
                                 <a rel="next" class="nav-link disabled">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/parallel101/cppguidebook/edit/master/docs/unicode.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -171,7 +179,134 @@
                     <div class="col-md-9" role="main">
 
 <h1 id="_1">字符编码那些事</h1>
+<div class="toc">
+<ul>
+<li><a href="#_1">字符编码那些事</a><ul>
+<li><a href="#_2">字符集</a><ul>
+<li><a href="#ascii">ASCII</a></li>
+<li><a href="#latin-1">Latin-1</a></li>
+<li><a href="#unicode">Unicode</a></li>
+<li><a href="#_3">总结</a></li>
+</ul>
+</li>
+<li><a href="#_4">字符编码</a><ul>
+<li><a href="#utf-32">UTF-32</a></li>
+<li><a href="#utf-8">UTF-8</a><ul>
+<li><a href="#ascii_1">兼容 ASCII</a></li>
+<li><a href="#_5">解码规则</a></li>
+<li><a href="#utf-8_1">UTF-8 的抗干扰能力</a></li>
+<li><a href="#_6">“我爱𰻞𰻞面!”</a></li>
+</ul>
+</li>
+<li><a href="#utf-16">UTF-16</a></li>
+<li><a href="#_7">字节序问题，大小端之争</a></li>
+<li><a href="#bom">BOM 标记</a></li>
+</ul>
+</li>
+<li><a href="#cc">C/C++ 中的字符编码</a><ul>
+<li><a href="#_8">字符类型</a></li>
+<li><a href="#utf-8-ascii">思考：UTF-8 为什么完美兼容 ASCII</a></li>
+<li><a href="#utf-8_2">UTF-8 确实几乎完美支持字符串所有操作</a></li>
+<li><a href="#ansi-unicode">轶事：“ANSI” 与 “Unicode” 是什么</a></li>
+<li><a href="#utf-16_1">小笑话：UTF-16 的背刺</a></li>
+<li><a href="#stdu8string">强类型的 std::u8string 只是君子协议</a></li>
+<li><a href="#_9">源码字符集与运行字符集</a></li>
+<li><a href="#_10">跨平台程序应该怎么做</a><ul>
+<li><a href="#utf-8-locale">.utf-8 locale 是如何工作的</a></li>
+<li><a href="#b-wchar_t">方案 B：投奔 wchar_t 流派</a></li>
+<li><a href="#u8">u8 字符串常量的作用</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_11">选择你的阵营！</a><ul>
+<li><a href="#ansi">ANSI 阵营</a></li>
+<li><a href="#utf-8_3">UTF-8 阵营</a></li>
+<li><a href="#utf-16_2">UTF-16 阵营</a></li>
+<li><a href="#utf-32_1">UTF-32 阵营</a></li>
+</ul>
+</li>
+<li><a href="#_12">字符编码的转换</a><ul>
+<li><a href="#utf-utfcpp">不同 UTF 之间互转：utfcpp</a></li>
+<li><a href="#boostlocale">跨平台的任意编码转换：boost::locale</a><ul>
+<li><a href="#utf">UTF 之间互转</a></li>
+<li><a href="#gbk-utf">GBK 和 UTF 互转</a></li>
+<li><a href="#utf-ansi">UTF 和 ANSI 互转</a></li>
+<li><a href="#_13">大总结</a></li>
+<li><a href="#gbk-shift-jis">GBK 和 Shift-JIS 互转</a></li>
+<li><a href="#_14">指定处理错误的方法</a></li>
+<li><a href="#_15">更多功能？！</a></li>
+</ul>
+</li>
+<li><a href="#windows-multibytetowidechar">Windows 用户：MultiByteToWideChar</a><ul>
+<li><a href="#messageboxa">MessageBoxA 出现乱码问题解决案例</a></li>
+</ul>
+</li>
+<li><a href="#linux-iconv">Linux 用户：iconv</a><ul>
+<li><a href="#iconv">iconv 命令行工具</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#locale">本地化 (locale)</a><ul>
+<li><a href="#_16">区分字符类型</a></li>
+<li><a href="#_17">区分宽字符类型</a></li>
+<li><a href="#stdlocale">区域设置与 std::locale</a></li>
+<li><a href="#_18">时间日期格式化</a></li>
+<li><a href="#_19">正则表达式匹配汉字？</a></li>
+</ul>
+</li>
+<li><a href="#_20">宽字符流</a><ul>
+<li><a href="#stdwstring">官方眼中的 std::wstring</a></li>
+<li><a href="#wchar_t">wchar_t 系列函数</a></li>
+<li><a href="#stdwcout">std::wcout 的使用</a></li>
+<li><a href="#stdwfstream">std::wfstream 的使用</a></li>
+<li><a href="#c">C 语言字符串编码转换</a></li>
+<li><a href="#c-codecvt">C++ 字符串编码转换 &lt;codecvt&gt;</a></li>
+</ul>
+</li>
+<li><a href="#windows">Windows 专题</a><ul>
+<li><a href="#windows-api-w">Windows API 的本源是 W 系函数</a></li>
+<li><a href="#tchar">TCHAR 流派</a></li>
+<li><a href="#utf-8_4">UTF-8 派的跨平台软件何去何从？</a></li>
+<li><a href="#wndproc">WndProc 接受输入法的中文输入</a></li>
+</ul>
+</li>
+<li><a href="#_21">常见的字符串实现探究</a><ul>
+<li><a href="#qt-qstring">Qt QString</a><ul>
+<li><a href="#qtextcodec">QTextCodec</a></li>
+<li><a href="#fromtolocal8bitsutf8latin1ascii">from/toLocal8Bits/Utf8/Latin1/Ascii</a></li>
+<li><a href="#_22">字符串常量</a></li>
+<li><a href="#qtextstream">QTextStream</a></li>
+</ul>
+</li>
+<li><a href="#python-3-str">Python 3 str</a></li>
+<li><a href="#rust-str-string">Rust &amp;str 和 String</a></li>
+<li><a href="#java-string">Java String</a></li>
+<li><a href="#cow">COW 字符串</a></li>
+</ul>
+</li>
+<li><a href="#unicode_1">Unicode 知识进阶</a><ul>
+<li><a href="#_23">字符的显示宽度计算</a></li>
+<li><a href="#grapheme">Grapheme</a></li>
+<li><a href="#_24">正规化</a></li>
+<li><a href="#_25">零宽空格</a></li>
+<li><a href="#_26">特殊控制字符</a></li>
+<li><a href="#unicode_2">根据编号输入 Unicode 字符</a></li>
+</ul>
+</li>
+<li><a href="#_27">黑暗小技巧</a><ul>
+<li><a href="#latin-1_1">Latin-1 的转换</a></li>
+<li><a href="#latin-1_2">Latin-1 的妙用</a></li>
+<li><a href="#base64">Base64 防乱码</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
 <h2 id="_2">字符集</h2>
+<p>计算机不能直接存储字符，而是用数字来代替，这就是字符集，为每个字符指定一个数字。</p>
 <h3 id="ascii">ASCII</h3>
 <p>ASCII 为英文字母、阿拉伯数组、标点符号等 128 个字符，每个都用一个 0 到 127 范围内的数字对应。</p>
 <p>如果你想要表示一个字符，就在这个表里寻找到相应的数字编号，然后存这个编号即可。</p>
@@ -399,10 +534,10 @@
 <li>0x10000 到 0x10FFFF 范围内的字符，用 4 个字节表示。</li>
 </ul>
 <p>序列化规则如下：</p>
-<h4 id="0-0x7f">0 到 0x7F</h4>
+<h4 id="ascii_1">兼容 ASCII</h4>
 <p>对于 0 到 0x7F 的字符，这个范围的字符需要 7 位存储。</p>
 <p>我们选择直接存储其值。</p>
-<p>例如 'P' 会被直接存储其 Unicode 值的 80（0x50）：</p>
+<p>例如 &lsquo;P&rsquo; 会被直接存储其 Unicode 值的 80（0x50）：</p>
 <pre><code>01010000
 </code></pre>
 <p>由于 Unicode 在 0 到 0x7F 范围内与 ASCII 表相同，而 UTF-8 又把 0 到 0x7F 的值直接存储，所以说 UTF-8 兼容 ASCII。这使得原本设计于处理 ASCII 的 C 语言函数，例如 strlen、strcat、sprintf 等，都可以直接无缝切换到 UTF-8。反之亦然，任何设计用于 UTF-8 的程序都可以完全接受 ASCII 格式的输入文本。</p>
@@ -453,7 +588,7 @@
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 高级车头装了防弹钢板，载客空间变少，只好匀到后面的车厢。</p>
 </blockquote>
-<h4 id="utf-8_1">UTF-8 的抗干扰机制</h4>
+<h4 id="utf-8_1">UTF-8 的抗干扰能力</h4>
 <p>如果发现 <code>10</code> 开头的独立车厢，就说明出问题了，可能是火车被错误拦腰截断，也可能是字符串被错误地反转。因为 <code>10</code> 只可能是火车车厢，不可能出现在火车头部。此时解码器应产生一个报错，或者用错误字符“�”替换。</p>
 <pre><code>10000010 10000001
 </code></pre>
@@ -611,43 +746,43 @@
 <td>Linux <code>char</code></td>
 <td>1 字节</td>
 <td>取决于 <code>$LC_ALL</code></td>
-<td>"hello"</td>
+<td>&ldquo;hello&rdquo;</td>
 </tr>
 <tr>
 <td>Windows <code>char</code></td>
 <td>1 字节</td>
 <td>取决于系统区域设置</td>
-<td>"hello"</td>
+<td>&ldquo;hello&rdquo;</td>
 </tr>
 <tr>
 <td>Linux <code>wchar_t</code></td>
 <td>4 字节</td>
 <td>UTF-32</td>
-<td>L"hello"</td>
+<td>L&rdquo;hello&rdquo;</td>
 </tr>
 <tr>
 <td>Windows <code>wchar_t</code></td>
 <td>2 字节</td>
 <td>UTF-16</td>
-<td>L"hello"</td>
+<td>L&rdquo;hello&rdquo;</td>
 </tr>
 <tr>
 <td><code>char8_t</code></td>
 <td>1 字节</td>
 <td>UTF-8</td>
-<td>u8"hello"</td>
+<td>u8&rdquo;hello&rdquo;</td>
 </tr>
 <tr>
 <td><code>char16_t</code></td>
 <td>2 字节</td>
 <td>UTF-16</td>
-<td>u"hello"</td>
+<td>u&rdquo;hello&rdquo;</td>
 </tr>
 <tr>
 <td><code>char32_t</code></td>
 <td>4 字节</td>
 <td>UTF-32</td>
-<td>U"hello"</td>
+<td>U&rdquo;hello&rdquo;</td>
 </tr>
 </tbody>
 </table>
@@ -1056,7 +1191,7 @@ hexdump(s); // E4 BD A0 E5 A5 BD (UTF-8)
 </thead>
 <tbody>
 <tr>
-<td>"你好"</td>
+<td>&ldquo;你好&rdquo;</td>
 <td></td>
 <td></td>
 </tr>
@@ -1085,7 +1220,7 @@ hexdump(s); // E4 BD A0 E5 A5 BD (UTF-8)
 <li>应用场景：常见于文字处理需求不大，但有强烈的跨平台需求，特别是互联网方面的软件。他们通常只用到字符串的拼接、查找、切片通常也只是在固定的位置（例如文件分隔符 <code>'/'</code>）。也非常适合主要面对的是以 ASCII 为主的“代码”类文本，UTF-8 是对英文类文本压缩率最高的，所以也广泛用于编译器、数据库之类的场景。同时因为 UTF-8 完全兼容 ASCII，使得他能轻易适配远古的 C 语言程序和库。</li>
 <li>方法：始终以 UTF-8 编码存储和处理字符串。</li>
 <li>优点：跨平台，在网络传输时无需任何转码，UTF-8 是互联网的主流编码格式，不同平台上运行的 UTF-8 软件可以随意共享文本数据。兼容 ASCII，方便复用现有库和生态。对英文类文本压缩率高，对中文文本也不算太差。</li>
-<li>缺点：对于底层 API 均采用 UTF-16 的 Windows 系统，需要进行字符编码转换，有少量性能损失。且字符串的正确切片、求长度等操作的复杂度会变成 $O(N)$ 而不是通常的 $O(1)$。</li>
+<li>缺点：对于底层 API 均采用 UTF-16 的 Windows 系统，需要进行字符编码转换，有少量性能损失。且字符串的正确切片、求长度等操作的复杂度会变成 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 而不是通常的 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span>。</li>
 <li>代表作：Rust 语言、Go 语言、CMake 构建系统、Julia 语言等。</li>
 </ul>
 <p>在 C++ 中，可以通过 <code>u8"你好"</code> 创建一个保证内部是 UTF-8 编码的字符串常量，类型为 <code>char8_t []</code>。</p>
@@ -1170,7 +1305,7 @@ std::ifstream fin(u8&quot;你好.txt&quot;);     // 可以了
 </tr>
 </tbody>
 </table>
-<p>为此，这些语言都为字符串提供了两套 API，一种是按字符索引，一种是按字节索引。按字符索引时，会从头开始，逐个解析码位，直到解析到想要的字符为止，复杂度 $O(N)$。按字节索引时，直接跳到指定字节，无需解析，复杂度 $O(1)$。</p>
+<p>为此，这些语言都为字符串提供了两套 API，一种是按字符索引，一种是按字节索引。按字符索引时，会从头开始，逐个解析码位，直到解析到想要的字符为止，复杂度 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span>。按字节索引时，直接跳到指定字节，无需解析，复杂度 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span>。</p>
 <pre><code class="language-rust">let s = &quot;你好&quot;;
 // 按字符遍历
 for c in s.chars() {
@@ -1257,7 +1392,7 @@ for (char32_t c : Utf8Range(s)) {
 <li>应用场景：通常认为，UTF-16 是纯粹的历史遗留糟粕，新软件不应该再使用 UTF-16。只有在和这些糟粕软件的 API 打交道时，才必须转换为 UTF-16。但也有人指出：UTF-16 是纯中文压缩率最高的编码格式，所以 UTF-16 还比较适合纯中文或以中文内容为主的文本数据压缩。</li>
 <li>方法：始终以 UTF-16 编码存储和处理字符串。</li>
 <li>优点：调用 Windows 系统 API 时无需任何转换，直接就能调用，最适合 Windows 本地开发，非跨平台。且对纯中文内容可比 UTF-8 额外节省 33% 空间。</li>
-<li>缺点：对于 Windows 以外的系统就需要转换回 UTF-8，有少量性能开销。且如果存储的内容主要是纯英文，如 XML 代码等，内存占用会比 UTF-8 翻倍。而且 UTF-16 仍然是变长编码，虽然出现变长的概率较低，但不为 0，仍需要开发者做特殊处理。字符串的按码位反转会导致生僻字符出错，字符串以码点为单位的的正确切片、求长度等操作的复杂度仍然 $O(N)$ 而不是通常的 $O(1)$。并且 UTF-16 有大小端转换的问题。</li>
+<li>缺点：对于 Windows 以外的系统就需要转换回 UTF-8，有少量性能开销。且如果存储的内容主要是纯英文，如 XML 代码等，内存占用会比 UTF-8 翻倍。而且 UTF-16 仍然是变长编码，虽然出现变长的概率较低，但不为 0，仍需要开发者做特殊处理。字符串的按码位反转会导致生僻字符出错，字符串以码点为单位的的正确切片、求长度等操作的复杂度仍然 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 而不是通常的 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span>。并且 UTF-16 有大小端转换的问题。</li>
 <li>代表作：Windows 系统 API、Java 语言、Windows 文件系统 (NTFS)、Qt、Word、JSON，他们都是 UTF-16 的受害者。</li>
 </ul>
 <p>这相当于是把 UTF-16 当作了内码，但 UTF-16 依然是一种变长编码，对常见的中文处理没问题，生僻字就容易出问题，且因为出现概率低，很容易不发现，埋下隐患。</p>
@@ -1320,7 +1455,7 @@ fmt::println(&quot;{}&quot;, s.size());   // 3
 <ul>
 <li>应用场景：适合需要经常处理文字的领域，如文本编辑器、浏览器等。但不适合存储和传输，因为浪费硬盘和网络带宽。字符串一般都长期以 UTF-8 存储，只有在需要频繁索引码位时，才需要转换为 UTF-32。</li>
 <li>方法：始终以 UTF-32 编码存储和处理字符串。</li>
-<li>优点：字符串的按码位反转、切片、求长度等操作都是 $O(1)$ 的复杂度，可以当作普通数组一样，随意处理。例如你可以设想一个文本编辑框，需要支持“退格”操作，如果是 UTF-8 和 UTF-16 就需要繁琐的判断代理对、各种车厢，而 UTF-32 的字符串只需要一次 <code>pop_back</code> 就搞定了。</li>
+<li>优点：字符串的按码位反转、切片、求长度等操作都是 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span> 的复杂度，可以当作普通数组一样，随意处理。例如你可以设想一个文本编辑框，需要支持“退格”操作，如果是 UTF-8 和 UTF-16 就需要繁琐的判断代理对、各种车厢，而 UTF-32 的字符串只需要一次 <code>pop_back</code> 就搞定了。</li>
 <li>缺点：浪费空间大，通常在保存时，仍然需要转换回 UTF-8 后再写入文件，有一定性能开销。</li>
 </ul>
 <p><em>总结：要支持 UTF-32 阵营，请全部使用 <code>char32_t</code> 和 <code>std::u32string</code>。字面量全用 <code>U"你好"</code> 的形式书写，读文件时转为 UTF-32，写文件时转回 UTF-8。</em></p>
@@ -1602,7 +1737,7 @@ int main() {
 }
 </code></pre>
 <blockquote>
-<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意！是目标编码在前！如果你要从 Shift-JIS 转成 GBK，那么需要 <code>between(jis, "GBK", "Shift-JIS")</code>，这真是一个糟糕的设计。不仅 GBK 和 Shift-JIS 可能不小心弄反了，编译器，一点提示都没有，而且 jis 和 "GBK" 都是字符串，很容易大脑搞混。让我来设计的话，我会这样提供 API：<code>decode(jis, Encoding::ShiftJIS).encode(Encoding::GBK)</code>，其中 <code>Encoding</code> 是一个枚举，强大的类型系统，不仅避免犯错的机会，看起来也更轻松。之后的设计模式专题课中，会再详细讲解什么是好的 API 设计。</p>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意！是目标编码在前！如果你要从 Shift-JIS 转成 GBK，那么需要 <code>between(jis, "GBK", "Shift-JIS")</code>，这真是一个糟糕的设计。不仅 GBK 和 Shift-JIS 可能不小心弄反了，编译器，一点提示都没有，而且 jis 和 &ldquo;GBK&rdquo; 都是字符串，很容易大脑搞混。让我来设计的话，我会这样提供 API：<code>decode(jis, Encoding::ShiftJIS).encode(Encoding::GBK)</code>，其中 <code>Encoding</code> 是一个枚举，强大的类型系统，不仅避免犯错的机会，看起来也更轻松。之后的设计模式专题课中，会再详细讲解什么是好的 API 设计。</p>
 </blockquote>
 <h4 id="_14">指定处理错误的方法</h4>
 <p>如果遇到无法编码的字符，该如何处置？</p>
@@ -2480,7 +2615,7 @@ stream &lt;&lt; &quot;你好，世界\n&quot;; // 写入 QString，QTextStream �
 </blockquote>
 <p>为了方便文本处理，最好以定长编码，也就是 UTF-32，存储字符串。</p>
 <p>如果用 UTF-8 或 UTF-16 来存储的话，会遇到变长编码的固有缺陷：</p>
-<p>例如像字符串索引，字符串求长度等操作，要么索引出来的是字节而不是字符了；要么就需要 $O(N)$ 的复杂度，逐一遍历每个字节，才能确定真正的位置；哪怕全是 ASCII 也得这么做，因为万一刚好有一个是中文字符呢？</p>
+<p>例如像字符串索引，字符串求长度等操作，要么索引出来的是字节而不是字符了；要么就需要 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 的复杂度，逐一遍历每个字节，才能确定真正的位置；哪怕全是 ASCII 也得这么做，因为万一刚好有一个是中文字符呢？</p>
 <p>所以，对于经常需要处理字符串的 Python 来说，UTF-8 是无法接受的，似乎只能以 UTF-32 来存储？</p>
 <p>Python 想到了一个小妙招：</p>
 <pre><code class="language-c">enum PyUnicodeType {
@@ -2514,7 +2649,7 @@ struct PyUnicodeString {
 <p>对于一个经常需要处理字符串的虚拟机语言来说，反正本来就不在乎 if-else 分支这点小开销，这确实是最好的方案。</p>
 <p>缺点就是，当你往一个完全是 ASCII 的字符串中，突然插入一个“𰻞”时，会产生巨大的内存重分配。虽然只有一个“𰻞”，但为此，其他所有 ASCII 字符都得为他扩张到 32 位的大小。而 UTF-8 和传统的 UTF-32 就没有这个问题，因此我也不建议 C++ 程序员自己手搓个这样的 union 字符串。</p>
 <h3 id="rust-str-string">Rust <code>&amp;str</code> 和 <code>String</code></h3>
-<p>而 Rust 则采用了字符串全员 UTF-8 的策略，这是因为 Rust 最常用于互联网方面的底层系统软件，互联网最常用的文本编码就是 UTF-8，没有大小端问题，且国际通用。除此之外，互联网基建最常见的平台就是 Linux，使用 UTF-8 存储字符串，调用 Linux 系统 API 无需任何转换。且文本文件基本都可以假定是 UTF-8 编码，写入时无需任何转换，复杂度低至 $O(1)$。作为代价，这导致文本处理上的一些困难，例如字符串的索引，需要区分是按字节索引还是按字符索引，如果确实需要按字符索引的话，复杂度就会是 $O(N)$ 了。</p>
+<p>而 Rust 则采用了字符串全员 UTF-8 的策略，这是因为 Rust 最常用于互联网方面的底层系统软件，互联网最常用的文本编码就是 UTF-8，没有大小端问题，且国际通用。除此之外，互联网基建最常见的平台就是 Linux，使用 UTF-8 存储字符串，调用 Linux 系统 API 无需任何转换。且文本文件基本都可以假定是 UTF-8 编码，写入时无需任何转换，复杂度低至 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span>。作为代价，这导致文本处理上的一些困难，例如字符串的索引，需要区分是按字节索引还是按字符索引，如果确实需要按字符索引的话，复杂度就会是 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 了。</p>
 <p>无论如何，如果你选择了 UTF-8 流派的话，Rust 字符串的“迭代器双轨制”确实值得称道：</p>
 <pre><code class="language-rust">let s = &quot;你好，世界&quot;;
 for c in s.chars() { // 按字符迭代
@@ -2617,6 +2752,7 @@ base64.b64decode(secret).decode()
 
         <footer class="col-md-12">
             <hr>
+                <p>小彭老师倾 ♥ 制作</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script src="../js/bootstrap.bundle.min.js"></script>
@@ -2626,6 +2762,8 @@ base64.b64decode(secret).decode()
         </script>
         <script src="../js/base.js"></script>
         <script src="../js/print-site.js"></script>
+        <script src="../extra.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script src="../search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">

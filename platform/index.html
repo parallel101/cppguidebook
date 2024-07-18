@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        
+        <meta name="author" content="小彭老师">
         
         <link rel="shortcut icon" href="../img/favicon.ico">
         <title>开发环境与平台选择 - ✝️小彭大典✝️</title>
@@ -25,6 +25,7 @@
         <link href="../css/print-site-enum-headings6.css" rel="stylesheet">
         <link href="../css/print-site.css" rel="stylesheet">
         <link href="../css/print-site-mkdocs.css" rel="stylesheet">
+        <link href="../extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <script>hljs.highlightAll();</script> 
     </head>
@@ -63,11 +64,15 @@
 </li>
                                     
 <li>
-    <a href="../functions/" class="dropdown-item">自定义函数 (未完工)</a>
+    <a href="../functions/" class="dropdown-item">认识函数 (未完工)</a>
 </li>
                                     
 <li>
     <a href="../functional/" class="dropdown-item">函数式编程</a>
+</li>
+                                    
+<li>
+    <a href="../design/" class="dropdown-item">设计模式 (未完工)</a>
 </li>
                                     
 <li>
@@ -98,6 +103,9 @@
                                 <a rel="next" href="../vartypes/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/parallel101/cppguidebook/edit/master/docs/platform.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -151,6 +159,37 @@
                     <div class="col-md-9" role="main">
 
 <h1 id="_1">开发环境与平台选择</h1>
+<div class="toc">
+<ul>
+<li><a href="#_1">开发环境与平台选择</a><ul>
+<li><a href="#ide">IDE 不是编译器！</a></li>
+<li><a href="#_2">编译器是？</a></li>
+<li><a href="#_3">编译器御三家</a></li>
+<li><a href="#_4">使用编译器编译源码</a><ul>
+<li><a href="#msvc">MSVC</a></li>
+<li><a href="#gcc">GCC</a></li>
+<li><a href="#clang">Clang</a></li>
+</ul>
+</li>
+<li><a href="#_5">编译器选项</a><ul>
+<li><a href="#c">C++ 标准</a></li>
+<li><a href="#_6">优化等级</a></li>
+<li><a href="#_7">调试信息</a></li>
+<li><a href="#_8">头文件搜索路径</a></li>
+<li><a href="#_9">指定要链接的库</a></li>
+<li><a href="#_10">库文件搜索路径</a></li>
+<li><a href="#_11">定义宏</a></li>
+<li><a href="#_12">警告开关</a></li>
+</ul>
+</li>
+<li><a href="#_13">标准库御三家</a><ul>
+<li><a href="#_14">标准库的调试模式</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
 <p>TODO</p>
 <h2 id="ide">IDE 不是编译器！</h2>
 <p>TODO</p>
@@ -301,6 +340,7 @@
 
         <footer class="col-md-12">
             <hr>
+                <p>小彭老师倾 ♥ 制作</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script src="../js/bootstrap.bundle.min.js"></script>
@@ -310,6 +350,8 @@
         </script>
         <script src="../js/base.js"></script>
         <script src="../js/print-site.js"></script>
+        <script src="../extra.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script src="../search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">

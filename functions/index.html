@@ -5,10 +5,10 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        
+        <meta name="author" content="小彭老师">
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>自定义函数 (未完工) - ✝️小彭大典✝️</title>
+        <title>认识函数 (未完工) - ✝️小彭大典✝️</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/brands.min.css" rel="stylesheet">
@@ -25,6 +25,7 @@
         <link href="../css/print-site-enum-headings6.css" rel="stylesheet">
         <link href="../css/print-site.css" rel="stylesheet">
         <link href="../css/print-site-mkdocs.css" rel="stylesheet">
+        <link href="../extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <script>hljs.highlightAll();</script> 
     </head>
@@ -63,11 +64,15 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active" aria-current="page">自定义函数 (未完工)</a>
+    <a href="./" class="dropdown-item active" aria-current="page">认识函数 (未完工)</a>
 </li>
                                     
 <li>
     <a href="../functional/" class="dropdown-item">函数式编程</a>
+</li>
+                                    
+<li>
+    <a href="../design/" class="dropdown-item">设计模式 (未完工)</a>
 </li>
                                     
 <li>
@@ -99,6 +104,9 @@
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/parallel101/cppguidebook/edit/master/docs/functions.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
                     </ul>
                 </div>
             </div>
@@ -117,7 +125,12 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">自定义函数 (未完工)</a>
+            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">认识函数 (未完工)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_2" class="nav-link">自定义函数</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -126,7 +139,14 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="_1">自定义函数 (未完工)</h1>
+<h1 id="_1">认识函数 (未完工)</h1>
+<div class="toc">
+<ul>
+<li><a href="#_1">认识函数 (未完工)</a></li>
+<li><a href="#_2">自定义函数</a></li>
+</ul>
+</div>
+<h1 id="_2">自定义函数</h1>
 <p>函数可以没有返回值，只需要返回类型写 <code>void</code> 即可，这样的函数调用的目的只是为了他的副作用（如修改全局变量，输出文本到控制台，修改引用参数等）。</p>
 <pre><code class="language-cpp">void compute()
 {
@@ -143,6 +163,7 @@
 
         <footer class="col-md-12">
             <hr>
+                <p>小彭老师倾 ♥ 制作</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script src="../js/bootstrap.bundle.min.js"></script>
@@ -152,6 +173,8 @@
         </script>
         <script src="../js/base.js"></script>
         <script src="../js/print-site.js"></script>
+        <script src="../extra.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script src="../search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">

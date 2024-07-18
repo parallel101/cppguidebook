@@ -1,0 +1,22 @@
+h1 {
+    font-weight: 1000;
+    margin: 1em auto;
+}
+h2 {
+    font-weight: 800;
+    margin: 1em auto;
+}
+h3 {
+    font-weight: 600;
+    margin: 1em auto;
+}
+h4 {
+    font-weight: 500;
+    margin: 1em auto;
+}
+body {
+    font-weight: 350;
+}
+blockquote {
+    color: var(--bs-gray-600);
+}
