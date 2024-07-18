@@ -470,7 +470,7 @@ UTF-8 是基于单字节的码位，火车头的顺序也有严格规定，火�
 
 > {{ icon.story }} 例如 Windows 环境中，所有的文本文件都被默认假定为 ANSI（GBK）编码，如果你要保存文本文件为 UTF-8 编码，就需要加上 BOM 标志。当 MSVC 读取时，看到开头是 `0xEF 0xBB 0xBF`，就明白这是一个 UTF-8 编码的文件。这样，MSVC 就能正确地处理中文字符串常量了。如果 MSVC 没看到 BOM，会默认以为是 ANSI（GBK）编码的，从而中文字符串常量会乱码。开启 `/utf-8` 选项也能让 MSVC 把没有 BOM 的源码文件当作 UTF-8 来解析，适合跨平台宝宝体质。
 
-## C/C++ 中的字符
+## C/C++ 中的字符编码
 
 ### 字符类型
 
@@ -697,7 +697,7 @@ strrev(s.data()); // 会把按字符正常反转，得到 “岁万课开公师�
 
 总之，UTF-16 是糟粕，但他是 Windows 唯一完整支持的 Unicode 接口。不建议软件内部用 UTF-16 存储文字，你可以用更紧凑的 UTF-8 或更方便切片的 UTF-32，只需在调用操作系统 API 前临时转换成 UTF-16 就行。
 
-### 强类型系统只是君子协议
+### 强类型的 `std::u8string` 只是君子协议
 
 必须指出：在 `std::string` 中装 UTF-8 并不是未定义行为，在 `std::u8string` 里同样可以装 GBK。这就好比一个名叫 `Age` 的枚举类型，实际却装着性别一样。
 
@@ -721,7 +721,7 @@ void thisFuncAcceptsUnicode(std::wstring msg);
 void thisFuncAcceptsUTF32(std::u32string msg);
 ```
 
-用类型别名同样可以起到差不多的说明效果（缺点是无法重载）：
+没有 `char8_t` 之前，用类型别名同样可以起到差不多的说明效果（缺点是无法重载）：
 
 ```cpp
 using ANSIString = std::string;
@@ -742,9 +742,195 @@ void thisFuncAcceptsUTF16(UTF16String msg);
 
 > {{ icon.detail }} 其中转换函数签名为 `std::string u8toansi(std::u8string s)`，很可惜，标准库并没有提供这个函数，直到 C++26 前，标准库对字符编码支持一直很差，你不得不自己实现或依赖第三方库。
 
-#### u8 字符串常量转换问题
+总之，`char8_t` 是 C++20 引入的新字符类型，用于强类型的君子协议，和 `char` 并没有实际区别。只是方便了函数类型签名更加一目了然，向调用者暗示这个参数只能接受 UTF-8 编码的字符串。
 
-`char8_t` 是 C++20 引入的新字符类型，用于强类型的君子协议，和 `char` 并没有实际区别。只是方便了函数类型签名更加一目了然，这个参数只能接受 UTF-8 编码的字符串！
+例如这样一个函数：
+
+```cpp
+thisFuncAcceptUTF8(std::u8string msg);
+```
+
+如果调用者喜欢用 `std::string` 装 UTF-8 字符串，可以用：
+
+```cpp
+std::string msg;
+// 调用者确信，这个 msg 虽然是 `std::string`，但里面的内容就是 UTF-8
+// 那么他可以强制转换为 u8string，来证明自己头脑清醒
+thisFuncAcceptUTF8(std::u8string((char8_t *)msg.data(), msg.size()));
+```
+
+### 源码字符集与运行字符集
+
+C++ 官方定义中，存在两种字符集。一种是 **源码字符集 (source charset)**，一种是 **运行字符集 (execution charset)**。
+
++ 这真是糟糕的术语，运行字符集这个名字具有误导性，他和运行时根本没有关系，明明是编译期就确定的。所以小彭老师替他改个名字，实际应该叫“字面量字符集”。
++ 而且他们叫字符集也不合理，应该叫字符编码才对，UTF-8 和 UTF-16 都是 Unicode 字符集的两种字符编码格式，但他们明显是不同的。
++ 然后，再引入一个真正的，运行时的字符编码，也就是软件客户电脑的区域设置。
+
+最终，经过小彭老师改良的术语如下：
+
+* 源码字符编码: `.cpp` 源码文件时用的字符编码。例如程序员用记事本保存 `.cpp` 源码文件时，选择 “UTF-8” 保存就是 UTF-8，选择 “ANSI” 保存就是 GBK。
+* 字面量字符编码: 指的是 `char` 字符串常量在内存中存储的字符编码。默认是我们程序员（开发者）电脑的“区域设置”。
+* 运行时字符编码: 指的是我们的程序在客户的操作系统中运行时，客户的操作系统 API 的 `const char *` 期望接受怎样编码的字符串。默认是客户电脑的“区域设置”。
+
+这三个可以各有不同。
+
+其中 **字面量字符编码** 和 **运行时字符编码** 的不匹配，是 Windows 软件出现乱码的主要原因。
+
+> {{ icon.tip }} 而源码字符编码只事关你如何保存源码，只是让编译器能够成功读取你的源码，对运行时的乱码问题没有影响。编译器读完源码后，要在常量区生成字符串常量时，还是会将其转换为字面量字符编码的。
+
+例如之前说的日本 galgame 在中国电脑上打开爆出乱码，就是因为是日本程序员编译了 galgame（字面量字符编码为 Shift-JIS），在中国客户电脑上打开（运行时字符编码为 GBK）导致的。
+
+日本程序员使用什么源码字符编码根本无关紧要……哪怕他们使用了 UTF-8 保存源码，MSVC 编译时仍然会将其转换为 Shift-JIS 编码的字面量来存储在可执行文件的常量区中。
+
+> {{ icon.tip }} 你可能会问，为什么不把这些花里胡哨玩应统一为 UTF-8，这样就不用转换来转换去了？还不是因为历史遗留，一些劳保程序员不肯把他们 GBK 编码的源码改成 UTF-8 保存，而且，Windows 也完全不提供基于 UTF-8 的跨平台 API（只提供 GBK 和 UTF-16 两种，就是不给 UTF-8 的，非常恶心人）。所以 MSVC 至今仍然默认是 GBK 编码的（更准确的说是 ANSI，跟随你系统的区域设置而变，在中国就 GBK，在美国就 UTF-8，在欧洲就 Latin-1，非常的双标）。微软各种扯皮效率低下，API 弄了一套又一套互相极限拉扯，而我们 Linux 和 GCC 早已默认就是 UTF-8……
+
+> {{ icon.fun }} 我理解你现在大脑干烧的心情。伺候这些历史答辩很复杂，也很无聊，毫无意义！只是为了擦反 Unicode 劳保的屁股。
+
+### 跨平台程序应该怎么做
+
+对于跨平台软件来说，我推荐大家把三个全部设为 UTF-8！（要做到这一点，主要是伺候 MSVC）
+
++ Linux + GCC 用户什么都不需要做，你们所有字符集默认的设定就是 UTF-8。
++ Windows + MSVC 用户请开启 `/utf-8`，这会把“源码字符编码”和“字面量字符编码”都设为 UTF-8，现在字符串常量在内存中都是 UTF-8 了。
++ Windows + MinGW 用户请开启 `-finput-charset=utf-8` 和 `-fexec-charset=utf-8`，这会把“源码字符编码”和“字面量字符编码”都设为 UTF-8。
++ 所有源码文件统一以 UTF-8 编码保存，且尽量在最前面加上 0xFEFF 这个 BOM 标记，防止 MSVC 脑抽当作 GBK 来读取。
++ 在 main 函数前，加两行：
+
+```cpp
+// 编译选项：/std:c++17 /utf-8
+int main() {
+#if _WIN32 // 热知识：64 位 Windows 也会定义 _WIN32 宏，所以 _WIN32 可以用于检测是否是 Windows 系统
+    setlocale(LC_ALL, ".utf-8");  // 设置标准库调用系统 API 所用的编码，用于 fopen，ifstream 等函数
+    SetConsoleOutputCP(CP_UTF8); // 设置控制台输出编码，或者写 system("chcp 65001") 也行，这里 CP_UTF8 = 65001
+#endif
+    // 这里开始写你的主程序吧！
+    // ...
+    std::cout << "你好，世界\n";   // 没问题！
+    std::ifstream fin("你好.txt"); // 没问题！
+    return 0;
+}
+```
+
+这样一套打下来，就可以保证，无论你使用什么编译器，无论你使用什么操作系统，无论你使用什么文本编辑器，无论你使用什么编码，你的程序都可以正确的以 UTF-8 编码来读取源码，正确的以 UTF-8 编码来存储字符串常量，正确的把 UTF-8 编码的字符串路径转为 UTF-16 后调用 W 系 API。
+
+在 CMake 中，只对 MSVC 开启 `/utf-8` 选项可以这样写：
+
+```cmake
+if (MSVC)
+    target_compile_options(你的程序 PRIVATE /utf-8)
+else()
+```
+
+也可以在最前面 `add_compile_options`，实现对所有之后定义的程序全局启用该选项。
+
+在我自己的项目中，我都会这样开启，解决 MSVC 不跨平台的问题：
+
+```cmake
+if (MSVC)
+    add_compile_options(/Zc:preprocessor /utf-8 /DNOMINMAX /D_USE_MATH_DEFINES /EHsc /bigobj)
+else()
+    if (WIN32)
+        add_compile_options(-finput-charset=utf-8 -fexec-charset=utf-8)
+    endif()
+    add_compile_options(-Wall -Wextra -Werror=return-type)
+endif()
+
+add_executable(你的程序 你的文件.cpp)  # 自动继承了上面所有的编译器选项
+```
+
+#### `.utf-8` locale 是如何工作的
+
+Windows 官方提供的真正 API 是 `_wfopen`。`fopen` 只是他们提供的“POSIX 兼容层” 包装，其会把输入的字符串参数通过 “GBK 到 UTF-16” 转换后，转发给 `_wfopen`。
+
+出于跨平台的要求，我们不能使用 `_wfopen` 这种其他平台没有的函数，也不想用那连 2 字节 4 字节都飘忽不定的 `wchar_t`，更不想让 `std::string` 存根本不能跨平台的 GBK。
+
+只要让 `fopen` 的 “GBK 到 UTF-16” 转换函数替换成 “UTF-8 到 UTF-16” 就行了。过去，我们无法替换，最新的 Windows 在一次更新中，支持了 `".utf-8"` locale 这一黑科技，专门满足跨平台程序员的需要。
+
+```cpp
+// 默认 locale
+fopen("你好.txt") == _wfopen(gbk_to_utf16("你好.txt"));
+// 设置了 utf-8 locale 后
+fopen("你好.txt") == _wfopen(utf8_to_utf16("你好.txt"));
+```
+
+若不设置 `setlocale(LC_ALL, ".utf-8")`，则 fopen 和 ifstream 默认会把你提供的 `const char *` 文件路径，当作 GBK 编码的，而我们设置了 `/utf-8` 或 `-fexec-charset=utf-8` 后，字符串字面量编码已经是 UTF-8 了，这样 UTF-8 的字符串常量输入进期望 `const char *` 的 fopen 参数，就会出乱码问题了。
+
+> {{ icon.story }} 不过要注意，`.utf-8` locale 只是影响了标准库！并不改变系统 API。
+
+直接调用系统 API 时，A 系 API 仍然有问题。
+
+```cpp
+    MessageBoxA(NULL, "你好，世界", "提示", MB_OK); // 不行，.utf-8 只是让标准库变成 UTF-8 接口了，A 系 Windows API 仍然是 GBK
+    MessageBoxW(NULL, L"你好，世界", L"提示", MB_OK); // 没问题！用 UTF-16 的 wchar_t 字面量来调用 W 接口总是没问题的
+```
+
+还是需要我们手动转换 UTF-8 到 UTF-16 后调用 W 系 API……但是反正跨平台程序员很少需要直接调用 Windows API，都是通过通用的 C/C++ 标准库，因此 `.utf-8` locale 可能是跨平台程序员想进军 UTF-8 的最佳选择。
+
+#### 方案 B：投奔 `wchar_t` 流派
+
+运行字符集和区域设置，都是针对 `char` 的，只有 `char` 被故意针对了，存在字符编码不统一的问题。
+
+如果全部用 `wchar_t` 的话，虽然在 Linux 上是 UTF-32，在 Windows 上是 UTF-16，不统一了。但至少在同一个 Windows 操作系统上，都是统一的 UTF-16。
+
+所以还有一种方式是全面采用 `wchar_t` 和 `std::wstring`，这样无论你的运行字符集和区域设置如何，都对 `wchar_t` 和基于 `const wchar_t *` 的函数没有任何影响。
+
+C 语言标准没有 `_wfopen`，但是 `std::ifstream` 有基于 `std::wstring` 的构造函数，就 C++ 标准库来看 `std::wstring` 的支持还是很丰富的，基本 `std::string` 有的 `std::wstring` 都有，例如 `std::to_string` 和 `std::to_wstring`，`std::cout` 和 `std::wcout`。本章节最后我们会详细介绍宽字符流的用法。
+
+缺点是，首先每次都需要写 `L"你好"` 这个 L 前缀很麻烦，容易忘记。
+
+而且很多第三方库都在用 `std::string`，并没有提供 `std::wstring` 的 API。
+
+例如 openvdb 的文件写入函数：
+
+```cpp
+void openvdb::io::File::write(std::string const &filename);
+```
+
+这样就很麻烦了，如果你内部全是 UTF-16 的 `std::wstring` 来表示字符串，调用第三方库前就需要转成 GBK 的 `std::string`。可以用 `boost::locale::conv::to_utf<wchar_t>` 这个函数转换，但也很麻烦，而且如果 `std::wstring` 含有 GBK 范围之外的 “𰻞”，GBK 无法表示，又会有编码失败的问题。
+
+还有 `stbi_load` 这些第三方库提供的函数，都是只提供了 `const char *` 的接口，多了去了。
+
+`setlocale(LC_ALL, ".utf-8")` 的好处是可以让这些第三方库全自动都从 GBK 无缝切换到 UTF-8，而不用对他们的源码做任何更改。因为他们内部都是调用的 `fopen` 和 `ifstream`。
+
+#### u8 字符串常量的作用
+
+> 中国区 Windows，MSVC，编译选项：`/std:c++17`
+
+```cpp
+std::string s = "你好";
+hexdump(s); // C4 E3 BA C3 (GBK)
+std::string s = u8"你好";
+hexdump(s); // E4 BD A0 E5 A5 BD (UTF-8)
+```
+
+`u8` 前缀告诉编译器，这个字符串常量必须以 UTF-8 格式编码存储。无论运行字符集 (execution charset) 是不是 UTF-8。
+
+编译器保证会把这个字符串常量转换为 UTF-8 编码的 `char` 字节序列，存储在字符串常量区。
+
+这对于已经设置了 `/utf-8` 选项，运行字符集已经保证是 UTF-8 的我们来说毫无作用。只是对于不用 `/utf-8` 的同学，他们想要临时创建一个 UTF-8 编码的字符串常量，就可以用 u8 前缀。
+
+在 C++17 和之前，`u8"你好"` 产生的是 `const char []` 类型的常量。
+
+在 C++20 中，引入了 `char8_t`。然后，他们规定，`u8"你好"` 现在产生的是 `const char8_t []` 类型的常量了。
+
+这导致了一些兼容性问题，比如以前你写的：
+
+```cpp
+std::string s = u8"你好";
+```
+
+现在无法编译通过了，因为 `const char8_t []` 无法用于构造只支持 `const char []` 的 `std::string`。
+
+好在 C++23 又修复了这个问题，他们允许 `const char8_t []` 隐式转换为 `const char []`，C++17 之前的这种代码又能正常通过编译。所以，如果想快乐地用 u8 字面量，要么 C++17，要么 C++23，跳过 C++20 比较好。
+
+> {{ icon.tip }} 你可以看到，C++ 版本的更新并不是 100% 完全向前兼容的，有时也会有破坏性的变更，但比较少，平时感觉不到。比如 C++11 之前 auto 就有其他的功能，后来决定这个功能没什么用，就把 auto 改成另一个意思了。
+
+除了 u8 以外，还有这些：
+
+|前缀|编码|字符类型|
+|----|----|--------|
+|"你好"|
 
 ## 选择你的阵营！
 
@@ -795,7 +981,7 @@ Linux 文件系统内部，均使用 8 位类型 `char` 存储，将文件名当
 MessageBoxW(NULL, L"你好", L"标题", MB_OK);
 ```
 
-> {{ icon.detail }} 这个 `MessageBoxW` 函数，只接受 `const wchar_t *` 类型的字符串。`L"你好"` 是一个 `wchar_t []` 类型的字符串常量，它的内部编码类型固定是 UTF-16，不会随着“区域设置”而变。
+> {{ icon.detail }} 这个 `MessageBoxW` 函数，只接受 `const wchar_t *` 类型的字符串。`L"你好"` 是一个 `wchar_t []` 类型的字符串常量，它的内部编码类型固定是 UTF-16，不会随着“区域设置”而变。之后的一节中会详细讲解 W 和 A 函数的问题。
 
 虽然也有提供 `A` 后缀的系列函数，他们和 `W` 一样，只不过是接受 `const char *` 类型的字符串。问题在于，这些字符串都必须是“区域设置”里的那个编码格式，也就是 GBK 编码！而且无法修改。
 
@@ -833,17 +1019,17 @@ std::ofstream f(std::filesystem::path(u8"你好.txt"));
 
 > {{ icon.story }} 很多软件在 Windows 上无法支持中文路径名，就是因为他们习惯了 Linux 或 MacOS 的全 UTF-8 环境，对文件路径没有任何转换。而 Windows 底层全是 UTF-16，根本没有提供 UTF-8 的 API，你 UTF-8 只能转换成 UTF-16 才能避免中文乱码。个人认为，死活不肯接受明摆着已经是国际通用标准的 UTF-8，A 函数的编码连当前进程切换的方法都不给一个，这个应该由 Windows 全责承担。
 
-好消息是，最近 MSVC 标准库提供了一种方案，在你的程序开头，加上 `setlocale(LC_ALL, ".utf8")` 就可以让 C 和 C++ 标准库进入 UTF-8 模式：不再调用 `A` 系函数操作文件，而是会把文件名从 UTF-8 转换成 UTF-16 后再调用真正稳定的 `W` 系函数。
+好消息是，最近 MSVC 标准库提供了一种方案，在你的程序开头，加上 `setlocale(LC_ALL, ".utf-8")` 就可以让 C 和 C++ 标准库进入 UTF-8 模式：不再调用 `A` 系函数操作文件，而是会把文件名从 UTF-8 转换成 UTF-16 后再调用真正稳定的 `W` 系函数。
 
 ```cpp
-setlocale(LC_ALL, ".utf8");          // 只需要这一行
+setlocale(LC_ALL, ".utf-8");          // 只需要这一行
 FILE *fp = fopen(u8"你好.txt", "r"); // 可以了
 std::ifstream fin(u8"你好.txt");     // 可以了
 ```
 
-> {{ icon.tip }} `setlocale(LC_ALL, ".utf8");` 只是把 C 标准库的 `const char *` 参数变成了接受 UTF-8，并不会让系统的 `A` 函数也变成 UTF-8 哦，调用本地 API 时仍需 UTF-8 到 UTF-16 的转换。
+> {{ icon.tip }} `setlocale(LC_ALL, ".utf-8");` 只是把 C 标准库的 `const char *` 参数变成了接受 UTF-8，并不会让系统的 `A` 函数也变成 UTF-8 哦，调用本地 API 时仍需 UTF-8 到 UTF-16 的转换。
 
-*总结：要支持 UTF-8 阵营，开启 `/utf-8`，程序开头写 `setlocale(LC_ALL, ".utf8")`。Linux 用户则什么都不用做。*
+*总结：要支持 UTF-8 阵营，开启 `/utf-8`，程序开头写 `setlocale(LC_ALL, ".utf-8")`。Linux 用户则什么都不用做。*
 
 看看各大软件站在 UTF-8 阵营的理由：
 
@@ -1345,7 +1531,7 @@ void u8print(std::string msg) {
 
 ```cpp
 std::wstring ansi_to_wstring(const std::string &s) {
-    // ACP = ANSI Code Page，指定 s 里的是当前区域设置指定的编码（在中国区，ANSI 就是 GBK 了）
+    // ACP = ANSI Code Page，告诉他字符串里的是当前区域设置指定的编码（在中国区，ANSI 就是 GBK 了）
     int len = MultiByteToWideChar(CP_ACP, 0,
                                   s.c_str(), s.size(),
                                   nullptr, 0);
@@ -1396,6 +1582,23 @@ std::string wstring_to_utf8(const std::wstring &ws) {
 
 > {{ icon.detail }} C 语言特色：所有要返回字符串的函数，都需要调用两遍，第一波先求出长度，第二波才写入。这是为了避免与内存分配器耦合，所有的 C 风格 API 都是这样。
 
+#### MessageBoxA 出现乱码问题解决案例
+
+复现条件：
+
++ Windows 系统区域设置为中文 (GBK)。
++ 使用 MSVC 的 `/utf-8` 选项编译。
+
+```cpp
+#include <windows.h>
+
+int main() {
+    MessageBoxA(nullptr, "我爱𰻞𰻞面", "标题", MB_OK);
+    // 会变成乱码
+    return 0;
+}
+```
+
 ### Linux 用户：`iconv`
 
 如果你是 Linux 用户，且没有跨平台需求，不想用 Boost，可以使用 C 语言的 `iconv` 库。
@@ -1434,7 +1637,7 @@ std::string gbk_to_utf8(std::string const &s) {
 }
 ```
 
-### `iconv` 命令行工具
+#### `iconv` 命令行工具
 
 `iconv` 不仅是一个库，也是一个命令行工具（大多 Linux 发行版都自带了）。用法如下：
 
@@ -1467,7 +1670,7 @@ $ iconv -f GBK -t UTF-8 gbk.txt
 
 > {{ icon.fun }} Windows 可能也有类似的工具，比如 `iconv.exe`，但我没找到。
 
-## 本地化
+## 本地化 (locale)
 
 本地化是指根据用户的语言、地区等环境，显示不同的界面。比如说，同样是文件菜单，中文用户看到的是“文件”、英文用户看到的是“File”。
 
@@ -1514,9 +1717,11 @@ TODO
 
 ### 区域设置与 `std::locale`
 
-### 字符串编码转换 `<codecvt>`
+TODO
 
 ### 时间日期格式化
+
+TODO
 
 ### 正则表达式匹配汉字？
 
@@ -1525,7 +1730,7 @@ TODO
 
 广义的汉字包含了几乎所有中日韩使用的汉字字符，而狭义的汉字只是中文里最常用的一部分。
 
-### 根据编号输入 Unicode 字符
+TODO
 
 ## 宽字符流
 
@@ -1561,6 +1766,21 @@ std::string to_os_string(std::string const &u8s) {
 
 总之，如果你实在要学糟糕的宽字符流，那我也奉陪到底。
 
+### 官方眼中的 `std::wstring`
+
+在他们看来，`std::string` 是已经废弃的。他们认为 `std::wstring` 才是真正跨平台，跨语言的字符串。
+
+* `std::wstring`: 字符串
+* `std::string`: 字节数组
+* `std::wifstream`: 文本流
+* `std::ifstream`: 二进制流
+
+看起来只要全部统一 `wchar_t` 就能实现跨平台了？是的，除了 Windows……
+
+标准认为 `wchar_t` 应该包含 0 到 0x10FFFF 的所有的 Unicode 字符码点，需要是 32 位的。然而 Windows 的 `wchar_t` 由于历史原因，是 16 位的，需要用代理对才能表示稀有字符，并不能一个 `wchar_t` 对应一个码点。这导致即使用了 `wchar_t` 还是存在跨平台困难的问题：一个 Linux 程序用 `wchar_t` 可能会利用 UTF-32 定长编码的特性，方便了文本处理，但移植到 Windows 时，发现变成了 UTF-16，需要对代理对做特殊判断……没有满足跨平台的初衷，也做不到定长编码。`char32_t` 做到了跨平台的 UTF-32，也能容纳全部 Unicode 码点，可标准库提供了 `std::to_wstring`，却根本没有 `std::to_u32string`；提供了 `std::wcout`，却没有提供 `std::u32cout`……
+
+这就是为什么宽字符流很糟糕，说是跨平台，跨了个寂寞。
+
 ### `wchar_t` 系列函数
 
 TODO
@@ -1570,6 +1790,14 @@ TODO
 TODO
 
 ### `std::wfstream` 的使用
+
+TODO
+
+### C 语言字符串编码转换
+
+TODO
+
+### C++ 字符串编码转换 `<codecvt>`
 
 TODO
 
@@ -1675,6 +1903,525 @@ TODO
 //```
 -->
 
+## Windows 专题
+
+遇到字符编码难题的，主要是 Windows 程序员。
+
+### Windows API 的本源是 W 系函数
+
+从 Windows NT 版本开始，对于所有涉及字符串的，其操作系统 API 提供了两套函数。
+
+- 一套是 `A` 系列函数，以 `A` 结尾，例如 `CreateFileA`，这些函数接收 ANSI（即 GBK）编码的字符串。
+- 另一套是 `W` 系列函数，以 `W` 结尾，例如 `CreateFileW`，这些函数接收 Unicode（即 UTF-16）编码的字符串。
+
+其中 `CreateFileW` 才是 Windows 系统真正的 API。
+
+而 `CreateFileA` 是为了兼容基于 ANSI 的老程序.
+
+> {{ icon.warn }} 由于 ANSI 在不同地区会变得不同，使用这类函数写出的程序不具有国际通用性。
+
+其内部的实现只是简简单单地给 `const char *` 做个转换，从 GBK 转到 UTF-16，然后直接调用 CreateFileW。
+
+```cpp
+HANDLE CreateFileA(const char *lpFileName) {
+    return CreateFileW(gbk_to_utf16(lpFileName));
+}
+```
+
+### TCHAR 流派
+
+除了又定义了一个宏，这个宏没有任何后缀，例如 `CreateFile`。
+
+其定义如下：
+
+```cpp
+#ifdef UNICODE
+#define MessageBox MessageBoxW
+#else
+#define MessageBox MessageBoxA
+#endif
+```
+
+这样做的初衷是，程序员只可以写出一套针对 `MessageBox` 的代码。
+
+- 当老板想要基于 Unicode 时，他就 `#define UNICODE`，这样 `MessageBox` 就变成了 `MessageBoxW`，程序员的代码就会自动变成 Unicode 的，国际通用。
+- 当劳保老板想要基于 ANSI 时，他就不定义 `UNICODE` 宏，这样所有的 `MessageBox` 又变回了 `MessageBoxA`，程序员的代码又变成 ANSI 的了。
+
+所有有 A/W 区分的的 Windows API 都有这样一个宏，根据 UNICODE 宏是否定义，决定采取哪套 API。
+
+> {{ icon.fun }} 我们伟大的 Linux 系统就没有这个苦恼，早就统一 UTF-8 了。
+
+除此之外，`<windows.h>` 中还定义了 `TEXT` 这个宏函数。
+
+```cpp
+#ifdef UNICODE
+#define TEXT(s) L##s
+#else
+#define TEXT(s) s
+#endif
+```
+
+用法：要求程序员把所有的字符串常量，都用 TEXT 宏包裹。
+
+> {{ icon.story }} Qt 也有类似的宏包裹字符串常量的做法，`tr`，但它并不是为了解决编码问题，而是为了解决多语言翻译问题，稍后会专门介绍一下 Qt 中的字符串。
+
+当 `UNICODE` 宏定义时，`TEXT` 会自动为字符串常量添加 `L` 前缀，使得字符串变成 Unicode 的。如果没有定义，则又变回 ANSI 编码的字符串（跟随“运行字符集”的设定）。
+
+例如下面这一段代码：
+
+```cpp
+#include <windows.h>
+
+int main() {
+    MessageBox(NULL, TEXT("你好，世界"), TEXT("标题"), MB_OK);
+}
+```
+
+当定义 `UNICODE` 时，等价于：
+
+```cpp
+#include <windows.h>
+
+int main() {
+    MessageBoxW(NULL, L"你好，世界", L"标题", MB_OK);
+}
+```
+
+当没有定义 `UNICODE` 时，等价于：
+
+```cpp
+#include <windows.h>
+
+int main() {
+    MessageBoxA(NULL, "你好，世界", "标题", MB_OK);
+}
+```
+
+此外，还定义了 `TCHAR` 这个类型别名，同样是针对是否定义 `UNICODE` 宏而定义了两套版本。
+
+```cpp
+#ifdef UNICODE
+typedef wchar_t TCHAR;
+#else
+typedef char TCHAR;
+#endif
+```
+
+还为 `printf` 和 `wprintf` 定义了 `TCHAR` 版本，不仅如此，还有 `strlen` 和 `wcslen`，`strcpy` 和 `wcscpy`，等等。
+
+```cpp
+#ifdef UNICODE
+#define _tprintf wprintf
+#define _tcscpy wcscpy
+#define _tcslen wcslen
+#else
+#define _tprintf printf
+#define _tcscpy strcpy
+#define _tcslen strlen
+#endif
+```
+
+> {{ icon.fun }} 不觉得这很酷吗？很符合我对强迫症的想象，科技并且带着臭味。
+
+```cpp
+int main() {
+    TCHAR str[] = TEXT("比尔盖子我测试你的码");
+}
+```
+
+> {{ icon.fun }} (\* 哦，我是说，我要测试你的编码格式 \*)
+
+需要切换时，在 MSVC 中，打开或关闭 `/DUNICODE` 编译选项即可。
+
+> {{ icon.fun }} 不要觉得这是什么好主意，这样做的后果是，你写出的代码只能在 Windows 下编译。
+
+写起来累死人，实际哪有那么多一直在 ANSI 和 Unicode 之间来回切换的需求？
+
+我的建议是，统一 `wchar_t`，统一全用 W 函数，憋抠抠索索的半进半退。
+
+### UTF-8 派的跨平台软件何去何从？
+
+之前说过了，Windows 平台到处都默认 GBK 非常麻烦，要切换到 UTF-8 工作流：
+
+1. 编译器开启 `/utf-8` 选项
+2. 设置控制台输出编码，`system("chcp 65001")`
+3. 设置文件系统字符串编码，`setlocale(LC_ALL, ".utf-8")`
+
+```cpp
+// 编译选项：/std:c++17 /utf-8
+int main() {
+#if _WIN32 // 热知识：64 位 Windows 也会定义 _WIN32 宏，所以 _WIN32 可以用于检测是否是 Windows 系统
+    setlocale(LC_ALL, ".utf-8");  // 设置标准库调用系统 API 所用的编码，用于 fopen，ifstream 等函数
+    SetConsoleOutputCP(CP_UTF8); // 设置控制台输出编码，或者写 system("chcp 65001") 也行，这里 CP_UTF8 = 65001
+    SetConsoleCP(CP_UTF8); // 设置控制台输入编码，用于 std::cin
+#elif __unix__
+    // 反正 Unix 系统默认都是 UTF-8，不设置也行，这里设置全局 locale 是为了让 iswspace 接受全角空格、iswpunct 接受全角逗号 L'，' 等
+    //setlocale(LC_ALL, "zh_CN.utf-8"); // 设置使用中文本地化，可使 strerror 输出中文（但用户必须 locale-gen 过中文！）
+    //setlocale(LC_ALL, "C.utf-8");     // 设置使用语言中性 locale，只影响 iswspace、iswpunct 等函数，不会使 strerror 等输出中文
+    setlocale(LC_ALL, ".utf-8");        // 若不带任何前缀（推荐），则默认使用当前系统环境变量中的语言 $LANG，使 strerror 自动适应
+#endif
+    // 这里开始写你的主程序吧！
+    // ...
+    std::cout << "你好，世界\n";   // 没问题！
+    std::ifstream fin("你好.txt"); // 没问题！
+    std::wcout << L"你好，世界\n"; // 你都统一 UTF-8 了，这破 UTF-16 和 UTF-32 之间来回跳的破 wchar_t 就别用了呗！
+    return 0;
+}
+```
+
+### WndProc 接受输入法的中文输入
+
+```cpp
+LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    switch (uMsg) {
+    case WM_CHAR: // 对于 IsWindowUnicode(hwnd) == false 的窗口，会进入这里
+        std::cout << char(wParam); // 此时 wParam 输入的是 GBK 编码的 char 序列
+        // 如果是中文字符，WndProc(WM_CHAR) 会被调用多次，每次一个字节，程序员需要自己判断和拼接 GBK 字符串
+        return 0;
+    case WM_UNICHAR: // 对于 IsWindowUnicode(hwnd) == true 的窗口，会进入这里
+        std::wcout << wchar_t(wParam); // 此时 wParam 输入的是 UTF-16 编码的 wchar_t 序列
+        // 如果是代理对，WndProc(WM_UNICHAR) 会被调用多次，每次一个码位，程序员需要自行把代理对组装成完整的 Unicode 码点
+        return 0;
+    default:
+        return DefWindowProc(hwnd, uMsg, wParam, lParam);
+    }
+}
+```
+
+把 WndProc 的输入存入 `std::u32string` 的案例：
+
+```cpp
+std::u32string result;
+std::string ansi_buf;
+std::wstring utf16_buf;
+
+std::optional<std::u32string> try_ansi_to_utf32(std::string const &s) {
+    try {
+        return boost::locale::conv::to_utf<char32_t>(s, "");
+    } catch (boost::locale::conv::conversion_error const &) {
+        return std::nullopt;
+    }
+}
+
+std::optional<std::u32string> try_utf16_to_utf32(std::wstring const &s) {
+    try {
+        return boost::locale::conv::utf_to_utf<char32_t>(s);
+    } catch (boost::locale::conv::conversion_error const &) {
+        return std::nullopt;
+    }
+}
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    switch (uMsg) {
+    case WM_CHAR:
+        ansi_buf.push_back(char(wParam));
+        if (auto u = try_ansi_to_utf32(ansi_buf)) {
+            result += u.value();
+            ansi_buf.clear();
+        }
+        return 0;
+    case WM_UNICHAR:
+        utf16_buf.push_back(wchar_t(wParam));
+        if (auto u = try_utf16_to_utf32(utf16_buf)) {
+            result += u.value();
+            utf16_buf.clear();
+        }
+        return 0;
+    default:
+        return DefWindowProc(hwnd, uMsg, wParam, lParam);
+    };
+```
+
+## 常见的字符串实现探究
+
+标准库的 `std::string` 我们不再赘述，刚才在“宽字符流”中也介绍了官方的想法，之后的字符串专题课会继续详解。
+
+这里我们主要探究关于字符编码的问题，探索各大常见的编程语言和库，是如何封装字符串类，如何解决 UTF-8 变长编码，UTF-32 压缩率低的问题的，希望在你的项目中提供一点灵感。
+
+通常来说，一个好的库或语言，都要明确区分字符串和字节数组的概念，前者是文本内容，后者是纯二进制内容。
+
+字符串可以通过“编码”得到纯二进制的字节数组，而字节数组可以“解码”得到原始字符串。
+
+> {{ icon.tip }} 早期的 C 语言就是因为把字符和字节混为一谈，都使用了 `char` 类型，才产生了后来这么多乱象。后来通过打补丁打上真正的字符 `wchar_t`，却没什么人用，而且还被 Windows 搞成 16 位，反而不跨平台了。
+
+此处先列一个不同编程语言眼中字符串和字节数组的表，方便你理解。
+
+|语言|字符|字符串|文本流|字节数组|二进制流|编码/解码|
+|--------|----|------|------|--------|--------|---------|
+|C|`char`|`wchar_t *`|`FILE *`+`fgetwc`|`char *`|`FILE *`+`fgetc`|`wcstomb`/`mbstowc`|
+|C++|`wchar_t`|`std::wstring`|`std::wistream`|`std::string`/`std::vector<char>`|`std::istream`|`std::codecvt`|
+|Qt|`QChar`|`QString`|`QTextStream`|`QByteArray`|`QDataStream`|`QTextCodec`|
+|Python3|`str`|`str`|`open('r')`|`bytes`|`open('rb')`|`str.encode()`|
+|Python2|`unicode`|`unicode`|无|`str`|`open('r')`|`unicode.encode()`|
+|Java|`Character`|`String`|`Reader`|`byte[]`|`InputStream`|`Charset.encode`|
+|C#|`char`|`string`|`StreamReader`|`byte[]`|`Stream`|`Encoding`|
+|Rust|`char`|`String`|`BufRead`|`u8`|`Read`|`str::from_utf8`|
+|JS|`char`|`String`|`ReadableStream`|`Uint8Array`|`ReadableStream`|`TextEncoder`|
+|Go|`rune`|`string`|`Reader`|`byte`|`Reader`|`utf8.DecodeRune`|
+|PHP|`string`|`string`|`fopen`|`string`|`fopen`|`mb_convert_encoding`|
+|Swift|`Character`|`String`|`String.UnicodeScalarView`|`UInt8`|`Data`|`String.Encoding`|
+|Kotlin|`Char`|`String`|`Reader`|`ByteArray`|`InputStream`|`Charset.encode`|
+|Obj-C|`unichar`|`NSString`|`NSInputStream`|`uint8_t`|`NSInputStream`|`NSStringEncoding`|
+|Lua|`integer`|`table`|无|`string`|`io.open`|`require'utf8'`|
+
+> {{ icon.tip }} 本课不会讲解这些语言的字符串具体用法，只提供一些概念，让你知道大家都是怎么实现的，触类旁通。
+
+> {{ icon.fun }} Lua 中 UTF-32 的定长编码，要这样实现：`{80, 101, 110, 103}`。而他所谓的 `utf8` 库，就是负责把 Lua 自己的 `string` 假设为 `utf8` 编码，解码出一个个 Unicode 码点，返回一个这样的数组。他甚至不是 Lua 标准的一部分，是个第三方的库，还是需要编译的 C 语言 `.so` 文件。还有 Lua 孝子借此硬说我们 Lua 是天生 UTF-8！然而拿着个 UTF-8 编码的“字节数组” `string` 来打开 `io.open` 文件，就会报错找不到文件（因为中国区 Windows 的 GBK），是不是很好笑呢？
+
+### Qt `QString`
+
+Qt 的字符串类型是 `QString`。它可以容纳任意 Unicode 字符集的字符串。
+
+Qt 的字节数组类型是 `QString`。它可以容纳任意 Unicode 字符集的字符串。
+
+它的数据结构实际上是个 `QChar` 数组，而 `QChar` 是 `unsigned short`，即 16 位无符号整数，也就是 UTF-16 编码的码位。
+
+```cpp
+QString str = "你好，世界";
+// str.size() = 5
+// str[0] = QChar(0x4f60) = u'你'
+// str[1] = QChar(0x597d) = u'好'
+// str[2] = QChar(0xff0c) = u'，'
+// str[3] = QChar(0x4e16) = u'世'
+// str[4] = QChar(0x754c) = u'界'
+```
+
+可见，`QString` 是 UTF-16 编码的，就和 Java 一样，Qt 也是 UTF-16 潮的受害者。
+
+所以，QString 也存在着代理对变长编码的问题。但至少对常见的中文字符来说，一个 16 位的 `QChar` 都容纳的下了。
+
+#### QTextCodec
+
+Qt 定义了一系列的编码转换函数，用于将 `QString` 转换成 `QByteArray`，或者从 `QByteArray` 转换成 `QString`，这些函数名都是以 `to` 或者 `from` 开头的，后面跟着编码名，例如 `fromUtf8`、`toUtf8`、`toLocal8Bits`。
+
+这些函数的内部，都是调用 `QTextCodec` 类实现的转换。
+
+`QTextCodec` 是 Qt 用于处理各种文本编码之间转换的类。它的静态方法 `codecForLocale` 返回了当前系统的编码，`toUnicode` 和 `fromUnicode` 分别是将 `QByteArray` 转换成 `QString`，或者将 `QString` 转换成 `QByteArray`。
+
+```cpp
+QTextCodec *codec = QTextCodec::codecForLocale(); // 返回当前系统编码
+QByteArray bytes = codec->fromUnicode(str);       // 将 QString 转换成 QByteArray，即 char[]
+QString str = codec->toUnicode(bytes);           // 将 QByteArray 转换成 QString
+```
+
+QTextCodec 还提供了一些更加细粒度的转换接口，例如 `fromUnicode` 除了接受 `QString`，还接受 `QChar` 数组，可以指定转换范围。
+
+#### from/toLocal8Bits/Utf8/Latin1/Ascii
+
+为了方便使用，Qt 封装了一些常用字符编码的转换函数，这样你不必每次都创建一个 QTextCodec。都是 `to` 和 `from` 开头，后面跟着编码的名称。
+
+`Local8Bits` 表示运行时检测到当前系统的字符编码，也就是客户电脑上的“区域设置”。
+
+```cpp
+QByteArray bytes = str.toLocal8Bits(); // 将 UTF-16 的 QString 转换成 QByteArray，使用当前系统的字符编码
+QString::fromLocal8Bits(bytes); // 再从当前系统的字符编码转换回 UTF-16 的 QString
+// 等价于：
+QTextCodec *codec = QTextCodec::codecForLocale();
+QByteArray bytes = codec->fromUnicode(str);
+QString str = codec->toUnicode(bytes);
+```
+
+`Utf8` 表示使用 UTF-8 编码。
+
+```cpp
+QByteArray bytes = str.toUtf8(); // 将 UTF-16 的 QString 转换成 QByteArray，使用 UTF-8 编码
+QString::fromUtf8(bytes); // 再从 UTF-8 编码转换回 UTF-16 的 QString
+// 等价于：
+QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+QByteArray bytes = codec->fromUnicode(str);
+QString str = codec->toUnicode(bytes);
+```
+
+`Latin1` 表示 ISO-8859-1 编码，又称为西欧编码，它是一个单字节编码，和 ASCII 编码相似，但是多了 128-255 的字符，包括了法语、德语、西班牙语、葡萄牙语等字符。
+
+```cpp
+QByteArray bytes = str.toLatin1(); // 将 UTF-16 的 QString 转换成 QByteArray，使用 Latin1 编码
+QString::fromLatin1(bytes); // 再从 Latin1 编码转换回 UTF-16 的 QString
+// 等价于：
+QTextCodec *codec = QTextCodec::codecForName("ISO-8859-1");
+QByteArray bytes = codec->fromUnicode(str);
+QString str = codec->toUnicode(bytes);
+```
+
+`Ascii` 表示 ASCII 编码，和 `Latin1` 的情况类似，只不过他无法处理 128-255 这一段的字符。
+
+```cpp
+QByteArray bytes = str.toAscii(); // 将 UTF-16 的 QString 转换成 QByteArray，使用 ASCII 编码
+QString::fromAscii(bytes); // 再从 ASCII 编码转换回 UTF-16 的 QString
+// 等价于：
+QTextCodec *codec = QTextCodec::codecForName("ASCII");
+QByteArray bytes = codec->fromUnicode(str);
+QString str = codec->toUnicode(bytes);
+```
+
+#### 字符串常量
+
+```cpp
+QString str = QStringLiterial("你好，世界");
+```
+
+`QStringLiterial` 可以保证，转换时采用的是所谓“运行字符集”（实际应该叫字面量字符编码），也就是我们开发者电脑上的“区域设置”，是编译期确定的。而如果写 `QString::fromLocal8Bits("")` 就变成 “ANSI”，客户的“区域设置”了。这两个字符编码，比如在之前跨国 galgame 的案例中，就是不同的。
+
+#### QTextStream
+
+`QTextStream` 是 Qt 提供的文本流类（带有缓冲），它可以将文本写入到文件、套接字、标准输出等设备。
+
+文本流和二进制流不同，他需要指定一个编码格式，通过 `QTextStream` 构造函数的第二个参数指定。
+
+- 当你往 `QTextStream`写入 `QString` 时，会调用这个编码格式自动转换为 `QByteArray`，然后才写入。
+- 读取时也同理，会把读到的 `QByteArray` 通过编码格式解码，得到 `QString` 字符串。
+
+Qt 值得称道的一点是：他把文件和文件流区分开来，文件 `QFile` 只需要负责打开文件就可以了；而文本流 `QTextStream` 才真正负责数据的缓冲，解码等操作。体现了面向对象的职责单一原则。
+
+```cpp
+QFile file("hello.txt");
+file.open(QIODevice::ReadWrite);
+QTextStream stream(&file);
+stream.setCodec("UTF-8"); // 设置文件的编码格式
+stream << "你好，世界\n"; // 写入 QString，QTextStream 会自动将其用 UTF-8 编码为 QByteArray 后写入 QFile
+```
+
+如果你确实需要直接写入二进制的 `QByteArray`，Qt 也提供了一个 `QDataStream` 类，方便二进制文件的读写。
+
+如此把二进制和文本严格区分，而不是像古代 C 语言那样字节与字符混淆不清，全用糟糕的 `char` 来表示，充分体现了强类型的安全。
+
+### Python 3 `str`
+
+> {{ icon.tip }} 如何解决 UTF-32 占用空间大的痛点？Python 的字符串实现绝对值得一看！
+
+为了方便文本处理，最好以定长编码，也就是 UTF-32，存储字符串。
+
+如果用 UTF-8 或 UTF-16 来存储的话，会遇到变长编码的固有缺陷：
+
+例如像字符串索引，字符串求长度等操作，要么索引出来的是字节而不是字符了；要么就需要 $O(N)$ 的复杂度，逐一遍历每个字节，才能确定真正的位置；哪怕全是 ASCII 也得这么做，因为万一刚好有一个是中文字符呢？
+
+所以，对于经常需要处理字符串的 Python 来说，UTF-8 是无法接受的，似乎只能以 UTF-32 来存储？
+
+Python 想到了一个小妙招：
+
+```c
+enum PyUnicodeType {
+    PyUnicodeType_Latin1,
+    PyUnicodeType_UCS2,
+    PyUnicodeType_UCS4,
+};
+
+struct PyUnicodeString {
+    PyUnicodeType type;
+    union {
+        uint8_t *latin1;
+        uint16_t *ucs2;
+        uint32_t *ucs4;
+    };
+};
+```
+
+这里的 `union` 是一个 C 语言特性，他允许你把多个成员共享同一片内存空间。通常来说需要配合一个 `enum` 表示类型，才能安全使用。现代 C++ 的 `std::variant` 更安全的取代了他，而且不需要外挂一个 `enum`。CPython 解释器因为是 C 语言实现，只能用 union 模拟 `std::variant` 的效果。
+
+当一个字符串中只包含 0 到 0xFF 的字符（Latin-1 范围）时，实际上没必要全用超大的 `uint32_t` 来存储。完全可以只取出低 8 位，存入一个更紧凑的 `uint8_t` 数组，就像 Latin-1 编码一样。
+
+但是当按索引读取元素时，会判断当前 union 里装的是哪种类型，如果是 Latin-1 的，那就会用结构体里的 `uint8_t *` 指针来索引。
+
+这样，对于全 ASCII 的字符串，相比老老实实存 UTF-32 内存占用直接减少了 75%！唯一的代价是按索引读字符元素时需要做个 if-else 判断。同时又不失去定长编码的优势。
+
+当一个字符串中只包含 0 到 0xFFFF 的字符（早期 Unicode 范围）时，则是取出低 16 位，存入一个 `uint16_t` 的数组，这种存储方案也称为 UCS-2。
+
+> {{ icon.warn }} 注意 UCS-2 并不等同于 UTF-16，UTF-16 是能够表示完整的 Unicode 的变长编码（有代理对）；而 UCS-2 是没有代理对的定长编码，缺点是只能表示 0xFFFF 的范围。
+
+对于大部分中文字符串，内存占用就减少了 50%，也不亏。
+
+如果字符串中出现“𰻞”这样的，超过 0xFFFF 的字符，才会采用 `uint32_t` 老老实实存储真正的 UTF-32，又称 UCS-4。
+
+> {{ icon.tip }} 这两种叫法是等价的，反正 Unicode 从来没有超过 0xFFFFFFFF 的，现在他们都是定长编码。
+
+对于一个经常需要处理字符串的虚拟机语言来说，反正本来就不在乎 if-else 分支这点小开销，这确实是最好的方案。
+
+缺点就是，当你往一个完全是 ASCII 的字符串中，突然插入一个“𰻞”时，会产生巨大的内存重分配。虽然只有一个“𰻞”，但为此，其他所有 ASCII 字符都得为他扩张到 32 位的大小。而 UTF-8 和传统的 UTF-32 就没有这个问题，因此我也不建议 C++ 程序员自己手搓个这样的 union 字符串。
+
+### Rust `&str` 和 `String`
+
+而 Rust 则采用了字符串全员 UTF-8 的策略，这是因为 Rust 最常用于互联网方面的底层系统软件，互联网最常用的文本编码就是 UTF-8，没有大小端问题，且国际通用。除此之外，互联网基建最常见的平台就是 Linux，使用 UTF-8 存储字符串，调用 Linux 系统 API 无需任何转换。且文本文件基本都可以假定是 UTF-8 编码，写入时无需任何转换，复杂度低至 $O(1)$。作为代价，这导致文本处理上的一些困难，例如字符串的索引，需要区分是按字节索引还是按字符索引，如果确实需要按字符索引的话，复杂度就会是 $O(N)$ 了。
+
+无论如何，如果你选择了 UTF-8 流派的话，Rust 字符串的“迭代器双轨制”确实值得称道：
+
+```rust
+let s = "你好，世界";
+for c in s.chars() { // 按字符迭代
+    println!("{}", c);
+}
+for b in s.bytes() { // 按字节迭代
+    println!("{:02X}", b); // 打印：E4 BD A0 E5 A5 BD EF BC 8C E4 B8 96 E7 95 8C
+}
+```
+
+### Java `String`
+
+Java 也是 UTF-16 的双字节编码。
+
+亮点：他的 `String` 类型是不可变的，也就是说，你无法就地修改一个 `String` 对象，每次产生你调用 `+=` 的都是一个新 String，而不会覆盖。
+
+也就是说：Java 的 `String` 虽然是“堆”中的对象，却无法以引用传递。
+
+这避免了以下这种情况：
+
+```cpp
+void registerStudent(String name) {
+    name += ".txt";
+    File file(name);
+    file.write(...);
+}
+
+void myTransaction() {
+    String name = "小彭";
+    lib.registerStudent(name);
+    office.registerStudent(name); // 这里 name 是否被修改？
+}
+```
+
+如果 Java 的 `String` 和普通对象一样，被调用者的修改可以对外部可见，那岂不是我每次调用一个以 `String` 为参数的函数时，都需要操心：这个函数会不会把我的字符串修改掉？
+
+所以，Java 给他的对象模型开了个后门：规定所有对象都是按引用传递，除了 `String`！就只有 `String` 是不可变对象，被调用者内部的修改对外不可见。
+
+> {{ icon.fun }} C++ 和 Rust 只需要加个常引用就行，而 Java 受害者要考虑的就多了。
+
+总之，这就是没有 `const` 的垃圾语言的丑态，需要靠各种语法规则上开洞才能弥补设计时考虑不周的缺陷，就为了伺候这帮引用都弄不明白的垃圾小白。
+
+> {{ icon.fun }} 我是说垃圾回收 (garbage-collect) 语言，简称垃圾语言。没有说 Java 垃圾的意思，你说对吧？垃圾语言。
+
+### COW 字符串
+
+担忧：那岂不是每次我 `+=` 实际上都白白深拷贝了一份新的 `String`？别担心，因为具体实现上，Java 的 `String` 在底层采用了和 Qt 的 `QString` 一样的 COW 机制：
+
+当一个 `QString` 被拷贝构造时，并不会对其中的 `QByteArray` 进行深拷贝，而是共享同一片内存。只有当其中一个 `QString` 被 `+=` 等带有副作用操作修改时，才会深拷贝一份新的，让你修改。这样大大降低了内存占用和性能开销。
+
+COW 字符串的缺点是：当你写多线程并发时，本来多线程只读访问同一个字符串是安全的，但如果字符串有 COW，连只读访问都会不安全了。之后我们的多线程专题课会详细分析这是为什么。
+
+> {{ icon.detail }} 其实早期的 C++98 中，`std::string` 也采用了 COW 机制，但后来因为不符合线程安全要求，被追求多线程的 C++11 责令改正，才有了后来 `std::__cxx11::basic_string` 的 ABI 不兼容问题。毕竟线程不安全实在太伤了，基本意味着多线程就没法共享 `std::string`。事实上，Qt 所有的对象 `QObject`，包括 `QString` 在多线程中传递时，就需要调用 `moveTo(QThread)` 转移所有权，才能安全地传递给另一个线程，就是因为 Qt 大量使用了 COW 机制。
+
+## Unicode 知识进阶
+
+### 字符的显示宽度计算
+
+### Grapheme
+
+TODO
+
+### 正规化
+
+TODO
+
+### 零宽空格
+
+TODO
+
+### 特殊控制字符
+
+TODO
+
+### 根据编号输入 Unicode 字符
+
+TODO
+
 ## 黑暗小技巧
 
 ### Latin-1 的转换
@@ -1700,9 +2447,11 @@ I love Péng
 
 ### Latin-1 的妙用
 
-由于 Latin-1 覆盖了所有的 256 个 `char` 的可能值，任何字节流都可以成功解码，不像 GBK 和 UTF-8 有自纠错性，有些输入会被塌缩成错误“�”。
+由于 Latin-1 覆盖了所有的 256 个 `char` 的可能值，任何字节流都可以成功解码。
 
-因此有时，人们可以欺骗一个编码器，我采用的字符编码是 Latin-1！这样编码器就不会对输入的字节流做任何转换，从而可以把二进制数据当文本来传，解码时也指定 Latin-1，原原本本的取出数据。
+GBK 和 UTF-8 有自纠错性，有些输入会被塌缩成错误“�”。Latin-1 就没有这个问题，他照单全收！
+
+因此有时，人们可以欺骗一个编码器说“我采用的字符编码是 Latin-1”！这样编码器就不会对输入的字节流做任何转换，从而可以把二进制数据当文本来传，解码时也指定 Latin-1，原原本本的取出数据。
 
 ### Base64 防乱码
 

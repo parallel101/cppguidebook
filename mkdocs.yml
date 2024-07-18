@@ -12,8 +12,8 @@ nav:
   - Bilibili: https://space.bilibili.com/263032155
 plugins:
   - search
-  - print-site
   - macros
+  - print-site
 theme:
   name: mkdocs
   palette:
