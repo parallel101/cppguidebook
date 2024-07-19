@@ -33,6 +33,9 @@ extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 extra_css: 
   - extra.css
+  - https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.0.19/index.min.css
+  - https://cdn.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono.min.css
+  - https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-sc@5.0.13/chinese-simplified-500.min.css
 markdown_extensions:
   - extra
   - tables

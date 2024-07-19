@@ -18,6 +18,9 @@ manual_sponsors = [
     User('Starry', '', '100.00'),
     User('阿哲', '', '100.00'),
     User('Eureka', '', '20.00'),
+    User('孙斌', '', '200.00'),
+    User('nullptr', '', '23.30'),
+    User('**发', '', '25.00'),
 ]
 
 def afd_query(which, **params):

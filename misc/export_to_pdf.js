@@ -43,12 +43,12 @@ footerHtml = ` `;
     await page.pdf({
         path: pdfPath, // path to save pdf file
         format: 'A4', // page format
-        displayHeaderFooter: true, // display header and footer (in this example, required!)
+        displayHeaderFooter: false, // display header and footer (in this example, required!)
         printBackground: true, // print background
         landscape: false, // use horizontal page layout
         headerTemplate: headerHtml, // indicate html template for header
         footerTemplate: footerHtml,
-        scale: 1, //Scale amount must be between 0.1 and 2
+        scale: 1.5, //Scale amount must be between 0.1 and 2
         margin: { // increase margins (in this example, required!)
             top: 80,
             bottom: 80,
