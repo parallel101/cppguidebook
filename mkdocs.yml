@@ -13,6 +13,10 @@ nav:
     - functional.md
     - design.md
     - unicode.md
+  - 关于:
+    - about.md
+    - donate.md
+    - recommend.md
   - GitHub: https://github.com/parallel101/cppguidebook
   - Bilibili: https://space.bilibili.com/263032155
 plugins:

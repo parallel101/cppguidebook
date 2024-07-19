@@ -30,7 +30,7 @@
 
 > {{ icon.tip }} 本书还在持续更新中……要追番的话，可以在 [GitHub]({{ config.repo_url }}) 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。
 
-更新时间：{{ config.repo_url }}
+更新时间：{{ build_date }}
 
 ## 格式约定
 
