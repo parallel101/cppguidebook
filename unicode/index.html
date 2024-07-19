@@ -154,7 +154,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_20" class="nav-link">宽字符流</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_18" class="nav-link">宽字符流</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -162,7 +162,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_21" class="nav-link">常见的字符串实现探究</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_19" class="nav-link">常见的字符串实现探究</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -170,7 +170,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_27" class="nav-link">黑暗小技巧</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_25" class="nav-link">黑暗小技巧</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -253,18 +253,36 @@
 </li>
 <li><a href="#locale">本地化 (locale)</a><ul>
 <li><a href="#_16">区分字符类型</a></li>
-<li><a href="#_17">区分宽字符类型</a></li>
-<li><a href="#stdlocale">区域设置与 std::locale</a></li>
-<li><a href="#_18">时间日期格式化</a></li>
-<li><a href="#_19">正则表达式匹配汉字？</a></li>
+<li><a href="#_17">宽字符类型</a></li>
+<li><a href="#wchar_t">wchar_t 应用案例</a></li>
+<li><a href="#locale_1">区域设置与 locale</a></li>
+<li><a href="#locale_2">locale 的命名规范</a></li>
+<li><a href="#locale_3">特殊 locale：空字符串</a></li>
+<li><a href="#localec">特殊 locale："C"</a></li>
+<li><a href="#lc_">LC_*** 系列环境变量</a><ul>
+<li><a href="#lc_messages">LC_MESSAGES：报错信息</a></li>
+<li><a href="#lc_ctype">LC_CTYPE：字符编码</a></li>
+<li><a href="#lc_time">LC_TIME：时间日期格式化</a></li>
+<li><a href="#stdlocale">std::locale 对象</a></li>
 </ul>
 </li>
-<li><a href="#_20">宽字符流</a><ul>
+</ul>
+</li>
+<li><a href="#_18">宽字符流</a><ul>
 <li><a href="#stdwstring">官方眼中的 std::wstring</a></li>
-<li><a href="#wchar_t">wchar_t 系列函数</a></li>
-<li><a href="#stdwcout">std::wcout 的使用</a></li>
-<li><a href="#stdwfstream">std::wfstream 的使用</a></li>
-<li><a href="#c">C 语言字符串编码转换</a></li>
+<li><a href="#wchar_t_1">wchar_t 系列函数</a></li>
+<li><a href="#stdwcout">std::wcout 的使用坑点科普</a><ul>
+<li><a href="#stdwcout-locale">std::wcout 必须设了 locale 才能用</a></li>
+<li><a href="#stdwcout-stdstring">std::wcout 不应用于打印 std::string</a></li>
+<li><a href="#stdwcout-stdcout">超级坑点：std::wcout 和 std::cout 只能用一个！</a></li>
+<li><a href="#stdwfstream">std::wfstream 读取任意编码的文本文件</a></li>
+</ul>
+</li>
+<li><a href="#locale_4">locale 用于字符编码转换</a><ul>
+<li><a href="#c">C 语言标准库的字符编码转换</a></li>
+<li><a href="#c_1">C++ 标准库的字符编码转换</a></li>
+</ul>
+</li>
 <li><a href="#c-codecvt">C++ 字符串编码转换 &lt;codecvt&gt;</a></li>
 </ul>
 </li>
@@ -275,11 +293,11 @@
 <li><a href="#wndproc">WndProc 接受输入法的中文输入</a></li>
 </ul>
 </li>
-<li><a href="#_21">常见的字符串实现探究</a><ul>
+<li><a href="#_19">常见的字符串实现探究</a><ul>
 <li><a href="#qt-qstring">Qt QString</a><ul>
 <li><a href="#qtextcodec">QTextCodec</a></li>
 <li><a href="#fromtolocal8bitsutf8latin1ascii">from/toLocal8Bits/Utf8/Latin1/Ascii</a></li>
-<li><a href="#_22">字符串常量</a></li>
+<li><a href="#_20">字符串常量</a></li>
 <li><a href="#qtextstream">QTextStream</a></li>
 </ul>
 </li>
@@ -290,19 +308,21 @@
 </ul>
 </li>
 <li><a href="#unicode_1">Unicode 知识进阶</a><ul>
-<li><a href="#_23">字符的显示宽度计算</a></li>
+<li><a href="#_21">字符的显示宽度计算</a></li>
 <li><a href="#grapheme">Grapheme</a></li>
-<li><a href="#_24">正规化</a></li>
-<li><a href="#_25">零宽空格</a></li>
-<li><a href="#_26">特殊控制字符</a></li>
+<li><a href="#_22">正规化</a></li>
+<li><a href="#_23">零宽空格</a></li>
+<li><a href="#_24">特殊控制字符</a></li>
 <li><a href="#unicode_2">根据编号输入 Unicode 字符</a></li>
 <li><a href="#unifont">UniFont 字体</a></li>
 </ul>
 </li>
-<li><a href="#_27">黑暗小技巧</a><ul>
+<li><a href="#_25">黑暗小技巧</a><ul>
+<li><a href="#_26">正则表达式匹配汉字？</a></li>
 <li><a href="#latin-1_1">Latin-1 的转换</a></li>
 <li><a href="#latin-1_2">Latin-1 的妙用</a></li>
 <li><a href="#base64">Base64 防乱码</a></li>
+<li><a href="#_27">字符编码猜测</a></li>
 </ul>
 </li>
 </ul>
@@ -741,6 +761,7 @@
 <p>因此，在文本头部加上 BOM 有助于软件推测该文件是什么编码的（如果那软件支持解析 BOM 的话）。</p>
 <blockquote>
 <p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如 Windows 环境中，所有的文本文件都被默认假定为 ANSI（GBK）编码，如果你要保存文本文件为 UTF-8 编码，就需要加上 BOM 标志。当 MSVC 读取时，看到开头是 <code>0xEF 0xBB 0xBF</code>，就明白这是一个 UTF-8 编码的文件。这样，MSVC 就能正确地处理中文字符串常量了。如果 MSVC 没看到 BOM，会默认以为是 ANSI（GBK）编码的，从而中文字符串常量会乱码。开启 <code>/utf-8</code> 选项也能让 MSVC 把没有 BOM 的源码文件当作 UTF-8 来解析，适合跨平台宝宝体质。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 其实 Windows 用户可以在控制面板的“时钟和区域”里，找到“区域”选项。在“区域”选项卡里，点击“更改系统区域设置”，然后弹出的对话框里，勾选“Beta 版：使用 Unicode UTF-8 提供全球语言支持”，重启后，就可以在程序中默认使用 UTF-8，而不是糟糕的 GBK 了。这会把 ANSI 变成 UTF-8，让记事本等软件把无 BOM 的文件都当作 UTF-8，让各种软件都认为字符串是 UTF-8 等等。这可以解决部分美国软件无法处理中文、乱码等问题，因为美国程序员常常无意识地用 UTF-8 字符串未经处理直接调用 <code>A</code> 函数。不过，这会导致你运行其他假定了 GBK 的中国特供程序乱码，也会导致你的毕业答辩导师发来的 ZIP 变成乱码。而且我们作为客户端的开发者，我们总不能强求所有客户用我们的软件前，改变他们的控制面板来适应我们的程序吧？所以还是需要绕开 GBK，直接调用 UTF-16 的 <code>W</code> 类 API。</p>
 </blockquote>
 <h2 id="cc">C/C++ 中的字符编码</h2>
 <h3 id="_8">字符类型</h3>
@@ -1584,7 +1605,7 @@ int main() {
 <h4 id="utf-ansi">UTF 和 ANSI 互转</h4>
 <p>我们程序的用户不一定是中国用户（GBK），也可能是俄罗斯用户（CP1251）、日本用户（Shift-JIS）、西班牙用户（CP1252）等。</p>
 <p>如果要采用用户的区域设置，即“ANSI”，可以把字符串留空（<code>""</code>）。</p>
-<p>空字符串就表示当前系统区域设置了，在中国大区等价于 <code>"GBK"</code>，俄罗斯大区等价于 <code>"CP1251"</code> 等。</p>
+<p>空字符串就表示采用当前系统区域设置了，在中国大区等价于 <code>"GBK"</code>，俄罗斯大区等价于 <code>"CP1251"</code> 等。</p>
 <pre><code class="language-cpp">#include &lt;boost/locale.hpp&gt;
 #include &lt;iostream&gt;
 
@@ -1592,6 +1613,8 @@ using boost::locale::conv::from_utf;
 using boost::locale::conv::to_utf;
 
 int main() {
+    setlocale(LC_ALL, &quot;&quot;); // 如果你想给 Boost 用空字符串，首先需要设置一下这一行
+
     std::string u8s = u8&quot;你好&quot;;
     // UTF-8 转 ANSI
     std::string s = from_utf(u8s, &quot;&quot;);
@@ -1600,6 +1623,9 @@ int main() {
     return 0;
 }
 </code></pre>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>setlocale(LC_ALL, "");</code> 中的空字符串表示</p>
+</blockquote>
 <h4 id="_13">大总结</h4>
 <table>
 <thead>
@@ -1840,14 +1866,17 @@ void try_save(std::u32string content, std::wstring path) {
 using boost::locale::conv::from_utf;
 using boost::locale::conv::utf_to_utf;
 
+static int dummy_init = (setlocale(LC_ALL, &quot;&quot;), 0); // 需要设置过 setlocale(LC_ALL, &quot;&quot;) 后，才能使用 Boost 的空字符串写法
+
 void u8print(std::string msg) {
     std::cout &lt;&lt; from_utf(msg, &quot;&quot;);
     // 或者：
-    // std::wcout &lt;&lt; utf_to_utf&lt;wchar_t&gt;(msg, &quot;&quot;);
+    // std::wcout &lt;&lt; utf_to_utf&lt;wchar_t&gt;(msg);
 }
 </code></pre>
 <blockquote>
-<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 更多细节详见官方文档：https://www.boost.org/doc/libs/1_81_0/libs/locale/doc/html/group__codepage.html</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 此处 <code>static int dummy_init =</code> 是一种静态初始化钩子的小技巧，之后设计模式课程的单例模式中会详细讲解。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 更多细节用法见官方文档：https://www.boost.org/doc/libs/1_81_0/libs/locale/doc/html/group__codepage.html</p>
 </blockquote>
 <h4 id="_15">更多功能？！</h4>
 <p>编码转换只是 <code>boost::locale::conv</code> 这个子模块下的一个小功能而已！<code>boost::locale</code> 还提供了更多功能，如按照地域语言规范格式化数字、货币、日期、时间等，下一小节中我们继续介绍。完全是 <code>std::locale</code> 的上位替代。</p>
@@ -2051,24 +2080,282 @@ $ iconv -f GBK -t UTF-8 gbk.txt
 </tbody>
 </table>
 <blockquote>
-<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 更详细的表格可以看：</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 更详细的表格可以看：https://en.cppreference.com/w/cpp/string/byte/isspace</p>
 </blockquote>
-<p>https://en.cppreference.com/w/cpp/string/byte/isspace</p>
 <p><img alt="" src="../img/cctype.png" /></p>
-<h3 id="_17">区分宽字符类型</h3>
-<p>TODO</p>
-<h3 id="stdlocale">区域设置与 <code>std::locale</code></h3>
-<p>TODO</p>
-<h3 id="_18">时间日期格式化</h3>
-<p>TODO</p>
-<h3 id="_19">正则表达式匹配汉字？</h3>
+<h3 id="_17">宽字符类型</h3>
+<p>之前提到的字符都是 <code>char</code> 类型的 ASCII 字符，范围最多在 0 到 0x7F 内。</p>
+<blockquote>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 对只接受 <code>char</code> 的 <code>isspace</code>，<code>ispunct</code> 系列函数，参数如果超过 0 到 0x7F 范围，结果是未定义行为。</p>
+</blockquote>
+<p>要支持更大范围的字符，我们需要用 <code>wchar_t</code> 类型，或者 <code>char16_t</code> 和 <code>char32_t</code>。</p>
+<p>与字符串常量一样，单个字符也可以用 <code>L</code>、<code>u</code>、<code>U</code> 来分别产生 <code>wchar_t</code>、<code>char16_t</code>、<code>char32_t</code> 类型的字符。</p>
+<pre><code class="language-cpp">char c = '我';       // 编译出错！char 类型无法容纳我 (0x6211)
+wchar_t wc = L'我';  // 编译通过，等价于 wc = 0x6211
+</code></pre>
+<p>和 <code>const char *</code> 一样，也有 <code>const wchar_t</code> 表示这种由 Unicode 编码的字符串：</p>
+<pre><code class="language-cpp">const wchar_t *ws = L&quot;你好，世界&quot;;
+assert(ws[2] == L'，');
+</code></pre>
+<p><code>wchar_t</code> 的提出起初是为了避免 <code>char</code> 的区域设置各自为政，编码混乱的问题，因为 <code>wchar_t</code> 始终是 UTF-16 (Windows) 或 UTF-32 (Linux)。</p>
+<h3 id="wchar_t"><code>wchar_t</code> 应用案例</h3>
+<pre><code class="language-cpp">std::string str = &quot;hello,world,universe&quot;;
+std::stringstream ss(str);
+std::string line;
+while (std::getline(ss, line, ',')) {
+    std::cout &lt;&lt; line &lt;&lt; '\n';
+}
+</code></pre>
+<p>这是一个简单的字符串分割函数，它会把 <code>hello</code> 按照逗号 “,” (0x2C) 分割，然后输出。</p>
+<p>但是，它无法处理 Unicode 字符 “，” (0xFF0C)，这是一个全角的逗号。因为 “，” 会被 UTF-8 编码成三个 <code>char</code>：0xEF 0xBC 0x8C。</p>
+<pre><code class="language-cpp">std::string str = &quot;你好，世界，宇宙&quot;;
+std::stringstream ss(str);
+std::string line;
+while (std::getline(ss, line, '，')) { // 编译错误：等价于 '\xEF\xBC\x8C'，一个 char 常量里不得包含三个 char！
+    std::cout &lt;&lt; line &lt;&lt; '\n';
+}
+</code></pre>
+<p>而 <code>wchar_t</code> 就没有这个问题，因为 “，” 在 0xFFFF 范围内，即使考虑到 Windows 是 UTF-16 编码，“，” 只会产生一个 <code>wchar_t</code>。这对以单个 <code>wchar_t</code> 为单位的 <code>std::getline</code> 来说没有问题。</p>
+<pre><code class="language-cpp">std::wstring str = L&quot;你好，世界，宇宙&quot;;
+std::wstringstream ss(str);
+std::wstring line;
+while (std::getline(ss, line, L'，')) { // 编译通过，'，' 是单个 UTF-16 码位
+    std::wcout &lt;&lt; line &lt;&lt; L'\n';
+}
+</code></pre>
+<h3 id="locale_1">区域设置与 <code>locale</code></h3>
+<p>要让 <code>iswspace</code> 和 <code>iswpunct</code> 识别中文逗号和中文空格，我们需要先使用下面这一行代码：</p>
+<pre><code class="language-cpp">setlocale(LC_ALL, &quot;C.utf-8&quot;);
+</code></pre>
+<p>这会启用 Unicode 字符集，使 <code>isw*****</code> 系列函数，能够基于 Unicode 字符集去判断字符类型，而不是默认的 ASCII 字符集。</p>
+<pre><code class="language-cpp">assert(ispunct(',') == true);   // 0x2C 对应的半角逗号是 ispunct 认同的标点符号
+assert(iswpunct(L',') == true); // 0x2C 对应的半角逗号是 iswpunct 认同的标点符号
+assert(iswpunct(L'，') == true);// 0xFF0C 对应的全角逗号也是 iswpunct 认同的标点符号
+</code></pre>
+<p>每个 C 语言程序一开始，默认的全局 locale 是 <code>"C"</code>。需要设置为 <code>"C.UTF-8"</code> 或者 <code>"zh_CN.UTF-8"</code>，总之是支持 Unicode 字符的编码格式，才能让 <code>isw*****</code> 系列函数识别超过 ASCII 范围的字符的类型。</p>
+<pre><code class="language-cpp">fmt::println(&quot;默认: {}&quot;, iswpunct(L'，'));
+
+setlocale(LC_ALL, &quot;C&quot;);
+fmt::println(&quot;C: {}&quot;, iswpunct(L'，'));
+
+setlocale(LC_ALL, &quot;C.UTF-8&quot;);
+fmt::println(&quot;C.UTF-8: {}&quot;, iswpunct(L'，'));
+
+setlocale(LC_ALL, &quot;zh_CN.UTF-8&quot;);
+fmt::println(&quot;zh_CN.UTF-8: {}&quot;, iswpunct(L'，'));
+</code></pre>
+<p>输出：</p>
+<pre><code>默认: 0
+C: 0
+C.UTF-8: 1
+zh_CN.UTF-8: 1
+</code></pre>
+<p>总之，<code>isw*****</code> 系列函数接受的参数 <code>wchar_t</code> 表示范围更广，在 Linux 上能表示所有 Unicode 字符，在 Windows 上能表示所有 0xFFFF 以内的常用 Unicode 字符。</p>
+<p><code>is*****</code> 系列函数遇到超过 0 到 0x7F 范围的 <code>char</code> 还会出现未定义行为，非常烦人。既然 <code>char</code> 可以隐式转换为 <code>wchar_t</code>，所以我的建议是设置了 <code>".utf-8"</code> locale 后，全部用 <code>isw*****</code> 取代 <code>is*****</code>。</p>
+<h3 id="locale_2">locale 的命名规范</h3>
+<p><code>"zh_CN.UTF-8"</code> 这样的字符串，就是 locale 的名字，locale 名字由两部分组成，分别是语言和编码格式。</p>
+<pre><code>语言.字符编码
+</code></pre>
+<p><code>"zh_CN.UTF-8"</code> 就表示，一个语言为简体中文，编码格式为 UTF-8 的区域设置。</p>
+<p>要注意的是，用户必须已经安装过该区域设置，程序才能使用 setlocale 设置，否则会出现找不到 locale 的错误。</p>
+<p>Linux 用户可以通过 修改 <code>/etc/locale.gen</code> 取消注释要启用的语言和编码格式，保存后，运行 <code>locale-gen</code> 即可安装所有没注释的语言。</p>
+<pre><code class="language-bash">sudo vim /etc/locale.gen
+sudo locale-gen
+</code></pre>
+<p>可以用 <code>locale -a</code> 命令查看已经安装了哪些 locale：</p>
+<pre><code class="language-bash">$ locale -a
+C
+C.utf8
+POSIX
+en_US
+en_US.iso88591
+en_US.utf8
+zh_CN.gb18030
+zh_CN.gbk
+zh_CN.utf8
+</code></pre>
+<p>注意到，locale 中 <code>'.'</code> 号右边的编码格式，是无视大小写的，而且可以省略掉 <code>'-'</code>。所以 <code>ISO-8859-1</code> 可以被简写成 <code>iso88591</code>，<code>UTF-8</code> 被简写成 <code>utf8</code>。</p>
+<p>左边的语言也是用 <code>'_'</code> 一分为二，固定是 <code>'语言_地区'</code> 的写法。比如加拿大既有英语用户又有法语用户，英语的代号是 <code>'en'</code>，法语的代号是 <code>'fr'</code>，加拿大的代号是 <code>'CA'</code>，所以就存在着 <code>'en_CA'</code> 和 <code>'fr_CA'</code> 两种 locale。</p>
+<p>也有一种语言被多个地区使用的情况，例如中文的代号是 <code>'zh'</code>，他被中国大陆使用时就叫 <code>'zh_CN'</code>，被香港使用时叫 <code>'zh_HK'</code>，被台湾省使用时就叫 <code>'zh_TW'</code>，被新加坡使用时就叫 <code>'zh_SG'</code>。</p>
+<p>Windows 也有类似的安装语言和地区的选项，但比尔盖子对 locale 命名的语法稍有不同：</p>
+<pre><code class="language-cpp">setlocale(LC_ALL, &quot;Chinese_China.936&quot;); // 表示简体中文，代码页 936（也就是 GBK）
+</code></pre>
+<p>他的语言名不是按照国际规范的 <code>zh_CN</code> 这样的简写，而是 <code>Chinese_China</code>。</p>
+<p>而且后面的 <code>936</code> 是 Windows 私自定义的一套所谓的“代码页”，这里 936 其实就是 <code>&lt;windows.h&gt;</code> 中宏 <code>CP_GBK</code> 的值，表示 GBK 代码页。同样地还有 65001 表示 UTF-8 代码页。</p>
+<pre><code class="language-cpp">setlocale(LC_ALL, &quot;Chinese_China.65001&quot;); // 表示简体中文，但是启用 UTF-8 支持
+setlocale(LC_ALL, &quot;Chinese_China.utf-8&quot;); // 等价的写法
+</code></pre>
+<blockquote>
+<p><code>.65001</code> 可以用别名 <code>.UTF-8</code> 取代。但只有 <code>.UTF-8</code> 支持这个别名，例如 <code>.GBK</code> 他就不能识别。</p>
+</blockquote>
+<p>设置了 <code>"Chinese_China.utf-8"</code> 效果和你在控制面板全局开了那个 “Beta 版：使用 Unicode UTF-8 全球语言实验支持” 一样，只不过这是仅限当前进程的 C/C++ 标准库。</p>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 而且由于 <code>argv</code> 在你来得及 <code>setlocale</code> 之前就已经初始化，所以 <code>main</code> 的 <code>argv</code> 参数依然是 GBK 编码的，除非你使用的是 <code>_wmain</code>，那将能收到 UTF-16 的 <code>argv</code>，然后你自己转换回 UTF-8。</p>
+</blockquote>
+<h3 id="locale_3">特殊 locale：空字符串</h3>
+<p>空字符串表示接受环境中的设置，对于 Linux 而言是 <code>$LC_ALL</code> 环境变量，对于 Windows 而言是控制面板中的“区域设置”。</p>
+<pre><code class="language-cpp">setlocale(LC_ALL, &quot;&quot;); // 是的，空的字符串
+</code></pre>
+<blockquote>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意是空字符串 <code>""</code> 才有这样的效果，而不是 NULL！<code>setlocale(LC_ALL, NULL)</code> 没有任何效果，他的效果是返回当前的 locale（没想到吧？setlocale 有返回值）。这就是 C 语言的魅力，同一个函数拆成好几分用，又能 set 又能 get，屁股十分灵活。</p>
+</blockquote>
+<p>也可以指定一个部分为空的 locale 名字，比如 <code>".utf-8"</code>，他表示保留当前环境中的“语言”部分，但“编码”部分替换为“.utf-8”。</p>
+<pre><code class="language-cpp">setlocale(LC_ALL, &quot;.utf-8&quot;);
+// 在中国区 Windows 上，等价于
+setlocale(LC_ALL, &quot;Chinese_China.utf-8&quot;);
+// 在美国区 Windows 上，等价于
+setlocale(LC_ALL, &quot;English_United States.utf-8&quot;);
+</code></pre>
+<h3 id="localec">特殊 locale：<code>"C"</code></h3>
+<p>不喜欢本地化这一套设定？</p>
+<p>你可以设置 <code>LC_ALL</code> 为 <code>"C"</code> 或 <code>"POSIX"</code>，这是标准库预先定义好的两个 locale，他们的特点是永远不会被本地化，而是始终以英文显示。这在调试程序时非常有用，因为这样你可以确定输出的格式是固定的，不会被用户的环境和本地化的信息而改变。</p>
+<p>事实上，只要你没有 <code>setlocale</code> 过，C 语言默认就是 <code>"C"</code> locale，不会受到用户环境变量的任何影响（Windows 的文件系统 API 除外，确实会受到 GBK 影响）。</p>
+<pre><code class="language-cpp">setlocale(LC_ALL, &quot;C&quot;);
+setlocale(LC_ALL, &quot;POSIX&quot;); // 等价的写法
+</code></pre>
+<p>不过，<code>"C"</code> 意味着他假定字符串是完全的 ASCII，超过 ASCII 的部分是实现定义行为：对于 Linux 而言是 UTF-8（更准确的说是不做任何处理，因为 Linux 的 ext4 文件系统没有字符编码的区分），对于 Windows 而言是 GBK（中国区）。</p>
+<p>因此，也有 <code>"C.utf-8"</code> 这样的 locale，他表示采用 UTF-8 编码，可以让 <code>isw*****</code> 系列函数支持 Unicode 范围的字符，也可以让 <code>std::wcout</code> 能打印 ASCII 以外的字符了。只是没有指定语言，通常来说这时 <code>strerror</code> 一类函数会默认返回英语的消息。</p>
+<blockquote>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 但似乎只在 Linux 上有效，Windows 只支持 <code>"C"</code> 而不支持 <code>"C.utf-8"</code>。</p>
+</blockquote>
+<h3 id="lc_"><code>LC_***</code> 系列环境变量</h3>
+<p>locale 分为许多个“方面 (facet)”，不同的方面可以有不同的取值（大多数情况下是一样的），可以客制化标准库不同部分涉及语言和编码相关的行为。这些方面在 C 语言中都有一个 <code>LC_</code> 开头的枚举来表示。</p>
 <ul>
-<li>狭义的汉字：0x4E00 到 0x9FA5（“一”到“龥”）</li>
-<li>广义的汉字：0x2E80 到 0x9FFF（“⺀”到“鿿”）</li>
+<li><code>LC_CTYPE</code> 只影响 ctype.h 中的函数，也就是 <code>isw*****</code> 系列函数，还有 <code>toupper</code>，<code>tolower</code> 等，他还影响字符编码格式，是最重要的一个方面。</li>
+<li><code>LC_TIME</code> 影响时间和日期的格式化，例如 <code>asctime</code> 等。</li>
+<li><code>LC_NUMERIC</code> 影响数字的格式化。</li>
+<li><code>LC_MONETARY</code> 影响货币的格式化。</li>
+<li><code>LC_MESSAGES</code> 影响 <code>strerror</code> 等信息类函数返回的字符串。例如在中文 locale 下 <code>strerror(EPERM)</code> 会返回 <code>"权限不够"</code>，而在英文 locale 下返回 <code>"Permission denied."</code>。</li>
 </ul>
-<p>广义的汉字包含了几乎所有中日韩使用的汉字字符，而狭义的汉字只是中文里最常用的一部分。</p>
-<p>TODO</p>
-<h2 id="_20">宽字符流</h2>
+<p><code>LC_ALL</code> 是全局 locale，它会影响以上所有标准库函数的行为。设置 <code>LC_ALL</code> 为一个值，等同于为以上所有都赋予统一的值。</p>
+<p>你可以在环境变量中设置 <code>$LC_ALL</code>、`$LC_CTYPE</p>
+<p>所有 GNU/Linux 自带的命令行程序都在 <code>main</code> 函数开头，配备了 <code>setlocale(LC_ALL, "");</code>。这会读取用户配置在环境变量中的区域偏好设置，并设为全局的 locale。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 可以理解为 locale 是一个隐藏在标准库中的全局变量，所有的 <code>iswpunct</code>、<code>asctime</code>、<code>strerror</code> 都会读取该全局变量里的区域设置，来决定自己的运行时行为。</p>
+</blockquote>
+<h4 id="lc_messages"><code>LC_MESSAGES</code>：报错信息</h4>
+<p>例如 <code>touch</code> 这些命令，都是基于 <code>strerror</code> 打印报错消息的，而 <code>strerror</code> 又基于区域设置的 <code>LC_MESSAGES</code> 方面。</p>
+<p>这些命令行程序的作者无需懂得所有语言，他们只需要调用 <code>strerror</code> 和各种 messages 查找函数，获得相应的字符串常量后，输出即可自动适应不同语言用户的需求。</p>
+<p>只需要语言的用户，在他的环境变量中，设置 <code>LC_ALL=zh_CN.UTF-8</code> 就可以让命令行程序们始终输出中文消息了。</p>
+<pre><code class="language-bash">$ export LC_MESSAGES=en_US.UTF-8
+$ touch /root/a
+touch: cannot touch '/root/a': Permission denied
+$ export LC_MESSAGES=zh_CN.UTF-8
+$ touch /root/a
+touch: 无法 touch '/root/a': 权限不够
+</code></pre>
+<p>例如 GCC 的报错信息，就是基于你的 <code>$LC_MESSAGES</code> 环境变量来决定输出何种语言的信息的。</p>
+<p>你也可以只设置一个 <code>export LC_ALL=zh_CN.UTF-8</code>，这样就无需设置其他所有的方面 (facet)，如无单独设置，其他方面会自动变得和 <code>$LC_ALL</code> 一样。</p>
+<h4 id="lc_ctype"><code>LC_CTYPE</code>：字符编码</h4>
+<p>这是最重要的一个，他决定了字符串的编码格式。</p>
+<p>GNU/Linux 的命令行程序内部都以内码（<code>const wchar_t *</code> 或 <code>std::wstring</code>）来处理字符串。</p>
+<p>当输出时，程序内部的内码字符串（<code>wchar_t *</code>）会以 <code>LC_CTYPE</code> 指定的编码格式编码成二进制流（<code>const char *</code> 或 <code>std::string</code>）后输出到控制台。</p>
+<p>因此，<code>LC_CTYPE</code> 中的“语言”部分是无关紧要的，重要的是后半段，例如 <code>"zh_CN.UTF-8"</code>，那有影响的就只是后面这段 <code>".UTF-8"</code>。</p>
+<p>务必使用和你终端配置相同的编码格式，否则会出现乱码。例如当我欺骗 <code>touch</code>，让他误以为我的终端输出需要是 GBK 编码：</p>
+<pre><code class="language-bash">$ export LC_MESSAGES=zh_CN.UTF-8
+$ export LC_CTYPE=zh_CN.GBK   # 欺骗 touch！好坏
+$ touch /root/a
+touch: �޷� touch '/root/a': Ȩ�޲���
+</code></pre>
+<p>他就输出了诡异的乱码。这不是 touch 的问题，touch 只是按照你环境变量 <code>$LC_CTYPE</code> 说的 GBK 编码，输出了 GBK 的二进制流。而终端的设置却是 UTF-8，用 UTF-8 解码 GBK 的二进制流当然出错了，不过由于 GBK 和 UTF-8 都兼容 ASCII，所以这里面英文部分才侥幸正常显示。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 解决方法是要么你 <code>$LC_CTYPE</code> 设回 UTF-8，要么把终端改成 GBK，总之 <code>$LC_CTYPE</code> 必须和终端字符编码配置一样。也可以调用 <code>iconv</code> 把 <code>touch</code> 的 GBK 输出转换回 UTF-8，供 UTF-8 的终端读取：</p>
+</blockquote>
+<pre><code class="language-bash">$ touch /root/a 2&gt;&amp;1 | iconv -f GBK -t UTF-8
+touch: 无法 touch '/root/a': 权限不够
+</code></pre>
+<h4 id="lc_time"><code>LC_TIME</code>：时间日期格式化</h4>
+<p><code>LC_TIME</code> 影响的是和时间有关函数的输出格式，因为不同的地区有不同的时间显示习惯，比如英文是 <code>Jan  1 00:00</code>，中文是 <code>1月  1日 00时00分</code>，而日本人则是 <code>1月1日 0時0分</code>。</p>
+<pre><code class="language-bash">$ export LC_TIME=en_US.UTF-8
+$ date
+Fri Jul 19 04:01:49 PM CST 2024
+$ export LC_TIME=zh_CN.UTF-8
+$ date
+2024年 07月 19日 星期五 16:01:07 CST
+</code></pre>
+<p>在 C 语言中，你可以用这样格式化时间和日期：</p>
+<pre><code class="language-c">#include &lt;time.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;locale.h&gt;
+
+int main() {
+    setlocale(LC_ALL, &quot;zh_CN.UTF-8&quot;);
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&amp;t);
+    char buf[32];
+    strftime(buf, sizeof(buf), &quot;%Y年 %m月 %d日 %A %H时 %M分&quot;, tm);
+    puts(buf);
+}
+</code></pre>
+<p>C++ 提供了基于流的，更“时尚”的写法：</p>
+<pre><code class="language-cpp">#include &lt;ctime&gt;
+#include &lt;iostream&gt;
+#include &lt;locale&gt;
+
+int main() {
+    setlocale(LC_ALL, &quot;zh_CN.UTF-8&quot;);
+    time_t t = time(NULL);
+    tm *tm = localtime(&amp;t);
+    std::cout &lt;&lt; std::put_time(tm, &quot;%Y年 %m月 %d日 %A %H时 %M分&quot;) &lt;&lt; '\n';
+}
+</code></pre>
+<p>输出：</p>
+<pre><code>2024年 07月 19日 星期五 16时 01分
+</code></pre>
+<h4 id="stdlocale"><code>std::locale</code> 对象</h4>
+<p>C 语言的 <code>setlocale</code> 设置的是全局 locale，全局 locale 只有一个，一设就影响所有线程，非常沙雕。因此提倡“不要状态机要对象”的 C++，封装了 <code>std::locale</code> 对象。</p>
+<p><code>std::locale</code> 的构造函数接受一个字符串，和 <code>setlocale</code> 的情况一样，有空字符串表示环境 locale，<code>"C"</code> 表示 POSIX locale，还有自定义字符串比如 <code>"zh_CN.UTF-8"</code> 的 locale。</p>
+<p>然后，C++ 的流类型，如 <code>std::cout</code>，都有一个 <code>.imbue</code> 可以设置一个局部 locale（只对 <code>std::cout</code> 生效的），接受的就是这个 <code>std::locale</code> 对象。</p>
+<pre><code class="language-cpp">#include &lt;ctime&gt;
+#include &lt;iostream&gt;
+#include &lt;locale&gt;
+
+int main() {
+    time_t t = time(NULL);
+    tm *tm = localtime(&amp;t);
+
+    auto locale_zh = std::locale(&quot;zh_CN.UTF-8&quot;);
+    std::cout.imbue(locale_zh);
+    std::cout &lt;&lt; std::put_time(tm, &quot;%Y年 %m月 %d日 %A %H时 %M分&quot;) &lt;&lt; '\n';
+
+    auto locale_en = std::locale(&quot;en_US.UTF-8&quot;);
+    std::cout.imbue(locale_en);
+    std::cout &lt;&lt; std::put_time(tm, &quot;%Y年 %m月 %d日 %A %H时 %M分&quot;) &lt;&lt; '\n';
+}
+</code></pre>
+<p>输出：</p>
+<pre><code>2024年 07月 19日 星期五 16时 01分
+2024年 07月 19日 Fri 16时 01分
+</code></pre>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 可以看到这里只有星期的字符串受到了影响。如果要使整个日期格式都跟随 <code>LC_TIME</code> 的设定，可用 <code>"%c"</code>：</p>
+</blockquote>
+<pre><code class="language-cpp">#include &lt;ctime&gt;
+#include &lt;iostream&gt;
+#include &lt;iomanip&gt;
+#include &lt;locale&gt;
+
+int main() {
+    time_t t = time(NULL);
+    tm *tm = localtime(&amp;t);
+
+    auto locale_zh = std::locale(&quot;zh_CN.UTF-8&quot;);
+    std::cout.imbue(locale_zh);
+    std::cout &lt;&lt; std::put_time(tm, &quot;%c&quot;) &lt;&lt; '\n';
+
+    auto locale_en = std::locale(&quot;en_US.UTF-8&quot;);
+    std::cout.imbue(locale_en);
+    std::cout &lt;&lt; std::put_time(tm, &quot;%c&quot;) &lt;&lt; '\n';
+}
+</code></pre>
+<p>输出：</p>
+<pre><code>2024年07月19日 星期五 16时33分39秒
+Fri 19 Jul 2024 04:33:39 PM CST
+</code></pre>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 关于 <code>"%c"</code>、<code>"%Y"</code> 这些格式化字符串的更多详细用法，参见 <a href="http://man7.org/linux/man-pages/man3/strftime.3.html"><code>man strftime</code></a>。我们作为字符编码的课程不再赘述，之后的时间与日期专题课也会稍微讲一下。</p>
+</blockquote>
+<h2 id="_18">宽字符流</h2>
 <p>之所以把宽字符流放到最后，是因为，首先 <code>iostream</code> 本来就是一个失败的设计。</p>
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 小彭老师在本书开头就多次强调过他是 <code>format</code> 孝子。</p>
@@ -2095,7 +2382,7 @@ $ iconv -f GBK -t UTF-8 gbk.txt
 </code></pre>
 <p>总之，如果你实在要学糟糕的宽字符流，那我也奉陪到底。</p>
 <h3 id="stdwstring">官方眼中的 <code>std::wstring</code></h3>
-<p>在他们看来，<code>std::string</code> 是已经废弃的。他们认为 <code>std::wstring</code> 才是真正跨平台，跨语言的字符串。</p>
+<p>在他们看来，<code>std::string</code> 是已经废弃的。他们认为 <code>std::wstring</code> 才是真正跨平台的字符串。</p>
 <ul>
 <li><code>std::wstring</code>: 字符串</li>
 <li><code>std::string</code>: 字节数组</li>
@@ -2105,14 +2392,112 @@ $ iconv -f GBK -t UTF-8 gbk.txt
 <p>看起来只要全部统一 <code>wchar_t</code> 就能实现跨平台了？是的，除了 Windows……</p>
 <p>标准认为 <code>wchar_t</code> 应该包含 0 到 0x10FFFF 的所有的 Unicode 字符码点，需要是 32 位的。然而 Windows 的 <code>wchar_t</code> 由于历史原因，是 16 位的，需要用代理对才能表示稀有字符，并不能一个 <code>wchar_t</code> 对应一个码点。这导致即使用了 <code>wchar_t</code> 还是存在跨平台困难的问题：一个 Linux 程序用 <code>wchar_t</code> 可能会利用 UTF-32 定长编码的特性，方便了文本处理，但移植到 Windows 时，发现变成了 UTF-16，需要对代理对做特殊判断……没有满足跨平台的初衷，也做不到定长编码。<code>char32_t</code> 做到了跨平台的 UTF-32，也能容纳全部 Unicode 码点，可标准库提供了 <code>std::to_wstring</code>，却根本没有 <code>std::to_u32string</code>；提供了 <code>std::wcout</code>，却没有提供 <code>std::u32cout</code>……</p>
 <p>这就是为什么宽字符流很糟糕，说是跨平台，跨了个寂寞。</p>
-<h3 id="wchar_t"><code>wchar_t</code> 系列函数</h3>
+<h3 id="wchar_t_1"><code>wchar_t</code> 系列函数</h3>
 <p>TODO</p>
-<h3 id="stdwcout"><code>std::wcout</code> 的使用</h3>
+<h3 id="stdwcout"><code>std::wcout</code> 的使用坑点科普</h3>
+<h4 id="stdwcout-locale"><code>std::wcout</code> 必须设了 locale 才能用</h4>
+<p>要使用 <code>std::wcout</code> 之前，需要用 <code>.imbue</code> 设置带有正确 <code>LC_CTYPE</code> 方面的 locale，或者设置了 C 语言的全局的 <code>setlocale</code>，否则中文字符会被丢掉。</p>
+<pre><code class="language-cpp">int main() {
+    std::wcout &lt;&lt; L&quot;Hello, 你好!\n&quot;; // 错误！你还没设置 locale 呢！
+    return 0;
+}
+</code></pre>
+<p>输出：</p>
+<pre><code>Hello, ??!
+</code></pre>
+<p>这是因为默认的全局 locale 是 <code>"C"</code>，他只支持 ASCII 的。而当 <code>std::wcout</code> 遇到超出当前 locale 字符集表示范围的字符时，会丢弃，替换为 <code>?</code> 字符，表示出错了。</p>
+<p>因此，<code>std::wcout</code> 的正确用法必须是在你打印第一条输出前，就 <code>setlocale(LC_ALL, "")</code> ，默认的 <code>"C"</code> 肯定是不行的。</p>
+<pre><code class="language-cpp">int main() {
+    setlocale(LC_ALL, &quot;&quot;);
+    std::wcout &lt;&lt; L&quot;Hello, 你好!\n&quot;; // 可以成功输出中文了
+    return 0;
+}
+</code></pre>
+<p>输出：</p>
+<pre><code>Hello, 你好!
+</code></pre>
+<p>或者用 <code>std::wcout</code> 的 <code>.imbue</code> 也可以，但是这样对于 <code>std::wcerr</code> 和 <code>std::wclog</code> 你也需要做同样的动作，感觉不如索性全局设置了 <code>setlocale</code> 方便。</p>
+<pre><code class="language-cpp">int main() {
+    std::wcout.imbue(std::locale(&quot;&quot;));
+    std::wcout &lt;&lt; L&quot;Hello, 你好!\n&quot;; // 可以成功输出中文了
+    return 0;
+}
+</code></pre>
+<p>如果你是 UTF-8 流派，选择 <code>setlocale(LC_ALL, ".utf-8")</code> 也是可以的，只要是支持中文字符的 locale 就可以让 <code>std::wcout</code> 能正常输出中文，只要你终端的设置也是相同的编码格式绝对不会乱码。</p>
+<p>例如当你 <code>setlocale(LC_ALL, ".utf-8")</code> 后就需要 <code>system("chcp 65001")</code>；当你 <code>setlocale(LC_ALL, "Chinese_China.936")</code> 后就需要 <code>system("chcp 936")</code>。总之，始终保证终端（<code>cmd</code> 或 <code>xfce4-terminal</code>）设置的编码和你程序里 <code>setlocale(LC_CTYPE, ...)</code> 设置的编码一致。</p>
+<h4 id="stdwcout-stdstring"><code>std::wcout</code> 不应用于打印 <code>std::string</code></h4>
+<p>有的人会用 <code>std::wcout</code> 似乎也能打印 <code>char</code> 的字符串？</p>
+<pre><code class="language-cpp">int main() {
+    setlocale(LC_ALL, &quot;&quot;);
+    std::wcout &lt;&lt; &quot;Hello, 你好!\n&quot;; // 不一定能稳定打印出中文！
+    std::wcout &lt;&lt; L&quot;Hello, 你好!\n&quot;; // OK，能稳定打印出中文
+    return 0;
+}
+</code></pre>
+<p>这是一种错误的用法，理想情况下应该要报错，但是糟糕的标准库却没有，设计的失误。</p>
+<p>设计的初衷是，可以在打印带中文的字符串后，方便你临时打印一些 <code>char</code> 的字符串和字符，例如 <code>'\n'</code>（因为总是有的人想偷懒不写 <code>L""</code> 前缀）</p>
+<p><code>std::wcout</code> 支持打印 <code>char</code> 和 <code>const char *</code>，他会自动帮你把这部分 <code>char</code> 转成 <code>wchar_t</code> 再打印。</p>
+<pre><code class="language-cpp">int main() {
+    setlocale(LC_ALL, &quot;&quot;);
+    std::wcout &lt;&lt; L&quot;Hello, 你好!&quot; &lt;&lt; L'\n'; // 正常写法
+    std::wcout &lt;&lt; L&quot;Hello, 你好!&quot; &lt;&lt; '\n';  // 懒惰狗狗写法
+    return 0;
+}
+</code></pre>
+<p>但是，这部分 <code>char</code> 应当只包含 ASCII 字符，不应该有中文字符，否则可能又要出现之前提到的 “galgame” 乱码问题了。</p>
+<h4 id="stdwcout-stdcout">超级坑点：<code>std::wcout</code> 和 <code>std::cout</code> 只能用一个！</h4>
+<p>非常坑的一个点：一旦你决定用 <code>std::wcout</code> 后，就不能再用 <code>std::cout</code> 了！</p>
+<p>小彭老师实测用过 <code>std::wcout</code> 后，你的 <code>std::cout</code> 会废掉，打印不出任何东西。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 上了贼船就上到底吧！如果确实需要临时打印一些 <code>std::string</code>，并且确保里面是 ASCII 的话，可以利用上面一节说的“懒惰狗狗写法”糊弄下，如果是 GBK 或 UTF-8 的 <code>std::string</code> 需要打印到 <code>std::wcout</code>，就召唤一下 <code>boost::locale</code> 吧。</p>
+</blockquote>
+<p><code>std::wprintf</code> 也有这个问题，当你第一次使用 <code>FILE *</code> 的 <code>wchar_t</code> 系列函数后，这个文件流会被“宽化” (<code>fwiden</code>)，用我们的话说叫<strong>上贼船</strong>，上了就下不来，再也无法当作“窄”流用了。</p>
+<p>反之亦然，一旦你用过一次 <code>std::cout</code> 后，<code>std::wcout</code> 就会废掉，打印任何东西都打印不出来。取决于你第一次调用输出流用的是宽字符还是窄字符，之后就只能一直用那个宽或窄了，不让跳船。</p>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 上贼船不行，上警船也不行，上定一个就没法变，真恶心呀！</p>
+</blockquote>
+<pre><code class="language-cpp">// 先 wcout
+int main() {
+    setlocale(LC_ALL, &quot;&quot;);
+    std::wcout &lt;&lt; L&quot;我是 wcout!&quot; &lt;&lt; L'\n';
+    std::cout &lt;&lt; &quot;我是 cout!&quot; &lt;&lt; '\n';
+    return 0;
+}
+</code></pre>
+<p>输出：</p>
+<pre><code>我是 wcout!
+</code></pre>
+<pre><code class="language-cpp">// 先 cout
+int main() {
+    setlocale(LC_ALL, &quot;&quot;);
+    std::cout &lt;&lt; &quot;我是 cout!&quot; &lt;&lt; '\n';
+    std::wcout &lt;&lt; L&quot;我是 wcout!&quot; &lt;&lt; L'\n';
+    return 0;
+}
+</code></pre>
+<p>输出：</p>
+<pre><code>我是 cout!
+/ wcout!
+</code></pre>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 这里 <code>/ wcout!</code> 好像是出 BUG 了……估计是贼被警察打掉一半耳朵变成 <code>/</code> 了？总之各种混乱，记住不要混用贼船和警船就行了。</p>
+</blockquote>
+<h4 id="stdwfstream"><code>std::wfstream</code> 读取任意编码的文本文件</h4>
+<p>有同学反映，Python 中可以通过 <code>open('path.txt', encoding='gbk')</code> 来用指定编码格式，而 C++ 似乎没有等效的替代品。</p>
+<p>其实一直都有，不过你一直用的是 <code>std::ifstream</code> 实际上是个“二进制流”！这种纯二进制的流根本就没打算支持字符编码。即使指定 <code>.imbue</code> 也没有任何效果，因为 <code>.imbue</code> 的前提是存在“外码 (<code>char</code>) 到内码 (<code>wchar_t</code>) 的转换”，你二进制流至始至终都是外码，哪来的转换？又没有规定 <code>char</code> 必须是 UTF-8。</p>
+<p>C++ 真正的文本流实际上是宽字符流 <code>std::wifstream</code>，而指定编码格式，实际上就是用 <code>.imbue(std::locale("zh_CN.GBK"))</code>……读取时会调用 <code>std::locale</code> 类的 <code>std::codecvt</code>（是 <code>LC_CTYPE</code> 的一部分）方面，转换为 <code>wchar_t</code>，然后输入你的 <code>std::wstring</code>。</p>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> C 和 C++ 委员会官方就认为 <code>char *</code> 是二进制字节流，<code>wchar_t *</code> 才是文本流！所有 GNU/Linux 的命令行程序里都是用 <code>wchar_t</code> 来处理文本性质的字符串，包括 GCC 也是大量使用 <code>wchar_t</code> 作为字符内部表示。GCC 读取源码文件就是用宽字符流读取和解码到内存中的 UTF-32 字符串 <code>std::wstring</code> 的。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 理论上所有的程序都应该像这样，只不过是因为劳保教材从来不提，一口一个 <code>char []</code> 就是字符串，搞得 <code>wchar_t</code> 在除了 GNU 这种“体制内”环境之外，根本没人用了。现在为了处理中文字符，才闹出了 <code>char</code> 当 UTF-8 使这种招数，令人唏嘘。</p>
+</blockquote>
+<h3 id="locale_4">locale 用于字符编码转换</h3>
+<h4 id="c">C 语言标准库的字符编码转换</h4>
 <p>TODO</p>
-<h3 id="stdwfstream"><code>std::wfstream</code> 的使用</h3>
+<h4 id="c_1">C++ 标准库的字符编码转换</h4>
 <p>TODO</p>
-<h3 id="c">C 语言字符串编码转换</h3>
-<p>TODO</p>
+<blockquote>
+<p><code>wchar_t</code>、<code>char16_t</code>、<code>char32_t</code> 之间的转换，可以用 <code>std::mbrtoc16</code>、<code>std::mbrtoc32</code>、<code>std::c16rtomb</code>、<code>std::c32rtomb</code> 函数。</p>
+</blockquote>
 <h3 id="c-codecvt">C++ 字符串编码转换 <code>&lt;codecvt&gt;</code></h3>
 <p>TODO</p>
 <!--
@@ -2404,7 +2789,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     };
 </code></pre>
-<h2 id="_21">常见的字符串实现探究</h2>
+<h2 id="_19">常见的字符串实现探究</h2>
 <p>标准库的 <code>std::string</code> 我们不再赘述，刚才在“宽字符流”中也介绍了官方的想法，之后的字符串专题课会继续详解。</p>
 <p>这里我们主要探究关于字符编码的问题，探索各大常见的编程语言和库，是如何封装字符串类，如何解决 UTF-8 变长编码，UTF-32 压缩率低的问题的，希望在你的项目中提供一点灵感。</p>
 <p>通常来说，一个好的库或语言，都要明确区分字符串和字节数组的概念，前者是文本内容，后者是纯二进制内容。</p>
@@ -2624,7 +3009,7 @@ QTextCodec *codec = QTextCodec::codecForName(&quot;ASCII&quot;);
 QByteArray bytes = codec-&gt;fromUnicode(str);
 QString str = codec-&gt;toUnicode(bytes);
 </code></pre>
-<h4 id="_22">字符串常量</h4>
+<h4 id="_20">字符串常量</h4>
 <pre><code class="language-cpp">QString str = QStringLiterial(&quot;你好，世界&quot;);
 </code></pre>
 <p><code>QStringLiterial</code> 可以保证，转换时采用的是所谓“运行字符集”（实际应该叫字面量字符编码），也就是我们开发者电脑上的“区域设置”，是编译期确定的。而如果写 <code>QString::fromLocal8Bits("")</code> 就变成 “ANSI”，客户的“区域设置”了。这两个字符编码，比如在之前跨国 galgame 的案例中，就是不同的。</p>
@@ -2728,20 +3113,30 @@ void myTransaction() {
 <p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 其实早期的 C++98 中，<code>std::string</code> 也采用了 COW 机制，但后来因为不符合线程安全要求，被追求多线程的 C++11 责令改正，才有了后来 <code>std::__cxx11::basic_string</code> 的 ABI 不兼容问题。毕竟线程不安全实在太伤了，基本意味着多线程就没法共享 <code>std::string</code>。事实上，Qt 所有的对象 <code>QObject</code>，包括 <code>QString</code> 在多线程中传递时，就需要调用 <code>moveTo(QThread)</code> 转移所有权，才能安全地传递给另一个线程，就是因为 Qt 大量使用了 COW 机制。</p>
 </blockquote>
 <h2 id="unicode_1">Unicode 知识进阶</h2>
-<h3 id="_23">字符的显示宽度计算</h3>
+<h3 id="_21">字符的显示宽度计算</h3>
 <h3 id="grapheme">Grapheme</h3>
 <p>TODO</p>
-<h3 id="_24">正规化</h3>
+<h3 id="_22">正规化</h3>
 <p>TODO</p>
-<h3 id="_25">零宽空格</h3>
+<h3 id="_23">零宽空格</h3>
 <p>TODO</p>
-<h3 id="_26">特殊控制字符</h3>
+<h3 id="_24">特殊控制字符</h3>
 <p>TODO</p>
 <h3 id="unicode_2">根据编号输入 Unicode 字符</h3>
-<p>TODO</p>
-<p>𰻞：0x30EDE</p>
+<p>“𰻞”的 Unicode 编号是 0x30EDE。</p>
+<p>在 Linux 系统中，通常可以输入 Ctrl+Shift+U 然后输入十六进制编号，3 0 E D E，然后 Enter，就输入了“𰻞”。</p>
+<p>在 Windows 系统中，可以按 Win+R，然后输入 <code>charmap</code>，打开字符映射表，找到“𰻞”，双击可以复制到剪贴板。</p>
+<p>在 macOS 系统中，可以按 Ctrl+Cmd+空格，打开特殊字符输入面板，选择“Unicode”分类，找到“𰻞”，然后双击就输入到光标处。</p>
 <h3 id="unifont">UniFont 字体</h3>
-<h2 id="_27">黑暗小技巧</h2>
+<p>TODO</p>
+<h2 id="_25">黑暗小技巧</h2>
+<h3 id="_26">正则表达式匹配汉字？</h3>
+<ul>
+<li>狭义的汉字：0x4E00 到 0x9FA5（“一”到“龥”）</li>
+<li>广义的汉字：0x2E80 到 0x9FFF（“⺀”到“鿿”）</li>
+</ul>
+<p>广义的汉字包含了几乎所有中日韩使用的汉字字符，而狭义的汉字只是中文里最常用的一部分。</p>
+<p>TODO</p>
 <h3 id="latin-1_1">Latin-1 的转换</h3>
 <p>Latin-1 是一个 8 位编码，能表示 256 个字符，包括了拉丁字母、阿拉伯数字、标点符号、常用的西欧字符，以及一些特殊字符。</p>
 <p><img alt="" src="../img/latin1.svg" /></p>
@@ -2783,7 +3178,9 @@ base64.b64decode(secret).decode()
 <blockquote>
 <p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 这个方法不仅可以编码 UTF-8 字符串，还可以传输任意非文本的文件！例如，有人利用 Base64 编码，把 jpg 图像文件直接内嵌在 md 文件里！（md 文件只支持包含合法的 UTF-8 文本，不可能包含 jpg 的任意字节流，因此只能用 Base64 先编码成 ASCII 范围内的字母和数字，防止 md 编译器报 UTF-8 解码错误）</p>
 </blockquote>
-<p>总之，如果你输入中文实在有问题，可以考虑先 Base64 转换成纯英文试试看，反正无论谁都兼容 ASCII。如果这个文本框不区分大小写，还可以试试看只有 A-Z 0-9 的 Base32 编码。</p></div>
+<p>总之，如果你输入中文实在有问题，可以考虑先 Base64 转换成纯英文试试看，反正无论谁都兼容 ASCII。如果这个文本框不区分大小写，还可以试试看只有 A-Z 0-9 的 Base32 编码。</p>
+<h3 id="_27">字符编码猜测</h3>
+<p>TODO</p></div>
             </div>
         </div>
 
