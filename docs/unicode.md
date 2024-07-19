@@ -482,6 +482,8 @@ UTF-8 是基于单字节的码位，火车头的顺序也有严格规定，火�
 
 > {{ icon.story }} 例如 Windows 环境中，所有的文本文件都被默认假定为 ANSI（GBK）编码，如果你要保存文本文件为 UTF-8 编码，就需要加上 BOM 标志。当 MSVC 读取时，看到开头是 `0xEF 0xBB 0xBF`，就明白这是一个 UTF-8 编码的文件。这样，MSVC 就能正确地处理中文字符串常量了。如果 MSVC 没看到 BOM，会默认以为是 ANSI（GBK）编码的，从而中文字符串常量会乱码。开启 `/utf-8` 选项也能让 MSVC 把没有 BOM 的源码文件当作 UTF-8 来解析，适合跨平台宝宝体质。
 
+> {{ icon.detail }} 其实 Windows 用户可以在控制面板的“时钟和区域”里，找到“区域”选项。在“区域”选项卡里，点击“更改系统区域设置”，然后弹出的对话框里，勾选“Beta 版：使用 Unicode UTF-8 提供全球语言支持”，重启后，就可以在程序中默认使用 UTF-8，而不是糟糕的 GBK 了。这会把 ANSI 变成 UTF-8，让记事本等软件把无 BOM 的文件都当作 UTF-8，让各种软件都认为字符串是 UTF-8 等等。这可以解决部分美国软件无法处理中文、乱码等问题，因为美国程序员常常无意识地用 UTF-8 字符串未经处理直接调用 `A` 函数。不过，这会导致你运行其他假定了 GBK 的中国特供程序乱码，也会导致你的毕业答辩导师发来的 ZIP 变成乱码。而且我们作为客户端的开发者，我们总不能强求所有客户用我们的软件前，改变他们的控制面板来适应我们的程序吧？所以还是需要绕开 GBK，直接调用 UTF-16 的 `W` 类 API。
+
 ## C/C++ 中的字符编码
 
 ### 字符类型
@@ -1364,7 +1366,7 @@ int main() {
 
 如果要采用用户的区域设置，即“ANSI”，可以把字符串留空（`""`）。
 
-空字符串就表示当前系统区域设置了，在中国大区等价于 `"GBK"`，俄罗斯大区等价于 `"CP1251"` 等。
+空字符串就表示采用当前系统区域设置了，在中国大区等价于 `"GBK"`，俄罗斯大区等价于 `"CP1251"` 等。
 
 ```cpp
 #include <boost/locale.hpp>
@@ -1374,6 +1376,8 @@ using boost::locale::conv::from_utf;
 using boost::locale::conv::to_utf;
 
 int main() {
+    setlocale(LC_ALL, ""); // 如果你想给 Boost 用空字符串，首先需要设置一下这一行
+
     std::string u8s = u8"你好";
     // UTF-8 转 ANSI
     std::string s = from_utf(u8s, "");
@@ -1382,6 +1386,8 @@ int main() {
     return 0;
 }
 ```
+
+> {{ icon.detail }} `setlocale(LC_ALL, "");` 中的空字符串表示
 
 #### 大总结
 
@@ -1524,14 +1530,18 @@ void try_save(std::u32string content, std::wstring path) {
 using boost::locale::conv::from_utf;
 using boost::locale::conv::utf_to_utf;
 
+static int dummy_init = (setlocale(LC_ALL, ""), 0); // 需要设置过 setlocale(LC_ALL, "") 后，才能使用 Boost 的空字符串写法
+
 void u8print(std::string msg) {
     std::cout << from_utf(msg, "");
     // 或者：
-    // std::wcout << utf_to_utf<wchar_t>(msg, "");
+    // std::wcout << utf_to_utf<wchar_t>(msg);
 }
 ```
 
-> {{ icon.detail }} 更多细节详见官方文档：https://www.boost.org/doc/libs/1_81_0/libs/locale/doc/html/group__codepage.html
+> {{ icon.detail }} 此处 `static int dummy_init =` 是一种静态初始化钩子的小技巧，之后设计模式课程的单例模式中会详细讲解。
+
+> {{ icon.detail }} 更多细节用法见官方文档：https://www.boost.org/doc/libs/1_81_0/libs/locale/doc/html/group__codepage.html
 
 #### 更多功能？！
 
@@ -1723,32 +1733,395 @@ C++ 对其实施了再封装，改名为 `<cctype>`。若你导入的是该头�
 |ispunct|标点符号|
 |isalnum|字母或数字|
 
-> {{ icon.tip }} 更详细的表格可以看：
-
-https://en.cppreference.com/w/cpp/string/byte/isspace
+> {{ icon.tip }} 更详细的表格可以看：https://en.cppreference.com/w/cpp/string/byte/isspace
 
 ![](img/cctype.png)
 
-### 区分宽字符类型
+### 宽字符类型
 
-TODO
+之前提到的字符都是 `char` 类型的 ASCII 字符，范围最多在 0 到 0x7F 内。
 
-### 区域设置与 `std::locale`
+> {{ icon.warn }} 对只接受 `char` 的 `isspace`，`ispunct` 系列函数，参数如果超过 0 到 0x7F 范围，结果是未定义行为。
 
-TODO
+要支持更大范围的字符，我们需要用 `wchar_t` 类型，或者 `char16_t` 和 `char32_t`。
 
-### 时间日期格式化
+与字符串常量一样，单个字符也可以用 `L`、`u`、`U` 来分别产生 `wchar_t`、`char16_t`、`char32_t` 类型的字符。
 
-TODO
+```cpp
+char c = '我';       // 编译出错！char 类型无法容纳我 (0x6211)
+wchar_t wc = L'我';  // 编译通过，等价于 wc = 0x6211
+```
 
-### 正则表达式匹配汉字？
+和 `const char *` 一样，也有 `const wchar_t` 表示这种由 Unicode 编码的字符串：
 
-- 狭义的汉字：0x4E00 到 0x9FA5（“一”到“龥”）
-- 广义的汉字：0x2E80 到 0x9FFF（“⺀”到“鿿”）
+```cpp
+const wchar_t *ws = L"你好，世界";
+assert(ws[2] == L'，');
+```
 
-广义的汉字包含了几乎所有中日韩使用的汉字字符，而狭义的汉字只是中文里最常用的一部分。
+`wchar_t` 的提出起初是为了避免 `char` 的区域设置各自为政，编码混乱的问题，因为 `wchar_t` 始终是 UTF-16 (Windows) 或 UTF-32 (Linux)。
 
-TODO
+### `wchar_t` 应用案例
+
+```cpp
+std::string str = "hello,world,universe";
+std::stringstream ss(str);
+std::string line;
+while (std::getline(ss, line, ',')) {
+    std::cout << line << '\n';
+}
+```
+
+这是一个简单的字符串分割函数，它会把 `hello` 按照逗号 “,” (0x2C) 分割，然后输出。
+
+但是，它无法处理 Unicode 字符 “，” (0xFF0C)，这是一个全角的逗号。因为 “，” 会被 UTF-8 编码成三个 `char`：0xEF 0xBC 0x8C。
+
+```cpp
+std::string str = "你好，世界，宇宙";
+std::stringstream ss(str);
+std::string line;
+while (std::getline(ss, line, '，')) { // 编译错误：等价于 '\xEF\xBC\x8C'，一个 char 常量里不得包含三个 char！
+    std::cout << line << '\n';
+}
+```
+
+而 `wchar_t` 就没有这个问题，因为 “，” 在 0xFFFF 范围内，即使考虑到 Windows 是 UTF-16 编码，“，” 只会产生一个 `wchar_t`。这对以单个 `wchar_t` 为单位的 `std::getline` 来说没有问题。
+
+```cpp
+std::wstring str = L"你好，世界，宇宙";
+std::wstringstream ss(str);
+std::wstring line;
+while (std::getline(ss, line, L'，')) { // 编译通过，'，' 是单个 UTF-16 码位
+    std::wcout << line << L'\n';
+}
+```
+
+### 区域设置与 `locale`
+
+要让 `iswspace` 和 `iswpunct` 识别中文逗号和中文空格，我们需要先使用下面这一行代码：
+
+```cpp
+setlocale(LC_ALL, "C.utf-8");
+```
+
+这会启用 Unicode 字符集，使 `isw*****` 系列函数，能够基于 Unicode 字符集去判断字符类型，而不是默认的 ASCII 字符集。
+
+```cpp
+assert(ispunct(',') == true);   // 0x2C 对应的半角逗号是 ispunct 认同的标点符号
+assert(iswpunct(L',') == true); // 0x2C 对应的半角逗号是 iswpunct 认同的标点符号
+assert(iswpunct(L'，') == true);// 0xFF0C 对应的全角逗号也是 iswpunct 认同的标点符号
+```
+
+每个 C 语言程序一开始，默认的全局 locale 是 `"C"`。需要设置为 `"C.UTF-8"` 或者 `"zh_CN.UTF-8"`，总之是支持 Unicode 字符的编码格式，才能让 `isw*****` 系列函数识别超过 ASCII 范围的字符的类型。
+
+```cpp
+fmt::println("默认: {}", iswpunct(L'，'));
+
+setlocale(LC_ALL, "C");
+fmt::println("C: {}", iswpunct(L'，'));
+
+setlocale(LC_ALL, "C.UTF-8");
+fmt::println("C.UTF-8: {}", iswpunct(L'，'));
+
+setlocale(LC_ALL, "zh_CN.UTF-8");
+fmt::println("zh_CN.UTF-8: {}", iswpunct(L'，'));
+```
+
+输出：
+
+```
+默认: 0
+C: 0
+C.UTF-8: 1
+zh_CN.UTF-8: 1
+```
+
+总之，`isw*****` 系列函数接受的参数 `wchar_t` 表示范围更广，在 Linux 上能表示所有 Unicode 字符，在 Windows 上能表示所有 0xFFFF 以内的常用 Unicode 字符。
+
+`is*****` 系列函数遇到超过 0 到 0x7F 范围的 `char` 还会出现未定义行为，非常烦人。既然 `char` 可以隐式转换为 `wchar_t`，所以我的建议是设置了 `".utf-8"` locale 后，全部用 `isw*****` 取代 `is*****`。
+
+### locale 的命名规范
+
+`"zh_CN.UTF-8"` 这样的字符串，就是 locale 的名字，locale 名字由两部分组成，分别是语言和编码格式。
+
+```
+语言.字符编码
+```
+
+`"zh_CN.UTF-8"` 就表示，一个语言为简体中文，编码格式为 UTF-8 的区域设置。
+
+要注意的是，用户必须已经安装过该区域设置，程序才能使用 setlocale 设置，否则会出现找不到 locale 的错误。
+
+Linux 用户可以通过 修改 `/etc/locale.gen` 取消注释要启用的语言和编码格式，保存后，运行 `locale-gen` 即可安装所有没注释的语言。
+
+```bash
+sudo vim /etc/locale.gen
+sudo locale-gen
+```
+
+可以用 `locale -a` 命令查看已经安装了哪些 locale：
+
+```bash
+$ locale -a
+C
+C.utf8
+POSIX
+en_US
+en_US.iso88591
+en_US.utf8
+zh_CN.gb18030
+zh_CN.gbk
+zh_CN.utf8
+```
+
+注意到，locale 中 `'.'` 号右边的编码格式，是无视大小写的，而且可以省略掉 `'-'`。所以 `ISO-8859-1` 可以被简写成 `iso88591`，`UTF-8` 被简写成 `utf8`。
+
+左边的语言也是用 `'_'` 一分为二，固定是 `'语言_地区'` 的写法。比如加拿大既有英语用户又有法语用户，英语的代号是 `'en'`，法语的代号是 `'fr'`，加拿大的代号是 `'CA'`，所以就存在着 `'en_CA'` 和 `'fr_CA'` 两种 locale。
+
+也有一种语言被多个地区使用的情况，例如中文的代号是 `'zh'`，他被中国大陆使用时就叫 `'zh_CN'`，被香港使用时叫 `'zh_HK'`，被台湾省使用时就叫 `'zh_TW'`，被新加坡使用时就叫 `'zh_SG'`。
+
+Windows 也有类似的安装语言和地区的选项，但比尔盖子对 locale 命名的语法稍有不同：
+
+```cpp
+setlocale(LC_ALL, "Chinese_China.936"); // 表示简体中文，代码页 936（也就是 GBK）
+```
+
+他的语言名不是按照国际规范的 `zh_CN` 这样的简写，而是 `Chinese_China`。
+
+而且后面的 `936` 是 Windows 私自定义的一套所谓的“代码页”，这里 936 其实就是 `<windows.h>` 中宏 `CP_GBK` 的值，表示 GBK 代码页。同样地还有 65001 表示 UTF-8 代码页。
+
+```cpp
+setlocale(LC_ALL, "Chinese_China.65001"); // 表示简体中文，但是启用 UTF-8 支持
+setlocale(LC_ALL, "Chinese_China.utf-8"); // 等价的写法
+```
+
+> `.65001` 可以用别名 `.UTF-8` 取代。但只有 `.UTF-8` 支持这个别名，例如 `.GBK` 他就不能识别。
+
+设置了 `"Chinese_China.utf-8"` 效果和你在控制面板全局开了那个 “Beta 版：使用 Unicode UTF-8 全球语言实验支持” 一样，只不过这是仅限当前进程的 C/C++ 标准库。
+
+> {{ icon.detail }} 而且由于 `argv` 在你来得及 `setlocale` 之前就已经初始化，所以 `main` 的 `argv` 参数依然是 GBK 编码的，除非你使用的是 `_wmain`，那将能收到 UTF-16 的 `argv`，然后你自己转换回 UTF-8。
+
+### 特殊 locale：空字符串
+
+空字符串表示接受环境中的设置，对于 Linux 而言是 `$LC_ALL` 环境变量，对于 Windows 而言是控制面板中的“区域设置”。
+
+```cpp
+setlocale(LC_ALL, ""); // 是的，空的字符串
+```
+
+> {{ icon.warn }} 注意是空字符串 `""` 才有这样的效果，而不是 NULL！`setlocale(LC_ALL, NULL)` 没有任何效果，他的效果是返回当前的 locale（没想到吧？setlocale 有返回值）。这就是 C 语言的魅力，同一个函数拆成好几分用，又能 set 又能 get，屁股十分灵活。
+
+也可以指定一个部分为空的 locale 名字，比如 `".utf-8"`，他表示保留当前环境中的“语言”部分，但“编码”部分替换为“.utf-8”。
+
+```cpp
+setlocale(LC_ALL, ".utf-8");
+// 在中国区 Windows 上，等价于
+setlocale(LC_ALL, "Chinese_China.utf-8");
+// 在美国区 Windows 上，等价于
+setlocale(LC_ALL, "English_United States.utf-8");
+```
+
+### 特殊 locale：`"C"`
+
+不喜欢本地化这一套设定？
+
+你可以设置 `LC_ALL` 为 `"C"` 或 `"POSIX"`，这是标准库预先定义好的两个 locale，他们的特点是永远不会被本地化，而是始终以英文显示。这在调试程序时非常有用，因为这样你可以确定输出的格式是固定的，不会被用户的环境和本地化的信息而改变。
+
+事实上，只要你没有 `setlocale` 过，C 语言默认就是 `"C"` locale，不会受到用户环境变量的任何影响（Windows 的文件系统 API 除外，确实会受到 GBK 影响）。
+
+```cpp
+setlocale(LC_ALL, "C");
+setlocale(LC_ALL, "POSIX"); // 等价的写法
+```
+
+不过，`"C"` 意味着他假定字符串是完全的 ASCII，超过 ASCII 的部分是实现定义行为：对于 Linux 而言是 UTF-8（更准确的说是不做任何处理，因为 Linux 的 ext4 文件系统没有字符编码的区分），对于 Windows 而言是 GBK（中国区）。
+
+因此，也有 `"C.utf-8"` 这样的 locale，他表示采用 UTF-8 编码，可以让 `isw*****` 系列函数支持 Unicode 范围的字符，也可以让 `std::wcout` 能打印 ASCII 以外的字符了。只是没有指定语言，通常来说这时 `strerror` 一类函数会默认返回英语的消息。
+
+> {{ icon.warn }} 但似乎只在 Linux 上有效，Windows 只支持 `"C"` 而不支持 `"C.utf-8"`。
+
+### `LC_***` 系列环境变量
+
+locale 分为许多个“方面 (facet)”，不同的方面可以有不同的取值（大多数情况下是一样的），可以客制化标准库不同部分涉及语言和编码相关的行为。这些方面在 C 语言中都有一个 `LC_` 开头的枚举来表示。
+
+- `LC_CTYPE` 只影响 ctype.h 中的函数，也就是 `isw*****` 系列函数，还有 `toupper`，`tolower` 等，他还影响字符编码格式，是最重要的一个方面。
+- `LC_TIME` 影响时间和日期的格式化，例如 `asctime` 等。
+- `LC_NUMERIC` 影响数字的格式化。
+- `LC_MONETARY` 影响货币的格式化。
+- `LC_MESSAGES` 影响 `strerror` 等信息类函数返回的字符串。例如在中文 locale 下 `strerror(EPERM)` 会返回 `"权限不够"`，而在英文 locale 下返回 `"Permission denied."`。
+
+`LC_ALL` 是全局 locale，它会影响以上所有标准库函数的行为。设置 `LC_ALL` 为一个值，等同于为以上所有都赋予统一的值。
+
+你可以在环境变量中设置 `$LC_ALL`、`$LC_CTYPE
+
+所有 GNU/Linux 自带的命令行程序都在 `main` 函数开头，配备了 `setlocale(LC_ALL, "");`。这会读取用户配置在环境变量中的区域偏好设置，并设为全局的 locale。
+
+> {{ icon.tip }} 可以理解为 locale 是一个隐藏在标准库中的全局变量，所有的 `iswpunct`、`asctime`、`strerror` 都会读取该全局变量里的区域设置，来决定自己的运行时行为。
+
+#### `LC_MESSAGES`：报错信息
+
+例如 `touch` 这些命令，都是基于 `strerror` 打印报错消息的，而 `strerror` 又基于区域设置的 `LC_MESSAGES` 方面。
+
+这些命令行程序的作者无需懂得所有语言，他们只需要调用 `strerror` 和各种 messages 查找函数，获得相应的字符串常量后，输出即可自动适应不同语言用户的需求。
+
+只需要语言的用户，在他的环境变量中，设置 `LC_ALL=zh_CN.UTF-8` 就可以让命令行程序们始终输出中文消息了。
+
+```bash
+$ export LC_MESSAGES=en_US.UTF-8
+$ touch /root/a
+touch: cannot touch '/root/a': Permission denied
+$ export LC_MESSAGES=zh_CN.UTF-8
+$ touch /root/a
+touch: 无法 touch '/root/a': 权限不够
+```
+
+例如 GCC 的报错信息，就是基于你的 `$LC_MESSAGES` 环境变量来决定输出何种语言的信息的。
+
+你也可以只设置一个 `export LC_ALL=zh_CN.UTF-8`，这样就无需设置其他所有的方面 (facet)，如无单独设置，其他方面会自动变得和 `$LC_ALL` 一样。
+
+#### `LC_CTYPE`：字符编码
+
+这是最重要的一个，他决定了字符串的编码格式。
+
+GNU/Linux 的命令行程序内部都以内码（`const wchar_t *` 或 `std::wstring`）来处理字符串。
+
+当输出时，程序内部的内码字符串（`wchar_t *`）会以 `LC_CTYPE` 指定的编码格式编码成二进制流（`const char *` 或 `std::string`）后输出到控制台。
+
+因此，`LC_CTYPE` 中的“语言”部分是无关紧要的，重要的是后半段，例如 `"zh_CN.UTF-8"`，那有影响的就只是后面这段 `".UTF-8"`。
+
+务必使用和你终端配置相同的编码格式，否则会出现乱码。例如当我欺骗 `touch`，让他误以为我的终端输出需要是 GBK 编码：
+
+```bash
+$ export LC_MESSAGES=zh_CN.UTF-8
+$ export LC_CTYPE=zh_CN.GBK   # 欺骗 touch！好坏
+$ touch /root/a
+touch: �޷� touch '/root/a': Ȩ�޲���
+```
+
+他就输出了诡异的乱码。这不是 touch 的问题，touch 只是按照你环境变量 `$LC_CTYPE` 说的 GBK 编码，输出了 GBK 的二进制流。而终端的设置却是 UTF-8，用 UTF-8 解码 GBK 的二进制流当然出错了，不过由于 GBK 和 UTF-8 都兼容 ASCII，所以这里面英文部分才侥幸正常显示。
+
+> {{ icon.tip }} 解决方法是要么你 `$LC_CTYPE` 设回 UTF-8，要么把终端改成 GBK，总之 `$LC_CTYPE` 必须和终端字符编码配置一样。也可以调用 `iconv` 把 `touch` 的 GBK 输出转换回 UTF-8，供 UTF-8 的终端读取：
+
+```bash
+$ touch /root/a 2>&1 | iconv -f GBK -t UTF-8
+touch: 无法 touch '/root/a': 权限不够
+```
+
+#### `LC_TIME`：时间日期格式化
+
+`LC_TIME` 影响的是和时间有关函数的输出格式，因为不同的地区有不同的时间显示习惯，比如英文是 `Jan  1 00:00`，中文是 `1月  1日 00时00分`，而日本人则是 `1月1日 0時0分`。
+
+```bash
+$ export LC_TIME=en_US.UTF-8
+$ date
+Fri Jul 19 04:01:49 PM CST 2024
+$ export LC_TIME=zh_CN.UTF-8
+$ date
+2024年 07月 19日 星期五 16:01:07 CST
+```
+
+在 C 语言中，你可以用这样格式化时间和日期：
+
+```c
+#include <time.h>
+#include <stdio.h>
+#include <locale.h>
+
+int main() {
+    setlocale(LC_ALL, "zh_CN.UTF-8");
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+    char buf[32];
+    strftime(buf, sizeof(buf), "%Y年 %m月 %d日 %A %H时 %M分", tm);
+    puts(buf);
+}
+```
+
+C++ 提供了基于流的，更“时尚”的写法：
+
+```cpp
+#include <ctime>
+#include <iostream>
+#include <locale>
+
+int main() {
+    setlocale(LC_ALL, "zh_CN.UTF-8");
+    time_t t = time(NULL);
+    tm *tm = localtime(&t);
+    std::cout << std::put_time(tm, "%Y年 %m月 %d日 %A %H时 %M分") << '\n';
+}
+```
+
+输出：
+
+```
+2024年 07月 19日 星期五 16时 01分
+```
+
+#### `std::locale` 对象
+
+C 语言的 `setlocale` 设置的是全局 locale，全局 locale 只有一个，一设就影响所有线程，非常沙雕。因此提倡“不要状态机要对象”的 C++，封装了 `std::locale` 对象。
+
+`std::locale` 的构造函数接受一个字符串，和 `setlocale` 的情况一样，有空字符串表示环境 locale，`"C"` 表示 POSIX locale，还有自定义字符串比如 `"zh_CN.UTF-8"` 的 locale。
+
+然后，C++ 的流类型，如 `std::cout`，都有一个 `.imbue` 可以设置一个局部 locale（只对 `std::cout` 生效的），接受的就是这个 `std::locale` 对象。
+
+```cpp
+#include <ctime>
+#include <iostream>
+#include <locale>
+
+int main() {
+    time_t t = time(NULL);
+    tm *tm = localtime(&t);
+
+    auto locale_zh = std::locale("zh_CN.UTF-8");
+    std::cout.imbue(locale_zh);
+    std::cout << std::put_time(tm, "%Y年 %m月 %d日 %A %H时 %M分") << '\n';
+
+    auto locale_en = std::locale("en_US.UTF-8");
+    std::cout.imbue(locale_en);
+    std::cout << std::put_time(tm, "%Y年 %m月 %d日 %A %H时 %M分") << '\n';
+}
+```
+
+输出：
+
+```
+2024年 07月 19日 星期五 16时 01分
+2024年 07月 19日 Fri 16时 01分
+```
+
+> {{ icon.tip }} 可以看到这里只有星期的字符串受到了影响。如果要使整个日期格式都跟随 `LC_TIME` 的设定，可用 `"%c"`：
+
+```cpp
+#include <ctime>
+#include <iostream>
+#include <iomanip>
+#include <locale>
+
+int main() {
+    time_t t = time(NULL);
+    tm *tm = localtime(&t);
+
+    auto locale_zh = std::locale("zh_CN.UTF-8");
+    std::cout.imbue(locale_zh);
+    std::cout << std::put_time(tm, "%c") << '\n';
+
+    auto locale_en = std::locale("en_US.UTF-8");
+    std::cout.imbue(locale_en);
+    std::cout << std::put_time(tm, "%c") << '\n';
+}
+```
+
+输出：
+
+```
+2024年07月19日 星期五 16时33分39秒
+Fri 19 Jul 2024 04:33:39 PM CST
+```
+
+> {{ icon.tip }} 关于 `"%c"`、`"%Y"` 这些格式化字符串的更多详细用法，参见 [`man strftime`](http://man7.org/linux/man-pages/man3/strftime.3.html)。我们作为字符编码的课程不再赘述，之后的时间与日期专题课也会稍微讲一下。
 
 ## 宽字符流
 
@@ -1786,7 +2159,7 @@ std::string to_os_string(std::string const &u8s) {
 
 ### 官方眼中的 `std::wstring`
 
-在他们看来，`std::string` 是已经废弃的。他们认为 `std::wstring` 才是真正跨平台，跨语言的字符串。
+在他们看来，`std::string` 是已经废弃的。他们认为 `std::wstring` 才是真正跨平台的字符串。
 
 * `std::wstring`: 字符串
 * `std::string`: 字节数组
@@ -1803,17 +2176,159 @@ std::string to_os_string(std::string const &u8s) {
 
 TODO
 
-### `std::wcout` 的使用
+### `std::wcout` 的使用坑点科普
+
+#### `std::wcout` 必须设了 locale 才能用
+
+要使用 `std::wcout` 之前，需要用 `.imbue` 设置带有正确 `LC_CTYPE` 方面的 locale，或者设置了 C 语言的全局的 `setlocale`，否则中文字符会被丢掉。
+
+```cpp
+int main() {
+    std::wcout << L"Hello, 你好!\n"; // 错误！你还没设置 locale 呢！
+    return 0;
+}
+```
+
+输出：
+
+```
+Hello, ??!
+```
+
+这是因为默认的全局 locale 是 `"C"`，他只支持 ASCII 的。而当 `std::wcout` 遇到超出当前 locale 字符集表示范围的字符时，会丢弃，替换为 `?` 字符，表示出错了。
+
+因此，`std::wcout` 的正确用法必须是在你打印第一条输出前，就 `setlocale(LC_ALL, "")` ，默认的 `"C"` 肯定是不行的。
+
+```cpp
+int main() {
+    setlocale(LC_ALL, "");
+    std::wcout << L"Hello, 你好!\n"; // 可以成功输出中文了
+    return 0;
+}
+```
+
+输出：
+
+```
+Hello, 你好!
+```
+
+或者用 `std::wcout` 的 `.imbue` 也可以，但是这样对于 `std::wcerr` 和 `std::wclog` 你也需要做同样的动作，感觉不如索性全局设置了 `setlocale` 方便。
+
+```cpp
+int main() {
+    std::wcout.imbue(std::locale(""));
+    std::wcout << L"Hello, 你好!\n"; // 可以成功输出中文了
+    return 0;
+}
+```
+
+如果你是 UTF-8 流派，选择 `setlocale(LC_ALL, ".utf-8")` 也是可以的，只要是支持中文字符的 locale 就可以让 `std::wcout` 能正常输出中文，只要你终端的设置也是相同的编码格式绝对不会乱码。
+
+例如当你 `setlocale(LC_ALL, ".utf-8")` 后就需要 `system("chcp 65001")`；当你 `setlocale(LC_ALL, "Chinese_China.936")` 后就需要 `system("chcp 936")`。总之，始终保证终端（`cmd` 或 `xfce4-terminal`）设置的编码和你程序里 `setlocale(LC_CTYPE, ...)` 设置的编码一致。
+
+#### `std::wcout` 不应用于打印 `std::string`
+
+有的人会用 `std::wcout` 似乎也能打印 `char` 的字符串？
+
+```cpp
+int main() {
+    setlocale(LC_ALL, "");
+    std::wcout << "Hello, 你好!\n"; // 不一定能稳定打印出中文！
+    std::wcout << L"Hello, 你好!\n"; // OK，能稳定打印出中文
+    return 0;
+}
+```
+
+这是一种错误的用法，理想情况下应该要报错，但是糟糕的标准库却没有，设计的失误。
+
+设计的初衷是，可以在打印带中文的字符串后，方便你临时打印一些 `char` 的字符串和字符，例如 `'\n'`（因为总是有的人想偷懒不写 `L""` 前缀）
+
+`std::wcout` 支持打印 `char` 和 `const char *`，他会自动帮你把这部分 `char` 转成 `wchar_t` 再打印。
+
+```cpp
+int main() {
+    setlocale(LC_ALL, "");
+    std::wcout << L"Hello, 你好!" << L'\n'; // 正常写法
+    std::wcout << L"Hello, 你好!" << '\n';  // 懒惰狗狗写法
+    return 0;
+}
+```
+
+但是，这部分 `char` 应当只包含 ASCII 字符，不应该有中文字符，否则可能又要出现之前提到的 “galgame” 乱码问题了。
+
+#### 超级坑点：`std::wcout` 和 `std::cout` 只能用一个！
+
+非常坑的一个点：一旦你决定用 `std::wcout` 后，就不能再用 `std::cout` 了！
+
+小彭老师实测用过 `std::wcout` 后，你的 `std::cout` 会废掉，打印不出任何东西。
+
+> {{ icon.tip }} 上了贼船就上到底吧！如果确实需要临时打印一些 `std::string`，并且确保里面是 ASCII 的话，可以利用上面一节说的“懒惰狗狗写法”糊弄下，如果是 GBK 或 UTF-8 的 `std::string` 需要打印到 `std::wcout`，就召唤一下 `boost::locale` 吧。
+
+`std::wprintf` 也有这个问题，当你第一次使用 `FILE *` 的 `wchar_t` 系列函数后，这个文件流会被“宽化” (`fwiden`)，用我们的话说叫**上贼船**，上了就下不来，再也无法当作“窄”流用了。
+
+反之亦然，一旦你用过一次 `std::cout` 后，`std::wcout` 就会废掉，打印任何东西都打印不出来。取决于你第一次调用输出流用的是宽字符还是窄字符，之后就只能一直用那个宽或窄了，不让跳船。
+
+> {{ icon.fun }} 上贼船不行，上警船也不行，上定一个就没法变，真恶心呀！
+
+```cpp
+// 先 wcout
+int main() {
+    setlocale(LC_ALL, "");
+    std::wcout << L"我是 wcout!" << L'\n';
+    std::cout << "我是 cout!" << '\n';
+    return 0;
+}
+```
+
+输出：
+
+```
+我是 wcout!
+```
+
+```cpp
+// 先 cout
+int main() {
+    setlocale(LC_ALL, "");
+    std::cout << "我是 cout!" << '\n';
+    std::wcout << L"我是 wcout!" << L'\n';
+    return 0;
+}
+```
+
+输出：
+
+```
+我是 cout!
+/ wcout!
+```
+
+> {{ icon.fun }} 这里 `/ wcout!` 好像是出 BUG 了……估计是贼被警察打掉一半耳朵变成 `/` 了？总之各种混乱，记住不要混用贼船和警船就行了。
+
+#### `std::wfstream` 读取任意编码的文本文件
+
+有同学反映，Python 中可以通过 `open('path.txt', encoding='gbk')` 来用指定编码格式，而 C++ 似乎没有等效的替代品。
+
+其实一直都有，不过你一直用的是 `std::ifstream` 实际上是个“二进制流”！这种纯二进制的流根本就没打算支持字符编码。即使指定 `.imbue` 也没有任何效果，因为 `.imbue` 的前提是存在“外码 (`char`) 到内码 (`wchar_t`) 的转换”，你二进制流至始至终都是外码，哪来的转换？又没有规定 `char` 必须是 UTF-8。
+
+C++ 真正的文本流实际上是宽字符流 `std::wifstream`，而指定编码格式，实际上就是用 `.imbue(std::locale("zh_CN.GBK"))`……读取时会调用 `std::locale` 类的 `std::codecvt`（是 `LC_CTYPE` 的一部分）方面，转换为 `wchar_t`，然后输入你的 `std::wstring`。
+
+> {{ icon.detail }} C 和 C++ 委员会官方就认为 `char *` 是二进制字节流，`wchar_t *` 才是文本流！所有 GNU/Linux 的命令行程序里都是用 `wchar_t` 来处理文本性质的字符串，包括 GCC 也是大量使用 `wchar_t` 作为字符内部表示。GCC 读取源码文件就是用宽字符流读取和解码到内存中的 UTF-32 字符串 `std::wstring` 的。
+
+> {{ icon.fun }} 理论上所有的程序都应该像这样，只不过是因为劳保教材从来不提，一口一个 `char []` 就是字符串，搞得 `wchar_t` 在除了 GNU 这种“体制内”环境之外，根本没人用了。现在为了处理中文字符，才闹出了 `char` 当 UTF-8 使这种招数，令人唏嘘。
+
+### locale 用于字符编码转换
+
+#### C 语言标准库的字符编码转换
 
 TODO
 
-### `std::wfstream` 的使用
+#### C++ 标准库的字符编码转换
 
 TODO
 
-### C 语言字符串编码转换
-
-TODO
+> `wchar_t`、`char16_t`、`char32_t` 之间的转换，可以用 `std::mbrtoc16`、`std::mbrtoc32`、`std::c16rtomb`、`std::c32rtomb` 函数。
 
 ### C++ 字符串编码转换 `<codecvt>`
 
@@ -2438,13 +2953,28 @@ TODO
 
 ### 根据编号输入 Unicode 字符
 
-TODO
+“𰻞”的 Unicode 编号是 0x30EDE。
 
-𰻞：0x30EDE
+在 Linux 系统中，通常可以输入 Ctrl+Shift+U 然后输入十六进制编号，3 0 E D E，然后 Enter，就输入了“𰻞”。
+
+在 Windows 系统中，可以按 Win+R，然后输入 `charmap`，打开字符映射表，找到“𰻞”，双击可以复制到剪贴板。
+
+在 macOS 系统中，可以按 Ctrl+Cmd+空格，打开特殊字符输入面板，选择“Unicode”分类，找到“𰻞”，然后双击就输入到光标处。
 
 ### UniFont 字体
 
+TODO
+
 ## 黑暗小技巧
+
+### 正则表达式匹配汉字？
+
+- 狭义的汉字：0x4E00 到 0x9FA5（“一”到“龥”）
+- 广义的汉字：0x2E80 到 0x9FFF（“⺀”到“鿿”）
+
+广义的汉字包含了几乎所有中日韩使用的汉字字符，而狭义的汉字只是中文里最常用的一部分。
+
+TODO
 
 ### Latin-1 的转换
 
@@ -2514,3 +3044,7 @@ base64.b64decode(secret).decode()
 > {{ icon.story }} 这个方法不仅可以编码 UTF-8 字符串，还可以传输任意非文本的文件！例如，有人利用 Base64 编码，把 jpg 图像文件直接内嵌在 md 文件里！（md 文件只支持包含合法的 UTF-8 文本，不可能包含 jpg 的任意字节流，因此只能用 Base64 先编码成 ASCII 范围内的字母和数字，防止 md 编译器报 UTF-8 解码错误）
 
 总之，如果你输入中文实在有问题，可以考虑先 Base64 转换成纯英文试试看，反正无论谁都兼容 ASCII。如果这个文本框不区分大小写，还可以试试看只有 A-Z 0-9 的 Base32 编码。
+
+### 字符编码猜测
+
+TODO
