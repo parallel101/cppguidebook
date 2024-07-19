@@ -106,7 +106,7 @@ Unicode 字符映射表可以在网上找到：
 > {{ icon.tip }} 如果你这里看到的是“我爱口口面!”说明你的字体不支持“biáng”这个字。当浏览器遇到当前字体不支持的 Unicode 字符时，就会替换为方块。建议安装支持中文字符较多的 “Noto Sans CJK SC” 字体，也可以安装支持一切 Unicode 字符的 “UniFonts”。
 
 ```bash
-sudo apt-get install fonts-noto-cjk
+sudo apt-get install -y fonts-noto-cjk
 ```
 
 > {{ icon.fun }} “𰻞(biáng)𰻞(biáng)面”是流行于中国陕西关中地区的一种知名传统风味面食，属于扯面，通过揉、抻、甩、扯等步骤制作，面宽而厚，犹如“裤腰带”，口感劲道，食用前加入各色臊子或油泼辣子。但是，小彭老师其实并没有吃过，只是因为稀有字体看起来比较好玩。

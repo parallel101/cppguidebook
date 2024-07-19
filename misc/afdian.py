@@ -19,7 +19,7 @@ manual_sponsors = [
     User('阿哲', '', '100.00'),
     User('Eureka', '', '20.00'),
     User('孙斌', '', '200.00'),
-    User('nullptr', '', '23.30'),
+    User('nullptr', 'https://i0.hdslb.com/bfs/face/effa1ec9bb0f5d09ed415da75129aca9d16092ac.jpg', '23.30'),
     User('**发', '', '25.00'),
 ]
 
