@@ -2440,6 +2440,8 @@ TODO
 
 TODO
 
+𰻞：0x30EDE
+
 ### UniFont 字体
 
 ## 黑暗小技巧

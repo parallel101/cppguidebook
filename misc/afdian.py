@@ -13,14 +13,15 @@ class User(namedtuple('User', ['name', 'avatar', 'all_sum_amount'])):
 manual_sponsors = [
     User('等疾风', 'https://i0.hdslb.com/bfs/face/b658b5ca52f41e53321d04f978be6784ca6f8687.jpg', '1000.00'),
     User('只喝白开水', 'https://i2.hdslb.com/bfs/face/821b88a24c1319d1fb51b3854884e2f829855c75.jpg', '100.00'),
-    User('*乾', '', '26.90'),
+    User('包乾', '', '26.90'),
     User('柿柿如意', '', '20.00'),
     User('Starry', '', '100.00'),
     User('阿哲', '', '100.00'),
     User('Eureka', '', '20.00'),
     User('孙斌', '', '200.00'),
     User('nullptr', 'https://i0.hdslb.com/bfs/face/effa1ec9bb0f5d09ed415da75129aca9d16092ac.jpg', '23.30'),
-    User('**发', '', '25.00'),
+    User('Fred Song', '', '25.00'),
+    User('**振', '', '20.00'),
 ]
 
 def afd_query(which, **params):
@@ -70,11 +71,14 @@ def afd_gen_thank_list():
     img = Image.new('RGB', (max_max_x, max_max_y), color='#19242e')
     x = 30
     y = 30
+    total = 0
     for user in sponsors:
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype('/usr/share/fonts/noto-cjk/NotoSansCJK-Medium.ttc', size=20)
         if user.avatar:
             avatar = Image.open(BytesIO(requests.get(user.avatar).content))
+        elif os.path.exists(f'/home/bate/下载/wx-{user.name.replace('/', '|')}.png'):
+            avatar = Image.open(f'/home/bate/下载/wx-{user.name.replace('/', '|')}.png')
         else:
             this_dir = os.path.dirname(os.path.abspath(__file__))
             avatar = Image.open(os.path.join(this_dir, '../docs/img/favicon.ico'))
@@ -83,11 +87,12 @@ def afd_gen_thank_list():
         draw.text((x + 100, y), f'{user.name}', fill='white', font=font)
         draw.text((x + 100, y + 30), f'￥{user.all_sum_amount}', fill='#aaaaaa', font=font)
         print(f'{user.name} ￥{user.all_sum_amount}')
-        print(user)
+        total += float(user.all_sum_amount)
         y += 100
         if y + 10 >= limit_y:
             y = 30
             x += 400
+    print(total)
     return img
 
 img = afd_gen_thank_list()
