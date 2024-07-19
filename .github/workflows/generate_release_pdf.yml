@@ -28,10 +28,7 @@ jobs:
 
       - name: Prepare Mkdocs environment
         run: |
-          pip install mkdocs
-          pip install mkdocs-print-site-plugin
-          pip install mkdocs-macros-plugin
-          pip install python-markdown-math
+          pip install -r requirements.txt
 
       - name: Compile Mkdocs document
         run: |
