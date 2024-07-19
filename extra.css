@@ -3,20 +3,30 @@ h1 {
     margin: 1em auto;
 }
 h2 {
-    font-weight: 800;
+    font-weight: 850;
     margin: 1em auto;
 }
 h3 {
-    font-weight: 600;
+    font-weight: 630;
     margin: 1em auto;
 }
 h4 {
-    font-weight: 500;
+    font-weight: 520;
     margin: 1em auto;
 }
 body {
-    font-weight: 350;
+    font-weight: 480;
 }
 blockquote {
     color: var(--bs-gray-600);
+}
+:root {
+    --bs-body-font-family: "Noto Sans CJK SC","Noto Serif CJK SC",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans","Liberation Sans",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    --bs-font-monospace: "Jetbrains Mono",SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New","Noto Sans CJK SC","Noto Serif CJK SC",monospace;
+}
+code {
+    font-family: var(--bs-font-monospace);
+}
+pre code {
+    font-family: var(--bs-font-monospace);
 }
