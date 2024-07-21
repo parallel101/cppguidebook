@@ -26,9 +26,6 @@
         <link href="../css/print-site.css" rel="stylesheet">
         <link href="../css/print-site-mkdocs.css" rel="stylesheet">
         <link href="../extra.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.0.19/index.min.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono.min.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-sc@5.0.13/chinese-simplified-500.min.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <script>hljs.highlightAll();</script> 
     </head>
@@ -280,14 +277,16 @@
 <li><a href="#lc_messages">LC_MESSAGES：报错信息</a></li>
 <li><a href="#lc_ctype">LC_CTYPE：字符编码</a></li>
 <li><a href="#lc_time">LC_TIME：时间日期格式化</a></li>
-<li><a href="#stdlocale">std::locale 对象</a></li>
+</ul>
+</li>
+<li><a href="#stdlocale">std::locale 对象</a><ul>
+<li><a href="#boostlocalegenerator-locale">boost::locale::generator 凭空创建一个用户没安装过的 locale</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#_18">宽字符流</a><ul>
 <li><a href="#stdwstring">官方眼中的 std::wstring</a></li>
-<li><a href="#wchar_t_1">wchar_t 系列函数</a></li>
 <li><a href="#stdwcout">std::wcout 的使用坑点科普</a><ul>
 <li><a href="#stdwcout-locale">std::wcout 必须设了 locale 才能用</a></li>
 <li><a href="#stdwcout-stdstring">std::wcout 不应用于打印 std::string</a></li>
@@ -295,12 +294,12 @@
 <li><a href="#stdwfstream">std::wfstream 读取任意编码的文本文件</a></li>
 </ul>
 </li>
-<li><a href="#locale_4">locale 用于字符编码转换</a><ul>
+<li><a href="#locale_4">locale 用于字符编码转换</a></li>
+<li><a href="#c-wchar_t">C 语言中的 wchar_t 系列函数</a><ul>
 <li><a href="#c">C 语言标准库的字符编码转换</a></li>
-<li><a href="#c_1">C++ 标准库的字符编码转换</a></li>
+<li><a href="#c-codecvt">C++ 标准库的字符编码转换 &lt;codecvt&gt;</a></li>
 </ul>
 </li>
-<li><a href="#c-codecvt">C++ 字符串编码转换 &lt;codecvt&gt;</a></li>
 </ul>
 </li>
 <li><a href="#windows">Windows 专题</a><ul>
@@ -1893,10 +1892,41 @@ void u8print(std::string msg) {
 </code></pre>
 <blockquote>
 <p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 此处 <code>static int dummy_init =</code> 是一种静态初始化钩子的小技巧，之后设计模式课程的单例模式中会详细讲解。</p>
-<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 更多细节用法见官方文档：https://www.boost.org/doc/libs/1_81_0/libs/locale/doc/html/group__codepage.html</p>
 </blockquote>
 <h4 id="_15">更多功能？！</h4>
-<p>编码转换只是 <code>boost::locale::conv</code> 这个子模块下的一个小功能而已！<code>boost::locale</code> 还提供了更多功能，如按照地域语言规范格式化数字、货币、日期、时间等，下一小节中我们继续介绍。完全是 <code>std::locale</code> 的上位替代。</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>从</th>
+<th>到</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>utf_to_utf</td>
+<td>UTF 系列</td>
+<td>UTF 系列</td>
+</tr>
+<tr>
+<td>from_utf</td>
+<td>UTF 系列</td>
+<td>杂牌字符编码</td>
+</tr>
+<tr>
+<td>to_utf</td>
+<td>杂牌字符编码</td>
+<td>UTF 系列</td>
+</tr>
+<tr>
+<td>between</td>
+<td>杂牌字符编码</td>
+<td>杂牌字符编码</td>
+</tr>
+</tbody>
+</table>
+<p>更多细节用法见官方文档：https://www.boost.org/doc/libs/1_81_0/libs/locale/doc/html/group__codepage.html</p>
+<p>不可思议的是：编码转换只是 <code>boost::locale::conv</code> 这个子模块下的一个小功能而已！<code>boost::locale</code> 还提供了更多功能，如按照地域语言规范格式化数字、货币、日期、时间等，下一小节中我们继续介绍。完全是 <code>std::locale</code> 的上位替代。</p>
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> Boost 哪里都好，你想要的功能应有尽有。而且不需要 C++20，很低版本的 C++ 也能用。唯一缺点可能就是太肥了，编译慢。</p>
 </blockquote>
@@ -2175,6 +2205,9 @@ zh_CN.UTF-8: 1
 </code></pre>
 <p><code>"zh_CN.UTF-8"</code> 就表示，一个语言为简体中文，编码格式为 UTF-8 的区域设置。</p>
 <p>要注意的是，用户必须已经安装过该区域设置，程序才能使用 setlocale 设置，否则会出现找不到 locale 的错误。</p>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 这几乎导致你没法用除默认外的任何 locale，比如 <code>"zh_CN.UTF-8"</code>，因为你不能确定用户有没有安装他。但你可以用 <code>boost::locale::generator</code> 凭空生成一个系统里没有安装过的 locale，绕开标准库的限制，稍后介绍。</p>
+</blockquote>
 <p>Linux 用户可以通过 修改 <code>/etc/locale.gen</code> 取消注释要启用的语言和编码格式，保存后，运行 <code>locale-gen</code> 即可安装所有没注释的语言。</p>
 <pre><code class="language-bash">sudo vim /etc/locale.gen
 sudo locale-gen
@@ -2319,7 +2352,7 @@ int main() {
 <p>输出：</p>
 <pre><code>2024年 07月 19日 星期五 16时 01分
 </code></pre>
-<h4 id="stdlocale"><code>std::locale</code> 对象</h4>
+<h3 id="stdlocale"><code>std::locale</code> 对象</h3>
 <p>C 语言的 <code>setlocale</code> 设置的是全局 locale，全局 locale 只有一个，一设就影响所有线程，非常沙雕。因此提倡“不要状态机要对象”的 C++，封装了 <code>std::locale</code> 对象。</p>
 <p><code>std::locale</code> 的构造函数接受一个字符串，和 <code>setlocale</code> 的情况一样，有空字符串表示环境 locale，<code>"C"</code> 表示 POSIX locale，还有自定义字符串比如 <code>"zh_CN.UTF-8"</code> 的 locale。</p>
 <p>然后，C++ 的流类型，如 <code>std::cout</code>，都有一个 <code>.imbue</code> 可以设置一个局部 locale（只对 <code>std::cout</code> 生效的），接受的就是这个 <code>std::locale</code> 对象。</p>
@@ -2372,6 +2405,12 @@ Fri 19 Jul 2024 04:33:39 PM CST
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 关于 <code>"%c"</code>、<code>"%Y"</code> 这些格式化字符串的更多详细用法，参见 <a href="http://man7.org/linux/man-pages/man3/strftime.3.html"><code>man strftime</code></a>。我们作为字符编码的课程不再赘述，之后的时间与日期专题课也会稍微讲一下。</p>
 </blockquote>
+<h4 id="boostlocalegenerator-locale"><code>boost::locale::generator</code> 凭空创建一个用户没安装过的 locale</h4>
+<pre><code class="language-cpp">boost::locale::generator gen;
+auto loc = gen(&quot;zh_CN.UTF-8&quot;);
+boost::locale::date_time dt = boost::locale::date_time::now(loc);
+std::cout &lt;&lt; boost::locale::as::date(dt) &lt;&lt; '\n';
+</code></pre>
 <h2 id="_18">宽字符流</h2>
 <p>之所以把宽字符流放到最后，是因为，首先 <code>iostream</code> 本来就是一个失败的设计。</p>
 <blockquote>
@@ -2409,8 +2448,6 @@ Fri 19 Jul 2024 04:33:39 PM CST
 <p>看起来只要全部统一 <code>wchar_t</code> 就能实现跨平台了？是的，除了 Windows……</p>
 <p>标准认为 <code>wchar_t</code> 应该包含 0 到 0x10FFFF 的所有的 Unicode 字符码点，需要是 32 位的。然而 Windows 的 <code>wchar_t</code> 由于历史原因，是 16 位的，需要用代理对才能表示稀有字符，并不能一个 <code>wchar_t</code> 对应一个码点。这导致即使用了 <code>wchar_t</code> 还是存在跨平台困难的问题：一个 Linux 程序用 <code>wchar_t</code> 可能会利用 UTF-32 定长编码的特性，方便了文本处理，但移植到 Windows 时，发现变成了 UTF-16，需要对代理对做特殊判断……没有满足跨平台的初衷，也做不到定长编码。<code>char32_t</code> 做到了跨平台的 UTF-32，也能容纳全部 Unicode 码点，可标准库提供了 <code>std::to_wstring</code>，却根本没有 <code>std::to_u32string</code>；提供了 <code>std::wcout</code>，却没有提供 <code>std::u32cout</code>……</p>
 <p>这就是为什么宽字符流很糟糕，说是跨平台，跨了个寂寞。</p>
-<h3 id="wchar_t_1"><code>wchar_t</code> 系列函数</h3>
-<p>TODO</p>
 <h3 id="stdwcout"><code>std::wcout</code> 的使用坑点科普</h3>
 <h4 id="stdwcout-locale"><code>std::wcout</code> 必须设了 locale 才能用</h4>
 <p>要使用 <code>std::wcout</code> 之前，需要用 <code>.imbue</code> 设置带有正确 <code>LC_CTYPE</code> 方面的 locale，或者设置了 C 语言的全局的 <code>setlocale</code>，否则中文字符会被丢掉。</p>
@@ -2507,16 +2544,105 @@ int main() {
 <p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> C 和 C++ 委员会官方就认为 <code>char *</code> 是二进制字节流，<code>wchar_t *</code> 才是文本流！所有 GNU/Linux 的命令行程序里都是用 <code>wchar_t</code> 来处理文本性质的字符串，包括 GCC 也是大量使用 <code>wchar_t</code> 作为字符内部表示。GCC 读取源码文件就是用宽字符流读取和解码到内存中的 UTF-32 字符串 <code>std::wstring</code> 的。</p>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 理论上所有的程序都应该像这样，只不过是因为劳保教材从来不提，一口一个 <code>char []</code> 就是字符串，搞得 <code>wchar_t</code> 在除了 GNU 这种“体制内”环境之外，根本没人用了。现在为了处理中文字符，才闹出了 <code>char</code> 当 UTF-8 使这种招数，令人唏嘘。</p>
 </blockquote>
+<p>总之，<code>.imbue(std::locale("zh_CN.GBK"))</code> 可以把 <code>GBK</code> 设为当前文本文件的编码格式，宽文件流将会按照这个编码和解码所有的字符串。</p>
+<p><code>std::locale</code> 的字符串构造函数，他的参数必须是用户系统里已经安装过的 locale（通过修改 <code>/etc/locale.gen</code> 和 <code>locale-gen</code> 命令安装）。但是，你无法确保用户的系统安装了 <code>"GBK"</code> locale。<code>std::locale("zh_CN.GBK")</code> 在没有安装 GBK 的用户电脑上运行就会抛出错误表示找不到该 locale。因此，如果要指定按 GBK 读取文件，不建议依赖系统中自带的 <code>std::locale("zh_CN.GBK"))</code>，而是调用 <code>boost::locale::generator</code> 就地生成一个 locale，这样程序无论系统有没有安装都能运行了：</p>
+<pre><code class="language-cpp">#include &lt;boost/locale.hpp&gt;
+#include &lt;fstream&gt;
+
+int main() {
+    std::wofstream fout;
+    boost::locale::generator gen;
+    std::locale loc = gen(&quot;zh_CN.GBK&quot;);
+    fout.imbue(loc);
+    fout &lt;&lt; L&quot;你好，世界\n&quot;; // 以 GBK 编码写出文本文件
+}
+</code></pre>
+<pre><code>$ cat build/你好.txt
+��ã���
+$ cat build/你好.txt | iconv -f GBK -t UTF-8
+你好，世界
+$ 
+</code></pre>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 这是因为 <code>boost_locale</code> 链接了 <code>icu</code>，其内部包含了所有编码格式的字符映射表。<code>boost::locale::generator</code> 首先创建了一个 <code>std::locale</code>，然后通过虚函数重载的方式把 <code>std::locale</code> 对象中的 <code>std::codecvt</code> 替换成 <code>icu</code> 的映射表。从而让 <code>std::wofstream</code> 调用这个 <code>icu</code> 的映射函数，实现了 UTF-32 到 GBK 的转换。</p>
+</blockquote>
+<p>此外，你还可以选择覆盖 locale 的部分方面 (facet)，比如在文件编码时，我们只需要用 <code>"zh_CN.GBK"</code> 的 <code>LC_CTYPE</code> 方面就可以了，其他的例如时间格式、语言信息等，我们还是想保留默认的。为此，我们可以利用 locale 的“杂交”拷贝构造函数，保留老 locale 的绝大部分方面，只替换一个方面为新 locale 的：</p>
+<pre><code class="language-cpp">std::locale old_loc = std::locale(&quot;&quot;); // 环境 locale
+boost::locale::generator gen;
+std::locale new_loc = gen(&quot;zh_CN.GBK&quot;); // 全 GBK locale
+std::locale loc = std::locale(old_loc, new_loc, std::locale::ctype); // 杂交：继承 old_loc 的其余全部，只替换掉 LC_CTYPE 部分为 new_loc 的
+fout.imbue(loc);
+</code></pre>
 <h3 id="locale_4">locale 用于字符编码转换</h3>
+<pre><code class="language-cpp">// 以 loc 规定的编码，把内码编码成外码
+std::string narrow(std::locale const &amp;loc, std::wstring const &amp;wstr) {
+    // use_facet 函数获得 locale 在字符转换 方面的 facet
+    auto const &amp;cvt = std::use_facet&lt;Codecvt&gt;(loc);
+    std::string str(wstr.size() * 4, '\0');  // 预留 4 倍空间
+    wchar_t const *from_next;
+    char *to_next;
+    std::mbstate_t state{};
+    auto res = cvt.in(state, wstr.data(), wstr.data() + wstr.size(), from_next, str.data(), str.data() + str.size(), to_next);
+    if (res == Codecvt::ok) {
+        // 转换成功
+        str.resize(to_next - str.data());
+        return str;
+    } else if (res == Codecvt::partial) {
+        // 转换部分成功
+        str.resize(to_next - str.data());
+        return str;
+    } else {
+        // 转换失败
+        return &quot;&quot;;
+    }
+}
+
+// 以 loc 规定的编码，把外码解码成内码
+std::wstring widen(std::locale const &amp;loc, std::string const &amp;str) {
+    // use_facet 函数获得 locale 在字符转换 方面的 facet
+    auto const &amp;cvt = std::use_facet&lt;Codecvt&gt;(loc);
+    std::wstring wstr(str.size(), L'\0');  // 预留空间
+    char const *from_next;
+    wchar_t *to_next;
+    std::mbstate_t state{};
+    auto res = cvt.out(state, str.data(), str.data() + str.size(), from_next, wstr.data(), wstr.data() + wstr.size(), to_next);
+    if (res == Codecvt::ok) {
+        // 转换成功
+        wstr.resize(to_next - wstr.data());
+        return wstr;
+    } else if (res == Codecvt::partial) {
+        // 转换部分成功
+        wstr.resize(to_next - wstr.data());
+        return wstr;
+    } else {
+        // 转换失败
+        return L&quot;&quot;;
+    }
+}
+</code></pre>
+<pre><code class="language-cpp">std::wstring wstr = L&quot;你好&quot;;
+std::cout &lt;&lt; narrow(std::locale(&quot;zh_CN.GBK&quot;), wstr);
+</code></pre>
+<p>不过，我们都有更方便的 <code>boost::locale::conv</code> 了，还何必还用这么繁琐的 <code>std::locale</code> 呢？所以我是不推荐再用这破玩意，无论是易用性还是扩展性都是 Boost 完胜。</p>
+<h3 id="c-wchar_t">C 语言中的 <code>wchar_t</code> 系列函数</h3>
+<p>对于所有的 <code>strcpy</code>、<code>strcmp</code>、<code>strlen</code> 这类 <code>str***</code> 系函数，都有一个相应的 <code>wcs***</code> 函数。</p>
+<p>例如 <code>wcscpy</code>、<code>wcscmp</code>、<code>wcslen</code>。</p>
+<p>它们的原型如下：</p>
+<pre><code class="language-c">wchar_t *wcscpy(wchar_t *dest, const wchar_t *src);
+int wcscmp(const wchar_t *s1, const wchar_t *s2);
+size_t wcslen(const wchar_t *s);
+</code></pre>
+<p>它们的作用和 <code>str***</code> 系函数一样，但是它们操作的是 <code>wchar_t</code> 字符串。</p>
+<p>对于所有的 <code>fputc</code>、<code>printf</code>，<code>fprintf</code>，<code>fgets</code> 这类操作文件的函数，也都有一个配套的 <code>fw***</code> 函数。</p>
+<p>第一次使用过这些函数后，<code>FILE *</code> 将会被“宽化”（<code>fwiden</code>）。宽化的文件流今后将只能输入宽字符串。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 但是，既然 C++ 已经有 <code>std::wstring</code>，就不建议再学 C 语言 <code>L'\0'</code> 结尾字符串了。</p>
+</blockquote>
 <h4 id="c">C 语言标准库的字符编码转换</h4>
 <p>TODO</p>
-<h4 id="c_1">C++ 标准库的字符编码转换</h4>
-<p>TODO</p>
-<blockquote>
-<p><code>wchar_t</code>、<code>char16_t</code>、<code>char32_t</code> 之间的转换，可以用 <code>std::mbrtoc16</code>、<code>std::mbrtoc32</code>、<code>std::c16rtomb</code>、<code>std::c32rtomb</code> 函数。</p>
-</blockquote>
-<h3 id="c-codecvt">C++ 字符串编码转换 <code>&lt;codecvt&gt;</code></h3>
-<p>TODO</p>
+<h4 id="c-codecvt">C++ 标准库的字符编码转换 <code>&lt;codecvt&gt;</code></h4>
+<p><code>wchar_t</code>、<code>char16_t</code>、<code>char32_t</code> 与 <code>char</code> 之间的转换，可以用 <code>std::mbrtoc16</code>、<code>std::mbrtoc32</code>、<code>std::c16rtomb</code>、<code>std::c32rtomb</code> 函数。</p>
+<p>然而，又臭又长，用封装好的 <code>boost::locale::utf_to_utf/from_utf/to_utf/between</code> 不香吗？</p>
 <!--
 //=== 跨平台软件何去何从？
 //
@@ -3131,6 +3257,7 @@ void myTransaction() {
 </blockquote>
 <h2 id="unicode_1">Unicode 知识进阶</h2>
 <h3 id="_21">字符的显示宽度计算</h3>
+<p>TODO</p>
 <h3 id="grapheme">Grapheme</h3>
 <p>TODO</p>
 <h3 id="_22">正规化</h3>
