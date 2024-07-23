@@ -500,7 +500,7 @@ int main() {
 ### 我用了 C++20 的函数参数 auto 语法糖
 
 ```cpp
-int generic_sum(std::vector<int> const &v, auto op) P
+int generic_sum(std::vector<int> const &v, auto op) {
 }
 ```
 
