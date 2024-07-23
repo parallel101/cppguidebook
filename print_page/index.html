@@ -84,6 +84,10 @@
 <li>
     <a href="../unicode/" class="dropdown-item">字符编码那些事</a>
 </li>
+                                    
+<li>
+    <a href="../undef/" class="dropdown-item">未定义行为完整列表</a>
+</li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -172,20 +176,24 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-bs-level="1"><a href="#undef" class="nav-link">9. 未定义行为完整列表</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
             
             <li class="nav-item" data-bs-level="0"><a href="#section-关于" class="nav-link">II. 关于</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="1"><a href="#about" class="nav-link">9. 关于小彭老师</a>
+            <li class="nav-item" data-bs-level="1"><a href="#about" class="nav-link">10. 关于小彭老师</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#donate" class="nav-link">10. 赞助名单</a>
+            <li class="nav-item" data-bs-level="1"><a href="#donate" class="nav-link">11. 赞助名单</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#recommend" class="nav-link">11. 参考资料</a>
+            <li class="nav-item" data-bs-level="1"><a href="#recommend" class="nav-link">12. 参考资料</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -231,7 +239,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年07月21日 23:07:03 (UTC+08:00)</p>
+<p>更新时间：2024年07月23日 12:55:22 (UTC+08:00)</p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是温馨提示</p>
@@ -618,7 +626,7 @@ void try_call_foo(T &amp;) {
 <li><code>-O3</code>：比 <code>-O2</code> 更激进的优化，会把一些复杂的循环用 SIMD 矢量指令优化加速，把一些复杂的数组操作用更快的指令替代等。性能提升很大，但是如果你的程序有未定义行为，可能会导致一些 Bug。如果你的代码没有未定义行为则绝不会有问题，对自己的代码质量有自信就可以放心开，编译速度也会很慢，一般用于程序最终成品发布阶段。</li>
 <li><code>-Ofast</code>：在 <code>-O3</code> 的基础上，进一步对浮点数的运算进行更深层次的优化，但是可能会导致一些浮点数计算结果不准确。如果你的代码不涉及到 NaN 和 Inf 的处理，那么 <code>-Ofast</code> 不会有太大的问题，一般用于科学计算领域的终极性能优化。</li>
 <li><code>-Os</code>：在 <code>-O2</code> 的基础上，专门优化代码大小，性能被当作次要需求，但是会禁止会导致可执行文件变大的优化。会把一些循环展开、内联等优化关闭，把一些代码用更小的指令实现，尽可能减小可执行文件的尺寸，比 <code>-O0</code>、<code>-O1</code>、<code>-O2</code> 都要小，通常用于需要节省内存的嵌入式系统开发。</li>
-<li><code>-Oz</code>：在 <code>-Os</code> 的基础上，进一步把代码压缩，可能把本可以一条大指令完成的任务也拆成多条小指令，为了尺寸完全性能，大幅减少了函数内联的机会，有时用于嵌入式系统开发。</li>
+<li><code>-Oz</code>：在 <code>-Os</code> 的基础上，进一步把代码压缩，可能把本可以一条大指令完成的任务也拆成多条小指令，为了缩小尺寸牺牲运行时性能，大幅减少了函数内联的机会，有时用于嵌入式系统开发。</li>
 <li><code>-Og</code>：在 <code>-O0</code> 的基础上，尽可能保留更多调试信息，不做破坏函数行号等信息的优化，建议配合产生更多调试信息的 <code>-g</code> 选项使用。但还是会做一些简单的优化，比 <code>-O0</code> 执行速度更快。但 <code>-Og</code> 的所有优化都不会涉及到未定义行为，因此非常适合调试未定义行为。但是由于插入了调试信息，最终的可执行文件会变得很大，一般在开发人员调试时使用。</li>
 </ul>
 <p>MSVC：<code>/Od</code>、<code>/O1</code>、<code>/O2</code>、<code>/Ox</code>、<code>/Ob1</code>、<code>/Ob2</code>、<code>/Os</code></p>
@@ -631,6 +639,9 @@ void try_call_foo(T &amp;) {
 <li><code>/Ob2</code>：启用函数内联，但是会扩大内联范围，一般比 <code>/Ob1</code> 更快，但是也会导致可执行文件变大。</li>
 <li><code>/Os</code>：在 <code>/O2</code> 的基础上，专门优化代码大小，性能被当作次要需求，但是会禁止会导致可执行文件变大的优化。会把一些循环展开、内联等优化关闭，把一些代码用更小的指令实现，尽可能减小可执行文件的尺寸，通常用于需要节省内存的嵌入式系统开发。</li>
 </ul>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意：函数内联是一种优化策略，和 <code>inline</code> 关键字毫无关系，请看稍后推出的符号链接专题课程或抢先看<a href="https://www.bilibili.com/video/BV1Mg4y1d79w">小彭老师视频</a>了解 <code>inline</code>，以后的性能优化专题课程也会介绍函数内联优化的成功案例。</p>
+</blockquote>
 <h3 id="platform-_7">调试信息</h3>
 <p>Clang 和 GCC：<code>-g</code>、<code>-g0</code>、<code>-g1</code>、<code>-g2</code>、<code>-g3</code></p>
 <p>MSVC：<code>/Z7</code>、<code>/Zi</code></p>
@@ -670,10 +681,30 @@ void try_call_foo(T &amp;) {
 <div class="toc">
 <ul>
 <li><a href="#functions-_1">认识函数 (未完工)</a></li>
-<li><a href="#functions-_2">自定义函数</a></li>
+<li><a href="#functions-_2">自定义函数</a><ul>
+<li><a href="#functions-_3">调用函数</a></li>
+<li><a href="#functions-_4">函数的返回值</a><ul>
+<li><a href="#functions-_5">接住返回值</a></li>
+<li><a href="#functions-auto">返回类型 auto</a></li>
+</ul>
+</li>
+<li><a href="#functions-_6">函数的参数</a><ul>
+<li><a href="#functions-vs">形参 vs 实参</a></li>
+<li><a href="#functions-vs_1">按引用传参 vs 按值传参</a></li>
+<li><a href="#functions-auto_1">参数类型 auto</a></li>
+<li><a href="#functions-c">C 风格变长参数</a></li>
+</ul>
+</li>
+<li><a href="#functions-_7">模板函数</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <h1 id="functions-_2">自定义函数</h1>
+<h2 id="functions-_3">调用函数</h2>
+<pre><code class="language-cpp">TODO: println 参数演示
+</code></pre>
+<h2 id="functions-_4">函数的返回值</h2>
 <p>函数可以没有返回值，只需要返回类型写 <code>void</code> 即可，这样的函数调用的目的只是为了他的副作用（如修改全局变量，输出文本到控制台，修改引用参数等）。</p>
 <pre><code class="language-cpp">void compute()
 {
@@ -682,8 +713,24 @@ void try_call_foo(T &amp;) {
 </code></pre>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 对于没有返回值（返回类型为 <code>void</code>）的函数，可以省略 <code>return</code> 不写。</p>
-<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 对于有返回值的函数，必须写 return 语句，否则程序出错。</p>
 </blockquote>
+<pre><code class="language-cpp">void compute()
+{
+    // 没问题
+}
+</code></pre>
+<blockquote>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 对于有返回值的函数，必须写 return 语句，如果漏写，会出现可怕的未定义行为 (undefined behaviour)。编译器不会报错，而是到运行时才出现崩溃等现象，建议 GCC 用户开启 <code>-Werror=return-type</code> 让编译器检测此类错误。更多未定义行为可以看我们的<a href="#undef">未定义行为列表</a>章节。</p>
+</blockquote>
+<h3 id="functions-_5">接住返回值</h3>
+<h3 id="functions-auto">返回类型 <code>auto</code></h3>
+<h2 id="functions-_6">函数的参数</h2>
+<h3 id="functions-vs">形参 vs 实参</h3>
+<h3 id="functions-vs_1">按引用传参 vs 按值传参</h3>
+<p>TODO：和 Python、Java 对比</p>
+<h3 id="functions-auto_1">参数类型 <code>auto</code></h3>
+<h3 id="functions-c">C 风格变长参数</h3>
+<h2 id="functions-_7">模板函数</h2>
 <p>TODO：更多介绍函数</p></section><section class="print-page" id="functional"><h1 id="functional-_1">函数式编程</h1>
 <div class="toc">
 <ul>
@@ -1540,6 +1587,11 @@ int main() {
 <li><a href="#unicode-utf-16">UTF-16</a></li>
 <li><a href="#unicode-_7">字节序问题，大小端之争</a></li>
 <li><a href="#unicode-bom">BOM 标记</a></li>
+<li><a href="#unicode-gb2312gbkgb18030">GB2312、GBK、GB18030 的关系</a><ul>
+<li><a href="#unicode-gb2312">GB2312</a></li>
+</ul>
+</li>
+<li><a href="#unicode-gbk">GBK</a></li>
 </ul>
 </li>
 <li><a href="#unicode-cc">C/C++ 中的字符编码</a><ul>
@@ -2101,6 +2153,17 @@ int main() {
 <p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如 Windows 环境中，所有的文本文件都被默认假定为 ANSI（GBK）编码，如果你要保存文本文件为 UTF-8 编码，就需要加上 BOM 标志。当 MSVC 读取时，看到开头是 <code>0xEF 0xBB 0xBF</code>，就明白这是一个 UTF-8 编码的文件。这样，MSVC 就能正确地处理中文字符串常量了。如果 MSVC 没看到 BOM，会默认以为是 ANSI（GBK）编码的，从而中文字符串常量会乱码。开启 <code>/utf-8</code> 选项也能让 MSVC 把没有 BOM 的源码文件当作 UTF-8 来解析，适合跨平台宝宝体质。</p>
 <p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 其实 Windows 用户可以在控制面板的“时钟和区域”里，找到“区域”选项。在“区域”选项卡里，点击“更改系统区域设置”，然后弹出的对话框里，勾选“Beta 版：使用 Unicode UTF-8 提供全球语言支持”，重启后，就可以在程序中默认使用 UTF-8，而不是糟糕的 GBK 了。这会把 ANSI 变成 UTF-8，让记事本等软件把无 BOM 的文件都当作 UTF-8，让各种软件都认为字符串是 UTF-8 等等。这可以解决部分美国软件无法处理中文、乱码等问题，因为美国程序员常常无意识地用 UTF-8 字符串未经处理直接调用 <code>A</code> 函数。不过，这会导致你运行其他假定了 GBK 的中国特供程序乱码，也会导致你的毕业答辩导师发来的 ZIP 变成乱码。而且我们作为客户端的开发者，我们总不能强求所有客户用我们的软件前，改变他们的控制面板来适应我们的程序吧？所以还是需要绕开 GBK，直接调用 UTF-16 的 <code>W</code> 类 API。</p>
 </blockquote>
+<h3 id="unicode-gb2312gbkgb18030">GB2312、GBK、GB18030 的关系</h3>
+<h4 id="unicode-gb2312">GB2312</h4>
+<p>GB2312 是一个古老的标准，兼容 ASCII。</p>
+<p>GB2312 规定了 6763 个汉字和 682 个特殊符号，共 7445 个字符。</p>
+<p>GB2312 使用 2 字节来编码汉字和特殊符号，而 1 字节的编码保持和 ASCII 相同，从而兼容 ASCII。</p>
+<p>2 个字节分别被称为“区码”和“位码”。的部分都在 0xA1 到 0xFE 区间内，与 ASCII 不重合，且避开了 0xFF</p>
+<p>其中“一级汉字”，即常用汉字，有 3755 个，这些汉字的编码从 0xA1A1 到 0xF7FE。</p>
+<p>“二级汉字”，即生僻汉字，有 3008 个，这些汉字的编码从 0xA1A1 到 0xA9FE。</p>
+<p>GB2312 也规定了一些特殊字符的编码，例如全角空格 <code>0xA1A1</code>，以及 1 级汉字和 2 级汉字的划分。</p>
+<h3 id="unicode-gbk">GBK</h3>
+<p>GBK 是 GB2312 的扩展，他规定了 21003 个汉字和 682 个非汉字，共 21886 个</p>
 <h2 id="unicode-cc">C/C++ 中的字符编码</h2>
 <h3 id="unicode-_8">字符类型</h3>
 <table>
@@ -2165,6 +2228,9 @@ int main() {
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 好消息是无论“区域设置”是什么，肯定兼容 ASCII。例如 GBK 和 UTF-8 都兼容 ASCII，否则就和所有的 C 语言经典函数如 <code>strlen</code>，换行符 <code>'\n'</code>，路径分隔符 <code>'/'</code> 和 <code>'\\'</code> 冲突了。</p>
 </blockquote>
 <p><code>wchar_t</code> 就好一些，虽然在 Windows 系统上是糟糕的 UTF-16，但至少稳定了，不会随着系统区域设置而随意改变，只要你不打算跨平台，<code>wchar_t</code> 就是 Windows 程序的标配。</p>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 根据 Windows 官方文档的说法，<code>wchar_t</code> 是 UTF-16LE。</p>
+</blockquote>
 <h3 id="unicode-utf-8-ascii">思考：UTF-8 为什么完美兼容 ASCII</h3>
 <p>UTF-8 的火车头和车厢，都是 <code>1</code> 开头的，而 ASCII 的单体火车头永远是 <code>0</code> 开头。这很重要，不仅火车头需要和 ASCII 区分开来，车厢也需要。考虑这样一个场景：</p>
 <pre><code class="language-cpp">std::u32string path = &quot;一个老伯.txt&quot;;
@@ -4646,7 +4712,682 @@ base64.b64decode(secret).decode()
 </blockquote>
 <p>总之，如果你输入中文实在有问题，可以考虑先 Base64 转换成纯英文试试看，反正无论谁都兼容 ASCII。如果这个文本框不区分大小写，还可以试试看只有 A-Z 0-9 的 Base32 编码。</p>
 <h3 id="unicode-_27">字符编码猜测</h3>
-<p>TODO</p></section><h1 class='nav-section-title-end'>Ended: 章节列表</h1>
+<p>TODO</p></section><section class="print-page" id="undef"><h1 id="undef-_1">未定义行为完整列表</h1>
+<div class="toc">
+<ul>
+<li><a href="#undef-_1">未定义行为完整列表</a><ul>
+<li><a href="#undef-_2">建议开启标准库的调试模式</a></li>
+<li><a href="#undef-_3">空指针类</a><ul>
+<li><a href="#undef-_4">不能解引用空指针（通常会产生崩溃，但也可能被优化产生奇怪的现象）</a></li>
+<li><a href="#undef-end">不能解引用 end 迭代器</a></li>
+<li><a href="#undef-this">this 指针不能为空</a></li>
+</ul>
+</li>
+<li><a href="#undef-_5">指针别名类</a><ul>
+<li><a href="#undef-reinterpret_cast">reinterpret_cast 后以不兼容的类型访问</a></li>
+<li><a href="#undef-union">union 访问不是激活的成员</a></li>
+<li><a href="#undef-t-alignoft">T 类型指针必须对齐到 alignof(T)</a></li>
+</ul>
+</li>
+<li><a href="#undef-_6">算数类</a><ul>
+<li><a href="#undef-_7">有符号整数的加减乘除模不能溢出</a></li>
+<li><a href="#undef-_8">左移或右移的位数，不得超过整数类型上限，不得为负</a></li>
+<li><a href="#undef-0">除数不能为 0</a></li>
+</ul>
+</li>
+<li><a href="#undef-_9">函数类</a><ul>
+<li><a href="#undef-void-return">返回类型不为 void 的函数，必须有 return 语句</a></li>
+<li><a href="#undef-_10">函数指针被调用时，不能为空</a></li>
+</ul>
+</li>
+<li><a href="#undef-_11">生命周期类</a><ul>
+<li><a href="#undef-_12">不能读取未初始化的变量</a></li>
+<li><a href="#undef-_13">指针的加减法不能超越数组边界</a></li>
+<li><a href="#undef-end_1">可以有指向数组尾部的指针（类似 end 迭代器），但不能解引用</a></li>
+<li><a href="#undef-_14">不能访问未初始化的指针</a></li>
+<li><a href="#undef-_15">不能访问已释放的内存</a></li>
+<li><a href="#undef-new-new-malloc-delete-delete-free">new / new[] / malloc 和 delete / delete[] / free 必须匹配</a></li>
+<li><a href="#undef-_16">不要访问已经析构的对象</a></li>
+</ul>
+</li>
+<li><a href="#undef-_17">库函数类</a><ul>
+<li><a href="#undef-ctypeh-0127-ascii">ctype.h 中一系列函数的字符参数，必须在 0~127 范围内（即只支持 ASCII 字符）</a></li>
+<li><a href="#undef-memcpy-src-dst">memcpy 函数的 src 和 dst 不能为空指针</a></li>
+<li><a href="#undef-memcpy-src-dst_1">memcpy 不能接受带有重叠的 src 和 dst</a></li>
+<li><a href="#undef-vback-v">v.back() 当 v 为空时是未定义行为</a></li>
+<li><a href="#undef-vector-operator-i">vector 的 operator[] 当 i 越界时，是未定义行为</a></li>
+<li><a href="#undef-_18">容器迭代器失效</a></li>
+<li><a href="#undef-_19">容器元素引用失效</a></li>
+</ul>
+</li>
+<li><a href="#undef-_20">多线程类</a><ul>
+<li><a href="#undef-_21">多个线程同时访问同一个对象，其中至少一个线程的访问为写访问，是未定义行为（俗称数据竞争）</a></li>
+<li><a href="#undef-mutex">多个线程同时对两个 mutex 上锁，但顺序相反，会产生未定义行为（俗称死锁）</a></li>
+<li><a href="#undef-recursive_mutex-mutex">对于非 recursive_mutex，同一个线程对同一个 mutex 重复上锁，会产生未定义行为（俗称递归死锁）</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#undef-_22">总结</a></li>
+</ul>
+</div>
+<p>如有疏漏，可以在 [GitHub](https://github.com/parallel101/ 补充。</p>
+<h2 id="undef-_2">建议开启标准库的调试模式</h2>
+<p>可以帮助你监测未定义行为</p>
+<ul>
+<li>msvc: Debug 配置</li>
+<li>gcc: 定义 <code>_GLIBCXX_DEBUG</code> 宏</li>
+</ul>
+<h2 id="undef-_3">空指针类</h2>
+<h3 id="undef-_4">不能解引用空指针（通常会产生崩溃，但也可能被优化产生奇怪的现象）</h3>
+<p>只要解引用就错了，无论是否读取或写入</p>
+<pre><code class="language-cpp">int *p = nullptr;
+*p;          // 错！
+&amp;*p;         // 错！
+*p = 0;      // 错！
+int i = *p;  // 错！
+</code></pre>
+<pre><code class="language-cpp">unique_ptr&lt;int&gt; p = nullptr;
+p.get();     // 可以
+&amp;*p;         // 错！
+</code></pre>
+<p>例如在 Debug 配置的 MSVC STL 中，<code>&amp;*p</code> 会产生断言异常，而 <code>p.get()</code> 不会。</p>
+<pre><code class="language-cpp">if (&amp;*p != nullptr) { // 可能被优化为 if (1)，因为未定义行为被排除了
+}
+if (p != nullptr) {   // 不会被优化，正常判断
+}
+</code></pre>
+<h3 id="undef-end">不能解引用 end 迭代器</h3>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = {1, 2, 3, 4};
+int *begin = &amp;*v.begin();
+int *end = &amp;*v.end(); // 错！
+</code></pre>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = {};
+int *begin = &amp;*v.begin(); // 错!
+int *end = &amp;*v.end();     // 错！
+</code></pre>
+<p>建议改用 data 和 size</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = {1, 2, 3, 4};
+int *begin = v.data();
+int *end = v.data() + v.size();
+</code></pre>
+<h3 id="undef-this">this 指针不能为空</h3>
+<pre><code class="language-cpp">struct C {
+    void print() {
+        if (this == nullptr) { // 此分支可能会被优化为 if (0) { ... } 从而永不生效
+            std::cout &lt;&lt; &quot;this 是空\n&quot;;
+        }
+    }
+};
+
+void func() {
+    C *c = nullptr;
+    c-&gt;print(); // 错！
+}
+</code></pre>
+<h2 id="undef-_5">指针别名类</h2>
+<h3 id="undef-reinterpret_cast">reinterpret_cast 后以不兼容的类型访问</h3>
+<pre><code class="language-cpp">int i;
+float f = *(float *)&amp;i; // 错！
+*(int *)(uintptr_t)&amp;i;  // 可以
+</code></pre>
+<p>例外：char、signed char、unsigned char 和 std::byte 总是兼容任何类型</p>
+<pre><code class="language-cpp">int i;
+char *buf = (char *)&amp;i; // 可以
+buf[0] = 1;             // 可以
+</code></pre>
+<h3 id="undef-union">union 访问不是激活的成员</h3>
+<pre><code class="language-cpp">float bitCast(int i) {
+    union {
+        int i;
+        float f;
+    } u;
+    u.i = i;
+    return u.f; // 错！
+}
+</code></pre>
+<p>特例：公共的前缀成员可以安全地访问</p>
+<pre><code class="language-cpp">int foo(int i) {
+    union {
+        struct {
+            int tag;
+            int value;
+        } m1;
+        struct {
+            int tag;
+            float value;
+        } m2;
+    } u;
+    u.m1.tag = i;
+    return u.m2.tag; // 可以
+}
+</code></pre>
+<p>如需在 float 和 int 之间按位转换，建议改用 memcpy，因为 memcpy 内部被认为是以 char 指针访问的，char 总是兼容任何类型</p>
+<pre><code class="language-cpp">float bitCast(int i) {
+    float f;
+    memcpy(&amp;f, &amp;i, sizeof(i));
+    return f;
+}
+</code></pre>
+<p>或 C++20 的 <code>std::bit_cast</code></p>
+<pre><code class="language-cpp">float bitCast(int i) {
+    float f = std::bit_cast&lt;float&gt;(i);
+    return f;
+}
+</code></pre>
+<h3 id="undef-t-alignoft">T 类型指针必须对齐到 alignof(T)</h3>
+<pre><code class="language-cpp">struct alignas(64) C { // 假设 alignof(int) 是 4
+    int i;
+    char c;
+};
+
+C *p = (C *)malloc(sizeof(C)); // 错！malloc 产生的指针只保证对齐到 max_align_t（GCC 上是 16 字节）大小，并不保证对齐到 C 所需的 64 字节
+C *p = new C;  // 可以，new T 总是保证对齐到 alignof(T)
+</code></pre>
+<pre><code class="language-cpp">char buf[sizeof(int)];
+int *p = (int *)buf;  // 错！
+</code></pre>
+<pre><code class="language-cpp">alignas(alignof(int)) char buf[sizeof(int)];
+int *p = (int *)buf;  // 可以
+</code></pre>
+<pre><code class="language-cpp">char buf[sizeof(int) * 2];
+int *p = (int *)(((uintptr_t)buf + sizeof(int) - 1) &amp; ~(alignof(int) - 1));  // 可以
+</code></pre>
+<h2 id="undef-_6">算数类</h2>
+<h3 id="undef-_7">有符号整数的加减乘除模不能溢出</h3>
+<pre><code class="language-cpp">int i = INT_MAX;
+i + 1;  // 错！
+</code></pre>
+<p>但无符号可以，无符号整数保证：溢出必定回环 (wrap-around)</p>
+<pre><code class="language-cpp">unsigned int i = UINT_MAX;
+i + 1;  // 可以，会得到 0
+</code></pre>
+<p>如需对有符号整数做回环，可以先转换为相应的 unsigned 类型，算完后再转回来</p>
+<pre><code class="language-cpp">int i = INT_MAX;
+(int)((unsigned int)i + 1);  // 可以，会得到一个负数 INT_MIN
+</code></pre>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 如下写法更具有可移植性，因为无符号数向有符号数转型时若超出有符号数的表示范围则为实现定义行为（编译器厂商决定结果，但不是未定义行为）</p>
+</blockquote>
+<pre><code class="language-cpp">std::bit_cast&lt;int&gt;((unsigned int)i + i);
+</code></pre>
+<p>有符号整数的加减乘除模运算结果结果必须在表示范围内：例如对于 int a 和 int b，若 a/b 的结果不可用 int 表示，那么 a/b 和 a%b 均未定义</p>
+<pre><code class="language-cpp">INT_MIN % -1; // 错！
+INT_MIN / -1; // 错！
+</code></pre>
+<h3 id="undef-_8">左移或右移的位数，不得超过整数类型上限，不得为负</h3>
+<pre><code class="language-cpp">unsigned int i = 0;
+i &lt;&lt; 31;  // 可以
+i &lt;&lt; 32;  // 错！
+i &lt;&lt; 0;   // 可以
+i &lt;&lt; -1;  // 错！
+</code></pre>
+<p>对于有符号整数，左移还不得破坏符号位</p>
+<pre><code class="language-cpp">int i = 0;
+i &lt;&lt; 1;   // 可以
+i &lt;&lt; 31;  // 错！
+unsigned int u = 0;
+u &lt;&lt; 31; // 可以
+</code></pre>
+<p>如需处理来自用户输入的位移数量，可以先做范围检测</p>
+<pre><code class="language-cpp">int shift;
+cin &gt;&gt; shift;
+
+unsigned int u = 0;
+int i = 0;
+(shift &gt; 0 &amp;&amp; shift &lt; 32) ? (u &lt;&lt; shift) : 0; // 可以
+(shift &gt; 0 &amp;&amp; shift &lt; 31) ? (i &lt;&lt; shift) : 0; // 可以
+</code></pre>
+<h3 id="undef-0">除数不能为 0</h3>
+<pre><code class="language-cpp">int i = 42;
+int j = 0;
+i / j;  // 错！
+i % j;  // 错！
+</code></pre>
+<h2 id="undef-_9">函数类</h2>
+<h3 id="undef-void-return">返回类型不为 void 的函数，必须有 return 语句</h3>
+<pre><code class="language-cpp">int func() {
+    int i = 42;
+    // 错！会导致 func 返回时程序崩溃，且编译器只是警告，不报错
+}
+
+int func() {
+    int i = 42;
+    return i;  // 正确
+}
+
+void func() {
+    int i = 42;
+    // 返回 void 的函数，return 语句可以省略
+}
+</code></pre>
+<p>坑人之处在于，忘记写，不会报错，编译器只是警告。</p>
+<p>为了避免忘记写 return 语句，建议 gcc 编译器开启 <code>-Werror=return-type</code> 选项，将不写返回语句的警告转化为错误</p>
+<p>注意，在有分支的非 void 函数中，必须所有可达分支都有 return 语句</p>
+<pre><code class="language-cpp">int func(int x) {
+    if (x &lt; 0)
+        return -x;
+    if (x &gt; 0)
+        return x;
+    // 如果调用了 func(0)，那么会抵达没有 return 的分支，触发未定义行为
+}
+</code></pre>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 没有 return 的分支相当于写了一个 std::unreachable()</p>
+</blockquote>
+<p>但也有例外：</p>
+<ol>
+<li><code>main</code> 函数可以不写 <code>return</code> 语句，默认自带 <code>return 0;</code></li>
+<li>协程函数可以不写 <code>return</code> 语句，如果有 <code>co_return</code> 或者协程返回类型为 <code>void</code> 且具有至少一个 <code>co_await</code> 出现</li>
+</ol>
+<h3 id="undef-_10">函数指针被调用时，不能为空</h3>
+<pre><code class="language-cpp">typedef void (*func_t)();
+
+func_t func = nullptr;
+func();    // 错！
+</code></pre>
+<p>《经典再现》</p>
+<pre><code class="language-cpp">#include &lt;cstdio&gt;
+
+static void func() {
+    printf(&quot;func called\n&quot;);
+}
+
+typedef void (*func_t)();
+
+static func_t fp = nullptr;
+
+extern void set_fp() { // 导出符号，虽然没人调用，却影响了 clang 的优化决策
+    fp = func;
+}
+
+int main() {
+    fp(); // Release 时，clang 会把这一行直接优化成 func()
+    return 0;
+}
+</code></pre>
+<h2 id="undef-_11">生命周期类</h2>
+<h3 id="undef-_12">不能读取未初始化的变量</h3>
+<pre><code class="language-cpp">int i;
+cout &lt;&lt; i; // 错！
+
+int i = 0;
+cout &lt;&lt; i; // 可以，会读到 0
+
+int arr[10];
+cout &lt;&lt; arr[0]; // 错！
+
+int arr[10] = {};
+cout &lt;&lt; arr[0]; // 可以，会读到 0
+</code></pre>
+<h3 id="undef-_13">指针的加减法不能超越数组边界</h3>
+<pre><code class="language-cpp">int arr[10];
+int *p = &amp;arr[0];
+p + 1;     // 可以
+p + 10;    // 可以
+p + 11;    // 错！
+</code></pre>
+<h3 id="undef-end_1">可以有指向数组尾部的指针（类似 end 迭代器），但不能解引用</h3>
+<pre><code class="language-cpp">int arr[10];
+int *p = &amp;arr[0];
+int *end = p + 10; // 可以
+*end;              // 错！
+</code></pre>
+<h3 id="undef-_14">不能访问未初始化的指针</h3>
+<pre><code class="language-cpp">int *p;
+*p; // 错！
+</code></pre>
+<pre><code class="language-cpp">struct Dog {
+    int age;
+};
+
+struct Person {
+    Dog *dog;
+};
+
+Person *p = new Person;
+cout &lt;&lt; p-&gt;dog-&gt;age; // 错！
+
+p-&gt;dog = new Dog;
+cout &lt;&lt; p-&gt;dog-&gt;age; // 可以
+</code></pre>
+<h3 id="undef-_15">不能访问已释放的内存</h3>
+<pre><code class="language-cpp">int *p = new int;
+*p; // 可以
+delete p;
+*p; // 错！
+</code></pre>
+<pre><code class="language-cpp">int *p = (int *)malloc(sizeof(int));
+*p; // 可以
+free(p);
+*p; // 错！
+</code></pre>
+<pre><code class="language-cpp">int *func() {
+    int arr[10];
+    return arr; // 错！
+}
+
+int main() {
+    int *p = func();
+    p[0];  // 错！arr 已经析构，不能通过空悬指针 / 空悬引用继续访问已经析构的对象
+}
+</code></pre>
+<p>建议改用更安全的 array 或 vector 容器</p>
+<pre><code class="language-cpp">array&lt;int, 10&gt; func() {
+    array&lt;int, 10&gt; arr;
+    return arr;
+}
+
+int main() {
+    auto arr = func();
+    arr[0];  // 可以，访问到的是 main 函数局部变量 arr，是对 func 中原 arr 的一份拷贝
+}
+</code></pre>
+<h3 id="undef-new-new-malloc-delete-delete-free">new / new[] / malloc 和 delete / delete[] / free 必须匹配</h3>
+<pre><code class="language-cpp">int *p = new int;
+free(p);  // 错！
+</code></pre>
+<pre><code class="language-cpp">int *p = (int *)malloc(sizeof(int));
+free(p);  // 正确
+</code></pre>
+<pre><code class="language-cpp">int *p = new int[3];
+delete p; // 错！
+</code></pre>
+<pre><code class="language-cpp">int *p = new int[3];
+delete[] p; // 正确
+</code></pre>
+<pre><code class="language-cpp">vector&lt;int&gt; a(3);
+unique_ptr&lt;int&gt; a = make_unique&lt;int&gt;(42);
+</code></pre>
+<h3 id="undef-_16">不要访问已经析构的对象</h3>
+<pre><code class="language-cpp">struct C {
+    int i;
+    ~C() { i = 0; }
+};
+
+C *c = (C *)malloc(sizeof(C));
+cout &lt;&lt; c-&gt;i; // 可以
+c-&gt;~C();
+cout &lt;&lt; c-&gt;i; // 错！
+free(c);
+</code></pre>
+<pre><code class="language-cpp">std::string func() {
+    std::string s = &quot;hello&quot;;
+    std::string s2 = std::move(s);
+    return s;  // 语言：OK，标准库作者：s 不一定是空字符串
+}
+</code></pre>
+<h2 id="undef-_17">库函数类</h2>
+<h3 id="undef-ctypeh-0127-ascii">ctype.h 中一系列函数的字符参数，必须在 0~127 范围内（即只支持 ASCII 字符）</h3>
+<pre><code class="language-cpp">isdigit('0');    // 可以，返回 true
+isdigit('a');    // 可以，返回 false
+isdigit('\xef'); // 错！结果未定义，在 MSVC 的 Debug 模式下会产生断言异常
+
+char s[] = &quot;你好A&quot;; // UTF-8 编码的中文
+// &quot;你好a&quot;？
+std::transform(std::begin(s), std::end(s), std::begin(s), ::tolower); // 错！结果未定义，因为 UTF-8 编码会产生大于 128 的字节
+</code></pre>
+<p>MSVC STL 中 is 系列函数的断言：</p>
+<p><code>assert(-1 &lt;= c &amp;&amp; c &lt; 256);</code></p>
+<p>理论上可以这样断言：</p>
+<p><code>assert(0 &lt;= c &amp;&amp; c &lt;= 127);</code></p>
+<p>解决方法：要么改用 iswdigit（MSVC：0-65536，GCC：0-0x010ffff）</p>
+<pre><code class="language-cpp">iswdigit('0');       // 可以，返回 true
+iswdigit('\xef');    // 可以，返回 false
+iswspace(L'\ufeff'); // 可以，UTF-8 locale 时返回 true，ASCII locale 时返回 false
+</code></pre>
+<p>要么自己实现判断</p>
+<pre><code class="language-cpp">if ('0' &lt;= c &amp;&amp; c &lt;= '9')  // 代替 isdigit(c)
+if (strchr(&quot; \n\t\r&quot;, c))  // 代替 isspace(c)
+</code></pre>
+<h3 id="undef-memcpy-src-dst">memcpy 函数的 src 和 dst 不能为空指针</h3>
+<pre><code class="language-cpp">void *dst = nullptr;
+void *src = nullptr;
+size_t size = 0;
+memcpy(dst, src, size); // 错！即使 size 为 0，src 和 dst 也不能为空指针
+</code></pre>
+<p>可以给 size 加个判断</p>
+<pre><code class="language-cpp">void *dst = nullptr;
+void *src = nullptr;
+size_t size = 0;
+if (size != 0) // 可以
+    memcpy(dst, src, size);
+</code></pre>
+<h3 id="undef-memcpy-src-dst_1">memcpy 不能接受带有重叠的 src 和 dst</h3>
+<pre><code class="language-cpp">char arr[10];
+memcpy(arr, arr + 1, 9); // 错！有的同学，以为这个是对的？错了，memcpy 的 src 和 dst
+memcpy(arr + 1, arr, 9); // 错！
+memcpy(arr + 5, arr, 5); // 可以
+memcpy(arr, arr + 5, 5); // 可以
+</code></pre>
+<p>如需拷贝带重复区间的内存，可以用 memmove</p>
+<pre><code class="language-cpp">char arr[10];
+memmove(arr, arr + 1, 9); // 可以
+memmove(arr + 1, arr, 9); // 可以
+memmove(arr + 5, arr, 5); // 可以
+memmove(arr, arr + 5, 5); // 可以
+</code></pre>
+<p>从 memcpy 的 src 和 dst 指针参数是 restrict 修饰的，而 memmove 没有，就可以看出来，memcpy 不允许任何形式的指针重叠，无论先后顺序</p>
+<h3 id="undef-vback-v">v.back() 当 v 为空时是未定义行为</h3>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = {};
+int i = v.back();                  // 错！back() 并不会对 v 是否有最后一个元素做检查，此处相当于解引用了越界的指针
+int i = v.empty() ? 0 : v.back();  // 更安全，当 v 为空时返回 0
+</code></pre>
+<h3 id="undef-vector-operator-i">vector 的 operator[] 当 i 越界时，是未定义行为</h3>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = { 1, 2, 3 };
+v[3]; // 错！相当于解引用了越界的指针
+</code></pre>
+<p>可以用 at 成员函数</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = { 1, 2, 3 };
+v.at(3); // 安全，会检测到越界，抛出 std::out_of_range 异常
+</code></pre>
+<h3 id="undef-_18">容器迭代器失效</h3>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = { 1, 2, 3 };
+auto it = v.begin();
+v.push_back(4); // push_back 可能导致扩容，会使之前保存的 v.begin() 迭代器失效
+*it = 0;        // 错！
+</code></pre>
+<p>如果不需要连续内存，可以改用分段内存的 deque 容器，其可以保证元素不被移动，迭代器不失效。</p>
+<pre><code class="language-cpp">std::deque&lt;int&gt; v = { 1, 2, 3 };
+auto it = v.begin();
+v.push_back(4); // deque 的 push_back 不会导致迭代器失效
+*it = 0;        // 可以
+</code></pre>
+<ul>
+<li>https://www.geeksforgeeks.org/iterator-invalidation-cpp</li>
+<li>https://en.cppreference.com/w/cpp/container</li>
+</ul>
+<h3 id="undef-_19">容器元素引用失效</h3>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = {1, 2, 3};
+int &amp;ref = v[0];
+v.push_back(4); // push_back 可能导致扩容，使元素全部移动到了新的一段内存，会使之前保存的 ref 引用失效
+ref = 0;        // 错！
+</code></pre>
+<p>如果不需要连续内存，可以改用分段内存的 deque 容器，其可以保证元素不被移动，引用不失效。</p>
+<pre><code class="language-cpp">std::deque&lt;int&gt; v = {1, 2, 3};
+int &amp;ref = v[0];
+v.push_back(4); // deque 的 push_back 不会导致元素移动，使引用失效
+ref = 0;        // 可以
+</code></pre>
+<h2 id="undef-_20">多线程类</h2>
+<h3 id="undef-_21">多个线程同时访问同一个对象，其中至少一个线程的访问为写访问，是未定义行为（俗称数据竞争）</h3>
+<pre><code class="language-cpp">std::string s;
+
+void t1() {
+    s.push_back('a'); // 写访问，出错！
+}
+
+void t2() {
+    cout &lt;&lt; s.size(); // 读访问
+}
+</code></pre>
+<pre><code class="language-cpp">std::string s;
+
+void t1() {
+    s.push_back('a'); // 写访问，出错！
+}
+
+void t2() {
+    s.push_back('b'); // 写访问，出错！
+}
+</code></pre>
+<p>更准确的说法是：多个线程（无 happens before 关系地）访问同一个对象，其中至少一个线程的访问带有副作用（写访问或带有volatile的读访问），是未定义行为</p>
+<pre><code class="language-cpp">// 八股文教材常见的错误写法！volatile 并不保证原子性和内存序，这样写是有未定义行为的。正确的做法是改用 std::atomic&lt;int&gt;
+volatile int ready = 0;
+int data;
+
+void t1() {
+    data = 42;
+    ready = 1;
+}
+
+void t2() {
+    while (ready == 0)
+        ;
+    printf(&quot;%d\n&quot;, data);
+}
+</code></pre>
+<p>建议利用 mutex，counting_semaphore，atomic 等多线程同步工具，保证多个线程访问同一个对象时，顺序有先有后，不会“同时”发生，那就是安全的</p>
+<pre><code class="language-cpp">std::string s;
+std::mutex m;
+
+void t1() {
+    std::lock_guard l(m);
+    s.push_back('a'); // 有 mutex 保护，可以
+}
+
+void t2() {
+    std::lock_guard l(m);
+    s.push_back('b'); // 有 mutex 保护，可以
+}
+</code></pre>
+<p>在上面的例子中，互斥锁保证了要么 t1 happens before t2，要么 t2 happens before t1，不会“同时”访问，是安全的</p>
+<pre><code class="language-cpp">std::string s;
+std::counting_semaphore&lt;1&gt; sem(1);
+
+void t1() {
+    s.push_back('a');
+    sem.release(); // 令 t2 必须发生在 t1 之后
+}
+
+void t2() {
+    sem.acquire(); // t2 必须等待 t1 release 后，才能开始执行
+    s.push_back('b');
+}
+</code></pre>
+<p>在上面的例子中，信号量保证了 t1 happens before t2，不会“同时”访问，是安全的</p>
+<pre><code class="language-cpp">std::string s;
+std::atomic&lt;bool&gt; ready{false};
+
+void t1() {
+    s.push_back('a');
+    ready.store(true, std::memory_order_release); // 令 s 的修改对其他 acquire 了 ready 的线程可见
+}
+
+void t2() {
+    while (!ready.load(std::memory_order_acquire)) // t2 必须等待 t1 store 后，才能开始执行
+        ;
+    s.push_back('b');
+}
+</code></pre>
+<p>在上面的例子中，原子变量的 acquire/release 内存序保证了 t1 happens before t2，不会“同时”访问，是安全的</p>
+<h3 id="undef-mutex">多个线程同时对两个 mutex 上锁，但顺序相反，会产生未定义行为（俗称死锁）</h3>
+<pre><code class="language-cpp">std::mutex m1, m2;
+
+void t1() {
+    m1.lock();
+    m2.lock(); // 错！
+    m2.unlock();
+    m1.unlock();
+}
+
+void t2() {
+    m2.lock();
+    m1.lock(); // 错！
+    m1.unlock();
+    m2.unlock();
+}
+</code></pre>
+<p>解决方法：不要在多个 mutex 上同时上锁，如果确实要多个 mutex，保证顺序一致</p>
+<pre><code class="language-cpp">std::mutex m1, m2;
+
+void t1() {
+    m1.lock();
+    m2.lock();
+    m2.unlock();
+    m1.unlock();
+}
+
+void t2() {
+    m1.lock();
+    m2.lock();
+    m2.unlock();
+    m1.unlock();
+}
+</code></pre>
+<p>或使用 std::lock</p>
+<pre><code class="language-cpp">std::mutex m1, m2;
+
+void t1() {
+    std::lock(m1, m2);
+    std::unlock(m1, m2);
+}
+
+void t2() {
+    std::lock(m2, m1);
+    std::unlock(m2, m1);
+}
+</code></pre>
+<h3 id="undef-recursive_mutex-mutex">对于非 recursive_mutex，同一个线程对同一个 mutex 重复上锁，会产生未定义行为（俗称递归死锁）</h3>
+<pre><code class="language-cpp">std::mutex m;
+
+void t1() {
+    m.lock();
+    m.lock();     // 错！
+    m.try_lock(); // 错！try_lock 也不允许！
+    m.unlock();
+    m.unlock();
+}
+
+void t2() {
+    m.try_lock(); // 可以
+}
+</code></pre>
+<p>解决方法：改用 recursive_mutex，或使用适当的条件变量</p>
+<pre><code class="language-cpp">std::recursive_mutex m;
+
+void t1() {
+    m.lock();
+    m.lock(); // 可以
+    m.try_lock(); // 可以，返回 true
+    m.unlock();
+    m.unlock();
+    m.unlock();
+}
+</code></pre>
+<h1 id="undef-_22">总结</h1>
+<ul>
+<li>不要玩空指针</li>
+<li>不要越界，用更安全的 at，subspan 等</li>
+<li>不要不初始化变量（auto-idiom）</li>
+<li>开启 <code>-Werror=return-type</code></li>
+<li>不要重复上锁 mutex</li>
+<li>仔细看库函数的文档</li>
+<li>用智能指针管理单个对象</li>
+<li>用 vector 管理多个对象组成的连续内存</li>
+<li>避免空悬引用</li>
+<li>开 Debug 模式的 STL</li>
+</ul>
+<p>指定 CMake 的模式：<code>cmake -B build -DCMAKE_BUILD_TYPE=Debug</code></p>
+<ul>
+<li>Debug: <code>-O0 -g</code> 编译选项</li>
+<li>Release: <code>-O3 -DNDEBUG</code> 编译选项</li>
+</ul>
+<p>指定 MSVC 的模式：<code>cmake --build build --config Debug</code></p>
+<ul>
+<li>Debug: 生成 <code>zenod.dll</code>，链接 Debug 的 ABI</li>
+<li>Release: 生成 <code>zeno.dll</code>，链接 Release 的 ABI</li>
+</ul></section><h1 class='nav-section-title-end'>Ended: 章节列表</h1>
                         <h1 class='nav-section-title' id='section-关于'>
                             关于 <a class='headerlink' href='#section-关于' title='Permanent link'>↵</a>
                         </h1>

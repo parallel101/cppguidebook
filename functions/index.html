@@ -78,6 +78,10 @@
 <li>
     <a href="../unicode/" class="dropdown-item">字符编码那些事</a>
 </li>
+                                    
+<li>
+    <a href="../undef/" class="dropdown-item">未定义行为完整列表</a>
+</li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -149,6 +153,22 @@
             
             <li class="nav-item" data-bs-level="1"><a href="#_2" class="nav-link">自定义函数</a>
               <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#_3" class="nav-link">调用函数</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_4" class="nav-link">函数的返回值</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_6" class="nav-link">函数的参数</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_7" class="nav-link">模板函数</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -160,10 +180,30 @@
 <div class="toc">
 <ul>
 <li><a href="#_1">认识函数 (未完工)</a></li>
-<li><a href="#_2">自定义函数</a></li>
+<li><a href="#_2">自定义函数</a><ul>
+<li><a href="#_3">调用函数</a></li>
+<li><a href="#_4">函数的返回值</a><ul>
+<li><a href="#_5">接住返回值</a></li>
+<li><a href="#auto">返回类型 auto</a></li>
+</ul>
+</li>
+<li><a href="#_6">函数的参数</a><ul>
+<li><a href="#vs">形参 vs 实参</a></li>
+<li><a href="#vs_1">按引用传参 vs 按值传参</a></li>
+<li><a href="#auto_1">参数类型 auto</a></li>
+<li><a href="#c">C 风格变长参数</a></li>
+</ul>
+</li>
+<li><a href="#_7">模板函数</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <h1 id="_2">自定义函数</h1>
+<h2 id="_3">调用函数</h2>
+<pre><code class="language-cpp">TODO: println 参数演示
+</code></pre>
+<h2 id="_4">函数的返回值</h2>
 <p>函数可以没有返回值，只需要返回类型写 <code>void</code> 即可，这样的函数调用的目的只是为了他的副作用（如修改全局变量，输出文本到控制台，修改引用参数等）。</p>
 <pre><code class="language-cpp">void compute()
 {
@@ -172,8 +212,24 @@
 </code></pre>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 对于没有返回值（返回类型为 <code>void</code>）的函数，可以省略 <code>return</code> 不写。</p>
-<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 对于有返回值的函数，必须写 return 语句，否则程序出错。</p>
 </blockquote>
+<pre><code class="language-cpp">void compute()
+{
+    // 没问题
+}
+</code></pre>
+<blockquote>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 对于有返回值的函数，必须写 return 语句，如果漏写，会出现可怕的未定义行为 (undefined behaviour)。编译器不会报错，而是到运行时才出现崩溃等现象，建议 GCC 用户开启 <code>-Werror=return-type</code> 让编译器检测此类错误。更多未定义行为可以看我们的<a href="/undef">未定义行为列表</a>章节。</p>
+</blockquote>
+<h3 id="_5">接住返回值</h3>
+<h3 id="auto">返回类型 <code>auto</code></h3>
+<h2 id="_6">函数的参数</h2>
+<h3 id="vs">形参 vs 实参</h3>
+<h3 id="vs_1">按引用传参 vs 按值传参</h3>
+<p>TODO：和 Python、Java 对比</p>
+<h3 id="auto_1">参数类型 <code>auto</code></h3>
+<h3 id="c">C 风格变长参数</h3>
+<h2 id="_7">模板函数</h2>
 <p>TODO：更多介绍函数</p></div>
             </div>
         </div>

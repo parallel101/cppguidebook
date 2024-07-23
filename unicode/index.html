@@ -78,6 +78,10 @@
 <li>
     <a href="./" class="dropdown-item active" aria-current="page">字符编码那些事</a>
 </li>
+                                    
+<li>
+    <a href="../undef/" class="dropdown-item">未定义行为完整列表</a>
+</li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -117,7 +121,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../about/" class="nav-link">
+                                <a rel="next" href="../undef/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -218,6 +222,11 @@
 <li><a href="#utf-16">UTF-16</a></li>
 <li><a href="#_7">字节序问题，大小端之争</a></li>
 <li><a href="#bom">BOM 标记</a></li>
+<li><a href="#gb2312gbkgb18030">GB2312、GBK、GB18030 的关系</a><ul>
+<li><a href="#gb2312">GB2312</a></li>
+</ul>
+</li>
+<li><a href="#gbk">GBK</a></li>
 </ul>
 </li>
 <li><a href="#cc">C/C++ 中的字符编码</a><ul>
@@ -779,6 +788,17 @@
 <p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如 Windows 环境中，所有的文本文件都被默认假定为 ANSI（GBK）编码，如果你要保存文本文件为 UTF-8 编码，就需要加上 BOM 标志。当 MSVC 读取时，看到开头是 <code>0xEF 0xBB 0xBF</code>，就明白这是一个 UTF-8 编码的文件。这样，MSVC 就能正确地处理中文字符串常量了。如果 MSVC 没看到 BOM，会默认以为是 ANSI（GBK）编码的，从而中文字符串常量会乱码。开启 <code>/utf-8</code> 选项也能让 MSVC 把没有 BOM 的源码文件当作 UTF-8 来解析，适合跨平台宝宝体质。</p>
 <p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 其实 Windows 用户可以在控制面板的“时钟和区域”里，找到“区域”选项。在“区域”选项卡里，点击“更改系统区域设置”，然后弹出的对话框里，勾选“Beta 版：使用 Unicode UTF-8 提供全球语言支持”，重启后，就可以在程序中默认使用 UTF-8，而不是糟糕的 GBK 了。这会把 ANSI 变成 UTF-8，让记事本等软件把无 BOM 的文件都当作 UTF-8，让各种软件都认为字符串是 UTF-8 等等。这可以解决部分美国软件无法处理中文、乱码等问题，因为美国程序员常常无意识地用 UTF-8 字符串未经处理直接调用 <code>A</code> 函数。不过，这会导致你运行其他假定了 GBK 的中国特供程序乱码，也会导致你的毕业答辩导师发来的 ZIP 变成乱码。而且我们作为客户端的开发者，我们总不能强求所有客户用我们的软件前，改变他们的控制面板来适应我们的程序吧？所以还是需要绕开 GBK，直接调用 UTF-16 的 <code>W</code> 类 API。</p>
 </blockquote>
+<h3 id="gb2312gbkgb18030">GB2312、GBK、GB18030 的关系</h3>
+<h4 id="gb2312">GB2312</h4>
+<p>GB2312 是一个古老的标准，兼容 ASCII。</p>
+<p>GB2312 规定了 6763 个汉字和 682 个特殊符号，共 7445 个字符。</p>
+<p>GB2312 使用 2 字节来编码汉字和特殊符号，而 1 字节的编码保持和 ASCII 相同，从而兼容 ASCII。</p>
+<p>2 个字节分别被称为“区码”和“位码”。的部分都在 0xA1 到 0xFE 区间内，与 ASCII 不重合，且避开了 0xFF</p>
+<p>其中“一级汉字”，即常用汉字，有 3755 个，这些汉字的编码从 0xA1A1 到 0xF7FE。</p>
+<p>“二级汉字”，即生僻汉字，有 3008 个，这些汉字的编码从 0xA1A1 到 0xA9FE。</p>
+<p>GB2312 也规定了一些特殊字符的编码，例如全角空格 <code>0xA1A1</code>，以及 1 级汉字和 2 级汉字的划分。</p>
+<h3 id="gbk">GBK</h3>
+<p>GBK 是 GB2312 的扩展，他规定了 21003 个汉字和 682 个非汉字，共 21886 个</p>
 <h2 id="cc">C/C++ 中的字符编码</h2>
 <h3 id="_8">字符类型</h3>
 <table>
@@ -843,6 +863,9 @@
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 好消息是无论“区域设置”是什么，肯定兼容 ASCII。例如 GBK 和 UTF-8 都兼容 ASCII，否则就和所有的 C 语言经典函数如 <code>strlen</code>，换行符 <code>'\n'</code>，路径分隔符 <code>'/'</code> 和 <code>'\\'</code> 冲突了。</p>
 </blockquote>
 <p><code>wchar_t</code> 就好一些，虽然在 Windows 系统上是糟糕的 UTF-16，但至少稳定了，不会随着系统区域设置而随意改变，只要你不打算跨平台，<code>wchar_t</code> 就是 Windows 程序的标配。</p>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 根据 Windows 官方文档的说法，<code>wchar_t</code> 是 UTF-16LE。</p>
+</blockquote>
 <h3 id="utf-8-ascii">思考：UTF-8 为什么完美兼容 ASCII</h3>
 <p>UTF-8 的火车头和车厢，都是 <code>1</code> 开头的，而 ASCII 的单体火车头永远是 <code>0</code> 开头。这很重要，不仅火车头需要和 ASCII 区分开来，车厢也需要。考虑这样一个场景：</p>
 <pre><code class="language-cpp">std::u32string path = &quot;一个老伯.txt&quot;;

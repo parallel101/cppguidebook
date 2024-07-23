@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="小彭老师">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>未定义行为完整列表 - ✝️小彭大典✝️</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../css/print-site-enum-headings1.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings2.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings3.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings4.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings5.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings6.css" rel="stylesheet">
+        <link href="../css/print-site.css" rel="stylesheet">
+        <link href="../css/print-site-mkdocs.css" rel="stylesheet">
+        <link href="../extra.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">✝️小彭大典✝️</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">章节列表</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href=".." class="dropdown-item">前言</a>
+</li>
+                                    
+<li>
+    <a href="../helloworld/" class="dropdown-item">你好，世界</a>
+</li>
+                                    
+<li>
+    <a href="../platform/" class="dropdown-item">开发环境与平台选择</a>
+</li>
+                                    
+<li>
+    <a href="../vartypes/" class="dropdown-item">变量与类型 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../functions/" class="dropdown-item">认识函数 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../functional/" class="dropdown-item">函数式编程</a>
+</li>
+                                    
+<li>
+    <a href="../design/" class="dropdown-item">设计模式 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../unicode/" class="dropdown-item">字符编码那些事</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active" aria-current="page">未定义行为完整列表</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">关于</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../about/" class="dropdown-item">关于小彭老师</a>
+</li>
+                                    
+<li>
+    <a href="../donate/" class="dropdown-item">赞助名单</a>
+</li>
+                                    
+<li>
+    <a href="../recommend/" class="dropdown-item">参考资料</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/parallel101/cppguidebook" class="nav-link">GitHub</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://space.bilibili.com/263032155" class="nav-link">Bilibili</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../unicode/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../about/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/parallel101/cppguidebook/edit/master/docs/undef.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">未定义行为完整列表</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#_2" class="nav-link">建议开启标准库的调试模式</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_3" class="nav-link">空指针类</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_5" class="nav-link">指针别名类</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_6" class="nav-link">算数类</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_9" class="nav-link">函数类</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_11" class="nav-link">生命周期类</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_17" class="nav-link">库函数类</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_20" class="nav-link">多线程类</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_22" class="nav-link">总结</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">未定义行为完整列表</h1>
+<div class="toc">
+<ul>
+<li><a href="#_1">未定义行为完整列表</a><ul>
+<li><a href="#_2">建议开启标准库的调试模式</a></li>
+<li><a href="#_3">空指针类</a><ul>
+<li><a href="#_4">不能解引用空指针（通常会产生崩溃，但也可能被优化产生奇怪的现象）</a></li>
+<li><a href="#end">不能解引用 end 迭代器</a></li>
+<li><a href="#this">this 指针不能为空</a></li>
+</ul>
+</li>
+<li><a href="#_5">指针别名类</a><ul>
+<li><a href="#reinterpret_cast">reinterpret_cast 后以不兼容的类型访问</a></li>
+<li><a href="#union">union 访问不是激活的成员</a></li>
+<li><a href="#t-alignoft">T 类型指针必须对齐到 alignof(T)</a></li>
+</ul>
+</li>
+<li><a href="#_6">算数类</a><ul>
+<li><a href="#_7">有符号整数的加减乘除模不能溢出</a></li>
+<li><a href="#_8">左移或右移的位数，不得超过整数类型上限，不得为负</a></li>
+<li><a href="#0">除数不能为 0</a></li>
+</ul>
+</li>
+<li><a href="#_9">函数类</a><ul>
+<li><a href="#void-return">返回类型不为 void 的函数，必须有 return 语句</a></li>
+<li><a href="#_10">函数指针被调用时，不能为空</a></li>
+</ul>
+</li>
+<li><a href="#_11">生命周期类</a><ul>
+<li><a href="#_12">不能读取未初始化的变量</a></li>
+<li><a href="#_13">指针的加减法不能超越数组边界</a></li>
+<li><a href="#end_1">可以有指向数组尾部的指针（类似 end 迭代器），但不能解引用</a></li>
+<li><a href="#_14">不能访问未初始化的指针</a></li>
+<li><a href="#_15">不能访问已释放的内存</a></li>
+<li><a href="#new-new-malloc-delete-delete-free">new / new[] / malloc 和 delete / delete[] / free 必须匹配</a></li>
+<li><a href="#_16">不要访问已经析构的对象</a></li>
+</ul>
+</li>
+<li><a href="#_17">库函数类</a><ul>
+<li><a href="#ctypeh-0127-ascii">ctype.h 中一系列函数的字符参数，必须在 0~127 范围内（即只支持 ASCII 字符）</a></li>
+<li><a href="#memcpy-src-dst">memcpy 函数的 src 和 dst 不能为空指针</a></li>
+<li><a href="#memcpy-src-dst_1">memcpy 不能接受带有重叠的 src 和 dst</a></li>
+<li><a href="#vback-v">v.back() 当 v 为空时是未定义行为</a></li>
+<li><a href="#vector-operator-i">vector 的 operator[] 当 i 越界时，是未定义行为</a></li>
+<li><a href="#_18">容器迭代器失效</a></li>
+<li><a href="#_19">容器元素引用失效</a></li>
+</ul>
+</li>
+<li><a href="#_20">多线程类</a><ul>
+<li><a href="#_21">多个线程同时访问同一个对象，其中至少一个线程的访问为写访问，是未定义行为（俗称数据竞争）</a></li>
+<li><a href="#mutex">多个线程同时对两个 mutex 上锁，但顺序相反，会产生未定义行为（俗称死锁）</a></li>
+<li><a href="#recursive_mutex-mutex">对于非 recursive_mutex，同一个线程对同一个 mutex 重复上锁，会产生未定义行为（俗称递归死锁）</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_22">总结</a></li>
+</ul>
+</div>
+<p>如有疏漏，可以在 [GitHub](https://github.com/parallel101/ 补充。</p>
+<h2 id="_2">建议开启标准库的调试模式</h2>
+<p>可以帮助你监测未定义行为</p>
+<ul>
+<li>msvc: Debug 配置</li>
+<li>gcc: 定义 <code>_GLIBCXX_DEBUG</code> 宏</li>
+</ul>
+<h2 id="_3">空指针类</h2>
+<h3 id="_4">不能解引用空指针（通常会产生崩溃，但也可能被优化产生奇怪的现象）</h3>
+<p>只要解引用就错了，无论是否读取或写入</p>
+<pre><code class="language-cpp">int *p = nullptr;
+*p;          // 错！
+&amp;*p;         // 错！
+*p = 0;      // 错！
+int i = *p;  // 错！
+</code></pre>
+<pre><code class="language-cpp">unique_ptr&lt;int&gt; p = nullptr;
+p.get();     // 可以
+&amp;*p;         // 错！
+</code></pre>
+<p>例如在 Debug 配置的 MSVC STL 中，<code>&amp;*p</code> 会产生断言异常，而 <code>p.get()</code> 不会。</p>
+<pre><code class="language-cpp">if (&amp;*p != nullptr) { // 可能被优化为 if (1)，因为未定义行为被排除了
+}
+if (p != nullptr) {   // 不会被优化，正常判断
+}
+</code></pre>
+<h3 id="end">不能解引用 end 迭代器</h3>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = {1, 2, 3, 4};
+int *begin = &amp;*v.begin();
+int *end = &amp;*v.end(); // 错！
+</code></pre>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = {};
+int *begin = &amp;*v.begin(); // 错!
+int *end = &amp;*v.end();     // 错！
+</code></pre>
+<p>建议改用 data 和 size</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = {1, 2, 3, 4};
+int *begin = v.data();
+int *end = v.data() + v.size();
+</code></pre>
+<h3 id="this">this 指针不能为空</h3>
+<pre><code class="language-cpp">struct C {
+    void print() {
+        if (this == nullptr) { // 此分支可能会被优化为 if (0) { ... } 从而永不生效
+            std::cout &lt;&lt; &quot;this 是空\n&quot;;
+        }
+    }
+};
+
+void func() {
+    C *c = nullptr;
+    c-&gt;print(); // 错！
+}
+</code></pre>
+<h2 id="_5">指针别名类</h2>
+<h3 id="reinterpret_cast">reinterpret_cast 后以不兼容的类型访问</h3>
+<pre><code class="language-cpp">int i;
+float f = *(float *)&amp;i; // 错！
+*(int *)(uintptr_t)&amp;i;  // 可以
+</code></pre>
+<p>例外：char、signed char、unsigned char 和 std::byte 总是兼容任何类型</p>
+<pre><code class="language-cpp">int i;
+char *buf = (char *)&amp;i; // 可以
+buf[0] = 1;             // 可以
+</code></pre>
+<h3 id="union">union 访问不是激活的成员</h3>
+<pre><code class="language-cpp">float bitCast(int i) {
+    union {
+        int i;
+        float f;
+    } u;
+    u.i = i;
+    return u.f; // 错！
+}
+</code></pre>
+<p>特例：公共的前缀成员可以安全地访问</p>
+<pre><code class="language-cpp">int foo(int i) {
+    union {
+        struct {
+            int tag;
+            int value;
+        } m1;
+        struct {
+            int tag;
+            float value;
+        } m2;
+    } u;
+    u.m1.tag = i;
+    return u.m2.tag; // 可以
+}
+</code></pre>
+<p>如需在 float 和 int 之间按位转换，建议改用 memcpy，因为 memcpy 内部被认为是以 char 指针访问的，char 总是兼容任何类型</p>
+<pre><code class="language-cpp">float bitCast(int i) {
+    float f;
+    memcpy(&amp;f, &amp;i, sizeof(i));
+    return f;
+}
+</code></pre>
+<p>或 C++20 的 <code>std::bit_cast</code></p>
+<pre><code class="language-cpp">float bitCast(int i) {
+    float f = std::bit_cast&lt;float&gt;(i);
+    return f;
+}
+</code></pre>
+<h3 id="t-alignoft">T 类型指针必须对齐到 alignof(T)</h3>
+<pre><code class="language-cpp">struct alignas(64) C { // 假设 alignof(int) 是 4
+    int i;
+    char c;
+};
+
+C *p = (C *)malloc(sizeof(C)); // 错！malloc 产生的指针只保证对齐到 max_align_t（GCC 上是 16 字节）大小，并不保证对齐到 C 所需的 64 字节
+C *p = new C;  // 可以，new T 总是保证对齐到 alignof(T)
+</code></pre>
+<pre><code class="language-cpp">char buf[sizeof(int)];
+int *p = (int *)buf;  // 错！
+</code></pre>
+<pre><code class="language-cpp">alignas(alignof(int)) char buf[sizeof(int)];
+int *p = (int *)buf;  // 可以
+</code></pre>
+<pre><code class="language-cpp">char buf[sizeof(int) * 2];
+int *p = (int *)(((uintptr_t)buf + sizeof(int) - 1) &amp; ~(alignof(int) - 1));  // 可以
+</code></pre>
+<h2 id="_6">算数类</h2>
+<h3 id="_7">有符号整数的加减乘除模不能溢出</h3>
+<pre><code class="language-cpp">int i = INT_MAX;
+i + 1;  // 错！
+</code></pre>
+<p>但无符号可以，无符号整数保证：溢出必定回环 (wrap-around)</p>
+<pre><code class="language-cpp">unsigned int i = UINT_MAX;
+i + 1;  // 可以，会得到 0
+</code></pre>
+<p>如需对有符号整数做回环，可以先转换为相应的 unsigned 类型，算完后再转回来</p>
+<pre><code class="language-cpp">int i = INT_MAX;
+(int)((unsigned int)i + 1);  // 可以，会得到一个负数 INT_MIN
+</code></pre>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 如下写法更具有可移植性，因为无符号数向有符号数转型时若超出有符号数的表示范围则为实现定义行为（编译器厂商决定结果，但不是未定义行为）</p>
+</blockquote>
+<pre><code class="language-cpp">std::bit_cast&lt;int&gt;((unsigned int)i + i);
+</code></pre>
+<p>有符号整数的加减乘除模运算结果结果必须在表示范围内：例如对于 int a 和 int b，若 a/b 的结果不可用 int 表示，那么 a/b 和 a%b 均未定义</p>
+<pre><code class="language-cpp">INT_MIN % -1; // 错！
+INT_MIN / -1; // 错！
+</code></pre>
+<h3 id="_8">左移或右移的位数，不得超过整数类型上限，不得为负</h3>
+<pre><code class="language-cpp">unsigned int i = 0;
+i &lt;&lt; 31;  // 可以
+i &lt;&lt; 32;  // 错！
+i &lt;&lt; 0;   // 可以
+i &lt;&lt; -1;  // 错！
+</code></pre>
+<p>对于有符号整数，左移还不得破坏符号位</p>
+<pre><code class="language-cpp">int i = 0;
+i &lt;&lt; 1;   // 可以
+i &lt;&lt; 31;  // 错！
+unsigned int u = 0;
+u &lt;&lt; 31; // 可以
+</code></pre>
+<p>如需处理来自用户输入的位移数量，可以先做范围检测</p>
+<pre><code class="language-cpp">int shift;
+cin &gt;&gt; shift;
+
+unsigned int u = 0;
+int i = 0;
+(shift &gt; 0 &amp;&amp; shift &lt; 32) ? (u &lt;&lt; shift) : 0; // 可以
+(shift &gt; 0 &amp;&amp; shift &lt; 31) ? (i &lt;&lt; shift) : 0; // 可以
+</code></pre>
+<h3 id="0">除数不能为 0</h3>
+<pre><code class="language-cpp">int i = 42;
+int j = 0;
+i / j;  // 错！
+i % j;  // 错！
+</code></pre>
+<h2 id="_9">函数类</h2>
+<h3 id="void-return">返回类型不为 void 的函数，必须有 return 语句</h3>
+<pre><code class="language-cpp">int func() {
+    int i = 42;
+    // 错！会导致 func 返回时程序崩溃，且编译器只是警告，不报错
+}
+
+int func() {
+    int i = 42;
+    return i;  // 正确
+}
+
+void func() {
+    int i = 42;
+    // 返回 void 的函数，return 语句可以省略
+}
+</code></pre>
+<p>坑人之处在于，忘记写，不会报错，编译器只是警告。</p>
+<p>为了避免忘记写 return 语句，建议 gcc 编译器开启 <code>-Werror=return-type</code> 选项，将不写返回语句的警告转化为错误</p>
+<p>注意，在有分支的非 void 函数中，必须所有可达分支都有 return 语句</p>
+<pre><code class="language-cpp">int func(int x) {
+    if (x &lt; 0)
+        return -x;
+    if (x &gt; 0)
+        return x;
+    // 如果调用了 func(0)，那么会抵达没有 return 的分支，触发未定义行为
+}
+</code></pre>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 没有 return 的分支相当于写了一个 std::unreachable()</p>
+</blockquote>
+<p>但也有例外：</p>
+<ol>
+<li><code>main</code> 函数可以不写 <code>return</code> 语句，默认自带 <code>return 0;</code></li>
+<li>协程函数可以不写 <code>return</code> 语句，如果有 <code>co_return</code> 或者协程返回类型为 <code>void</code> 且具有至少一个 <code>co_await</code> 出现</li>
+</ol>
+<h3 id="_10">函数指针被调用时，不能为空</h3>
+<pre><code class="language-cpp">typedef void (*func_t)();
+
+func_t func = nullptr;
+func();    // 错！
+</code></pre>
+<p>《经典再现》</p>
+<pre><code class="language-cpp">#include &lt;cstdio&gt;
+
+static void func() {
+    printf(&quot;func called\n&quot;);
+}
+
+typedef void (*func_t)();
+
+static func_t fp = nullptr;
+
+extern void set_fp() { // 导出符号，虽然没人调用，却影响了 clang 的优化决策
+    fp = func;
+}
+
+int main() {
+    fp(); // Release 时，clang 会把这一行直接优化成 func()
+    return 0;
+}
+</code></pre>
+<h2 id="_11">生命周期类</h2>
+<h3 id="_12">不能读取未初始化的变量</h3>
+<pre><code class="language-cpp">int i;
+cout &lt;&lt; i; // 错！
+
+int i = 0;
+cout &lt;&lt; i; // 可以，会读到 0
+
+int arr[10];
+cout &lt;&lt; arr[0]; // 错！
+
+int arr[10] = {};
+cout &lt;&lt; arr[0]; // 可以，会读到 0
+</code></pre>
+<h3 id="_13">指针的加减法不能超越数组边界</h3>
+<pre><code class="language-cpp">int arr[10];
+int *p = &amp;arr[0];
+p + 1;     // 可以
+p + 10;    // 可以
+p + 11;    // 错！
+</code></pre>
+<h3 id="end_1">可以有指向数组尾部的指针（类似 end 迭代器），但不能解引用</h3>
+<pre><code class="language-cpp">int arr[10];
+int *p = &amp;arr[0];
+int *end = p + 10; // 可以
+*end;              // 错！
+</code></pre>
+<h3 id="_14">不能访问未初始化的指针</h3>
+<pre><code class="language-cpp">int *p;
+*p; // 错！
+</code></pre>
+<pre><code class="language-cpp">struct Dog {
+    int age;
+};
+
+struct Person {
+    Dog *dog;
+};
+
+Person *p = new Person;
+cout &lt;&lt; p-&gt;dog-&gt;age; // 错！
+
+p-&gt;dog = new Dog;
+cout &lt;&lt; p-&gt;dog-&gt;age; // 可以
+</code></pre>
+<h3 id="_15">不能访问已释放的内存</h3>
+<pre><code class="language-cpp">int *p = new int;
+*p; // 可以
+delete p;
+*p; // 错！
+</code></pre>
+<pre><code class="language-cpp">int *p = (int *)malloc(sizeof(int));
+*p; // 可以
+free(p);
+*p; // 错！
+</code></pre>
+<pre><code class="language-cpp">int *func() {
+    int arr[10];
+    return arr; // 错！
+}
+
+int main() {
+    int *p = func();
+    p[0];  // 错！arr 已经析构，不能通过空悬指针 / 空悬引用继续访问已经析构的对象
+}
+</code></pre>
+<p>建议改用更安全的 array 或 vector 容器</p>
+<pre><code class="language-cpp">array&lt;int, 10&gt; func() {
+    array&lt;int, 10&gt; arr;
+    return arr;
+}
+
+int main() {
+    auto arr = func();
+    arr[0];  // 可以，访问到的是 main 函数局部变量 arr，是对 func 中原 arr 的一份拷贝
+}
+</code></pre>
+<h3 id="new-new-malloc-delete-delete-free">new / new[] / malloc 和 delete / delete[] / free 必须匹配</h3>
+<pre><code class="language-cpp">int *p = new int;
+free(p);  // 错！
+</code></pre>
+<pre><code class="language-cpp">int *p = (int *)malloc(sizeof(int));
+free(p);  // 正确
+</code></pre>
+<pre><code class="language-cpp">int *p = new int[3];
+delete p; // 错！
+</code></pre>
+<pre><code class="language-cpp">int *p = new int[3];
+delete[] p; // 正确
+</code></pre>
+<pre><code class="language-cpp">vector&lt;int&gt; a(3);
+unique_ptr&lt;int&gt; a = make_unique&lt;int&gt;(42);
+</code></pre>
+<h3 id="_16">不要访问已经析构的对象</h3>
+<pre><code class="language-cpp">struct C {
+    int i;
+    ~C() { i = 0; }
+};
+
+C *c = (C *)malloc(sizeof(C));
+cout &lt;&lt; c-&gt;i; // 可以
+c-&gt;~C();
+cout &lt;&lt; c-&gt;i; // 错！
+free(c);
+</code></pre>
+<pre><code class="language-cpp">std::string func() {
+    std::string s = &quot;hello&quot;;
+    std::string s2 = std::move(s);
+    return s;  // 语言：OK，标准库作者：s 不一定是空字符串
+}
+</code></pre>
+<h2 id="_17">库函数类</h2>
+<h3 id="ctypeh-0127-ascii">ctype.h 中一系列函数的字符参数，必须在 0~127 范围内（即只支持 ASCII 字符）</h3>
+<pre><code class="language-cpp">isdigit('0');    // 可以，返回 true
+isdigit('a');    // 可以，返回 false
+isdigit('\xef'); // 错！结果未定义，在 MSVC 的 Debug 模式下会产生断言异常
+
+char s[] = &quot;你好A&quot;; // UTF-8 编码的中文
+// &quot;你好a&quot;？
+std::transform(std::begin(s), std::end(s), std::begin(s), ::tolower); // 错！结果未定义，因为 UTF-8 编码会产生大于 128 的字节
+</code></pre>
+<p>MSVC STL 中 is 系列函数的断言：</p>
+<p><code>assert(-1 &lt;= c &amp;&amp; c &lt; 256);</code></p>
+<p>理论上可以这样断言：</p>
+<p><code>assert(0 &lt;= c &amp;&amp; c &lt;= 127);</code></p>
+<p>解决方法：要么改用 iswdigit（MSVC：0-65536，GCC：0-0x010ffff）</p>
+<pre><code class="language-cpp">iswdigit('0');       // 可以，返回 true
+iswdigit('\xef');    // 可以，返回 false
+iswspace(L'\ufeff'); // 可以，UTF-8 locale 时返回 true，ASCII locale 时返回 false
+</code></pre>
+<p>要么自己实现判断</p>
+<pre><code class="language-cpp">if ('0' &lt;= c &amp;&amp; c &lt;= '9')  // 代替 isdigit(c)
+if (strchr(&quot; \n\t\r&quot;, c))  // 代替 isspace(c)
+</code></pre>
+<h3 id="memcpy-src-dst">memcpy 函数的 src 和 dst 不能为空指针</h3>
+<pre><code class="language-cpp">void *dst = nullptr;
+void *src = nullptr;
+size_t size = 0;
+memcpy(dst, src, size); // 错！即使 size 为 0，src 和 dst 也不能为空指针
+</code></pre>
+<p>可以给 size 加个判断</p>
+<pre><code class="language-cpp">void *dst = nullptr;
+void *src = nullptr;
+size_t size = 0;
+if (size != 0) // 可以
+    memcpy(dst, src, size);
+</code></pre>
+<h3 id="memcpy-src-dst_1">memcpy 不能接受带有重叠的 src 和 dst</h3>
+<pre><code class="language-cpp">char arr[10];
+memcpy(arr, arr + 1, 9); // 错！有的同学，以为这个是对的？错了，memcpy 的 src 和 dst
+memcpy(arr + 1, arr, 9); // 错！
+memcpy(arr + 5, arr, 5); // 可以
+memcpy(arr, arr + 5, 5); // 可以
+</code></pre>
+<p>如需拷贝带重复区间的内存，可以用 memmove</p>
+<pre><code class="language-cpp">char arr[10];
+memmove(arr, arr + 1, 9); // 可以
+memmove(arr + 1, arr, 9); // 可以
+memmove(arr + 5, arr, 5); // 可以
+memmove(arr, arr + 5, 5); // 可以
+</code></pre>
+<p>从 memcpy 的 src 和 dst 指针参数是 restrict 修饰的，而 memmove 没有，就可以看出来，memcpy 不允许任何形式的指针重叠，无论先后顺序</p>
+<h3 id="vback-v">v.back() 当 v 为空时是未定义行为</h3>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = {};
+int i = v.back();                  // 错！back() 并不会对 v 是否有最后一个元素做检查，此处相当于解引用了越界的指针
+int i = v.empty() ? 0 : v.back();  // 更安全，当 v 为空时返回 0
+</code></pre>
+<h3 id="vector-operator-i">vector 的 operator[] 当 i 越界时，是未定义行为</h3>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = { 1, 2, 3 };
+v[3]; // 错！相当于解引用了越界的指针
+</code></pre>
+<p>可以用 at 成员函数</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = { 1, 2, 3 };
+v.at(3); // 安全，会检测到越界，抛出 std::out_of_range 异常
+</code></pre>
+<h3 id="_18">容器迭代器失效</h3>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = { 1, 2, 3 };
+auto it = v.begin();
+v.push_back(4); // push_back 可能导致扩容，会使之前保存的 v.begin() 迭代器失效
+*it = 0;        // 错！
+</code></pre>
+<p>如果不需要连续内存，可以改用分段内存的 deque 容器，其可以保证元素不被移动，迭代器不失效。</p>
+<pre><code class="language-cpp">std::deque&lt;int&gt; v = { 1, 2, 3 };
+auto it = v.begin();
+v.push_back(4); // deque 的 push_back 不会导致迭代器失效
+*it = 0;        // 可以
+</code></pre>
+<ul>
+<li>https://www.geeksforgeeks.org/iterator-invalidation-cpp</li>
+<li>https://en.cppreference.com/w/cpp/container</li>
+</ul>
+<h3 id="_19">容器元素引用失效</h3>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = {1, 2, 3};
+int &amp;ref = v[0];
+v.push_back(4); // push_back 可能导致扩容，使元素全部移动到了新的一段内存，会使之前保存的 ref 引用失效
+ref = 0;        // 错！
+</code></pre>
+<p>如果不需要连续内存，可以改用分段内存的 deque 容器，其可以保证元素不被移动，引用不失效。</p>
+<pre><code class="language-cpp">std::deque&lt;int&gt; v = {1, 2, 3};
+int &amp;ref = v[0];
+v.push_back(4); // deque 的 push_back 不会导致元素移动，使引用失效
+ref = 0;        // 可以
+</code></pre>
+<h2 id="_20">多线程类</h2>
+<h3 id="_21">多个线程同时访问同一个对象，其中至少一个线程的访问为写访问，是未定义行为（俗称数据竞争）</h3>
+<pre><code class="language-cpp">std::string s;
+
+void t1() {
+    s.push_back('a'); // 写访问，出错！
+}
+
+void t2() {
+    cout &lt;&lt; s.size(); // 读访问
+}
+</code></pre>
+<pre><code class="language-cpp">std::string s;
+
+void t1() {
+    s.push_back('a'); // 写访问，出错！
+}
+
+void t2() {
+    s.push_back('b'); // 写访问，出错！
+}
+</code></pre>
+<p>更准确的说法是：多个线程（无 happens before 关系地）访问同一个对象，其中至少一个线程的访问带有副作用（写访问或带有volatile的读访问），是未定义行为</p>
+<pre><code class="language-cpp">// 八股文教材常见的错误写法！volatile 并不保证原子性和内存序，这样写是有未定义行为的。正确的做法是改用 std::atomic&lt;int&gt;
+volatile int ready = 0;
+int data;
+
+void t1() {
+    data = 42;
+    ready = 1;
+}
+
+void t2() {
+    while (ready == 0)
+        ;
+    printf(&quot;%d\n&quot;, data);
+}
+</code></pre>
+<p>建议利用 mutex，counting_semaphore，atomic 等多线程同步工具，保证多个线程访问同一个对象时，顺序有先有后，不会“同时”发生，那就是安全的</p>
+<pre><code class="language-cpp">std::string s;
+std::mutex m;
+
+void t1() {
+    std::lock_guard l(m);
+    s.push_back('a'); // 有 mutex 保护，可以
+}
+
+void t2() {
+    std::lock_guard l(m);
+    s.push_back('b'); // 有 mutex 保护，可以
+}
+</code></pre>
+<p>在上面的例子中，互斥锁保证了要么 t1 happens before t2，要么 t2 happens before t1，不会“同时”访问，是安全的</p>
+<pre><code class="language-cpp">std::string s;
+std::counting_semaphore&lt;1&gt; sem(1);
+
+void t1() {
+    s.push_back('a');
+    sem.release(); // 令 t2 必须发生在 t1 之后
+}
+
+void t2() {
+    sem.acquire(); // t2 必须等待 t1 release 后，才能开始执行
+    s.push_back('b');
+}
+</code></pre>
+<p>在上面的例子中，信号量保证了 t1 happens before t2，不会“同时”访问，是安全的</p>
+<pre><code class="language-cpp">std::string s;
+std::atomic&lt;bool&gt; ready{false};
+
+void t1() {
+    s.push_back('a');
+    ready.store(true, std::memory_order_release); // 令 s 的修改对其他 acquire 了 ready 的线程可见
+}
+
+void t2() {
+    while (!ready.load(std::memory_order_acquire)) // t2 必须等待 t1 store 后，才能开始执行
+        ;
+    s.push_back('b');
+}
+</code></pre>
+<p>在上面的例子中，原子变量的 acquire/release 内存序保证了 t1 happens before t2，不会“同时”访问，是安全的</p>
+<h3 id="mutex">多个线程同时对两个 mutex 上锁，但顺序相反，会产生未定义行为（俗称死锁）</h3>
+<pre><code class="language-cpp">std::mutex m1, m2;
+
+void t1() {
+    m1.lock();
+    m2.lock(); // 错！
+    m2.unlock();
+    m1.unlock();
+}
+
+void t2() {
+    m2.lock();
+    m1.lock(); // 错！
+    m1.unlock();
+    m2.unlock();
+}
+</code></pre>
+<p>解决方法：不要在多个 mutex 上同时上锁，如果确实要多个 mutex，保证顺序一致</p>
+<pre><code class="language-cpp">std::mutex m1, m2;
+
+void t1() {
+    m1.lock();
+    m2.lock();
+    m2.unlock();
+    m1.unlock();
+}
+
+void t2() {
+    m1.lock();
+    m2.lock();
+    m2.unlock();
+    m1.unlock();
+}
+</code></pre>
+<p>或使用 std::lock</p>
+<pre><code class="language-cpp">std::mutex m1, m2;
+
+void t1() {
+    std::lock(m1, m2);
+    std::unlock(m1, m2);
+}
+
+void t2() {
+    std::lock(m2, m1);
+    std::unlock(m2, m1);
+}
+</code></pre>
+<h3 id="recursive_mutex-mutex">对于非 recursive_mutex，同一个线程对同一个 mutex 重复上锁，会产生未定义行为（俗称递归死锁）</h3>
+<pre><code class="language-cpp">std::mutex m;
+
+void t1() {
+    m.lock();
+    m.lock();     // 错！
+    m.try_lock(); // 错！try_lock 也不允许！
+    m.unlock();
+    m.unlock();
+}
+
+void t2() {
+    m.try_lock(); // 可以
+}
+</code></pre>
+<p>解决方法：改用 recursive_mutex，或使用适当的条件变量</p>
+<pre><code class="language-cpp">std::recursive_mutex m;
+
+void t1() {
+    m.lock();
+    m.lock(); // 可以
+    m.try_lock(); // 可以，返回 true
+    m.unlock();
+    m.unlock();
+    m.unlock();
+}
+</code></pre>
+<h1 id="_22">总结</h1>
+<ul>
+<li>不要玩空指针</li>
+<li>不要越界，用更安全的 at，subspan 等</li>
+<li>不要不初始化变量（auto-idiom）</li>
+<li>开启 <code>-Werror=return-type</code></li>
+<li>不要重复上锁 mutex</li>
+<li>仔细看库函数的文档</li>
+<li>用智能指针管理单个对象</li>
+<li>用 vector 管理多个对象组成的连续内存</li>
+<li>避免空悬引用</li>
+<li>开 Debug 模式的 STL</li>
+</ul>
+<p>指定 CMake 的模式：<code>cmake -B build -DCMAKE_BUILD_TYPE=Debug</code></p>
+<ul>
+<li>Debug: <code>-O0 -g</code> 编译选项</li>
+<li>Release: <code>-O3 -DNDEBUG</code> 编译选项</li>
+</ul>
+<p>指定 MSVC 的模式：<code>cmake --build build --config Debug</code></p>
+<ul>
+<li>Debug: 生成 <code>zenod.dll</code>，链接 Debug 的 ABI</li>
+<li>Release: 生成 <code>zeno.dll</code>，链接 Release 的 ABI</li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>小彭老师倾 ♥ 制作</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../js/print-site.js"></script>
+        <script src="../extra.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
