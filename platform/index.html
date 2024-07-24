@@ -205,6 +205,7 @@
 </li>
 <li><a href="#_13">标准库御三家</a><ul>
 <li><a href="#_14">标准库的调试模式</a></li>
+<li><a href="#c11-abi">C++11 ABI 问题</a></li>
 </ul>
 </li>
 </ul>
@@ -358,7 +359,15 @@
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 牛头人笑话：“如果你不知道一个人是用的什么标准库，那么你可以猜他用的是 libstdc++。因为即使他的编译器是 Clang，他用的大概率依然是 libstdc++。”</p>
 </blockquote>
 <h3 id="_14">标准库的调试模式</h3>
-<p>TODO</p></div>
+<p>TODO</p>
+<h3 id="c11-abi">C++11 ABI 问题</h3>
+<p>在一些特别古老的发行版上（比如 Ubuntu 16.04、CentOS），他们的标准库不支持 C++11，可以开启这个宏：</p>
+<pre><code class="language-cpp">#define _GLIBCXX_USE_CXX11_ABI 0
+</code></pre>
+<p>或者命令行选项 <code>-D_GLIBCXX_USE_CXX11_ABI=0</code>。</p>
+<blockquote>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 为了更好的学习现代 C++，还是建议安装新的发行版。</p>
+</blockquote></div>
             </div>
         </div>
 

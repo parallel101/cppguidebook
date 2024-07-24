@@ -239,7 +239,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年07月24日 23:18:34 (UTC+08:00)</p>
+<p>更新时间：2024年07月24日 23:21:10 (UTC+08:00)</p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是温馨提示</p>
@@ -518,6 +518,7 @@ void try_call_foo(T &amp;) {
 </li>
 <li><a href="#platform-_13">标准库御三家</a><ul>
 <li><a href="#platform-_14">标准库的调试模式</a></li>
+<li><a href="#platform-c11-abi">C++11 ABI 问题</a></li>
 </ul>
 </li>
 </ul>
@@ -671,7 +672,15 @@ void try_call_foo(T &amp;) {
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 牛头人笑话：“如果你不知道一个人是用的什么标准库，那么你可以猜他用的是 libstdc++。因为即使他的编译器是 Clang，他用的大概率依然是 libstdc++。”</p>
 </blockquote>
 <h3 id="platform-_14">标准库的调试模式</h3>
-<p>TODO</p></section><section class="print-page" id="vartypes"><h1 id="vartypes-_1">变量与类型 (未完工)</h1>
+<p>TODO</p>
+<h3 id="platform-c11-abi">C++11 ABI 问题</h3>
+<p>在一些特别古老的发行版上（比如 Ubuntu 16.04、CentOS），他们的标准库不支持 C++11，可以开启这个宏：</p>
+<pre><code class="language-cpp">#define _GLIBCXX_USE_CXX11_ABI 0
+</code></pre>
+<p>或者命令行选项 <code>-D_GLIBCXX_USE_CXX11_ABI=0</code>。</p>
+<blockquote>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 为了更好的学习现代 C++，还是建议安装新的发行版。</p>
+</blockquote></section><section class="print-page" id="vartypes"><h1 id="vartypes-_1">变量与类型 (未完工)</h1>
 <div class="toc">
 <ul>
 <li><a href="#vartypes-_1">变量与类型 (未完工)</a></li>
@@ -4772,7 +4781,7 @@ base64.b64decode(secret).decode()
 <li><a href="#undef-_22">总结</a></li>
 </ul>
 </div>
-<p>如有疏漏，可以在 [GitHub](https://github.com/parallel101/ 补充。</p>
+<p>如有疏漏，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 补充。</p>
 <h2 id="undef-_2">建议开启标准库的调试模式</h2>
 <p>可以帮助你监测未定义行为</p>
 <ul>
