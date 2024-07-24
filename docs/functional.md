@@ -914,6 +914,7 @@ int hello(int x, int y) {
 }
 
 int main() {
+    auto hello2 = std::bind(hello, 2, std::placeholders::_1);
     fmt::println("main 调用 hello2(3) 结果：{}", hello2(3));
     fmt::println("main 调用 hello2(4) 结果：{}", hello2(4));
     fmt::println("main 调用 hello2(5) 结果：{}", hello2(5));
