@@ -188,3 +188,15 @@ MSVC：`/Dmacro=value`
 ### 标准库的调试模式
 
 TODO
+
+### C++11 ABI 问题
+
+在一些特别古老的发行版上（比如 Ubuntu 16.04、CentOS），他们的标准库不支持 C++11，可以开启这个宏：
+
+```cpp
+#define _GLIBCXX_USE_CXX11_ABI 0
+```
+
+或者命令行选项 `-D_GLIBCXX_USE_CXX11_ABI=0`。
+
+> {{ icon.warn }} 为了更好的学习现代 C++，还是建议安装新的发行版。

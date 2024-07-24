@@ -2,7 +2,7 @@
 
 [TOC]
 
-如有疏漏，可以在 [GitHub](https://github.com/parallel101/ 补充。
+如有疏漏，可以在 [GitHub](https://github.com/parallel101/cppguidebook) 补充。
 
 ## 建议开启标准库的调试模式
 
