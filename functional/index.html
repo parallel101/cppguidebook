@@ -623,7 +623,7 @@ int main() {
 <li>库用户 <code>main</code> 不必了解 <code>generic_sum</code> 如何实现操作累加，他只管注入“如何操作”的代码，以函数的形式。</li>
 </ul>
 <h3 id="c20-auto">我用了 C++20 的函数参数 auto 语法糖</h3>
-<pre><code class="language-cpp">int generic_sum(std::vector&lt;int&gt; const &amp;v, auto op) P
+<pre><code class="language-cpp">int generic_sum(std::vector&lt;int&gt; const &amp;v, auto op) {
 }
 </code></pre>
 <p>这里的参数 op 类型声明为 auto，效果就是，op 这个参数现在能接受任意类型的对象了（包括函数！）</p>
