@@ -239,7 +239,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年07月24日 23:15:55 (UTC+08:00)</p>
+<p>更新时间：2024年07月24日 23:17:42 (UTC+08:00)</p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是温馨提示</p>
@@ -1991,13 +1991,13 @@ int main() {
 </code></pre>
 <p>编码时则是反过来。</p>
 <p>乘客需要被拆分成三片，例如对于“我”这个乘客，“我”的码点是 0x6211，转换成二进制是：</p>
-<pre><code>110010000010001
+<pre><code>110001000010001
 </code></pre>
-<p>把乘客切分成高 4 位、中 6 位和低 6 位：</p>
-<pre><code>1100 100000 10001
+<p>把乘客切分成高 4 位、中 6 位和低 6 位（不足时在前面补零）：</p>
+<pre><code>0110 001000 010001
 </code></pre>
 <p>加上 <code>1110</code>、<code>10</code> 和 <code>10</code> 前缀后，形成一列火车：</p>
-<pre><code>11100110 10000010 10000001
+<pre><code>11100110 10001000 10010001
 </code></pre>
 <p>这样，我们就把“我”这个字符，编码成了三节列车，塞进字节流的网络隧道里了。</p>
 <p>总结：</p>
