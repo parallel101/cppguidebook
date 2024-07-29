@@ -160,11 +160,11 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_11" class="nav-link">选择你的阵营！</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_12" class="nav-link">选择你的阵营！</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_12" class="nav-link">字符编码的转换</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_13" class="nav-link">字符编码的转换</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -172,7 +172,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_18" class="nav-link">宽字符流</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_19" class="nav-link">宽字符流</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -180,7 +180,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_19" class="nav-link">常见的字符串实现探究</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_20" class="nav-link">常见的字符串实现探究</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -188,7 +188,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_25" class="nav-link">黑暗小技巧</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_26" class="nav-link">黑暗小技巧</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -224,20 +224,23 @@
 <li><a href="#bom">BOM 标记</a></li>
 <li><a href="#gb2312gbkgb18030">GB2312、GBK、GB18030 的关系</a><ul>
 <li><a href="#gb2312">GB2312</a></li>
+<li><a href="#gb2312_1">GB2312 的缺陷</a></li>
+<li><a href="#gbk">GBK</a></li>
+<li><a href="#gb18030">GB18030</a></li>
+<li><a href="#_8">总结</a></li>
 </ul>
 </li>
-<li><a href="#gbk">GBK</a></li>
 </ul>
 </li>
 <li><a href="#cc">C/C++ 中的字符编码</a><ul>
-<li><a href="#_8">字符类型</a></li>
-<li><a href="#utf-8-ascii">思考：UTF-8 为什么完美兼容 ASCII</a></li>
+<li><a href="#_9">字符类型</a></li>
+<li><a href="#utf-8-ascii">思考：UTF-8 为什么完美能兼容 ASCII</a></li>
 <li><a href="#utf-8_2">UTF-8 确实几乎完美支持字符串所有操作</a></li>
 <li><a href="#ansi-unicode">轶事：“ANSI” 与 “Unicode” 是什么</a></li>
 <li><a href="#utf-16_1">小笑话：UTF-16 的背刺</a></li>
 <li><a href="#stdu8string">强类型的 std::u8string 只是君子协议</a></li>
-<li><a href="#_9">源码字符集与运行字符集</a></li>
-<li><a href="#_10">跨平台程序应该怎么做</a><ul>
+<li><a href="#_10">源码字符集与运行字符集</a></li>
+<li><a href="#_11">跨平台程序应该怎么做</a><ul>
 <li><a href="#utf-8-locale">.utf-8 locale 是如何工作的</a></li>
 <li><a href="#b-wchar_t">方案 B：投奔 wchar_t 流派</a></li>
 <li><a href="#u8">u8 字符串常量的作用</a></li>
@@ -245,23 +248,23 @@
 </li>
 </ul>
 </li>
-<li><a href="#_11">选择你的阵营！</a><ul>
+<li><a href="#_12">选择你的阵营！</a><ul>
 <li><a href="#ansi">ANSI 阵营</a></li>
 <li><a href="#utf-8_3">UTF-8 阵营</a></li>
 <li><a href="#utf-16_2">UTF-16 阵营</a></li>
 <li><a href="#utf-32_1">UTF-32 阵营</a></li>
 </ul>
 </li>
-<li><a href="#_12">字符编码的转换</a><ul>
+<li><a href="#_13">字符编码的转换</a><ul>
 <li><a href="#utf-utfcpp">不同 UTF 之间互转：utfcpp</a></li>
 <li><a href="#boostlocale">跨平台的任意编码转换：boost::locale</a><ul>
 <li><a href="#utf">UTF 之间互转</a></li>
 <li><a href="#gbk-utf">GBK 和 UTF 互转</a></li>
 <li><a href="#utf-ansi">UTF 和 ANSI 互转</a></li>
-<li><a href="#_13">大总结</a></li>
+<li><a href="#_14">大总结</a></li>
 <li><a href="#gbk-shift-jis">GBK 和 Shift-JIS 互转</a></li>
-<li><a href="#_14">指定处理错误的方法</a></li>
-<li><a href="#_15">更多功能？！</a></li>
+<li><a href="#_15">指定处理错误的方法</a></li>
+<li><a href="#_16">更多功能？！</a></li>
 </ul>
 </li>
 <li><a href="#windows-multibytetowidechar">Windows 用户：MultiByteToWideChar</a><ul>
@@ -275,8 +278,8 @@
 </ul>
 </li>
 <li><a href="#locale">本地化 (locale)</a><ul>
-<li><a href="#_16">区分字符类型</a></li>
-<li><a href="#_17">宽字符类型</a></li>
+<li><a href="#_17">区分字符类型</a></li>
+<li><a href="#_18">宽字符类型</a></li>
 <li><a href="#wchar_t">wchar_t 应用案例</a></li>
 <li><a href="#locale_1">区域设置与 locale</a></li>
 <li><a href="#locale_2">locale 的命名规范</a></li>
@@ -294,7 +297,7 @@
 </li>
 </ul>
 </li>
-<li><a href="#_18">宽字符流</a><ul>
+<li><a href="#_19">宽字符流</a><ul>
 <li><a href="#stdwstring">官方眼中的 std::wstring</a></li>
 <li><a href="#stdwcout">std::wcout 的使用坑点科普</a><ul>
 <li><a href="#stdwcout-locale">std::wcout 必须设了 locale 才能用</a></li>
@@ -318,11 +321,11 @@
 <li><a href="#wndproc">WndProc 接受输入法的中文输入</a></li>
 </ul>
 </li>
-<li><a href="#_19">常见的字符串实现探究</a><ul>
+<li><a href="#_20">常见的字符串实现探究</a><ul>
 <li><a href="#qt-qstring">Qt QString</a><ul>
 <li><a href="#qtextcodec">QTextCodec</a></li>
 <li><a href="#fromtolocal8bitsutf8latin1ascii">from/toLocal8Bits/Utf8/Latin1/Ascii</a></li>
-<li><a href="#_20">字符串常量</a></li>
+<li><a href="#_21">字符串常量</a></li>
 <li><a href="#qtextstream">QTextStream</a></li>
 </ul>
 </li>
@@ -333,21 +336,22 @@
 </ul>
 </li>
 <li><a href="#unicode_1">Unicode 知识进阶</a><ul>
-<li><a href="#_21">字符的显示宽度计算</a></li>
+<li><a href="#_22">字符的显示宽度计算</a></li>
 <li><a href="#grapheme">Grapheme</a></li>
-<li><a href="#_22">正规化</a></li>
-<li><a href="#_23">零宽空格</a></li>
-<li><a href="#_24">特殊控制字符</a></li>
+<li><a href="#_23">正规化</a></li>
+<li><a href="#_24">零宽空格</a></li>
+<li><a href="#_25">特殊控制字符</a></li>
 <li><a href="#unicode_2">根据编号输入 Unicode 字符</a></li>
 <li><a href="#unifont">UniFont 字体</a></li>
 </ul>
 </li>
-<li><a href="#_25">黑暗小技巧</a><ul>
-<li><a href="#_26">正则表达式匹配汉字？</a></li>
+<li><a href="#_26">黑暗小技巧</a><ul>
+<li><a href="#_27">正则表达式匹配汉字？</a></li>
 <li><a href="#latin-1_1">Latin-1 的转换</a></li>
 <li><a href="#latin-1_2">Latin-1 的妙用</a></li>
 <li><a href="#base64">Base64 防乱码</a></li>
-<li><a href="#_27">字符编码猜测</a></li>
+<li><a href="#utf-7">UTF-7</a></li>
+<li><a href="#_28">字符编码猜测</a></li>
 </ul>
 </li>
 </ul>
@@ -361,7 +365,7 @@
 <p>如果你想要表示一个字符，就在这个表里寻找到相应的数字编号，然后存这个编号即可。</p>
 <p><img alt="" src="../img/ascii.png" /></p>
 <p>例如下面的一串数字：</p>
-<pre><code>80 101 110 103
+<pre><code class="language-txt">80 101 110 103
 </code></pre>
 <p>在 ASCII 表中查找，发现这些数字分别对应 <code>P</code>、<code>e</code>、<code>n</code>、<code>g</code> 四个字母，连起来就还原得到了原本的字符串“Peng”。</p>
 <h3 id="latin-1">Latin-1</h3>
@@ -595,7 +599,7 @@
 <p>对于 0 到 0x7F 的字符，这个范围的字符需要 7 位存储。</p>
 <p>我们选择直接存储其值。</p>
 <p>例如 &lsquo;P&rsquo; 会被直接存储其 Unicode 值的 80（0x50）：</p>
-<pre><code>01010000
+<pre><code class="language-txt">01010000
 </code></pre>
 <p>由于 Unicode 在 0 到 0x7F 范围内与 ASCII 表相同，而 UTF-8 又把 0 到 0x7F 的值直接存储，所以说 UTF-8 兼容 ASCII。这使得原本设计于处理 ASCII 的 C 语言函数，例如 strlen、strcat、sprintf 等，都可以直接无缝切换到 UTF-8。反之亦然，任何设计用于 UTF-8 的程序都可以完全接受 ASCII 格式的输入文本。</p>
 <blockquote>
@@ -616,22 +620,22 @@
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 小朋友用小号列车装，大朋友用大号列车装。</p>
 </blockquote>
 <p>例如下面这一串二进制：</p>
-<pre><code>11100110 10000010 10000001
+<pre><code class="language-txt">11100110 10000010 10000001
 </code></pre>
 <p>首先，看到第一个字节，是 <code>1110</code> 开头的三级车头！说明后面还有两节车厢是属于他的。火车头中 4 位用于表示车头等级了，剩下还有 4 位用于装乘客。</p>
 <p>车厢也有固定的前缀，所有的车厢都必须是 <code>10</code> 开头的。去除这开头的 2 位，剩下的 6 位就是乘客。</p>
 <p>对于这种三级列车，4 + 6 + 6 总共 16 位二进制，刚好可以装得下 0xFFFF 内的乘客。</p>
-<pre><code>0110 000010 000001
+<pre><code class="language-txt">0110 000010 000001
 </code></pre>
 <p>编码时则是反过来。</p>
 <p>乘客需要被拆分成三片，例如对于“我”这个乘客，“我”的码点是 0x6211，转换成二进制是：</p>
-<pre><code>110001000010001
+<pre><code class="language-txt">110001000010001
 </code></pre>
 <p>把乘客切分成高 4 位、中 6 位和低 6 位（不足时在前面补零）：</p>
-<pre><code>0110 001000 010001
+<pre><code class="language-txt">0110 001000 010001
 </code></pre>
 <p>加上 <code>1110</code>、<code>10</code> 和 <code>10</code> 前缀后，形成一列火车：</p>
-<pre><code>11100110 10001000 10010001
+<pre><code class="language-txt">11100110 10001000 10010001
 </code></pre>
 <p>这样，我们就把“我”这个字符，编码成了三节列车，塞进字节流的网络隧道里了。</p>
 <p>总结：</p>
@@ -647,7 +651,7 @@
 </blockquote>
 <h4 id="utf-8_1">UTF-8 的抗干扰能力</h4>
 <p>如果发现 <code>10</code> 开头的独立车厢，就说明出问题了，可能是火车被错误拦腰截断，也可能是字符串被错误地反转。因为 <code>10</code> 只可能是火车车厢，不可能出现在火车头部。此时解码器应产生一个报错，或者用错误字符“�”替换。</p>
-<pre><code>10000010 10000001
+<pre><code class="language-txt">10000010 10000001
 </code></pre>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 在网络收发包时，如果你不妥善处理 TCP 粘包问题，就可能火车头进去了，火车尾巴还露在隧道外面，一段完整的列车被切断，导致 UTF-8 解读的时候出错。正确的做法是设立一个状态机来解码 UTF-8。C 语言的 <code>mbstate_t</code> 就是这种状态机，稍后讲解。</p>
@@ -683,15 +687,15 @@
 <p>我们建议计算机从硬盘或网络中读出 UTF-8 字符串后，立即将其转换为 UTF-32，以方便后续文字处理。当需要写入硬盘或网络时，再转换回 UTF-8，避免硬盘容量和网络带宽的浪费。</p>
 <p>计算机需要外码和内码两种：</p>
 <ul>
-<li>外码=硬盘中的文本=UTF-32</li>
-<li>内码=内存中的文本=UTF-8</li>
+<li>外码=硬盘中的文本=UTF-8</li>
+<li>内码=内存中的文本=UTF-32</li>
 </ul>
 <h3 id="utf-16">UTF-16</h3>
 <p>UTF-16 的策略是：既然大多数常用字符的码点都在 0x0 到 0xFFFF 内，用 <code>uint32_t</code> 来存储也太浪费了。他的方案如下：</p>
 <p>对于 0x0 到 0xFFFF 范围内的字符，就用一个 <code>uint16_t</code> 直接存。</p>
 <p>对于 0xFFFF 到 0x10FFFF 范围的稀有字符，反正不常见，就拆成两个 <code>uint16_t</code> 存。这个拆的方案很有讲究，如果只是普通的拆，由于解码时收到的是个没头没尾的字节序列，无法分辨这到底是两个 <code>uint16_t</code> 的稀有字符，还是一个 <code>uint16_t</code> 的普通字符。</p>
 <p>例如，我们把一个稀有字符“𰻞”，0x30EDE。拆成两个 <code>uint16_t</code>，得到 0x3 和 0x0EDE。如果直接存储这两个 <code>uint16_t</code>：</p>
-<pre><code>0x0003 0x0EDE
+<pre><code class="language-txt">0x0003 0x0EDE
 </code></pre>
 <p>之后解码时，先读到 0x0003，还会以为他是单独的一个 <code>uint16_t</code>，表示 3 号字符“”。后面的 0x0EDE 就变成了一个单独的 0x0EDE，变成了 0x0EDE 号字符 “ໞ”。这样一来，“𰻞”就变成了两个毫不相干的字符，“ໞ”了。</p>
 <p>为了避免与普通字符产生歧义，两个 <code>uint16_t</code> 需要采用一种特殊的方式以示区分。让解码器一看到，就能确定这两个 <code>uint16_t</code> 需要组装成同一个字符。</p>
@@ -706,18 +710,18 @@
 <p>对于 0xFFFF 到 0x10FFFF 范围的码点，首先将其值减去 0x10000，变成一个范围 0x0 到 0xFFFFF 范围内的数字，这能保证他们只需 20 个二进制位即可表示。</p>
 <p>例如“𰻞”对应的码点 0x30EDE，减去后就变成 0x20EDE。</p>
 <p>然后，写出 0x20EDE 的二进制表示：</p>
-<pre><code>00100000111011011110
+<pre><code class="language-txt">00100000111011011110
 </code></pre>
 <p>总共 20 位，我们将其拆成高低各 10 位：</p>
-<pre><code>0010000011 1011011110
+<pre><code class="language-txt">0010000011 1011011110
 </code></pre>
 <p>各自写出相应的十六进制数：</p>
-<pre><code>0x083 0x2DE
+<pre><code class="language-txt">0x083 0x2DE
 </code></pre>
 <p>因为最多只有 10 位，这两个数都会在 0 到 0x3FF 的范围内。</p>
 <p>而 0xD800 到 0xDBFF，和 0xDC00 到 0xDFFF 预留的空间，刚好可以分别容纳 0x400 个数！</p>
 <p>所以，我们将拆分出来的两个 10 位数，分别加上 0xD800 和 0xDC00：</p>
-<pre><code>0xD800+0x083=0xD883
+<pre><code class="language-txt">0xD800+0x083=0xD883
 0xDC00+0x2DE=0xDFDE
 </code></pre>
 <p>这两个数，必定是 0xD800 到 0xDBFF，和 0xDC00 到 0xDFFF 范围内的数。而这两个范围都是 Unicode 委员会预留的代理对区间，绝对没有普通字符。所以，生成的两个代理对不会与普通字符产生歧义，可以放心放进 <code>uint16_t</code> 数组，解码器如果检测到代理对，就说明是两节车厢，可以放心连续读取两个 <code>uint16_t</code>。</p>
@@ -731,12 +735,12 @@
 <ul>
 <li>大端派 (bit endian)：低地址存放整数的高位，高地址存放整数的低位，也就是大数靠前！这样数值的高位和低位和人类的书写习惯一致。例如，0x12345678，在内存中就是：</li>
 </ul>
-<pre><code>0x12 0x34 0x56 0x78
+<pre><code class="language-txt">0x12 0x34 0x56 0x78
 </code></pre>
 <ul>
 <li>小端派 (little endian)：低地址存放整数的低位，高地址存放整数的高位，也就是小数靠前！这样数值的高位和低位和计算机电路的计算习惯一致。例如，0x12345678，在内存中就是：</li>
 </ul>
-<pre><code>0x78 0x56 0x34 0x12
+<pre><code class="language-txt">0x78 0x56 0x34 0x12
 </code></pre>
 <p>例如，Intel 的 x86 架构和 ARM 公司的 ARM 架构都是小端派，而 Motorola 公司的 68k 架构和 Sun 公司的 SPARC 架构都是大端派。</p>
 <blockquote>
@@ -748,13 +752,13 @@
 <p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 基于字节码的虚拟机语言通常会规定一个字节序：像 Java 这种面向互联网语言，索性也规定了统一采用大端，无论 JVM 运行在大端机器还是小端机器上。这使得他与互联网通信比较方便，而在 x86 和 ARM 架构上，与本地只接受小端数据的 API，例如 OpenGL，沟通较为困难，需要做额外的字节序转换。而 C# 主打游戏业务（例如 Unity），需要考虑性能，所以规定全部采用小端。作为底层编程语言的 C++ 则是入乡随俗，你的硬件是什么端，他就是什么端，不主动做任何额外的转换。</p>
 </blockquote>
 <p>UTF-16 和 UTF-32 的码位都是多字节的，也会有大小端问题。例如，UTF-16 中的 <code>uint16_t</code> 序列：</p>
-<pre><code>0x1234 0x5678
+<pre><code class="language-txt">0x1234 0x5678
 </code></pre>
 <p>在大端派的机器中，就是：</p>
-<pre><code>0x12 0x34 0x56 0x78
+<pre><code class="language-txt">0x12 0x34 0x56 0x78
 </code></pre>
 <p>在小端派的机器中，就是：</p>
-<pre><code>0x34 0x12 0x78 0x56
+<pre><code class="language-txt">0x34 0x12 0x78 0x56
 </code></pre>
 <p>这样一来，UTF-16 和 UTF-32 的字节流，在不同的机器上，可能会有不同的顺序。这给跨平台的文本处理带来了麻烦。</p>
 <p>所以当你需要把 UTF-16 存入硬盘和在网络发送时，还需要额外指明你用的是大端的 UTF-16 还是小端的 UTF-16。</p>
@@ -790,17 +794,99 @@
 </blockquote>
 <h3 id="gb2312gbkgb18030">GB2312、GBK、GB18030 的关系</h3>
 <h4 id="gb2312">GB2312</h4>
-<p>GB2312 是一个古老的标准，兼容 ASCII。</p>
+<p>GB2312 发布于 1980 年，是一个古老的汉字编码标准，兼容 ASCII。</p>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> “GB” 表示 Guo Biao（国标）的意思。</p>
+</blockquote>
 <p>GB2312 规定了 6763 个汉字和 682 个特殊符号，共 7445 个字符。</p>
-<p>GB2312 使用 2 字节来编码汉字和特殊符号，而 1 字节的编码保持和 ASCII 相同，从而兼容 ASCII。</p>
-<p>2 个字节分别被称为“区码”和“位码”。的部分都在 0xA1 到 0xFE 区间内，与 ASCII 不重合，且避开了 0xFF</p>
-<p>其中“一级汉字”，即常用汉字，有 3755 个，这些汉字的编码从 0xA1A1 到 0xF7FE。</p>
-<p>“二级汉字”，即生僻汉字，有 3008 个，这些汉字的编码从 0xA1A1 到 0xA9FE。</p>
-<p>GB2312 也规定了一些特殊字符的编码，例如全角空格 <code>0xA1A1</code>，以及 1 级汉字和 2 级汉字的划分。</p>
-<h3 id="gbk">GBK</h3>
-<p>GBK 是 GB2312 的扩展，他规定了 21003 个汉字和 682 个非汉字，共 21886 个</p>
+<p>GB2312 让英文和数字采用和 ASCII 相同的单字节编码，而对于汉字和特殊符号采用双字节编码。</p>
+<p>其中汉字和特殊符号的双字节编码，两个字节都在 0xA1 到 0xFE 的范围内，避免了与单字节的 ASCII 编码空间冲突。</p>
+<pre><code class="language-txt">  H    i      彭       宝
+0x48 0x69 0xC5 0xED 0xB1 0xA6
+</code></pre>
+<p>2 个字节分别被称为“区码”和“位码”，范围都是在 0xA1 到 0xFE 区间内。</p>
+<p>“特殊符号”，共 682 个，这些字符的编码从 0xA1A1 到 0xA9FE。</p>
+<p>“一级汉字”，都是比较常用的汉字，按拼音顺序排序，共 3755 个，这些字符的编码从 0xB0A1 到 0xF7FE。</p>
+<p>“二级汉字”，是一些生僻字，按部首/笔画排序，共 3008 个，这些汉字的字符从 0x8140 到 0xA0FE。</p>
+<p>GBK 中汉字的编号和 Unicode 并不是相同的，这也是 GB2312 编码的文本文件用 UTF-8 或 UTF-16 打开会产生乱码的根本原因。</p>
+<p>例如汉字 “彭” 就属于 “二级汉字”，在 GB2312 中编号为 0xC5ED，Unicode 中编号为 0x5F6D。</p>
+<p>全角空格 “　”，在 GB2312 中的编号为 0xA1A1，Unicode 中的编号为 0x3000。</p>
+<h4 id="gb2312_1">GB2312 的缺陷</h4>
+<p>GBK 和 UTF-8 的共同点在于，他们都避开了 0 ~ 127 的 ASCII 空间，所以完全兼容 ASCII。</p>
+<p>不同点在于，如果在一个 GBK 编码的中文字符串中查找中文，可能得到错误的结果，而 UTF-8 不会。这是因为 GBK 没有自纠错机制，他前后两个车厢并没有不同。</p>
+<p>当 GBK 被切片时，就容易出现连锁反应。</p>
+<pre><code class="language-cpp">std::string s = &quot;沉迷圆神&quot;;  // 0xB3 0xC1 0xC3 0xD4 0xD4 0xAD 0xC9 0xF1
+std::cout &lt;&lt; s.substr(1); // &quot;撩栽采�&quot;
+// 复现方式: MSVC 中国区 Windows，/std:c++17，不开启 /utf-8 参数（这时字符串常量都是 GBK 编码的）
+</code></pre>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 核反应堆，启动！</p>
+</blockquote>
+<p>特别是当你试图 find 一个中文子字符串时，GBK 编码的多字节字符串可能产生找到了的假象。实际上找到的位置根本是切断了单个完整的中文字符。</p>
+<pre><code class="language-cpp">std::string s = &quot;沉迷圆神&quot;;  // 0xB3 0xC1 0xC3 0xD4 0xD4 0xAD 0xC9 0xF1
+std::cout &lt;&lt; s.find(&quot;采&quot;); // 5，把“圆”的后半段 0xAD 和“神”的前半段 0xC9 当成一个字“采” (0xAD 0xC9) 了
+</code></pre>
+<p>而 UTF-8 则能有效限制错误的传播。</p>
+<pre><code class="language-cpp">std::string u8s = &quot;沉迷圆神&quot;;  // 0xE6 0xB2 0x89 0xE8 0xBF 0xB7 0xE5 0x9C 0x86 0xE7 0xA5 0x9E
+std::cout &lt;&lt; u8s.substr(1); // &quot;�迷圆神&quot;
+std::cout &lt;&lt; u8s.find(&quot;采&quot;); // 找不到，返回 -1
+</code></pre>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 因为 UTF-8 的头部小火车和尾部车厢采用了独立的编码，find 不可能通过任何合法的 UTF-8 子字符串定位到错误的中间位置。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> GB2312 和 GBK 的特殊性：他既是字符集，又是字符编码。除 Unicode 外大多数字符集都是这样，自己就是自己的字符编码，没有其他编码方式。只有 Unicode 把字符集和字符编码的概念分的很清楚，因为 Unicode 字符集有 UTF-8、UTF-。</p>
+</blockquote>
+<h4 id="gbk">GBK</h4>
+<p>GBK 同样是双字节编码，是对 GB2312 的扩展。</p>
+<p>GBK 在保持 GB2312 部分不变的基础上，额外追加了 21886 个汉字。收录的有：</p>
+<ul>
+<li>GB2312 中的全部汉字和特殊符号</li>
+<li>BIG-5（繁体中文的编码）中的全部汉字</li>
+<li>GB13000（即 Unicode）中的其他中日韩汉字</li>
+<li>其他尚未收录的特殊汉字、部首、符号等</li>
+</ul>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> “K” 表示 Kuo（扩展）的意思。</p>
+</blockquote>
+<ul>
+<li>GB2312：首字节 0xA1 到 0xFE，尾字节 0xA1 到 0xFE。</li>
+<li>GBK：首字节 <strong>0x81 到 0xFE</strong>，尾字节 <strong>0x40 到 0xFE</strong>。</li>
+</ul>
+<p>注意到 GBK 的尾字节进入了 0x40，ASCII 的范围。</p>
+<p>这使得 GBK 比 GB2312 更危险，例如 “侰” 这个字，会被编码成 0x82 0x43。</p>
+<p>而 0x43 刚好是 ASCII 字符 “C” 的编码。如果发生字符串切片，可能导致 “侰” 变成 “�C”。并且如果刚好程序在 <code>.find('C')</code>，那么 “侰” 的后半个字节会被当作 “C” 而找到。</p>
+<p>不过，GBK 设计时特意避开了 0x40 以下的 ASCII 字符，例如 0x2F 是 “/” 的 ASCII 编码，常用于文件系统的路径分隔符。</p>
+<p>然而，Windows 所用的路径分隔符是反斜杠 “\”，他的 ASCII 编码是 0x5C。</p>
+<p>例如 “俓”，GBK 编码 0x82 0x5C，这个字就可能被错误解读成 “�\”，使程序误认为这是一个文件夹的路径，从而导致程序出错，或留下被黑客攻击的隐患。</p>
+<p>虽然 Windows 系统内部统一采用 Unicode（UTF-16）来存储和处理路径，但总架不住一些劳保程序，依然执着于 ANSI（GBK），如果用户无意或恶意输入“俓啊.txt”，就有可能产生隐患。</p>
+<p>而 UTF-8 同样兼容 ASCII，得益于冗余的自纠错机制，就没有这样的问题。</p>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> “GBK” 虽然冠以“国标”之名，但实际上是微软擅自推出的！根本不是什么国家标准（你猜他为什么没有国家文件编号）。本来我国官方都打算推出 GB13000 了，直接完全兼容 Unicode 字符集。然而微软自作主张把他 Wendous 的 GB2312 升级到 GBK（比尔盖子以为自己兼容压倒一切，拽死了），本来好好的 GB13000 标准只好作罢。为了兼容已经升级成 GBK 的 Wendous 系统，国家只好重新制作了一份 GB18030 标准，兼容 GBK 和 GB2312。</p>
+</blockquote>
+<h4 id="gb18030">GB18030</h4>
+<p>于 2000 年 3 月发布的汉字编码国家标准，完全兼容 GBK 诶 GB2312。</p>
+<p>采用多字节编码，每个字符可以编码为 1 字节、2 字节、或 4 字节。</p>
+<p>其中 1 字节的部分取值范围是 0 到 0x7F，和 ASCII 相同。
+2 字节的部分首字节范围 0x81 到 0xFE，尾字节范围 0x40 到 0xFE，和 GBK 相同。
+4 字节的部分第一字节范围 0x81 到 0xFE，第二字节范围 0x30 到 0x39，第三字节范围 0x81 到 0xFE，第四字节范围 0x30 到 0x39。</p>
+<p>字符处理软件在处理 GB18030 的文本时，从左往右依次扫描每个字节：</p>
+<ul>
+<li>如果遇到的字节的最高位是 0，那么就会断定该字符只占用了一个字节</li>
+<li>如果遇到的字节的最高位是 1，那么该字符可能占用了两个字节，也可能占用了四个字节，不能妄下断论，所以还要继续往后扫描：</li>
+<li>如果第二个字节的高位有两个连续的 0，那么就会断定该字符占用了四个字节</li>
+<li>如果第二个字节的高位没有连续的 0，那么就会断定该字符占用了两个字节</li>
+</ul>
+<p>当字符占用两个或者四个字节时，GB18030 编码总要检测两次，处理效率比 GB2312 和 GBK 都低。而且和 GBK 一样，有着不能自纠错，容易使编码错误连锁反应的问题。</p>
+<p>GB18030 编码空间巨大，不仅囊括了中日韩汉字，所有 Unicode 中的字符也都被纳入其中！也就是说，Unicode 字符用 GB18030 编码是无损的，和 UTF-8 一样，而且还完全兼容了 GBK（中国区 Windows 的默认编码）。</p>
+<p>所以，GB18030 字符编码对应的字符集实际上是 Unicode。</p>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 尽管如此，Windows 至今（我测的是 Win10，不知道 Win11 它们改进没有）采用的依然是 GBK 编码：<code>A</code> 系 API 无法正确识别 GB18030 编码的字符串，文件路径名。明明中国政府都给你做完全兼容你的 GBK 了，还收录所有 Unicode 字符了，完全可以无缝增量升级的东西，泥码沟槽的比尔盖子还不快点默认切换到 GB18030，想不通（致敬传奇阴井盖比尔盖子）</p>
+</blockquote>
+<h4 id="_8">总结</h4>
+<p>字符编码兼容性：UTF-8 != GB18030 &gt; GBK &gt; GB2312 &gt; ASCII</p>
+<p>字符集大小：Unicode = GB18030 &gt; GBK &gt; GB2312 &gt; ASCII</p>
+<p>总之，GB 系列编码面对切片和查找存在一定的问题，有条件的话，建议 Windows 程序尽快升级到 UTF-8 外码、UTF-16 内码的工作流上来，回避掉史山的影响。</p>
 <h2 id="cc">C/C++ 中的字符编码</h2>
-<h3 id="_8">字符类型</h3>
+<h3 id="_9">字符类型</h3>
 <table>
 <thead>
 <tr>
@@ -866,15 +952,15 @@
 <blockquote>
 <p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 根据 Windows 官方文档的说法，<code>wchar_t</code> 是 UTF-16LE。</p>
 </blockquote>
-<h3 id="utf-8-ascii">思考：UTF-8 为什么完美兼容 ASCII</h3>
+<h3 id="utf-8-ascii">思考：UTF-8 为什么完美能兼容 ASCII</h3>
 <p>UTF-8 的火车头和车厢，都是 <code>1</code> 开头的，而 ASCII 的单体火车头永远是 <code>0</code> 开头。这很重要，不仅火车头需要和 ASCII 区分开来，车厢也需要。考虑这样一个场景：</p>
 <pre><code class="language-cpp">std::u32string path = &quot;一个老伯.txt&quot;;
 </code></pre>
 <p>“一个老伯” 转换为 Unicode 码点分别是：</p>
-<pre><code>0x4E00 0x4E2A 0x8001 0x4F2F
+<pre><code class="language-txt">0x4E00 0x4E2A 0x8001 0x4F2F
 </code></pre>
 <p>如果让他们原封不动直接存储进 char 数组里：</p>
-<pre><code>0x4E 0x00 0x4E 0x2A 0x80 0x01 0x4F 0x2F
+<pre><code class="language-txt">0x4E 0x00 0x4E 0x2A 0x80 0x01 0x4F 0x2F
 </code></pre>
 <p>就出问题了！首先，这里 0x4E00 的 0x00 部分，会被 C 语言当作是字符串的结尾。如果拿这样的字符串去调用操作系统的 open 函数，他会以为你在打开 0x4E 单个字符的文件名，也就是 <code>"N"</code>。</p>
 <p>更糟糕的是，0x2F 对应的 ASCII 字符是 <code>'/'</code>，是路径分隔符。操作系统会以为你要创建一个子文件夹下的文件 <code>"N\x00N*\x80\x01O/.txt"</code>，文件夹名字叫 <code>"N\x00N*\x80\x01O"</code> 而文件叫 <code>".txt"</code>。</p>
@@ -1013,7 +1099,7 @@ fmt::println(&quot;UTF-8 下，前四个字节：{}&quot;, s.substr(0, 4));
 fmt::println(&quot;UTF-32 下，前四个字符：{}&quot;, s.substr(0, 4));
 // 会打印 “小彭老师”
 </code></pre>
-<p>只有当索引来自 <code>find</code> 的结果时，UTF-8 字符串的切片才能正常工作：</p>
+<p>只有当索引是来自 <code>find</code> 的结果时，UTF-8 字符串的切片才能正常工作：</p>
 <pre><code class="language-cpp">std::string s = &quot;小彭老师公开课万岁&quot;;
 size_t pos = s.find(&quot;公&quot;); // pos = 12
 fmt::println(&quot;UTF-8 下，“公”前的所有字节：{}&quot;, s.substr(0, pos));
@@ -1049,7 +1135,7 @@ strrev(s.data()); // 会把按字符正常反转，得到 “岁万课开公师�
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 按索引切片不行，但如果索引是 find 出来的就没问题。</p>
 </blockquote>
 <h3 id="ansi-unicode">轶事：“ANSI” 与 “Unicode” 是什么</h3>
-<p>在 Windows 官方的说辞中，有“Unicode 编码”和“ANSI 编码”的说法。当你使用 Windows 自带的记事本程序，保存文本文件时，就会看到这样的选单：</p>
+<p>在 Windows 官方的说辞中，有“Unicode 编码”和“ANSI 编码”的说法。当你使用 Windows 自带的记事本程序 (<code>notepad.exe</code>) 保存文本文件时，就会看到这样的选单：</p>
 <p><img alt="" src="../img/notepad.png" /></p>
 <p>翻译一下：</p>
 <ul>
@@ -1134,7 +1220,7 @@ void thisFuncAcceptsUTF16(UTF16String msg);
 // 那么他可以强制转换为 u8string，来证明自己头脑清醒
 thisFuncAcceptUTF8(std::u8string((char8_t *)msg.data(), msg.size()));
 </code></pre>
-<h3 id="_9">源码字符集与运行字符集</h3>
+<h3 id="_10">源码字符集与运行字符集</h3>
 <p>C++ 官方定义中，存在两种字符集。一种是 <strong>源码字符集 (source charset)</strong>，一种是 <strong>运行字符集 (execution charset)</strong>。</p>
 <ul>
 <li>这真是糟糕的术语，运行字符集这个名字具有误导性，他和运行时根本没有关系，明明是编译期就确定的。所以小彭老师替他改个名字，实际应该叫“字面量字符集”。</li>
@@ -1158,7 +1244,7 @@ thisFuncAcceptUTF8(std::u8string((char8_t *)msg.data(), msg.size()));
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 你可能会问，为什么不把这些花里胡哨玩应统一为 UTF-8，这样就不用转换来转换去了？还不是因为历史遗留，一些劳保程序员不肯把他们 GBK 编码的源码改成 UTF-8 保存，而且，Windows 也完全不提供基于 UTF-8 的跨平台 API（只提供 GBK 和 UTF-16 两种，就是不给 UTF-8 的，非常恶心人）。所以 MSVC 至今仍然默认是 GBK 编码的（更准确的说是 ANSI，跟随你系统的区域设置而变，在中国就 GBK，在美国就 UTF-8，在欧洲就 Latin-1，非常的双标）。微软各种扯皮效率低下，API 弄了一套又一套互相极限拉扯，而我们 Linux 和 GCC 早已默认就是 UTF-8……</p>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 我理解你现在大脑干烧的心情。伺候这些历史答辩很复杂，也很无聊，毫无意义！只是为了擦反 Unicode 劳保的屁股。</p>
 </blockquote>
-<h3 id="_10">跨平台程序应该怎么做</h3>
+<h3 id="_11">跨平台程序应该怎么做</h3>
 <p>对于跨平台软件来说，我推荐大家把三个全部设为 UTF-8！（要做到这一点，主要是伺候 MSVC）</p>
 <ul>
 <li>Linux + GCC 用户什么都不需要做，你们所有字符集默认的设定就是 UTF-8。</li>
@@ -1292,7 +1378,7 @@ hexdump(s); // E4 BD A0 E5 A5 BD (UTF-8)
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 只不过是开发者和客户往往处于同一个地区，所以 <code>"你好"</code> 看起来好像可以直接输入到 <code>std::cout</code> 中一样。实际上他只是开发者电脑的 ANSI，而不是客户电脑的 ANSI，如果直接拿来打印，会导致以 <code>""</code> 常量形式写死的字符串会在客户电脑上出现乱码。除非这个字符串只包含 ASCII，因为所有 ANSI 都兼容 ASCII，才恰好避免了乱码。</p>
 </blockquote>
-<h2 id="_11">选择你的阵营！</h2>
+<h2 id="_12">选择你的阵营！</h2>
 <p><img alt="" src="../img/utfwar.png" /></p>
 <h3 id="ansi">ANSI 阵营</h3>
 <p>把字符串当作纯粹的“字节流”，无视字符编码。或者说，你从系统输入进来的是什么编码，我就存储的什么编码。对于 Unicode 则采取完全摆烂的态度，完全无视 Unicode 的存在。</p>
@@ -1554,7 +1640,7 @@ fmt::println(&quot;{}&quot;, s.size());   // 3
 <li>缺点：浪费空间大，通常在保存时，仍然需要转换回 UTF-8 后再写入文件，有一定性能开销。</li>
 </ul>
 <p><em>总结：要支持 UTF-32 阵营，请全部使用 <code>char32_t</code> 和 <code>std::u32string</code>。字面量全用 <code>U"你好"</code> 的形式书写，读文件时转为 UTF-32，写文件时转回 UTF-8。</em></p>
-<h2 id="_12">字符编码的转换</h2>
+<h2 id="_13">字符编码的转换</h2>
 <p>由于 C++26 前标准库对编码转换几乎没有支持，在 C++ 中转换编码格式，通常都需要第三方库。</p>
 <h3 id="utf-utfcpp">不同 UTF 之间互转：<code>utfcpp</code></h3>
 <p>如果你只是需要不同 UTF 格式之间的转换，没有处理 GBK 等的需求：那么之前已经介绍了 <code>utfcpp</code> 这个方便的库，已经够用。</p>
@@ -1665,7 +1751,7 @@ int main() {
 <blockquote>
 <p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>setlocale(LC_ALL, "");</code> 中的空字符串表示</p>
 </blockquote>
-<h4 id="_13">大总结</h4>
+<h4 id="_14">大总结</h4>
 <table>
 <thead>
 <tr>
@@ -1839,7 +1925,7 @@ int main() {
 <blockquote>
 <p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意！是目标编码在前！如果你要从 Shift-JIS 转成 GBK，那么需要 <code>between(jis, "GBK", "Shift-JIS")</code>，这真是一个糟糕的设计。不仅 GBK 和 Shift-JIS 可能不小心弄反了，编译器，一点提示都没有，而且 jis 和 &ldquo;GBK&rdquo; 都是字符串，很容易大脑搞混。让我来设计的话，我会这样提供 API：<code>decode(jis, Encoding::ShiftJIS).encode(Encoding::GBK)</code>，其中 <code>Encoding</code> 是一个枚举，强大的类型系统，不仅避免犯错的机会，看起来也更轻松。之后的设计模式专题课中，会再详细讲解什么是好的 API 设计。</p>
 </blockquote>
-<h4 id="_14">指定处理错误的方法</h4>
+<h4 id="_15">指定处理错误的方法</h4>
 <p>如果遇到无法编码的字符，该如何处置？</p>
 <p>默认情况下 Boost 会忽视错误，编码失败的字符会被丢弃。</p>
 <pre><code class="language-cpp">#include &lt;boost/locale.hpp&gt;
@@ -1916,7 +2002,7 @@ void u8print(std::string msg) {
 <blockquote>
 <p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 此处 <code>static int dummy_init =</code> 是一种静态初始化钩子的小技巧，之后设计模式课程的单例模式中会详细讲解。</p>
 </blockquote>
-<h4 id="_15">更多功能？！</h4>
+<h4 id="_16">更多功能？！</h4>
 <table>
 <thead>
 <tr>
@@ -2083,7 +2169,7 @@ $ iconv -f GBK -t UTF-8 gbk.txt
 </blockquote>
 <h2 id="locale">本地化 (locale)</h2>
 <p>本地化是指根据用户的语言、地区等环境，显示不同的界面。比如说，同样是文件菜单，中文用户看到的是“文件”、英文用户看到的是“File”。</p>
-<h3 id="_16">区分字符类型</h3>
+<h3 id="_17">区分字符类型</h3>
 <p>C 语言提供了 <code>&lt;ctype.h&gt;</code> 头文件，里面封装了大量形如 <code>isspace</code>、<code>isdigit</code> 这样的判断字符分类的函数。</p>
 <pre><code class="language-c">#include &lt;ctype.h&gt;
 </code></pre>
@@ -2153,7 +2239,7 @@ $ iconv -f GBK -t UTF-8 gbk.txt
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 更详细的表格可以看：https://en.cppreference.com/w/cpp/string/byte/isspace</p>
 </blockquote>
 <p><img alt="" src="../img/cctype.png" /></p>
-<h3 id="_17">宽字符类型</h3>
+<h3 id="_18">宽字符类型</h3>
 <p>之前提到的字符都是 <code>char</code> 类型的 ASCII 字符，范围最多在 0 到 0x7F 内。</p>
 <blockquote>
 <p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 对只接受 <code>char</code> 的 <code>isspace</code>，<code>ispunct</code> 系列函数，参数如果超过 0 到 0x7F 范围，结果是未定义行为。</p>
@@ -2434,7 +2520,7 @@ auto loc = gen(&quot;zh_CN.UTF-8&quot;);
 boost::locale::date_time dt = boost::locale::date_time::now(loc);
 std::cout &lt;&lt; boost::locale::as::date(dt) &lt;&lt; '\n';
 </code></pre>
-<h2 id="_18">宽字符流</h2>
+<h2 id="_19">宽字符流</h2>
 <p>之所以把宽字符流放到最后，是因为，首先 <code>iostream</code> 本来就是一个失败的设计。</p>
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 小彭老师在本书开头就多次强调过他是 <code>format</code> 孝子。</p>
@@ -2955,7 +3041,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     };
 </code></pre>
-<h2 id="_19">常见的字符串实现探究</h2>
+<h2 id="_20">常见的字符串实现探究</h2>
 <p>标准库的 <code>std::string</code> 我们不再赘述，刚才在“宽字符流”中也介绍了官方的想法，之后的字符串专题课会继续详解。</p>
 <p>这里我们主要探究关于字符编码的问题，探索各大常见的编程语言和库，是如何封装字符串类，如何解决 UTF-8 变长编码，UTF-32 压缩率低的问题的，希望在你的项目中提供一点灵感。</p>
 <p>通常来说，一个好的库或语言，都要明确区分字符串和字节数组的概念，前者是文本内容，后者是纯二进制内容。</p>
@@ -3175,7 +3261,7 @@ QTextCodec *codec = QTextCodec::codecForName(&quot;ASCII&quot;);
 QByteArray bytes = codec-&gt;fromUnicode(str);
 QString str = codec-&gt;toUnicode(bytes);
 </code></pre>
-<h4 id="_20">字符串常量</h4>
+<h4 id="_21">字符串常量</h4>
 <pre><code class="language-cpp">QString str = QStringLiterial(&quot;你好，世界&quot;);
 </code></pre>
 <p><code>QStringLiterial</code> 可以保证，转换时采用的是所谓“运行字符集”（实际应该叫字面量字符编码），也就是我们开发者电脑上的“区域设置”，是编译期确定的。而如果写 <code>QString::fromLocal8Bits("")</code> 就变成 “ANSI”，客户的“区域设置”了。这两个字符编码，比如在之前跨国 galgame 的案例中，就是不同的。</p>
@@ -3279,15 +3365,15 @@ void myTransaction() {
 <p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 其实早期的 C++98 中，<code>std::string</code> 也采用了 COW 机制，但后来因为不符合线程安全要求，被追求多线程的 C++11 责令改正，才有了后来 <code>std::__cxx11::basic_string</code> 的 ABI 不兼容问题。毕竟线程不安全实在太伤了，基本意味着多线程就没法共享 <code>std::string</code>。事实上，Qt 所有的对象 <code>QObject</code>，包括 <code>QString</code> 在多线程中传递时，就需要调用 <code>moveTo(QThread)</code> 转移所有权，才能安全地传递给另一个线程，就是因为 Qt 大量使用了 COW 机制。</p>
 </blockquote>
 <h2 id="unicode_1">Unicode 知识进阶</h2>
-<h3 id="_21">字符的显示宽度计算</h3>
+<h3 id="_22">字符的显示宽度计算</h3>
 <p>TODO</p>
 <h3 id="grapheme">Grapheme</h3>
 <p>TODO</p>
-<h3 id="_22">正规化</h3>
+<h3 id="_23">正规化</h3>
 <p>TODO</p>
-<h3 id="_23">零宽空格</h3>
+<h3 id="_24">零宽空格</h3>
 <p>TODO</p>
-<h3 id="_24">特殊控制字符</h3>
+<h3 id="_25">特殊控制字符</h3>
 <p>TODO</p>
 <h3 id="unicode_2">根据编号输入 Unicode 字符</h3>
 <p>“𰻞”的 Unicode 编号是 0x30EDE。</p>
@@ -3296,8 +3382,8 @@ void myTransaction() {
 <p>在 macOS 系统中，可以按 Ctrl+Cmd+空格，打开特殊字符输入面板，选择“Unicode”分类，找到“𰻞”，然后双击就输入到光标处。</p>
 <h3 id="unifont">UniFont 字体</h3>
 <p>TODO</p>
-<h2 id="_25">黑暗小技巧</h2>
-<h3 id="_26">正则表达式匹配汉字？</h3>
+<h2 id="_26">黑暗小技巧</h2>
+<h3 id="_27">正则表达式匹配汉字？</h3>
 <ul>
 <li>狭义的汉字：0x4E00 到 0x9FA5（“一”到“龥”）</li>
 <li>广义的汉字：0x2E80 到 0x9FFF（“⺀”到“鿿”）</li>
@@ -3346,7 +3432,9 @@ base64.b64decode(secret).decode()
 <p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 这个方法不仅可以编码 UTF-8 字符串，还可以传输任意非文本的文件！例如，有人利用 Base64 编码，把 jpg 图像文件直接内嵌在 md 文件里！（md 文件只支持包含合法的 UTF-8 文本，不可能包含 jpg 的任意字节流，因此只能用 Base64 先编码成 ASCII 范围内的字母和数字，防止 md 编译器报 UTF-8 解码错误）</p>
 </blockquote>
 <p>总之，如果你输入中文实在有问题，可以考虑先 Base64 转换成纯英文试试看，反正无论谁都兼容 ASCII。如果这个文本框不区分大小写，还可以试试看只有 A-Z 0-9 的 Base32 编码。</p>
-<h3 id="_27">字符编码猜测</h3>
+<h3 id="utf-7">UTF-7</h3>
+<p>TODO</p>
+<h3 id="_28">字符编码猜测</h3>
 <p>TODO</p></div>
             </div>
         </div>
