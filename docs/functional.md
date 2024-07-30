@@ -811,7 +811,7 @@ Lambda 函数对象的类型是匿名的，每个 Lambda 表达式都会创建�
 
 唯一的代价是，你需要指定出所有参数的类型，和返回值的类型。
 
-例如一个参数为两个 `int`， `std::function<int(int, int)>`
+例如参数为两个 `int`，返回 `int` 的函数，可以用 `std::function<int(int, int)>` 容器存储。
 
 ```cpp
 auto add_lambda = [](int a, int b) { // Lambda 函数对象
@@ -865,10 +865,12 @@ int generic_sum(std::vector<int> const &v,
 
 ### 案例：函数对象的动态分发用于多线程任务队列
 
+主线程不断地向工作者线程发送函数对象，令其代为执行：
+
 ```cpp
 mt_queue<std::function<void()>> task_queue;
 
-void thread1() {
+void main_thread() {
     task_queue.push([] {
         fmt::println("正在执行任务1");
     });
@@ -877,7 +879,7 @@ void thread1() {
     });
 }
 
-void thread2() {
+void worker_thread() {
     while (true) {
         auto task = task_queue.pop();
         task();
@@ -888,6 +890,67 @@ void thread2() {
 > {{ icon.detail }} `mt_queue` 是小彭老师封装的多线程安全的消息队列，实现原理会在稍后的多线程专题课中详细讲解。
 
 ### 函数对象的重要机制：闭包
+
+闭包是函数对象的重要机制，他允许函数对象捕获外部变量，并在函数对象内部使用这些变量。
+
+```cpp
+int x = 10;
+auto add_x = [x](int a) {
+    return a + x;
+};
+fmt::println("{}", add_x(5)); // 输出 15
+```
+
+闭包捕获的变量默认是只读的，如果需要修改捕获的变量，需要使用 `mutable`。
+
+#### 闭包的本质是语法糖
+
+Lambda 函数对象的闭包语法：
+
+```cpp
+auto add_x = [x](int a) {
+    return a + x;
+};
+```
+
+实际上等价于一个带有 `operator()()` 的结构体：
+
+```cpp
+struct Lambda {
+    int x;
+    Lambda(int val) : x(val) {}
+
+    int operator()(int a) {
+        return a + x;
+    }
+};
+
+int main() {
+    Lambda add_x(10);
+    fmt::println("{}", add_x(5)); // 输出 15
+    return 0;
+}
+```
+
+而且这结构体是匿名的，没有确定的名字，此处类名 `Lambda` 只是示意。
+
+**而所谓的闭包捕获变量，实际上就是这个结构体的成员！**
+
+按值捕获，就相当于结构体成员里拷贝了一份同名的成员；如果是引用捕获，就相当于结构体里的成员是个引用。
+
+> {{ icon.tip }} 可以在 https://cppinsights.io 这个网站，自动拆解包括 Lambda 在内的所有现代 C++ 语法糖为原始的结构体和函数。更多好用的工具网站可以看我们 [工具和项目推荐](recommend.md) 专题章节。
+
+#### 闭包捕获变量的生命周期问题
+
+正因如此，闭包按值捕获（`[=]`）的变量，其生命周期和 Lambda 对象相同。
+
+当 Lambda 对象被拷贝时，其按值捕获的所有变量也会被重新拷贝一份。
+
+当 Lambda 对象被移动时，其按值捕获的所有变量也会随之一起移动。
+
+如果按值捕获了不能拷贝的对象（比如 `std::unique_ptr`），那么 Lambda 对象也会无法拷贝，只能移动。
+
+#### `operator()` 很有迷惑性
 
 ### 函数指针是 C 语言陋习，改掉
 
@@ -921,3 +984,9 @@ int main() {
     return 0;
 }
 ```
+
+### `std::placeholders`
+
+### bind 是一个失败的设计
+
+### `std::bind_front` 和 `std::bind_back`

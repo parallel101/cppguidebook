@@ -27,6 +27,25 @@ manual_sponsors = [
     User('**振', '', '20.00', ''),
     User('**伟', '', '20.00', ''),
     User('**枫', '', '26.90', ''),
+    User('相欢', '', '100.00', ''),
+    User('**辉', '', '30.00', '支持一下小彭老师，嘿嘿（求匿名）'),
+    User('**峰', '', '26.90', '感谢小鹏老师在技术上无私奉献，加油！'),
+    User('**卿', '', '26.60', ''),
+    User('**飞', '', '26.90', '黑心老板太可恶，资助老师吃饭�9�'),
+    User('**宇', '', '26.90', '给小彭老师点赞'),
+    User('**逸', '', '26.90', '绵薄之力，希望小彭老师早日度过难关'),
+    User('**帆', '', '10.00', '祝小彭老师生活顺利'),
+    User('**蓝', '', '500.00', '小彭老师加油�0�5�0�5'),
+    User('*洋', '', '26.90', ''),
+    User('**豪', '', '66.00', ''),
+    User('**楠', '', '26.90', '小彭老师加油！凭你的才华没问题的'),
+    User('*锷', '', '100.00', ''),
+    User('**博', '', '30.00', '小彭老师加油，你这么优秀肯定能找到好工作'),
+    User('**运', '', '30.00', '小彭老师加油！B站视频太棒啦！'),
+    User('windy小助手', 'https://i0.hdslb.com/bfs/face/d5d323e4063cad911bd722292fbf67dc6a23493b.jpg', '500.00', ''),
+    User('**康', '', '40.00', '感谢小彭老师的指导'),
+    User('*坤', '', '40.00', ''),
+    User('**峰', '', '20.00', ''),
 ]
 
 def afd_query(which, **params):
@@ -35,7 +54,7 @@ def afd_query(which, **params):
     ts = int(time.time())
     params = json.dumps(params)
     sign = hashlib.md5(f'{token}params{params}ts{ts}user_id{user_id}'.encode('utf-8')).hexdigest()
-    res = requests.get(f'https://afdian.net/api/open/{which}', params={
+    res = requests.get(f'https://afdian.com/api/open/{which}', params={
         'user_id': user_id,
         'params': params,
         'ts': ts,
@@ -86,7 +105,7 @@ def afd_gen_thank_list():
     max_y = 30
     stride_x = 450
     stride_y = 120
-    limit_y = 720
+    limit_y = stride_y * 10
     max_max_y = max_y
     for user in sponsors:
         max_y += stride_y
@@ -104,7 +123,8 @@ def afd_gen_thank_list():
     for user in sponsors:
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype('/usr/share/fonts/noto-cjk/NotoSansCJK-Medium.ttc', size=20)
-        font_small = ImageFont.truetype('/usr/share/fonts/noto-cjk/NotoSerifCJK-Medium.ttc', size=13)
+        font_small = ImageFont.truetype('/usr/share/fonts/noto-cjk/NotoSansCJK-Medium.ttc', size=13)
+        # font_small = ImageFont.truetype('/usr/share/fonts/Unifont/Unifont.otf', size=13)
         if user.avatar:
             avatar = Image.open(BytesIO(requests.get(user.avatar).content))
         else:
@@ -121,6 +141,11 @@ def afd_gen_thank_list():
         remark = user.remark
         if remark:
             remark = remark.rstrip('。').replace('.。', '，')
+            # chunk remark into 40 char per line:
+            chunk_size = int((stride_x - 100) / font_small.size)
+            if len(remark) > chunk_size:
+                remark_lines = [remark[i:i+chunk_size] for i in range(0, len(remark), chunk_size)]
+                remark = '\n'.join(remark_lines)
             draw.text((x + 100, y + 60), f'{remark}', fill='#779977', font=font_small)
         print(f'{user.name} ￥{user.all_sum_amount} {remark}')
         total += float(user.all_sum_amount)

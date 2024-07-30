@@ -4,7 +4,7 @@
 - learncpp.com
 - cppreference.com
 - godbolt.org
-- cpp-insights.io
+- cppinsights.io
 - quick-bench.com
 - github.com
 - stackoverflow.com
