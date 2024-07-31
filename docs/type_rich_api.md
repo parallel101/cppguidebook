@@ -6,6 +6,8 @@
 
 **Type is all you need**
 
+[TOC]
+
 ---
 ---
 ---
@@ -881,7 +883,9 @@ int i = cin.readInt().value();
 ```
 这样如果用户要读取到值的话，必然要 `.value()`，从而如果 readInt 失败返回的是 nullopt，就必然抛出异常，避免了用户忘记判断错误的可能。
 
-> 在小彭老师自主研发的一款 co_async 协程库中，重新设计了异步的字符流，例如其中 getline 函数会返回 `std::expected<std::string, std::system_error>`。
+> {{ icon.tip }} 在小彭老师自主研发的一款 co_async 协程库中，就重新设计了自己的异步字符流类，例如其中 getline 函数会返回 `std::expected<std::string, std::system_error>`。
+
+> {{ icon.detail }} 在[错误处理专题](error_code.md)中有进一步的详解。
 
 ---
 ---
