@@ -2,7 +2,7 @@
 
 小彭大典的持续编写离不开以下小彭友的赞助！
 
-[![](img/thanks.png)]("https://afdian.com/a/archibate")
+[![](img/thanks.png)](https://afdian.com/a/archibate)
 
 > {{ icon.tip }} 小彭老师的大典是免费下载的，不用赞助也可以查看哦。
 
@@ -14,7 +14,7 @@
 
 > {{ icon.tip }} 每有一位小彭友赞助 `26.90`，小彭老师一天的食品安全就有了着落。
 
-[![](https://142857.red/afdian-qrcode.jpg?y){width=500px}](https://afdian.com/a/archibate)
+[![](https://142857.red/afdian-qrcode.jpg?z){width=500px}](https://afdian.com/a/archibate)
 
 > 救命……爱发电似乎关停了！？小彭老师赶紧贴出支付宝收款码作为替代……
 

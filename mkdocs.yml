@@ -25,6 +25,8 @@ nav:
     - cpp_lifetime.md
     - cpp_memory.md
     - unicode.md
+    - error_code.md
+    - warnings.md
     - undef.md
   - 关于:
     - about.md

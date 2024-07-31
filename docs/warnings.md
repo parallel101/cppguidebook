@@ -1,3 +1,5 @@
+# 建议 C++ 程序员开启的警告选项
+
 ```
 -Wall -Wextra -Weffc++
 -Werror=uninitialized

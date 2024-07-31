@@ -1,4 +1,6 @@
-# 参考资料
+# 参考资料与项目
+
+## 资源推荐
 
 - hackingcpp.com
 - learncpp.com
@@ -12,15 +14,15 @@
 - 小彭老师 (双笙子佯谬)
 - 白律师 (mq白cpp)
 
-# 项目推荐
+## 项目推荐
 
-## 集大成者
+### 集大成者
 
 - boost
 - qt
 - llvm
 
-## 现代
+### 现代
 
 - utfcpp
 - fmt
@@ -29,7 +31,7 @@
 - nlohmann-json
 - ranges-v3
 
-## 高性能
+### 高性能
 
 - tbb
 - cub
@@ -40,14 +42,14 @@
 - amgcl
 - eigen
 
-## 图形学
+### 图形学
 
 - sfml
 - libigl
 - openvdb
 - cgal
 
-## 实用扩展
+### 实用扩展
 
 - tsl-robin-map
 - absl
@@ -55,7 +57,7 @@
 - iguana
 - magic_enum
 
-## 古代
+### 古代
 
 - opencv
 - nothings/stb
@@ -67,7 +69,7 @@
 - poco
 - incbin
 
-## 小彭老师课程
+### 小彭老师课程
 
 - parallel101/course
 - parallel101/opengltutor
@@ -75,7 +77,7 @@
 - parallel101/cppguidebook
 - parallel101/simdtutor
 
-## 小彭老师自研
+### 小彭老师自研
 
 - zenustech/zeno
 - archibate/co_async
@@ -106,3 +108,18 @@
 - archibate/logisim
 - archibate/newton
 - archibate/vimrc
+
+## GCC 建议开启的警告选项
+
+```
+-Wall -Wextra -Weffc++
+-Werror=uninitialized
+-Werror=return-type
+-Wconversion -Wsign-compare
+-Werror=unused-result
+-Werror=suggest-override
+-Wzero-as-null-pointer-constant
+-Wmissing-declarations
+-Wold-style-cast -Werror=vla
+-Wnon-virtual-dtor
+```
