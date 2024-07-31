@@ -51,7 +51,7 @@
 > [!TIP]
 > 每有一位小彭友赞助 `26.90`，小彭老师一天的食品安全就有了着落。
 
-<a href="https://afdian.com/a/archibate"><img src="https://142857.red/afdian-qrcode.jpg?z" alt="https://afdian.com/a/archibate" width="400px"/></a>
+<a href="https://afdian.com/a/archibate"><img src="https://142857.red/afdian-qrcode.jpg?z=1" alt="https://afdian.com/a/archibate" width="400px"/></a>
 
 > 救命……爱发电似乎关停了！？小彭老师赶紧贴出支付宝收款码作为替代……
 
