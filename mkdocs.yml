@@ -6,12 +6,24 @@ repo_url: https://github.com/parallel101/cppguidebook
 nav:
   - 章节列表:
     - 前言: index.md
-    - helloworld.md
+    - hello_world.md
     - platform.md
-    - vartypes.md
+    - variable_types.md
     - functions.md
-    - functional.md
-    - design.md
+    - cpp_tricks.md
+    - lambda.md
+    - type_rich_api.md
+    - no_more_new.md
+    - stl_map.md
+    - design_overview.md
+    - design_virtual.md
+    - design_gamedev.md
+    - design_functor.md
+    - design_variant.md
+    - design_erasure.md
+    - design_concept.md
+    - cpp_lifetime.md
+    - cpp_memory.md
     - unicode.md
     - undef.md
   - 关于:
