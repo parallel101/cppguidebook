@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="小彭老师">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>现代 C++ 从拒绝 new 开始 - ✝️小彭大典✝️</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../css/print-site-enum-headings1.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings2.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings3.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings4.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings5.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings6.css" rel="stylesheet">
+        <link href="../css/print-site.css" rel="stylesheet">
+        <link href="../css/print-site-mkdocs.css" rel="stylesheet">
+        <link href="../extra.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">✝️小彭大典✝️</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">章节列表</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href=".." class="dropdown-item">前言</a>
+</li>
+                                    
+<li>
+    <a href="../hello_world/" class="dropdown-item">你好，世界</a>
+</li>
+                                    
+<li>
+    <a href="../platform/" class="dropdown-item">开发环境与平台选择</a>
+</li>
+                                    
+<li>
+    <a href="../variable_types/" class="dropdown-item">变量与类型 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../functions/" class="dropdown-item">认识函数 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../cpp_tricks/" class="dropdown-item">应知应会 C++ 小技巧</a>
+</li>
+                                    
+<li>
+    <a href="../lambda/" class="dropdown-item">函数式编程</a>
+</li>
+                                    
+<li>
+    <a href="../type_rich_api/" class="dropdown-item">现代化的 API 设计指南</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active" aria-current="page">现代 C++ 从拒绝 new 开始</a>
+</li>
+                                    
+<li>
+    <a href="../stl_map/" class="dropdown-item">深入浅出 STL 系列之 map (基本完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_overview/" class="dropdown-item">设计模式总览 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_virtual/" class="dropdown-item">让虚函数再次伟大！</a>
+</li>
+                                    
+<li>
+    <a href="../design_gamedev/" class="dropdown-item">游戏开发中常用的设计模式</a>
+</li>
+                                    
+<li>
+    <a href="../design_functor/" class="dropdown-item">函数式设计模式</a>
+</li>
+                                    
+<li>
+    <a href="../design_variant/" class="dropdown-item">静态多态与面向数据编程 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_erasure/" class="dropdown-item">类型擦除神教及其实现 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_concept/" class="dropdown-item">鸭子类型与 C++20 concept (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../cpp_lifetime/" class="dropdown-item">深入理解析构函数与生命周期</a>
+</li>
+                                    
+<li>
+    <a href="../cpp_memory/" class="dropdown-item">真正的 C++ 内存模型！ (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../unicode/" class="dropdown-item">字符编码那些事</a>
+</li>
+                                    
+<li>
+    <a href="../error_code/" class="dropdown-item">现代 C++ 中的错误处理 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../warnings/" class="dropdown-item">建议 C++ 程序员开启的警告选项</a>
+</li>
+                                    
+<li>
+    <a href="../undef/" class="dropdown-item">未定义行为完整列表</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">关于</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../about/" class="dropdown-item">关于小彭老师</a>
+</li>
+                                    
+<li>
+    <a href="../donate/" class="dropdown-item">赞助名单</a>
+</li>
+                                    
+<li>
+    <a href="../recommend/" class="dropdown-item">参考资料与项目</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/parallel101/cppguidebook" class="nav-link">GitHub</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://space.bilibili.com/263032155" class="nav-link">Bilibili</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../type_rich_api/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../stl_map/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/parallel101/cppguidebook/edit/master/docs/no_more_new.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#c-new" class="nav-link">现代 C++ 从拒绝 new 开始</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#1" class="nav-link">案例 1</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#2" class="nav-link">案例 2</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_1" class="nav-link">优势何在？</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#shared_ptr" class="nav-link">shared_ptr 小课堂</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_6" class="nav-link">线程安全？</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="c-new">现代 C++ 从拒绝 new 开始</h1>
+<p>使用 new 和 delete 是一种过时的内存管理方式，容易导致内存泄漏和悬空指针，应当永不使用。</p>
+<p>优秀的现代 C++ 项目，都使用<strong>智能指针</strong>和<strong>容器</strong>管理内存，从来不需要直接创建原始指针。
+不仅 new 不应该出现，原始指针也应该少出现，而是更安全，用法更明确的<strong>引用</strong>或 <strong>span</strong> 代替。</p>
+<p>下列三种情况下，你可以使用 new 和 delete：</p>
+<ol>
+<li>你在封装一个非常底层的内存分配器库。</li>
+<li>你是 C++98 用户，且你的老板不允许使用 boost（其提供了智能指针）。</li>
+<li>你想要创造一些内存泄漏来惩罚拖欠工资的脑板。</li>
+</ol>
+<blockquote>
+<p>同理，malloc 和 free 也是不允许的。</p>
+</blockquote>
+<h2 id="1">案例 1</h2>
+<p>同学：我想要<strong>分配一段内存空间</strong>，你不让我 new，我还能怎么办呢？</p>
+<pre><code class="language-cpp">char *mem = new char[1024];   // 同学想要 1024 字节的缓冲区
+read(1, mem, 1024);           // 用于供 C 语言的读文件函数使用
+delete[] mem;                 // 需要手动 delete
+</code></pre>
+<p>小彭老师：有没有一种可能，vector 就可以分配内存空间。</p>
+<pre><code class="language-cpp">vector&lt;char&gt; mem(1024);
+read(1, mem.data(), mem.size());
+</code></pre>
+<p>vector 一样符合 RAII 思想，构造时自动申请内存，离开作用域时自动释放。</p>
+<p>用 data() 即可获取出首个 char 元素的指针，用于传递给 C 语言函数使用。</p>
+<p>用 size() 取出数组的长度，即是内存空间的字节数，因为我们的元素类型是 char，char 刚好就是 1 字节的。</p>
+<blockquote>
+<p>更现代的 C++ 思想家还会用 <code>vector&lt;std::byte&gt;</code>。
+如果你读出来的目的是用作字符串，<code>string</code> 也可以。</p>
+</blockquote>
+<h3 id="11">贴士 1.1</h3>
+<p>我一般会用更直观的 auto 写法，这样更能明确这是在创建一个 vector 对象，然后保存到 mem 这个变量名中。</p>
+<pre><code class="language-cpp">auto mem = vector&lt;char&gt;(1024);
+read(1, mem.data(), mem.size());
+</code></pre>
+<h3 id="12">贴士 1.2</h3>
+<p>有的同学会想当然地提出，用智能指针代替 new。</p>
+<pre><code class="language-cpp">auto mem = make_shared&lt;char[]&gt;(1024);
+read(1, mem.get(), 1024);
+</code></pre>
+<p>可 new 的替代品从来不只有智能指针一个，也可以是 vector 容器！</p>
+<ul>
+<li>智能指针只会用于<strong>单个对象</strong>！</li>
+<li><strong>动态长度的数组</strong>人们都是用 vector 管理的。</li>
+</ul>
+<blockquote>
+<p>很多劣质的所谓 “现代 C++ 教材” 都忽略了这一点，总是刻意夸大了智能指针的覆盖范围，为了新而新，而对实际上更适合管理 <strong>动态长度内存空间</strong> 的 vector 只字不提。</p>
+</blockquote>
+<p>vector 管理动态长度内存空间的优势：</p>
+<ul>
+<li>你可以随时随地 resize 和 push_back，加入新元素，而智能指针管理的数组要重新调整大小就比较困难。</li>
+<li>vector 的拷贝构造函数是深拷贝，符合 C++ 容器的一般约定。而 unique_ptr 完全不支持拷贝，深拷贝需要额外的代码，shared_ptr 则是浅拷贝，有时会导致数据覆盖。</li>
+</ul>
+<p>其实 <code>shared_ptr&lt;char[]&gt;</code> 也不是不可以用，然而，智能指针管理的数组，并不能方便地通过 <code>.size()</code> 获取数组的长度，必须用另一个变量单独存储这个长度。这就违背了封装原则，那会使你的代码变得不可维护。</p>
+<blockquote>
+<p>绝大多数情况下，可维护性总是比性能重要的，你只需要比较 <strong>你重构代码花的时间</strong> 和 <strong>计算机运行这段代码所需时间</strong> 就明白值不值了。</p>
+</blockquote>
+<h2 id="2">案例 2</h2>
+<p>同学：我需要在“堆”上分配一个对象，让他持久存在。你不让我用 new，我只能在“栈”上创建临时对象了，如果要返回或存起来的话根本用不了啊。</p>
+<pre><code class="language-cpp">Foo *hello() {
+    Foo *foo = new Foo();
+    return foo;
+}
+</code></pre>
+<p>小彭老师：你可以使用智能指针，最适合新人上手的智能指针是 shared_ptr。
+当没有任何函数或对象持有该 shared_ptr 指向的对象时，也就是当调用者存储 hello() 返回值的函数体退出时，指向的对象会被自动释放。</p>
+<pre><code class="language-cpp">shared_ptr&lt;Foo&gt; hello() {
+    shared_ptr&lt;Foo&gt; foo = make_shared&lt;Foo&gt;();
+    return foo;
+}
+</code></pre>
+<p>总之，这样替换你的代码：</p>
+<ul>
+<li><code>T *</code> 换成 <code>shared_ptr&lt;T&gt;</code></li>
+<li><code>new T(...)</code> 换成 <code>make_shared&lt;T&gt;(...)</code></li>
+</ul>
+<p>你的代码就基本上安全了，再也不用手动 delete 了。</p>
+<blockquote>
+<p>有个用了 shared_ptr 还会内存泄漏的边缘情况：循环引用，通常是实现双向链表时，weak_ptr 可以解决，稍后介绍。</p>
+</blockquote>
+<h3 id="21">贴士 2.1</h3>
+<p>unique_ptr 和 shared_ptr 有什么区别？初学者应该先学哪个？</p>
+<p>unique_ptr 是独占所有权，他的限制更多，比如：</p>
+<ul>
+<li>不允许拷贝，只允许移动。</li>
+<li>不允许赋值，只允许移动赋值。</li>
+<li>用 unique_ptr 主要是出于性能优势。</li>
+</ul>
+<blockquote>
+<p>然而性能总是不如安全重要的，你是想要<strong>一个造在火星的豪华宫殿，还是一个地球的安全老家？</strong></p>
+</blockquote>
+<p>所以，建议你先全部替换成泛用性强、易用的 shared_ptr。等确实出现性能瓶颈时，再对瓶颈部分单独调试优化也不迟。</p>
+<blockquote>
+<p>先把老家造好了，然后再想办法移民火星，而不是反过来。</p>
+</blockquote>
+<h3 id="22">贴士 2.2</h3>
+<p>有些老式的所谓 “现代 C++ 教程” 中，会看到这样 new 与智能指针并用的写法：</p>
+<pre><code class="language-cpp">shared_ptr&lt;Foo&gt; foo(new Foo());
+</code></pre>
+<p>从 C++14 开始，这已经是<strong>过时的</strong>！具有安全隐患（如果构造函数可能抛出异常），且写起来也不够直观。</p>
+<p>现在人们一般都会用 make_shared 函数，其内部封装不仅保证了异常安全，而且会使 shared_ptr 的控制块与 Foo 对象前后紧挨着，只需一次内存分配，不仅更直观，还提升了性能。</p>
+<pre><code class="language-cpp">auto foo = make_shared&lt;Foo&gt;();
+</code></pre>
+<blockquote>
+<p>从 C++14 开始，内存安全的现代 C++ 程序中就不会出现任何显式的 new 了，哪怕是抱在 shared_ptr 或 unique_ptr 内的也不行。（除了最上面说的 3 种特殊情况）</p>
+</blockquote>
+<h2 id="_1">优势何在？</h2>
+<p>在日常代码中，我们常常会使用“如果错误了就提前返回”的写法。这被称为<strong>提前返回 (early-return)</strong>，一种优质代码的写法，比弄个很大的 else 分支要可维护得多。</p>
+<p>然而这有时我们会忘记在提前返回的分支中 delete 之前分配过的所有智能指针。</p>
+<pre><code class="language-cpp">int func() {
+    Foo *foo = new Foo();
+    ...
+    if (出错) {
+        // 提前返回的分支中忘记 delete foo！
+        return -1;
+    }
+    ...
+    delete foo;
+    return 0;
+}
+</code></pre>
+<p>而智能指针，不论是提前返回还是最终的返回，只要是函数结束了，都能自动释放。智能指针使得程序员写出“提前返回式”毫无精神压力，再也不用惦记着哪些需要释放。</p>
+<pre><code class="language-cpp">int func() {
+    shared_ptr&lt;Foo&gt; foo = make_shared&lt;Foo&gt;();
+    ...
+    if (出错) {
+        return -1;
+    }
+    ...
+    return 0;
+}
+</code></pre>
+<h2 id="shared_ptr">shared_ptr 小课堂</h2>
+<h3 id="_2">自动释放</h3>
+<pre><code class="language-cpp">void func() {
+    shared_ptr&lt;Foo&gt; fooPtr = make_shared&lt;Foo&gt;();
+    ...
+}
+</code></pre>
+<p>离开 func 作用域，fooPtr 就销毁了。</p>
+<p>fooPtr 是唯一也是最后一个持有 foo 对象的智能指针。</p>
+<p>所以离开 func 作用域时，其指向的 foo 对象就会销毁。</p>
+<h3 id="_3">保存续命</h3>
+<pre><code class="language-cpp">shared_ptr&lt;Foo&gt; globalPtr;
+
+void func() {
+    shared_ptr&lt;Foo&gt; fooPtr = make_shared&lt;Foo&gt;();
+    ...
+    globalPtr = fooPtr;
+}
+</code></pre>
+<ul>
+<li>离开 func 作用域，fooPtr 就销毁了。</li>
+<li>但是 globalPtr 是全局变量，直到程序退出才会销毁。</li>
+<li>相当于帮原 fooPtr 指向的对象帮续命了！</li>
+</ul>
+<h3 id="_4">提前释放</h3>
+<pre><code class="language-cpp">void other() {
+    globalPtr = nullptr;  // 相当于传统指针的 delete
+}
+</code></pre>
+<p>但是如果现在又一个函数给 globalPtr 写入空指针。
+这时之前对原对象的引用就没有了。</p>
+<p><strong>对智能指针写入一个空指针可以使其指向的对象释放。</strong></p>
+<p>对智能指针写入空指针的效果和 delete 很像，区别在于：</p>
+<ul>
+<li>如果你忘了 delete 就完了！</li>
+<li>你就算不写入空指针，智能指针也会自动释放，写入空指针只是把死期提前了一点而已……</li>
+</ul>
+<pre><code class="language-cpp">shared_ptr&lt;Foo&gt; p = make_shared&lt;Foo&gt;();
+
+p = nullptr;  // 1
+p.reset();    // 2
+}             // 3
+</code></pre>
+<blockquote>
+<p>P.S. 同理，vector 也可以通过 <code>v = {}</code> 或 <code>v.clear()</code> 来提前释放内存。</p>
+</blockquote>
+<h3 id="_5">总结</h3>
+<ul>
+<li>当你需要分配一段内存空间：vector</li>
+<li>当你需要创建单个对象：shared_ptr</li>
+<li>当你想提前 delete：写入空指针</li>
+</ul>
+<h2 id="_6">线程安全？</h2>
+<p>似乎很多三脚猫教材都在模棱两可地辩论一个问题：shared_ptr 到底是不是线程安全的？</p>
+<p>不论什么类型，都要看你的用况，才能知道是不是线程安全，这里分为三种情况讨论：</p>
+<ol>
+<li>多个线程同时从同一个地方拷贝 shared_ptr 出来是安全的（多线程只读永远安全定律）：</li>
+</ol>
+<pre><code class="language-cpp">shared_ptr&lt;T&gt; a;
+void t1() {
+    shared_ptr&lt;T&gt; b1 = a;
+}
+
+void t1() {
+    shared_ptr&lt;T&gt; b2 = a;
+}
+</code></pre>
+<ol start="2">
+<li>多个线程同时从往同一个地方写入 shared_ptr 是不安全的（多线程 1 写 n 读定律）：</li>
+</ol>
+<pre><code class="language-cpp">shared_ptr&lt;T&gt; a;
+void t1() {
+    shared_ptr&lt;T&gt; b1;
+    a = b1;
+}
+
+void t1() {
+    shared_ptr&lt;T&gt; b2;
+    a = b2;
+}
+</code></pre>
+<blockquote>
+<p>这种情况下，你应该考虑的是 <code>atomic&lt;shared_ptr&lt;T&gt;&gt;</code>。</p>
+</blockquote>
+<ol start="3">
+<li>shared_ptr 并不保护其指向 T 类型的线程安全（你自己 T 实现的就不安全怪我指针???）：</li>
+</ol>
+<pre><code class="language-cpp">shared_ptr&lt;T&gt; a;
+void t1() {
+    a-&gt;b1 = 0;
+}
+
+void t1() {
+    a-&gt;b1 = 1;
+}
+</code></pre>
+<blockquote>
+<p>这种情况下，你应该考虑的是给你的 T 类型里面加个 mutex 保护好自己，而不是来怪我指针。</p>
+</blockquote>
+<p>直接的答案：他们说的是，shared_ptr 的拷贝构造函数、析构函数是线程安全的，这不是废话吗？我只是拷贝另一个 shared_ptr，对那个 shared_ptr 又不进行更改，当然不会发生线程冲突咯。我自己析构关你其他 shared_ptr 什么事，当然就没有线程冲突咯。这是非常直观的，和普通指针的线程安全没有任何不同。</p>
+<p>之所以这些狗币教材会辩论，是因为他们老爱多管闲事，他们了解到 shared_ptr 的底层细节中有个控制块的存在，而拷贝构造函数、析构函数需要修改控制块的计数值，所以实际标准库的实现中，会把这个计数器设为原子的，最终结果是使得 shared_ptr 在多线程中和普通指针一样安全。这是标准库底层实现细节，我们作为高层用户并不需要考虑他底层如何实现，我们只需要记住原始指针怎样用是线程安全的，shared_ptr 就怎样线程安全。</p>
+<ul>
+<li>你会两个线程同时写入同一个原始指针吗？同样地，如果你原始指针不会犯错，shared_ptr 为什么会犯错？</li>
+<li>你可以两个线程同时读取同一个全局的原始指针变量，同样地，shared_ptr 也可以，有任何区别吗？</li>
+</ul>
+<p>反正，shared_ptr 内部专门为线程安全做过设计，你不用去操心。</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>小彭老师倾 ♥ 制作</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../js/print-site.js"></script>
+        <script src="../extra.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

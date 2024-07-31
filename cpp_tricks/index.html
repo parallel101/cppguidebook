@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="小彭老师">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>应知应会 C++ 小技巧 - ✝️小彭大典✝️</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../css/print-site-enum-headings1.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings2.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings3.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings4.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings5.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings6.css" rel="stylesheet">
+        <link href="../css/print-site.css" rel="stylesheet">
+        <link href="../css/print-site-mkdocs.css" rel="stylesheet">
+        <link href="../extra.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">✝️小彭大典✝️</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">章节列表</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href=".." class="dropdown-item">前言</a>
+</li>
+                                    
+<li>
+    <a href="../hello_world/" class="dropdown-item">你好，世界</a>
+</li>
+                                    
+<li>
+    <a href="../platform/" class="dropdown-item">开发环境与平台选择</a>
+</li>
+                                    
+<li>
+    <a href="../variable_types/" class="dropdown-item">变量与类型 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../functions/" class="dropdown-item">认识函数 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active" aria-current="page">应知应会 C++ 小技巧</a>
+</li>
+                                    
+<li>
+    <a href="../lambda/" class="dropdown-item">函数式编程</a>
+</li>
+                                    
+<li>
+    <a href="../type_rich_api/" class="dropdown-item">现代化的 API 设计指南</a>
+</li>
+                                    
+<li>
+    <a href="../no_more_new/" class="dropdown-item">现代 C++ 从拒绝 new 开始</a>
+</li>
+                                    
+<li>
+    <a href="../stl_map/" class="dropdown-item">深入浅出 STL 系列之 map (基本完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_overview/" class="dropdown-item">设计模式总览 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_virtual/" class="dropdown-item">让虚函数再次伟大！</a>
+</li>
+                                    
+<li>
+    <a href="../design_gamedev/" class="dropdown-item">游戏开发中常用的设计模式</a>
+</li>
+                                    
+<li>
+    <a href="../design_functor/" class="dropdown-item">函数式设计模式</a>
+</li>
+                                    
+<li>
+    <a href="../design_variant/" class="dropdown-item">静态多态与面向数据编程 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_erasure/" class="dropdown-item">类型擦除神教及其实现 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_concept/" class="dropdown-item">鸭子类型与 C++20 concept (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../cpp_lifetime/" class="dropdown-item">深入理解析构函数与生命周期</a>
+</li>
+                                    
+<li>
+    <a href="../cpp_memory/" class="dropdown-item">真正的 C++ 内存模型！ (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../unicode/" class="dropdown-item">字符编码那些事</a>
+</li>
+                                    
+<li>
+    <a href="../error_code/" class="dropdown-item">现代 C++ 中的错误处理 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../warnings/" class="dropdown-item">建议 C++ 程序员开启的警告选项</a>
+</li>
+                                    
+<li>
+    <a href="../undef/" class="dropdown-item">未定义行为完整列表</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">关于</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../about/" class="dropdown-item">关于小彭老师</a>
+</li>
+                                    
+<li>
+    <a href="../donate/" class="dropdown-item">赞助名单</a>
+</li>
+                                    
+<li>
+    <a href="../recommend/" class="dropdown-item">参考资料与项目</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/parallel101/cppguidebook" class="nav-link">GitHub</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://space.bilibili.com/263032155" class="nav-link">Bilibili</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../functions/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../lambda/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/parallel101/cppguidebook/edit/master/docs/cpp_tricks.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#c" class="nav-link">应知应会 C++ 小技巧</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#_1" class="nav-link">交换两个变量</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_2" class="nav-link">别再写构造函数啦！</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_3" class="nav-link">别再 [] 啦！</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#make_pair" class="nav-link">别再 make_pair 啦！</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#insert" class="nav-link">insert 不会替换现有值</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cout-endl" class="nav-link">cout 不需要 endl</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cout" class="nav-link">多线程中 cout 出现乱序？</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#map" class="nav-link">一边遍历 map，一边删除？</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#vector" class="nav-link">高效删除 vector 元素</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#vector_1" class="nav-link">批量删除 vector 元素</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#vector_2" class="nav-link">有序的 vector</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_4" class="nav-link">提前返回</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#lambda" class="nav-link">立即调用的 Lambda</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#lambda_1" class="nav-link">Lambda 复用代码</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_5" class="nav-link">类内静态成员</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#const" class="nav-link">const 居然应该后置&hellip;</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="c">应知应会 C++ 小技巧</h1>
+<div class="toc">
+<ul>
+<li><a href="#c">应知应会 C++ 小技巧</a><ul>
+<li><a href="#_1">交换两个变量</a></li>
+<li><a href="#_2">别再写构造函数啦！</a></li>
+<li><a href="#_3">别再 [] 啦！</a></li>
+<li><a href="#make_pair">别再 make_pair 啦！</a></li>
+<li><a href="#insert">insert 不会替换现有值</a></li>
+<li><a href="#cout-endl">cout 不需要 endl</a></li>
+<li><a href="#cout">多线程中 cout 出现乱序？</a></li>
+<li><a href="#map">一边遍历 map，一边删除？</a></li>
+<li><a href="#vector">高效删除 vector 元素</a></li>
+<li><a href="#vector_1">批量删除 vector 元素</a></li>
+<li><a href="#vector_2">有序的 vector</a></li>
+<li><a href="#_4">提前返回</a></li>
+<li><a href="#lambda">立即调用的 Lambda</a></li>
+<li><a href="#lambda_1">Lambda 复用代码</a></li>
+<li><a href="#_5">类内静态成员</a></li>
+<li><a href="#const">const 居然应该后置&hellip;</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="_1">交换两个变量</h2>
+<pre><code class="language-cpp">int a = 42;
+int b = 58;
+</code></pre>
+<p>现在你想交换这两个变量。</p>
+<pre><code class="language-cpp">int tmp = a;
+a = b;
+b = tmp;
+</code></pre>
+<p>但是标准库提供了更好的方法：</p>
+<pre><code class="language-cpp">std::swap(a, b);
+</code></pre>
+<p>这个方法可以交换任意两个同类型的值，包括结构体、数组、容器等。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 只需要 <code>#include &lt;utility&gt;</code> 就可以使用！</p>
+</blockquote>
+<h2 id="_2">别再写构造函数啦！</h2>
+<pre><code class="language-cpp">// C++98
+struct Student {
+    string name;
+    int age;
+    int id;
+
+    Student(string name_, int age_, int id_) : name(name_), age(age_), id(id_) {}
+};
+
+Student stu(&quot;侯捷老师&quot;, 42, 123);
+</code></pre>
+<p>C++98 需要手动书写构造函数，非常麻烦！而且几乎都是重复的。</p>
+<p>C++11 中，平凡的结构体类型不需要再写构造函数了，只需用 <code>{}</code> 就能对成员依次初始化：</p>
+<pre><code class="language-cpp">// C++11
+struct Student {
+    string name;
+    int age;
+    int id;
+};
+
+Student stu{&quot;小彭老师&quot;, 24, 123};
+</code></pre>
+<p>这被称为<strong>聚合初始化</strong> (aggergate initialize)。只要你的类没有自定义构造函数，没有 private 成员，都可以用 <code>{}</code> 聚合初始化。</p>
+<p>好消息：C++20 中，聚合初始化也支持 <code>()</code> 了，用起来就和传统的 C++98 构造函数一样！</p>
+<pre><code class="language-cpp">// C++20
+Student stu(&quot;小彭老师&quot;, 24, 123);
+</code></pre>
+<p>聚合初始化还可以指定默认值：</p>
+<pre><code class="language-cpp">// C++11
+struct Student {
+    string name;
+    int age;
+    int id = 9999;
+};
+
+Student stu{&quot;小彭老师&quot;, 24};
+// 等价于：
+Student stu{&quot;小彭老师&quot;, 24, 9999};
+</code></pre>
+<p>C++20 开始，<code>{}</code> 聚合初始化还可以根据每个成员的名字来指定值：</p>
+<pre><code class="language-cpp">Student stu{.name = &quot;小彭老师&quot;, .age = 24, .id = 9999};
+// 等价于：
+Student stu{&quot;小彭老师&quot;, 24, 9999};
+</code></pre>
+<p>好处是，即使不慎写错参数顺序也不用担心。</p>
+<pre><code class="language-cpp">Student stu{.name = &quot;小彭老师&quot;, .age = 24, .id = 9999};
+Student stu{.name = &quot;小彭老师&quot;, .id = 9999, .age = 24};
+</code></pre>
+<h2 id="_3">别再 <code>[]</code> 啦！</h2>
+<p>你知道吗？在 map 中使用 <code>[]</code> 查找元素，如果不存在，会自动创建一个默认值。这个特性有时很方便，但如果你不小心写错了，就会在 map 中创建一个多余的默认元素。</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table[&quot;小彭老师&quot;] = 24;
+
+cout &lt;&lt; table[&quot;侯捷老师&quot;];
+</code></pre>
+<p>table 中明明没有 &ldquo;侯捷老师&rdquo; 这个元素，但由于 <code>[]</code> 的特性，他会默认返回一个 0，不会爆任何错误！</p>
+<p>改用更安全的 <code>at()</code> 函数，当查询的元素不存在时，会抛出异常，方便你调试：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.at(&quot;小彭老师&quot;) = 24;
+
+cout &lt;&lt; table.at(&quot;侯捷老师&quot;);  // 抛出异常
+</code></pre>
+<p><code>[]</code> 的用途是“写入新元素”时，如果元素不存在，他可以自动帮你创建一个默认值，供你以引用的方式赋值进去。</p>
+<h2 id="make_pair">别再 make_pair 啦！</h2>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert(pair&lt;string, int&gt;(&quot;侯捷老师&quot;, 42));
+</code></pre>
+<p>为避免写出类型名的麻烦，很多老师都会让你写 make_pair：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert(make_pair(&quot;侯捷老师&quot;, 42));
+</code></pre>
+<p>然而 C++11 提供了更好的写法，那就是通过 <code>{}</code> 隐式构造，不用写出类型名或 make_pair：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert({&quot;侯捷老师&quot;, 42});
+</code></pre>
+<p>即使需要写出类型名的情况，也可以用 C++17 的 CTAD 语法，免去模板参数，make_xxx 系列函数就此完全被 C++17 平替：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert(pair(&quot;侯捷老师&quot;, 42));
+</code></pre>
+<h2 id="insert">insert 不会替换现有值</h2>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert({&quot;小彭老师&quot;, 24});
+table.insert({&quot;小彭老师&quot;, 42});
+</code></pre>
+<p>这时，<code>table["小彭老师"]</code> 仍然会是 24，而不是 42。因为 insert 不会替换 map 里已经存在的值。</p>
+<p>如果希望如果已经存在时，替换现有元素，可以使用 <code>[]</code> 运算符：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table[&quot;小彭老师&quot;] = 24;
+table[&quot;小彭老师&quot;] = 42;
+</code></pre>
+<p>C++17 提供了比 <code>[]</code> 运算符更适合覆盖性插入的 insert_or_assign 函数：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert_or_assign(&quot;小彭老师&quot;, 24);
+table.insert_or_assign(&quot;小彭老师&quot;, 42);
+</code></pre>
+<h2 id="cout-endl">cout 不需要 endl</h2>
+<pre><code class="language-cpp">int a = 42;
+printf(&quot;%d\n&quot;, a);
+</code></pre>
+<p>万一你写错了 <code>%</code> 后面的类型，编译器不会有任何报错，留下隐患。</p>
+<pre><code class="language-cpp">int a = 42;
+printf(&quot;%s\n&quot;, a);  // 编译器不报错，但是运行时会崩溃！
+</code></pre>
+<p>C++ 中有更安全的输出方式 <code>cout</code>，通过 C++ 的重载机制，无需手动指定 <code>%</code>，自动就能推导类型。</p>
+<pre><code class="language-cpp">int a = 42;
+cout &lt;&lt; a &lt;&lt; endl;
+double d = 3.14;
+cout &lt;&lt; d &lt;&lt; endl;
+</code></pre>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;Hello, World!&quot; &lt;&lt; endl;
+</code></pre>
+<p>endl 是一个特殊的流操作符，作用等价于先输出一个 <code>'\n'</code> 然后 <code>flush</code>。</p>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;Hello, World!&quot; &lt;&lt; '\n';
+cout.flush();
+</code></pre>
+<p>但实际上，输出流 cout 默认的设置就是“行刷新缓存”，也就是说，检测到 <code>'\n'</code> 时，就会自动刷新一次，根本不需要我们手动刷新！</p>
+<p>如果还用 endl 的话，就相当于刷新了两次，浪费性能。</p>
+<p>所以，我们只需要输出 <code>'\n'</code> 就可以了，每次换行时 cout 都会自动刷新，endl 是一个典型的以讹传讹错误写法。</p>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;Hello, World!&quot; &lt;&lt; '\n';
+</code></pre>
+<h2 id="cout">多线程中 cout 出现乱序？</h2>
+<h2 id="map">一边遍历 map，一边删除？</h2>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+for (auto it = table.begin(); it != table.end(); ++it) {
+    if (it-&gt;second &lt; 0) {
+        table.erase(it);
+    }
+}
+</code></pre>
+<p>会发生崩溃！看来 map 似乎不允许在遍历的过程中删除？不，只是你的写法有错误：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+for (auto it = table.begin(); it != table.end(); ) {
+    if (it-&gt;second &lt; 0) {
+        it = table.erase(it);
+    } else {
+        ++it;
+    }
+}
+</code></pre>
+<p>C++20 引入了更好的 erase_if 全局函数，不用手写上面这么麻烦的代码：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+erase_if(table, [](pair&lt;string, int&gt; it) {
+    return it.second &lt; 0;
+});
+</code></pre>
+<h2 id="vector">高效删除 vector 元素</h2>
+<pre><code class="language-cpp">vector&lt;int&gt; v = {48, 23, 76, 11, 88, 63, 45, 28, 59};
+</code></pre>
+<p>众所周知，在 vector 中删除元素，会导致后面的所有元素向前移动，十分低效。复杂度：<span class="arithmatex"><span class="MathJax_Preview">O(n)</span><script type="math/tex">O(n)</script></span></p>
+<pre><code class="language-cpp">// 直接删除 v[3]
+v.erase(v.begin() + 3);
+</code></pre>
+<p>如果不在乎元素的顺序，可以把要删除的元素和最后一个元素 swap，然后 pop_back。复杂度：<span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span></p>
+<pre><code class="language-cpp">// 把 v[3] 和 v[v.size() - 1] 位置对调
+swap(v[3], v[v.size() - 1]);
+// 然后删除 v[v.size() - 1]
+v.pop_back();
+</code></pre>
+<p>这样就不用移动一大堆元素了。这被称为 back-swap-erase。</p>
+<h2 id="vector_1">批量删除 vector 元素</h2>
+<p>vector 中只删除一个元素需要 <span class="arithmatex"><span class="MathJax_Preview">O(n)</span><script type="math/tex">O(n)</script></span>。如果一边遍历，一边删除多个符合条件的元素，就需要复杂度 <span class="arithmatex"><span class="MathJax_Preview">O(n^2)</span><script type="math/tex">O(n^2)</script></span> 了。</p>
+<p>标准库提供了 <code>remove</code> 和 <code>remove_if</code> 函数，其内部采用类似 back-swap-erase 的方法，先把要删除的元素移动到末尾。然后一次性 <code>erase</code> 掉末尾同样数量的元素。</p>
+<p>且他们都能保持顺序不变。</p>
+<p>删除所有值为 42 的元素：</p>
+<pre><code class="language-cpp">vector&lt;int&gt; v;
+v.erase(remove(v.begin(), v.end(), 42), v.end());
+</code></pre>
+<p>删除所有值大于 0 的元素：</p>
+<pre><code class="language-cpp">vector&lt;int&gt; v;
+v.erase(remove_if(v.begin(), v.end(), [](int x) {
+    return x &gt; 0;
+}), v.end());
+</code></pre>
+<p>现在 C++20 也引入了全局函数 erase 和 erase_if，使用起来更加直观：</p>
+<pre><code class="language-cpp">vector&lt;int&gt; v;
+erase(v, 42);       // 删除所有值为 42 的元素
+erase_if(v, [](int x) {
+    return x &gt; 0;   // 删除所有值大于 0 的元素
+});
+</code></pre>
+<h2 id="vector_2">有序的 vector</h2>
+<p>如果你想要维护一个有序的数组，用 <code>lower_bound</code> 或 <code>upper_bound</code> 来插入元素，保证插入后仍保持有序：</p>
+<pre><code class="language-cpp">vector&lt;int&gt; s;
+s.push_back(1);
+s.push_back(2);
+s.push_back(4);
+s.push_back(6);
+// s = { 1, 2, 4, 6 }
+s.insert(lower_bound(s.begin(), s.end(), 3), 3);
+// s = { 1, 2, 3, 4, 6 }
+s.insert(lower_bound(s.begin(), s.end(), 5), 5);
+// s = { 1, 2, 3, 4, 5, 6 }
+</code></pre>
+<p>有序数组中，可以利用 <code>lower_bound</code> 或 <code>upper_bound</code> 快速二分查找到想要的值：</p>
+<pre><code class="language-cpp">vector&lt;int&gt; s;
+s.push_back(1);
+s.push_back(2);
+s.push_back(4);
+s.push_back(6);
+// s = { 1, 2, 4, 6 }
+lower_bound(s.begin(), s.end(), 3); // s.begin() + 2;
+lower_bound(s.begin(), s.end(), 5); // s.begin() + 3;
+</code></pre>
+<p>利用 CDF 积分 + 二分法可以实现生成任意指定分布的随机数。</p>
+<p>例如抽卡概率要求：</p>
+<ul>
+<li>2% 出金卡</li>
+<li>10% 出蓝卡</li>
+<li>80% 出白卡</li>
+<li>8% 出答辩</li>
+</ul>
+<pre><code class="language-cpp">vector&lt;double&gt; probs = {0.02, 0.1, 0.8, 0.08};
+vector&lt;double&gt; cdf = {0.02, 0.12, 0.92, 1.00};
+vector&lt;string&gt; result = {&quot;金卡&quot;, &quot;蓝卡&quot;, &quot;白卡&quot;, &quot;答辩&quot;};
+// 生成 100 个随机数：
+for (int i = 0; i &lt; 100; ++i) {
+    double r = rand() / (RAND_MAX + 1.);
+    int index = lower_bound(cdf.begin(), cdf.end(), r) - cdf.begin();
+    cout &lt;&lt; &quot;你抽到了&quot; &lt;&lt; result[index] &lt;&lt; endl;
+}
+</code></pre>
+<h2 id="_4">提前返回</h2>
+<pre><code class="language-cpp">void babysitter(Baby *baby) {
+    if (baby-&gt;is_alive()) {
+        puts(&quot;宝宝已经去世了&quot;);
+    } else {
+        puts(&quot;正在检查宝宝喂食情况...&quot;);
+        if (baby-&gt;is_feeded()) {
+            puts(&quot;宝宝已经喂食过了&quot;);
+        } else {
+            puts(&quot;正在喂食宝宝...&quot;);
+            puts(&quot;正在调教宝宝...&quot;);
+            puts(&quot;正在安抚宝宝...&quot;);
+        }
+    }
+}
+</code></pre>
+<p>这个函数有很多层嵌套，很不美观。用<strong>提前返回</strong>的写法来优化：</p>
+<pre><code class="language-cpp">void babysitter(Baby *baby) {
+    if (baby-&gt;is_alive()) {
+        puts(&quot;宝宝已经去世了&quot;);
+        return;
+    }
+    puts(&quot;正在检查宝宝喂食情况...&quot;);
+    if (baby-&gt;is_feeded()) {
+        puts(&quot;宝宝已经喂食过了&quot;);
+        return;
+    }
+    puts(&quot;正在喂食宝宝...&quot;);
+    puts(&quot;正在调教宝宝...&quot;);
+    puts(&quot;正在安抚宝宝...&quot;);
+}
+</code></pre>
+<h2 id="lambda">立即调用的 Lambda</h2>
+<p>有时，需要在一个列表里循环查找某样东西，也可以用提前返回的写法优化：</p>
+<pre><code class="language-cpp">bool find(const vector&lt;int&gt; &amp;v, int target) {
+    for (int i = 0; i &lt; v.size(); ++i) {
+        if (v[i] == target) {
+            return true;
+        }
+    }
+    return false;
+}
+</code></pre>
+<p>可以包裹一个立即调用的 Lambda 块 <code>[&amp;] { ... } ()</code>，限制提前返回的范围：</p>
+<pre><code class="language-cpp">void find(const vector&lt;int&gt; &amp;v, int target) {
+    bool found = [&amp;] {
+        for (int i = 0; i &lt; v.size(); ++i) {
+            if (v[i] == target) {
+                return true;
+            }
+        }
+        return false;
+    } ();
+    if (found) {
+        ...
+    }
+}
+</code></pre>
+<h2 id="lambda_1">Lambda 复用代码</h2>
+<pre><code class="language-cpp">vector&lt;string&gt; spilt(string str) {
+    vector&lt;string&gt; list;
+    string last;
+    for (char c: str) {
+        if (c == ' ') {
+            list.push_back(last);
+            last.clear();
+        } else {
+            last.push_back(c);
+        }
+    }
+    list.push_back(last);
+    return list;
+}
+</code></pre>
+<p>上面的代码可以用 Lambda 复用：</p>
+<pre><code class="language-cpp">vector&lt;string&gt; spilt(string str) {
+    vector&lt;string&gt; list;
+    string last;
+    auto push = [&amp;] {
+        list.push_back(last);
+        last.clear();
+    };
+    for (char c: str) {
+        if (c == ' ') {
+            push();
+        } else {
+            last.push_back(c);
+        }
+    }
+    push();
+    return list;
+}
+</code></pre>
+<h2 id="_5">类内静态成员</h2>
+<p>在头文件中定义结构体的 static 成员时：</p>
+<pre><code class="language-cpp">struct Class {
+    static Class instance;
+};
+</code></pre>
+<p>会报错 <code>undefined reference to 'Class::instance'</code>。这是说的你需要找个 .cpp 文件，写出 <code>Class Class::instance</code> 才能消除该错误。</p>
+<p>C++17 中，只需加个 <code>inline</code> 就能解决。</p>
+<pre><code class="language-cpp">struct Class {
+    inline static Class instance;
+};
+</code></pre>
+<h2 id="const">const 居然应该后置&hellip;</h2>
+<pre><code class="language-cpp">const int *p;
+int *const p;
+</code></pre>
+<p>你能看出来上面这个 const 分别修饰的是谁吗？</p>
+<ol>
+<li>指针本身 <code>int *</code></li>
+<li>指针指向的 <code>int</code></li>
+</ol>
+<pre><code class="language-cpp">const int *p;  // 2
+int *const p;  // 1
+</code></pre>
+<p>为了看起来更加明确，我通常都会后置所有的 const 修饰。</p>
+<pre><code class="language-cpp">int const *p;
+int *const p;
+</code></pre>
+<p>这样就一目了然，const 总是在修饰他前面的东西，而不是后面。</p>
+<p>为什么 <code>int *const</code> 修饰的是 <code>int *</code> 也就很容易理解了。</p>
+<pre><code class="language-cpp">int const i;
+int const *p;
+int const &amp;r;
+</code></pre></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>小彭老师倾 ♥ 制作</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../js/print-site.js"></script>
+        <script src="../extra.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

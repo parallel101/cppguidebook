@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="小彭老师">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>深入理解析构函数与生命周期 - ✝️小彭大典✝️</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../css/print-site-enum-headings1.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings2.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings3.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings4.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings5.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings6.css" rel="stylesheet">
+        <link href="../css/print-site.css" rel="stylesheet">
+        <link href="../css/print-site-mkdocs.css" rel="stylesheet">
+        <link href="../extra.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">✝️小彭大典✝️</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">章节列表</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href=".." class="dropdown-item">前言</a>
+</li>
+                                    
+<li>
+    <a href="../hello_world/" class="dropdown-item">你好，世界</a>
+</li>
+                                    
+<li>
+    <a href="../platform/" class="dropdown-item">开发环境与平台选择</a>
+</li>
+                                    
+<li>
+    <a href="../variable_types/" class="dropdown-item">变量与类型 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../functions/" class="dropdown-item">认识函数 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../cpp_tricks/" class="dropdown-item">应知应会 C++ 小技巧</a>
+</li>
+                                    
+<li>
+    <a href="../lambda/" class="dropdown-item">函数式编程</a>
+</li>
+                                    
+<li>
+    <a href="../type_rich_api/" class="dropdown-item">现代化的 API 设计指南</a>
+</li>
+                                    
+<li>
+    <a href="../no_more_new/" class="dropdown-item">现代 C++ 从拒绝 new 开始</a>
+</li>
+                                    
+<li>
+    <a href="../stl_map/" class="dropdown-item">深入浅出 STL 系列之 map (基本完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_overview/" class="dropdown-item">设计模式总览 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_virtual/" class="dropdown-item">让虚函数再次伟大！</a>
+</li>
+                                    
+<li>
+    <a href="../design_gamedev/" class="dropdown-item">游戏开发中常用的设计模式</a>
+</li>
+                                    
+<li>
+    <a href="../design_functor/" class="dropdown-item">函数式设计模式</a>
+</li>
+                                    
+<li>
+    <a href="../design_variant/" class="dropdown-item">静态多态与面向数据编程 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_erasure/" class="dropdown-item">类型擦除神教及其实现 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_concept/" class="dropdown-item">鸭子类型与 C++20 concept (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active" aria-current="page">深入理解析构函数与生命周期</a>
+</li>
+                                    
+<li>
+    <a href="../cpp_memory/" class="dropdown-item">真正的 C++ 内存模型！ (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../unicode/" class="dropdown-item">字符编码那些事</a>
+</li>
+                                    
+<li>
+    <a href="../error_code/" class="dropdown-item">现代 C++ 中的错误处理 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../warnings/" class="dropdown-item">建议 C++ 程序员开启的警告选项</a>
+</li>
+                                    
+<li>
+    <a href="../undef/" class="dropdown-item">未定义行为完整列表</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">关于</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../about/" class="dropdown-item">关于小彭老师</a>
+</li>
+                                    
+<li>
+    <a href="../donate/" class="dropdown-item">赞助名单</a>
+</li>
+                                    
+<li>
+    <a href="../recommend/" class="dropdown-item">参考资料与项目</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/parallel101/cppguidebook" class="nav-link">GitHub</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://space.bilibili.com/263032155" class="nav-link">Bilibili</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../design_concept/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../cpp_memory/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/parallel101/cppguidebook/edit/master/docs/cpp_lifetime.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">深入理解析构函数与生命周期</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#c" class="nav-link">C++ 对象生命周期</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_2" class="nav-link">三大存储周期</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_3" class="nav-link">总结</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_4" class="nav-link">析构函数的逆天大坑</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_5" class="nav-link">虚类的析构函数必须是虚的</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">深入理解析构函数与生命周期</h1>
+<div class="toc">
+<ul>
+<li><a href="#_1">深入理解析构函数与生命周期</a><ul>
+<li><a href="#c">C++ 对象生命周期</a></li>
+<li><a href="#_2">三大存储周期</a></li>
+<li><a href="#_3">总结</a></li>
+<li><a href="#_4">析构函数的逆天大坑</a></li>
+<li><a href="#_5">虚类的析构函数必须是虚的</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="c">C++ 对象生命周期</h2>
+<p>C++ 中一个类可以具有构造函数和析构函数。</p>
+<ul>
+<li>构造函数固定为 <code>类名(构造函数参数列表)</code>。</li>
+<li>
+<p>析构函数固定为 <code>~类名()</code>。</p>
+</li>
+<li>
+<p>构造函数和析构函数都没有返回值类型。</p>
+</li>
+<li>析构函数不得拥有任何参数，但构造函数可以有。</li>
+</ul>
+<pre><code class="language-cpp">struct Class {
+    Class() {
+        puts(&quot;构造函数&quot;);
+    }
+
+    ~Class() {
+        puts(&quot;析构函数&quot;);
+    }
+};
+</code></pre>
+<pre><code class="language-cpp">int main() {
+    puts(&quot;进入 main&quot;);
+    Class c;
+    puts(&quot;离开 main&quot;);
+}
+</code></pre>
+<p>运行结果：</p>
+<pre><code>进入 main
+构造函数
+离开 main
+析构函数
+</code></pre>
+<p>这是 C++ 中最基本的现象。每当一个对象被创建时，会调用构造函数，每当一个对象离开定义了他的函数体时，会调用析构函数。</p>
+<blockquote>
+<p>函数体指的是从 <code>{</code> 到 <code>}</code> 之间的代码块。</p>
+</blockquote>
+<p>其中构造函数中通常负责创建资源，析构函数中通常销毁资源。对于智能指针和 vector 而言，这个资源就是内存。</p>
+<p>为什么要及时销毁不用的资源？只分配不释放，一个程序占用的内存和其他各种资源就会越来越多，这种程序如果长期运行，会吃光整个系统的所有资源然后被 Linux 内核视为危险进程而杀死。除非你的程序只会运行一会会，如果是长期运行的程序，例如服务器，必须严格管理所有自己曾经分配过的内存，不用时就立即释放，不要占着茅坑不拉史。</p>
+<p><code>}</code> 被誉为<strong>最伟大的运算符</strong>，就是因为他可以触发析构函数，帮你自动释放掉资源，你就不用自己费心手动释放内存，和其他各种资源了。</p>
+<h2 id="_2">三大存储周期</h2>
+<p>在进一步深入之前，我们必须明确以下术语：自动存储周期、动态存储周期、静态存储周期。</p>
+<p>变量定义在不同的位置，其生命周期（构造函数和析构函数调用的时机）会有所不同。</p>
+<p>比如一个变量定义在函数体内、类体内、通过 new 创建，之类的。</p>
+<ol>
+<li>自动存储周期，这种变量直接定义在<strong>函数体</strong>内。俗称“栈上”或“局部变量”</li>
+</ol>
+<pre><code class="language-cpp">void func() {
+    Class a;  // a 是自动存储周期
+}
+</code></pre>
+<ul>
+<li>构造时机：当变量定义时被调用。</li>
+<li>析构时机：当变量所在的 <code>{}</code> 代码块执行到 <code>}</code> 处时调用。</li>
+</ul>
+<ol start="2">
+<li>动态存储周期，这种变量通过 new 来创建。俗称“堆上”或“堆对象”</li>
+</ol>
+<pre><code class="language-cpp">void func() {
+    Class *p = new Class;  // *p 是动态存储周期
+    delete p;              // 释放动态分配的内存
+}
+</code></pre>
+<ul>
+<li>构造时机：当变量通过 new 创建时被调用。</li>
+<li>析构时机：当 delete 被调用时被调用。</li>
+</ul>
+<blockquote>
+<p>特别注意，<code>p</code> 依然是“栈上变量”，<code>p</code> 指向的 <code>*p</code> 才是“堆上变量”！</p>
+<p>用律师语再说一遍：<code>p</code> 是自动存储周期，<code>p</code> 指向的 <code>*p</code> 才是动态存储周期！（白律师最满意的一集）</p>
+</blockquote>
+<p>指针本身，和指针指向的对象，是两个东西，不要混淆。</p>
+<p><code>p</code> 本身会随着 func 的 <code>}</code> 而析构，但是 <code>*p</code> 的类型是 <code>Class *</code>，是一个 C 语言原始指针，原始指针属于 C 语言原始类型，没有析构函数。也就是说，抵达 <code>}</code> 时，<code>p</code> 名义上会析构，但是他没有析构函数，并不会产生任何作用。这一切和 <code>p</code> 指向的对象 <code>*p</code> 没有任何关系，你需要手动 delete 才会调用到 <code>*p</code> 的析构函数，并释放分配的内存。</p>
+<ul>
+<li>new 分为两部分：内存分配 + <strong>对象构造</strong></li>
+<li>delete 分为两部分：<strong>对象析构</strong> + 内存释放</li>
+</ul>
+<p>智能指针的优势在于，智能指针是个 C++ 类，具有定制的析构函数。当 <code>}</code> 抵达，<strong>智能指针本身</strong>由于自动存储周期的规则析构时，其会 <code>delete p</code>，利用动态存储周期的规则，触发<strong>智能指针指向对象</strong>的析构函数，也就是从而调用 <code>*p</code> 的析构函数。</p>
+<ol start="3">
+<li>静态存储周期，这种变量又要具体分三种情况，俗称“全局变量”或“静态变量”</li>
+</ol>
+<p>(1) 定义在<strong>名字空间</strong>内，不论是不是 static 或 inline（在名字空间中，static 和 inline 影响的只是“符号可见性”，而不是存储周期）</p>
+<pre><code class="language-cpp">namespace hello {
+Class s;         // s 是静态存储周期
+static Class s;  // s 是静态存储周期
+inline Class s;  // s 是静态存储周期
+}
+</code></pre>
+<ul>
+<li>构造时机：当程序启动时调用（main 函数之前）；对 DLL 来说则是 DLL 首次加载时调用。</li>
+<li>析构时机：当程序退出时调用（main 函数之后）。</li>
+</ul>
+<p>(2) 注意，<strong>全局名字空间</strong>是一个特殊的<strong>名字空间</strong>，外面没有包裹任何 <code>namespace</code> 时就属于这种情况，俗称“全局变量”。所以下面这种也属于“在 (全局) 名字空间内”：</p>
+<pre><code class="language-cpp">Class s;         // s 是静态存储周期
+static Class s;  // s 是静态存储周期
+inline Class s;  // s 是静态存储周期
+</code></pre>
+<p>(3) 定义在类内的静态成员变量，也就是通过 static 修饰过的成员变量（在类内，static 就影响存储周期了，inline 继续只影响“符号可见性”）</p>
+<pre><code class="language-cpp">struct Other {
+    static Class s;
+};
+Class Other::s;             // s 是静态存储周期
+
+struct Other {
+    inline static Class s;  // s 是静态存储周期
+};
+
+struct Other {
+    Class a;                // a 不是静态存储周期，而是跟随其所属的 Other 结构体的存储周期
+};
+</code></pre>
+<ol start="4">
+<li>定义在类内的成员变量（没有 static 的），跟随所属类的存储周期</li>
+</ol>
+<pre><code class="language-cpp">struct Other {
+    Class a;  // a 跟随 Other 结构体的存储周期
+};
+
+Other o;      // o.a 是静态存储周期
+
+int main() {
+    Other o;  // o.a  是自动存储周期
+    Other *p; // p-&gt;a 是动态存储周期
+}
+</code></pre>
+<ul>
+<li>构造时机：当 Other 结构体构造时调用。</li>
+<li>析构时机：当 Other 结构体析构时调用。</li>
+</ul>
+<h2 id="_3">总结</h2>
+<ul>
+<li>自动存储周期 - 函数的局部变量，自动析构</li>
+<li>动态存储周期 - 通过 new 创建的，delete 时析构</li>
+<li>静态存储周期 - 全局变量，程序结束时析构</li>
+</ul>
+<pre><code class="language-cpp"></code></pre>
+<h2 id="_4">析构函数的逆天大坑</h2>
+<p>定义了析构函数，就<strong>必须删除移动构造函数、移动赋值函数、拷贝构造函数、拷贝赋值函数</strong>！</p>
+<p>原因很复杂，整个故事要从 boost 当年如何设计出右值引用到图灵的停机问题讲起，讲了你也记不住，只需要记住结论：</p>
+<p>如果你要定义析构函数，就<strong>必须删除移动构造函数、移动赋值函数、拷贝构造函数、拷贝赋值函数</strong>！</p>
+<h2 id="_5">虚类的析构函数必须是虚的</h2>
+<ul>
+<li><code>-Wnon-virtual-dtor</code></li>
+<li><code>-Wdelete-non-virtual-dtor</code></li>
+</ul>
+<p>TODO: 介绍</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>小彭老师倾 ♥ 制作</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../js/print-site.js"></script>
+        <script src="../extra.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

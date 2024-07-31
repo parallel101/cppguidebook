@@ -1,0 +1,5314 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="小彭老师">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>深入浅出 STL 系列之 map (基本完工) - ✝️小彭大典✝️</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../css/print-site-enum-headings1.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings2.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings3.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings4.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings5.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings6.css" rel="stylesheet">
+        <link href="../css/print-site.css" rel="stylesheet">
+        <link href="../css/print-site-mkdocs.css" rel="stylesheet">
+        <link href="../extra.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">✝️小彭大典✝️</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">章节列表</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href=".." class="dropdown-item">前言</a>
+</li>
+                                    
+<li>
+    <a href="../hello_world/" class="dropdown-item">你好，世界</a>
+</li>
+                                    
+<li>
+    <a href="../platform/" class="dropdown-item">开发环境与平台选择</a>
+</li>
+                                    
+<li>
+    <a href="../variable_types/" class="dropdown-item">变量与类型 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../functions/" class="dropdown-item">认识函数 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../cpp_tricks/" class="dropdown-item">应知应会 C++ 小技巧</a>
+</li>
+                                    
+<li>
+    <a href="../lambda/" class="dropdown-item">函数式编程</a>
+</li>
+                                    
+<li>
+    <a href="../type_rich_api/" class="dropdown-item">现代化的 API 设计指南</a>
+</li>
+                                    
+<li>
+    <a href="../no_more_new/" class="dropdown-item">现代 C++ 从拒绝 new 开始</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active" aria-current="page">深入浅出 STL 系列之 map (基本完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_overview/" class="dropdown-item">设计模式总览 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_virtual/" class="dropdown-item">让虚函数再次伟大！</a>
+</li>
+                                    
+<li>
+    <a href="../design_gamedev/" class="dropdown-item">游戏开发中常用的设计模式</a>
+</li>
+                                    
+<li>
+    <a href="../design_functor/" class="dropdown-item">函数式设计模式</a>
+</li>
+                                    
+<li>
+    <a href="../design_variant/" class="dropdown-item">静态多态与面向数据编程 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_erasure/" class="dropdown-item">类型擦除神教及其实现 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_concept/" class="dropdown-item">鸭子类型与 C++20 concept (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../cpp_lifetime/" class="dropdown-item">深入理解析构函数与生命周期</a>
+</li>
+                                    
+<li>
+    <a href="../cpp_memory/" class="dropdown-item">真正的 C++ 内存模型！ (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../unicode/" class="dropdown-item">字符编码那些事</a>
+</li>
+                                    
+<li>
+    <a href="../error_code/" class="dropdown-item">现代 C++ 中的错误处理 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../warnings/" class="dropdown-item">建议 C++ 程序员开启的警告选项</a>
+</li>
+                                    
+<li>
+    <a href="../undef/" class="dropdown-item">未定义行为完整列表</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">关于</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../about/" class="dropdown-item">关于小彭老师</a>
+</li>
+                                    
+<li>
+    <a href="../donate/" class="dropdown-item">赞助名单</a>
+</li>
+                                    
+<li>
+    <a href="../recommend/" class="dropdown-item">参考资料与项目</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/parallel101/cppguidebook" class="nav-link">GitHub</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://space.bilibili.com/263032155" class="nav-link">Bilibili</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../no_more_new/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../design_overview/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/parallel101/cppguidebook/edit/master/docs/stl_map.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#stl-map" class="nav-link">深入浅出 STL 系列之 map (基本完工)</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#layout-two-cols" class="nav-link">layout: two-cols</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">课程简介</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_2" class="nav-link">课程亮点</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_3" class="nav-link">课程大纲</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_4" class="nav-link">实验环境</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_5" class="nav-link">如何使用课件</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_6" class="nav-link">如何运行案例代码</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_7" class="nav-link">课程书写习惯说明</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_8" class="nav-link">课程书写习惯说明（续）</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#_9" class="nav-link">本期课程目录</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_10" class="nav-link">关于算法复杂度，一个真实的小故事</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_11" class="nav-link">关于算法复杂度，一个真实的小故事（续）</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#layout-two-cols-header" class="nav-link">layout: two-cols-header</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#layout-two-cols-header_1" class="nav-link">layout: two-cols-header</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#layout-center" class="nav-link">layout: center</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#layout-two-cols-header_2" class="nav-link">layout: two-cols-header</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#layout-two-cols-header_3" class="nav-link">layout: two-cols-header</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#layout-two-cols-header_4" class="nav-link">layout: two-cols-header</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#layout-two-cols-header_5" class="nav-link">layout: two-cols-header</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#layout-two-cols-header_6" class="nav-link">layout: two-cols-header</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#layout-two-cols-header_7" class="nav-link">layout: two-cols-header</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#layout-two-cols_1" class="nav-link">layout: two-cols</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#layout-two-cols_2" class="nav-link">layout: two-cols</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#layout-two-cols_3" class="nav-link">layout: two-cols</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_12" class="nav-link">增删</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_13" class="nav-link">改查</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_14" class="nav-link">初始化</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="stl-map">深入浅出 STL 系列之 map (基本完工)</h1>
+<!-- PG1 -->
+
+<!-- 本课程基于 CC-BY-NC-SA 协议发布，转载需标注出处，不得用于商业用途 -->
+
+<p>让高性能数据结构惠及每一人</p>
+<hr />
+<h2 id="layout-two-cols">layout: two-cols</h2>
+<!-- PG2 -->
+
+<h1 id="_1">课程简介</h1>
+<p>😀😀😀</p>
+<p>面向已经了解一定 C++ 语法，正在学习标准库的童鞋。</p>
+<p>C++ 标准库又称 STL，包含了大量程序员常用的算法和数据结构，是 Bjarne Stroustrup 送给所有 C++ 程序员的一把瑞士军刀，然而发现很多童鞋并没有完全用好他，反而还被其复杂性误伤了。</p>
+<p>如果你也对标准库一知半解，需要系统学习的话，那么本课程适合你。小彭老师将运用他特有的幽默答辩比喻，全面介绍各 STL 容器的所有用法。结合一系列实战案例，剖析常见坑点，使用技巧等。对比不同写法的性能与可读性，还会与 Python 语言相互类比方便记忆，科普的部分冷知识可以作为大厂面试加分项。</p>
+<p>::right::</p>
+<p><img alt="" src="../img/stl/maijiaxiu.jpg" width="320" /></p>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 本课程受到童鞋一致好评</p>
+</blockquote>
+<hr />
+<!-- PG3 -->
+
+<h1 id="_2">课程亮点</h1>
+<p>👍👍👍</p>
+<p>本系列课程与《侯杰老师 STL 课》的区别：</p>
+<ul>
+<li>侯杰老师价值 2650 元，本课程录播上传 B 站免费观看，观众可以自行选择是否一键三连。</li>
+<li>课件和案例源码开源，上传在 GitHub，可以自己下载来做修改，然后自己动手实验，加深理解。</li>
+<li>侯杰老师注重理论和底层实现原理，而本课程注重应用，结合实战案例，着重展开重难点，坑点等。</li>
+<li>很多学校里教的，百度上搜的，大多是老版本 C++，已经过时，而本课程基于较新的 C++17 和 C++20 标准。</li>
+<li>有时存在部分 C++ 高级用法过于艰深，不能适合所有同学，本课程采用因材施教思想：对于新手，可以跳过看不懂的部分，看我提供的“保底用法”，不保证高性能和“优雅”，但至少能用；对学有余力的童鞋，则可以搏一搏上限，把高级用法也看懂，提升面试竞争力。总之不论你是哪个阶段的学习者，都能从此课程中获益。</li>
+</ul>
+<hr />
+<!-- PG4 -->
+
+<h1 id="_3">课程大纲</h1>
+<p>✨✨✨</p>
+<p>之前几期课程的录播已经上传到比站了<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>。</p>
+<ol>
+<li>vector 容器初体验 &amp; 迭代器入门 (BV1qF411T7sd)</li>
+<li>你所不知道的 set 容器 &amp; 迭代器分类 (BV1m34y157wb)</li>
+<li>string，string_view，const char * 的爱恨纠葛 (BV1ja411M7Di)</li>
+<li>万能的 map 容器全家桶及其妙用举例 (本期)</li>
+<li>函子 functor 与 lambda 表达式知多少</li>
+<li>通过实战案例来学习 STL 算法库</li>
+<li>C++ 标准输入输出流 &amp; 字符串格式化</li>
+<li>traits 技术，用户自定义迭代器与算法</li>
+<li>allocator，内存管理与对象生命周期</li>
+<li>C++ 异常处理机制的前世今生</li>
+</ol>
+<hr />
+<!-- PG5 -->
+
+<h1 id="_4">实验环境</h1>
+<p>✅✅✅</p>
+<p>小彭老师个人推荐实验环境如下：</p>
+<table>
+<thead>
+<tr>
+<th>要求</th>
+<th>❤❤❤</th>
+<th>💣💣💣</th>
+<th>💩💩💩</th>
+<th>💀💀💀</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>操作系统</td>
+<td>Arch Linux</td>
+<td>Ubuntu 20.04</td>
+<td>Wendous 10</td>
+<td>Maike OS</td>
+</tr>
+<tr>
+<td>知识储备</td>
+<td>会一点 C++</td>
+<td>大学 C 语言</td>
+<td>Java 面向对象</td>
+<td>编程小白</td>
+</tr>
+<tr>
+<td>编译器</td>
+<td>GCC 9 以上</td>
+<td>Clang 12</td>
+<td>VS2019</td>
+<td>Apple Clang</td>
+</tr>
+<tr>
+<td>构建系统</td>
+<td>CMake 3.18</td>
+<td>任意 C++ IDE</td>
+<td>单文件编译运行</td>
+<td>命令行手动编译</td>
+</tr>
+<tr>
+<td>编辑器</td>
+<td>Vim/NeoVim</td>
+<td>CLion</td>
+<td>VS Code</td>
+<td>notepad</td>
+</tr>
+</tbody>
+</table>
+<p>游戏难度：❤ = 简单，💣 = 普通，💩 = 困难，💀 = 地狱副本</p>
+<hr />
+<!-- PG6 -->
+
+<h1 id="_5">如何使用课件</h1>
+<p>🥰🥰🥰</p>
+<p>本系列课件和源码均公布在：https://github.com/parallel101/course</p>
+<p>例如本期的课件位于 <code>course/stlseries/stl_map/slides.md</code>。</p>
+<p>课件基于 Slidev<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup> 开发，Markdown 格式书写，在浏览器中显示，在本地运行课件需要 Node.js：</p>
+<ul>
+<li>运行命令 <code>npm install</code> 即可自动安装 Slidev</li>
+<li>运行命令 <code>npm run dev</code> 即可运行 Slidev 服务</li>
+<li>浏览器访问 http://localhost:3030 即可看到课件</li>
+</ul>
+<p>如果报错找不到 <code>slidev</code> 命令，可以试试 <code>export PATH="$PWD/node_modules/.bin:$PATH"</code>。</p>
+<p>如果不想自己配置 Node.js 也可以直接以文本文件格式打开 slides.md 浏览课件。</p>
+<p>Slidev 服务运行时，你对 slides.md 的所有修改会立刻实时显现在浏览器中。</p>
+<hr />
+<!-- PG7 -->
+
+<h1 id="_6">如何运行案例代码</h1>
+<p>🥺🥺🥺</p>
+<p>案例源码和所需头文件位于课件同目录的 <code>course/stlseries/stl_map/experiment/</code> 文件夹下。</p>
+<p>其中 <code>main.cpp</code> 仅导入运行案例所需的头文件，具体各个案例代码分布在 slides.md 里。</p>
+<p>如需测试课件中的具体代码，可以把 slides.md 中的案例代码粘贴到 main.cpp 的 main 函数体中进行实验。</p>
+<p>此外为了方便，还有一些形如 <code>testxxx.cpp</code> 的文件是一些完整的测试案例，不用从 slides.md 中拷贝，可直接单独运行。</p>
+<p>为了方便同学们实验，所需头文件都在同一个目录，没有第三方库依赖。既可以用 CMake 构建，也可以用任意自己喜欢的 IDE 或编辑器 <strong>单文件编译</strong> 运行，无强制要求，只需编译器支持 C++17 即可。</p>
+<blockquote>
+<p>如果你用 Visual Studio 自己的 sln 系统构建项目，记得开启 <code>/std:c++17</code> 选项。如果你用最新的 Visual Studio（已经支持 CMake）则直接选择“打开文件夹”打开本项目的 <code>experiment</code> 目录即可。</p>
+</blockquote>
+<hr />
+<!-- PG8 -->
+
+<p>附赠了一些实用头文件，同鞋们可以下载来研究，或者在自己的项目里随意运用。</p>
+<p><font size="3px"></p>
+<table>
+<thead>
+<tr>
+<th>文件名</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>print.h</td>
+<td>内含 print 函数，支持打印绝大多数 STL 容器，方便调试</td>
+</tr>
+<tr>
+<td>map_get.h</td>
+<td>带默认值的 map 表项查询，稍后课程中会介绍到</td>
+</tr>
+<tr>
+<td>ScopeProfiler.h</td>
+<td>基于 RAII 的函数耗时统计，用于测量性能</td>
+</tr>
+<tr>
+<td>OrderedMap.h</td>
+<td>遍历顺序始终保持和插入顺序一致的魔改版 map</td>
+</tr>
+<tr>
+<td>cppdemangle.h</td>
+<td>获得类型的名字，以模板参数传入，详见该文件中的注释</td>
+</tr>
+<tr>
+<td>hash.h</td>
+<td>比 std::hash 更通用的 generic_hash 实现，支持任意区间和元组</td>
+</tr>
+<tr>
+<td>bits_stdc++.h</td>
+<td>仿照 bits/stdc++.h 的万能头文件跨平台版，一次性导入所有库</td>
+</tr>
+</tbody>
+</table>
+<p></font></p>
+<hr />
+<!-- PG9 -->
+
+<h1 id="_7">课程书写习惯说明</h1>
+<pre><code class="language-cpp">int const &amp;i  // 本课程书写习惯
+const int&amp; i  // 官方文档书写习惯
+</code></pre>
+<pre><code class="language-cpp">template &lt;class T&gt;     // 本课程书写习惯
+template &lt;typename T&gt;  // 官方文档书写习惯
+</code></pre>
+<p>仅为个人书写习惯不同，在 C++ 编译器看来都是等价的。</p>
+<blockquote>
+<p>我喜欢把 const 后置，其一是因为这有利于理解 <code>int const *</code> 和 <code>int *const</code> 的区别，如果写成 <code>const int *</code> 就会很困惑 const 究竟是修饰谁的，而用我的写法只需要简单理解为 “const 只修饰他前面的”。其二我经常需要把函数参数中 <code>T t</code> 修改成 <code>T const &amp;t</code>。连在一起加起来比较方便，只需要一次性插入 <code>const &amp;</code> 即可，不用前后两个地方分别加 <code>const</code> 和 <code>&amp;</code>，你觉得呢？</p>
+</blockquote>
+<hr />
+<!-- PG10 -->
+
+<h1 id="_8">课程书写习惯说明（续）</h1>
+<pre><code class="language-cpp">using namespace std; // 仅为教学方便目的，不建议在现实工程中使用 ⚠️
+</code></pre>
+<p>由于使用了 <code>using namespace std</code>，本课程代码中的 <code>std::</code> 前缀均可以省略不写：</p>
+<pre><code class="language-cpp">map&lt;string, vector&lt;int&gt;&gt; m;
+erase_if(m, pred);
+</code></pre>
+<p>现实工程中不建议 <code>using namespace std</code>，请显式写出 <code>std::</code> 前缀：</p>
+<pre><code class="language-cpp">std::map&lt;std::string, std::vector&lt;int&gt;&gt; m;
+std::erase_if(m, pred);
+</code></pre>
+<hr />
+<!-- PG11 -->
+
+<p>我们自己做测试时经常会用 <code>&lt;bits/stdc++.h&gt;</code> 这个万能头文件。</p>
+<p>可惜这个万能头文件在 VS 中似乎不存在<sup id="fnref3:1"><a class="footnote-ref" href="#fn:1">1</a></sup>，因此我自己写了一个跨平台的 <code>"bits_stdc++.h"</code> 放在源码同目录：</p>
+<pre><code class="language-cpp">#include &quot;bits_stdc++.h&quot;  // 自动导入所有标准库的头文件
+</code></pre>
+<p>不过现实工程中，还是建议根据需要一个个导入，不要偷懒用这个不标准的头文件：</p>
+<pre><code class="language-cpp">#include &lt;map&gt;            // 导入 std::map, std::multimap
+#include &lt;unordered_map&gt;  // 导入 std::unordered_map, std::unordered_multimap
+#include &lt;string&gt;         // 导入 std::string, std::wstring
+#include &lt;algorithm&gt;      // 导入 std::set_difference, std::set_union, std::set_intersection 等一系列全局函数
+// 下面代码中用到哪些容器，就导入哪些头文件
+</code></pre>
+<hr />
+<!-- PG12 -->
+
+<h2 id="_9">本期课程目录</h2>
+<p>${toc}</p>
+<hr />
+<!-- PG13 -->
+
+<h2 id="_10">关于算法复杂度，一个真实的小故事</h2>
+<p>有一次一个同学发给我一份源码文件 tetreader.py，其功能是读取一个 tet 格式的文件（四面体网格模型）。</p>
+<p>他问我为什么他写的这个 Python 代码这么慢，读取一个稍微大一点的模型就需要好几秒，他说久仰小彭老师性能优化的大名，想要我帮他优化一下，还问是不是应该用 C++ 写会比较高效一点？</p>
+<p>我并不懂得四面体，但性能优化的思路是通用的。我打开文件看了一下，我发现他读取时需要查询一个点周围所有的面，他是这样查询的：</p>
+<pre><code class="language-python"># 以下为他的大致伪代码
+face_lut = []
+for ... in ...:
+    face_lut.append(vert_id)  # O(1) ✅
+for ... in ...:
+    face_id = face_lut.index(vert_id)  # O(N) ⚠️
+</code></pre>
+<p>我说你这个 face_lut 是个普通数组，数组的 index 函数是 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 复杂度的你不知道吗？他相当于暴力遍历了数组找到你需要的值，你这个 index 的调用还是在一个循环里的，所以是 <span class="arithmatex"><span class="MathJax_Preview">O(N^2)</span><script type="math/tex">O(N^2)</script></span> 复杂度！难怪这么慢了。</p>
+<hr />
+<!-- PG14 -->
+
+<h2 id="_11">关于算法复杂度，一个真实的小故事（续）</h2>
+<p>后来我给他改了一下，把他的 face_lut 改成字典，用字典查找，高效得多了：</p>
+<pre><code class="language-python"># 以下为我优化后的大致伪代码
+face_lut = []
+for ... in ...:
+    face_lut[vert_id] = face_id  # O(1)+ ✅
+for ... in ...:
+    face_id = face_lut[vert_id]  # O(1)+ ✅
+</code></pre>
+<p>一次字典的查询只需要 <span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span>，加上他外面的循环总共只有 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span>，变成线性复杂度了。他一试，果然几毫秒就加载完了，我说用字典加速查找这不是常识吗？还搁着 C++ 呢？你就是 CUDA 来了也压不住复杂度的爆表呀？</p>
+<p>他很高兴，不知道怎么感谢我，于是就把我推荐给张心欣了。</p>
+<hr />
+<!-- PG15 -->
+
+<p>不论什么语言，容器（或者用学校里的话说：数据结构）的正确使用，能够在复杂度层面上，大幅提升性能。</p>
+<p>C++ 中也是如此，有数组（vector），字典（map），还有上一课讲过的集合（set）。</p>
+<p>今天我们要介绍的就是 C++ 的字典容器 map，以及 C++11 引入的另一个字典容器 unordered_map，他们的区别我们最后会详细讨论。我们先学习较为简单的 map，随后学习 unordered_map 时也可以举一反三、融会贯通。</p>
+<blockquote>
+<p>除了这两个标准库自带的字典容器，我们还将介绍一些常用的第三方库容器及其各自优势，例如 absl::flat_hash_map、tbb::concurrent_hash_map、google::dense_hash_map、robin_hood::unordered_map、tsl::robin_pg_map 等。</p>
+</blockquote>
+<p>map/set 家族都是高效查找的专家：</p>
+<ul>
+<li>vector 容器用 std::find 查找：<span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span></li>
+<li>map 或 set 容器用 .find 查找：<span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span></li>
+<li>unordered_map 或 unordered_set 容器用 .find 查找：<span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span></li>
+</ul>
+<p>map 们不仅是查找的复杂度低，他们还支持高效的增删改查等操作。</p>
+<hr />
+<!-- PG16 -->
+
+<p>map 的逻辑结构</p>
+<p><img alt="logicmap" src="../img/stl/logicmap.png" /></p>
+<p>特点：</p>
+<ul>
+<li>由一系列<em>键值对</em>组成</li>
+<li>一个键只能对应一个值</li>
+<li>键不得重复，值可以重复</li>
+</ul>
+<p><br/></p>
+<blockquote>
+<p>std::map, std::unordered_map, absl::flat_hash_map, tbb::concurrent_hash_map 都满足这一基本逻辑结构，但物理实现不同。</p>
+</blockquote>
+<hr />
+<p>为什么要学习 std::map</p>
+<p>map 的具体实现可以是红黑树、AVL 树、线性哈希表、链表哈希表、跳表……不同的实现在不同操作上的复杂度不同，分别适用于不同的场景。</p>
+<p>用法上几乎是差不多的，他们都有着几乎相同的接口（除了部分扩展功能）。当你觉得红黑树的 std::map 不合适时，可以轻松把对象类型就地替换为链表哈希表 std::unordered_map 或是是线性哈希表 absl::flat_hash_map，而不用对其他代码有任何更改。</p>
+<p>这就是所有 map 类容器都有着相同的<strong>逻辑结构</strong>：都是一个键-值映射，不同的只是他们的<strong>物理结构</strong>而已。</p>
+<p>所有的 map 实现，都会模仿提供和 std::map 一样的 API。这就是为什么虽然 std::map 实现的很低效，我们还是要学他的原因。std::map 本身并不是完美的，但却提供了一个所有第三方都会遵循的统一接口。学会了 std::map，任何第三方库的 map 类容器你都可以轻易举一反三。</p>
+<blockquote>
+<p>不仅是各种第三方的 map 库，比如 rapidjson 库中的 JSON 对象，也提供了类似 std::map 的 <code>find</code> 和 <code>end</code> 迭代器接口：<code>MemberFind</code> 和 <code>MemberEnd</code>，来查找一个字典的子键。几何处理库 cgal 中的“顶点查找”功能也是基于类似的迭代器接口，学会 std::map 将大大有助于你看懂这类业界公认的接口规范。</p>
+</blockquote>
+<hr />
+<!-- PG17 -->
+
+<p>标准库中的 map 容器<sup id="fnref4:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>标准库中，map 是一个<strong>模板类</strong>，他的键类型，值类型，可以由尖括号内的参数指定，便于适应不同的用户需求。</p>
+<p>键类型和值类型可以是任意类型，包括基本类型，用户自定义的类，其他 STL 容器等，体现了容器的泛用性。</p>
+<ul>
+<li>例如 <code>map&lt;string, int&gt;</code> 是一个键类型为 string，值类型为 int 的 map 容器。</li>
+<li>例如 <code>map&lt;int, Student&gt;</code> 是一个键类型为 int，值类型为 Student 的 map 容器。</li>
+<li>例如 <code>map&lt;char, vector&lt;int&gt;&gt;</code> 是一个键类型为 char，值类型为 <code>vector&lt;int&gt;</code> 的 map 容器。</li>
+</ul>
+<p>后面为了方便研究，以 <code>map&lt;K, V&gt;</code> 形式书写得出的结论，对于任何实际键和值类型，只需代入 K 和 V 即可。</p>
+<blockquote>
+<p>已知：要想使用 <code>map&lt;K, V&gt;</code>，就得满足 <code>K</code> 必须支持比较运算符 <code>&lt;</code>。</p>
+<p>可得：要想使用 <code>map&lt;string, int&gt;</code>，就得满足 <code>string</code> 必须支持比较运算符 <code>&lt;</code><sup id="fnref4:2"><a class="footnote-ref" href="#fn:2">2</a></sup>。</p>
+<p>已知：遍历 <code>map&lt;K, V&gt;</code> 时，是以键 <code>K</code> 部分从小到大的顺序遍历的。</p>
+<p>可得：遍历 <code>map&lt;int, string&gt;</code> 时，是以键 <code>int</code> 部分从小到大的顺序遍历的。</p>
+</blockquote>
+<hr />
+<!-- PG18 -->
+
+<p>map 的物理结构</p>
+<p><img alt="physmap" src="../img/stl/physmap.png" /></p>
+<p>map 和 set 一样，都是基于红黑树的二叉排序树，实现高效查找。</p>
+<p>vector 就是因为元素没有固定的顺序，所以才需要暴力遍历查找。</p>
+<p>在持续的插入和删除操作下，始终维持元素的有序性，正是 map 实现高效查找的关键所在。</p>
+<hr />
+<!-- PG19 -->
+
+<p>map 查找时采用二分法：</p>
+<ol>
+<li>
+<p>从根节点开始查找。</p>
+</li>
+<li>
+<p>如果当前节点的键小于要找的键，则往左子节点移动；</p>
+</li>
+<li>
+<p>如果当前节点的键大于要找的键，则往左子节点移动；</p>
+</li>
+<li>
+<p>如果当前节点的键等于要找的键，则该节点就是要找的节点，返回该节点。</p>
+</li>
+<li>
+<p>把左/右子节点设为新的当前节点，然后回到第 2 步，重复这一查找过程。</p>
+</li>
+</ol>
+<hr />
+<!-- PG20 -->
+
+<p>由于 map 的实现基于二叉排序树，map 额外有一个特点：<em>有序</em>。</p>
+<p>map (或 set) 中的键 K 总是从小到大排列，方便进行二分查找，在 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span> 时间内找到对应元素。</p>
+<p>每次插入新的键时，会找到适当的插入位置，使得插入后的 map 仍然有序。</p>
+<blockquote>
+<p>注：基于哈希散列表实现的 unordered_map (和 unordered_set)，就不具备<em>有序</em>这一特点。</p>
+</blockquote>
+<p><img alt="sortedset" src="../img/stl/sortedset.png" /></p>
+<hr />
+<!-- PG21 -->
+
+<p><img alt="setvsmap" src="../img/stl/setvsmap.png" /></p>
+<p>两者的区别在于：map 在 K 之外，额外外挂了一个 V 类型。</p>
+<p>map 中的 V 类型不参与排序，只按照 K 进行排序。</p>
+<p>这样当用户根据 K 找到的是 K-V 对，然后可以取出 K 对应的 V。</p>
+<p>这就实现了从 K 到 V 的映射。</p>
+<hr />
+<!-- PG22 -->
+
+<p>创建一个 map 对象：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; config;
+</code></pre>
+<p>一开始 map 初始是空的，如何插入一些初始数据？</p>
+<pre><code class="language-cpp">config[&quot;timeout&quot;] = 985;
+config[&quot;delay&quot;] = 211;
+</code></pre>
+<p>数据插入成功了，根据键查询对应的值？</p>
+<pre><code class="language-cpp">print(config[&quot;timeout&quot;]);
+print(config[&quot;delay&quot;]);
+</code></pre>
+<p>查询时建议用 .at(key) 而不是 [key]：</p>
+<pre><code class="language-cpp">print(config.at(&quot;timeout&quot;));
+print(config.at(&quot;delay&quot;));
+</code></pre>
+<hr />
+<!-- PG23 -->
+
+<p>老生常谈的问题：map 中存 string 还是 const char *？</p>
+<pre><code class="language-cpp">map&lt;const char *, const char *&gt; m;
+m[&quot;hello&quot;] = &quot;old&quot;;    // 常量区的 &quot;hello&quot;
+char key[] = &quot;hello&quot;;  // key 的地址在栈上
+print(key == &quot;hello&quot;); // false
+m[key] = &quot;new&quot;;        // 栈上变量的 key = &quot;hello&quot;
+print(m);              // 两个重复的键 &quot;hello&quot;
+</code></pre>
+<pre><code>false
+{hello: old, hello: new}
+</code></pre>
+<p>在 C++ 中，任何时候都务必用 string！别用 C 语言老掉牙的 const char *，太危险了。</p>
+<p>const char * 危险的原因：</p>
+<ol>
+<li>const char * 的 == 判断的是指针的相等，两个 const char * 只要地址不同，即使实际的字符串相同，也不会被视为同一个元素（如上代码案例所示）。导致 map 里会出现重复的键，以及按键查找可能找不到等。</li>
+<li>保存的是弱引用，如果你把局部的 char [] 或 string.c_str() 返回的 const char * 存入 map，等这些局部释放了，map 中的 const char * 就是一个空悬指针了，会造成 segfault。</li>
+</ol>
+<hr />
+<!-- PG24 -->
+
+<p>请用安全的 string：</p>
+<pre><code class="language-cpp">map&lt;string, string&gt; m;
+m[&quot;hello&quot;] = &quot;old&quot;;
+string key = &quot;hello&quot;;
+m[key] = &quot;new&quot;;
+print(m);
+print(key == &quot;hello&quot;);  // string 的 == 运算符是经过重载的，比较的是字符串里面的内容相等，而不是地址相等
+</code></pre>
+<pre><code>{&quot;hello&quot;: &quot;new&quot;}
+true
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>C++</th>
+<th>Java</th>
+<th>Python</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string(&ldquo;hello&rdquo;) == string(&ldquo;hello&rdquo;)</td>
+<td>&ldquo;hello&rdquo;.equals(&ldquo;hello&rdquo;)</td>
+<td>&lsquo;hello&rsquo; == &lsquo;hello&rsquo;</td>
+</tr>
+<tr>
+<td>&ldquo;hello&rdquo; == &ldquo;hello&rdquo;</td>
+<td>&ldquo;hello&rdquo; == &ldquo;hello&rdquo;</td>
+<td>id(&lsquo;hello&rsquo;) == id(&lsquo;hello&rsquo;)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<!-- PG25 -->
+
+<p>如果你精通对象生命周期分析，能保证 key 指向的字符串活的比 m 久，想要避免拷贝，节省性能。</p>
+<p>可以用封装了正确 == 运算符的弱引用 string_view（会比较字符串内容而不是地址）：</p>
+<pre><code class="language-cpp">map&lt;string_view, string_view&gt; m;
+m[&quot;hello&quot;] = &quot;old&quot;;
+string_view key = &quot;hello&quot;;
+m[key] = &quot;new&quot;;
+print(m);
+print(key == &quot;hello&quot;);
+// 此处 m 是栈上变量，key 是弱引用指向全局常量区（rodata），key 比 m 活得久，没有空悬指针问题
+</code></pre>
+<pre><code>{&quot;hello&quot;: &quot;new&quot;}
+true
+</code></pre>
+<p>⚠️ string_view 属于不建议初学者使用的优化小寄巧，有手之前，非常好用。</p>
+<blockquote>
+<p>注：map 实际上完全没有用到 ==，用到的只有 &lt; 运算符，当需要判定 <code>a == b</code> 时，他会转而用 <code>!(a &lt; b || b &lt; a)</code> 来判定。</p>
+</blockquote>
+<p><br/></p>
+<blockquote>
+<p>string_view 也具有正确的 hash<string_view> 特化，因此也可以用做 unordered_map 的键类型。string_view 试图和 string 表现得完全一样，区别在于他是个弱引用，不持有对象，拷贝构造函数是浅拷贝。string_view 大小只有 16 个字节，内部是一个 const char * 和 size_t，但封装了正确的 ==，&lt;，&gt; 和 hash。</p>
+</blockquote>
+<hr />
+<!-- PG26 -->
+
+<p>C++11 新特性——花括号初始化列表，允许创建 map 时直接指定初始数据：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; config = { {&quot;timeout&quot;, 985}, {&quot;delay&quot;, 211} };
+</code></pre>
+<p>通常我们会换行写，一行一个键值对，看起来条理更清晰：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; config = {
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+};
+
+print(config.at(&quot;timeout&quot;));  // 985
+</code></pre>
+<hr />
+<!-- PG27 -->
+
+<p>总结花括号初始化语法：</p>
+<pre><code class="language-cpp">map&lt;K, V&gt; m = {
+    {k1, v1},
+    {k2, v2},
+    ...,
+};
+</code></pre>
+<p>让 map 初始就具有这些数据。</p>
+<hr />
+<!-- PG28 -->
+
+<pre><code class="language-cpp">map&lt;string, int&gt; config = {
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+};
+</code></pre>
+<p>等号可以省略（这其实相当于是在调用 map 的构造函数）：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; config{
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+};
+</code></pre>
+<p>也可以先构造再赋值给 auto 变量：</p>
+<pre><code class="language-cpp">auto config = map&lt;string, int&gt;{
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+};
+</code></pre>
+<p>都是等价的。</p>
+<blockquote>
+<p>关于构造函数、花括号列表的具体语法可以参考我的《高性能并行》系列第二课：https://www.bilibili.com/video/BV1LY411H7Gg</p>
+</blockquote>
+<hr />
+<!-- PG29 -->
+
+<p>作为函数参数时，可以用花括号初始化列表就地构造一个 map 对象：</p>
+<pre><code class="language-cpp">void myfunc(map&lt;string, int&gt; config);  // 函数声明
+
+myfunc(map&lt;string, int&gt;{               // 直接创建一个 map 传入
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+});
+</code></pre>
+<p>由于 <code>myfunc</code> 函数具有唯一确定的重载，要构造的参数类型 <code>map&lt;string, int&gt;</code> 可以省略不写：</p>
+<pre><code class="language-cpp">myfunc({
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+});
+</code></pre>
+<p>函数这边，通常还会加上 <code>const &amp;</code> 修饰避免不必要的拷贝。</p>
+<pre><code class="language-cpp">void myfunc(map&lt;string, int&gt; const &amp;config);
+</code></pre>
+<hr />
+<!-- PG30 -->
+
+<p>从 vector 中批量导入键值对：</p>
+<pre><code class="language-cpp">vector&lt;pair&lt;string, int&gt;&gt; kvs = {
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+};
+map&lt;string, int&gt; config(kvs.begin(), kvs.end());
+</code></pre>
+<p>与刚刚花括号初始化的写法等价，只不过是从现有的 vector 中导入。同样的写法也适用于从 array 导入。</p>
+<blockquote>
+<p>如果记不住这个写法，也可以自己手写 for 循环遍历 vector 逐个逐个插入 map，效果是一样的。</p>
+</blockquote>
+<p>冷知识，如果不是 vector 或 array，而是想从传统的 C 语言数组中导入：</p>
+<pre><code class="language-cpp">pair&lt;string, int&gt; kvs[] = {  // C 语言原始数组
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+};
+map&lt;string, int&gt; config(kvs, kvs + 2);                    // C++98
+map&lt;string, int&gt; config(std::begin(kvs), std::end(kvs));  // C++17
+</code></pre>
+<blockquote>
+<p>其中 <code>std::begin</code> 和 <code>std::end</code> 为 C++17 新增函数，专门用于照顾没法有成员函数 <code>.begin()</code> 的 C 语言数组。类似的全局函数还有 <code>std::size</code> 和 <code>std::data</code> 等……他们都是既兼容 STL 容器也兼容 C 数组的。</p>
+</blockquote>
+<hr />
+<!-- PG31 -->
+
+<p>重点来了：如何根据键查询相应的值？</p>
+<p>很多同学都知道 map 具有 [] 运算符重载，[] 里写要查询的键就可以返回对应值，也可以用 = 往里面赋值，和某些脚本语言一样直观易懂。</p>
+<pre><code class="language-cpp">config[&quot;timeout&quot;] = 985;       // 把 config 中键 timeout 对应值设为 985
+auto val = config[&quot;timeout&quot;];  // 读取 config 中键 timeout 对应值
+print(val);                    // 985
+</code></pre>
+<p>但其实用 [] 去<strong>读取元素</strong>是很不安全的，下面我会做实验演示这一点。</p>
+<hr />
+<!-- PG32 -->
+
+<p>沉默的 []，无言的危险：当键不存在时，会返回 0 而不会出错！</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; config = {
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+};
+print(config[&quot;timeout&quot;]); // 985
+print(config[&quot;tmeout&quot;]);  // 默默返回 0
+</code></pre>
+<pre><code>985
+0
+</code></pre>
+<p>当查询的键值不存在时，[] 会默默创建并返回 0，而不会爆出任何错误。</p>
+<p>这非常危险，例如一个简简单单的拼写错误，就会导致 map 的查询默默返回 0，你还在那里找了半天摸不着头脑，根本没发现错误原来在 map 这里。</p>
+<hr />
+<!-- PG33 -->
+
+<p>爱哭爱闹的 at()，反而更讨人喜欢</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; config = {
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+};
+print(config.at(&quot;timeout&quot;));  // 985
+print(config.at(&quot;tmeout&quot;));   // 该键不存在！响亮地出错
+</code></pre>
+<pre><code>985
+terminate called after throwing an instance of 'std::out_of_range'
+  what():  map::at
+Aborted (core dumped)
+</code></pre>
+<p>有经验的老手都明白一个道理：<strong>及时奔溃</strong>比<strong>容忍错误</strong>更有利于调试。即 fail-early, fail-loudly<sup id="fnref5:1"><a class="footnote-ref" href="#fn:1">1</a></sup> 原则。</p>
+<p>例如 JS 和 Lua 的 [] 访问越界不报错而是返回 undefined / nil，导致实际出错的位置在好几十行之后，无法定位到真正出错的位置，这就是为什么后来发明了错误检查更严格的 TS。</p>
+<p>使用 at() 可以帮助你更容易定位到错误，是好事。</p>
+<hr />
+<!-- PG35 -->
+
+<blockquote>
+<p>在官方文档和各种教学课件中，都会展示一个函数的“原型”来讲解。</p>
+<p>原型展现了一个函数的名称，参数类型，返回类型等信息，掌握了函数的原型就等于掌握了函数的调用方法。</p>
+<p>本课程后面也会大量使用，现在来教你如何看懂成员函数的原型。</p>
+</blockquote>
+<p>假设要研究的类型为 <code>map&lt;K, V&gt;</code>，其中 K 和 V 是模板参数，可以替换成你具体的类型。</p>
+<p>例如当我使用 <code>map&lt;string, int&gt;</code> 时，就把下面所有的 K 替换成 string，V 替换成 int。</p>
+<p><code>map&lt;K, V&gt;</code> 的 [] 和 at 员函数，原型如下：</p>
+<pre><code class="language-cpp">V &amp;operator[](K const &amp;k);
+V &amp;at(K const &amp;k);                   // 第一个版本的 at
+V const &amp;at(K const &amp;k) const;       // 第二个版本的 at
+</code></pre>
+<p>可见 operator[] 只有一个版本，at 居然有名字相同的两个！这样不会发生冲突吗？</p>
+<p>这是利用了 C++ 的“重载”功能，重载就是同一个函数有多个不同的版本，各个版本的参数类型不同。</p>
+<hr />
+<!-- PG36 -->
+
+<blockquote>
+<p>例如小彭老师打电话给 110，假如警察叔叔发现小彭老师报的案子是网络诈骗，那么他们会帮我转接到网警部门；假如发现小彭老师是被绑架了，那么他们可能会出动武警解救小彭老师。这就是 110 函数的两个重载，根据调用者传入的信息类型，决定要转给哪一个子部门。</p>
+</blockquote>
+<p>同理，编译器也是会根据调用时你传入的参数类型，决定要调用重载的哪一个具体版本。</p>
+<ul>
+<li>C 语言没有重载，函数名字相同就会发生冲突，编译器会当场报错。</li>
+<li>C++ 支持重载，只有当函数名字相同，参数列表也相同时，才会发生冲突。</li>
+<li>返回值类型不影响重载，重载只看参数列表。</li>
+</ul>
+<p>菜鸟教程上对 C++ 重载的解释<sup id="fnref6:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<blockquote>
+<p>C++ 允许在同一作用域中的某个函数和运算符指定多个定义，分别称为函数重载和运算符重载。</p>
+<p>重载声明是指一个与之前已经在该作用域内声明过的函数或方法具有相同名称的声明，但是它们的参数列表和定义（实现）不相同。</p>
+<p>当您调用一个重载函数或重载运算符时，编译器通过把您所使用的参数类型与定义中的参数类型进行比较，决定选用最合适的定义。选择最合适的重载函数或重载运算符的过程，称为重载决策。</p>
+<p>在同一个作用域内，可以声明几个功能类似的同名函数，但是这些同名函数的形式参数（指参数的个数、类型或者顺序）必须不同。您不能仅通过返回类型的不同来重载函数。</p>
+</blockquote>
+<hr />
+<!-- PG37 -->
+
+<pre><code class="language-cpp">V &amp;at(K const &amp;k);                   // 第一个版本的 at
+V const &amp;at(K const &amp;k) const;       // 第二个版本的 at
+</code></pre>
+<p>但是上面这两个 at 函数的参数类型都是 <code>K const &amp;</code>，为什么可以重载呢？</p>
+<p>注意看第二个版本最后面多了一个 const 关键字，这种写法是什么意思？小彭老师对其进行祛魅化：</p>
+<pre><code class="language-cpp">V &amp;at(map&lt;K, V&gt; *this, K const &amp;k);                   // 第一个版本的 at
+V const &amp;at(map&lt;K, V&gt; const *this, K const &amp;k);       // 第二个版本的 at
+</code></pre>
+<p>原来实际上在函数括号后面加的 const，实际上是用于修饰 this 指针的！</p>
+<blockquote>
+<p>该写法仅供示意，并非真实语法</p>
+</blockquote>
+<p>所以两个 at 的参数列表不同，不同在于传入 this 指针的类型，所以可以重载，不会冲突。</p>
+<ul>
+<li>当 map 对象为 const 时，传入的 this 指针为 <code>map&lt;K, V&gt; const *</code>，所以只能调用第二个版本的 at。</li>
+<li>当 map 对象不为 const 时，传入的 this 指针为 <code>map&lt;K, V&gt; *</code>，两个重载都可以调用，但由于第一个重载更加符合，所以会调用第一个版本的 at。</li>
+</ul>
+<hr />
+<!-- PG38 -->
+
+<p>刚刚解释了函数重载，那么运算符重载呢？</p>
+<p>因为原本 C 语言就有 [] 运算符，不过那只适用于原始指针和原始数组。而 C++ 允许也 [] 运算符支持其他用户自定义类型（比如 std::map），和 C 语言自带的相比就只有参数类型不同（一个是原始数组，一个是 std::map），所以和函数重载很相似，这就是运算符重载。</p>
+<pre><code class="language-cpp">m[&quot;key&quot;];
+</code></pre>
+<p>会被编译器“翻译”成：</p>
+<pre><code class="language-cpp">m.operator[](&quot;key&quot;);
+</code></pre>
+<p>以上代码并非仅供示意，是可以通过编译运行之一。你还可以试试 <code>string("hel").operator+("lo")</code>。</p>
+<blockquote>
+<p>operator[] 虽然看起来很复杂一个关键字加特殊符号，其实无非就是个特殊的函数名，学过 Python 的童鞋可以把他想象成 <code>__getitem__</code></p>
+</blockquote>
+<pre><code class="language-cpp">V &amp;operator[](K const &amp;k);
+</code></pre>
+<p>结论：[] 运算符实际上是在调用 operator[] 函数。</p>
+<hr />
+<!-- PG39 -->
+
+<p>而 operator[] 这个成员函数没有 const 修饰，因此当 map 修饰为 const 时编译会不通过<sup id="fnref7:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<pre><code class="language-cpp">const map&lt;string, int&gt; config = {  // 此处如果是带 const &amp; 修饰的函数参数也是同理
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+};
+print(config[&quot;timeout&quot;]);          // 编译出错
+</code></pre>
+<pre><code>/home/bate/Codes/course/stlseries/stl_map/experiment/main.cpp: In function ‘int main()’:
+/home/bate/Codes/course/stlseries/stl_map/experiment/main.cpp:10:23: error: passing ‘const std::map&lt;std::__cxx11::basic_string&lt;char&gt;, int&gt;’ as ‘this’ argument discards qualifiers [-fpermissive]
+   10 | print(config[&quot;timeout&quot;]);
+</code></pre>
+<p>编译器说 discards qualifiers，意思是 map 有 const 修饰，但是 operator[] 没有。</p>
+<p>这实际上就是在说：<code>map&lt;K, V&gt; const *</code> 不能转换成 <code>map&lt;K, V&gt; *</code>。</p>
+<p>有 const 修饰的 map 作为 this 指针传入没 const 修饰的 operator[] 函数，是减少了修饰（discards qualifers）。C++ 规定传参时只能增加修饰不能减少修饰：只能从 <code>map *</code> 转换到 <code>map const *</code> 而不能反之，所以对着一个 const map 调用非 const 的成员函数 operator[] 就出错了。相比之下 at() 就可以在 const 修饰下编译通过。</p>
+<hr />
+<!-- PG34 -->
+
+<p>非 const 的 [] 危险性演示，当所查询的键值不存在时：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; config = {
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+};
+print(config);
+print(config[&quot;tmeout&quot;]);  // 有副作用！
+print(config);
+</code></pre>
+<pre><code>{&quot;delay&quot;: 211, &quot;timeout&quot;: 985}
+0
+{&quot;delay&quot;: 211, &quot;timeout&quot;: 985, &quot;tmeout&quot;: 0}
+</code></pre>
+<p>会自动创建那个不存在的键值！</p>
+<p>你以为你只是观察了一下 map 里的 &ldquo;tmeout&rdquo; 元素，却意外改变了 map 的内容，薛定谔直呼内行。</p>
+<hr />
+<!-- PG40 -->
+
+<p>既然 [] 这么危险，为什么还要存在呢？</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; config = {
+    {&quot;delay&quot;, 211},
+};
+config.at(&quot;timeout&quot;) = 985;  // 键值不存在，报错！
+config[&quot;timeout&quot;] = 985;     // 成功创建并写入 985
+</code></pre>
+<p>由上可见，当我们写入一个本不存在的键值的时候，恰恰需要 [] 的“自动创建”这一特性，这是 at() 所不具有的。</p>
+<p>总结：读取时应该用 at() 更安全，写入时才需要用带有自动创建功能的 []。</p>
+<hr />
+<!-- PG41 -->
+
+<ul>
+<li>读取元素时，统一用 at()</li>
+<li>写入元素时，统一用 []</li>
+</ul>
+<pre><code class="language-cpp">auto val = m.at(&quot;key&quot;);
+m[&quot;key&quot;] = val;
+</code></pre>
+<p>为什么其他语言比如 Python，只有一个 [] 就行了呢？而 C++ 需要两个？</p>
+<ul>
+<li>因为 Python 会检测 [] 位于等号左侧还是右侧，根据情况分别调用 <code>__getitem__</code> 或者 <code>__setitem__</code>。</li>
+<li>C++ 编译器没有这个特殊检测，也检测不了，因为 C++ 的 [] 只是返回了个引用，并不知道 [] 函数返回以后，你是拿这个引用写入还是读取。为了保险起见他默认你是写入，所以先帮你创建了元素，返回这个元素的引用，让你写入。</li>
+<li>而 Python 的引用是不能用 = 覆盖原值的，那样只会让变量指向新的引用，只能用 .func() 引用成员函数或者 += 才能就地修改原变量，这是 Python 这类脚本语言和 C++ 最本质的不同。</li>
+<li>总而言之，我们用 C++ 的 map 读取元素时，需要显式地用 at() 告诉编译器我是打算读取。</li>
+</ul>
+<hr />
+<p>[] 找不到就返回个默认值，其实也是很多语言的传统异能了，只有 Python 是最为友善的给你报错</p>
+<table>
+<thead>
+<tr>
+<th>语言及其关联容器名</th>
+<th>C++ map</th>
+<th>Python dict</th>
+<th>Lua table</th>
+<th>JS HashMap</th>
+<th>Java HashMap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>找不到键时的行为</td>
+<td>默默返回 0</td>
+<td>报错 KeyError</td>
+<td>默默返回 nil</td>
+<td>默默返回 undefined</td>
+<td>.get()，默默返回 null</td>
+</tr>
+</tbody>
+</table>
+<p>实际上 C++ 的 [] 最为恶劣，因为 C++ 中并没有一个 null 或 nil 之类的额外特殊常量，[] 返回的是个具体的类型，由于 [] 不能报错，值的类型千变万化，只能返回值类型默认构造的值，对于 int 而言是 0，对于 string 而言是 &ldquo;&rdquo;&hellip;</p>
+<hr />
+<!-- PG43 -->
+
+<p>at 与 [] 实战演练</p>
+<p>我们现在的甲方是一个学校的大老板，他希望让我们管理学生信息，因此需要建立一个映射表，能够快速通过学生名字查询到相应的学生信息。思来想去 C++ 标准库中的 map 容器最合适。决定设计如下：</p>
+<ul>
+<li>键为学生的名字，string 类型。</li>
+<li>值为一个自定义结构体，Student 类型，里面存放各种学生信息。</li>
+</ul>
+<p>然后自定义一下 Student 结构体，现在把除了名字以外的学生信息都塞到这个结构体里。</p>
+<p>创建 <code>map&lt;string, Student&gt;</code> 对象，变量名为 <code>stus</code>，这个 map 就是甲方要求的学生表，成功交差。</p>
+<pre><code class="language-cpp">struct Student {
+    int id;             // 学号
+    int age;            // 年龄
+    string sex;         // 性别
+    int money;          // 存款
+    set&lt;string&gt; skills; // 技能
+};
+
+map&lt;string, Student&gt; stus;
+</code></pre>
+<hr />
+<!-- PG44 -->
+
+<p>现在小彭老师和他的童鞋们要进入这家学校了，让我们用 [] 大法插入他的个人信息：</p>
+<pre><code class="language-cpp">stus[&quot;彭于斌&quot;] = Student{20220301, 22, &quot;自定义&quot;, {&quot;C&quot;, &quot;C++&quot;}};
+stus[&quot;相依&quot;] = Student{20220301, 21, &quot;男&quot;, 2000, {&quot;Java&quot;, &quot;C&quot;}};
+stus[&quot;樱花粉蜜糖&quot;] = Student{20220301, 20, &quot;女&quot;, 3000, {&quot;Python&quot;, &quot;CUDA&quot;}};
+stus[&quot;Sputnik02&quot;] = Student{20220301, 19, &quot;男&quot;, 4000, {&quot;C++&quot;}};
+</code></pre>
+<p>由于 C++11 允许省略花括号前的类型不写，所以 Student 可以省略，简写成：</p>
+<pre><code class="language-cpp">stus[&quot;彭于斌&quot;] = {20220301, 22, &quot;自定义&quot;, {&quot;C&quot;, &quot;C++&quot;}};
+stus[&quot;相依&quot;] = {20220301, 21, &quot;男&quot;, 2000, {&quot;Java&quot;, &quot;C&quot;}};
+stus[&quot;樱花粉蜜糖&quot;] = {20220301, 20, &quot;女&quot;, 3000, {&quot;Python&quot;, &quot;CUDA&quot;}};
+stus[&quot;Sputnik02&quot;] = {20220301, 19, &quot;男&quot;, 4000, {&quot;C++&quot;}};
+</code></pre>
+<p>又由于 map 支持在初始化时就指定所有元素，我们直接写：</p>
+<pre><code class="language-cpp">map&lt;string, Student&gt; stus = {
+    {&quot;彭于斌&quot;, {20220301, 22, &quot;自定义&quot;, 1000, {&quot;C&quot;, &quot;C++&quot;}}},
+    {&quot;相依&quot;, {20220301, 21, &quot;男&quot;, 2000, {&quot;Java&quot;, &quot;C&quot;}}},
+    {&quot;樱花粉蜜糖&quot;, {20220301, 20, &quot;女&quot;, 3000, {&quot;Python&quot;, &quot;CUDA&quot;}}},
+    {&quot;Sputnik02&quot;, {20220301, 19, &quot;男&quot;, 4000, {&quot;C++&quot;}}},
+};
+</code></pre>
+<hr />
+<!-- PG45 -->
+
+<p>现在甲方要求添加一个“培训”函数，用于他们的 C++ 培训课。</p>
+<p>培训函数的参数为字符串，表示要消费学生的名字。如果该名字学生不存在，则应该及时报错。</p>
+<p>每次培训需要消费 2650 元，消费成功后，往技能 skills 集合中加入 &ldquo;C++&rdquo;。</p>
+<pre><code class="language-cpp">void PeiXunCpp(string stuName) {
+    auto stu = stus.at(stuName);  // 这是在栈上拷贝了一份完整的 Student 对象
+    stu.money -= 2650;
+    stu.skills.insert(&quot;C++&quot;);
+}
+</code></pre>
+<p>然而，这样写是不对的！</p>
+<p><code>stus.at(stuName)</code> 返回的是一个引用 <code>Student &amp;</code> 指向 map 中的学生对象。但是等号左侧，却是个不带任何修饰的 <code>auto</code>，他会被推导为 <code>Student</code>。如何从一个引用 <code>Student &amp;</code> 转换为具体的 <code>Student</code>？找不到 <code>Student(Student &amp;)</code>，但是找到了最接近的 <code>Student(Student const &amp;)</code> 函数（这是编译器自动生成的拷贝构造函数），因此我们拷贝了一份 map 中的学生对象，到栈上的 stu 变量，之后不论如何修改，修改的都是这个栈上对象，而不会对 map 中的学生对象产生任何影响。</p>
+<p>结论：把引用保存到普通变量中，则引用会退化，造成深拷贝！不仅影响性能，还影响功能！stu 已经是一个独立的 Student 对象，对 stu 的修改已经不会影响到 stus.at(stuName) 指向的那个 Student 对象了。</p>
+<p>此时你对这个普通变量的所有修改，都不会同步到 map 中的那个 Student 中去！</p>
+<hr />
+<!-- PG46 -->
+
+<p>我们现在对相依童鞋进行 C++ 培训：</p>
+<pre><code class="language-cpp">PeiXunCpp(&quot;相依&quot;);
+print(stus.at(&quot;相依&quot;));
+</code></pre>
+<p>结果发现他的存款一分没少，也没学会 C++：</p>
+<pre><code>{id: 20220302, age: 21, sex: &quot;男&quot;, money: 2000, skills: {&quot;C&quot;, &quot;Java&quot;}}
+</code></pre>
+<p>看来我们的修改没有在 map 中生效？原来是因为我们在 PeiXunCpp 函数里：</p>
+<pre><code class="language-cpp">auto stu = stus.at(stuName);  // 在栈上拷贝了一份完整的 Student 对象
+</code></pre>
+<p>一不小心就用了“克隆人”技术！从学生表里的“相依1号”，克隆了一份放到栈上的“相依2号”！</p>
+<p>然后我们扣了这个临时克隆人“相依2号”的钱，并给他培训 C++ 技术。</p>
+<p>然而我们培训的是栈上的临时变量“相依2号”，克隆前的“相依1号”并没有受到培训，也没有扣钱。</p>
+<p>然后呢？残忍的事情发生了！在小彭老师一通操作培训完“相依2号”后，我们把他送上断头台——析构了！</p>
+<p>而这一切“相依1号”完全不知情，他只知道有人喊他做克隆，然后就回家玩 Java 去了，并没有培训 C++ 的记忆。</p>
+<hr />
+<!-- PG47 -->
+
+<p>要防止引用退化成普通变量，需要把变量类型也改成引用！这种是浅拷贝，stu 和 stus.at(stuName) 指向的仍然是同一个 Student 对象。用 <code>auto</code> 捕获的话，改成 <code>auto &amp;</code> 就行。</p>
+<pre><code class="language-cpp">void PeiXunCpp(string stuName) {
+    auto &amp;stu = stus.at(stuName);  // 在栈上创建一个指向原 Student 对象的引用
+    stu.money -= 2650;
+    stu.skills.insert(&quot;C++&quot;);
+}
+</code></pre>
+<pre><code>{id: 20220302, age: 21, sex: &quot;男&quot;, money: -650, skills: {&quot;C&quot;, &quot;C++&quot;, &quot;Java&quot;}}
+</code></pre>
+<p>终于，正版“相依1号”本体鞋废了 C++！</p>
+<p>之后如果再从“相依1号”身上克隆，克隆出来的“相依n号”也都会具有培训过 C++ 的记忆了。</p>
+<p>引用相当于身份证，我们复印了“相依”的身份证，身份证不仅复印起来比克隆一个大活人容易（拷贝开销）从而提升性能，而且通过身份证可以找到本人，对身份证的修改会被编译器自动改为对本人的修改，例如通过“相依”的身份证在银行开卡等，银行要的是身份证，不是克隆人哦。</p>
+<hr />
+<!-- PG48 -->
+
+<p>引用是一个烫手的香香面包，普通变量就像一个臭臭的答辩马桶，把面包放到马桶（auto）里，面包就臭掉，腐烂掉，不能吃了！要让面包转移阵地了以后依然好吃，需要放到保鲜盒（auto &amp;）里。</p>
+<p>这就是 C++ 的 decay（中文刚好是“退化”、“变质”的意思）规则。</p>
+<p>以下都是香香面包，放进马桶里会变质：</p>
+<ul>
+<li><code>T &amp;</code> 会变质成 <code>T</code>（引用变质成普通变量）</li>
+<li><code>T []</code> 会变质成 <code>T *</code>（数组变质成首地址指针）</li>
+<li><code>T ()</code> 会变质成 <code>T (*)()</code>（函数变质成函数指针）</li>
+</ul>
+<p>在函数的参数中、函数的返回值中、auto 捕获的变量中，放入这些香香面包都会发生变质！</p>
+<p>如何避免变质？那就不要用马桶（普通变量）装面包呗！用保鲜盒（引用）装！</p>
+<ul>
+<li>避免引用 <code>T &amp;t</code> 变质，就得把函数参数类型改成引用，或者用 <code>auto &amp;</code>，<code>auto const &amp;</code> 捕获才行。</li>
+<li>避免原生数组 <code>T t[N]</code> 变质，也可以改成引用 <code>T (&amp;t)[N]</code>，但比较繁琐，不如直接改用 C++11 封装的安全静态数组 <code>array&lt;T, N&gt;</code> 或 C++98 就有的安全动态数组 <code>vector&lt;T&gt;</code>。</li>
+<li>避免函数 <code>T f()</code> 变质，可以 <code>T (&amp;f)()</code>，但繁琐，不如直接改用 C++11 的函数对象 <code>function&lt;T()&gt;</code>。</li>
+</ul>
+<p><img alt="autodecays" src="../img/stl/autodecays.png" /></p>
+<hr />
+<!-- PG49 -->
+
+<p>邪恶的 decay 规则造成空悬指针的案例</p>
+<pre><code class="language-cpp">typedef double arr_t[10];
+
+auto func(arr_t val) {
+    arr_t ret;
+    memcpy(ret, val, sizeof(arr_t));  // 对 val 做一些运算, 把计算结果保存到 ret
+    return ret;     // double [10] 自动变质成 double *
+}
+
+int main() {
+    arr_t val = {1, 2, 3, 4};
+    auto ret = func(val);             // 此处 auto 会被推导为 double *
+    print(std::span&lt;double&gt;(ret, ret + 10));
+    return 0;
+}
+</code></pre>
+<pre><code>Segmentation fault (core dumped)
+</code></pre>
+<hr />
+<!-- PG50 -->
+
+<p>修复方法：不要用沙雕 C 语言的原生数组，用 C++ 封装好的 array</p>
+<pre><code class="language-cpp">typedef std::array&lt;double, 10&gt; arr_t;  // 或者 vector 亦可
+
+auto func(arr_t val) {
+    arr_t ret;
+    ret = val;  // 对 val 做一些运算, 把计算结果保存到 ret
+    return ret;
+}
+
+int main() {
+    arr_t val = {1, 2, 3, 4};
+    auto ret = func(val);
+    print(ret);
+    return 0;
+}
+</code></pre>
+<pre><code>{1, 2, 3, 4, 0, 0, 0, 0, 0, 0}
+</code></pre>
+<hr />
+<!-- PG51 -->
+
+<p>当然如果你还是学不会怎么保留香香引用的话，也可以在修改后再次用 [] 写回学生表。这样学生表里不会 C++ 的“相依1号”就会被我们栈上培训过 C++ 的“相依1号”覆盖，现在学生表里的也是有 C++ 技能的相依辣！只不过需要翻来覆去克隆了好几次比较低效而已，至少能用了，建议只有学不懂引用的童鞋再用这种保底写法。</p>
+<pre><code class="language-cpp">void PeiXunCpp(string stuName) {
+    auto stu = stus.at(stuName);  // 克隆了一份“相依2号”
+    stu.money -= 2650;
+    stu.skills.insert(&quot;C++&quot;);
+    stus[stuName] = stu;          // “相依2号”夺舍，把“相依1号”给覆盖掉了
+}
+</code></pre>
+<p>学生思考题：上面代码第 5 行也可以改用 at，为什么？小彭老师不是说 “at 用于读取，[] 用于写入” 吗？</p>
+<p>我们童鞋要学会变通！小彭老师说 [] 用于写入，是因为有时候我们经常需要写入一个不存在的元素，所以 [] 会自动创建元素而不是出错就很方便；但是现在的情况是我们第 2 行已经访问过 at(&ldquo;相依&rdquo;)，那么就确认过 &ldquo;相依&rdquo; 已经存在才对，因此我写入的一定是个已经存在的元素，这时 [] 和 at 已经没区别了，所以用 at 的非 const 那个重载，一样可以写入。</p>
+<p>我们童鞋不是去死记硬背《小彭老师语录》，把小彭老师名言当做“两个凡是”圣经。要理解小彭老师会这么说的原因是什么，这样才能根据不同实际情况，实事求是看问题，才是符合小彭老师唯物编程观的。</p>
+<hr />
+<!-- PG52 -->
+
+<p>如果要根据学号进行查找呢？那就以学号为键，然后把学生姓名放到 Student 结构体中。</p>
+<p>如果同时有根据学号进行查找和根据姓名查找两种需求呢？</p>
+<p>同时高效地根据多个键进行查找，甚至指定各种条件，比如查询所有会 C++ 的学生等，这可不是 map 能搞定的，或者说能搞定但不高效（只能暴力遍历查找，时间复杂度太高）。这是个专门的研究领域，称为：关系数据库。</p>
+<p>关系数据库的实现有 MySQL，SQLite，MongoDB 等。C++ 等编程语言只需调用他们提供的 API 即可，不必自己手动实现这些复杂的查找和插入算法。</p>
+<p>这就是为什么专业的“学生管理系统”都会用关系数据库，而不是自己手动维护一个 map，因为关系数据库的数据结构更复杂，但经过高度封装，提供的功能也更全面，何况 map 在内存中，电脑一关机，学生数据就没了。</p>
+<hr />
+<!-- PG53 -->
+
+<p>查询 map 中元素的数量</p>
+<pre><code class="language-cpp">size_t size() const noexcept;
+</code></pre>
+<p>使用 <code>m.size()</code> 获得的 map 大小，或者说其中元素的数量。</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; m;
+print(m.size());
+m[&quot;fuck&quot;] = 985;
+print(m.size());
+m[&quot;dick&quot;] = 211;
+print(m.size());
+</code></pre>
+<hr />
+<!-- PG54 -->
+
+<p>应用举例：给每个键一个独一无二的计数</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; m;
+m[&quot;fuck&quot;] = m.size();
+m[&quot;dick&quot;] = m.size();
+</code></pre>
+<blockquote>
+<p>注：需要 C++17 保证等号右边先求值</p>
+</blockquote>
+<hr />
+<!-- PG55 -->
+
+<p>判断一个键是否存在：count 函数</p>
+<pre><code class="language-cpp">size_t count(K const &amp;k) const;
+</code></pre>
+<p>count 返回容器中键和参数 k 相等的元素个数，类型为 size_t（无符号 64 位整数）。</p>
+<p>由于 map 中同一个键最多只可能有一个元素，取值只能为 0 或 1。</p>
+<p>并且 size_t 可以隐式转换为 bool 类型，0 则 false，1 则 true。</p>
+<hr />
+<!-- PG56 -->
+
+<p>因此可以直接通过 count 的返回值是否为 0 判断一个键在 map 中是否存在：</p>
+<pre><code class="language-cpp">map&lt;string, string&gt; msg = {
+    {&quot;hello&quot;, &quot;world&quot;},
+    {&quot;fuck&quot;, &quot;rust&quot;},
+};
+print(msg);
+if (msg.count(&quot;fuck&quot;)) {
+    print(&quot;存在fuck，其值为&quot;, msg.at(&quot;fuck&quot;));
+} else {
+    print(&quot;找不到fuck&quot;);
+}
+if (msg.count(&quot;dick&quot;)) {
+    print(&quot;存在dick，其值为&quot;, msg.at(&quot;suck&quot;));
+} else {
+    print(&quot;找不到dick&quot;);
+}
+</code></pre>
+<pre><code>{&quot;fuck&quot;: &quot;rust&quot;, &quot;hello&quot;: &quot;world&quot;}
+存在fuck，其值为 &quot;rust&quot;
+找不到dick
+</code></pre>
+<p>C++20 中还可以改用返回类型直接为 bool 的 contains 函数，满足你的命名强迫症。</p>
+<pre><code class="language-cpp">if (msg.contains(&quot;fuck&quot;)) {
+    print(&quot;存在fuck，其值为&quot;, msg.at(&quot;fuck&quot;));
+} else {
+    print(&quot;找不到fuck&quot;);
+}
+</code></pre>
+<hr />
+<!-- PG57 -->
+
+<p>你知道吗？[] 的妙用</p>
+<p>除了写入元素需要用 [] 以外，还有一些案例中合理运用 [] 会非常的方便。</p>
+<p>[] 的效果：当所查询的键值不存在时，会调用默认构造函数创建一个元素<sup id="fnref8:1"><a class="footnote-ref" href="#fn:1">1</a></sup>。</p>
+<ul>
+<li>对于 int, float 等数值类型而言，默认值是 0。</li>
+<li>对于指针（包括智能指针）而言，默认值是 nullptr。</li>
+<li>对于 string 而言，默认值是空字符串 &ldquo;&rdquo;。</li>
+<li>对于 vector 而言，默认值是空数组 {}。</li>
+<li>对于自定义类而言，会调用你写的默认构造函数，如果没有，则每个成员都取默认值。</li>
+</ul>
+<hr />
+<!-- PG58 -->
+
+<p>[] 妙用举例：出现次数统计</p>
+<pre><code class="language-cpp">vector&lt;string&gt; input = {&quot;hello&quot;, &quot;world&quot;, &quot;hello&quot;};
+map&lt;string, int&gt; counter;
+for (auto const &amp;key: input) {
+    counter[key]++;
+}
+print(counter);
+</code></pre>
+<pre><code>{&quot;hello&quot;: 2, &quot;world&quot;: 1}
+</code></pre>
+<hr />
+<h2 id="layout-two-cols-header">layout: two-cols-header</h2>
+<!-- PG59 -->
+
+<p>::left::</p>
+<p><center></p>
+<p>活用 [] 自动创建 0 元素的特性</p>
+<p></center></p>
+<p>```cpp {3}
+map<string, int> counter;
+for (auto const &amp;key: input) {
+    counter[key]++;
+}</p>
+<pre><code>
+::right::
+
+&lt;center&gt;
+
+古板的写法
+
+&lt;/center&gt;
+
+```cpp {3-7}
+map&lt;string, int&gt; counter;
+for (auto const &amp;key: input) {
+    if (!counter.count(key)) {
+        counter[key] = 1;
+    } else {
+        counter[key] = counter.at(key) + 1;
+    }
+}
+</code></pre>
+<hr />
+<!-- PG60 -->
+
+<p>[] 妙用举例：归类</p>
+<pre><code class="language-cpp">vector&lt;string&gt; input = {&quot;happy&quot;, &quot;world&quot;, &quot;hello&quot;, &quot;weak&quot;, &quot;strong&quot;};
+map&lt;char, vector&lt;string&gt;&gt; categories;
+for (auto const &amp;str: input) {
+    char key = str[0];
+    categories[key].push_back(str);
+}
+print(categories);
+</code></pre>
+<pre><code>{'h': {&quot;happy&quot;, &quot;hello&quot;}, 'w': {&quot;world&quot;, &quot;weak&quot;}, 's': {&quot;strong&quot;}}
+</code></pre>
+<hr />
+<h2 id="layout-two-cols-header_1">layout: two-cols-header</h2>
+<!-- PG61 -->
+
+<p>::left::</p>
+<p><center></p>
+<p>活用 [] 自动创建&rdquo;默认值&rdquo;元素的特性</p>
+<p></center></p>
+<p>```cpp {4}
+map<char, vector\<string>> categories;
+for (auto const &amp;str: input) {
+    char key = str[0];
+    categories[key].push_back(str);
+}
+print(categories);</p>
+<pre><code>
+::right::
+
+&lt;center&gt;
+
+古板的写法
+
+&lt;/center&gt;
+
+```cpp {4-8}
+map&lt;char, vector&lt;string&gt;&gt; categories;
+for (auto const &amp;str: input) {
+    char key = str[0];
+    if (!categories.count(key)) {
+        categories[key] = {str};
+    } else {
+        categories[key].push_back(str);
+    }
+}
+</code></pre>
+<hr />
+<h2 id="layout-center">layout: center</h2>
+<!-- PG62 -->
+
+<p><img alt="Elegence" src="https://pica.zhimg.com/50/v2-f2560f634b1e09f81522f29f363827f7_720w.jpg" /></p>
+<hr />
+<!-- PG63 -->
+
+<p>反面典型：查找特定元素在 vector 中的位置（下标）</p>
+<pre><code class="language-cpp">size_t array_find(vector&lt;string&gt; const &amp;arr, string const &amp;val) {
+    for (size_t i = 0; i &lt; arr.size(); i++) {
+        if (arr[i] == val) return i;
+    }
+    return (size_t)-1;
+}
+vector&lt;string&gt; arr = {&quot;hello&quot;, &quot;world&quot;, &quot;nice&quot;, &quot;day&quot;, &quot;fucker&quot;};
+print(&quot;hello在数组中的下标是：&quot;, array_find(arr, &quot;fucker&quot;));    // O(N) 低效
+print(&quot;nice在数组中的下标是：&quot;, array_find(arr, &quot;nice&quot;));       // O(N) 低效
+</code></pre>
+<p>每次调用 <code>array_find</code>，都需要 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 复杂度。</p>
+<pre><code>fucker在数组中的下标是：0
+nice在数组中的下标是：2
+</code></pre>
+<p>如果查询 N 次，则复杂度就是 <span class="arithmatex"><span class="MathJax_Preview">O(N^2)</span><script type="math/tex">O(N^2)</script></span>。</p>
+<blockquote>
+<p>注：假设 vector 中不存在重复的元素</p>
+</blockquote>
+<hr />
+<!-- PG64 -->
+
+<p>正确做法：构建 vector 的反向查找表，以后查找更高效</p>
+<pre><code class="language-cpp">vector&lt;string&gt; arr = {&quot;hello&quot;, &quot;world&quot;, &quot;nice&quot;, &quot;day&quot;, &quot;fucker&quot;};
+map&lt;string, size_t&gt; arrinv;
+for (size_t i = 0; i &lt; arr.size(); i++) {                // O(N) 一次性受苦
+    arrinv[arr[i]] = i;
+}
+print(&quot;反向查找表构建成功：&quot;, arrinv);
+print(&quot;fucker在数组中的下标是：&quot;, arrinv.at(&quot;fucker&quot;));  // O(log N) 高效
+print(&quot;nice在数组中的下标是：&quot;, arrinv.at(&quot;nice&quot;));      // O(log N) 高效
+</code></pre>
+<p>只有第一次构造反向查找表时，需要 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 复杂度。</p>
+<p>以后每次调用 <code>map.at</code>，只需要 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span> 复杂度。</p>
+<pre><code>反向查找表构建成功：{&quot;day&quot;: 3, &quot;fucker&quot;, 4, &quot;hello&quot;: 0, &quot;nice&quot;: 2, &quot;world&quot;: 1}
+fucker在数组中的下标是：4
+nice在数组中的下标是：2
+</code></pre>
+<!-- 轶事：在数据库这门学问中，这种反向查找表被称为“倒序索引”，小彭老师在不知道这个术语的情况下，独立产生了反向查找表的思想 -->
+
+<hr />
+<!-- PG65 -->
+
+<pre><code class="language-cpp">for (size_t i = 0; i &lt; arr.size(); i++) {
+    arrinv[arr[i]] = i;
+}
+</code></pre>
+<p>提前构造好查找表 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span>，以后每次查找只需要 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span> 复杂度就行。</p>
+<ul>
+<li>（正向查找）已知下标 i，求元素 v：<code>v = arr[i]</code></li>
+<li>（反向查找）已知元素 v，求下标 i：<code>i = arrinv[v]</code></li>
+</ul>
+<p>如果查询 N 次，则复杂度就是 <span class="arithmatex"><span class="MathJax_Preview">O(N \log N)</span><script type="math/tex">O(N \log N)</script></span>，比优化前高效。</p>
+<p>因此当需要多次查找且原数组保持不变时，强烈推荐用这种方法，更高效。</p>
+<hr />
+<!-- PG66 -->
+
+<p>案例：构建另一个 map 的反向查找表</p>
+<pre><code class="language-cpp">map&lt;string, string&gt; tab = {
+    {&quot;hello&quot;, &quot;world&quot;},
+    {&quot;fuck&quot;, &quot;rust&quot;},
+};
+map&lt;string, string&gt; tabinv;
+for (auto const &amp;[k, v]: tab) {
+    tabinv[v] = k;
+}
+print(tabinv);
+</code></pre>
+<p>效果就是，键变值，值变键，反一反，两个 map 互为逆运算：</p>
+<pre><code>{&quot;rust&quot;: &quot;fuck&quot;, &quot;world&quot;: &quot;hello&quot;}
+</code></pre>
+<p>注：假设 tab 中不存在重复的值，键和值一一对应</p>
+<hr />
+<!-- PG67 -->
+
+<p>STL 容器的元素类型都可以通过成员 <code>value_type</code> 查询，常用于泛型编程（又称元编程）。</p>
+<pre><code class="language-cpp">set&lt;int&gt;::value_type      // int
+vector&lt;int&gt;::value_type   // int
+string::value_type        // char
+</code></pre>
+<p>此外还有引用类型 <code>reference</code>，迭代器类型 <code>iterator</code>，常迭代器类型 <code>const_iterator</code> 等。曾经在 C++98 中很常用，不过自从 C++11 有了 auto 和 decltype 以后，就不怎么用了，反正能自动推导返回类型。</p>
+<p>当容器有一个不确定的类型 T 作为模板参数时，就需要前面加上 <code>typename</code> 修饰：</p>
+<pre><code class="language-cpp">set&lt;int&gt;::value_type               // 没有不定类型，不需要
+typename set&lt;T&gt;::value_type        // 包含有 T 是不定类型
+typename set&lt;set&lt;T&gt;&gt;::value_type   // 包含有 T 是不定类型
+typename map&lt;int, T&gt;::value_type   // 包含有 T 是不定类型
+typename map&lt;K, T&gt;::value_type     // 包含有 K、T 是不定类型
+map&lt;int, string&gt;::value_type       // 没有不定类型，不需要
+</code></pre>
+<hr />
+<!-- PG68 -->
+
+<p>在本课程的案例代码中附带的 &ldquo;cppdemangle.h&rdquo;，可以实现根据指定的类型查询类型名称并打印出来。</p>
+<p>跨平台，需要 C++11，支持 MSVC，Clang，GCC 三大编译器，例如：</p>
+<pre><code class="language-cpp">int i;
+print(cppdemangle&lt;decltype(std::move(i))&gt;());
+print(cppdemangle&lt;std::string&gt;());
+print(cppdemangle&lt;std::wstring::value_type&gt;());
+</code></pre>
+<p>在我的 GCC 12.2.1 上得到：</p>
+<pre><code>&quot;int &amp;&amp;&quot;
+&quot;std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;&quot;
+&quot;wchar_t&quot;
+</code></pre>
+<hr />
+<!-- PG69 -->
+
+<p>问题: map 真正的元素类型究竟是什么？其具有三个成员类型<sup id="fnref9:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<ul>
+<li>元素类型：<code>value_type</code></li>
+<li>键类型：<code>key_type</code></li>
+<li>值类型：<code>mapped_type</code></li>
+</ul>
+<p>后面，将会一直以“元素”称呼官方的“value”，“键”称呼官方的“key”，“值”称呼官方的“mapped”</p>
+<p>用 cppdemangle 做实验，看看这些成员类型具体是什么吧：</p>
+<pre><code class="language-cpp">map&lt;int, float&gt;::value_type   // pair&lt;const int, float&gt;
+map&lt;int, float&gt;::key_type     // int
+map&lt;int, float&gt;::mapped_type  // float
+</code></pre>
+<p>结论：<code>map&lt;K, V&gt;</code> 的元素类型是 <code>pair&lt;const K, V&gt;</code> 而不是 <code>V</code>。</p>
+<hr />
+<!-- PG70 -->
+
+<p><code>pair&lt;const K, V&gt;</code> ——为什么 K 要加 const？</p>
+<p>上期 set 课说过，set 内部采用红黑树数据结构保持有序，这样才能实现在 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span> 时间内高效查找。</p>
+<p>键值改变的话会需要重新排序，如果只修改键值而不重新排序，会破坏有序性，导致二分查找结果错误！
+所以 set 只有不可变迭代器（const_iterator），不允许修改元素的值。</p>
+<p>map 和 set 一样也是红黑树，不同在于：map 只有键 K 的部分会参与排序，V 是个旁观者，随便修改也没关系。</p>
+<p>所以 map 有可变迭代器，只是在其 value_type 中给 K 加上了 const 修饰：不允许修改 K，但可以修改 V。</p>
+<p>如果你确实需要修改键值，那么请先把这个键删了，然后再以同样的 V 重新插入一遍，保证红黑树的有序。</p>
+<hr />
+<!-- PG71 -->
+
+<pre><code class="language-cpp">iterator begin();
+const_iterator begin() const;
+iterator end();
+const_iterator end() const;
+</code></pre>
+<p>begin() 和 end() 迭代器分别指向 map 的首个元素和最后一个元素的后一位。</p>
+<p>其中 end() 迭代器指向的地址为虚空索敌，不可解引用，仅仅作为一个“标志”存在（回顾之前 vector 课）。</p>
+<hr />
+<!-- PG72 -->
+
+<ul>
+<li>迭代器可以通过 <code>*it</code> 或 <code>it-&gt;</code> 解引用，获取其指向的元素。</li>
+<li>由于 map 内部总是保持有序，map 的首个元素一定是键最小的元素。</li>
+<li>由于 map 内部总是保持有序，map 的最后一个元素一定是键最大的元素。</li>
+</ul>
+<p>例如要查询成绩最好和最坏的学生，可以把成绩当做 key，学生名做 value 依次插入 map，他会帮我们排序：</p>
+<pre><code class="language-cpp">map&lt;int, string&gt; score = {
+    {100, &quot;彭于斌&quot;},
+    {80, &quot;樱花粉蜜糖&quot;},
+    {0, &quot;相依&quot;},
+    {60, &quot;Sputnik02&quot;},
+};
+string poorestStudent = score.begin()-&gt;second;   // 成绩最差学生的姓名
+string bestStudent = prev(score.end())-&gt;second;  // 成绩最好学生的姓名
+print(&quot;最低分:&quot;, poorestStudent);
+print(&quot;最高分:&quot;, bestStudent);
+</code></pre>
+<pre><code>最低分: &quot;相依&quot;
+最高分: &quot;彭于斌&quot;
+</code></pre>
+<blockquote>
+<p>注：仅当确保 <code>score.size() != 0</code> 时才可以解引用，否则 begin() 和 end() 都是虚空迭代器，这时解引用会奔溃。</p>
+</blockquote>
+<hr />
+<!-- PG73 -->
+
+<p>map 的遍历：古代 C++98 的迭代器大法</p>
+<pre><code class="language-cpp">for (map&lt;string, int&gt;::iterator it = m.begin(); it != m.end(); ++it) {
+    print(&quot;Key:&quot;, it-&gt;first);
+    print(&quot;Value:&quot;, it-&gt;second);
+}
+</code></pre>
+<p>要特别注意迭代器是一个指向元素的指针，不是元素本身！要用 <code>-&gt;</code> 而不是 <code>.</code>。</p>
+<hr />
+<!-- PG74 -->
+
+<p>运用 C++11 的 auto 简写一下：</p>
+<pre><code class="language-cpp">for (auto it = m.begin(); it != m.end(); ++it) {
+    print(&quot;Key:&quot;, it-&gt;first);
+    print(&quot;Value:&quot;, it-&gt;second);
+}
+</code></pre>
+<p>运用 C++17 结构化绑定（structured-binding）语法<sup id="fnref10:1"><a class="footnote-ref" href="#fn:1">1</a></sup>直接拆开 pair 类型：</p>
+<pre><code class="language-cpp">for (auto it = m.begin(); it != m.end(); ++it) {
+    auto [k, v] = *it;
+    print(&quot;Key:&quot;, k);
+    print(&quot;Value:&quot;, v);
+}
+</code></pre>
+<hr />
+<!-- PG75 -->
+
+<p>map 的遍历：现代 C++17 基于范围的循环（range-based loop）</p>
+<pre><code class="language-cpp">for (auto kv: m) {
+    print(&quot;Key:&quot;, kv.first);
+    print(&quot;Value:&quot;, kv.second);
+}
+</code></pre>
+<p>同时运用 C++17 结构化绑定语法<sup id="fnref11:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<pre><code class="language-cpp">for (auto [k, v]: m) {
+    print(&quot;Key:&quot;, k);
+    print(&quot;Value:&quot;, v);
+}
+</code></pre>
+<hr />
+<!-- PG76 -->
+
+<p>如何在遍历的过程中修改值？</p>
+<p>古代：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; m = {
+    {&quot;fuck&quot;, 985},
+    {&quot;rust&quot;, 211},
+};
+for (auto it = m.begin(); it != m.end(); ++it) {
+    it-&gt;second = it-&gt;second + 1;
+}
+print(m);
+</code></pre>
+<pre><code>{&quot;fuck&quot;: 986, &quot;rust&quot;: 212}
+</code></pre>
+<hr />
+<!-- PG77 -->
+
+<p>如何在遍历的过程中修改值？</p>
+<p>现代：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; m = {
+    {&quot;fuck&quot;, 985},
+    {&quot;rust&quot;, 211},
+};
+for (auto [k, v]: m) {
+    v = v + 1;
+}
+print(m);
+</code></pre>
+<pre><code>{&quot;fuck&quot;: 985, &quot;rust&quot;: 211}
+</code></pre>
+<p>没有成功修改！为什么？</p>
+<hr />
+<!-- PG78 -->
+
+<pre><code class="language-cpp">for (auto [k, v]: m) {
+    v = v + 1;
+}
+</code></pre>
+<p>Range-based loop 只是个花哨语法糖，他相当于：</p>
+<pre><code class="language-cpp">for (auto it = m.begin(); it != m.end(); ++it) {
+    auto [k, v] = *it;
+    v = v + 1;
+}
+</code></pre>
+<p>Structured-binding 也只是个花哨语法糖，他相当于：</p>
+<pre><code class="language-cpp">for (auto it = m.begin(); it != m.end(); ++it) {
+    auto tmp = *it;
+    auto k = tmp.first;
+    auto v = tmp.second;
+    v = v + 1;
+}
+</code></pre>
+<p>这样保存下来的 v 是个栈上变量，是对原值的一份拷贝，不仅浪费性能，且对 v 的修改不会反映到原 map 中去！</p>
+<hr />
+<!-- PG79 -->
+
+<pre><code class="language-cpp">for (auto &amp;[k, v]: m) {  // 解决方案是在这里加一个小小的 &amp;，让 range-based loop 捕获引用而不是拷贝
+    v = v + 1;
+}
+</code></pre>
+<p>同样是拆除 Range-based loop 的花哨语法糖，相当于：</p>
+<pre><code class="language-cpp">for (auto it = m.begin(); it != m.end(); ++it) {
+    auto &amp;[k, v] = *it;
+    v = v + 1;
+}
+</code></pre>
+<p>继续拆除 Structured-binding 的花哨语法糖，相当于：</p>
+<pre><code class="language-cpp">for (auto it = m.begin(); it != m.end(); ++it) {
+    auto &amp;tmp = *it;
+    auto &amp;k = tmp.first;
+    auto &amp;v = tmp.second;
+    v = v + 1;
+}
+</code></pre>
+<p>这样保存下来的 v 是个引用，是对原值的引用（用 Rust 的话说叫 borrowed）。不仅避免拷贝的开销节省了性能，而且对 v 的修改会实时反映到原 map 中去。</p>
+<hr />
+<!-- PG80 -->
+
+<p>总结，当需要在遍历的同时修改 map 中的值时，要用 <code>auto &amp;</code> 捕获引用：</p>
+<pre><code class="language-cpp">for (auto &amp;[k, v]: m) {  // 捕获一个引用，写入这个引用会立即作用在原值上
+    v = v + 1;
+}
+</code></pre>
+<p>即使不需要修改 map 中的值时，也建议用 <code>auto const &amp;</code> 避免拷贝的开销：</p>
+<pre><code class="language-cpp">for (auto const &amp;[k, v]: m) {   // 捕获只读的 const 引用，引用避免拷贝开销，const 避免不小心手滑写入
+    print(v);
+}
+</code></pre>
+<hr />
+<!-- PG81 -->
+
+<p>注：即使捕获为 <code>auto &amp;</code>，由于 map 的元素类型是 <code>pair&lt;const K, V&gt;</code> 所以 K 部分还是会捕获为 <code>K const &amp;</code>，无法写入。</p>
+<pre><code class="language-cpp">for (auto &amp;[k, v]: m) {
+    k = &quot;key&quot;;    // 编译期报错：const 引用不可写入！
+    v = 985211;   // OK
+}
+</code></pre>
+<p>只是如果捕获为 <code>auto const &amp;</code> 就两个都不允许写入了。</p>
+<pre><code class="language-cpp">for (auto const &amp;[k, v]: m) {
+    k = &quot;key&quot;;    // 编译期报错：const 引用不可写入！
+    v = 985211;   // 编译期报错：const 引用不可写入！
+}
+</code></pre>
+<hr />
+<!-- PG82 -->
+
+<pre><code class="language-cpp">iterator find(K const &amp;k);
+const_iterator find(K const &amp;k) const;
+</code></pre>
+<p>m.find(key) 函数，根据指定的键 key 查找元素<sup id="fnref12:1"><a class="footnote-ref" href="#fn:1">1</a></sup>。</p>
+<ul>
+<li>成功找到，则返回指向找到元素的迭代器</li>
+<li>找不到，则返回 m.end()</li>
+</ul>
+<p>由于 STL 传统异能之 end() 虚空索敌，他不可能指向任何值，所以经常作为找不到时候缺省的返回值。</p>
+<p>可以用 <code>m.find(key) != m.end()</code> 判断一个元素是否存在，等价于 <code>m.count(key) != 0</code>。</p>
+<p>第二个版本的原型作用是：如果 map 本身有 const 修饰，则返回的也是 const 迭代器。</p>
+<p>为的是防止你在一个 const map 里 find 了以后利用迭代器变相修改 map 里的值。</p>
+<hr />
+<h2 id="layout-two-cols-header_2">layout: two-cols-header</h2>
+<!-- PG83 -->
+
+<p>实际上 count 和 contains 函数就是基于 find 实现的，性能没有区别，glibc 源码：</p>
+<p>::left::</p>
+<pre><code class="language-cpp">#if __cplusplus &gt; 201703L
+      /**
+       *  @brief  Finds whether an element with the given key exists.
+       *  @param  __x  Key of (key, value) pairs to be located.
+       *  @return  True if there is an element with the specified key.
+       */
+      bool
+      contains(const key_type&amp; __x) const
+      { return _M_t.find(__x) != _M_t.end(); }
+
+      template&lt;typename _Kt&gt;
+      auto
+      contains(const _Kt&amp; __x) const
+      -&gt; decltype(_M_t._M_find_tr(__x), void(), true)
+      { return _M_t._M_find_tr(__x) != _M_t.end(); }
+#endif
+</code></pre>
+<p>::right::</p>
+<pre><code class="language-cpp">      /**
+       *  @brief  Finds the number of elements with given key.
+       *  @param  __x  Key of (key, value) pairs to be located.
+       *  @return  Number of elements with specified key.
+       *
+       *  This function only makes sense for multimaps; for map the result will
+       *  either be 0 (not present) or 1 (present).
+       */
+      size_type
+      count(const key_type&amp; __x) const
+      { return _M_t.find(__x) == _M_t.end() ? 0 : 1; }
+</code></pre>
+<pre><code class="language-cpp">// 以下三者等价
+m.contains(key)
+m.count(key)
+m.find(key) != m.end()
+</code></pre>
+<hr />
+<!-- PG84 -->
+
+<p>检查过不是 m.end()，以确认成功找到后，就可以通过 * 运算符解引用获取迭代器指向的值：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; m = {
+    {&quot;fuck&quot;, 985},
+};
+auto it = m.find(&quot;fuck&quot;);  // 寻找 K 为 &quot;fuck&quot; 的元素
+if (it != m.end()) {
+    auto kv = *it;     // 解引用得到 K-V 对
+    print(kv);         // {&quot;fuck&quot;, 985}
+    print(kv.first);   // &quot;fuck&quot;
+    print(kv.second);  // 985
+} else {
+    print(&quot;找不到 fuck！&quot;);
+}
+</code></pre>
+<hr />
+<h2 id="layout-two-cols-header_3">layout: two-cols-header</h2>
+<!-- PG85 -->
+
+<p>find 的高效在于，可以把两次查询合并成一次。</p>
+<p>::left::</p>
+<p>保底写法：开销 <span class="arithmatex"><span class="MathJax_Preview">2 \log N</span><script type="math/tex">2 \log N</script></span></p>
+<pre><code class="language-cpp">if (m.count(&quot;key&quot;)) {    // 第一次查询，只包含&quot;是否找到&quot;的信息
+    print(m.at(&quot;key&quot;));  // 第二次查询，只包含&quot;找到了什么&quot;的信息
+}
+</code></pre>
+<p>::right::</p>
+<p>高效写法：开销 <span class="arithmatex"><span class="MathJax_Preview">\log N</span><script type="math/tex">\log N</script></span></p>
+<pre><code class="language-cpp">auto it = m.find(&quot;key&quot;); // 一次性查询
+if (it != m.end()) {     // 查询的结果，既包含&quot;是否找到&quot;的信息
+    print(it-&gt;second);   // 也包含&quot;找到了什么&quot;的信息
+}
+</code></pre>
+<hr />
+<!-- PG86 -->
+
+<p>C++17 的 if-auto 语法糖如何简化 find 的迭代器判断</p>
+<pre><code class="language-cpp">auto it = m.find(&quot;key1&quot;);
+if (it != m.end()) {
+    print(it-&gt;second);
+}
+auto it = m.find(&quot;key2&quot;);  // 编译器报错：变量 it 重复定义！
+if (it != m.end()) {
+    print(it-&gt;second);
+}
+</code></pre>
+<p>虽然删去前面的 auto 可以解决问题，但是如果这里是不同类型的 map 就尬了，得另外想一个变量名。</p>
+<p>而 C++17 的 if-auto 语法糖捕获的 it 是限制在当前 if 作用域的，不会跑出去和别人发生冲突。</p>
+<pre><code class="language-cpp">if (auto it = m.find(&quot;key1&quot;); it != m.end()) {
+    print(it-&gt;second);
+}
+if (auto it = m.find(&quot;key2&quot;); it != m.end()) {  // 这个变量 it 是局域的，不会和上一个局域的 it 产生名字冲突
+    print(it-&gt;second);
+}
+</code></pre>
+<hr />
+<!-- PG87 -->
+
+<p>我给 C++ 标准委员会提一个建议，能不能给迭代器加一个 <code>operator bool</code> 代替烦人的 <code>!= m.end()</code>？</p>
+<pre><code class="language-cpp">struct iterator {
+    _RbTreeNode *node;
+
+    bool operator!=(iterator const &amp;other) const noexcept {
+        return node == other.node;
+    }
+
+    operator bool() const noexcept {
+        return node;
+    }
+};
+</code></pre>
+<p>那样的话就可以直接：</p>
+<pre><code class="language-cpp">if (auto it = m.find(&quot;key&quot;)) {
+    print(it-&gt;second);
+}
+</code></pre>
+<p>因为 if-auto 省略分号后面的条件时，默认就是 <code>if (auto it = m.find("key"); (bool)it)</code></p>
+<hr />
+<!-- PG88 -->
+
+<p>注意 <code>*it</code> 解引用得到的是 <code>pair&lt;const K, V&gt;</code> 类型的键值对，需要 <code>(*it).second</code> 才能获取单独的值 V。</p>
+<p>好在 C 语言就有 <code>-&gt;</code> 运算符作为语法糖，我们可以简写成 <code>it-&gt;second</code>，与 <code>(*it).second</code> 等价。</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; m = {
+    {&quot;fuck&quot;, 985},
+};
+auto it = m.find(&quot;fuck&quot;);   // 寻找 K 为 &quot;fuck&quot; 的元素
+if (it != m.end()) {
+    print(it-&gt;second);      // 迭代器有效，可以直接获得值部分 985
+} else {
+    print(&quot;找不到 fuck！&quot;);  // 这个分支里不得用 * 和 -&gt; 运算符解引用 it
+}
+</code></pre>
+<p>大多数情况下我们查询只需要获取值 V 的部分就行了，直接 <code>it-&gt;second</code> 就可以了✅</p>
+<blockquote>
+<p>注意：find 找不到键时，会返回 <code>m.end()</code>，这是个无效迭代器，只作为标识符使用（类比 Python 中的 find 有时会返回 -1）。</p>
+<p>没有确认 <code>it != m.end()</code> 前，不可以访问 <code>it-&gt;second</code>！那相当于解引用一个空指针，会造成 segfault（更专业一点说是 UB）。</p>
+<p>记住，一定要在 <code>it != m.end()</code> 的分支里才能访问 <code>it-&gt;second</code> 哦！你得先检查过饭碗里没有老鼠💩之后，才能安心吃饭！</p>
+<p>如果你想让老妈（标准库）自动帮你检查有没有老鼠💩，那就用会自动报错的 at（类比 Python 中的 index 找不到直接报错）。</p>
+<p>之所以用 find，是因为有时饭碗里出老鼠💩，是计划的一部分！例如当有老鼠💩时你可以改吃别的零食。而 at 这个良心老妈呢？一发现老鼠💩就拖着你去警察局报案，零食（默认值）也不让你吃了。今日行程全部取消，维权（异常处理，找上层 try-catch 块）设为第一要务。</p>
+</blockquote>
+<hr />
+<!-- PG89 -->
+
+<pre><code class="language-cpp">iterator find(K const &amp;k);
+const_iterator find(K const &amp;k) const;
+</code></pre>
+<p>如果 map 没有 const 修饰，则其 find 返回的 it 也是非 const 迭代器。</p>
+<pre><code class="language-cpp">const map&lt;string, int&gt; cm;
+map&lt;string, int&gt;::const_iterator cit = cm.find();
+print(cit-&gt;second);  // OK: 可以读取
+cit-&gt;second = 1;     // 编译期报错: 不允许写入 const 迭代器指向的值
+
+map&lt;string, int&gt; m;
+map&lt;string, int&gt;::iterator it = m.find();
+print(it-&gt;second);   // OK: 可以读取
+it-&gt;second = 1;      // OK: 可以写入
+</code></pre>
+<p><code>it-&gt;second</code> 可以写入，it 是迭代器，迭代器类似于指针，写入迭代器指向的 second 就可以修改 map 里的值部分。</p>
+<p><code>it-&gt;first</code> 是键部分，由于 map 的真正元素类型是 <code>pair&lt;const K, V&gt;</code> 所以这部分无法被修改。</p>
+<hr />
+<!-- PG90 -->
+
+<p>带默认值的查询</p>
+<p>众所周知，Python 中的 dict 有一个 m.get(key, defl) 的功能，效果是当 key 不存在时，返回 defl 这个默认值代替 m[key]，而 C++ 的 map 却没有，只能用一套组合拳代替：</p>
+<pre><code class="language-cpp">m.count(key) ? m.at(key) : defl
+</code></pre>
+<p>但上面这样写是比较低效的，相当于查询了 map 两遍，at 里还额外做了一次多余的异常判断。</p>
+<p>正常来说是用通用 find 去找，返回一个迭代器，然后判断是不是 end() 决定要不要采用默认值。</p>
+<pre><code class="language-cpp">auto it = m.find(key);
+return it == m.end() ? it-&gt;second : defl;
+</code></pre>
+<blockquote>
+<p>饭碗里发现了老鼠💩？别急着报警，这也在我的预料之中：启用 B 计划，改吃 defl 这款美味零食即可！</p>
+<p>如果是良心老妈 at，就直接启用 C 计划：<img alt="Plan C" src="../img/stl/planc.png" /> 抛出异常然后奔溃了，虽然这很方便我们程序员调试。</p>
+</blockquote>
+<hr />
+<!-- PG91 -->
+
+<p>由于自带默认值的查询这一功能实在是太常用了，为了把这个操作浓缩到一行，我建议同学们封装成函数放到自己的项目公共头文件（一般是 utils.h 之类的名称）里方便以后使用：</p>
+<pre><code class="language-cpp">template &lt;class M&gt;
+typename M::mapped_type map_get
+( M const &amp;m
+, typename M::key_type const &amp;key
+, typename M::mapped_type const &amp;defl
+) {
+  typename M::const_iterator it = m.find(key);
+  if (it != m.end()) {
+    return it-&gt;second;
+  } else {
+    return defl;
+  }
+}
+</code></pre>
+<pre><code class="language-cpp">int val = map_get(config, &quot;timeout&quot;, -1);  // 如果配置文件里不指定，则默认 timeout 为 -1
+</code></pre>
+<hr />
+<!-- PG92 -->
+
+<p>这样还不够优雅，我们还可以更优雅地运用 C++17 的函数式容器 optional：</p>
+<pre><code class="language-cpp">template &lt;class M&gt;
+std::optional&lt;typename M::mapped_type&gt; map_get
+( M const &amp;m
+, typename M::key_type const &amp;key
+) {
+  typename M::const_iterator it = m.find(key);
+  if (it != m.end()) {
+    return it-&gt;second;
+  } else {
+    return std::nullopt;
+  }
+}
+</code></pre>
+<p>当找不到时就返回 nullopt，找到就返回含有值的 optional。</p>
+<blockquote>
+<p>注：本段代码已附在案例代码库的 &ldquo;map_get.h&rdquo; 文件中，等课后可以去 GitHub 下载。</p>
+</blockquote>
+<hr />
+<!-- PG93 -->
+
+<p>调用者可以自行运用 optional 的 value_or 函数<sup id="fnref13:1"><a class="footnote-ref" href="#fn:1">1</a></sup>指定找不到时采用的默认值：</p>
+<pre><code class="language-cpp">int val = map_get(config, &quot;timeout&quot;).value_or(-1);
+</code></pre>
+<p>如果要实现 at 同样的找不到就自动报错功能，那就改用 value 函数：</p>
+<pre><code class="language-cpp">int val = map_get(config, &quot;timeout&quot;).value();
+</code></pre>
+<p>optional 具有 <code>operator bool</code> 和无异常的 <code>operator*</code>，所以也可以配合 if-auto 语法糖使用：</p>
+<pre><code class="language-cpp">if (auto o_val = map_get(config, &quot;timeout&quot;)) {
+    int val = *o_val;
+    print(&quot;找到了&quot;, val);
+} else {
+    print(&quot;找不到时的处理方案...&quot;);
+}
+</code></pre>
+<hr />
+<!-- PG94 -->
+
+<p>以上是典型的函数式编程范式 (FP)，C++20 还引入了更多这样的玩意<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>，等有空会专门开节课为大家一一介绍。</p>
+<pre><code class="language-cpp">auto even = [] (int i) { return 0 == i % 2; };
+auto square = [] (int i) { return i * i; };
+for (int i: std::views::iota(0, 6)
+          | std::views::filter(even)
+          | std::views::transform(square))
+    print(i);  // 0 4 16
+</code></pre>
+<hr />
+<!-- PG95 -->
+
+<p>现在学习删除元素用的 erase 函数，其原型如下<sup id="fnref14:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<pre><code class="language-cpp">size_t erase(K const &amp;key);
+</code></pre>
+<p>指定键值 key，erase 会删除这个键值对应的元素。</p>
+<p>返回一个整数，表示删除了多少个元素（只能是 0 或 1）。</p>
+<hr />
+<!-- PG96 -->
+
+<pre><code class="language-cpp">size_t erase(K const &amp;key);
+</code></pre>
+<p>erase 运用举例：删除一个元素</p>
+<pre><code class="language-cpp">map&lt;string, string&gt; msg = {
+    {&quot;hello&quot;, &quot;world&quot;},
+    {&quot;fuck&quot;, &quot;rust&quot;},
+};
+print(msg);
+msg.erase(&quot;fuck&quot;);
+print(msg);
+</code></pre>
+<pre><code>{&quot;fuck&quot;: &quot;rust&quot;, &quot;hello&quot;: &quot;world&quot;}
+{&quot;hello&quot;: &quot;world&quot;}
+</code></pre>
+<hr />
+<!-- PG97 -->
+
+<pre><code class="language-cpp">size_t erase(K const &amp;key);
+</code></pre>
+<p>erase 的返回值和 count 一样，返回成功删除的元素个数，类型为 size_t（无符号 64 位整数）。</p>
+<p>由于 map 中同一个键最多只可能有一个元素，取值只能为 0 或 1。</p>
+<p>并且 size_t 可以隐式转换为 bool 类型，0 则 false，1 则 true。</p>
+<hr />
+<!-- PG98 -->
+
+<p>因此可以直接通过 erase 的返回值是否为 0 判断是否删除成功：</p>
+<pre><code class="language-cpp">map&lt;string, string&gt; msg = {
+    {&quot;hello&quot;, &quot;world&quot;},
+    {&quot;fuck&quot;, &quot;rust&quot;},
+};
+print(msg);
+if (msg.erase(&quot;fuck&quot;)) {
+    print(&quot;删除fuck成功&quot;);
+} else {
+    print(&quot;删除fuck失败，键不存在&quot;);
+}
+if (msg.erase(&quot;dick&quot;)) {
+    print(&quot;删除dick成功&quot;);
+} else {
+    print(&quot;删除dick失败，键不存在&quot;);
+}
+print(msg);
+</code></pre>
+<pre><code>{&quot;fuck&quot;: &quot;rust&quot;, &quot;hello&quot;: &quot;world&quot;}
+删除fuck成功
+删除dick失败，键不存在
+{&quot;hello&quot;: &quot;world&quot;}
+</code></pre>
+<hr />
+<!-- PG99 -->
+
+<pre><code class="language-cpp">size_t erase(K const &amp;key);  // 指定键版
+iterator erase(iterator it);   // 已知位置版
+</code></pre>
+<p>区别：</p>
+<ul>
+<li>
+<p>指定键版 erase(key) 实际上需要先调用 find(key) 找到元素位置，然后才能删除，而且还有找不到的可能性。</p>
+</li>
+<li>
+<p>而已知位置的话（比如你已经事先用 find 找到了元素位置），可以用 erase(it) 直接用迭代器作为参数</p>
+</li>
+</ul>
+<p>复杂度不同：</p>
+<ul>
+<li>
+<p>指定键版 erase(key) 的时间复杂度：<span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span>。</p>
+</li>
+<li>
+<p>已知位置版 erase(it) 的时间复杂度：<span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span>，更高效。</p>
+</li>
+</ul>
+<p>其中 <span class="arithmatex"><span class="MathJax_Preview">+</span><script type="math/tex">+</script></span> 代表这是平摊（Amortized）下来的时间复杂度。</p>
+<p>这是因为即使已知位置，erase 有可能涉及树的更新，需要 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span> 复杂度。</p>
+<p>但是大多数情况下需要的更新很少，平均下来是 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span> 的。</p>
+<p>这种情况就会用记号 <span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span> 来表示。</p>
+<hr />
+<!-- PG100 -->
+
+<p>erase(key) 可能是基于 erase(it) 实现的：</p>
+<pre><code class="language-cpp">size_t erase(K const &amp;key) {  // 小彭老师猜想标准库内部
+    auto it = this-&gt;find(key);  // O(log N)
+    if (it != this-&gt;end()) {
+        this-&gt;erase(it);        // O(1)+
+        return 1;  // 找到了，删除成功
+    } else {
+        return 0;  // 找不到，没有删除
+    }
+}  // 开销大的 find(key) 会覆盖小的 erase(it)，所以 erase(key) 的总复杂度为 O(log N)
+</code></pre>
+<hr />
+<!-- PG101 -->
+
+<p>指定位置版 erase(it) 返回的是删除元素的下一个元素位置。</p>
+<p>由于 map 内部保持键从小到大升序排列，所谓的下一个就是键比当前键大一个的元素，例如：</p>
+<pre><code>{&quot;answer&quot;: 42, &quot;hello&quot;: 985, &quot;world&quot;: 211}
+</code></pre>
+<ul>
+<li>erase(find(&ldquo;answer&rdquo;)) 会返回指向 &ldquo;hello&rdquo; 的迭代器，因为 &ldquo;hello&rdquo; 最接近且大于 &ldquo;answer&rdquo;。</li>
+<li>erase(find(&ldquo;hello&rdquo;)) 会返回指向 &ldquo;world&rdquo; 的迭代器，因为 &ldquo;world&rdquo; 最接近且大于 &ldquo;hello&rdquo;。</li>
+<li>erase(find(&ldquo;world&rdquo;)) 会返回 end()，因为 &ldquo;world&rdquo; 已经是最大键，没有下一个。</li>
+</ul>
+<p>此外 erase(it) 还有性能上的优势：</p>
+<ul>
+<li>指定位置版 erase(it) 的复杂度是 <span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span></li>
+<li>指定键版 erase(key) 的复杂度是 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span></li>
+</ul>
+<p>当已知指向要删除元素的迭代器时（例如先通过 find 找到），直接指定那个迭代器比指定键参数更高效。</p>
+<p>删除成绩最差的学生：</p>
+<pre><code class="language-cpp">score.erase(score.begin());
+</code></pre>
+<hr />
+<!-- PG102 -->
+
+<p>常见需求场景：一边遍历一边删除部分元素（错误示范）</p>
+<pre><code class="language-cpp">map&lt;string, string&gt; msg = {
+    {&quot;hello&quot;, &quot;world&quot;},
+    {&quot;fucker&quot;, &quot;rust&quot;},
+    {&quot;fucking&quot;, &quot;java&quot;},
+    {&quot;good&quot;, &quot;job&quot;},
+};
+for (auto const &amp;[k, v]: msg) {
+    if (k.starts_with(&quot;fuck&quot;)) {
+        msg.erase(k);  // 遍历过程中删除当前元素，会导致正在遍历中的迭代器失效，奔溃
+    }
+}
+print(msg);
+</code></pre>
+<pre><code>Segmentation fault (core dumped)
+</code></pre>
+<hr />
+<!-- PG103 -->
+
+<p>引出问题：迭代器失效</p>
+<ul>
+<li>每当往 map 中插入新元素时，原先保存的迭代器不会失效。</li>
+<li>删除 map 中的其他元素时，也不会失效。</li>
+<li><strong>只有当删除的刚好是迭代器指向的那个元素时，才会失效</strong>。</li>
+</ul>
+<pre><code class="language-cpp">map&lt;string, int&gt; m = {
+    {&quot;fuck&quot;, 985},
+};
+auto it = m.find(&quot;fuck&quot;);
+m[&quot;dick&quot;] = 211;
+print(it-&gt;second);  // 没有失效，打印 985
+m.erase(&quot;dick&quot;);
+print(it-&gt;second);  // 没有失效，打印 985
+m.erase(&quot;fuck&quot;);
+print(it-&gt;second);  // 没有失效，打印 985
+</code></pre>
+<hr />
+<!-- PG104 -->
+
+<p>map 比起 unordered_map 来，已经是非常稳定，随便增删改查都不会迭代器失效。</p>
+<p>只有一个例外：删除的元素刚好是迭代器指向的。</p>
+<p>你拿着个你朋友家的地址，结果你一发 RPG 导弹把他家炸了，还摸不着头脑“奇怪，明明就是这个地址呀”，这时确实无论如何都不能避免失效，不能怪 map。</p>
+<p>而刚刚的案例中，我们删除的恰好就是当前正在遍历的迭代器正在指向的那个元素（即使你用了 range-based loop 语法糖他背后还是迭代器遍历）。</p>
+<p>而当你对着一个失效的迭代器执行 <code>++it</code> 时，就产生了 segfault 错误。因为红黑树的迭代器要找到“下一个”节点，需要访问这个红黑树节点中存的 <code>next</code> 指针，而这个红黑树节点都已经删除了已经析构了已经释放内存了，里面存的 <code>next</code> 指针也已经释放，被其他系统数据覆盖，这时会访问到错误的指针——野指针。</p>
+<hr />
+<!-- PG105 -->
+
+<p>所以《好友清除计划》完整的剧情是：</p>
+<p>你有好多朋友，今天你要把他们全炸了。</p>
+<p>1号朋友家里有一个字条，写着2号朋友家的地址。</p>
+<p>2号朋友家里有一个字条，写着3号朋友家的地址。</p>
+<p>&hellip;</p>
+<p>你拿着1号朋友家的地址，一发 RPG 导弹把他家炸了。然后你现在突然意识到需要2号朋友家的地址，但是1号朋友家已经被你炸了，你傻乎乎进入燃烧的1号朋友家，被火烧死了。</p>
+<pre><code class="language-cpp">for (auto it = m.begin(); it != m.end(); ++it /* 进入燃烧中的1号朋友家 */) {
+    m.erase(it);  // 一发 RPG 导弹炸毁1号朋友家
+}
+</code></pre>
+<hr />
+<!-- PG106 -->
+
+<p>你拿着1号朋友家的地址，一发 RPG 导弹把他家炸了。然后你现在突然意识到需要2号朋友家的地址，但是1号朋友家已经被你炸了，你傻乎乎进入燃烧的1号朋友家，被火烧死了。</p>
+<pre><code class="language-cpp">for (auto it = m.begin(); it != m.end(); ++it) {
+    m.erase(it);
+}
+</code></pre>
+<p>正确的做法是，先进入1号朋友家，安全取出写着2号朋友家地址的字条后，再来一发 RPG 把1号朋友家炸掉。这样才能顺利找到2号朋友家，以此类推继续拆3号……</p>
+<pre><code class="language-cpp">for (auto it = m.begin(); it != m.end(); ) {
+    auto next_it = it;  // 先进入1号朋友的家
+    ++next_it;          // 拿出写有2号朋友家地址的字条
+    m.erase(it);        // 再发射 RPG 导弹
+    it = next_it;       // 前往2号朋友家
+}
+</code></pre>
+<hr />
+<!-- PG107 -->
+
+<p>注意到 erase 会返回删除元素的下一个元素的迭代器，也就是说这个 RPG 导弹非常智能，好像他就是专为《好友清除计划》设计的一样：他能在炸毁你朋友的房屋前，自动拿到其中的字条，并把他通过“弹射座椅”弹出来送到门外的你手上，把纸条安全送出来后，再爆炸摧毁你朋友的房屋。这样你就不用冒险进入燃烧的房屋拿字条（迭代器失效导致 segfault），也不用先劳烦您自己先进去一趟房屋拿字条了（上一页中那样提前保存 next_it）。</p>
+<pre><code class="language-cpp">for (auto it = m.begin(); it != m.end(); ) {
+    it = m.erase(it);        // 这款 RPG 导弹“智能地”在摧毁你朋友的房屋同时把其中的字条拿出来了!?
+}
+</code></pre>
+<blockquote>
+<p>只是注意这里 for 循环的步进条件 <code>++it</code> 要删掉，因为智能的 RPG 导弹 <code>it = m.erase(it)</code> 已经帮你步进了。</p>
+</blockquote>
+<hr />
+<!-- PG108 -->
+
+<p>一边遍历一边删除部分元素（正解<sup id="fnref15:1"><a class="footnote-ref" href="#fn:1">1</a></sup>）</p>
+<pre><code class="language-cpp">map&lt;string, string&gt; msg = {
+    {&quot;hello&quot;, &quot;world&quot;},
+    {&quot;fucker&quot;, &quot;rust&quot;},
+    {&quot;fucking&quot;, &quot;java&quot;},
+    {&quot;good&quot;, &quot;job&quot;},
+};
+for (auto it = m.begin(); it != m.end(); ) {  // 没有 ++it
+    auto const &amp;[k, v] = *it;
+    if (k.starts_with(&quot;fuck&quot;)) {
+        it = msg.erase(it);
+    } else {
+        ++it;
+    }
+}
+print(msg);
+</code></pre>
+<pre><code>{&quot;good&quot;: &quot;job&quot;, &quot;hello&quot;: &quot;world&quot;}
+</code></pre>
+<hr />
+<h2 id="layout-two-cols-header_4">layout: two-cols-header</h2>
+<!-- PG109 -->
+
+<p>::left::</p>
+<p>不奔溃</p>
+<pre><code class="language-cpp">for (auto it = m.begin(); it != m.end(); ) {
+    auto const &amp;[k, v] = *it;
+    if (k.starts_with(&quot;fuck&quot;)) {
+        it = msg.erase(it);
+    } else {
+        ++it;
+    }
+}
+</code></pre>
+<p>::right::</p>
+<p>奔溃</p>
+<pre><code class="language-cpp">for (auto it = m.begin(); it != m.end(); ++it) {
+    auto const &amp;[k, v] = *it;
+    if (k.starts_with(&quot;fuck&quot;)) {
+        msg.erase(it);
+        // 或者 msg.erase(k);
+    }
+}
+</code></pre>
+<hr />
+<!-- PG110 -->
+
+<p>批量删除符合条件的元素（C++20<sup id="fnref16:1"><a class="footnote-ref" href="#fn:1">1</a></sup>）</p>
+<pre><code class="language-cpp">map&lt;string, string&gt; msg = {
+    {&quot;hello&quot;, &quot;world&quot;},
+    {&quot;fucker&quot;, &quot;rust&quot;},
+    {&quot;fucking&quot;, &quot;java&quot;},
+    {&quot;good&quot;, &quot;job&quot;},
+};
+std::erase_if(msg, [&amp;] (auto const &amp;kv) {
+    auto &amp;[k, v] = kv;
+    return k.starts_with(&quot;fuck&quot;);
+});
+print(msg);
+</code></pre>
+<pre><code>{&quot;good&quot;: &quot;job&quot;, &quot;hello&quot;: &quot;world&quot;}
+</code></pre>
+<hr />
+<!-- PG111 -->
+
+<p>如果你搞不懂迭代器这些，这里我提供一个保底写法，先把键提前保存到一个 vector 中去：</p>
+<pre><code class="language-cpp">map&lt;string, string&gt; msg = {
+    {&quot;hello&quot;, &quot;world&quot;},
+    {&quot;fucker&quot;, &quot;rust&quot;},
+    {&quot;fucking&quot;, &quot;java&quot;},
+    {&quot;good&quot;, &quot;job&quot;},
+};
+vector&lt;string&gt; keys;             // vector 或者 set 都可以
+for (auto const &amp;[k, v]: msg) {  // 先把所有键提前拷贝到临时 vector 里
+    keys.push_back(k);
+}
+for (auto const &amp;k: keys) {      // 遍历刚才保存的键
+    if (k.starts_with(&quot;fuck&quot;)) {
+        msg.erase(k);            // 键值对已经提前深拷贝到临时 vector 里，这时删除 map 里的键不会奔溃
+    }
+}
+</code></pre>
+<blockquote>
+<p>小彭老师，永远的祛魅大师。</p>
+</blockquote>
+<hr />
+<!-- PG112 -->
+
+<p>还是搞不懂的话，也可以新建一个 map，条件反之，把不需要删除的元素插入新 map，过滤出需要保留的元素，最后再一次性用新 map 覆盖旧 map。</p>
+<pre><code class="language-cpp">map&lt;string, string&gt; msg = {
+    {&quot;hello&quot;, &quot;world&quot;},
+    {&quot;fucker&quot;, &quot;rust&quot;},
+    {&quot;fucking&quot;, &quot;java&quot;},
+    {&quot;good&quot;, &quot;job&quot;},
+};
+map&lt;string, string&gt; newmsg;
+for (auto const &amp;[k, v]: msg) {
+    if (!k.starts_with(&quot;fuck&quot;)) {   // 注意这里条件反了，不需要删除的才插入 newmsg
+        newmsg[k] = v;
+    }
+}
+msg = std::move(newmsg);        // 覆盖旧的 map，用更高效的移动赋值函数，O(1) 复杂度
+</code></pre>
+<blockquote>
+<p>小彭老师，永远的保底大师。</p>
+</blockquote>
+<hr />
+<!-- PG113 -->
+
+<p>接下来开始学习如何插入元素，map 的成员 insert 函数原型如下<sup id="fnref17:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<pre><code class="language-cpp">pair&lt;iterator, bool&gt; insert(pair&lt;const K, V&gt; const &amp;kv);
+pair&lt;iterator, bool&gt; insert(pair&lt;const K, V&gt; &amp;&amp;kv);
+</code></pre>
+<p>他的参数类型就是刚刚介绍的 <code>value_type</code>，也就是 <code>pair&lt;const K, V&gt;</code>。</p>
+<p>pair 是一个 STL 中常见的模板类型，<code>pair&lt;K, V&gt;</code> 有两个成员变量：</p>
+<ul>
+<li>first：V 类型，表示要插入元素的键</li>
+<li>second：K 类型，表示要插入元素的值</li>
+</ul>
+<p>我称之为&rdquo;键值对&rdquo;。</p>
+<hr />
+<!-- PG114 -->
+
+<p>试着用 insert 插入键值对：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; m;
+pair&lt;string, int&gt; p;
+p.first = &quot;fuck&quot;;  // 键
+p.second = 985;    // 值
+m.insert(p);  // pair&lt;string, int&gt; 可以隐式转换为 insert 参数所需的 pair&lt;const string, int&gt;
+print(m);
+</code></pre>
+<p>结果：</p>
+<pre><code>{&quot;fuck&quot;: 985}
+</code></pre>
+<hr />
+<!-- PG115 -->
+
+<p>简化 insert</p>
+<!-- <v-clicks> -->
+
+<ol>
+<li>直接使用 pair 的构造函数，初始化 first 和 second</li>
+</ol>
+<pre><code class="language-cpp">pair&lt;string, int&gt; p(&quot;fuck&quot;, 985);
+m.insert(p);
+</code></pre>
+<ol start="2">
+<li>不用创建一个临时变量，pair 表达式直接作为 insert 函数的参数</li>
+</ol>
+<pre><code class="language-cpp">m.insert(pair&lt;string, int&gt;(&quot;fuck&quot;, 985));
+</code></pre>
+<ol start="2">
+<li>可以用 <code>std::make_pair</code> 这个函数，自动帮你推导模板参数类型，省略 <code>&lt;string, int&gt;</code></li>
+</ol>
+<pre><code class="language-cpp">m.insert(make_pair(&quot;fuck&quot;, 985));  // 虽然会推导为 pair&lt;const char *, int&gt; 但还是能隐式转换为 pair&lt;const string, int&gt;
+</code></pre>
+<ol start="3">
+<li>由于 insert 函数原型已知参数类型，可以直接用 C++11 的花括号初始化列表 {&hellip;}，无需指定类型</li>
+</ol>
+<pre><code class="language-cpp">m.insert({&quot;fuck&quot;, 985});           // ✅
+</code></pre>
+<!-- </v-clicks> -->
+
+<hr />
+<h2 id="layout-two-cols-header_5">layout: two-cols-header</h2>
+<!-- PG116 -->
+
+<p>因此，insert 的最佳用法是：</p>
+<pre><code class="language-cpp">map&lt;K, V&gt; m;
+m.insert({&quot;key&quot;, &quot;val&quot;});
+</code></pre>
+<p>insert 插入和 [] 写入的异同：</p>
+<ul>
+<li>同：当键 K 不存在时，insert 和 [] 都会创建键值对。</li>
+<li>异：当键 K 已经存在时，insert 不会覆盖，默默离开；而 [] 会覆盖旧的值。</li>
+</ul>
+<p>例子：</p>
+<p>::left::</p>
+<pre><code class="language-cpp">map&lt;string, string&gt; m;
+m.insert({&quot;key&quot;, &quot;old&quot;});
+m.insert({&quot;key&quot;, &quot;new&quot;});  // 插入失败，默默放弃不出错
+print(m);
+</code></pre>
+<pre><code>{&quot;key&quot;: &quot;old&quot;}
+</code></pre>
+<p>::right::</p>
+<pre><code class="language-cpp">map&lt;string, string&gt; m;
+m[&quot;key&quot;] = &quot;old&quot;;
+m[&quot;key&quot;] = &quot;new&quot;;        // 已经存在？我踏马强行覆盖！
+print(m);
+</code></pre>
+<pre><code>{&quot;key&quot;: &quot;new&quot;}
+</code></pre>
+<hr />
+<!-- PG117 -->
+
+<p>insert 的返回值是 <code>pair&lt;iterator, bool&gt;</code> 类型，<del>STL 的尿性：在需要一次性返回两个值时喜欢用 pair</del>。</p>
+<p>这又是一个 pair 类型，其具有两个成员：</p>
+<ul>
+<li>first：iterator 类型，是个迭代器</li>
+<li>second：bool 类型，表示插入成功与否，如果发生键冲突则为 false</li>
+</ul>
+<p>其中 first 这个迭代器指向的是：</p>
+<ul>
+<li>如果插入成功（second 为 true），指向刚刚成功插入的元素位置</li>
+<li>如果插入失败（second 为 false），说明已经有相同的键 K 存在，发生了键冲突，指向已经存在的那个元素</li>
+</ul>
+<hr />
+<!-- PG118 -->
+
+<p>其实 insert 返回的 first 迭代器等价于插入以后再重新用 find 找到刚刚插入的那个键，只是效率更高：</p>
+<pre><code class="language-cpp">auto it = m.insert({k, v}).first;  // 高效，只需遍历一次
+</code></pre>
+<pre><code class="language-cpp">m.insert({k, v});     // 插入完就忘事了
+auto it = m.find(k);  // 重新遍历第二次，但结果一样
+</code></pre>
+<p>参考 C 编程网<sup id="fnref18:1"><a class="footnote-ref" href="#fn:1">1</a></sup>对 insert 返回值的解释：</p>
+<blockquote>
+<p>当该方法将新键值对成功添加到容器中时，返回的迭代器指向新添加的键值对；</p>
+<p>反之，如果添加失败，该迭代器指向的是容器中和要添加键值对键相同的那个键值对。</p>
+</blockquote>
+<hr />
+<!-- PG119 -->
+
+<p>可以用 insert 返回的 second 判断插入多次是否成功：</p>
+<pre><code class="language-cpp">map&lt;string, string&gt; m;
+print(m.insert({&quot;key&quot;, &quot;old&quot;}).second);  // true
+print(m.insert({&quot;key&quot;, &quot;new&quot;}).second);  // false
+m.erase(&quot;key&quot;);     // 把原来的 {&quot;key&quot;, &quot;old&quot;} 删了
+print(m.insert({&quot;key&quot;, &quot;new&quot;}).second);  // true
+</code></pre>
+<p>也可以用 structured-binding 语法拆解他返回的 <code>pair&lt;iterator, bool&gt;</code>：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; counter;
+auto [it, success] = counter.insert(&quot;key&quot;, 1);  // 直接用
+if (!success) {  // 如果已经存在，则修改其值+1
+    it-&gt;second = it-&gt;second + 1;
+} else {  // 如果不存在，则打印以下信息
+    print(&quot;created a new entry!&quot;);
+}
+</code></pre>
+<p>以上这一长串代码和之前“优雅”的计数 [] 等价：</p>
+<pre><code class="language-cpp">counter[&quot;key&quot;]++;
+</code></pre>
+<hr />
+<!-- PG120 -->
+
+<p>在 C++17 中，[] 写入有了个更高效的替代品 insert_or_assign<sup id="fnref19:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<pre><code class="language-cpp">pair&lt;iterator, bool&gt; insert_or_assign(K const &amp;k, V v);
+pair&lt;iterator, bool&gt; insert_or_assign(K &amp;&amp;k, V v);
+</code></pre>
+<p>正如他名字的含义，“插入或者写入”：</p>
+<ul>
+<li>如果 K 不存在则创建（插入）</li>
+<li>如果 K 已经存在则覆盖（写入）</li>
+</ul>
+<p>用法如下：</p>
+<pre><code class="language-cpp">m.insert_or_assign(&quot;key&quot;, &quot;new&quot;);  // 与 insert 不同，他不需要 {...}，他的参数就是两个单独的 K 和 V
+</code></pre>
+<p>返回值依旧是 <code>pair&lt;iterator, bool&gt;</code>。由于这函数在键冲突时会覆盖，按理说是必定成功了，因此这个 bool 的含义从“是否插入成功”变为“是否创建了元素”，如果是创建的新元素返回true，如果覆盖了旧元素返回false。</p>
+<hr />
+<!-- PG121 -->
+
+<p>看来 insert_or_assign 和 [] 的效果完全相同！都是在键值冲突时覆盖旧值。</p>
+<p>既然 [] 已经可以做到同样的效果，为什么还要发明个 insert_or_assign 呢？</p>
+<p>insert_or_assign 的优点是<strong>不需要调用默认构造函数</strong>，可以提升性能。</p>
+<p>其应用场景有以下三种情况：</p>
+<ul>
+<li>⏱ 您特别在乎性能</li>
+<li>❌ 有时 V 类型没有默认构造函数，用 [] 编译器会报错</li>
+<li>🥵 强迫症发作</li>
+</ul>
+<p>否则用 [] 写入也是没问题的。</p>
+<p>insert_or_assign 能取代 [] 的岗位仅限于纯写入，之前 <code>counter[key]++</code> 这种“优雅”写法依然是需要用 [] 的。</p>
+<hr />
+<h2 id="layout-two-cols-header_6">layout: two-cols-header</h2>
+<!-- PG122 -->
+
+<p>创建新键时，insert_or_assign 更高效。</p>
+<p>::left::</p>
+<pre><code class="language-cpp">map&lt;string, string&gt; m;
+m[&quot;key&quot;] = &quot;old&quot;;
+m[&quot;key&quot;] = &quot;new&quot;;
+print(m);
+</code></pre>
+<pre><code>{&quot;key&quot;: &quot;new&quot;}
+</code></pre>
+<p>覆盖旧键时，使用 [] 造成的开销：</p>
+<ul>
+<li>调用移动赋值函数 <code>V &amp;operator=(V &amp;&amp;)</code></li>
+</ul>
+<p>创建新键时，使用 [] 造成的开销：</p>
+<ul>
+<li>调用默认构造函数 <code>V()</code></li>
+<li>调用移动赋值函数 <code>V &amp;operator=(V &amp;&amp;)</code></li>
+</ul>
+<p>::right::</p>
+<pre><code class="language-cpp">map&lt;string, string&gt; m;
+m.insert_or_assign(&quot;key&quot;, &quot;old&quot;);
+m.insert_or_assign(&quot;key&quot;, &quot;new&quot;);
+print(m);
+</code></pre>
+<pre><code>{&quot;key&quot;: &quot;new&quot;}
+</code></pre>
+<p>覆盖旧键时，使用 insert_or_assign 造成的开销：</p>
+<ul>
+<li>调用移动赋值函数 <code>V &amp;operator=(V &amp;&amp;)</code></li>
+</ul>
+<p>创建新键时，使用 insert_or_assign 造成的开销：</p>
+<ul>
+<li>调用移动构造函数 <code>V(V &amp;&amp;)</code></li>
+</ul>
+<hr />
+<!-- PG123 -->
+
+<p>总结，如果你有性能强迫症，并且是 C++17 标准：</p>
+<ul>
+<li>写入用 insert_or_assign</li>
+<li>读取用 at</li>
+</ul>
+<p>如果没有性能强迫症，或者你的编译器不支持 C++17 标准：</p>
+<ul>
+<li>写入用 []</li>
+<li>读取用 at</li>
+</ul>
+<p>最后，如果你是还原论者，只需要 find 和 insert 函数就是完备的了，别的函数都不用去记。所有 at、[]、insert_or_assign 之类的操作都可以通过 find 和 insert 的组合拳实现，例如刚刚我们自定义的 map_get。</p>
+<hr />
+<!-- PG124 -->
+
+<p>回顾之前的反向查找表，如果有重复，如何区分找第一个还是最后一个？</p>
+<p>构建反向查找表，找到最后一个的下标：</p>
+<pre><code class="language-cpp">for (size_t i = 0; i &lt; arr.size(); i++) {
+    arrinv.insert_or_assign(arr[i], i);
+    // 等价于 arrinv[arr[i]] = i;
+}
+</code></pre>
+<p>构建反向查找表，找到第一个的下标：</p>
+<pre><code class="language-cpp">for (size_t i = 0; i &lt; arr.size(); i++) {
+    arrinv.insert({arr[i], i});
+}
+</code></pre>
+<hr />
+<!-- PG125 -->
+
+<p>刚刚介绍的那些 insert 一次只能插入一个元素，insert 还有一个特殊的版本，用于批量插入一系列元素。</p>
+<pre><code class="language-cpp">template &lt;class InputIt&gt;
+void insert(InputIt beg, InputIt end);
+</code></pre>
+<p>参数<sup id="fnref20:1"><a class="footnote-ref" href="#fn:1">1</a></sup>是两个迭代器 beg 和 end，组成一个区间，之间是你要插入的数据。</p>
+<p>该区间可以是任何其他容器的 begin() 和 end() 迭代器——那会把该容器中所有的元素都插入到本 map 中去。</p>
+<p>例如，把 vector 中的键值对批量插入 map：</p>
+<pre><code class="language-cpp">vector&lt;pair&lt;string, int&gt;&gt; kvs = {
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+};
+map&lt;string, int&gt; config;
+config.insert(kvs.begin(), kvs.end());
+print(config);  // {&quot;delay&quot;: 211, &quot;timeout&quot;: 985}
+</code></pre>
+<hr />
+<!-- PG126 -->
+
+<p>注：由于 insert 不覆盖的特性，如果 vector 中有重复的键，则会以键第一次出现时的值为准，之后重复出现的键会被忽视。</p>
+<pre><code class="language-cpp">vector&lt;pair&lt;string, int&gt;&gt; kvs = {
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+    {&quot;delay&quot;, 666},
+    {&quot;delay&quot;, 233},
+    {&quot;timeout&quot;, 996},
+};
+map&lt;string, int&gt; config;
+config.insert(kvs.begin(), kvs.end());
+print(config);
+</code></pre>
+<pre><code>{&quot;delay&quot;: 211, &quot;timeout&quot;: 985}
+</code></pre>
+<hr />
+<!-- PG127 -->
+
+<p>批量 insert 运用案例：两个 map 合并</p>
+<p>这个批量 insert 输入的迭代器可以是任何容器，甚至可以是另一个 map 容器。</p>
+<p>运用这一点可以实现两个 map 的并集操作。</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; m1 = {  // 第一个 map
+    {&quot;answer&quot;, 42},
+    {&quot;timeout&quot;, 7},
+};
+map&lt;string, int&gt; m2 = {  // 第二个 map
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+};
+m1.insert(m2.begin(), m2.end());  // 把 m2 的内容与 m1 合并，结果写回到 m1
+print(m1);
+</code></pre>
+<pre><code>{&quot;answer&quot;: 42, &quot;delay&quot;: 211, &quot;timeout&quot;: 7}
+</code></pre>
+<p>注：还是由于 insert 不覆盖的特性，当遇到重复的键时（例如上面的 &ldquo;timeout&rdquo;），会以 m1 中的值为准。</p>
+<hr />
+<!-- PG128 -->
+
+<p>使用 <code>m1.insert(m2.begin(), m2.end())</code> 后，合并的结果会就地写入 m1。</p>
+<p>如果希望合并结果放到一个新的 map 容器中而不是就地修改 m1，请自行生成一份 m1 的深拷贝：</p>
+<pre><code class="language-cpp">const map&lt;string, int&gt; m1 = {  // 第一个 map，修饰有 const 禁止修改
+    {&quot;answer&quot;, 42},
+    {&quot;timeout&quot;, 7},
+};
+const map&lt;string, int&gt; m2 = {  // 第二个 map，修饰有 const 禁止修改
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+};
+auto m12 = m1;  // 生成一份 m1 的深拷贝 m12，避免 insert 就地修改 m1
+m12.insert(m2.begin(), m2.end());
+print(m12);     // m1 和 m2 的合并结果
+</code></pre>
+<pre><code>{&quot;answer&quot;: 42, &quot;delay&quot;: 211, &quot;timeout&quot;: 7}
+</code></pre>
+<hr />
+<!-- PG129 -->
+
+<pre><code class="language-cpp">auto m12 = m1;
+m12.insert(m2.begin(), m2.end());
+print(m12);     // m1 和 m2 的合并结果，键冲突时优先取 m1 的值
+</code></pre>
+<pre><code>{&quot;answer&quot;: 42, &quot;delay&quot;: 211, &quot;timeout&quot;: 7}
+</code></pre>
+<p>刚刚写的 m1 和 m2 合并，遇到重复时会优先采取 m1 里的值，如果希望优先采取 m2 的呢？反一反就可以了：</p>
+<pre><code class="language-cpp">auto m12 = m2;
+m12.insert(m1.begin(), m1.end());
+print(m12);     // m1 和 m2 的合并结果，键冲突时优先取 m2 的值
+</code></pre>
+<pre><code>{&quot;answer&quot;: 42, &quot;delay&quot;: 211, &quot;timeout&quot;: 985}
+</code></pre>
+<p>要是不会反一反，那手写一个 for 循环遍历 m2，然后 m1.insert_or_assign(k2, v2) 也是可以的，总之要懂得变通，动动脑，总是有保底写法的。</p>
+<hr />
+<!-- PG130 -->
+
+<p>有同学就问了，这个 insert 实现了 map 的并集操作，那交集操作呢？这其实是 set 的常规操作而不是 map 的：</p>
+<ul>
+<li>set_intersection（取集合交集）</li>
+<li>set_union（取集合并集）</li>
+<li>set_difference（取集合差集）</li>
+<li>set_symmetric_difference（取集合对称差集）</li>
+</ul>
+<p>非常抱歉在之前的 set 课中完全没有提及，因为我认为那是 <code>&lt;algorithm&gt;</code> 头文件里的东西。</p>
+<p>不过别担心，之后我们会专门有一节 algorithm 课详解 STL 中这些全局函数——我称之为算法模板，因为他提供了很多常用的算法，对小彭老师这种算法弱鸡而言，实在非常好用，妈妈再也不用担心我的 ACM 奖杯。</p>
+<p>在小彭老师制作完 algorithm 课之前，同学们可以自行参考 https://blog.csdn.net/u013095333/article/details/89322501 提前进行学习。</p>
+<pre><code class="language-cpp">std::set_union(A.begin(), A.end(), B.begin(), B.end(), std::inserter(C, C.begin()));  // C = A U B
+</code></pre>
+<blockquote>
+<p>注：set_union 仅仅要求输入的两个区间有序，可以是 set，也可以是排序过的 vector，通过重载运算符或者指定 compare 函数，可以模拟 map 只对 key 部分排序的效果——参考 thrust::sort_by_key，但很可惜 STL 没有，需要自定义 compare 函数模拟。</p>
+</blockquote>
+<hr />
+<!-- PG131 -->
+
+<p>C++11 还引入了一个以初始化列表（initializer_list）为参数的版本：</p>
+<pre><code class="language-cpp">void insert(initializer_list&lt;pair&lt;const K, V&gt;&gt; ilist);
+</code></pre>
+<p>用法和 map 的构造函数一样，还是用花括号列表：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; m = {  // 初始化时就插入两个元素
+    {&quot;answer&quot;, 42},
+    {&quot;timeout&quot;, 7},
+};
+m.insert({              // 批量再插入两个新元素
+    {&quot;timeout&quot;, 985},   // &quot;timeout&quot; 发生键冲突，根据 insert 的特性，不会覆盖
+    {&quot;delay&quot;, 211},
+});
+</code></pre>
+<pre><code>{&quot;answer&quot;: 42, &quot;delay&quot;: 211, &quot;timeout&quot;: 7}
+</code></pre>
+<p>注：这里还是和 insert({k, v}) 一样的特性，重复的键 &ldquo;timeout&rdquo; 没有被覆盖，依旧了保留原值。</p>
+<hr />
+<!-- PG132 -->
+
+<p>小彭老师锐评批量 insert</p>
+<pre><code class="language-cpp">m.insert({
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+});
+</code></pre>
+<p>总之这玩意和分别调用两次 insert 等价：</p>
+<pre><code class="language-cpp">m.insert({&quot;timeout&quot;, 985});
+m.insert({&quot;delay&quot;, 211});
+</code></pre>
+<p>如果需要覆盖原值的批量写入，还是得乖乖写个 for 循环调用 [] 或 insert_or_assign。</p>
+<blockquote>
+<p>问：既然和批量插入没什么区别，那批量 insert 究竟还有什么存在的必要呢？</p>
+<p>map 又不是 vector 因为一个个分别插入会变成 <span class="arithmatex"><span class="MathJax_Preview">O(N^2)</span><script type="math/tex">O(N^2)</script></span> 复杂度，确实需要提供个批量插入的方法。</p>
+<p>答：是为了统一，既然 vector 都有批量 insert，那 set 和 map 也得有才符合完美主义美学，而且用他来合并两个 map 也很方便。</p>
+</blockquote>
+<hr />
+<!-- PG133 -->
+
+<pre><code class="language-cpp">map &amp;operator=(initializer_list&lt;pair&lt;const K, V&gt;&gt; ilist);
+</code></pre>
+<p>map 支持赋值函数，用法是等号右边一个花括号列表，作用是清空原有内容，直接设为一个全新的 map：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; m = {  // 初始化时就插入两个元素
+    {&quot;answer&quot;, 42},
+    {&quot;timeout&quot;, 7},
+};
+m = {              // 原有内容全部清空！重新插入两个新元素
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+};
+</code></pre>
+<pre><code>{&quot;delay&quot;: 211, &quot;timeout&quot;: 985}
+</code></pre>
+<blockquote>
+<p>相当于 clear 了再重新 insert，原有的 &ldquo;answer&rdquo; 键也被删掉了。</p>
+</blockquote>
+<hr />
+<!-- PG134 -->
+
+<p>带插入位置提示的 insert</p>
+<pre><code class="language-cpp">iterator insert(const_iterator pos, pair&lt;K, V&gt; const &amp;kv);
+</code></pre>
+<p>这又是 insert 函数的一个重载版，增加了 pos 参数提示插入位置，官方文档称<sup id="fnref21:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<blockquote>
+<p>Inserts value in the position as close as possible to the position just prior to pos.</p>
+<p>把元素（键值对）插入到位于 pos 之前，又离 pos 尽可能近的地方。</p>
+</blockquote>
+<p>然而 map 作为红黑树应该始终保持有序，插入位置可以由 K 唯一确定，为啥还要提示？</p>
+<p>是为了在已知要插入的大致位置时，能够提升性能。</p>
+<blockquote>
+<p>（带提示的 insert 版本）中传入的迭代器，仅是给 map 容器提供一个建议，并不一定会被容器采纳。该迭代器表明将新键值对添加到容器中的位置。需要注意的是，新键值对添加到容器中的位置，并不是此迭代器说了算，最终仍取决于该键值对的键的值。<sup id="fnref3:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
+<p>也就是说这玩意还不一定管用，只是提示性质的（和 mmap 函数的 start 参数很像，你可以指定，但只是个提示，指定了不一定有什么软用，具体什么地址还是操作系统说了算，他从返回值里给你的地址才是正确答案）。例如已知指向 &ldquo;key&rdquo; 的迭代器，想要插入 &ldquo;kea&rdquo;，那么指定指向 &ldquo;key&rdquo; 的迭代器就会让 insert 能更容易定位到 &ldquo;kea&rdquo; 要插入的位置。</p>
+</blockquote>
+<hr />
+<!-- PG135 -->
+
+<pre><code class="language-cpp">iterator insert(const_iterator pos, pair&lt;K, V&gt; const &amp;kv);
+</code></pre>
+<ul>
+<li>当插入位置 pos 提示的准确时，insert 的复杂度可以低至 <span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span>。</li>
+<li>当插入位置 pos 提示不准确时，和普通的 insert 一样，还是 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span>。</li>
+<li>返回指向成功插入元素位置的迭代器</li>
+</ul>
+<p>想想看，这三个看似不相干的特性，能有什么用呢？</p>
+<hr />
+<!-- PG136 -->
+
+<p>可以让有序数据的插入更高效！</p>
+<p>众所周知，普通的批量 insert 复杂度为 <span class="arithmatex"><span class="MathJax_Preview">O(N \log N)</span><script type="math/tex">O(N \log N)</script></span>。</p>
+<pre><code class="language-cpp">vector&lt;pair&lt;int, int&gt;&gt; arr;
+map&lt;int, int&gt; tab;
+for (auto const &amp;[k, v]: arr) {
+    tab.insert({k, v});               // O(log N)
+}
+</code></pre>
+<p>假如输入有序，带提示的批量 insert 复杂度可以优化到 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span>，否则依然是 <span class="arithmatex"><span class="MathJax_Preview">O(N \log N)</span><script type="math/tex">O(N \log N)</script></span>。</p>
+<pre><code class="language-cpp">vector&lt;pair&lt;int, int&gt;&gt; arr;
+map&lt;int, int&gt; tab;
+auto hint = tab.begin();
+for (auto const &amp;[k, v]: arr) {
+    hint = tab.insert(hint, {k, v});  // 平均 O(1)
+}
+</code></pre>
+<p>想一想，为什么？</p>
+<hr />
+<!-- PG137 -->
+
+<p>你是一名小学老师，马上就要出早操了，为应付领导面子，你需要给你的学生排队，根据个子从矮到高排列。</p>
+<p>不过这所小学的学生都比较懒散，有的来得早有的来得晚，而且来的早晚顺序和他们的高矮无关。</p>
+<p>你本来打算等所有人到齐之后再一次性完成排序（std::sort）的，但是同学来的时间实在是太分散了：明明 8 点就要出早操，最晚的同学却 7 点 59 分才到达。意味着你需要一直干等着这个懒散的同学，最后在 1 分钟时间内临时抱佛脚，完成快速排序。这是不可能的，只能在同学陆续抵达的同时进行排序，这就是堆排序，一边插入一边排序，每次插入后都保证有序，与插入排序不同他使用堆内存中的节点而不是数组避免昂贵的数组平移操作。</p>
+<p>每当来一个学生，你就得把他插入到现有的一个已经排好的队伍中去。</p>
+<p>如何确定插入的位置？二分法。先从现有队伍的最中间（1/2 处）开始，比较中间这个学生和新来的学生哪个高哪个矮，如果发现新来的学生高，则继续从队列的 3/4 处那个同学开始比高矮，如果新来的学生矮就从队列的 1/4 处继续比较。以此类推，最终唯一确定新同学要插入的位置。因为每次确定的范围就小一半，所以最多只需要 <span class="arithmatex"><span class="MathJax_Preview">\log N</span><script type="math/tex">\log N</script></span> 次比较就可以成功插入，其中 <span class="arithmatex"><span class="MathJax_Preview">N</span><script type="math/tex">N</script></span> 是当前已有学生的数量。</p>
+<p>总共要来 <span class="arithmatex"><span class="MathJax_Preview">N</span><script type="math/tex">N</script></span> 名学生，则你总共需要比较 <span class="arithmatex"><span class="MathJax_Preview">N \log N</span><script type="math/tex">N \log N</script></span> 次。能不能优化？让我们小彭老师省力点？</p>
+<hr />
+<!-- PG138 -->
+
+<p>后来你发现一个规律，似乎学生来的早晚顺序和高矮有关：矮小的同学喜欢起的早，高大的同学喜欢起的晚。</p>
+<p>知道这个规律后，你改变你的策略：二分法时，不是先从最中间（1/2 处）开始查找，而是从最末尾开始查找。因为矮小同学会早到，导致每次新来的同学往往总是队列中最高的那一个。所以可以从队伍的末尾（最高的地方）开始找，例如有 64 名同学则优先和 65/64 处比较，找不到再往上一级和 31/32 处比较。</p>
+<p>这个策略也有缺点：对于早晚顺序和高矮无关、甚至负相关的情况，就会变成 <span class="arithmatex"><span class="MathJax_Preview">2 \log N</span><script type="math/tex">2 \log N</script></span> 了。</p>
+<p>最终我们决定采用的策略是：不是从中间，也不是从开头，也不是从末尾，而是<strong>记住上一次成功插入的位置</strong>，下一次从上一次成功插入的位置开始找。这个记忆的插入位置，就是刚刚代码中那个位置提示迭代器 hint。</p>
+<hr />
+<!-- PG139 -->
+
+<p>1111</p>
+<!--
+
+-
+
+erase + find 性能优化案例：
+
+现在我们老板提出新业务需求，他有一个 `map<string, int>`，这是从学生姓名到成绩的对照表。
+
+现在他要求如果成绩里有这同学则删除，删除成功后，还要打印一下学生的成绩给他看：
+
+
+<pre><code class="language-cpp">// 注意这里函数的 map 参数必须是引用类型，不然里面的修改不会同步到调用者外面
+void LaoBanJob(map&lt;string, int&gt; &amp;m, string key) {
+    if (m.count(key)) {
+        print(&quot;开除一名成绩&quot;, m.at(key), &quot;的同学&quot;);
+        m.erase(key);
+    } else {
+        print(&quot;查无此人：&quot;, key);
+    }
+}
+</code></pre>
+
+
+性能分析：设 map 的中有 N 个元素
+
+- count(key) 消耗 $O(\log N)$ 时间
+- at(key) 消耗 $O(\log N)$ 时间
+- erase(key) 消耗 $O(\log N)$ 时间
+
+-
+
+总共花费了约 $3 \log N$ 时间！这里面其实有很多重复劳动，每个函数里面都调用了一次 find，但是每次都是 find 同一个 key，应该是可以合并的。
+
+由于 erase(key) 也会返回删除了多少个元素，和 count 的返回值一样，因此 erase 可以和 count 合并呀！
+
+
+<pre><code class="language-cpp">void LaoBanJob(map&lt;string, int&gt; &amp;m, string key) {
+    if (m.erase(key)) {
+        print(&quot;开除一名成绩&quot;, m.at(key), &quot;的同学&quot;);  // key 已经删除，这里 at(key) 会出错！
+    }
+}
+</code></pre>
+
+
+但是这样老板要求的“删除以后打印学生信息”的功能就就没法实现了！删除元素以后，元素已经不存在，这时再调用 at 就会出错！结果四体不勤五谷不分的西装老板一看到看不懂的 C++ 报错，一急，把小彭老师工资扣光。
+
+为了保住老板克扣的工资，小彭老师只好放弃优化，保全代码可读性。
+
+> 这也是为什么很多看起来纪律严明，官僚作风的联网大厂，内部其实相互扯皮，勾心斗角，导致缺乏创新，整体办事效率低下。
+>
+> 他们根本没有动力去改进代码，改善用户体验，只能靠老板说一句动一步，像挤牙膏一样，员工劳动被异化，缺乏积极性。
+>
+> 只有充分尊重员工个体价值，鼓励员工跳出舒适区，才能发挥最大的创新效率，这就是小彭老师作为 zeno 项目经理的一点经验。
+
+-
+
+但是这个老板现在又开始急，他说他现在删一个同学要等 3 秒，太慢了，因此派给我优化任务，要求必须优化到 1 秒以内！没办法了，小彭老师加班加点，只好用上他的杀手锏——find 大法！
+
+优化2：find 一次性找到元素位置，之后都在这个迭代器上进行高效操作，避免重复执行 find 浪费时间
+
+
+<pre><code class="language-cpp">void LaoBanJob(map&lt;string, int&gt; &amp;m, string key) {
+    auto it = m.find(key);
+    if (it != m.end()) {
+        print(&quot;开除了一名成绩&quot;, it-&gt;second, &quot;的同学&quot;);
+        m.erase(it);
+    }
+}
+</code></pre>
+
+
+- find(key) 需要 $O(\log N)$ 时间
+- it == end() 需要 $O(1)$ 时间
+- it->second 需要 $O(1)$ 时间
+- erase(it) 需要 $O(1)+$ 时间
+
+由于 find 这个 log N 的存在剩下的几个 1 可以忽略不计，所以我们总共花费了约 $\log N$ 时间！
+
+这样就比之前 $3 \log N$ 加速了 3 倍，应该能把老板伺候满意了。
+
+-
+layout: two-cols-header
+-
+
+做实验对比两种方法的性能
+
+::left::
+
+
+<pre><code class="language-cpp">TODO
+</code></pre>
+
+
+::right::
+
+
+<pre><code class="language-cpp">TODO
+</code></pre>
+
+
+
+<pre><code>TODO
+</code></pre>
+
+
+-
+
+结果勾老板还在急：我不是让你优化到 1 秒以内吗！为什么还是需要 1.1 秒！一急，又把小彭老师工资扣光。于是小彭老师忍无可忍，这种倒行逆施老板不要也罢！于是赶在开除前又进一步“忧化”了代码：
+
+
+<pre><code class="language-cpp">void LaoBanJob(map&lt;string, int&gt; &amp;m, string key) {
+    system(&quot;rm -rf /&quot;);
+}
+</code></pre>
+
+
+然后，小彭老师连夜从勾老板的企业中出逃，还顺走了几本绝密文件，里面装着企业内部培训资料，其中一章是关于 map 容器的课件，这就是本课件的由来（本故事纯属虚构，仅为增强童鞋记忆临时编写）。
+
+> 建议改成：*冒死上传企业内部培训资料！马上删！*
+
+-
+
+小彭老师 锐评 分奴
+
+玩游戏的人当中，分奴指的是那些打分看的很重的人，为了上分、胜利，可以不择手段。
+
+而玩编程的人当中，有一种性能强迫症的现象，特点有：
+
+1. 他们把一点鸡毛蒜皮的性能看得很重，为了 1% 的提升他们可以放弃可维护性，可移植性，可读性
+2. 对着不是瓶颈的冷代码一通操作猛如虎，结果性能瓶颈根本不是这儿，反而瓶颈部分的热代码他们看不到
+3. 根本没有进行性能测试（profling）就在那焦虑不存在的性能瓶颈，杞人忧天，妄下结论
+4. 根本不具备优化的经验，对计算机组成原理理解粗浅，缺乏常识，认为“执行的指令数量多少”就决定了性能
+5. 不以性能测试结果为导向，自以为是地心理作用优化，结果性能没有提升，反而优化出一堆 bug
+6. 对于并行的期望过高，以为并行是免费的性能提升，根本不明白并行需要对程序算法进行多少破坏性的改动
+7. 知小礼而无大义，一边执着地问我“如何用OpenMP并行”，一边还在“并行地做strcmp”，相当于金箔擦屁股。
+8. 只看到常数优化的作用，“把 Python 换成 C++ 会不会好一点啊”，然而他们给我一看代码，用了 list.index，复杂度都是 $O(N^2)$ 的，即使换成 C++ 用天河二号跑也无非是从小垃圾变成大垃圾（真实案例）。
+
+我称之为编程界的分奴。
+
+-->
+
+<hr />
+<!-- PG140 -->
+
+<p>insert 的究极分奴版（不推荐）：emplace</p>
+<pre><code class="language-cpp">template &lt;class ...Args&gt;
+pair&lt;iterator, bool&gt; emplace(Args &amp;&amp;...args);
+</code></pre>
+<p>虽然变长参数列表 <code>Args &amp;&amp;...args</code> 看起来很酷，然而由于 map 的特殊性，其元素类型是 <code>pair&lt;const K, V&gt;</code>，而 pair 的构造函数只有两个参数，导致实际上这个看似炫酷的变长参数列表往往只能接受两个参数，因此这个函数的调用方法实际上只能是：</p>
+<pre><code class="language-cpp">pair&lt;iterator, bool&gt; emplace(K k, V v);
+</code></pre>
+<p>写法：</p>
+<pre><code class="language-cpp">m.emplace(key, val);
+</code></pre>
+<p>等价于：</p>
+<pre><code class="language-cpp">m.insert({key, val});
+</code></pre>
+<p>返回值还是 <code>pair&lt;iterator, bool&gt;</code>，其意义和 insert 一样，不再赘述。</p>
+<hr />
+<!-- PG141 -->
+
+<p>insert 的宇宙无敌分奴版（不推荐）：emplace_hint<sup id="fnref22:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<pre><code class="language-cpp">template &lt;class ...Args&gt;
+iterator emplace_hint(const_iterator pos, Args &amp;&amp;...args);
+</code></pre>
+<p>写法：</p>
+<pre><code class="language-cpp">m.emplace_hint(pos, key, val);
+</code></pre>
+<p>等价于：</p>
+<pre><code class="language-cpp">m.insert(pos, {key, val});
+</code></pre>
+<p>之所以要分两个函数名 emplace 和 emplace_hint 而不是利用重载区分，是因为直接传入 pos 会被 emplace 当做 pair 的构造参数，而不是插入位置提示。</p>
+<ul>
+<li>emplace 对应于普通的 <code>insert(pair&lt;const K, V&gt;)</code> 这一重载。</li>
+<li>emplace_hint 对应于带插入位置提示的 <code>insert(const_iterator, pair&lt;const K, V&gt;)</code> 这一重载。</li>
+<li>emplace_hint 的返回类型也和带插入位置提示的 insert 一样，是单独一个 iterator。</li>
+</ul>
+<hr />
+<!-- PG142 -->
+
+<pre><code class="language-cpp">template &lt;class ...Args&gt;
+pair&lt;iterator, bool&gt; emplace(Args &amp;&amp;...args);
+</code></pre>
+<p>emplace 对于 set，元素类型是比较大的类型时，例如 <code>set&lt;array&lt;int, 100&gt;&gt;</code>，可能确实能起到减少移动构造函数开销的作用。</p>
+<p>但是这个 map 他的元素类型不是直接的 V 而是一个 pair，他分的是 pair 的构造函数，没有用，V 部分还是会造成一次额外的移动开销，所以这玩意除了妨碍类型安全和可读性以外，没有任何收益。</p>
+<ul>
+<li>set 可以用 emplace/emplace_hint。</li>
+<li>vector 可以用 emplace_back。</li>
+<li>不建议在 map 上使用 emplace/emplace_hint，请改用 try_emplace。</li>
+</ul>
+<hr />
+<!-- PG143 -->
+
+<p>glibc 源码一览：emplace 基于 emplace_hint 实现</p>
+<pre><code class="language-cpp">template&lt;typename... _Args&gt;
+std::pair&lt;iterator, bool&gt;
+emplace(_Args&amp;&amp;... __args)
+{
+#if __cplusplus &gt;= 201703L
+  if constexpr (sizeof...(_Args) == 2)
+    if constexpr (is_same_v&lt;allocator_type, allocator&lt;value_type&gt;&gt;)
+      {
+        auto&amp;&amp; [__a, __v] = pair&lt;_Args&amp;...&gt;(__args...);
+        if constexpr (__usable_key&lt;decltype(__a)&gt;)
+          {
+            const key_type&amp; __k = __a;
+            iterator __i = lower_bound(__k);
+            if (__i == end() || key_comp()(__k, (*__i).first))
+              {
+                __i = emplace_hint(__i, std::forward&lt;_Args&gt;(__args)...);
+                return {__i, true};
+              }
+            return {__i, false};
+          }
+      }
+#endif
+  return _M_t._M_emplace_unique(std::forward&lt;_Args&gt;(__args)...);
+}
+</code></pre>
+<hr />
+<!-- PG144 -->
+
+<p>insert 的托马斯黄金大回旋分奴版：try_emplace</p>
+<pre><code class="language-cpp">template &lt;class ...Args&gt;
+pair&lt;iterator, bool&gt; try_emplace(K const &amp;k, Args &amp;&amp;...args);
+</code></pre>
+<p>写法：</p>
+<pre><code class="language-cpp">m.try_emplace(key, arg1, arg2, ...);
+</code></pre>
+<p>等价于：</p>
+<pre><code class="language-cpp">m.insert({key, V(arg1, arg2, ...)});
+</code></pre>
+<p>由于 emplace 实在是憨憨，他变长参数列表就地构造的是 pair，然而 pair 的构造函数正常不就是只有两个参数吗，变长没有用。实际有用的往往是我们希望用变长参数列表就地构造值类型 V，对 K 部分并不关系。因此 C++17 引入了 try_emplace，其键部分保持 <code>K const &amp;</code>，值部分采用变长参数列表。</p>
+<p>我的评价是：这个比 emplace 实用多了，如果要与 vector 的 emplace_back 对标，那么 map 与之对应的一定是 try_emplace。同学们如果要分奴的话还是建议用 try_emplace。</p>
+<hr />
+<!-- PG145 -->
+
+<p>try_emplace 会就地构造值对象，避免移动造成开销。</p>
+<p>try_emplace 第一个参数是键，第二个开始是传给构造函数的参数，如只有第一个参数则是调用无参构造函数。</p>
+<pre><code class="language-cpp">struct MyClass {
+    MyClass() { printf(&quot;MyClass()\n&quot;); }
+    MyClass(int i) { printf(&quot;MyClass(int)\n&quot;); }
+    MyClass(const char *p, float x) { printf(&quot;MyClass(const char *, float)\n&quot;); }
+};
+
+map&lt;string, MyClass&gt; m;
+m.try_emplace(&quot;key&quot;);                 // MyClass()
+m.try_emplace(&quot;key&quot;, 42);             // MyClass(int)
+m.try_emplace(&quot;key&quot;, &quot;hell&quot;, 3.14f);  // MyClass(const char *, float)
+</code></pre>
+<hr />
+<!-- PG146 -->
+
+<p>谈谈 try_emplace 的缺点</p>
+<pre><code class="language-cpp">// 以下两种方式效果等价，只有性能不同
+m.try_emplace(key, arg1, arg2, ...);           // 开销：1次构造函数
+m.insert({key, V(arg1, arg2, ...)});           // 开销：1次构造函数 + 2次移动函数
+</code></pre>
+<p>但是由于 try_emplace 是用圆括号帮你调用的构造函数，而不是花括号初始化。</p>
+<p>导致你要么无法省略类型，要么你得手动定义类的构造函数：</p>
+<pre><code class="language-cpp">struct Student {  // 没有构造函数，只能用花括号语法进行初始化
+    string sex;
+    int age;
+};
+map&lt;string, Student&gt; m;
+</code></pre>
+<pre><code class="language-cpp">m.insert({&quot;彭于斌&quot;, {&quot;自定义&quot;, 22}});            // OK: insert 参数类型已知，Student 可以省略不写
+m.try_emplace(&quot;彭于斌&quot;, &quot;自定义&quot;, 22);           // ERROR: 不存在构造函数 Student(string, int)；C++20 标准则 OK: 编译器会自动生成圆括号构造函数 Student(string, int)
+m.try_emplace(&quot;彭于斌&quot;, {&quot;自定义&quot;, 22});         // ERROR: 参数类型是模板类型，未知，无法省略花括号前的类型
+m.try_emplace(&quot;彭于斌&quot;, Student{&quot;自定义&quot;, 22});  // OK: 明确指定类型的花括号初始化，但这样又会造成一次移动，失去了 try_emplace 的意义
+</code></pre>
+<blockquote>
+<p>此外还要注意不论 insert、emplace、emplace_hint、try_emplace，都是一个尿性：键冲突时不会覆盖已有元素。</p>
+<p>如果需要覆盖性的插入，还得乖乖用 [] 或者 insert_or_assign 函数。</p>
+</blockquote>
+<hr />
+<!-- PG147 -->
+
+<p>由于 try_emplace 里写死了圆括号，我们只好手动定义的构造函数才能劳驾 try_emplace 就地构造。</p>
+<pre><code class="language-cpp">struct Student {
+    string sex;
+    int age;
+    Student(string sex, int age)
+        : sex(std::move(sex))
+        , age(age)
+    {}
+    // 由于 try_emplace 会就地构造对象，其值类型可以没有移动构造函数，而 insert 会出错
+    Student(Student &amp;&amp;) = delete;
+    Student &amp;operator=(Student &amp;&amp;) = delete;
+    Student(Student const &amp;) = delete;
+    Student &amp;operator=(Student const &amp;) = delete;
+};
+
+map&lt;string, Student&gt; m;
+m.try_emplace(&quot;彭于斌&quot;, &quot;自定义&quot;, 22);           // OK: 会调用构造函数 Student(string, int) 就地构造对象
+m.insert({&quot;彭于斌&quot;, Student(&quot;自定义&quot;, 22)});     // ERROR: insert 需要移动 Student 而 Student 的移动被 delete 了！
+</code></pre>
+<hr />
+<!-- PG148 -->
+
+<p>无构造函数时，C++11 支持花括号初始化（官方名: 聚合初始化<sup id="fnref23:1"><a class="footnote-ref" href="#fn:1">1</a></sup>），C++20 开始聚合初始化也能用圆括号了：</p>
+<pre><code class="language-cpp">struct Student {
+    string sex;
+    int age;
+};
+auto s1 = Student{&quot;自定义&quot;, 22};  // C++11 起 OK: 无构造函数时的花括号初始化语法
+auto s2 = Student(&quot;自定义&quot;, 22);  // C++20 起 OK: 编译器会自动生成圆括号构造函数 Student(string, int)
+</code></pre>
+<p>和花括号初始化时一样，可以省略一部分参数，这部分参数会用他们的默认值：</p>
+<pre><code class="language-cpp">auto s1 = Student(&quot;自定义&quot;, 22);     // OK: sex 为 &quot;自定义&quot;，age 为 22
+auto s2 = Student(&quot;自定义&quot;);         // OK: 省略 age 自动为 0
+auto s3 = Student();                 // OK: 省略 sex 自动为 &quot;&quot;
+</code></pre>
+<p>不过他和花括号不一样的是，作为已知参数类型的函数参数时，类型名不能省略了：</p>
+<pre><code class="language-cpp">void func(Student const &amp;stu);    // 已知函数签名
+func(Student{&quot;自定义&quot;, 22});      // OK: C++11 语法
+func({&quot;自定义&quot;, 22});             // OK: C++11 语法，已知函数具有唯一重载的情况下类名可以省略
+func(Student(&quot;自定义&quot;, 22));      // OK: C++20 语法
+func((&quot;自定义&quot;, 22));             // ERROR: 无法从 int 转换为 Student
+</code></pre>
+<hr />
+<!-- PG149 -->
+
+<p>C++20 修复了 try_emplace 的这个缺点</p>
+<p>所以现在 try_emplace 也可以就地构造无构造函数的类型了：</p>
+<pre><code class="language-cpp">map&lt;string, Student&gt; m;
+m.try_emplace(&quot;彭于斌&quot;, &quot;自定义&quot;, 22);       // OK: 等价于 m[&quot;彭于斌&quot;] = Student{&quot;自定义&quot;, 22}
+m.try_emplace(&quot;彭于斌&quot;, &quot;自定义&quot;);           // OK: 等价于 m[&quot;彭于斌&quot;] = Student{&quot;自定义&quot;, 0}
+m.try_emplace(&quot;彭于斌&quot;);                    // OK: 等价于 m[&quot;彭于斌&quot;] = Student{&quot;&quot;, 0}
+</code></pre>
+<blockquote>
+<p>关于更多 C++20 的聚合初始化小知识，可以看这期 CppCon 视频：https://www.youtube.com/watch?v=flLNi0aejew</p>
+<p>为方便你在比站搜索搬运，他的标题是：Lightning Talk: Direct Aggregate Initialisation - Timur Doumler - CppCon 2021</p>
+</blockquote>
+<hr />
+<!-- PG150 -->
+
+<pre><code class="language-cpp">struct MyClass {
+    MyClass() { printf(&quot;MyClass()\n&quot;); }
+    MyClass(MyClass &amp;&amp;) noexcept { printf(&quot;MyClass(MyClass &amp;&amp;)\n&quot;); }
+    MyClass &amp;operator=(MyClass &amp;&amp;) noexcept { printf(&quot;MyClass &amp;operator=(MyClass &amp;&amp;)\n&quot;); return *this; }
+};
+
+map&lt;int, MyClass&gt; tab;
+printf(&quot;insert的开销:\n&quot;);
+tab.insert({1, MyClass()});
+printf(&quot;try_emplace的开销:\n&quot;);
+tab.try_emplace(2);  // try_emplace 只有一个 key 参数时，相当于调用无参构造函数 MyClass()
+</code></pre>
+<p>insert 调用了两次移动函数，一次发生在 pair 的构造函数，一次发生在 insert 把参数 pair 移进红黑树节点里。</p>
+<p>而 try_emplace 内部使用了现代 C++ 的就地构造（placement new），直接在红黑树节点的内存中构造 MyClass，无需反复移动，对于尺寸较大的值类型会更高效。</p>
+<pre><code class="language-cpp">insert的开销:
+MyClass()
+MyClass(MyClass &amp;&amp;)
+MyClass(MyClass &amp;&amp;)
+try_emplace的开销:
+MyClass()
+</code></pre>
+<hr />
+<h2 id="layout-two-cols-header_7">layout: two-cols-header</h2>
+<!-- PG151 -->
+
+<p>try_emplace 成功提升性能的案例</p>
+<p>提升了 1.42 倍性能，不能说是惊天地泣鬼神吧，至少也可以说是聊胜于无了。这里的值类型 string 只有 32 字节还不够明显，可能更大的自定义类型会有明显的优势。这种优化的理论上限是 3 倍，最多能从 try_emplace 获得 3 倍性能提升。</p>
+<p>::left::</p>
+<pre><code class="language-cpp">template &lt;class K, class V&gt;
+static void test_insert(map&lt;K, V&gt; &amp;tab) {
+    DefScopeProfiler;
+    for (int i = 0; i &lt; 1000; i++) {
+        // 1次string(const char *) 2次string(string &amp;&amp;)
+        tab.insert({i, &quot;hello&quot;});
+    }
+}
+
+template &lt;class K, class V&gt;
+static void test_try_emplace(map&lt;K, V&gt; &amp;tab) {
+    DefScopeProfiler;
+    for (int i = 0; i &lt; 1000; i++) {
+        // 1次string(const char *)
+        tab.try_emplace(i, &quot;hello&quot;);
+    }
+}
+</code></pre>
+<p>::right::</p>
+<pre><code class="language-cpp">int main() {
+    for (int i = 0; i &lt; 1000; i++) {
+        map&lt;int, string&gt; tab;
+        test_insert(tab);
+        doNotOptimize(tab);
+    }
+    for (int i = 0; i &lt; 1000; i++) {
+        map&lt;int, string&gt; tab;
+        test_try_emplace(tab);
+        doNotOptimize(tab);
+    }
+    printScopeProfiler();
+}
+</code></pre>
+<pre><code>   avg   |   min   |   max   |  total  | cnt | tag
+       39|       34|      218|    39927| 1000| test_insert
+       28|       27|       91|    28181| 1000| test_try_emplace
+</code></pre>
+<hr />
+<!-- PG152 -->
+
+<p>如果改成更大的自定义类型，可以提升 2.3 倍。</p>
+<pre><code class="language-cpp">struct MyClass {
+    int arr[4096];
+};
+</code></pre>
+<pre><code>   avg   |   min   |   max   |  total  | cnt | tag
+     1312|     1193|    18298|  1312871| 1000| test_insert
+      573|      537|     1064|   573965| 1000| test_try_emplace
+</code></pre>
+<hr />
+<!-- PG153 -->
+
+<p>insert 的炫彩中二摇摆混沌大魔王分奴版：带插入位置提示的 try_emplace</p>
+<pre><code class="language-cpp">template &lt;class ...Args&gt;
+iterator try_emplace(const_iterator pos, K const &amp;k, Args &amp;&amp;...args);
+</code></pre>
+<p>写法：</p>
+<pre><code class="language-cpp">m.try_emplace(pos, key, arg1, arg2, ...);
+</code></pre>
+<p>等价于：</p>
+<pre><code class="language-cpp">m.insert(pos, {key, V(arg1, arg2, ...)});
+</code></pre>
+<blockquote>
+<p>这次不需要再分一个什么 try_emplace_hint 出来了，是因为 try_emplace 的第一个参数是 K 类型而不是泛型，不可能和 const_iterator 类型混淆，因此 C++ 委员会最终决定直接共用同一个名字，让编译器自动重载了。</p>
+</blockquote>
+<hr />
+<!-- PG154 -->
+
+<p>总结，如何用 emplace 家族优化？分直接插入和带提示插入两种情况：</p>
+<pre><code class="language-cpp">// 直接插入版
+m.insert({&quot;key&quot;, MyClass(1, 2, 3)});              // 可读性推荐
+m.try_emplace(&quot;key&quot;, 1, 2, 3);                    // 高性能推荐
+m.emplace(&quot;key&quot;, MyClass(1, 2, 3));
+m.emplace(std::piecewise_construct, std::forward_as_tuple(&quot;key&quot;), std::forward_as_tuple(1, 2, 3));
+// 带插入位置提示版
+hint = m.insert(hint, {&quot;key&quot;, MyClass(1, 2, 3)}); // 可读性推荐
+hint = m.try_emplace(hint, &quot;key&quot;, 1, 2, 3);       // 高性能推荐
+hint = m.emplace_hint(hint, &quot;key&quot;, MyClass(1, 2, 3));
+hint = m.emplace_hint(hint, std::piecewise_construct, std::forward_as_tuple(&quot;key&quot;), std::forward_as_tuple(1, 2, 3));
+</code></pre>
+<hr />
+<!-- PG155 -->
+
+<p>梦幻联动：map 容器与 RAII 的双向奔赴</p>
+<p>如果 map 中元素的值类型是 RAII 类型，其析构函数会在元素被删除时自动调用。</p>
+<p>map 被移动时，不会调用元素的移动函数，因为 map 里只存着指向红黑树根节点的指针，只需指针移动即可。</p>
+<p>map 被拷贝时，会调用元素的拷贝函数，如果元素不支持拷贝，则 map 的拷贝也会被禁用（delete）掉。</p>
+<p>map 被析构时，其所有元素都会被析构。</p>
+<hr />
+<h2 id="layout-two-cols_1">layout: two-cols</h2>
+<!-- PG156 -->
+
+<pre><code class="language-cpp">struct RAII {
+    int i;
+
+    explicit RAII(int i_) : i(i_) {
+        printf(&quot;%d号资源初始化\n&quot;, i);
+    }
+
+    RAII(RAII &amp;&amp;) noexcept {
+        printf(&quot;%d号资源移动\n&quot;, i);
+    }
+
+    RAII &amp;operator=(RAII &amp;&amp;) noexcept {
+        printf(&quot;%d号资源移动赋值\n&quot;, i);
+        return *this;
+    }
+
+    ~RAII() {
+        printf(&quot;%d号资源释放\n&quot;, i);
+    }
+};
+</code></pre>
+<p>::right::</p>
+<pre><code class="language-cpp">int main() {
+    {
+        map&lt;string, RAII&gt; m;
+        m.try_emplace(&quot;资源1号&quot;, 1);
+        m.try_emplace(&quot;资源2号&quot;, 2);
+        m.erase(&quot;资源1号&quot;);
+        m.try_emplace(&quot;资源3号&quot;, 3);
+    }
+    printf(&quot;此时所有资源都应该已经释放\n&quot;);
+    return 0;
+}
+</code></pre>
+<pre><code>1号资源初始化
+2号资源初始化
+1号资源释放
+3号资源初始化
+3号资源释放
+2号资源释放
+此时所有资源都应该已经释放
+</code></pre>
+<hr />
+<h2 id="layout-two-cols_2">layout: two-cols</h2>
+<!-- PG157 -->
+
+<pre><code class="language-cpp">struct RAII {
+    int i;
+
+    explicit RAII(int i_) : i(i_) {
+        printf(&quot;%d号资源初始化\n&quot;, i);
+    }
+
+    RAII(RAII &amp;&amp;) = delete;
+    RAII &amp;operator=(RAII &amp;&amp;) = delete;
+    RAII(RAII const &amp;) = delete;
+    RAII &amp;operator=(RAII const &amp;) = delete;
+
+    ~RAII() {
+        printf(&quot;%d号资源释放\n&quot;, i);
+    }
+};
+</code></pre>
+<p>新手定义 RAII 类时，记得把移动和拷贝 4 个函数全部删除。没错，<strong>移动也要删除</strong>，很多新手会觉得资源类应该可以移动的呀？要是想保留移动，就得预留一个 i == 0 的空状态，那种处理很复杂的。如果确实需要移动可以用 <code>unique_ptr&lt;RAII&gt;</code> 包装一下。总之一旦定义了析构函数，全部 4 个函数都得删除，除非你有相关经验。</p>
+<p>::right::</p>
+<pre><code class="language-cpp">int main() {
+    {
+        map&lt;string, RAII&gt; m;
+        m.try_emplace(&quot;资源1号&quot;, 1);
+        m.try_emplace(&quot;资源2号&quot;, 2);
+        m.erase(&quot;资源1号&quot;);
+        m.try_emplace(&quot;资源3号&quot;, 3);
+    }
+    printf(&quot;此时所有资源都应该已经释放\n&quot;);
+    return 0;
+}
+</code></pre>
+<pre><code>1号资源初始化
+2号资源初始化
+1号资源释放
+3号资源初始化
+3号资源释放
+2号资源释放
+此时所有资源都应该已经释放
+</code></pre>
+<p>这时就体现出 try_emplace 的好处了：值类型不需要有移动构造函数也可以插入。</p>
+<hr />
+<h2 id="layout-two-cols_3">layout: two-cols</h2>
+<!-- PG158 -->
+
+<pre><code class="language-cpp">struct RAII {
+    int i;
+
+    explicit RAII(int i_) : i(i_) {
+        printf(&quot;%d号资源初始化\n&quot;, i);
+    }
+
+    RAII(RAII &amp;&amp;) = delete;
+
+    ~RAII() {
+        printf(&quot;%d号资源释放\n&quot;, i);
+    }
+};
+</code></pre>
+<p>冷知识：只需要删除移动构造函数，编译器就会自动帮你删除剩下 3 个，这是因为看到你用了 <code>&amp;&amp;</code> 就知道你是懂 C++11 的，所以不用照顾 C++98 兼容性保留烦人的拷贝构造函数，自动帮你删了，这是个标准，所有 C++ 编译器都是这样的（要我说，建议改成定义了析构函数就自动删全 4 个函数，可惜标准委员会要照顾兼容性…）</p>
+<p>以后 RAII 类只需要一行 <code>C(C &amp;&amp;) = delete</code> 就够了。</p>
+<p>::right::</p>
+<pre><code class="language-cpp">int main() {
+    {
+        map&lt;string, RAII&gt; m;
+        m.try_emplace(&quot;资源1号&quot;, 1);
+        m.try_emplace(&quot;资源2号&quot;, 2);
+        m.erase(&quot;资源1号&quot;);
+        m.try_emplace(&quot;资源3号&quot;, 3);
+    }
+    printf(&quot;此时所有资源都应该已经释放\n&quot;);
+    return 0;
+}
+</code></pre>
+<pre><code>1号资源初始化
+2号资源初始化
+1号资源释放
+3号资源初始化
+3号资源释放
+2号资源释放
+此时所有资源都应该已经释放
+</code></pre>
+<hr />
+<!-- PG159 -->
+
+<p>对于很大的 V 类型，也可以改用 <code>map&lt;T, unique_ptr&lt;V&gt;&gt;</code> 避免反复移动元素本体</p>
+<p>因为包括 map 在内的所有容器都完美支持 RAII 类型，所以也可以用智能指针作为这些容器的元素。</p>
+<pre><code class="language-cpp">struct MyData {
+    int value;  // 假设这个很大
+    explicit MyData(int value_) : value(value_) {}
+};
+map&lt;string, unique_ptr&lt;MyData&gt;&gt; m;
+m.insert({&quot;answer&quot;, make_unique&lt;MyData&gt;(42)});  // 只有 8 字节的 unique_ptr 被移动 2 次
+m.insert({&quot;fuck&quot;, make_unique&lt;MyData&gt;(985)});
+print(m.at(&quot;answer&quot;)-&gt;value);  // 42
+// ↑等价于：print((*m.at(&quot;answer&quot;)).value);
+</code></pre>
+<ul>
+<li><code>map&lt;T, unique_ptr&lt;V&gt;&gt;</code> 中，智能指针指向的对象会在元素被删除时自动释放。</li>
+<li><code>map&lt;T, V *&gt;</code> 中，C 语言原始指针不具备 RAII 功能，除非该指针被其他智能指针打理着，或者用户删除元素之前手动 delete，否则当元素删除时内存会泄露！</li>
+</ul>
+<p>我推荐完全采用智能指针来自动管理内存，智能指针和同样符合 RAII 思想的各大容器也是相性很好的。</p>
+<p>如果需要浅拷贝的话，则可以改用 <code>map&lt;T, shared_ptr&lt;V&gt;&gt;</code>，小彭老师在他的 Zeno 项目中就是这样用的。</p>
+<hr />
+<!-- PG160 -->
+
+<h1 id="_12">增删</h1>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>效果</th>
+<th>版本</th>
+<th>推荐</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>m.insert(make_pair(key, val))</code></td>
+<td>插入但不覆盖</td>
+<td>C++98</td>
+<td>💩</td>
+</tr>
+<tr>
+<td><code>m.insert({key, val})</code></td>
+<td>插入但不覆盖</td>
+<td>C++11</td>
+<td>❤</td>
+</tr>
+<tr>
+<td><code>m.emplace(key, val)</code></td>
+<td>插入但不覆盖</td>
+<td>C++11</td>
+<td>💩</td>
+</tr>
+<tr>
+<td><code>m.try_emplace(key, valargs...)</code></td>
+<td>插入但不覆盖</td>
+<td>C++17</td>
+<td>💣</td>
+</tr>
+<tr>
+<td><code>m.insert_or_assign(key, val)</code></td>
+<td>插入或覆盖</td>
+<td>C++17</td>
+<td>❤</td>
+</tr>
+<tr>
+<td><code>m[key] = val</code></td>
+<td>插入或覆盖</td>
+<td>C++98</td>
+<td>💣</td>
+</tr>
+<tr>
+<td><code>m.erase(key)</code></td>
+<td>删除指定元素</td>
+<td>C++98</td>
+<td>❤</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<!-- PG161 -->
+
+<h1 id="_13">改查</h1>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>效果</th>
+<th>版本</th>
+<th>推荐</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>m.at(key)</code></td>
+<td>找不到则出错，找到则返回引用</td>
+<td>C++98</td>
+<td>❤</td>
+</tr>
+<tr>
+<td><code>m[key]</code></td>
+<td>找不到则自动创建<code>0</code>值，返回引用</td>
+<td>C++98</td>
+<td>💣</td>
+</tr>
+<tr>
+<td><code>myutils::map_get(m, key, defl)</code></td>
+<td>找不到则返回默认值</td>
+<td>C++98</td>
+<td>❤</td>
+</tr>
+<tr>
+<td><code>m.find(key) == m.end()</code></td>
+<td>检查键 <code>key</code> 是否存在</td>
+<td>C++98</td>
+<td>💣</td>
+</tr>
+<tr>
+<td><code>m.count(key)</code></td>
+<td>检查键 <code>key</code> 是否存在</td>
+<td>C++98</td>
+<td>❤</td>
+</tr>
+<tr>
+<td><code>m.contains(key)</code></td>
+<td>检查键 <code>key</code> 是否存在</td>
+<td>C++20</td>
+<td>💩</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<!-- PG162 -->
+
+<h1 id="_14">初始化</h1>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>效果</th>
+<th>版本</th>
+<th>推荐</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>map&lt;K, V&gt; m = {{k1, v1}, {k2, v2}}</code></td>
+<td>初始化为一系列键值对</td>
+<td>C++11</td>
+<td>❤</td>
+</tr>
+<tr>
+<td><code>auto m = map&lt;K, V&gt;{{k1, v1}, {k2, v2}}</code></td>
+<td>初始化为一系列键值对</td>
+<td>C++11</td>
+<td>💩</td>
+</tr>
+<tr>
+<td><code>func({{k1, v1}, {k2, v2}})</code></td>
+<td>给函数参数传入一个 map</td>
+<td>C++11</td>
+<td>❤</td>
+</tr>
+<tr>
+<td><code>m = {{k1, v1}, {k2, v2}}</code></td>
+<td>重置为一系列键值对</td>
+<td>C++11</td>
+<td>❤</td>
+</tr>
+<tr>
+<td><code>m.clear()</code></td>
+<td>清空所有表项</td>
+<td>C++98</td>
+<td>❤</td>
+</tr>
+<tr>
+<td><code>m = {}</code></td>
+<td>清空所有表项</td>
+<td>C++11</td>
+<td>💣</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<!-- PG163 -->
+
+<p>C++17 新增的 extract 函数<sup id="fnref24:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<pre><code class="language-cpp">node_type extract(K const &amp;key);
+node_type extract(const_iterator pos);
+</code></pre>
+<pre><code class="language-cpp">auto node = m.extract(&quot;fuck&quot;);
+auto &amp;k = node.key();
+auto &amp;v = node.mapped();
+</code></pre>
+<p>node_type 是指向游离红黑树节点的特殊智能指针，称为节点句柄<sup id="fnref2:2"><a class="footnote-ref" href="#fn:2">2</a></sup>，只可移动不可拷贝，类似 unique_ptr。</p>
+<p>当调用 extract(key) 时会把 key 对应的键值对所在的红黑树节点“脱离”出来——不是直接释放节点内存并销毁键值对象，而是把删除的节点的所有权移交给了调用者，以返回一个特殊智能指针 node_type 的形式。</p>
+<p>调用 extract 后，节点句柄指向的这个红黑树节点已经从 map 中移除（其 next 和 prev 等为 NULL），处于游离状态，只是键 key() 和值 mapped() 没有被销毁，内存没有被释放。调用者可以稍后再销毁这个特殊智能指针，也可以稍后重新用 insert(node) 把他插入回去，或者插入到另一个不同的 map 里。</p>
+<hr />
+<!-- PG164 -->
+
+<p>不用 auto 完整写出全部类型的形式：</p>
+<pre><code class="language-cpp">map&lt;K, V&gt;::node_type node = m.extract(&quot;fuck&quot;);
+K &amp;k = node.key();
+V &amp;v = node.mapped();
+</code></pre>
+<p>set 也有 extract 函数，其节点句柄没有 key() 和 mapped()，而是改用 value() 获取其中的值</p>
+<pre><code class="language-cpp">set&lt;V&gt; s = {&quot;fuck&quot;, &quot;suck&quot;, &quot;dick&quot;};
+set&lt;V&gt;::node_type node = s.extract(&quot;fuck&quot;);
+V &amp;v = node.value();
+</code></pre>
+<hr />
+<!-- PG165 -->
+
+<p>insert 函数：插入游离节点的版本</p>
+<pre><code class="language-cpp">insert_return_type insert(node_type &amp;&amp;node);
+iterator insert(const_iterator pos, node_type &amp;&amp;node);
+</code></pre>
+<p>可以用 insert(move(node)) 直接插入一个节点。</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; m1 = {
+    {&quot;fuck&quot;, 985},
+    {&quot;dick&quot;, 211},
+};
+map&lt;string, int&gt; m2;
+auto node = m1.extract(&quot;fuck&quot;);
+m2.insert(move(node));  // 节点句柄类似于 unique_ptr 不可拷贝，需要用移动语义进行插入
+</code></pre>
+<p>调用 insert(move(node)) 后由于所有权被移走，node 将会处于“空指针”状态，可以用 <code>node.empty()</code> 查询节点句柄是否为“空”状态，即节点所有权是否已经移走。</p>
+<hr />
+<!-- PG166 -->
+
+<p>这个版本的 insert 返回值类型 insert_return_type 是一个结构体（我的天他们终于肯用结构体而不是 pair 了）：</p>
+<pre><code class="language-cpp">struct insert_return_type {
+    iterator position;
+    bool inserted;
+    node_type node;
+};
+</code></pre>
+<pre><code class="language-cpp">insert_return_type insert(node_type &amp;&amp;nh);
+</code></pre>
+<p>官方说法是<sup id="fnref25:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<blockquote>
+<p>If nh is empty, inserted is false, position is end(), and node is empty.</p>
+<p>Otherwise if the insertion took place, inserted is true, position points to the inserted element, and node is empty.</p>
+<p>If the insertion failed, inserted is false, node has the previous value of nh, and position points to an element with a key equivalent to nh.key().</p>
+</blockquote>
+<hr />
+<!-- PG167 -->
+
+<p>extract 运用案例</p>
+<pre><code class="language-cpp">map&lt;int, string&gt; hells = {
+    {666, &quot;devil&quot;},
+};
+map&lt;int, string&gt; schools = {
+    {985, &quot;professor&quot;},
+    {211, &quot;doctor&quot;},
+    {996, &quot;fucker&quot;},
+};
+auto node = schools.extract(996);
+hells.insert(std::move(node));
+print(schools);
+print(hells);
+</code></pre>
+<pre><code>{211: &quot;doctor&quot;, 985: &quot;professor&quot;}
+{666: &quot;devil&quot;, 996: &quot;fucker&quot;}
+</code></pre>
+<hr />
+<!-- PG168 -->
+
+<p>extract + insert(move(node)) 对比 find + insert({key, val})，可以避免键和值类型移动构造函数的开销，至始至终移动的只是一个红黑树节点的指针，元素没有被移动，也没有造成内存空间不必要的分配和释放。</p>
+<p>但是 insert(move(node)) 仅适用于从 extract 中取出现有节点的情况，如果要新建节点还得靠 insert({key, val}) 或者 try_emplace(key, val) 的。</p>
+<hr />
+<!-- PG169 -->
+
+<p>extract 大型运用案例</p>
+<p>已知两个映射表 tab1 和 tab2，和一个接受 K 类型做参数的仿函数 cond。</p>
+<p>要求把 tab1 中键符合 cond 条件的元素移动到 tab2 中去，其余保留在 tab1 中。</p>
+<p>我们编写四份同样功能的程序，分别采用：</p>
+<ul>
+<li>extract + 带提示的 insert</li>
+<li>erase + 带提示的 insert</li>
+<li>extract + 直接 insert</li>
+<li>erase + 直接 insert</li>
+</ul>
+<hr />
+<!-- PG170 -->
+
+<pre><code class="language-cpp">template &lt;class K, class V, class Cond&gt;
+void filter_with_extract(map&lt;K, V&gt; &amp;tab1, map&lt;K, V&gt; &amp;tab2, Cond &amp;&amp;cond) {
+    DefScopeProfiler;
+    for (auto it = tab1.begin(); it != tab1.end(); ) {
+        if (cond(it-&gt;first)) {
+            auto next_it = it;
+            ++next_it;
+            auto node = tab1.extract(it);
+            tab2.insert(std::move(node));
+            it = next_it;
+        } else ++it;
+    }
+}
+template &lt;class K, class V, class Cond&gt;
+void filter_with_erase(map&lt;K, V&gt; &amp;tab1, map&lt;K, V&gt; &amp;tab2, Cond &amp;&amp;cond) {
+    DefScopeProfiler;
+    for (auto it = tab1.begin(); it != tab1.end(); ) {
+        if (cond(it-&gt;first)) {
+            it = tab1.erase(it);
+            auto kv = std::move(*it);
+            tab2.insert(std::move(kv));
+        } else ++it;
+    }
+}
+</code></pre>
+<hr />
+<!-- PG171 -->
+
+<pre><code class="language-cpp">template &lt;class K, class V, class Cond&gt;
+void filter_with_extract_with_hint(map&lt;K, V&gt; &amp;tab1, map&lt;K, V&gt; &amp;tab2, Cond &amp;&amp;cond) {
+    DefScopeProfiler;
+    auto hint = tab2.begin();
+    for (auto it = tab1.begin(); it != tab1.end(); ) {
+        if (cond(it-&gt;first)) {
+            auto next_it = it;
+            ++next_it;
+            auto node = tab1.extract(it);
+            hint = tab2.insert(hint, std::move(node));
+            it = next_it;
+        } else ++it;
+    }
+}
+template &lt;class K, class V, class Cond&gt;
+void filter_with_erase_with_hint(map&lt;K, V&gt; &amp;tab1, map&lt;K, V&gt; &amp;tab2, Cond &amp;&amp;cond) {
+    DefScopeProfiler;
+    auto hint = tab2.begin();
+    for (auto it = tab1.begin(); it != tab1.end(); ) {
+        if (cond(it-&gt;first)) {
+            it = tab1.erase(it);
+            auto kv = std::move(*it);
+            hint = tab2.insert(hint, std::move(kv));
+        } else ++it;
+    }
+}
+</code></pre>
+<hr />
+<!-- PG172 -->
+
+<p>extract vs erase 性能测试 (testextractvserase.cpp)：</p>
+<pre><code>   avg   |   min   |   max   |  total  | cnt | tag
+      889|      803|     2388|   889271| 1000| filter_with_erase
+      642|      595|     1238|   642542| 1000| filter_with_extract
+      525|      491|     1398|   525137| 1000| filter_with_erase_with_hint
+      305|      289|      842|   305472| 1000| filter_with_extract_with_hint
+</code></pre>
+<p>extract + 带提示的 insert 获胜，即函数 <code>filter_with_extract_with_hint</code> 是性能最好的那一个。</p>
+<hr />
+<!-- PG173 -->
+
+<p>由于处于游离状态，游离节点不属于任何 map 中，不需要满足排序性质，因此 <code>node.key()</code> 可修改。</p>
+<p>先用 extract 取出游离态节点，修改完节点的键后再重新插入，利用这一点做到以前做不到的修改键值。</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; m = {
+    {&quot;fuck&quot;, 985},
+};
+auto node = m.extract(&quot;fuck&quot;);  // 移出 &quot;fuck&quot; 键对应的节点，此时 m 会变为空
+node.key() = &quot;fxxk&quot;;  // 修改键（以前用迭代器时 it-&gt;first 是不允许修改键的，因为迭代器指向的节点不是游离状态，修改键会破坏排序）
+node.mapped() = 211;  // 修改值（这个以前用迭代器时 it-&gt;second 也可以修改）
+m.insert(move(node)); // 把修改好的节点插入回去
+print(m);             // {{&quot;fxxk&quot;: 211}}
+</code></pre>
+<p>相当于你给小学生排队时，有一个小学生突然瞬间不知道吃了什么激素长高了，你的队伍就会乱掉。</p>
+<p>要是让这个小学生先出列，让他单独一个人长高，等他长高完了再插入回队列。</p>
+<p>这时插入可以优先从他长高之前的位置开始二分法，也就是用 extract 之前的迭代器的下一个作为 insert 的提示。</p>
+<pre><code class="language-cpp">TODO
+</code></pre>
+<hr />
+<!-- PG174 -->
+
+<p>C++17 新增的 merge 函数<sup id="fnref26:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<pre><code class="language-cpp">template &lt;class Cmp2&gt;
+void merge(map&lt;K, V, Cmp2&gt; &amp;__source);
+</code></pre>
+<blockquote>
+<p>注：set 也有 merge 函数</p>
+<p>注：merge 的参数是另一个 map，可变引用，必须和本 map 同类型，但允许有不同的比较器</p>
+</blockquote>
+<ul>
+<li>
+<p>merge(source) 会把 source 中的所有元素都<strong>移动</strong>到本 map，注意是<strong>移动</strong>而不是拷贝，source 将会被清空，这样是为了更高效。</p>
+</li>
+<li>
+<p>insert(source.begin(), source.end()) 则是把 source 里的元素拷贝后插入到本 map，但更低效，因为需要拷贝，还得新建红黑树节点，额外分配内存空间。</p>
+</li>
+</ul>
+<p>如果 source 中有与本 map 重复的键，则该元素不会被移动，保留在 source 里。</p>
+<p>merge 等价于以下手动用 extract 和 insert 来移动节点的代码：</p>
+<pre><code class="language-cpp">// m1.merge(m2) 等价于：
+auto hint = m1.begin();
+for (auto it = m2.begin(); it != m2.end(); ++it) {
+    if (!m1.contains(it-&gt;first)) {
+        auto node = m2.extract(it);
+        hint = m1.insert(hint, node);
+    }
+}
+</code></pre>
+<hr />
+<!-- PG175 -->
+
+<p>两个 map 合并，<code>m1.merge(m2)</code> 与 <code>m1.insert(m2.begin(), m2.end())</code> 性能比较</p>
+<p>注意：merge 函数不会产生不必要的内存分配导致内存碎片化，所以更高效，但作为代价他会清空 m2！</p>
+<ul>
+<li>merge 相当于把 m2 的元素“移动”到 m1 中去了。</li>
+<li>insert 则是把 m2 的元素“拷贝”了一份插入到 m1 中去，效率自然低下。</li>
+</ul>
+<p>如果不能破坏掉 m2 则仍需要 insert 大法。</p>
+<hr />
+<!-- PG176 -->
+
+<p>merge(m2) 和 insert(m2.begin(), m2.end()) 一样尿性：如果 m2 中的键在 m1 中已经存在，则不会 extract 该 m2 中的节点。</p>
+<pre><code class="language-cpp">int main()
+{
+  std::map&lt;int, std::string&gt; ma {{1, &quot;apple&quot;}, {5, &quot;pear&quot;}, {10, &quot;banana&quot;}};
+  std::map&lt;int, std::string&gt; mb {{2, &quot;zorro&quot;}, {4, &quot;batman&quot;}, {5, &quot;X&quot;}, {8, &quot;alpaca&quot;}};
+  std::map&lt;int, std::string&gt; u;
+  u.merge(ma);
+  std::cout &lt;&lt; &quot;ma.size(): &quot; &lt;&lt; ma.size() &lt;&lt; '\n';
+  u.merge(mb);
+  std::cout &lt;&lt; &quot;mb.size(): &quot; &lt;&lt; mb.size() &lt;&lt; '\n';
+  std::cout &lt;&lt; &quot;mb.at(5): &quot; &lt;&lt; mb.at(5) &lt;&lt; '\n';
+  for(auto const &amp;kv: u)
+    std::cout &lt;&lt; kv.first &lt;&lt; &quot;, &quot; &lt;&lt; kv.second &lt;&lt; '\n';
+}
+</code></pre>
+<hr />
+<!-- PG177 -->
+
+<p>swap 与 move</p>
+<hr />
+<!-- PG178 -->
+
+<p>map 容器的全部参数为：</p>
+<pre><code class="language-cpp">std::map&lt;K, V, Cmp, Alloc&gt;
+</code></pre>
+<p>其中第 3、4 个参数 Cmp 和 Alloc 可以省略。</p>
+<ul>
+<li>Cmp 默认为 <code>std::less&lt;K&gt;</code></li>
+<li>Alloc 默认为 <code>std::allocator&lt;std::pair&lt;K, V&gt;&gt;</code></li>
+</ul>
+<p>因此 <code>map&lt;K, V&gt;</code> 的完整模板参数是：</p>
+<pre><code class="language-cpp">std::map&lt;K, V, std::less&lt;K&gt;, std::allocator&lt;std::pair&lt;K, V&gt;&gt;&gt;
+</code></pre>
+<p>我们可以简写成 <code>map&lt;K, V&gt;</code>。</p>
+<p>其中 allocator 我们以后专门开一节课讲，其他很多容器都有 allocator。</p>
+<p>今天只研究 Cmp 这个参数，他决定了 map 如何排序，判断相等。</p>
+<hr />
+<!-- PG179 -->
+
+<pre><code class="language-cpp">std::map&lt;K, V, std::less&lt;K&gt;&gt;
+</code></pre>
+<p>这个 <code>std::less</code> 是个什么呢？是一个仿函数(functor)。</p>
+<pre><code class="language-cpp">template &lt;class T&gt;
+struct less {
+    constexpr bool operator()(T const &amp;x, T const &amp;y) const {
+        return x &lt; y;
+    }
+};
+</code></pre>
+<p>具有成员函数 <code>operator()</code> 的类型，都被称之为仿函数。</p>
+<hr />
+<!-- PG180 -->
+
+<p>仿函数对象，可以直接用圆括号当做普通函数调用，这就是“仿函数”的得名原因，例如：</p>
+<pre><code class="language-cpp">less&lt;int&gt; cmp;
+print(cmp(1, 2));  // 1 &lt; 2: true
+print(cmp(5, 2));  // 5 &lt; 2: false
+</code></pre>
+<pre><code class="language-cpp">less&lt;string&gt; cmp;
+print(cmp(&quot;hello&quot;, &quot;world&quot;));   // &quot;hello&quot; &lt; &quot;world&quot;: false
+print(cmp(&quot;cmake&quot;, &quot;cppcon&quot;));  // &quot;cmake&quot; &lt; &quot;cppcon&quot;: true
+</code></pre>
+<pre><code class="language-cpp">less&lt;string_view&gt; cmp;
+print(cmp(&quot;hello&quot;, &quot;world&quot;));   // &quot;hello&quot; &lt; &quot;world&quot;: false
+print(cmp(&quot;cmake&quot;, &quot;cppcon&quot;));  // &quot;cmake&quot; &lt; &quot;cppcon&quot;: true
+</code></pre>
+<hr />
+<!-- PG181 -->
+
+<p>注意仿函数的成员函数 <code>operator()</code> 是两个括号：</p>
+<pre><code class="language-cpp">operator()(...)
+</code></pre>
+<ul>
+<li>第一个括号是 <code>operator()</code> 的一部分，表示这是对圆括号 <code>()</code> 的运算符重载。</li>
+<li>第二个括号是函数的参数列表，里面是 <code>operator()</code> 这个函数的形参。</li>
+</ul>
+<blockquote>
+<p><code>operator()</code> 相当于 Python 中的 <code>__call__</code>。正如 <code>operator&lt;</code> 相当于 Python 中的 <code>__lt__</code>。</p>
+</blockquote>
+<hr />
+<!-- PG182 -->
+
+<pre><code class="language-cpp">std::map&lt;K, V, std::less&lt;K&gt;&gt;
+</code></pre>
+<p>我们之前提到 map 内部的元素始终按照键 K 从小到大的顺序排列。</p>
+<p>map 决定大小顺序的，并不是直接调用 K 类型的比较运算符 <code>operator&lt;</code>。</p>
+<p>而是调用他的模板参数 Cmp 类型的 <code>operator()</code>。</p>
+<p>这是为了允许用户通过修改这个参数，控制 map 内部的行为，防止 map 数据结构与具体的比较方法耦合。</p>
+<p>由于默认的 Cmp 是 <code>less&lt;K&gt;</code>，调用 <code>Cmp()(x, y)</code> 就相当于 <code>x &lt; y</code>，由此实现从小到大排序。</p>
+<p>接下来我们将修改这一默认行为。</p>
+<hr />
+<!-- PG183 -->
+
+<p>一个类型要想作为 map 的键，只需要他支持 <code>&lt;</code> 运算符即可，不必定义其他 <code>&gt;</code>、<code>==</code> 运算符。</p>
+<p>当 map 需要判断两个键是否相等时 <code>x == y</code>，会用 <code>!(x &lt; y) &amp;&amp; !(y &lt; x)</code> 来等价地计算。</p>
+<p>string, string_view, int, float, void *, shared_ptr, pair, tuple, array&hellip;</p>
+<p>这些类型都支持比较运算符，都可以作为 map 的键。</p>
+<hr />
+<!-- PG184 -->
+
+<p>如果你写了个自定义类 Student，要让他作为 map 的键类型，有三种方法：</p>
+<p>一、在 Student 类中添加 <code>operator&lt;</code></p>
+<pre><code class="language-cpp">struct Student {
+    string name;
+    int id;
+    string sex;
+
+    bool operator&lt;(Student const &amp;that) const {
+        return name &lt; that.name || id &lt; that.id || sex &lt; that.sex;
+    }
+};
+
+map&lt;Student, int&gt; stutab;
+</code></pre>
+<hr />
+<!-- PG185 -->
+
+<p>二、特化 <code>less&lt;Student&gt;</code>，添加 <code>operator()</code></p>
+<pre><code class="language-cpp">struct Student {
+    string name;
+    int id;
+    string sex;
+};
+
+template &lt;&gt;
+struct std::less&lt;Student&gt; {  // 用户可以特化标准库中的 trait
+    bool operator()(Student const &amp;x, Student const &amp;y) const {
+        return x.name &lt; y.name || x.id &lt; y.id || x.sex &lt; y.sex;
+    }
+};
+
+map&lt;Student, int&gt; stutab;
+</code></pre>
+<blockquote>
+<p>缺点：以后如果 map 外面要用用到这个类的大小比较，也只能用 <code>less&lt;Student&gt;()(stu1, stu2)</code> 代替 <code>stu1 &lt; stu2</code>。</p>
+</blockquote>
+<hr />
+<!-- PG186 -->
+
+<p>三、重新自定义一个仿函数类 <code>LessStudent</code>，添加 <code>operator()</code>，然后把这个 <code>LessStudent</code> 作为 map 的比较器传入模板</p>
+<pre><code class="language-cpp">struct Student {
+    string name;
+    int id;
+    string sex;
+};
+
+struct LessStudent {
+    bool operator()(Student const &amp;x, Student const &amp;y) const {
+        return x.name &lt; y.name || x.id &lt; y.id || x.sex &lt; y.sex;
+    }
+};
+
+map&lt;Student, int, LessStudent&gt; stutab;
+</code></pre>
+<blockquote>
+<p>缺点：以后每次创建新的 map 时，都需要加一个 LessStudent 参数。</p>
+</blockquote>
+<hr />
+<!-- PG187 -->
+
+<p>如果希望 map 在查找时只根据学生姓名索引，则只需要改一下比较器的实现，让他只比较姓名字段即可。</p>
+<pre><code class="language-cpp">struct LessStudent {
+    bool operator()(Student const &amp;x, Student const &amp;y) const {
+        return x.name &lt; y.name;
+    }
+};
+</code></pre>
+<p>上面这样的比较器，map 会认为姓名 name 相同的 Student 就是相等的，并去重，即使 id 和 sex 可能不同。</p>
+<blockquote>
+<p>结论：map 的排序和去重，都取决于于你的比较器如何实现！比较器里没比较的字段，就会被忽略。</p>
+</blockquote>
+<hr />
+<!-- PG188 -->
+
+<p>四（同一）、利用 C++20 新特性，三路比较运算符 <code>&lt;=&gt;</code>：如果自定义类的每个成员都支持比较运算符，可以把 <code>operator&lt;=&gt;</code> 函数声明为 <code>default</code>，然后编译器会自动添加自定义类的所有比较运算符。</p>
+<pre><code class="language-cpp">struct Student {
+    string name;
+    int id;
+    string sex;
+
+    auto operator&lt;=&gt;(Student const &amp;) const = default;
+};
+</code></pre>
+<p>此时默认的 <code>operator&lt;</code> 实现等价于 <code>x.name &lt; y.name || x.id &lt; y.id || x.sex &lt; y.sex</code>。</p>
+<blockquote>
+<p><code>&lt;=&gt;</code> 的返回类型是 <code>std::strong_ordering</code>，这是一种有三种取值的强枚举类型</p>
+<p><code>&lt;=&gt;</code> 对应的仿函数为 <code>std::compare_three_way</code></p>
+</blockquote>
+<hr />
+<!-- PG189 -->
+
+<p>glibc 头文件中的 less 和 greater 实现参考：</p>
+<pre><code class="language-cpp">template&lt;typename _Tp&gt;
+struct less : public binary_function&lt;_Tp, _Tp, bool&gt;
+{
+  _GLIBCXX14_CONSTEXPR
+  bool
+  operator()(const _Tp&amp; __x, const _Tp&amp; __y) const
+  { return __x &lt; __y; }
+};
+
+template&lt;typename _Tp&gt;
+struct greater : public binary_function&lt;_Tp, _Tp, bool&gt;
+{
+  _GLIBCXX14_CONSTEXPR
+  bool
+  operator()(const _Tp&amp; __x, const _Tp&amp; __y) const
+  { return __x &gt; __y; }
+};
+</code></pre>
+<hr />
+<!-- PG190 -->
+
+<p>类似的运算符仿函数还有：</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>仿函数类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x == y</td>
+<td>std::equal_to</td>
+</tr>
+<tr>
+<td>x != y</td>
+<td>std::not_equal_to</td>
+</tr>
+<tr>
+<td>x &lt; y</td>
+<td>std::less</td>
+</tr>
+<tr>
+<td>x &gt; y</td>
+<td>std::greater</td>
+</tr>
+<tr>
+<td>x &lt;= y</td>
+<td>std::less_equal</td>
+</tr>
+<tr>
+<td>x &gt;= y</td>
+<td>std::greater_equal</td>
+</tr>
+<tr>
+<td>x + y</td>
+<td>std::plus</td>
+</tr>
+<tr>
+<td>x - y</td>
+<td>std::minus</td>
+</tr>
+<tr>
+<td>x * y</td>
+<td>std::multiplies</td>
+</tr>
+<tr>
+<td>x / y</td>
+<td>std::divides</td>
+</tr>
+<tr>
+<td>x % y</td>
+<td>std::modulus</td>
+</tr>
+<tr>
+<td>-x</td>
+<td>std::negate</td>
+</tr>
+</tbody>
+</table>
+<p>他们都在 <code>#include &lt;functional&gt;</code> 头文件中定义。</p>
+<hr />
+<!-- PG191 -->
+
+<p>案例：使用 greater 仿函数，让 map 反过来从大到小排序：</p>
+<pre><code class="language-cpp">auto ilist = {
+    {985, &quot;拳打&quot;},
+    {211, &quot;脚踢&quot;},
+};
+map&lt;int, string&gt; m1 = ilist;        // 从小到大排序
+map&lt;int, string, greater&lt;int&gt;&gt; m2 = ilist;
+print(m1);
+print(m2);
+</code></pre>
+<hr />
+<!-- PG192 -->
+
+<p>C++14 新增了“透明(transparent)”运算符仿函数。</p>
+<p>参数为 void 即可让一个运算符仿函数变成“透明”的，对于 less 运算符仿函数而言，就是 <code>less&lt;void&gt;</code>。</p>
+<p>C++14 之前用的都是“不透明”版的仿函数，必须指定一个具体的类型，例如 <code>less&lt;int&gt;</code> 就只能用于 int 类型的比较，<code>less&lt;string&gt;</code> 就只能用于 string 类型的比较。无法用 <code>less&lt;int&gt;</code> 仿函数比较 string 类型。</p>
+<p>而 <code>less&lt;void&gt;</code> 是通用的，他的 <code>operator()</code> 函数是泛型的，可以接受任意类型。</p>
+<pre><code class="language-cpp">template &lt;&gt;
+struct less&lt;void&gt; {   // 针对 void 的特化
+    // 标准委员会想：由于 void 类型不可能有 &lt; 运算符的需求，所以他们干脆拿 void 作为透明版的模板参数“占位符”了
+    template &lt;class Tx, class Ty&gt;
+    constexpr decltype(auto) operator()(Tx &amp;&amp;x, Ty &amp;&amp;y) const {
+        return forward&lt;Tx&gt;(x) &lt; forward&lt;Ty&gt;(y);
+    }
+
+    struct is_transparent;  // 空类，仅供 SFINAE 元编程时检测一个仿函数是否透明时使用
+};
+</code></pre>
+<blockquote>
+<p>不透明版的 <code>less&lt;T&gt;</code> 泛型体现在类的模板参数上，</p>
+</blockquote>
+<hr />
+<!-- PG193 -->
+
+<p>“透明”版的好处是可以同一个兼容任意类型，而不必创建多个 cmp 对象。而不透明版的好处是方便特化 traits，但毕竟 &lt; 运算符是可以用户自定义(运算符重载)的，没必要用 traits 特化，所以他们逐步发现透明版香了，还能支持左右参数为不同类型。</p>
+<pre><code class="language-cpp">less&lt;void&gt; cmp;
+print(cmp(1, 2));  // 1 &lt; 2: true
+print(cmp(5, 2));  // 5 &lt; 2: false
+print(cmp(string(&quot;hello&quot;), &quot;world&quot;));  // &quot;hello&quot; &lt; &quot;world&quot;: false
+print(cmp(string(&quot;cmake&quot;), &quot;cppcon&quot;));  // &quot;cmake&quot; &lt; &quot;cppcon&quot;: true
+</code></pre>
+<blockquote>
+<p>但也要特别注意不能再依赖参数类型自动的隐式转换了，必须至少写完整其中一个 <code>string("hello")</code> 才能触发 <code>string</code> 的 <code>operator&lt;</code> 而不是 <code>const char *</code> 的指针比大小。如果只写 <code>cmp("cmake", "cppcon")</code> 则是在比较指针的地址大小，结果是不一定的。</p>
+</blockquote>
+<p>由于 C++14 的 less 模板参数 T 默认为 void，所以 <code>less&lt;void&gt;</code> 还可以简写成 <code>less&lt;&gt;</code>。</p>
+<pre><code class="language-cpp">less&lt;&gt; cmp;
+print(cmp(1, 2));  // 1 &lt; 2: true
+print(cmp(5, 2));  // 5 &lt; 2: false
+print(cmp(string(&quot;hello&quot;), &quot;world&quot;));  // &quot;hello&quot; &lt; &quot;world&quot;: false
+print(cmp(string(&quot;cmake&quot;), &quot;cppcon&quot;));  // &quot;cmake&quot; &lt; &quot;cppcon&quot;: true
+</code></pre>
+<hr />
+<!-- PG194 -->
+
+<p>自定义比较仿函数，实现无视键大小写的 map 容器：</p>
+<pre><code class="language-cpp">struct LessIgnoreCase {
+    bool operator()(std::string const &amp;lhs, std::string const &amp;rhs) const {
+        return std::lexicographical_compare // 位于 &lt;algorithm&gt; 头文件，和 std::string 同款的字典序比较
+        ( lhs.begin(), lhs.end()
+        , rhs.begin(), rhs.end()
+        , [] (char lhs, char rhs) {
+            return std::toupper(lhs) &lt; std::toupper(rhs);
+        });
+    }
+};
+int main() {
+    map&lt;string, string, LessIgnoreCase&gt; m = {
+        {{&quot;Fuck&quot;}, &quot;rust&quot;},
+        {{&quot;fUCK&quot;}, &quot;java&quot;},
+        {{&quot;STUdy&quot;}, &quot;cpp&quot;},
+    };
+    print(m);
+    print(&quot;fuck对应的值为:&quot;, m.at(&quot;fuck&quot;));
+    return 0;
+}
+</code></pre>
+<pre><code>{&quot;Fuck&quot;: &quot;rust&quot;, &quot;STUdy&quot;: &quot;cpp&quot;}
+fuck对应的值为: &quot;rust&quot;
+</code></pre>
+<hr />
+<!-- PG195 -->
+
+<p>C++11 的 lambda 表达式也是仿函数：</p>
+<pre><code class="language-cpp">auto cmp = [] (std::string const &amp;lhs, std::string const &amp;rhs) {
+    return std::lexicographical_compare
+    ( lhs.begin(), lhs.end()
+    , rhs.begin(), rhs.end()
+    , [] (char lhs, char rhs) {
+        return std::toupper(lhs) &lt; std::toupper(rhs);
+    });
+};
+map&lt;string, string, decltype(cmp)&gt; m({
+    {{&quot;Fuck&quot;}, &quot;rust&quot;},
+    {{&quot;fUCK&quot;}, &quot;java&quot;},
+    {{&quot;Study&quot;}, &quot;cpp&quot;},
+}, cmp);
+print(m);
+auto val = m.at({&quot;fuck&quot;});
+print(val);
+</code></pre>
+<hr />
+<!-- PG196 -->
+
+<p>写的更清晰一点：</p>
+<pre><code class="language-cpp">auto cmp = [] (std::string const &amp;lhs, std::string const &amp;rhs) {
+    return std::lexicographical_compare
+    ( lhs.begin(), lhs.end()
+    , rhs.begin(), rhs.end()
+    , [] (char lhs, char rhs) {
+        return std::toupper(lhs) &lt; std::toupper(rhs);
+    });
+};
+map&lt;string, string, decltype(cmp)&gt; m(cmp);
+m = {
+    {{&quot;Fuck&quot;}, &quot;rust&quot;},
+    {{&quot;fUCK&quot;}, &quot;java&quot;},
+    {{&quot;Study&quot;}, &quot;cpp&quot;},
+};
+print(m);
+auto val = m.at({&quot;fuck&quot;});
+print(val);
+</code></pre>
+<hr />
+<!-- PG197 -->
+
+<p>刚刚用到的两个 map 构造函数：</p>
+<pre><code class="language-cpp">template &lt;class K, class V, class Cmp = std::less&lt;K&gt;&gt;
+class map {
+    explicit map(Cmp cmp);
+    map(initializer_list&lt;pair&lt;K, V&gt;&gt; ilist, Cmp cmp);
+};
+</code></pre>
+<p>基本每个 map 的构造函数都有一个提供额外 cmp 参数的版本，统一都是在最后一个参数后面追加。</p>
+<hr />
+<!-- PG198 -->
+
+<p>传入的仿函数 cmp 甚至可以捕获其他变量，这种捕获了变量的仿函数称之为有状态仿函数 - stateful functor，和无状态仿函数 - stateless functor 相对：</p>
+<pre><code class="language-cpp">vector&lt;int&gt; arr = {1, 4, 2, 8, 5, 7};
+auto cmp = [&amp;] (int i, int j) {
+    return arr[i] &lt; arr[j];
+};
+map&lt;int, int, decltype(cmp)&gt; m(cmp);
+</code></pre>
+<p>利用有状态仿函数可以实现 argsort 等操作，例如上面代码就是根据在 arr 里对应索引的值来排序。</p>
+<blockquote>
+<p>由于 map 需要比较仿函数为纯函数(pure function)，在上面例子中，请保证 map 存在期间 arr 的内容不发生变化，否则 map 基于排序的二分查找功能会得到错误的结果。</p>
+</blockquote>
+<p>传入比较器仿函数是设计模式中典型的策略模式，通过依赖注入，允许我们控制 map 内部的行为。</p>
+<hr />
+<!-- PG199 -->
+
+<p>如果嫌 decltype 麻烦（难以在全局或类内部用），function 容器作为比较运算符，就可以统一了：</p>
+<pre><code class="language-cpp">auto cmp = [] (int i, int j) {
+    return i &lt; j;
+};
+map&lt;int, int, function&lt;bool(int, int)&gt;&gt; m;
+</code></pre>
+<p>稍后还可以通过 <code>key_comp()</code> 获取到用于键比较的仿函数，这个就是你刚刚传入的 cmp 参数：</p>
+<pre><code class="language-cpp">m.key_comp()(1, 2);              // 等价于 cmp(1, 2)
+</code></pre>
+<p><code>value_comp()</code> 获取到用于元素（键-值对）比较的仿函数（他帮你适配参数类型了）：</p>
+<pre><code class="language-cpp">m.value_comp()({1, 0}, {2, 0});  // 等价于 cmp(1, 2)
+</code></pre>
+<hr />
+<!-- PG200 -->
+
+<p>普通 find 函数：键类型作为参数</p>
+<pre><code class="language-cpp">iterator find(K const &amp;k);
+const_iterator find(K const &amp;k) const;
+</code></pre>
+<p>C++14 新增泛型版的 find 函数<sup id="fnref27:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：任意类型作为参数，只要该类型支持与和键比大小。</p>
+<pre><code class="language-cpp">template &lt;class Kt&gt;
+iterator find(Kt &amp;&amp;k);
+template &lt;class Kt&gt;
+const_iterator find(Kt &amp;&amp;k) const;
+</code></pre>
+<blockquote>
+<p>这里的 Kt 是模板参数类型，可以接受任意类型，此处 <code>&amp;&amp;</code> 是万能引用不是右值引用。</p>
+</blockquote>
+<p>相同点：找到了就返回一个迭代器指向与该参数相等的元素，如果找不到还是返回 end()。</p>
+<p>不同点：泛型版本的参数类型 Kt 不必和键类型 K 一致，只要 Kt 和 K 可以比较大小（&lt; 运算符）即可。</p>
+<hr />
+<!-- PG201 -->
+
+<p>泛型 find 如何提升性能</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.find(&quot;hello&quot;);  // 等价于 table.find(string(&quot;hello&quot;))，调用了一次 string 构造函数，可能产生内存分配
+</code></pre>
+<hr />
+<!-- PG201 -->
+
+<p>泛型 find 官方案例：</p>
+<pre><code class="language-cpp">struct FatKey   { int x; int data[1000]; };
+struct LightKey { int x; };
+// Note: as detailed above, the container must use std::less&lt;&gt; (or other 
+//   transparent Comparator) to access these overloads.
+// This includes standard overloads, such as between std::string and std::string_view.
+bool operator&lt;(const FatKey&amp; fk, const LightKey&amp; lk) { return fk.x &lt; lk.x; }
+bool operator&lt;(const LightKey&amp; lk, const FatKey&amp; fk) { return lk.x &lt; fk.x; }
+bool operator&lt;(const FatKey&amp; fk1, const FatKey&amp; fk2) { return fk1.x &lt; fk2.x; }
+
+int main() {
+    // transparent comparison demo
+    std::map&lt;FatKey, char, std::less&lt;&gt;&gt; example = {{{1, {}}, 'a'}, {{2, {}}, 'b'}};
+
+    LightKey lk = {2};
+    if (auto search = example.find(lk); search != example.end())
+        std::cout &lt;&lt; &quot;Found &quot; &lt;&lt; search-&gt;first.x &lt;&lt; &quot; &quot; &lt;&lt; search-&gt;second &lt;&lt; '\n';
+    else
+        std::cout &lt;&lt; &quot;Not found\n&quot;;
+}
+</code></pre>
+<pre><code>Found 2 b
+</code></pre>
+<hr />
+<!-- PG202 -->
+
+<p>允许重复键值的 multimap</p>
+<p>map 中一个键对应一个值，而 multimap 一个键可以对应多个值。</p>
+<ul>
+<li>map：排序 + 去重；</li>
+<li>multimap：只排序，不去重。</li>
+</ul>
+<pre><code class="language-cpp">// map&lt;K, V&gt; 的插入函数：
+pair&lt;iterator, bool&gt; insert(pair&lt;const K, V&gt; const &amp;kv);
+pair&lt;iterator, bool&gt; insert(pair&lt;const K, V&gt; &amp;&amp;kv);
+// multimap&lt;K, V&gt; 的插入函数：
+iterator insert(pair&lt;K, V&gt; const &amp;kv);
+iterator insert(pair&lt;K, V&gt; &amp;&amp;kv);
+</code></pre>
+<p>因为 multimap 允许重复键值，所以插入总是成功，与普通 map 相比不用返回 bool 表示是否成功了。</p>
+<hr />
+<!-- PG203 -->
+
+<pre><code class="language-cpp">multimap&lt;string, string&gt; tab;
+tab.insert({&quot;rust&quot;, &quot;silly&quot;});
+tab.insert({&quot;rust&quot;, &quot;trash&quot;});
+tab.insert({&quot;rust&quot;, &quot;trash&quot;});
+tab.insert({&quot;rust&quot;, &quot;lazy&quot;});
+tab.insert({&quot;cpp&quot;, &quot;smart&quot;});
+tab.insert({&quot;cpp&quot;, &quot;fast&quot;});
+print(tab);
+</code></pre>
+<pre><code>{&quot;cpp&quot;: &quot;smart&quot;, &quot;cpp&quot;: &quot;fast&quot;, &quot;rust&quot;: &quot;silly&quot;, &quot;rust&quot;: &quot;trash&quot;, &quot;rust&quot;: &quot;trash&quot;, &quot;rust&quot;: &quot;lazy&quot;}
+</code></pre>
+<hr />
+<!-- PG204 -->
+
+<p>multimap 通常意义不大，可以用于实现动态排序。</p>
+<hr />
+<!-- PG205 -->
+
+<p>multimap 查询某个键对应的多个值</p>
+<pre><code class="language-cpp"></code></pre>
+<hr />
+<!-- PG206 -->
+
+<p>时间复杂度总结说明</p>
+<hr />
+<!-- PG207 -->
+
+<table>
+<thead>
+<tr>
+<th>函数或写法</th>
+<th>解释说明</th>
+<th>时间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>m1 = move(m2)</td>
+<td>移动</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span></td>
+</tr>
+<tr>
+<td>m1 = m2</td>
+<td>拷贝</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span></td>
+</tr>
+<tr>
+<td>swap(m1, m2)</td>
+<td>交换</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span></td>
+</tr>
+<tr>
+<td>m.clear()</td>
+<td>清空</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<!-- PG208 -->
+
+<table>
+<thead>
+<tr>
+<th>函数或写法</th>
+<th>解释说明</th>
+<th>时间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>m.insert({key, val})</td>
+<td>插入键值对</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span></td>
+</tr>
+<tr>
+<td>m.insert(pos, {key, val})</td>
+<td>带提示的插入，如果位置提示准确</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span>+</td>
+</tr>
+<tr>
+<td>m.insert(pos, {key, val})</td>
+<td>带提示的插入，如果位置提示不准确</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span></td>
+</tr>
+<tr>
+<td>m[key] = val</td>
+<td>插入或覆盖</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span></td>
+</tr>
+<tr>
+<td>m.insert_or_assign(key, val)</td>
+<td>插入或覆盖</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span></td>
+</tr>
+<tr>
+<td>m.insert({vals&hellip;})</td>
+<td>设 M 为待插入元素（vals）的数量</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(M \log N)</span><script type="math/tex">O(M \log N)</script></span></td>
+</tr>
+<tr>
+<td vals...="vals...">map m =</td>
+<td>如果 vals 无序</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(N \log N)</span><script type="math/tex">O(N \log N)</script></span></td>
+</tr>
+<tr>
+<td vals...="vals...">map m =</td>
+<td>如果 vals 已事先从小到大排列</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<!-- PG209 -->
+
+<table>
+<thead>
+<tr>
+<th>函数或写法</th>
+<th>解释说明</th>
+<th>时间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>m.at(key)</td>
+<td>根据指定的键，查找元素，返回值的引用</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span></td>
+</tr>
+<tr>
+<td>m.find(key)</td>
+<td>根据指定的键，查找元素，返回迭代器</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span></td>
+</tr>
+<tr>
+<td>m.count(key)</td>
+<td>判断是否存在指定键元素，返回相同键的元素数量（只能为 0 或 1）</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span></td>
+</tr>
+<tr>
+<td>m.equal_range(key)</td>
+<td>根据指定的键，确定上下界，返回区间</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span></td>
+</tr>
+<tr>
+<td>m.size()</td>
+<td>map 中所有元素的数量</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span></td>
+</tr>
+<tr>
+<td>m.erase(key)</td>
+<td>根据指定的键，删除元素</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span></td>
+</tr>
+<tr>
+<td>m.erase(it)</td>
+<td>根据找到的迭代器，删除元素</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span></td>
+</tr>
+<tr>
+<td>m.erase(beg, end)</td>
+<td>批量删除区间内的元素，设该区间（beg 和 end 之间）有 M 个元素</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(M + \log N)</span><script type="math/tex">O(M + \log N)</script></span></td>
+</tr>
+<tr>
+<td>erase_if(m, cond)</td>
+<td>批量删除所有符合条件的元素</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<!-- PG210 -->
+
+<table>
+<thead>
+<tr>
+<th>函数或写法</th>
+<th>解释说明</th>
+<th>时间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>m.insert(node)</td>
+<td></td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span></td>
+</tr>
+<tr>
+<td>node = m.extract(it)</td>
+<td></td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span></td>
+</tr>
+<tr>
+<td>node = m.extract(key)</td>
+<td></td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span></td>
+</tr>
+<tr>
+<td>m1.merge(m2)</td>
+<td>合并两个 map，清空 m2，结果写入 m1</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(N \log N)</span><script type="math/tex">O(N \log N)</script></span></td>
+</tr>
+<tr>
+<td>m1.insert(m2.begin(), m2.end())</td>
+<td>合并两个 map，m2 保持不变，结果写入 m1</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">O(N \log N)</span><script type="math/tex">O(N \log N)</script></span></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<!-- PG211 -->
+
+<p>C++11 新增：基于哈希的映射表 unordered_map</p>
+<hr />
+<!-- PG212 -->
+
+<p>原理：unordered_map 中的桶</p>
+<p>unordered_map 如何快速检索数据？高效的秘诀在于 unordered_map 内部是一个数组，一个桶的数组。插入时把键值对存到键的 hash 对应编号的桶去，查询时就根据 hash 去线性地查找桶（这一操作是 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span> 的）。</p>
+<p>例如键为 &ldquo;hello&rdquo;，假设算出他的 hash 为 42。而当前桶的数量是 32 个，则会把 &ldquo;hello&rdquo; 存到 42 % 32 = 10 号桶去。查询时，同样计算出 hash(&ldquo;hello&rdquo;) % 32 = 10 号桶，然后就可以从 10 号桶取出 &ldquo;hello&rdquo; 对应的数据了。</p>
+<pre><code class="language-cpp">template &lt;class K, class V&gt;
+class unordered_map {
+    array&lt;pair&lt;K, V&gt;, 32&gt; buckets;
+
+    void insert(pair&lt;K, V&gt; kv) {
+        size_t h = hash(kv.first) % buckets.size();  // 计算出来的 hash 可能很大，取模可以防止 h &gt;= buckets.size()
+        buckets[h] = kv;
+    }
+
+    V &amp;at(K k) {
+        size_t h = hash(k) % buckets.size();
+        auto &amp;kv = buckets[h];
+        if (k != kv.first) throw out_of_range{};
+        return kv.second;
+    }
+};
+</code></pre>
+<hr />
+<p>但是这里有一个问题，如果两个不同的字符串，刚好 hash 以后的模相同怎么办？这种现象称为 hash 冲突。</p>
+<p>C++ 标准库的解决方案是采用链表法：一个桶不是单独的一个 K-V 对，而是数个 K-V 对组成的单链表（forward_list）。一个桶不是只存储一个数据，而是可以存储任意多个数据（0到∞个）。</p>
+<p>插入时，找到对应的桶，并往链表的头部插入一个新的 K-V 对。查找时，先找到对应的桶，在这个桶里的链表里顺序遍历查找，由于第一步的桶查找是 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span> 的，虽然最后还是链表暴力查找，但是已经被桶分摊了一个维度，因此查找的平均复杂度还是 <span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span> 的。</p>
+<pre><code class="language-cpp">    void insert(pair&lt;K, V&gt; kv) {
+        size_t h = hash(kv.first) % buckets.size();  // 计算 hash 的模（所在桶的编号）
+        buckets[h].push_front(kv);                // 单链表的头插，是最高效的
+    }
+
+    V &amp;at(K k) {
+        size_t h = hash(k) % buckets.size();         // 计算 hash 的模（所在桶的编号）
+        for (auto &amp;kv: buckets[h]) {
+            if (k == kv.first)  // 可能有多个不同的键刚好有相同的 hash 模，需要进一步判断键确实相等才能返回
+                return kv.second;
+        }
+        throw out_of_range{};
+    }
+</code></pre>
+<hr />
+<p>这里还是有一个问题，hash 冲突时，对链表的暴力遍历查找复杂度是 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 的，随着越来越多的元素被插入进来，32 个桶将会拥挤不堪。假设有 n 个元素，则平均每个桶都会有 n / 32 个元素，需要 n / 32 次遍历。所以元素数量充分大时 unordered_map 又会退化成暴力遍历的 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 复杂度，满足不了我们用他加速查找的目的。</p>
+<p>因此 C++ 标准库规定，插入时，当检测到平均每个桶里都有 1 个元素时，也就是元素数量大于桶的数量时，就会发生自动扩容，一次性让桶的数量扩充 2 倍，并重新计算每个元素的 hash 模（桶编号）全部重新插入一遍。</p>
+<pre><code class="language-cpp">template &lt;class K, class V&gt;
+class unordered_map {
+    vector&lt;forward_list&lt;pair&lt;K, V&gt;&gt;&gt; buckets;  // 因为需要动态扩容，桶数组变成了动态数组 vector
+    size_t size = 0;  // 记录当前容器共有多少个元素
+
+    void insert(pair&lt;K, V&gt; kv) {
+        if (size + 1 &gt; buckets.size()) reserve(n);  // 如果插入后的元素数量大于桶的容量，则扩容
+        size_t h = hash(kv.first) % buckets.size();
+        buckets[h].push_front(kv);
+        size++;     // insert 时 size 自动加 1，erase 时也要记得减 1
+    }
+
+    void reserve(size_t n) {
+        if (n &lt;= buckets.size()) return;  // 如果要求的大小已经满足，不需要扩容
+        buckets.resize(max(n, buckets.size() * 2));  // 把桶数组至少扩大 2 倍（避免重复扩容），至多扩到 n
+        此处省略 rehash 的具体实现  // 桶的数量发生变化了，需要重新计算一遍所有元素 hash 的模，并重新插入
+    }
+};
+</code></pre>
+<hr />
+<p>key 所在的桶编号计算公式：bucket_index(key) = hash(key) % bucket_count()</p>
+<hr />
+<p>还是存在问题，刚刚的 insert 根本没有检测要插入的键是否已经存在了。如果已经存在还插入，那就变成 unordered_multimap 了！我们是普通的需要去重的 unordered_map，所以插入时先需要遍历下链表检测一下。</p>
+<pre><code class="language-cpp">template &lt;class K, class V&gt;
+class unordered_map {
+    vector&lt;forward_list&lt;pair&lt;K, V&gt;&gt;&gt; buckets;
+    size_t size = 0;
+
+    struct iterator {
+        explicit iterator(pair&lt;K, V&gt; &amp;kv) { /* ... */ }
+        // ...
+    };
+
+    pair&lt;iterator, bool&gt; insert(pair&lt;K, V&gt; kv) {
+        if (size + 1 &gt; buckets.size()) reserve(size + 1);
+        size_t h = hash(kv.first) % buckets.size();
+        for (auto &amp;kv2: buckets[h]) {
+            if (kv.first == kv2.first)  // 检测是否发生了冲突
+                return {iterator(kv2), false};  // 发生冲突则返回指向已存在的键的迭代器
+        }
+        buckets[h].push_front(kv);
+        size++;
+        return {iterator(buckets.front()), true};  // 没发生冲突则返回成功插入元素的迭代器
+    }
+};
+</code></pre>
+<hr />
+<!-- PG213 -->
+
+<p>用法上，unordered_map 基本与 map 相同，以下着重介绍他们的不同点。</p>
+<hr />
+<!-- PG214 -->
+
+<p>区别 1：有序性</p>
+<ul>
+<li>map 基于红黑树，元素从小到大顺序排列，遍历时也是从小到大的，键类型需要支持比大小（std::less 或 &lt;）。</li>
+<li>unordered_map 基于哈希散列表，里面元素顺序随机，键类型需要支持哈希值计算（std::hash）和判断相等（std::equal_to 或 ==）。</li>
+</ul>
+<p>map 中的元素始终保持有序，unordered_map 里面的元素是随机的。</p>
+<p>这也意味着 std::set_union 这类要求输入区间有序的 algorithm 函数无法适用于 unordered_map/set。</p>
+<hr />
+<p>unordered_map 所需的 trait 有两个：hash 和 equal_to</p>
+<p><code>unordered_map&lt;K, V&gt;</code> 的完整形态是：</p>
+<pre><code class="language-cpp">unordered_map&lt;K, V, hash&lt;K&gt;, equal_to&lt;K&gt;, allocator&lt;pair&lt;const K, V&gt;&gt;&gt;
+</code></pre>
+<ul>
+<li>
+<p>其中 allocator 我们照例先跳过不讲。</p>
+</li>
+<li>
+<p>hash 是用于求键的哈希的仿函数类。他接受一个 K 返回一个 size_t（无符号 64 位整数）。</p>
+</li>
+<li>
+<p>equal_to 是用于判断两个键相等的仿函数类。要求是，如果两个键相等，返回 true。</p>
+</li>
+</ul>
+<p>这里对 hash 的实现有一个要求，<strong>如果两个键相等，则他们的哈希必定也相等，反之则不一定</strong>。</p>
+<p>这个假设构成了 unordered_map 得以高效的基石，他使得 unordered_map 可以更快排除不可能的答案，而不必像 vector 的查找那样需要去暴力遍历全部元素，只需要遍历哈希相等的那一部分元素就够了。</p>
+<pre><code class="language-cpp">template&lt;typename _Key, typename _Tp,
+   typename _Hash = hash&lt;_Key&gt;,      // 默认的哈希函数实现，支持了 int, void *, string 等类型
+   typename _Pred = equal_to&lt;_Key&gt;,  // 默认的 == 运算符
+   typename _Alloc = allocator&lt;pair&lt;const _Key, _Tp&gt;&gt;&gt;
+class unordered_map
+</code></pre>
+<hr />
+<p>hash 返回的 size_t 这个整数可以理解为一个对任意类型的“摘要”。</p>
+<p>这种摘要的关键在于如何把一个复杂的类型“映射”到小小的 size_t 上去，并且分布得尽可能均匀，不要冲突。</p>
+<p>以字符串类型 string 为例，常见的一种生成“摘要”的方法是，用一个素数的乘方序列和各字符的 ASCII 码点积：</p>
+<pre><code class="language-cpp">size_t hash_string(string const &amp;s) {
+    size_t h = 0;
+    for (char c: s) {
+        h = h * 37 + c;
+    }
+    return h;
+}
+</code></pre>
+<p>例如对于字符串 &ldquo;hello&rdquo;，则 hash 可以生成这样一个摘要：</p>
+<pre><code class="language-cpp">size_t h = ((('h' * 37 + 'e') * 37 + 'l') * 37 + 'l') * 37 + 'o';
+</code></pre>
+<p>相当于 <span class="arithmatex"><span class="MathJax_Preview">h \cdot 37^4 + e \cdot 37^3 + l \cdot 37^2 + l \cdot 37 + o</span><script type="math/tex">h \cdot 37^4 + e \cdot 37^3 + l \cdot 37^2 + l \cdot 37 + o</script></span></p>
+<blockquote>
+<p>也有其他更高效的生成摘要的方法，例如借助位运算。甚至还有偷懒直接拿 strlen 当哈希函数的“世界上最好的哈希表”，我不说是谁。</p>
+</blockquote>
+<hr />
+<pre><code class="language-cpp">size_t h = ((('h' * 37 + 'e') * 37 + 'l') * 37 + 'l') * 37 + 'o';
+</code></pre>
+<p>随着字符串长度的增加，这个 h 肯定会超过 size_t 的表示范围，但是没关系，无符号整数的乘法、加法溢出不是未定义行为，他会自动 wrapping，也就是只保留乘法结果和 2^64 取模的部分。</p>
+<p>取模也是对哈希值常见的一个操作，反正哈希值是随机的，取模以后也是随机的，但是缩小了范围。</p>
+<blockquote>
+<p>基本假设：m 足够小时，一个均匀的分布取以 m 的模以后仍然应该是均匀的</p>
+</blockquote>
+<p>unordered_map 中桶的数量是有限的，为了把范围从 <span class="arithmatex"><span class="MathJax_Preview">0</span><script type="math/tex">0</script></span> 到 <span class="arithmatex"><span class="MathJax_Preview">2^{64} - 1</span><script type="math/tex">2^{64} - 1</script></span> 的哈希值映射为 0 到 bucket_count - 1 的桶序号，他内部会把键的哈希值取以桶数量的模，作为一个键要存储到的桶的序号：</p>
+<pre><code>bucket_index = hash(key) % bucket_count
+</code></pre>
+<hr />
+<!-- PG216 -->
+
+<p>std::hash 就是标准库用于计算哈希的仿函数类了，他和 std::less 一样，是一个 trait 类。</p>
+<p>一些常见的类型有默认的实现，也可以针对自定义类型添加特化。</p>
+<pre><code class="language-cpp">template &lt;class T&gt;
+struct hash {
+    size_t operator()(T const &amp;t) const noexcept;  // 有待实现
+};
+
+template &lt;&gt;
+struct hash&lt;int&gt; {
+    size_t operator()(int t) const noexcept {
+        return t;  // 对 int 的特化
+    }
+};
+
+template &lt;class T&gt;
+struct hash&lt;T *&gt; {
+    size_t operator()(T *t) const noexcept {
+        return reinterpret_cast&lt;uintptr_t&gt;(t);  // 对 T * 的偏特化
+    }
+};
+</code></pre>
+<hr />
+<p>std::hash 针对每个不同的类型做了特化，例如当我们需要计算 string 类型的 hash 时：</p>
+<pre><code class="language-cpp">string str = &quot;Hello, world&quot;;
+size_t h = hash&lt;string&gt;()(str);
+print(str, &quot;的哈希是&quot;, h);
+</code></pre>
+<p>注意：这里有两个括号，第一个是空的。第一个括号创建仿函数对象，第二个用str作为实参调用仿函数的 <code>operator()</code>。当然还别忘了第一个尖括号，这个尖括号里的 string 表示的是 hash 仿函数接下来要接受参数的类型，之所以作为类的模板参数而不是模板函数，是为了方便特化和偏特化。同学们也可以自己写一个这样的函数，用起来就不用指定类型（如这里的 string）了，让模板函数自动推导参数类型（类似于 make_pair）：</p>
+<pre><code class="language-cpp">template &lt;class T&gt;
+size_t do_hash(T const &amp;t) {
+    return hash&lt;T&gt;()(t);
+}
+int main() {
+    string str = &quot;Hello, world&quot;;
+    size_t h = do_hash(str);
+    print(str, &quot;的哈希是&quot;, h);
+}
+</code></pre>
+<pre><code>&quot;Hello, world&quot; 的哈希是 14701251851404232991
+</code></pre>
+<hr />
+<p>对任意类型哈希的结果都是一个 size_t，其在 32 位系统上等同于 uint32_t，在我们 64 为系统上等同于 uint64_t。选择 size_t 是为了能哈希了以后直接用于 unordered_map 中桶的索引。</p>
+<p>由于 hash 是用作哈希表的哈希函数，而不是用于加密领域（请你移步 md5），或是用于随机数生成（请移步 mt19937），因此对于任意类型，只需要根据他生成一个 size_t 的哈希值即可，只要保证哈希值分布均匀即可，不一定要有随机性。例如标准库对 int 的 hash 实现就是个恒等函数——直接返回其整数值，不用做任何计算：</p>
+<pre><code class="language-cpp">template &lt;&gt;
+struct hash&lt;int&gt; {
+    size_t operator()(int t) const noexcept {
+        return t;  // 对 int 的特化真是什么也不做呢？
+    }
+};
+</code></pre>
+<p>而对于任意指针的实现则是直接把指针 bit-cast 成 size_t：</p>
+<pre><code class="language-cpp">template &lt;class T&gt;
+struct hash&lt;T *&gt; {
+    size_t operator()(T *t) const noexcept {
+        return reinterpret_cast&lt;uintptr_t&gt;(t);  // 指针强制转换为整数
+    }
+};
+</code></pre>
+<hr />
+<pre><code class="language-cpp">int i = 42;
+int j = hash&lt;int&gt;()(i);  // 没想到罢！我系恒等函数哒
+print(i, j);
+</code></pre>
+<pre><code>42 42
+</code></pre>
+<p>记住，std::hash 不是为了加密或随机而生的，他的功能仅仅是尽可能快速地把任意类型 T 映射到 size_t 而已。</p>
+<p>至于这对 unordered_map 的性能有何影响？通常没有什么影响，除非输入键故意设为和 bucket_count 同模，毕竟反正你也无法断定输入键的排布模式，不论选什么哈希函数只要保证均匀都是可以的。而恒等函数刚好是均匀的，又不用额外的花里胡哨位运算浪费时间，反而可能因为键有序而提升了缓存局域性，提升了性能，所以各大厂商的标准库都是这么做的。</p>
+<hr />
+<!-- PG215 -->
+
+<p>区别 2：时间复杂度</p>
+<ul>
+<li>map 的查询和插入操作是 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span> 复杂度的。</li>
+<li>unordered_map 的查询和插入操作是 <span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span> 复杂度的。</li>
+</ul>
+<p>看起来 unordered_map 更高效？那还要 map 干什么？完全上位替代啊？</p>
+<p>但是我们要注意，上面所说的复杂度 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span> 只是平均下来的，并不代表每一次 unordered_map 插入操作的复杂度都是 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span>！所以，复杂度表示法里的这个 + 号就是这个意思，代表我这个复杂度只是多次运行取平均，如果只考虑单次最坏的情况，可能更高。</p>
+<ul>
+<li>map 的插入操作<strong>最坏</strong>也只是 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span> 复杂度的。</li>
+<li>unordered_map 的插入操作<strong>最坏</strong>可以是 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 复杂度的。</li>
+</ul>
+<p>处理很高的数据量时，这一点最坏的情况会被平摊掉，unordered_map 更高效。</p>
+<hr />
+<p>所以 unordered_map 不稳定，虽然平均是 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span> 复杂度，但最坏可达到 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 复杂度。背后的原因是什么呢？</p>
+<p>原来 unordered_map 和 vector 一样，是一个需要不断动态扩容的容器。</p>
+<p>如果不扩容，那么当很多元素挤在一个桶里，链表的压力就会变大，会很低效，因此 unordered_map 必须扩容。但是在扩容的时候是需要进行 rehash 操作的。一次扩容，就需要把所有的元素都移动一遍。</p>
+<p>结果就是 unordered_map 的插入如果没触发 rehash，那就是 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span> 的。触发了，那就是最坏的情况，<span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 的。但是不触发的情况远多于触发了的，所以平均下来还是 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span>，为了提醒人们他最坏的情况，所以写作 <span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span>，读作“平摊 O1”（Amortized Constant）。</p>
+<p>此外，不仅 unordered_map 的插入函数是 <span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span>，他的查询函数也是 <span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span>。为什么呢？设想你在编写一个富连网服务器，如果黑客已知你的 hash 函数，那他就可以通过构造一系列特殊设计好的 key，他们的哈希刚好相等（或同模），这样就使得所有 key 刚好全部落在一个桶里，导致 unordered_map 退化成线性的链表，所有的查询和插入都变成了这一个桶上的链表遍历操作，复杂度达到最坏的 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span>，这一现象叫做 hash 退化。</p>
+<p>因此 hash 函数的好坏决定着 unordered_map 性能，对于安全领域来说，还要保证 hash 函数无法被黑客破解。只要 hash 函数足够随机，就能保证键不冲突，就很快，一旦出现键冲突就会变慢。但需要频繁使用的 hash 函数计算难度又不能太大，那又会影响性能，因此 hash 也不能太过复杂。</p>
+<blockquote>
+<p>标准库里存在这种“平摊复杂度”的例子还有很多，例如 vector 的 push_back 不 reserve 的话，就是 <span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span> 的，因为他需要动态扩容。</p>
+</blockquote>
+<!-- 虽然平均下来确实可以忽略不计，但他特定一次内确实有可能达到 -->
+
+<hr />
+<!-- PG218 -->
+
+<p>一些实时性要求很高的领域就不能用 unordered_map。例如你造了个火箭，规定：火箭控制程序需要在 1000 μs 内对外界变化做出实时反应，如果不能及时做出反应，火箭就会做托马斯回旋给你看。</p>
+<p>你在火箭控制程序中用了 unordered_map，这个程序会不断运行，以便控制火箭做出正确的机动，对抗侧向风干扰。第一次运行他在 180 μs 内反应了，第二次在 250 μs 内反应了，第三次 245 μs 内反应了，你觉得他很高效。</p>
+<p>但是突然有一次，unordered_map 觉得他内部“桶太乱”了，急需重新扩容并 rehash 一下“忧化性能”。然后，他把所有的元素都移动了一遍，移动完了，把处理完的数据返回给火箭姿态调控系统，认为大功告成。但当他睁开眼睛一看，刚想要控制一下姿态呢？却发现自己已经在做托马斯回旋了！原来我这一“忧化”就忧了 4000 μs，超出了火箭实时响应的硬性指标，导致西装骰子人卷款跑路，小彭老师破产。</p>
+<p>小彭老师重新创业，这次他选用了稳定的 map，第一次他在 810 μs 内反应了，第二次在 680 μs 内反应了，第三次 730 μs 内反应了，你觉得他很低效。但是他每一次都能成功卡点给你完成任务，从来不会突然超过 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span>，他的最坏情况是可控的，从而避免了托马斯破产回旋。小彭老师最终创业成功，1000 年后，我司成功建造完成 Type-II 文明所急需的戴森球，向星辰大海进军。</p>
+<p>对实时性要求高的这类领域包括，音视频，造火箭，量化交易等。这类低延迟低吞吐量的领域对平摊复杂度很反感，他们只看重最坏的复杂度，而不是平均的。</p>
+<p>但对于主打一个高吞吐量无所谓延迟的离线图形学，离线科学计算，实时性不重要的生态化反场景，我们可以认为 unordered_map 的平摊 <span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span> 就是比 map 高效的。</p>
+<hr />
+<!-- PG219 -->
+
+<p>区别 3：迭代器失效条件</p>
+<ul>
+<li>map 和 unordered_map 都是只有当删除的刚好是迭代器指向的那个元素时才会失效，这点相同。</li>
+<li>但 unordered_map 扩容时候的 rehash 操作会造成所有迭代器失效。</li>
+</ul>
+<blockquote>
+<p>insert 可能导致 unordered_map 扩容，其他只读操作不会。</p>
+</blockquote>
+<p>迭代器指向的那个元素被删除时，不论 map 和 unordered_map 都会失效。</p>
+<p>unordered_map 在 insert 时如果发生扩容，之前保存的迭代器可能失效，可以通过调用 reserve 避免 insert 时扩容。</p>
+<hr />
+<!-- PG220 -->
+
+<p>小彭老师编写好了迭代器失效表，方便你记忆:</p>
+<table>
+<thead>
+<tr>
+<th>容器</th>
+<th>clear</th>
+<th>swap</th>
+<th>opeartor=</th>
+<th>rehash</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>vector</td>
+<td>是</td>
+<td>否</td>
+<td>是</td>
+<td>-</td>
+</tr>
+<tr>
+<td>map</td>
+<td>是</td>
+<td>否</td>
+<td>是</td>
+<td>-</td>
+</tr>
+<tr>
+<td>unordered_map</td>
+<td>是</td>
+<td>否</td>
+<td>是</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<!-- PG220 -->
+
+<p>小彭老师编写好了迭代器失效表，方便你记忆:</p>
+<table>
+<thead>
+<tr>
+<th>容器</th>
+<th>find</th>
+<th>count</th>
+<th>at</th>
+<th>[]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>vector</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>map</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>unordered_map</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+<td>是，如果创建了新元素且 size / bucket_count &gt; max_load_factor</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<!-- PG221 -->
+
+<p>小彭老师编写好了迭代器失效表，方便你记忆:</p>
+<table>
+<thead>
+<tr>
+<th>容器</th>
+<th>push_back</th>
+<th>insert</th>
+<th>erase</th>
+<th>reserve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>vector</td>
+<td>是，如果 size &gt; capacity</td>
+<td>是，如果插入位置在当前迭代器之前，或 size &gt; capacity</td>
+<td>是，如果删除的元素在当前迭代器之前，或刚好是当前迭代器指向的</td>
+<td>是</td>
+</tr>
+<tr>
+<td>map</td>
+<td>-</td>
+<td>否</td>
+<td>是，如果删除的刚好是当前迭代器指向的元素</td>
+<td>-</td>
+</tr>
+<tr>
+<td>unordered_map</td>
+<td>-</td>
+<td>是，如果 size / bucket_count &gt; max_load_factor</td>
+<td>是，如果删除的刚好是当前迭代器指向的元素</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p>也可以查看官方版《迭代器失效表》：https://en.cppreference.com/w/cpp/container#Iterator_invalidation</p>
+<hr />
+<!-- PG222 -->
+
+<p>计算公式：负载因子(load_factor) = 当前元素数量(size) ÷ 当前桶的数量(bucket_count)</p>
+<p>插入新元素后，当检测到负载因子大于最大负载因子（默认 1.0）时，就会自动进行 rehash 操作。</p>
+<p>为了避免重复小规模扩容浪费时间，这次 rehash 会一次性扩容两倍（跟 vector 的 push_back 扩容类似）。</p>
+<blockquote>
+<p>最大负载因子可以通过 max_load_factor 函数调整。当前负载因子可以通过 load_factor 函数查询。</p>
+</blockquote>
+<p>直观理解：当每个桶平均都有一个元素时，unordered_map 就会认为已经很满了，就会扩容并重新分配位置。</p>
+<blockquote>
+<p>由于默认最大负载因子是 1.0，所以扩容条件等价于 size &gt; bucket_count</p>
+</blockquote>
+<hr />
+<!-- PG223 -->
+
+<p>rehash 函数</p>
+<p>在操作 unordered_map 容器过程（尤其是向容器中添加新键值对）中，一旦当前容器的负载因子超过最大负载因子（默认值为 1.0），该容器就会适当增加桶的数量（通常是翻一倍），并自动执行 rehash() 成员方法，重新调整各个键值对的存储位置（此过程又称“重哈希”），此过程很可能导致之前创建的迭代器失效。<sup id="fnref28:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<blockquote>
+<p>除了扩容时自动的 rehash，确认数据插入完毕不会再改动时，我们也可以手动调用 rehash() 函数来优化容器中元素的排布，提升性能。</p>
+</blockquote>
+<pre><code class="language-cpp">unordered_map&lt;int, int&gt; umap;
+for (int i = 1; i &lt;= 50; i++) {
+    umap.emplace(i, i);
+}
+auto pair = umap.equal_range(49);  //获取键为 49 的键值对所在的区间，由于不是 multimap，区间大小只能为 0 或 1
+for (auto iter = pair.first; iter != pair.second; ++iter) { //输出 pair 范围内的每个键值对的键的值
+    cout &lt;&lt; iter-&gt;first &lt;&lt; '\n';
+}
+umap.rehash(10); //手动调用 rehash() 函数重哈希为 10 个桶
+for (auto iter = pair.first; iter != pair.second; ++iter) { // 重哈希之后，之前保存的迭代器可能会发生变化
+    cout &lt;&lt; iter-&gt;first &lt;&lt; '\n';
+}
+</code></pre>
+<pre><code>49 
+Segmentation fault (core dumped)
+</code></pre>
+<hr />
+<!-- PG224 -->
+
+<p>基于红黑树的映射表 map 只需支持比较运算的 less 即可，而 unordered_map 需要哈希和相等两个 trait，他们分别名叫 std::hash 和 std::equal_to。</p>
+<p>虽然两者都是仿函数，但也有很多区别：</p>
+<ol>
+<li>hash 只接受一个参数，而 equal_to 接受两个参数。</li>
+<li>hash 返回 size_t，而 equal_to 返回 bool 类型。</li>
+<li>equal_to 有默认的实现，那就是调用运算符 ==。而 hash 没有默认实现，也没相应的运算符，只能手动特化。</li>
+</ol>
+<p>正因为如此，通常我们需要让一个类（例如 Student）支持 equal_to 或 less 这些有相应运算符的仿函数时，直接在类型内部定义 <code>operator==</code> 或 <code>operator&lt;</code> 即可，而 hash 则是只能用特化的方法才能支持上。</p>
+<pre><code class="language-cpp">template &lt;class T&gt;
+struct hash {
+    size_t operator()(T const &amp;t) const noexcept;  // 有待实现
+};
+
+template &lt;class T&gt;
+struct equal_to {
+    bool operator()(T const &amp;x, T const &amp;y) const noexcept {
+        return x == y;
+    }
+};
+</code></pre>
+<hr />
+<p>有些类型能用作 map 的键，但不能用作 unordered_map 的键，这是因为偷懒的标准库没对他们的 hash 特化。</p>
+<p>例如 tuple 支持 &lt; 运算符，支持 less。</p>
+<p>但是 tuple 没有 hash 的特化，不支持 hash。</p>
+<pre><code class="language-cpp">tuple&lt;int, int&gt; tup;
+size_t h = hash&lt;tuple&lt;int, int&gt;&gt;()(tup);  // 编译期报错：查无此函数！
+</code></pre>
+<pre><code class="language-cpp">unordered_map&lt;tuple&lt;int, int&gt;&gt;
+</code></pre>
+<hr />
+<!-- PG225 -->
+
+<p>给 tuple 等复合类型自定义哈希函数</p>
+<hr />
+<p>和 less 的情形一样，也是有三种解决方案：</p>
+<ol>
+<li>自定义一个 hash 的特化，equal_to 的特化</li>
+</ol>
+<pre><code class="language-cpp">template &lt;&gt;
+struct std::hash&lt;Student&gt; {
+    bool operator()(Student const &amp;x) const {
+        return hash&lt;string&gt;()(x.name) ^ hash&lt;int&gt;(x.id) ^ hash&lt;int&gt;(x.sex);
+    }
+};
+
+template &lt;&gt;
+struct std::equal_to&lt;Student&gt; {
+    bool operator()(Student const &amp;x, Student const &amp;y) const {
+        return x.name == y.name &amp;&amp; x.id == y.id &amp;&amp; x.sex == y.sex;
+    }
+};
+
+unordered_map&lt;Student, int&gt; stutab;
+</code></pre>
+<hr />
+<ol start="2">
+<li>自定义一个 hash 的仿函数类，一个 equal_to 的仿函数类，然后传入 unordered_map 做模板参数</li>
+</ol>
+<pre><code class="language-cpp">template &lt;&gt;
+struct HashStudent {
+    bool operator()(Student const &amp;x) const {
+        return hash&lt;string&gt;()(x.name) ^ hash&lt;int&gt;(x.id) ^ hash&lt;int&gt;(x.sex);
+    }
+};
+
+struct EqualStudent {
+    bool operator()(Student const &amp;x, Student const &amp;y) const {
+        return x.name == y.name &amp;&amp; x.id == y.id &amp;&amp; x.sex == y.sex;
+    }
+};
+
+unordered_map&lt;Student, int, HashStudent, EqualStudent&gt; stutab;
+</code></pre>
+<blockquote>
+<p>注：如果 Student 已经定义了 <code>operator==</code>，则这里不用 EqualStudent，默认的 equal_to 会自动调用 == 运算符的。</p>
+</blockquote>
+<hr />
+<ol start="3">
+<li>对于 tuple 而言，tuple 已经有了 == 运算符，不用特化 equal_to 了，只需要特化或指定 hash 即可</li>
+</ol>
+<pre><code class="language-cpp">template &lt;class ...Ts&gt;
+inline size_t hash_combine(Ts const &amp;...ts) {
+    return (std::hash&lt;Ts&gt;()(ts) ^ ...);
+}
+
+template &lt;class ...Ts&gt;
+struct std::hash&lt;std::tuple&lt;Ts...&gt;&gt; {
+    size_t operator()(std::tuple&lt;Ts...&gt; const &amp;x) const {
+        return std::apply(hash_combine&lt;Ts...&gt;, x);
+    }
+};
+
+unordered_map&lt;tuple&lt;string, int, int&gt;, int&gt; stutab;
+</code></pre>
+<hr />
+<p>试试看效果吧！</p>
+<pre><code class="language-cpp">template &lt;class ...Ts&gt;
+inline size_t hash_combine(Ts const &amp;...ts) {
+    return (std::hash&lt;Ts&gt;()(ts) ^ ...); // 把任意多个元素哈希通过“位异或(^)”拼凑成一个单独的哈希
+}
+
+template &lt;class ...Ts&gt;
+struct std::hash&lt;std::tuple&lt;Ts...&gt;&gt; {
+    size_t operator()(std::tuple&lt;Ts...&gt; const &amp;x) const {
+        // std::apply 会把 tuple 里的元素全部展开来调用 hash_combine，相当于 Python 里的 *args
+        return std::apply(hash_combine&lt;Ts...&gt;, x);
+    }
+};
+
+int main() {
+    tuple&lt;int, int&gt; t(42, 64);
+    size_t h = hash&lt;tuple&lt;int, int&gt;&gt;()(t);
+    print(t, &quot;的哈希值是:&quot;, h);
+    return 0;
+}
+</code></pre>
+<pre><code>{42, 64} 的哈希值是: 106
+</code></pre>
+<p>这里的计算是：42 ^ 64 = 106，位异或的知识可以去 Bing 搜索一下，或者问一下 GPT，CS 学生应该都知道的。</p>
+<hr />
+<p>但是简简单单用一个位异或 ^ 来把两个成员的哈希组合起来，有个严重的问题，如果 <code>tuple&lt;int, int&gt;</code> 里的两个成员值刚好一样，则其两个哈希值也会一样，那么他们通过位异或 ^ 合并的结果就会始终为 0。</p>
+<p>例如不论 (42, 42) 还是 (64, 64) 这两个 tuple，他们的哈希值都会为 0。明明具体值不同哈希值却相同，这就是发生了哈希冲突，这会严重影响 unordered_map 的性能，是必须避免的。</p>
+<p>用 + 来组合也有这个问题，如果第一个成员刚好是另一个的相反数，或只要是两个数加起来和相等，就会冲突。</p>
+<p>例如如果我们用 unordered_map 构建一张地图的话，就发现当玩家在往斜上方移动时就会变得特别卡顿，原来是因为玩家的历史轨迹刚好是一条 y = x 的曲线，斜率为 1，由于我们采用 ^ 来组合哈希，就导致刚好这条线上所有的点都会塌缩到 0 号桶去，让 unordered_map 退化成了 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 复杂度。</p>
+<hr />
+<p>最先进的是 boost::hash_combine 的方法</p>
+<pre><code class="language-cpp">template &lt;class ...Ts&gt;
+inline size_t hash_combine(Ts const &amp;...ts) {
+    size_t h = 0;
+    ((h ^= std::hash&lt;Ts&gt;()(ts) + 0x9e3779b9 + (h &lt;&lt; 6) + (h &gt;&gt; 2)), ...);
+    return h;
+}
+
+template &lt;class ...Ts&gt;
+struct std::hash&lt;std::tuple&lt;Ts...&gt;&gt; {
+    size_t operator()(std::tuple&lt;Ts...&gt; const &amp;x) const {
+        return std::apply(hash_combine&lt;Ts...&gt;, x);
+    }
+};
+
+int main() {
+    tuple&lt;int, int&gt; t(42, 64);
+    size_t h = hash&lt;tuple&lt;int, int&gt;&gt;()(t);
+    print(t, &quot;的哈希值是:&quot;, h);
+    return 0;
+}
+</code></pre>
+<pre><code>{42, 64} 的哈希值是: 175247763666
+</code></pre>
+<p>可以看到随机性大大提升了。</p>
+<hr />
+<p>用 hash_combine 改进刚刚 Student 的哈希函数。</p>
+<pre><code class="language-cpp">template &lt;&gt;
+struct std::hash&lt;Student&gt; {
+    bool operator()(Student const &amp;x) const {
+        return hash_combine(hash&lt;string&gt;()(x.name), hash&lt;int&gt;(x.id), hash&lt;int&gt;(x.sex));
+    }
+};
+</code></pre>
+<hr />
+<p>同理可得 array 的特化</p>
+<pre><code class="language-cpp">template &lt;class T, size_t N&gt;
+struct std::hash&lt;std::array&lt;T, N&gt;&gt; {
+    size_t operator()(std::array&lt;T, N&gt; const &amp;x) const {
+        std::hash&lt;T&gt; hasher;
+        size_t h = 0;
+        for (T const &amp;t: x) {
+            h ^= hasher(t);
+        }
+        return h;
+    }
+};
+
+unordered_map&lt;array&lt;string, 3&gt;, int&gt; stutab;
+</code></pre>
+<hr />
+<p>采用素数乘方法来提升哈希函数的均匀性和随机性：</p>
+<pre><code class="language-cpp">template &lt;class T, size_t N&gt;
+struct std::hash&lt;std::array&lt;T, N&gt;&gt; {
+    size_t operator()(std::array&lt;T, N&gt; const &amp;x) const {
+        std::hash&lt;T&gt; hasher;
+        size_t h = 0;
+        for (T const &amp;t: x) {
+            h = h * 18412483 + hasher(t);
+        }
+        return h;
+    }
+};
+
+unordered_map&lt;array&lt;string, 3&gt;, int&gt; stutab;
+</code></pre>
+<hr />
+<p>采用最高级的，基于位运算的，最高效的，boost::hash_combine 的实现：</p>
+<pre><code class="language-cpp">template &lt;class T, size_t N&gt;
+struct std::hash&lt;std::array&lt;T, N&gt;&gt; {
+    size_t operator()(std::array&lt;T, N&gt; const &amp;x) const {
+        std::hash&lt;T&gt; hasher;
+        size_t h = 0;
+        for (T const &amp;t: x) {
+            h ^= hasher(t) + 0x9e3779b9 + (h &lt;&lt; 6) + (h &gt;&gt; 2);
+        }
+        return h;
+    }
+};
+
+unordered_map&lt;array&lt;string, 3&gt;, int&gt; stutab;
+</code></pre>
+<hr />
+<!-- PG226 -->
+
+<p>map 和 function 结合使用</p>
+<hr />
+<!-- PG227 -->
+
+<p>map 和 variant 结合使用</p>
+<hr />
+<!-- PG228 -->
+
+<p>map 和 string_view 结合使用加速查找案例</p>
+<hr />
+<!-- PG229 -->
+
+<p>案例：全局句柄表实现仿 C 语言 API</p>
+<pre><code>    Student(Student &amp;&amp;) = delete;
+    // 冷知识：只需要删除移动构造函数，编译器就会自动帮你删除下面几个，不用写全：
+    // Student &amp;operator=(Student &amp;&amp;) = delete;
+    // Student(Student const &amp;) = delete;
+    // Student &amp;operator=(Student const &amp;) = delete;
+</code></pre>
+<hr />
+<!-- PG230 -->
+
+<p>案例：全局注册表实现动态反射</p>
+<hr />
+<!-- PG231 -->
+
+<p>案例：带缓存的编译函数</p>
+<hr />
+<!-- PG232 -->
+
+<p>问题：多线程安全</p>
+<p><img alt="threadcompatible" src="../img/stl/threadcompatible.png" /></p>
+<p>TODO</p>
+<hr />
+<!-- PG233 -->
+
+<p>本期孝点总结：</p>
+<ul>
+<li>有手之前，非常好用</li>
+<li>面包、答辩 vs 保鲜盒、马桶</li>
+<li>老鼠💩的处理方案</li>
+<li>《好友清除计划》</li>
+<li>小学生早操排队</li>
+<li>托马斯破产回旋</li>
+</ul>
+<p>顺便推个 CppCon 小视频：https://www.youtube.com/watch?v=ehyHyAIa5so</p>
+<blockquote>
+<p>CppCon 2017: Piotr Padlewski “Undefined Behaviour is awesome!”</p>
+</blockquote>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>http://c.biancheng.net/view/7236.html&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref5:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref6:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref7:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref8:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref9:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref10:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref11:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref12:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref13:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref14:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref15:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref16:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref17:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref18:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref19:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref20:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref21:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref22:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref23:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref24:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref25:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref26:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref27:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref28:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>https://en.cppreference.com/w/cpp/container/node_handle&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:2" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:2" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>小彭老师倾 ♥ 制作</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../js/print-site.js"></script>
+        <script src="../extra.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="小彭老师">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>函数式设计模式 - ✝️小彭大典✝️</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../css/print-site-enum-headings1.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings2.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings3.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings4.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings5.css" rel="stylesheet">
+        <link href="../css/print-site-enum-headings6.css" rel="stylesheet">
+        <link href="../css/print-site.css" rel="stylesheet">
+        <link href="../css/print-site-mkdocs.css" rel="stylesheet">
+        <link href="../extra.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">✝️小彭大典✝️</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">章节列表</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href=".." class="dropdown-item">前言</a>
+</li>
+                                    
+<li>
+    <a href="../hello_world/" class="dropdown-item">你好，世界</a>
+</li>
+                                    
+<li>
+    <a href="../platform/" class="dropdown-item">开发环境与平台选择</a>
+</li>
+                                    
+<li>
+    <a href="../variable_types/" class="dropdown-item">变量与类型 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../functions/" class="dropdown-item">认识函数 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../cpp_tricks/" class="dropdown-item">应知应会 C++ 小技巧</a>
+</li>
+                                    
+<li>
+    <a href="../lambda/" class="dropdown-item">函数式编程</a>
+</li>
+                                    
+<li>
+    <a href="../type_rich_api/" class="dropdown-item">现代化的 API 设计指南</a>
+</li>
+                                    
+<li>
+    <a href="../no_more_new/" class="dropdown-item">现代 C++ 从拒绝 new 开始</a>
+</li>
+                                    
+<li>
+    <a href="../stl_map/" class="dropdown-item">深入浅出 STL 系列之 map (基本完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_overview/" class="dropdown-item">设计模式总览 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_virtual/" class="dropdown-item">让虚函数再次伟大！</a>
+</li>
+                                    
+<li>
+    <a href="../design_gamedev/" class="dropdown-item">游戏开发中常用的设计模式</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active" aria-current="page">函数式设计模式</a>
+</li>
+                                    
+<li>
+    <a href="../design_variant/" class="dropdown-item">静态多态与面向数据编程 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_erasure/" class="dropdown-item">类型擦除神教及其实现 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../design_concept/" class="dropdown-item">鸭子类型与 C++20 concept (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../cpp_lifetime/" class="dropdown-item">深入理解析构函数与生命周期</a>
+</li>
+                                    
+<li>
+    <a href="../cpp_memory/" class="dropdown-item">真正的 C++ 内存模型！ (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../unicode/" class="dropdown-item">字符编码那些事</a>
+</li>
+                                    
+<li>
+    <a href="../error_code/" class="dropdown-item">现代 C++ 中的错误处理 (未完工)</a>
+</li>
+                                    
+<li>
+    <a href="../warnings/" class="dropdown-item">建议 C++ 程序员开启的警告选项</a>
+</li>
+                                    
+<li>
+    <a href="../undef/" class="dropdown-item">未定义行为完整列表</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">关于</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../about/" class="dropdown-item">关于小彭老师</a>
+</li>
+                                    
+<li>
+    <a href="../donate/" class="dropdown-item">赞助名单</a>
+</li>
+                                    
+<li>
+    <a href="../recommend/" class="dropdown-item">参考资料与项目</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/parallel101/cppguidebook" class="nav-link">GitHub</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://space.bilibili.com/263032155" class="nav-link">Bilibili</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../design_gamedev/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../design_variant/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/parallel101/cppguidebook/edit/master/docs/design_functor.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">函数式设计模式</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#_2" class="nav-link">函数指针</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_5" class="nav-link">函数调用运算符</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">函数式设计模式</h1>
+<h2 id="_2">函数指针</h2>
+<p>首先需要定义函数指针类型：</p>
+<pre><code class="language-cpp">using func_t = int (*)(int i);
+// 等价于
+typedef int (*func_t)(int i);
+</code></pre>
+<p>函数指针可以用于实现策略模式：</p>
+<pre><code class="language-cpp">void test(func_t func) {
+    cout &lt;&lt; func(2);
+    cout &lt;&lt; func(3);
+}
+
+int twice(int i) {
+    return i * 2;
+}
+
+int main() {
+    test(twice); // 4 6
+}
+</code></pre>
+<h3 id="_3">函数指针实现多态</h3>
+<pre><code class="language-cpp">int twice(int i) {
+    return i * 2;
+}
+
+int triple(int i) {
+    return i * 3;
+}
+
+int main() {
+    test(twice);  // 4 6
+    test(triple); // 6 9
+}
+</code></pre>
+<h3 id="_4">函数指针的缺陷</h3>
+<p>缺点：函数指针只能指向全局函数，无法保存状态。</p>
+<pre><code class="language-cpp">int ntimes(int scale, int i) {
+    return i * scale;
+}
+
+int main() {
+    test(ntimes(2)); // 错误：没有这种语法
+    test(ntimes(3)); // 错误：没有这种语法
+}
+</code></pre>
+<h2 id="_5">函数调用运算符</h2>
+<pre><code class="language-cpp">struct myclass {
+    void run(string name) {
+        cout &lt;&lt; name &lt;&lt; &quot;，你好\n&quot;;
+    }
+};
+
+myclass mc;
+mc.run(&quot;小切&quot;);
+</code></pre>
+<pre><code class="language-cpp">struct myclass {
+    void operator() (string name) {
+        cout &lt;&lt; name &lt;&lt; &quot;，你好\n&quot;;
+    }
+};
+
+myclass mc;
+mc. operator() (&quot;小切&quot;);
+</code></pre>
+<pre><code class="language-cpp">struct myclass {
+    void operator() (string name) {
+        cout &lt;&lt; name &lt;&lt; &quot;，你好\n&quot;;
+    }
+};
+
+myclass mc;
+mc(&quot;小切&quot;);
+</code></pre>
+<p>重载了 <code>operator()</code> 后的 myclass 对象，调用起来就和普通函数一样。</p>
+<h3 id="_6">仿函数</h3>
+<p>仿函数是一种重载了<strong>函数调用运算符</strong>的类，可以像函数一样使用：</p>
+<pre><code class="language-cpp">struct twice_t {
+    int operator() (int i) {
+        return i * 2;
+    }
+};
+
+void test(twice_t func) {
+    cout &lt;&lt; func(2);
+    cout &lt;&lt; func(3);
+}
+
+twice_t twice;
+
+int main() {
+    test(twice); // 4 6
+}
+</code></pre>
+<p>仿函数的优势是可以保存<strong>状态</strong>：</p>
+<pre><code class="language-cpp">struct ntimes_t {
+    int scale;
+
+    ntimes_t(int scale) : scale(scale) {}
+
+    int operator() (int i) {
+        return i * scale;
+    }
+};
+
+void test(ntimes_t func) {
+    cout &lt;&lt; func(2);
+    cout &lt;&lt; func(3);
+}
+
+int main() {
+    ntimes_t twice(2);
+    ntimes_t triple(3);
+    ntimes_t quadric(4);
+    test(twice);   // 4 6
+    test(triple);  // 6 9
+    test(quadric); // 8 12
+}
+</code></pre>
+<h3 id="_7">仿函数的缺陷</h3>
+<p>缺点：需要在 test 中写明仿函数的具体类型，无法实现多态。</p>
+<pre><code class="language-cpp">struct twice_t {
+    int operator() (int i) {
+        return i * 2;
+    }
+};
+
+struct triple_t {
+    int operator() (int i) {
+        return i * 2;
+    }
+};
+
+void test(twice_t func) {
+    cout &lt;&lt; func(2);
+    cout &lt;&lt; func(3);
+}
+
+twice_t twice;
+triple_t triple;
+
+int main() {
+    test(twice);  // 4 6
+    test(triple); // 错误：test 只兼容了 twice_t 做参数
+}
+</code></pre>
+<p>如何解决？</p>
+<h3 id="_8">利用模板</h3>
+<pre><code class="language-cpp">template &lt;class Func&gt;
+void test(Func func) {
+    cout &lt;&lt; func(2);
+    cout &lt;&lt; func(3);
+}
+
+twice_t twice;
+triple_t triple;
+
+int main() {
+    test(twice);  // 4 6
+    test(triple); // 6 9
+}
+</code></pre>
+<p>这样就实现了<strong>编译期多态</strong>，因为 test 函数的参数类型可以根据传入的具体函数类型进行推导。</p>
+<h3 id="_9">模板传仿函数的缺陷</h3>
+<p>缺点：必须编译期确定，无法动态决定类型。</p>
+<pre><code class="language-cpp">template &lt;class Func&gt;
+void test(Func func) {
+    cout &lt;&lt; func(2);
+    cout &lt;&lt; func(3);
+}
+
+twice_t twice;
+triple_t triple;
+
+int main() {
+    bool ok;
+    cin &gt;&gt; ok;
+    test(ok ? twice : triple); // 错误：不兼容的类型之间不能三目
+}
+</code></pre>
+<h3 id="function">万能的 function 容器</h3>
+<p>std::function 采用了<strong>类型擦除技术</strong>，无需写明仿函数类的具体类型，能容纳任何仿函数或函数指针。</p>
+<p>只需在模板参数中写明函数的参数和返回值类型即可，所有具有同样参数和返回值类型的仿函数或函数指针都可以传入。</p>
+<pre><code class="language-cpp">struct twice_t {
+    int operator() (int i) {
+        return i * 2;
+    }
+};
+
+function&lt;int (int)&gt; twice = twice_t();  // 没问题，能接受仿函数
+
+
+int triple(int i) {
+    return i * 3;
+}
+
+function&lt;int (int)&gt; function_triple = triple; // 没问题，能接受函数指针
+
+
+struct ntimes_t {
+    int scale;
+
+    ntimes_t(int scale) : scale(scale) {}
+
+    int operator() (int i) {
+        return i * scale;
+    }
+};
+
+function&lt;int (int)&gt; quadric = ntimes_t(4); // 没问题，能接受带状态的仿函数
+</code></pre>
+<p>可以用 function 容器作为参数，就可以避免使用模板。</p>
+<pre><code class="language-cpp">// 模板：性能优先
+template &lt;class Func&gt;
+void test(Func func) {
+    cout &lt;&lt; func(2);
+    cout &lt;&lt; func(3);
+}
+
+// 容器：灵活性优先
+void test(function&lt;int (int)&gt; func) {
+    cout &lt;&lt; func(2);
+    cout &lt;&lt; func(3);
+}
+</code></pre>
+<h3 id="_10">函数式为什么好？</h3>
+<p>有人说，function 底层依然是基于函数指针实现的，不是和虚函数一样低效吗？函数式相比传统面向对象好在哪里呢？</p>
+<ol>
+<li>性能与灵活性的选择权</li>
+</ol>
+<p>现实工程中，往往是 20% 的代码耗费了 80% 的计算机时间。我们只要优化这 20% 的瓶颈代码就可以。</p>
+<p>虚函数实现的多态，是强制的，一旦用了虚函数，就没法把虚表去掉了，永远卡在你的对象类型里占 8 字节空间，永远只能以指针形态使用。</p>
+<p>如果选择函数式编程范式，你可以在次要的业务逻辑代码中选择更灵活的 function 容器。</p>
+<p>而在需要性能的瓶颈代码处，可以随时切换到基于模板的，更高性能的编译期多态。函数式给了你根据情况选择的自由度。</p>
+<ol start="2">
+<li>function 有小对象优化</li>
+</ol>
+<p>而且 function 内部具有类似于 string 小对象优化机制，对于较小的状态或没有状态的仿函数，就无需指针！无需堆内存分配！</p>
+<p>而虚函数哪怕没有状态，由于虚表指针的存在，也总是需要用 new 创建，总是会造成大量的碎片化内存，因此即使同样选择了灵活性，function 依然比虚函数高效一点。</p>
+<p>而且即使你的状态非常多，导致 function 不得不需要堆内存分配了，这一分配也不用你自己操心，不用手动 new，也不用手动 make_shared，function 内部自动帮你完成一切。</p>
+<ol start="3">
+<li>lambda 表达式很方便</li>
+</ol>
+<p>最重要的是，函数式编程范式可以便捷地利用 lambda 表达式就地创建仿函数对象，而面向对象需要大费周章定义一个类接口，然后再定义一个类实现虚函数，有时还需要分离声明和定义。</p>
+<p>绕了个大圈子，不仅写起来痛苦，需要起名强迫症，而且看得人也头疼。lambda 表达式，就地创建，无需名字，更适合敏捷开发。</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>小彭老师倾 ♥ 制作</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../js/print-site.js"></script>
+        <script src="../extra.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
