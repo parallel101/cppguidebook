@@ -401,7 +401,7 @@ read(32, buf, fd);
 
 用户一样可以用一个根本不是文件句柄的臭整数来调用你，而得不到任何警告或报错：
 ```cpp
-typedef FileHandle int;
+typedef int FileHandle;
 ssize_t read(FileHandle fd, char *buf, size_t len);
 
 read(32, buf, fd); // 照样编译通过！
@@ -531,7 +531,7 @@ struct Span {
     template <size_t N>
     Span(std::array<char, N> &arr) : data(arr.data()), size(N) {}
 
-    Span(std::vector<charN> &vec) : data(vec.data()), size(vec.size()) {}
+    Span(std::vector<char> &vec) : data(vec.data()), size(vec.size()) {}
 
     // 如果有需要，也可以显式写出 Span(buf, 30) 从首地址和长度构造出一个 Span 来
     explicit Span(char *data, size_t size) : data(data), size(size) {}
@@ -1584,7 +1584,7 @@ public:
 ```
 
 ```cpp
-struct Name : Typed<Name, T> {};
+struct Name : Typed<Name, std::string> {};
 
 struct Meter : Typed<Meter, double> {};
 
