@@ -281,7 +281,7 @@ C++ 中也是如此，有数组（vector），字典（map），还有上一课�
 
 今天我们要介绍的就是 C++ 的字典容器 map，以及 C++11 引入的另一个字典容器 unordered_map，他们的区别我们最后会详细讨论。我们先学习较为简单的 map，随后学习 unordered_map 时也可以举一反三、融会贯通。
 
-> 除了这两个标准库自带的字典容器，我们还将介绍一些常用的第三方库容器及其各自优势，例如 absl::flat_hash_map、tbb::concurrent_hash_map、google::dense_hash_map、robin_hood::unordered_map、tsl::robin_pg_map 等。
+> 介绍完这两个标准库自带的字典容器后，我们还将介绍一些常用的第三方库容器，例如 absl::flat_hash_map、tbb::concurrent_hash_map、google::dense_hash_map、robin_hood::unordered_map、tsl::robin_pg_map 等，需要根据应用场景选择适合的容器。
 
 map/set 家族都是高效查找的专家：
 
@@ -289,7 +289,7 @@ map/set 家族都是高效查找的专家：
 - map 或 set 容器用 .find 查找：$O(\log N)$
 - unordered_map 或 unordered_set 容器用 .find 查找：$O(1)+$
 
-map 们不仅是查找的复杂度低，他们还支持高效的增删改查等操作。
+不仅是查找，map 们还支持高效的增删改查等操作。
 
 ---
 
@@ -307,7 +307,7 @@ map 的逻辑结构
 
 <br/>
 
-> std::map, std::unordered_map, absl::flat_hash_map, tbb::concurrent_hash_map 都满足这一基本逻辑结构，但物理实现不同。
+> std::map, std::unordered_map, absl::flat_hash_map, tbb::concurrent_hash_map 都满足这一基本逻辑结构，只是物理实现不同。
 
 ---
 
@@ -321,7 +321,7 @@ map 的具体实现可以是红黑树、AVL 树、线性哈希表、链表哈希
 
 所有的 map 实现，都会模仿提供和 std::map 一样的 API。这就是为什么虽然 std::map 实现的很低效，我们还是要学他的原因。std::map 本身并不是完美的，但却提供了一个所有第三方都会遵循的统一接口。学会了 std::map，任何第三方库的 map 类容器你都可以轻易举一反三。
 
-> 不仅是各种第三方的 map 库，比如 rapidjson 库中的 JSON 对象，也提供了类似 std::map 的 `find` 和 `end` 迭代器接口：`MemberFind` 和 `MemberEnd`，来查找一个字典的子键。几何处理库 cgal 中的“顶点查找”功能也是基于类似的迭代器接口，学会 std::map 将大大有助于你看懂这类业界公认的接口规范。
+> 不仅是各种第三方的 map 库，比如 rapidjson 库中的 JSON 对象，也提供了类似 std::map 的 `find` 和 `end` 迭代器接口：`MemberFind` 和 `MemberEnd`，来查找一个字典的子键；几何处理库 cgal 中的“顶点查找”功能也是基于类似的迭代器接口。总之，学会 std::map 将大大有助于你看懂这类业界公认的接口规范。
 
 ---
 
@@ -432,7 +432,7 @@ print(config["timeout"]);
 print(config["delay"]);
 ```
 
-查询时建议用 .at(key) 而不是 [key]：
+查询时建议用 `.at(key)` 而不是 `[key]`：
 
 ```cpp
 print(config.at("timeout"));
@@ -486,10 +486,10 @@ print(key == "hello");  // string 的 == 运算符是经过重载的，比较的
 true
 ```
 
-| C++ | Java | Python |
-|-|-|-|
-| string("hello") == string("hello") | "hello".equals("hello") | 'hello' == 'hello' |
-| "hello" == "hello" | "hello" == "hello" | id('hello') == id('hello') |
+| 描述 | C++ | Java | Python |
+|-|-|-|-|
+| 内容相等 | `string("hello") == string("hello")` | `"hello".equals("hello")` | `'hello' == 'hello'` |
+| 地址相等 | `"hello" == "hello"` | `"hello" == "hello"` | `id('hello') == id('hello')` |
 
 ---
 
@@ -497,7 +497,7 @@ true
 
 如果你精通对象生命周期分析，能保证 key 指向的字符串活的比 m 久，想要避免拷贝，节省性能。
 
-可以用封装了正确 == 运算符的弱引用 string_view（会比较字符串内容而不是地址）：
+string 的弱引用版本：string_view，同样可以用封装了正确的 == 运算符，会比较字符串内容而不是地址：
 
 ```cpp
 map<string_view, string_view> m;
