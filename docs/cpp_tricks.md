@@ -528,3 +528,7 @@ int const i;
 int const *p;
 int const &r;
 ```
+
+## 智能指针防止对象移动
+
+TODO: `shared_ptr<array<int, 1000>>`

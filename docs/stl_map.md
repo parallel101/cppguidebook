@@ -1,4 +1,4 @@
-# 深入浅出 STL 系列之 map
+# STL 精讲：std::map 和他的朋友们
 
 <!-- PG1 -->
 
@@ -1144,13 +1144,15 @@ int main() {
 Segmentation fault (core dumped)
 ```
 
----
+> {{ icon.fun }} 小时候看这集 $^{14}C$ 语言“衰变”导致程序 Segmentation fault 了。
 
 ![u235decay](img/stl/u235decay.webp)
 
+---
+
 <!-- PG50 -->
 
-修复方法：别再用沙雕 C 语言的原生数组了！用 C++ 封装好的 array
+修复方法：别再用 C 语言的煞笔原始人数组了！用 C++ 封装好的 array，无隐患
 
 ```cpp
 typedef std::array<double, 10> arr_t;  // 如需动态长度，改用 vector 亦可
@@ -1190,9 +1192,9 @@ void PeiXunCpp(string stuName) {
 
 > {{ icon.fun }} 狂想：如果克隆“相依1号”同学，得到“相依2号”，然后把原来的杀……啊不对，“析构”掉，然后对外谎称“这还是原来的相依1号呀！”会不会被发现呢？
 
-学生思考题：上面代码第 5 行也可以改用 at，为什么？小彭老师不是说 “at 用于读取，[] 用于写入” 吗？
+脑筋急转弯：上面代码第 5 行也可以改用 at，为什么？小彭老师不是说 “at 用于读取，[] 用于写入” 吗？
 
-我们童鞋要学会变通！小彭老师说 [] 用于写入，是因为有时候我们经常需要写入一个不存在的元素，所以 [] 会自动创建元素而不是出错就很方便；但是现在的情况是我们第 2 行已经访问过 at("相依")，那么就确认过 "相依" 已经存在才对，因此我写入的一定是个已经存在的元素，这时 [] 和 at 已经没区别了，所以用 at 的非 const 那个重载，一样可以写入。
+我们童鞋要学会变通！小彭老师警告说 “[] 只能用于写入”，是因为我们平时的写入，实际上都是需要写入到一个不存在的元素，所以 [] 会自动创建元素就很方便；如果是 at() 就不符合“写入时自动创建不存在的键“。但是现在的情况是我们第 2 行已经访问过 `at("相依")`，那么就可以确认 `"相依"` 已经存在了，因此我写入的一定是个已经存在的元素，这时 [] 和 at 已经没区别了，所以用 at 的非 const 重载，一样可以写入。
 
 > {{ icon.fun }} 我们童鞋不是去死记硬背《小彭老师语录》，把小彭老师名言当做“两个凡是”圣经。要理解小彭老师会这么说的原因是什么，这样才能根据不同实际情况，实事求是看问题，才是符合小彭老师唯物编程观的（孝）
 
@@ -1204,11 +1206,13 @@ void PeiXunCpp(string stuName) {
 
 如果同时有根据学号进行查找和根据姓名查找两种需求呢？
 
-同时高效地根据多个键进行查找，甚至指定各种条件，比如查询所有会 C++ 的学生等，这可不是 map 能搞定的，或者说能搞定但不高效（只能暴力遍历查找，时间复杂度太高）。这是个专门的研究领域，称为：关系数据库。
+同时高效地根据多个键进行查找，甚至指定各种条件，比如查询所有会 C++ 的学生等，这可不是 map 能搞定的，或者说能搞定但不高效（最后往往只能暴力遍历查找，时间复杂度太高）。这是个专门的研究领域，称为：关系数据库。
 
 关系数据库的实现有 MySQL，SQLite，MongoDB 等。C++ 等编程语言只需调用他们提供的 API 即可，不必自己手动实现这些复杂的查找和插入算法。
 
-这就是为什么专业的“学生管理系统”都会用关系数据库，而不是自己手动维护一个 map，因为关系数据库的数据结构更复杂，但经过高度封装，提供的功能也更全面，何况 map 在内存中，电脑一关机，学生数据就没了。
+这就是为什么专业的“学生管理系统”都会用关系数据库，而不是自己手动维护一个 map。关系数据库底层的数据结构更复杂，但经过高度封装，效率更高，提供的功能也更全面，用起来也比较无感。何况 map 存在内存中，电脑一关机，学生数据就没了！而数据库可以把数据持久化到磁盘中，相当于在磁盘里构建出了一颗查找树，关机后数据依然保持。
+
+> {{ icon.fun }} 相依同学好不容易考出满分，结果小彭老师一不小心踢了一脚电脑，重启，全部学生档案丢失，白考！
 
 ---
 
@@ -1243,7 +1247,7 @@ m["fuck"] = m.size();
 m["dick"] = m.size();
 ```
 
-> 注：需要 C++17 保证等号右边先求值
+> {{ icon.detail }} 需要 C++17 以上的版本，才能保证等号右边的 `m.size()` 先于 `m["fuck"]` 求值。C++14 中上面这段代码行为未定义，需要改用 `m.insert({"fuck", m.size()})` 的写法（函数参数总是优先于函数求值，这保证 `m.size()` 先求值，然后才发生元素插入）。
 
 ---
 
@@ -1291,7 +1295,7 @@ if (msg.count("dick")) {
 找不到dick
 ```
 
-C++20 中还可以改用返回类型直接为 bool 的 contains 函数，满足你的命名强迫症。
+C++20 中建议改用返回类型为 `bool` 的 `contains` 函数，函数名和类型更加一目了然，但实际效果和 `count` 是一样的。
 
 ```cpp
 if (msg.contains("fuck")) {
@@ -1343,6 +1347,8 @@ layout: two-cols-header
 ---
 
 <!-- PG59 -->
+
+对比
 
 ::left::
 
@@ -1402,6 +1408,8 @@ print(categories);
 layout: two-cols-header
 ---
 
+对比
+
 <!-- PG61 -->
 
 ::left::
@@ -1452,6 +1460,8 @@ layout: center
 ---
 
 <!-- PG63 -->
+
+### map 构建下标查找表
 
 反面典型：查找特定元素在 vector 中的位置（下标）
 
@@ -1505,7 +1515,7 @@ fucker在数组中的下标是：4
 nice在数组中的下标是：2
 ```
 
-<!-- 轶事：在数据库这门学问中，这种反向查找表被称为“倒序索引”，小彭老师在不知道这个术语的情况下，独立产生了反向查找表的思想 -->
+> {{ icon.detail }} 轶事：在数据库中，这种反向查找表被称为“倒序索引”，小彭老师之前在不知道这个术语的情况下，独立产生了反向查找表的思想
 
 ---
 
@@ -1526,9 +1536,13 @@ for (size_t i = 0; i < arr.size(); i++) {
 
 因此当需要多次查找且原数组保持不变时，强烈推荐用这种方法，更高效。
 
+> {{ icon.detail }} 只有当 vector 更新时，才需要重新构建 map。如果 vector 的删除采用 back-swap-erase（见 [C++ 小妙招](cpp_tricks.md)），那么无需完全重构 map，只需更新 swap 的两个元素即可，总复杂度 $O(\log N)$，这样就实现了一个 $O(\log N)$ 的有下标又能快速查找数组，兼具 map 和 vector 的优势。在之后的数据结构进阶课中我们会详细介绍此类复合数据结构。
+
 ---
 
 <!-- PG66 -->
+
+map 只能通过值映射到键，能不能反过来通过键查找值？
 
 案例：构建另一个 map 的反向查找表
 
@@ -1550,11 +1564,13 @@ print(tabinv);
 {"rust": "fuck", "world": "hello"}
 ```
 
-注：假设 tab 中不存在重复的值，键和值一一对应
+> {{ icon.tip }} 注意：要求 tab 中不能存在重复的值，键和值必须是一一对应关系，才能用这种方式构建双向查找表。否则一个值可能对应到两个键，反向表必须是 `map<string, vector<string>` 了。
 
 ---
 
 <!-- PG67 -->
+
+## 元编程查询成员类型：`value_type`
 
 STL 容器的元素类型都可以通过成员 `value_type` 查询，常用于泛型编程（又称元编程）。
 
@@ -1564,22 +1580,96 @@ vector<int>::value_type   // int
 string::value_type        // char
 ```
 
-此外还有引用类型 `reference`，迭代器类型 `iterator`，常迭代器类型 `const_iterator` 等。曾经在 C++98 中很常用，不过自从 C++11 有了 auto 和 decltype 以后，就不怎么用了，反正能自动推导返回类型。
+此外还有引用类型 `reference`，迭代器类型 `iterator`，常迭代器类型 `const_iterator` 等。
 
-当容器有一个不确定的类型 T 作为模板参数时，就需要前面加上 `typename` 修饰：
+曾经在 C++98 中很常用，不过自从 C++11 有了 auto 和 decltype 以后，就不怎么用了，反正能自动推导返回类型。
+
+C++23:
 
 ```cpp
-set<int>::value_type               // 没有不定类型，不需要
-typename set<T>::value_type        // 包含有 T 是不定类型
-typename set<set<T>>::value_type   // 包含有 T 是不定类型
-typename map<int, T>::value_type   // 包含有 T 是不定类型
-typename map<K, T>::value_type     // 包含有 K、T 是不定类型
-map<int, string>::value_type       // 没有不定类型，不需要
+std::vector<int> arr;
+for (auto const &elem: arr) {
+    std::println("{}", elem);
+}
+```
+
+C++17:
+
+```cpp
+std::vector<int> arr;
+for (auto const &elem: arr) {
+    std::cout << elem << '\n';
+}
+```
+
+C++11:
+
+```cpp
+std::vector<int> arr;
+for (auto it = arr.begin(); it != arr.end(); ++it) {
+    std::cout << *it << '\n';
+}
+```
+
+C++98:
+
+```cpp
+std::vector<int> arr;
+for (std::vector<int>::iterator it = arr.begin(); it != arr.end(); ++it) {
+    std::cout << *it << '\n';
+}
+```
+
+### typename 修饰
+
+当容器有至少一个不确定的类型 T 作为模板参数时，就需要前面加上 `typename` 修饰了：
+
+```cpp
+set<int>::value_type;               // 没有不定类型，不需要
+typename set<T>::value_type;        // 包含有 T 是不定类型
+typename set<set<T>>::value_type;   // 包含有 T 是不定类型
+typename map<int, T>::value_type;   // 包含有 T 是不定类型
+typename map<K, T>::value_type;     // 包含有 K、T 是不定类型
+map<int, string>::value_type;       // 没有不定类型，不需要
+```
+
+如果你搞不清楚，始终加 `typename` 就行了，反正加多肯定不会有错。你就认为：这就是一个平时可以省略，偶尔不能省略的东西。
+
+```cpp
+typename set<int>::value_type;    // 可以省略，但你加了也没关系
+typename set<T>::value_type;      // 不能省略
+typename set<set<T>>::value_type; // 不能省略
+typename map<int, T>::value_type; // 不能省略
+typename map<K, T>::value_type;   // 不能省略
+typename map<int, string>::value_type; // 可以省略，但你加了也没关系
+```
+
+> {{ icon.detail }} 含有 T 的类型表达式称为 dependant-type，根本原因是因为在不知道具体是类型表达式还是值表达式的情况下，编译器无法区分模板的 `<` 和小于符号 `<`，以及类型的指针 `*` 和数值乘法 `*`。默认会认为是小于符号和数值乘法，加上 `typename` 后明确前面这一串是类型表达式，才知道这是模板的 `<` 和指针的 `*`。
+
+### decltype 大法好
+
+也有更直观的获取 STL 容器元素类型的方法：
+
+```cpp
+std::vector<int> arr;
+
+using T = std::decay_t<decltype(arr[0])>; // T = int
+```
+
+> {{ icon.warn }} `decltype` 必须配合 `std::decay_t` 才能用！否则会得到引用类型 `int &`，后续使用中就坑到你！（因为 arr 的 [] 返回的是一个引用类型）
+
+```cpp
+// 错误示范
+using T = decltype(arr[0]); // T = int &
+
+T i = 0; // int &i = 0; 后续使用中编译出错！
 ```
 
 ---
 
 <!-- PG68 -->
+
+### 查询类名小工具
 
 在本课程的案例代码中附带的 "cppdemangle.h"，可以实现根据指定的类型查询类型名称并打印出来。
 
@@ -1604,7 +1694,9 @@ print(cppdemangle<std::wstring::value_type>());
 
 <!-- PG69 -->
 
-问题: map 真正的元素类型究竟是什么？其具有三个成员类型[^1]：
+### map 真正的元素类型究竟是什么？
+
+map 具有三个成员类型[^1]：
 
 - 元素类型：`value_type`
 - 键类型：`key_type`
@@ -1628,18 +1720,19 @@ map<int, float>::mapped_type  // float
 
 <!-- PG70 -->
 
-`pair<const K, V>` ——为什么 K 要加 const？
+疑惑：`pair<const K, V>` 中，为什么 K 要加 const？
 
-上期 set 课说过，set 内部采用红黑树数据结构保持有序，这样才能实现在 $O(\log N)$ 时间内高效查找。
+我们在 set 课中说过，set 内部采用红黑树数据结构保持有序，这样才能实现在 $O(\log N)$ 时间内高效查找。
 
-键值改变的话会需要重新排序，如果只修改键值而不重新排序，会破坏有序性，导致二分查找结果错误！
-所以 set 只有不可变迭代器（const_iterator），不允许修改元素的值。
+键值改变的话会需要重新排序，如果只修改键值而不重新排序，会破坏有序性，导致二分查找结果错误！所以 set 只提供了不可变迭代器（const_iterator），没有可变的迭代器，不允许用户修改任何元素的值。
 
 map 和 set 一样也是红黑树，不同在于：map 只有键 K 的部分会参与排序，V 是个旁观者，随便修改也没关系。
 
-所以 map 有可变迭代器，只是在其 value_type 中给 K 加上了 const 修饰：不允许修改 K，但可以修改 V。
+所以 map 有可变迭代器，只是在其值类型 value_type 中给键的部分，K，加上了 const 修饰：不允许修改 K，但可以随意修改 V。
 
-如果你确实需要修改键值，那么请先把这个键删了，然后再以同样的 V 重新插入一遍，保证红黑树的有序。
+如果你确实需要修改键值，那么请先取出旧值，把这个键删了，然后再以同样的值重新插入一遍到新的键。相当于重新构建了一个 `pair<const K, V>` 对象。
+
+> {{ icon.detail }} C++17 开始也可以用更高效 `node_handle` 系列 API，避免数据发生移动，稍后介绍。
 
 ---
 
@@ -4183,7 +4276,7 @@ print(m.at("answer")->value);  // 42
 
 <!-- PG163 -->
 
-C++17 新增的 extract 函数[^1]
+C++17 新增的 extract 函数[^1] 可以“剥离”出单个节点：
 
 ```cpp
 node_type extract(K const &key);
@@ -4192,15 +4285,64 @@ node_type extract(const_iterator pos);
 
 ```cpp
 auto node = m.extract("fuck");
-auto &k = node.key();
-auto &v = node.mapped();
+auto &k = node.key();    // 键（引用）
+auto &v = node.mapped(); // 值（引用）
 ```
 
-node_type 是指向游离红黑树节点的特殊智能指针，称为节点句柄[^2]，只可移动不可拷贝，类似 unique_ptr。
+其功能与 erase 类似，都会将元素从 map 中删除，但 extract 只是把节点从 map 中移走，并不会直接销毁节点。
+
+extract 会返回这个刚被“剥离”出来节点的句柄，类型为 node_type，节点的生杀大权就这样返回给了用户来处置。
+
+node_type 是指向游离红黑树节点的特殊智能指针，称为节点句柄[^2]。只可移动不可拷贝，类似一个指向节点的 unique_ptr。
 
 当调用 extract(key) 时会把 key 对应的键值对所在的红黑树节点“脱离”出来——不是直接释放节点内存并销毁键值对象，而是把删除的节点的所有权移交给了调用者，以返回一个特殊智能指针 node_type 的形式。
 
-调用 extract 后，节点句柄指向的这个红黑树节点已经从 map 中移除（其 next 和 prev 等为 NULL），处于游离状态，只是键 key() 和值 mapped() 没有被销毁，内存没有被释放。调用者可以稍后再销毁这个特殊智能指针，也可以稍后重新用 insert(node) 把他插入回去，或者插入到另一个不同的 map 里。
+调用 extract 后，节点句柄指向的这个红黑树节点已经从 map 中移除（其 left、right、parent 等指针为 NULL），处于游离状态。
+
+> {{ icon.detail }} 节点中不仅存储着我们感兴趣的键和值，还有 left、right、parent、color 等用于维护数据结构的成员变量，对用户不可见。
+
+只是因为节点句柄类似于 unique_ptr，维持着节点的生命周期，保护着键 key() 和值 mapped() 没有被销毁，内存没有被释放。
+
+如果调用者接下来不做操作，那么当离开调用者所在的函数体时，这个特殊的 unique_ptr 会自动释放其指向节点。
+
+- 对于第一个按键取出节点句柄的 extract 重载：如果键值不存在，那么 extract 会返回一个特殊的空节点句柄，类似于空指针。可以通过 `(bool)node` 来判断一个节点句柄是否为空。
+- 对于第二个按迭代器取出句柄的 extract：总是成功，因为既然你已经获得了迭代器，肯定是 find 获得的，而 find 找不到返回的 end 传入 extract 是未定义行为。正如 erase 迭代器版重载 erase(it) 总是成功一样。
+
+调用者稍后可以直接销毁这个特殊智能指针：
+
+```cpp
+{
+    auto node = m.extract("fuck");
+    print(node.key(), node.value());
+} // node 在此自动销毁
+```
+
+也可以做一些修改后（例如修改键值），稍后重新用 insert(node) 重新把他插入回去：
+
+```cpp
+auto node = m.extract("fuck");
+nh.key() = "love";
+m.insert(std::move(node));
+```
+
+或者插入到另一个不同的 map 对象（但键和值类型相同）里：
+
+```cpp
+// 从 m1 挪到 m2
+auto node = m1.extract("fuck");
+m2.insert(std::move(node));
+```
+
+优点在于，extract 和节点版 insert 不涉及内存的重新分配与释放，不涉及元素类型的移动（因为节点句柄类似于智能指针，智能指针的移动并不会导致其指向对象的移动），所以会比下面这种传统写法更高效：
+
+```cpp
+// 从 m1 挪到 m2：传统写法
+if (m1.count("fuck")) {
+    auto value = std::move(m1.at("fuck"));
+    m2["fuck"] = std::move(value);
+    m1.erase(it);
+}
+```
 
 [^1]: https://en.cppreference.com/w/cpp/container/map/extract
 [^2]: https://en.cppreference.com/w/cpp/container/node_handle
@@ -4209,15 +4351,15 @@ node_type 是指向游离红黑树节点的特殊智能指针，称为节点句�
 
 <!-- PG164 -->
 
-不用 auto 完整写出全部类型的形式：
+不用 auto 完整写出全部类型的形式（古代 C++98 作风）：
 
 ```cpp
-map<K, V>::node_type node = m.extract("fuck");
+typename map<K, V>::node_type node = m.extract("fuck");
 K &k = node.key();
 V &v = node.mapped();
 ```
 
-set 也有 extract 函数，其节点句柄没有 key() 和 mapped()，而是改用 value() 获取其中的值
+set 也有 extract 函数，其节点句柄没有 key() 和 mapped() 了，而是只有一个 value()，获取其中的值
 
 ```cpp
 set<V> s = {"fuck", "suck", "dick"};
@@ -4233,7 +4375,7 @@ insert 函数：插入游离节点的版本
 
 ```cpp
 insert_return_type insert(node_type &&node);
-iterator insert(const_iterator pos, node_type &&node);
+iterator insert(const_iterator pos, node_type &&node); // 带提示的版本
 ```
 
 可以用 insert(move(node)) 直接插入一个节点。
@@ -4245,7 +4387,7 @@ map<string, int> m1 = {
 };
 map<string, int> m2;
 auto node = m1.extract("fuck");
-m2.insert(move(node));  // 节点句柄类似于 unique_ptr 不可拷贝，需要用移动语义进行插入
+m2.insert(std::move(node));  // 节点句柄类似于 unique_ptr，不可拷贝，需要用移动语义进行插入
 ```
 
 调用 insert(move(node)) 后由于所有权被移走，node 将会处于“空指针”状态，可以用 `node.empty()` 查询节点句柄是否为“空”状态，即节点所有权是否已经移走。
@@ -4432,17 +4574,46 @@ print(m);             // {{"fxxk": 211}}
 
 相当于你给小学生排队时，有一个小学生突然瞬间不知道吃了什么激素长高了，你的队伍就会乱掉。
 
-要是让这个小学生先出列，让他单独一个人长高，等他长高完了再插入回队列。
+所以需要让这个小学生先出列，让他单独一个人长高，等他长高完了再插入回队列。
 
-这时插入可以优先从他长高之前的位置开始二分法，也就是用 extract 之前的迭代器的下一个作为 insert 的提示。
+但是小学生长高的量可能是有限的（新的键可能和老键很接近）。
+
+这时插入可以优先从他长高之前的位置开始二分法，也就是用 extract 之前，这个小学生后一位同学的位置，作为 insert 的提示，让 insert 更快定位到这个小学生应该插入的位置。
 
 ```cpp
-TODO
+auto it = m.find("fuck");
+assert(it != m.end()); // 假定 "fuck" 必须存在（如果不存在会返回 end）
+auto next_it = std::next(it); // 下一位同学（可能会得到 end，但没关系，因为 insert 的提示也允许为 end 迭代器）
+auto node = m.extract(it);
+node.key() = "fxxk";   // 修改键值，变化不大
+m.insert(next_it, move(node)); // 如果键值变动不大，优先尝试在老位置插入
+```
+
+> {{ icon.tip }} 这里的 `std::next(it)` 对于等价于 it + 1。但是 map 属于双向迭代器（而不是随机迭代器），不支持加法操作，只支持就地 ++。所以 `std::next` 内部等价于：
+
+```cpp
+auto next(auto it) {
+    auto next_it = it; // 先拷贝一份，防止原迭代器被破坏（迭代器都支持拷贝，性质上是浅拷贝）
+    ++next_it;         // 再让 next_it 就地自增到下一位
+    return next_it;    // 返回现在已经相当于 it + 1 的 next_it
+}
+```
+
+如果键不变，或者键变了以后，插入位置不变的话，那么这次 insert 可以低至 $O(1)$ 复杂度。
+
+```cpp
+map<string, int> m = {
+    {"dick", 211},
+    {"fuck", 985}, // "fuck" -> "fxxk" 后，重新插入，其依字典序的“大小”依然是介于 "dick" 和 "suck"
+    {"suck", 996},
+};
 ```
 
 ---
 
 <!-- PG174 -->
+
+## map 的合并操作（并集）
 
 C++17 新增的 merge 函数[^1]
 
@@ -4451,15 +4622,17 @@ template <class Cmp2>
 void merge(map<K, V, Cmp2> &__source);
 ```
 
-> 注：set 也有 merge 函数
+> {{ icon.tip }} 注：set 也有 merge 函数
 
-> 注：merge 的参数是另一个 map，可变引用，必须和本 map 同类型，但允许有不同的比较器
+注意到 merge 的参数是另一个 map，可变引用，必须和本 map 同类型（这是为了保证节点句柄类型相同），但允许有不同的比较函数
 
-- merge(source) 会把 source 中的所有元素都**移动**到本 map，注意是**移动**而不是拷贝，source 将会被清空，这样是为了更高效。
+- `merge(source)` 会把 source 中的所有节点都**移动**并合并到本 map，注意是**移动**而不是拷贝，source 将会被清空，这样是为了更高效。
+- `insert(source.begin(), source.end())` 则是把 source 里的元素拷贝后插入到本 map，更低效，因为需要拷贝，还得新建红黑树节点，额外分配内存空间。
 
-- insert(source.begin(), source.end()) 则是把 source 里的元素拷贝后插入到本 map，但更低效，因为需要拷贝，还得新建红黑树节点，额外分配内存空间。
+对于键冲突的情况：
 
-如果 source 中有与本 map 重复的键，则该元素不会被移动，保留在 source 里。
+- merge: 如果 source 中有与本 map 重复的键，则该元素不会被移动，保留在 source 里。因此 merge 也并不总是清空 source，当 source 和本 map 有冲突时，冲突的键就保留在 source 里了。
+- insert: 如果 source 中有与本 map 重复的键，则该元素不会被插入本 map。无论有没有插入本 map，原 source 中的键都不会被清除。
 
 merge 等价于以下手动用 extract 和 insert 来移动节点的代码：
 
@@ -4480,14 +4653,54 @@ for (auto it = m2.begin(); it != m2.end(); ++it) {
 
 <!-- PG175 -->
 
-两个 map 合并，`m1.merge(m2)` 与 `m1.insert(m2.begin(), m2.end())` 性能比较
+同样做到两个 map 合并，`m1.merge(m2)` 与 `m1.insert(m2.begin(), m2.end())` 性能比较：
 
-注意：merge 函数不会产生不必要的内存分配导致内存碎片化，所以更高效，但作为代价他会清空 m2！
+```cpp
+#include <map>
+#include <string>
+#include "benchmark/benchmark.h"
+
+using namespace std;
+
+static void BM_Insert(benchmark::State &state) {
+    map<string, int> m1_init;
+    map<string, int> m2_init;
+    for (int i = 0; i < state.range(0); i++) {
+        m1_init[to_string(i)] = i;
+        m2_init[to_string(i + state.range(0))] = i;
+    }
+    for (auto _ : state) {
+        auto m1 = m1_init;
+        auto m2 = m2_init;
+        m2.insert(m1.begin(), m1.end());
+        benchmark::DoNotOptimize(m3);
+    }
+}
+BENCHMARK(BM_Insert);
+
+static void BM_Merge(benchmark::State &state) {
+    map<string, int> m1_init;
+    map<string, int> m2_init;
+    for (int i = 0; i < state.range(0); i++) {
+        m1_init[to_string(i)] = i;
+        m2_init[to_string(i + state.range(0))] = i;
+    }
+    for (auto _ : state) {
+        auto m1 = m1_init;
+        auto m2 = m2_init;
+        m2.merge(m1);
+        benchmark::DoNotOptimize(m2);
+    }
+}
+BENCHMARK(BM_Merge);
+```
+
+merge 函数不会产生不必要的内存分配导致内存碎片化，所以更高效。但作为代价，他会清空 m2！
 
 - merge 相当于把 m2 的元素“移动”到 m1 中去了。
 - insert 则是把 m2 的元素“拷贝”了一份插入到 m1 中去，效率自然低下。
 
-如果不能破坏掉 m2 则仍需要 insert 大法。
+如果不能破坏掉 m2，或者你用不上 C++17，则仍需要 insert 大法。
 
 ---
 
@@ -6006,6 +6219,7 @@ TODO
 - 有手之前，非常好用
 - 马桶装面包
 - “析构”相依1号
+- 小彭老师语录
 - 看到老鼠💩过激反应
 - 《好友清除计划》
 - 小学生早操排队
