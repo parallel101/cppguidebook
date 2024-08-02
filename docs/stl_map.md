@@ -3173,6 +3173,8 @@ print(config);
 
 <!-- PG127 -->
 
+### 批量 insert 实现 map 合并
+
 批量 insert 运用案例：两个 map 合并
 
 这个批量 insert 输入的迭代器可以是任何容器，甚至可以是另一个 map 容器。
@@ -3204,7 +3206,7 @@ print(m1);
 
 使用 `m1.insert(m2.begin(), m2.end())` 后，合并的结果会就地写入 m1。
 
-如果希望合并结果放到一个新的 map 容器中而不是就地修改 m1，请自行生成一份 m1 的深拷贝：
+如果希望合并结果放到一个新的 map 容器中而不是就地修改 m1，请先自行生成一份 m1 的深拷贝：
 
 ```cpp
 const map<string, int> m1 = {  // 第一个 map，修饰有 const 禁止修改
@@ -3225,6 +3227,8 @@ print(m12);     // m1 和 m2 的合并结果
 ```
 
 ---
+
+### 批量 insert 的冲突处理
 
 <!-- PG129 -->
 
@@ -3279,7 +3283,9 @@ std::set_union(A.begin(), A.end(), B.begin(), B.end(), std::inserter(C, C.begin(
 
 <!-- PG131 -->
 
-C++11 还引入了一个以初始化列表（initializer_list）为参数的版本：
+### insert 一个初始化列表
+
+C++11 还引入了一个以初始化列表（initializer_list）为参数的 insert 版本：
 
 ```cpp
 void insert(initializer_list<pair<const K, V>> ilist);
@@ -3302,13 +3308,13 @@ m.insert({              // 批量再插入两个新元素
 {"answer": 42, "delay": 211, "timeout": 7}
 ```
 
-注：这里还是和 insert({k, v}) 一样的特性，重复的键 "timeout" 没有被覆盖，依旧了保留原值。
+注：这里还是和逐个 insert 一样，重复的键 "timeout" 没有被覆盖，依旧了保留原值。
 
 ---
 
 <!-- PG132 -->
 
-小彭老师锐评批量 insert
+### 小彭老师锐评批量 insert 有什么用
 
 ```cpp
 m.insert({
@@ -3326,11 +3332,12 @@ m.insert({"delay", 211});
 
 如果需要覆盖原值的批量写入，还是得乖乖写个 for 循环调用 [] 或 insert_or_assign。
 
-> 问：既然和批量插入没什么区别，那批量 insert 究竟还有什么存在的必要呢？
->
-> map 又不是 vector 因为一个个分别插入会变成 $O(N^2)$ 复杂度，确实需要提供个批量插入的方法。
->
-> 答：是为了统一，既然 vector 都有批量 insert，那 set 和 map 也得有才符合完美主义美学，而且用他来合并两个 map 也很方便。
+问：既然和批量插入没什么区别，复杂度也一样是 $O(\log N)$，那批量 insert 究竟还有什么存在的必要呢？map 又不像 vector 一个个分别插入会变成 $O(N^2)$ 复杂度，确实需要提供个批量插入的方法。
+
+答：
+
+1. 是为了统一，既然 vector 都有批量 insert，那 set 和 map 也得有才符合完美主义美学，而且用他来合并两个 map 也很方便。
+2. 复杂度并不一样，当输入已经有序时，批量 insert 会比逐个 insert 更快，只需 $O(N)$ 而不是 $O(N \log N)$；如果输入无序，那么依然是 $O(N \log N)$，稍后会讲原理。
 
 ---
 
@@ -3340,14 +3347,16 @@ m.insert({"delay", 211});
 map &operator=(initializer_list<pair<const K, V>> ilist);
 ```
 
-map 支持赋值函数，用法是等号右边一个花括号列表，作用是清空原有内容，直接设为一个全新的 map：
+map 也支持赋值函数，不仅有 map 自己给自己赋值的移动赋值和拷贝赋值函数，还有从列表初始化的函数。
+
+用法是等号右边一个花括号列表，作用是清空原有内容，直接设为一个全新的 map：
 
 ```cpp
 map<string, int> m = {  // 初始化时就插入两个元素
     {"answer", 42},
     {"timeout", 7},
 };
-m = {              // 原有内容全部清空！重新插入两个新元素
+m = {                   // 原有内容全部清空！重新插入两个新元素
     {"timeout", 985},
     {"delay", 211},
 };
@@ -3358,6 +3367,31 @@ m = {              // 原有内容全部清空！重新插入两个新元素
 ```
 
 > 相当于 clear 了再重新 insert，原有的 "answer" 键也被删掉了。
+
+### 赋值函数和构造函数辨析
+
+要注意赋值函数 `operator=(initializer_list)` 和构造函数 `map(initializer_list)` 是不同的。
+
+构造函数是初始化时调用的（无论有没有 = 号），赋值函数是后期重新赋值时调用的。
+
+```cpp
+map<string, int> m{    // 构造函数 map(initializer_list)
+    {"answer", 42},
+    {"timeout", 7},
+};
+map<string, int> m = {  // 虽然有等号，但这里是初始化语境，调用的依然是构造函数 map(initializer_list)
+    {"answer", 42},
+    {"timeout", 7},
+};
+m = {                   // m 已经初始化过，这里是重新赋值，才是赋值函数 operator=(initializer_list)
+    {"timeout", 985},
+    {"delay", 211},
+};
+```
+
+如果一个类要支持初始化，又要支持后期重新赋值，那么构造函数和赋值函数都要实现。
+
+但也可以选择只定义 `operator=(map &&)` 移动赋值函数而不定义 `operator=(initializer_list)`。这样当试图 `operator=(initializer_list)` 时，会匹配到 `map(initializer_list)` 这个隐式构造函数来转换，然后调用到 `operator=(map &&)`。标准库选择将两个都定义可能是处于避免一次 map 移动的效率考量。
 
 ---
 
@@ -3396,7 +3430,7 @@ iterator insert(const_iterator pos, pair<K, V> const &kv);
 
 - 当插入位置 pos 提示的准确时，insert 的复杂度可以低至 $O(1)+$。
 - 当插入位置 pos 提示不准确时，和普通的 insert 一样，还是 $O(\log N)$。
-- 返回指向成功插入元素位置的迭代器
+- 返回指向成功插入元素位置的迭代器。
 
 想想看，这三个看似不相干的特性，能有什么用呢？
 
@@ -3404,7 +3438,7 @@ iterator insert(const_iterator pos, pair<K, V> const &kv);
 
 <!-- PG136 -->
 
-可以让有序数据的插入更高效！
+可以让已经有序数据的批量插入更高效！
 
 众所周知，普通的批量 insert 复杂度为 $O(N \log N)$。
 
@@ -3413,10 +3447,12 @@ vector<pair<int, int>> arr;
 map<int, int> tab;
 for (auto const &[k, v]: arr) {
     tab.insert({k, v});               // O(log N)
-}
+}  // 总共 O(N log N)
 ```
 
-假如输入有序，带提示的批量 insert 复杂度可以优化到 $O(N)$，否则依然是 $O(N \log N)$。
+假如输入本就有序，带提示的批量 insert 复杂度可以降低到 $O(N)$。
+
+如果输入无序，带提示的批量 insert 复杂度依然是 $O(N \log N)$ 不变。
 
 ```cpp
 vector<pair<int, int>> arr;
@@ -3424,7 +3460,7 @@ map<int, int> tab;
 auto hint = tab.begin();
 for (auto const &[k, v]: arr) {
     hint = tab.insert(hint, {k, v});  // 平均 O(1)
-}
+}  // 总共 O(N)
 ```
 
 想一想，为什么？
@@ -3453,9 +3489,21 @@ for (auto const &[k, v]: arr) {
 
 知道这个规律后，你改变你的策略：二分法时，不是先从最中间（1/2 处）开始查找，而是从最末尾开始查找。因为矮小同学会早到，导致每次新来的同学往往总是队列中最高的那一个。所以可以从队伍的末尾（最高的地方）开始找，例如有 64 名同学则优先和 65/64 处比较，找不到再往上一级和 31/32 处比较。
 
-这个策略也有缺点：对于早晚顺序和高矮无关、甚至负相关的情况，就会变成 $2 \log N$ 了。
+这个策略也有缺点：对于早晚顺序和高矮无关、甚至负相关的情况，每次插入的消耗就会变成 $2 \log N$ 了。
 
 最终我们决定采用的策略是：不是从中间，也不是从开头，也不是从末尾，而是**记住上一次成功插入的位置**，下一次从上一次成功插入的位置开始找。这个记忆的插入位置，就是刚刚代码中那个位置提示迭代器 hint。
+
+这正是我们代码的写法：
+
+```cpp
+hint = tab.insert(hint, {k, v});
+```
+
+实际上，insert 的批量插入版 `insert(arr.begin(), arr.end())` 内部就会使用这种带提示的方式，逐个插入。
+
+```cpp
+vector<pair<int, int>> arr;
+```
 
 ---
 
@@ -4629,10 +4677,12 @@ void merge(map<K, V, Cmp2> &__source);
 - `merge(source)` 会把 source 中的所有节点都**移动**并合并到本 map，注意是**移动**而不是拷贝，source 将会被清空，这样是为了更高效。
 - `insert(source.begin(), source.end())` 则是把 source 里的元素拷贝后插入到本 map，更低效，因为需要拷贝，还得新建红黑树节点，额外分配内存空间。
 
-对于键冲突的情况：
+对于键存在冲突的情况：
 
-- merge: 如果 source 中有与本 map 重复的键，则该元素不会被移动，保留在 source 里。因此 merge 也并不总是清空 source，当 source 和本 map 有冲突时，冲突的键就保留在 source 里了。
+- merge: 如果 source 中有与本 map 重复的键，则该元素不会被移动，保留在 source 里。
 - insert: 如果 source 中有与本 map 重复的键，则该元素不会被插入本 map。无论有没有插入本 map，原 source 中的键都不会被清除。
+
+> 因此，merge 也并不总是完全清空 source，当 source 和本 map 有冲突时，冲突的键就保留在 source 里了。
 
 merge 等价于以下手动用 extract 和 insert 来移动节点的代码：
 
@@ -4700,7 +4750,7 @@ merge 函数不会产生不必要的内存分配导致内存碎片化，所以�
 - merge 相当于把 m2 的元素“移动”到 m1 中去了。
 - insert 则是把 m2 的元素“拷贝”了一份插入到 m1 中去，效率自然低下。
 
-如果不能破坏掉 m2，或者你用不上 C++17，则仍需要 insert 大法。
+如果不想破坏掉 m2，或者你用不上 C++17，则仍需要传统的 insert。
 
 ---
 
