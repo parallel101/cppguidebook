@@ -345,7 +345,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年07月31日 14:36:15 (UTC+08:00)</p>
+<p>更新时间：2024年08月02日 14:35:06 (UTC+08:00)</p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是温馨提示</p>
@@ -2399,7 +2399,7 @@ read(32, buf, fd);
 <p>仅仅只是装模作样的用 typedef 定义个好看的类型别名，并没有任何意义！
 他连你的参数名 fd 都能看不见，你觉得他会看到你的参数类型是个别名？</p>
 <p>用户一样可以用一个根本不是文件句柄的臭整数来调用你，而得不到任何警告或报错：</p>
-<pre><code class="language-cpp">typedef FileHandle int;
+<pre><code class="language-cpp">typedef int FileHandle;
 ssize_t read(FileHandle fd, char *buf, size_t len);
 
 read(32, buf, fd); // 照样编译通过！
@@ -2493,7 +2493,7 @@ read(fd, buf);  // 自动转换成 Span{buf, 30}
     template &lt;size_t N&gt;
     Span(std::array&lt;char, N&gt; &amp;arr) : data(arr.data()), size(N) {}
 
-    Span(std::vector&lt;charN&gt; &amp;vec) : data(vec.data()), size(vec.size()) {}
+    Span(std::vector&lt;char&gt; &amp;vec) : data(vec.data()), size(vec.size()) {}
 
     // 如果有需要，也可以显式写出 Span(buf, 30) 从首地址和长度构造出一个 Span 来
     explicit Span(char *data, size_t size) : data(data), size(size) {}
@@ -3251,7 +3251,7 @@ public:
     explicit Typed(T value) : value(value) {}
 };
 </code></pre>
-<pre><code class="language-cpp">struct Name : Typed&lt;Name, T&gt; {};
+<pre><code class="language-cpp">struct Name : Typed&lt;Name, std::string&gt; {};
 
 struct Meter : Typed&lt;Meter, double&gt; {};
 
