@@ -156,6 +156,16 @@ auto foo = make_shared<Foo>();
 
 > 从 C++14 开始，内存安全的现代 C++ 程序中就不会出现任何显式的 new 了，哪怕是抱在 shared_ptr 或 unique_ptr 内的也不行。（除了最上面说的 3 种特殊情况）
 
+如果你需要调用的 C 语言接口还需要原始指针的话，用 `.get()` 可以从智能指针中获取原始指针。建议只在和 C 语言打交道时 `.get()`，其余时间一律 shared_ptr 保证安全。
+
+```cpp
+extern "C" void some_c_function(Foo *foo);
+
+auto foo = make_shared<Foo>();
+some_c_function(foo.get());
+```
+
+
 ## RAII 比起手动 delete 的优势
 
 在日常代码中，我们常常会使用“如果错误了就提前返回”的写法。这被称为**提前返回 (early-return)**，一种优质的代码写法，比弄个很大的 else 分支要可维护得多。

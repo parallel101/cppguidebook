@@ -4,13 +4,17 @@
 
 让高性能数据结构惠及每一人
 
+[TOC]
+
 ---
 layout: two-cols
 ---
 
 <!-- PG2 -->
 
-# 课程简介
+## 前言
+
+### 课程简介
 
 😀😀😀
 
@@ -30,7 +34,7 @@ C++ 标准库又称 STL，包含了大量程序员常用的算法和数据结构
 
 <!-- PG3 -->
 
-# 课程亮点
+### 课程亮点
 
 👍👍👍
 
@@ -46,7 +50,7 @@ C++ 标准库又称 STL，包含了大量程序员常用的算法和数据结构
 
 <!-- PG4 -->
 
-# 课程大纲
+### 课程大纲
 
 ✨✨✨
 
@@ -69,7 +73,7 @@ C++ 标准库又称 STL，包含了大量程序员常用的算法和数据结构
 
 <!-- PG5 -->
 
-# 实验环境
+### 实验环境
 
 ✅✅✅
 
@@ -89,7 +93,7 @@ C++ 标准库又称 STL，包含了大量程序员常用的算法和数据结构
 
 <!-- PG6 -->
 
-# 如何使用课件
+### 如何使用课件
 
 🥰🥰🥰
 
@@ -115,7 +119,7 @@ Slidev 服务运行时，你对 slides.md 的所有修改会立刻实时显现�
 
 <!-- PG7 -->
 
-# 如何运行案例代码
+### 如何运行案例代码
 
 🥺🥺🥺
 
@@ -155,7 +159,7 @@ Slidev 服务运行时，你对 slides.md 的所有修改会立刻实时显现�
 
 <!-- PG9 -->
 
-# 课程书写习惯说明
+### 课程书写习惯说明
 
 ```cpp
 int const &i  // 本课程书写习惯
@@ -174,8 +178,6 @@ template <typename T>  // 官方文档书写习惯
 ---
 
 <!-- PG10 -->
-
-# 课程书写习惯说明（续）
 
 ```cpp
 using namespace std; // 仅为教学方便目的，不建议在现实工程中使用 ⚠️
@@ -223,15 +225,13 @@ std::erase_if(m, pred);
 
 <!-- PG12 -->
 
-## 本期课程目录
-
-${toc}
-
 ---
 
 <!-- PG13 -->
 
-## 关于算法复杂度，一个真实的小故事
+## 什么是算法复杂度
+
+### 关于算法复杂度，一个真实的小故事
 
 有一次一个同学发给我一份源码文件 tetreader.py，其功能是读取一个 tet 格式的文件（四面体网格模型）。
 
@@ -254,8 +254,6 @@ for ... in ...:
 
 <!-- PG14 -->
 
-## 关于算法复杂度，一个真实的小故事（续）
-
 后来我给他改了一下，把他的 face_lut 改成字典，用字典查找，高效得多了：
 
 ```python
@@ -272,6 +270,8 @@ for ... in ...:
 他很高兴，不知道怎么感谢我，于是就把我推荐给张心欣了。
 
 ---
+
+### 数据结构与复杂度
 
 <!-- PG15 -->
 
@@ -295,23 +295,27 @@ map/set 家族都是高效查找的专家：
 
 <!-- PG16 -->
 
-map 的逻辑结构
+## map 的逻辑结构
 
 ![logicmap](img/stl/logicmap.png)
 
 特点：
 
-- 由一系列*键值对*组成
+- 由一系列 **键值对** 组成
 - 一个键只能对应一个值
 - 键不得重复，值可以重复
 
 <br/>
 
-> std::map, std::unordered_map, absl::flat_hash_map, tbb::concurrent_hash_map 都满足这一基本逻辑结构，只是物理实现不同。
+> {{ icon.tip }} std::map, std::unordered_map, absl::flat_hash_map, tbb::concurrent_hash_map 都满足“键值对”这一基本逻辑结构，只是物理实现不同。
+
+> {{ icon.fun }} 面壁者罗辑监督你的学习！
+
+在编程中我们常常需要用到“映射”的关系，这就非常需要用到以 map 为首的“键值对”这类容器了。
 
 ---
 
-为什么要学习 std::map
+### 为什么要学习 std::map
 
 map 的具体实现可以是红黑树、AVL 树、线性哈希表、链表哈希表、跳表……不同的实现在不同操作上的复杂度不同，分别适用于不同的场景。
 
@@ -327,11 +331,15 @@ map 的具体实现可以是红黑树、AVL 树、线性哈希表、链表哈希
 
 <!-- PG17 -->
 
-标准库中的 map 容器[^1]
+### 标准库中的 map 容器
 
-标准库中，map 是一个**模板类**，他的键类型，值类型，可以由尖括号内的参数指定，便于适应不同的用户需求。
+标准库中，map[^1] 是一个**模板类**，他的键类型，值类型，可以由尖括号内的参数指定，便于适应不同的用户需求。
+
+> {{ icon.tip }} 由于 C++ 标准库的容器大多都是模板类，提供的算法也大多是模板函数，因此 C++ 标准库常被称为标准模板库 (Standard-Template-Library, STL)。
 
 键类型和值类型可以是任意类型，包括基本类型，用户自定义的类，其他 STL 容器等，体现了容器的泛用性。
+
+唯一的要求是：键必须支持比较，这里 map 要求的是小于运算符 `<`。
 
 - 例如 `map<string, int>` 是一个键类型为 string，值类型为 int 的 map 容器。
 - 例如 `map<int, Student>` 是一个键类型为 int，值类型为 Student 的 map 容器。
@@ -354,11 +362,11 @@ map 的具体实现可以是红黑树、AVL 树、线性哈希表、链表哈希
 
 <!-- PG18 -->
 
-map 的物理结构
+## map 的物理结构
 
 ![physmap](img/stl/physmap.png)
 
-map 和 set 一样，都是基于红黑树的二叉排序树，实现高效查找。
+map 和 set 一样，都是基于红黑树的二叉排序树，实现 $O(\log N)$ 复杂度的高效查找。
 
 vector 就是因为元素没有固定的顺序，所以才需要暴力遍历查找。
 
@@ -368,19 +376,20 @@ vector 就是因为元素没有固定的顺序，所以才需要暴力遍历查�
 
 <!-- PG19 -->
 
-map 查找时采用二分法：
+### 二叉排序树与二分法
+
+始终保存元素按键排序的好处是，如果需要寻找指定键值的元素，就可以采用二分法：
 
 1. 从根节点开始查找。
-
 2. 如果当前节点的键小于要找的键，则往左子节点移动；
-
 3. 如果当前节点的键大于要找的键，则往左子节点移动；
-
 4. 如果当前节点的键等于要找的键，则该节点就是要找的节点，返回该节点。
-
-5. 把左/右子节点设为新的当前节点，然后回到第 2 步，重复这一查找过程。
+5. 如果当前节点已经是最后一层叶子节点，也没找到相等的键，则说明该键不存在。
+6. 把左/右子节点设为新的当前节点，然后回到第 2 步，重复这一查找过程。
 
 ---
+
+### 二叉排序树
 
 <!-- PG20 -->
 
@@ -408,7 +417,119 @@ map 中的 V 类型不参与排序，只按照 K 进行排序。
 
 这就实现了从 K 到 V 的映射。
 
+### 二叉树退化问题
+
+二叉排序树只解决了查找的问题，但是他并不能保证经历一通插入后的树不会“退化”。
+
+如果插入的时候不小心，可能会让树的形状变得非常诡异！
+
+例如，若插入数据的顺序是从小到大的，那就会一直在往右插入，清一色的一边倒，以至于几乎成了一根往右跑的链表。
+
+如果插入顺序是从大到小，就变成一直往左边倒。即使插入的顺序不那么刻意，依然可能产生非常变态的形状，违背了二叉树的初衷。
+
+![binary_tree_best_worst_cases](img/stl/binary_tree_best_worst_cases.png)
+
+> {{ icon.fun }} 哥俩生异形呢？
+
+这样“退化”的二叉排序树，虽然能保持有序，但二分查找时就起不到加速作用了。
+
+如果要找一个中间的元素，几乎就和链表一样，需要遍历整个右枝干。
+
+为了限制二叉排序树不要长成畸形，我们引入一个指标：“深度”，表示从根节点到最底层叶子节点的距离。
+
+要最大化二分查找的效率，就需要二叉树的深度尽可能的低。
+
+因为二分查找的次数就取决于每个叶子节点的平均深度，要尽可能减少平均需要访问的次数，就是要减少二叉树的深度。
+
+也就是说要让大家都尽可能贴近根部，但我们不可能让所有叶子都最贴近根部。
+
+例如右侧只有一个叶子节点，他自己是深度最低了，但代价是左边全部挤在一条链表上了！这不公平。
+
+![binary_tree_almost_worst_case](img/stl/binary_tree_almost_worst_case.png)
+
+> {{ icon.fun }} 它自己倒是自由了，但它奴役了所有的人民
+
+![slave-all](img/stl/slave-all.jpg)
+
+所以要最大化二分查找的效率，我们真正需要的是让所有叶子节点都尽可能“平等”！
+
+### 红黑树 vs 平衡树
+
+为了避免二叉树长成畸形，陷入一边倒的情况。我们需要在每次插入后，检查二叉树是否深度差距过大。
+
+如果差的太多了，就需要进行一系列矫正操作，“劫富济贫”，把太长的枝干砍断，接在短的地方，尽可能保持所有叶子路径的深度差不多，这个“劫富济贫”的动作就是**平衡操作 (balancing)**。
+
+问题是，最大能容忍叶子节点之间多大的深度差才开始矫正？针对这个问题，二叉排序树分为两派：
+
+#### 平衡树
+
+最理想的情况下，一颗含有 $N$ 个节点的二叉树，至少需要有 $\lceil \log N \rceil$ 深度。
+
+这就是平衡树（AVL），他强制保证整个树处于完美的平衡状态，每个叶子节点之间的深度差距不会超过 1（当节点数量 $N$ 不是 2 的整数倍时，这是不得不存在的 1 格差距）。
+
+![balanced_binary_tree](img/stl/balanced_binary_tree.png)
+
+- 优点：始终保持最完美的平衡，平均复杂度和最坏复杂度最低。所以平衡树的查找性能是最好的。
+- 缺点：然而始终保持完美的平衡意味着，几乎每插入一个元素（可能会突然产生深度差距超过 1 的情况），就立即需要平衡一次。平衡一次的开销是比较大的，所以平衡树的性能是插入性能是比较差的。
+
+平衡树实现平衡的方式是“旋转”，他能始终保持最低的深度差：
+
+![avltree_right_rotate_with_grandchild](img/stl/avltree_right_rotate_with_grandchild.png)
+
+> {{ icon.tip }} 这里的细节我们不会深究，那是数据结构课的内容，届时会带大家手搓平衡树和红黑树，本期只是稍微了解 map 常见的底层实现，帮助你理解为什么 map 是有序容器。
+
+#### 红黑树
+
+而红黑树认为，我们不需要总是保持深度差距为 1 那么小，我们只需要保证最深叶子和最浅叶子的深度差不超过 2 倍即可。
+
+例如最浅的一个叶子是 6 深度，另一个最深的叶子可以是 12 深度。只有当最深的叶子超过 12 深度时，红黑树才会开始主动干预平衡，避免继续畸形发展下去。
+
+- 缺点：树可能有一定的一边倒情况，平均复杂度稍微降低，最坏复杂度可以达到原来的 2 倍！
+- 优点：因为对不平衡现象更加宽松，正常插入时基本不需要平衡，只有特别扭曲了才会下场“救急”。所以红黑树是牺牲了一部分查找性能，换取了更好的插入和删除性能。
+
+总之，如果你的用况是插入比较少，但是查询非常多，那就适合用平衡树。
+
+由于换来的这部分插入和删除性能实际上比损失的查找性能多，而 map 常见的用况确实需要经常增删改查，所以现在 C++ 标准库的 map 底层都是基于红黑树实现的。
+
+> {{ icon.tip }} 如果你的需求是大量查找的话，完全可以考虑用查找平均复杂度低至 $O(1)$ 的哈希表 unordered_map。
+
+> {{ icon.story }} 如果是一次性插入完毕后不会再修改，还可以用完美哈希表（frozen_map），他会为你的键值序列专门生成一个专用的哈希函数，编译期确定，且保证完全无冲突。例如你在做一种语言编译器，有很多“关键字”，比如“if”、“while”，你需要运行时频繁的查找这些关键字，而关键字有哪些在编译期是固定的，那就很适合用完美哈希。
+
+#### 红黑树实现平衡的秘密
+
+红黑树是如何保证最深叶子和最浅叶子的深度差不超过 2 倍的呢？
+
+他设定了这样 5 条规则：
+
+1. 节点可以是红色或黑色的。
+2. 根节点总是黑色的。
+3. 所有叶子节点都是黑色（叶子节点就是 NULL）。
+4. 红色节点的两个子节点必须都是黑色的。
+5. 从任一节点到其所有叶子节点的路径都包含相同数量的黑色节点。
+
+> {{ icon.fun }} 什么规则类怪谈……
+
+看起来好像很复杂，但实际上大多是废话，有用的只是 4 和 5 这两条。
+
+规则 4 翻译一下就是：不得出现相邻的红色节点（相邻指两个节点是父子关系）。这条规则还有一个隐含的信息：黑色节点可以相邻！
+
+规则 5 翻译一下就是：从根节点到所有底层叶子的距离（以黑色节点数量计），必须相等。
+
+因为规则 4 的存在，红色节点不可能相邻，也就是说最深的枝干只能是：红-黑-红-黑-红-黑-红-黑。
+
+结合规则 5 来看，也就是说每条枝干上的黑色节点数量必须相同，因为最深的枝干是 4 个黑节点了，所以最浅的枝干至少也得有 4 个节点全是黑色的：黑-黑-黑-黑。
+
+可以看到，规则 4 和规则 5 联合起来实际上就保证了：最深枝干的深度不会超过最浅枝干的 2 倍。
+
+![Red-black_tree_example](img/stl/Red-black_tree_example.svg.png)
+
+如果超出了 2 倍，就不得不破坏红黑树的规则 4 或 5，从而触发“劫富济贫”的平衡操作，从而阻止了二叉树过于畸形化。
+
+红黑树如何实现“劫富济贫”的细节我们就不再多谈了，小彭老师点到为止，接下来直接进入正题：
+
 ---
+
+## 开始使用 map 容器
 
 <!-- PG22 -->
 
@@ -2314,7 +2435,7 @@ std::optional<typename M::mapped_type> map_get
 
 当找不到时就返回 nullopt，找到就返回含有值的 optional。
 
-> 注：本段代码已附在案例代码库的 "map_get.h" 文件中，等课后可以去 GitHub 下载。
+> {{ icon.tip }} 本段代码已附在案例代码库的 "map_get.h" 文件中，等课后可以去 GitHub 下载，赶紧用在你的项目中吧！
 
 ---
 
@@ -5080,59 +5201,6 @@ print(m2);
 
 ---
 
-<!-- PG192 -->
-
-C++14 新增了“透明(transparent)”运算符仿函数。
-
-参数为 void 即可让一个运算符仿函数变成“透明”的，对于 less 运算符仿函数而言，就是 `less<void>`。
-
-C++14 之前用的都是“不透明”版的仿函数，必须指定一个具体的类型，例如 `less<int>` 就只能用于 int 类型的比较，`less<string>` 就只能用于 string 类型的比较。无法用 `less<int>` 仿函数比较 string 类型。
-
-而 `less<void>` 是通用的，他的 `operator()` 函数是泛型的，可以接受任意类型。
-
-```cpp
-template <>
-struct less<void> {   // 针对 void 的特化
-    // 标准委员会想：由于 void 类型不可能有 < 运算符的需求，所以他们干脆拿 void 作为透明版的模板参数“占位符”了
-    template <class Tx, class Ty>
-    constexpr decltype(auto) operator()(Tx &&x, Ty &&y) const {
-        return forward<Tx>(x) < forward<Ty>(y);
-    }
-
-    struct is_transparent;  // 空类，仅供 SFINAE 元编程时检测一个仿函数是否透明时使用
-};
-```
-
-> 不透明版的 `less<T>` 泛型体现在类的模板参数上，
-
----
-
-<!-- PG193 -->
-
-“透明”版的好处是可以同一个兼容任意类型，而不必创建多个 cmp 对象。而不透明版的好处是方便特化 traits，但毕竟 < 运算符是可以用户自定义(运算符重载)的，没必要用 traits 特化，所以他们逐步发现透明版香了，还能支持左右参数为不同类型。
-
-```cpp
-less<void> cmp;
-print(cmp(1, 2));  // 1 < 2: true
-print(cmp(5, 2));  // 5 < 2: false
-print(cmp(string("hello"), "world"));  // "hello" < "world": false
-print(cmp(string("cmake"), "cppcon"));  // "cmake" < "cppcon": true
-```
-
-> 但也要特别注意不能再依赖参数类型自动的隐式转换了，必须至少写完整其中一个 `string("hello")` 才能触发 `string` 的 `operator<` 而不是 `const char *` 的指针比大小。如果只写 `cmp("cmake", "cppcon")` 则是在比较指针的地址大小，结果是不一定的。
-
-由于 C++14 的 less 模板参数 T 默认为 void，所以 `less<void>` 还可以简写成 `less<>`。
-
-```cpp
-less<> cmp;
-print(cmp(1, 2));  // 1 < 2: true
-print(cmp(5, 2));  // 5 < 2: false
-print(cmp(string("hello"), "world"));  // "hello" < "world": false
-print(cmp(string("cmake"), "cppcon"));  // "cmake" < "cppcon": true
-```
-
----
-
 <!-- PG194 -->
 
 自定义比较仿函数，实现无视键大小写的 map 容器：
@@ -5171,7 +5239,7 @@ fuck对应的值为: "rust"
 
 <!-- PG195 -->
 
-C++11 的 lambda 表达式也是仿函数：
+C++11 的 lambda 表达式也是仿函数，配合 decltype 后就可以传入 map 作为比较器：
 
 {% raw %}
 ```cpp
@@ -5285,6 +5353,64 @@ m.value_comp()({1, 0}, {2, 0});  // 等价于 cmp(1, 2)
 
 ---
 
+<!-- PG192 -->
+
+C++14 新增了“透明(transparent)”运算符仿函数。
+
+参数为 void 即可让一个运算符仿函数变成“透明”的，对于 less 运算符仿函数而言，就是 `less<void>`。
+
+C++14 之前用的都是“不透明”版的仿函数，必须指定一个具体的类型，例如 `less<int>` 就只能用于 int 类型的比较，`less<string>` 就只能用于 string 类型的比较。
+
+无法用 `less<int>` 仿函数比较 string 类型。
+
+而 `less<void>` 是通用的，他的 `operator()` 函数是泛型的，可以接受任意类型。
+
+```cpp
+template <>
+struct less<void> {   // 针对 void 的特化
+    // 标准委员会想：由于 void 类型不可能有 < 运算符的需求，所以他们干脆拿 void 作为透明版的模板参数“占位符”了
+    template <class Tx, class Ty>
+    constexpr decltype(auto) operator()(Tx &&x, Ty &&y) const {
+        return forward<Tx>(x) < forward<Ty>(y);
+    }
+
+    struct is_transparent;  // 空类，仅供 SFINAE 元编程时检测一个仿函数是否透明时使用
+};
+```
+
+> {{ icon.detail }} 我的思考：不透明版的 `less<T>` 泛型体现在类的模板参数上，而透明版的体现在了成员函数 `operator()` 的模板参数上。
+
+> {{ icon.tip }} 这里用 `void` 特化只是一个偷懒，`void` 并没有什么特殊的，实际上应该单独定义一个没有模板的 `transparent_less` 类，但他们就是懒得引入新标识符。
+
+---
+
+<!-- PG193 -->
+
+“透明”版的好处是可以同一个兼容任意类型，而不必创建多个 cmp 对象。而不透明版的好处是方便特化 traits，但毕竟 < 运算符是可以用户自定义(运算符重载)的，没必要用 traits 特化，所以他们逐步发现透明版香了，还能支持左右参数为不同类型。
+
+```cpp
+less<void> cmp;
+print(cmp(1, 2));  // 1 < 2: true
+print(cmp(5, 2));  // 5 < 2: false
+print(cmp(string("hello"), "world"));  // "hello" < "world": false
+print(cmp(string("cmake"), "cppcon"));  // "cmake" < "cppcon": true
+```
+
+> 但也要特别注意不能再依赖参数类型自动的隐式转换了，必须至少写完整其中一个 `string("hello")` 才能触发 `string` 的 `operator<` 而不是 `const char *` 的指针比大小。如果只写 `cmp("cmake", "cppcon")` 则是在比较指针的地址大小，结果是不一定的。
+
+由于 C++14 的 less 模板参数 T 默认为 void，所以 `less<void>` 还可以简写成 `less<>`。
+
+```cpp
+less<> cmp;
+print(cmp(1, 2));  // 1 < 2: true
+print(cmp(5, 2));  // 5 < 2: false
+print(cmp(string("hello"), "world"));  // "hello" < "world": false
+print(cmp(string("cmake"), "cppcon"));  // "cmake" < "cppcon": true
+```
+
+
+---
+
 <!-- PG200 -->
 
 普通 find 函数：键类型作为参数
@@ -5311,22 +5437,122 @@ const_iterator find(Kt &&k) const;
 
 [^1]: https://en.cppreference.com/w/cpp/container/map/find
 
----
+不仅
 
-<!-- PG201 -->
+### 泛型 find 的要求
 
-泛型 find 如何提升性能
+要想用泛型版的 find 函数有一个条件：
+
+map 的比较器必须是“透明(transparent)”的，也就是 `less<void>` 这种。否则泛型版的 `find(Kt &&)` 不会参与重载，也就是只能调用传统的 `find(K const &)`。
+
+但是 `map<K, V>` 默认的比较器是 `less<V>`，他是不透明的，比较的两边必须都是 `V` 类型。如果其中一边不是的话，就得先隐式转换为 `V` 才能用。
+
+这是早期 C++98 设计的失败，当时他们没想到 `find` 还可以接受 `string_view` 和 `const char *` 这类可以和 `string` 比较，但构造会廉价得多的弱引用类型。
+
+只好后来引入了透明比较器企图，然而为了历史兼容，`map<K, V>` 默认仍然是 `map<K, V, less<K>>`。
+
+如果我们同学的编译器支持 C++14，建议全部改用这种写法 `map<K, V, less<>>`，从而用上更高效的 find、at、erase、count、contains 等需要按键查找元素的函数。
+
+#### 字符串为键的字典
+
+除非传入的刚好就是一个 `string` 的 const 引用，否则就会发生隐式构造 `string` 的操作。
+
+如果传入的是一个 `string_view` 或 `const char *`，那么需要从他们构造出一个 `string`，然后才能传入传统的 `find(string const &)` 函数。而 `string` 的构造会发生拷贝，且可能产生内存分配。
+
+对于比较大的字符串做键值，每次查找都需要重新构造一个 `string` 对象，开销会比较大。
 
 ```cpp
-map<string, int> table;
-table.find("hello");  // 等价于 table.find(string("hello"))，调用了一次 string 构造函数，可能产生内存分配
+map<string, int> lut;
+
+lut.at("a-very-very-very-very-long-key");
+// 等价于:
+lut.at(string("a-very-very-very-very-long-key")); // 隐式构造了一个 string，导致深拷贝了整个字符串！
 ```
 
----
+而启用了透明比较后，就不需要每次都拷贝整个字符串来构造 `string` 了。因为 find、at 这类函数会启用一个泛型的版本 `at(Kt &&)`，Kt 可以是任何类型，只要他支持与 `string` 比较。可以是 `const char *`，`string_view` 或另一个 `string`。
+
+```cpp
+map<string, int, less<>> lut;
+
+lut.at("a-very-very-very-very-long-key");
+// 等价于:
+lut.at<const char *>("a-very-very-very-very-long-key");
+```
+
+因为不用拷贝了，更加高效，特别是对于键字符串非常长的情况。
+
+at 内部也不会构造任何新的 `string`，他会拿着 `const char *` 和红黑树中的每个节点调用 `==` 比较。
+
+> {{ icon.tip }} `string == const char *` 是安全的，会比较字符串的内容而不是地址。
+
+#### 智能指针为键的字典
+
+某有某些特殊情况下，我们需要把指针，甚至智能指针！放进 map 或 set 的键中，用于快速按指针的值查找到元素。（是的你没听错，是放在**键类型**里！）
+
+> {{ icon.detail }} 轶事：把指针放在键里并不罕见，常见的一个用法是 `set<Node *>`。好处是当 `Node` 析构时，他可以直接调用 `set.erase(this)` 把自己剔除掉。而普通的 `set<Node>` 就很难做到这一点了，你无法通过 Node 的 this 指针获得他在 set 中的迭代器，也无法知道自己位于哪个 set 中。侵入式红黑树完美解决了这一痛点，LLVM 和 Linux 内核中都大量运用了侵入式链表/LRU/红黑树，以后的高级数据结构课程中会为你讲解。
+
+```cpp
+map<Node *, int> lut;
+
+Node *raw_ptr = get_some_ptr();
+lut.find(raw_ptr);
+```
+
+如果是智能指针，就比较困难了，特别是 `unique_ptr`。如果你已知一个原始指针，想要在 map 中查找指向同样的智能指针键。
+
+```cpp
+map<unique_ptr<Node>, int> lut;
+Node *raw_ptr = get_some_ptr();
+lut.find(raw_ptr); // 错误：无法从 Node * 隐式构造 unique_ptr<Node>
+```
+
+过去，人们不得不用一种称为 stale-ptr（变质指针）的黑科技，来构造一个不掌握生命周期的伪 unique_ptr 出来：
+
+```cpp
+map<unique_ptr<Node>, int> lut;
+Node *raw_ptr = get_some_ptr();
+unique_ptr<Node> stale_ptr(raw_ptr);  // 一个并不掌握生命周期的“变质智能指针”
+lut.find(stale_ptr); // OK: 匹配到 find(unique_ptr<Node> const &) 重载
+stale_ptr.release(); // 必须！否则会出现双重释放 (double-free) 错误
+```
+
+而 C++14 中，我们只需定义一个透明的比较函数，支持 `Node *` 与 `unique_ptr<Node>` 互相比较即可：
+
+```cpp
+struct transparent_ptr_less {
+    template <class T>
+    bool operator()(T *const &p1, T const &p2) const {
+        return p1 < p2;
+    }
+
+    template <class T>
+    bool operator()(T *const &p1, unique_ptr<T> const &p2) const {
+        return p1 < p2.get();
+    }
+
+    template <class T>
+    bool operator()(unique_ptr<T> const &p1, T *const &p2) const {
+        return p1.get() < p2;
+    }
+
+    template <class T>
+    bool operator()(unique_ptr<T> const &p1, unique_ptr<T> const &p2) const {
+        return p1.get() < p2.get();
+    }
+
+    using is_transparent = std::true_type;
+};
+
+map<unique_ptr<Node>, int, transparent_ptr_less> lut;
+Node *raw_ptr = get_some_ptr();
+lut.find(raw_ptr); // OK: 匹配到泛型的 find(Kt &&) 重载，其中 Kt 推导为 Node *const &
+```
+
+#### 超大对象为键的字典
 
 <!-- PG201 -->
 
-泛型 find 官方案例：
+以下摘自 cppreference 上泛型 find 的官方案例：
 
 {% raw %}
 ```cpp
@@ -5360,6 +5586,8 @@ Found 2 b
 
 <!-- PG202 -->
 
+## 神奇的 multimap
+
 允许重复键值的 multimap
 
 map 中一个键对应一个值，而 multimap 一个键可以对应多个值。
@@ -5387,36 +5615,184 @@ multimap<string, string> tab;
 tab.insert({"rust", "silly"});
 tab.insert({"rust", "trash"});
 tab.insert({"rust", "trash"});
-tab.insert({"rust", "lazy"});
 tab.insert({"cpp", "smart"});
+tab.insert({"rust", "lazy"});
 tab.insert({"cpp", "fast"});
+tab.insert({"java", "pig"});
 print(tab);
 ```
 
 ```
-{"cpp": "smart", "cpp": "fast", "rust": "silly", "rust": "trash", "rust": "trash", "rust": "lazy"}
+{"cpp": "smart", "cpp": "fast", "java": "pig", "rust": "silly", "rust": "trash", "rust": "trash", "rust": "lazy"}
 ```
+
+插入进 multimap 的重复键会紧挨着，他们之间的顺序取决于插入的顺序。例如上面键同样是 "cpp" 的两个元素，"smart" 先于 "fast" 插入，所以 "smart" 靠前了。
 
 ---
 
 <!-- PG204 -->
 
-multimap 通常意义不大，可以用于实现动态排序。
+multimap / multiset 的作用通常就不是键值映射了，而是利用红黑树会保持元素有序的特性（任何二叉搜索树都这样）实现一边插入一边动态排序。
+
+传统排序方式：
+
+```cpp
+std::vector<int> arr;
+int i;
+while (cin >> i) {
+    arr.push_back(i);
+}
+std::sort(arr.begin(), arr.end(), std::less<int>());
+```
+
+multiset 排序方式：
+
+```cpp
+std::multiset<int> tab;
+int i;
+while (cin >> i) {
+    tab.insert(i);
+}
+// 无需再排序，tab 中的键已经是有序的了！
+// 如需取出到 vector:
+std::vector<int> arr(tab.begin(), tab.end());
+```
+
+利用 multimap 键-值对的特点，还能轻易实现只对键排序，值的部分不参与排序的效果。
+
+multimap 排序的好处是：
+
+- 动态排序，在插入的过程中就保持整个红黑树的有序性，最后任何无需额外操作。
+- 在一次次插入的过程中，每时每刻都是有序的，而不必等到最后才变得有序。
+- 可以随时动态删除一个元素，同样不会破坏有序性。
+- 还很方便随时按键值查找到和我相等的元素。
+- 如果还额外需要去重，则只需改用普通 map
+
+普通 map 轻松实现去重 + 动态排序，如何处置重复的键随你决定：
+
+* 普通 map 的 insert 只接受第一次出现的键-值对。
+* 普通 map 的 insert_or_assign 只保留最后一次出现的键-值对。
 
 ---
 
 <!-- PG205 -->
 
-multimap 查询某个键对应的多个值
+### multimap 查询某个键对应的多个值
+
+因为 multimap 中，一个键不再对于单个值了；所以 multimap 没有 `[]` 和 `at` 了，也没有 `insert_or_assign`（反正 `insert` 永远不会发生键冲突！）
+
+要查询 multimap 中的一个键对应了哪些值，可以用 `equal_range` 获取一前一后两个迭代器，他们形成一个区间。这个区间内所有的元素都是同样的键。
 
 ```cpp
+multimap<string, string> tab;
+tab.insert({"rust", "silly"});
+tab.insert({"rust", "trash"});
+tab.insert({"rust", "trash"});
+tab.insert({"cpp", "smart"});
+tab.insert({"rust", "lazy"});
+tab.insert({"cpp", "fast"});
+tab.insert({"java", "pig"});
+
+auto range = tab.equal_range("cpp");
+for (auto it = range.first; it != range.second; ++it) {
+    print(it->first, it->second);
+}
 ```
+
+```
+cpp smart
+cpp fast
+```
+
+`equal_range` 返回两个迭代器相等时（即区间大小为 0），就代表找不到该键值。
+
+```cpp
+auto range = tab.equal_range("html");
+if (range.first == range.second) {
+    print("找不到该元素！");
+} else {
+    for (auto it = range.first; it != range.second; ++it) {
+        print(it->first, it->second);
+    }
+}
+```
+
+`equal_range` 返回的两个迭代器，也可以用 `lower_bound` 和 `upper_bound` 分别获得：
+
+```cpp
+auto begin_it = tab.lower_bound("html");
+auto end_it = tab.upper_bound("html");
+if (begin_it == end_it) {
+    print("找不到该元素！");
+} else {
+    for (auto it = begin_it; it != end_it; ++it) {
+        print(it->first, it->second);
+    }
+}
+```
+
+### lower/upper_bound 实现范围查询
+
+- `lower_bound(key)` 到 `end()` 迭代器之间的元素，都是大于等于（>=）当前 key 的元素。
+- `upper_bound(key)` 到 `end()` 迭代器之间的元素，都是大于（>）当前 key 的元素。
+- `begin()` 到 `lower_bound(key)` 迭代器之间的元素，都是小于（<）当前 key 的元素。
+- `begin()` 到 `upper_bound(key)` 迭代器之间的元素，都是小于等于（<=）当前 key 的元素。
+
+例如我要对一系列小彭友的成绩数据进行排序，要求查出大于等于 60 分的所有同学，发放“小红花”：
+
+```cpp
+struct Student {
+    string name;
+    int score;
+};
+
+vector<Student> students;
+```
+
+就可以把成绩 int 作为键，学生名字作为值，插入 multimap。
+
+插入的过程中 multimap 就自动为你动态排序了。
+
+```cpp
+multimap<int, string> sorted;
+for (auto const &stu: students) {
+    sorted.insert({stu.score, stu.name});
+}
+```
+
+然后，要找出所有大于等于 60 分的同学，也就是 `lower_bound(60)` 到 `end()` 这个区间：
+
+```cpp
+// where score >= 60
+for (auto it = sorted.lower_bound(60); it != sorted.end(); ++it) {
+    print("恭喜 {} 同学，考出了 {} 分，奖励你一朵小红花", it->second, it->first);
+}
+```
+
+找出 30（含）到 60（不含）分的同学也很容易：
+
+```cpp
+// where 30 <= score and score < 60
+for (auto it = sorted.upper_bound(30); it != sorted.lower_bound(60); ++it) {
+    print("{} 同学考出了 {} 分，不要灰心！小彭老师奖励你一朵小黄花，表示黄牌警告", it->second, it->first);
+}
+```
+
+### 课后练习
+
+尝试用 multimap 实现一个简单的学生成绩管理系统，要求如下：
+
+1. 学生信息包括姓名和成绩。
+2. 能够动态插入和删除学生信息，始终保持按成绩排序。
+3. 能够查询给定成绩范围内的所有学生。
+
+> {{ icon.detail }} 实际上，数据库就是这样实现的，我们的 multimap 只是简单地对成绩这一个字段排序，而专业的关系数据库会为每个字段都建立索引，分别排序后存储，以加速查找。学有余力的同学可以尝试让学生信息包含姓名、成绩、年龄、学号，然后分别构建这四个字段的索引，支持指定值查找和范围查找，其中姓名和学号要求唯一性。提示：用之前提到的 vector + map 的方法。做出来以后，面试数据库时你就可以秀理解了。
 
 ---
 
 <!-- PG206 -->
 
-时间复杂度总结说明
+## 时间复杂度总结说明
 
 ---
 
@@ -5476,15 +5852,31 @@ multimap 查询某个键对应的多个值
 
 <!-- PG211 -->
 
-C++11 新增：基于哈希的映射表 unordered_map
+# 哈希表 unordered_map
+
+C++11 新增：基于哈希 (hash) 的映射表 unordered_map
+
+## unordered_map 与 map 之争：适用场景不同
+
+之前提到，map 底层基于红黑树，大多数操作的复杂度都是 $O(\log N)$ 级别的，其中部分按迭代器的插入和删除的复杂度可以降低到 $O(1)$。
+
+![hash_map](img/stl/hash_map.png)
+
+而 unordered_map 则是基于哈希表的更高效查找，只需 $O(1)$ 复杂度！他能实现如此高效查找得益于哈希函数可以把散列唯一定位到一个数组的下标中去，而数组的索引是 $O(1)$ 的。缺点是哈希值可能产生冲突，而且哈希数组可能有空位没有填满，浪费一部分内存空间。总的来说哈希表在平均复杂度上（$O(1)$）比红黑树这类基于树的复杂度（$O(\log N)$）更低，虽然固有延迟高，占用空间大，还容易被哈希冲突攻击。
+
+- 哈希表结构简单无脑，在巨量的键值对的存储时会发挥出明显的性能优势，常用于需要高吞吐量但不太在乎延迟的图形学应用。
+- 而各种基于树的数据结构，复杂度更加稳定，看似适合小规模数据，但是因为保持有序的特性，非常适合数据库这种需要范围查询的情况，且有序性反而有利于缓存局域性，无序的哈希表难以胜任。
+- 最近新提出的一种数据结构——跳表，也是有序的，但基于链表，更加高效，在 Redis 等软件中都有应用。别担心，小彭老师之后的数据结构课程会专门介绍并带你手搓所有这些！
 
 ---
 
+## 原理：unordered_map 中的“桶”
+
 <!-- PG212 -->
 
-原理：unordered_map 中的桶
 
-unordered_map 如何快速检索数据？高效的秘诀在于 unordered_map 内部是一个数组，一个桶的数组。插入时把键值对存到键的 hash 对应编号的桶去，查询时就根据 hash 去线性地查找桶（这一操作是 $O(1)$ 的）。
+
+unordered_map 如何快速检索数据？高效的秘诀在于 unordered_map 内部是一个数组，一个由许多“桶”组成的数组。插入时把键值对存到键的 hash 对应编号的桶去，查询时就根据 hash 去线性地查找桶（这一操作是 $O(1)$ 的）。
 
 例如键为 "hello"，假设算出他的 hash 为 42。而当前桶的数量是 32 个，则会把 "hello" 存到 42 % 32 = 10 号桶去。查询时，同样计算出 hash("hello") % 32 = 10 号桶，然后就可以从 10 号桶取出 "hello" 对应的数据了。
 
@@ -5597,13 +5989,15 @@ class unordered_map {
 
 <!-- PG213 -->
 
+## 与 map 的异同
+
 用法上，unordered_map 基本与 map 相同，以下着重介绍他们的不同点。
 
 ---
 
 <!-- PG214 -->
 
-区别 1：有序性
+### 区别 1：有序性
 
 - map 基于红黑树，元素从小到大顺序排列，遍历时也是从小到大的，键类型需要支持比大小（std::less 或 <）。
 - unordered_map 基于哈希散列表，里面元素顺序随机，键类型需要支持哈希值计算（std::hash）和判断相等（std::equal_to 或 ==）。
@@ -5622,13 +6016,13 @@ unordered_map 所需的 trait 有两个：hash 和 equal_to
 unordered_map<K, V, hash<K>, equal_to<K>, allocator<pair<const K, V>>>
 ```
 
-- 其中 allocator 我们照例先跳过不讲。
+- 其中 allocator 我们照例先跳过不讲，之后 STL 精讲：分配器专题课中会介绍。
 
-- hash 是用于求键的哈希的仿函数类。他接受一个 K 返回一个 size_t（无符号 64 位整数）。
+- hash 说的是，如何求键的哈希值？hash 仿函数接受一个 K 类型的键，返回一个 size_t（在 64 位系统上是个无符号 64 位整数，表示哈希值）。
 
-- equal_to 是用于判断两个键相等的仿函数类。要求是，如果两个键相等，返回 true。
+- equal_to 说的是，如何判断两个键相等？如果两个键完全相等，他会返回 true。
 
-这里对 hash 的实现有一个要求，**如果两个键相等，则他们的哈希必定也相等，反之则不一定**。
+这里对 hash 的实现只有一个要求，**如果两个键相等，则他们的哈希必定也相等，反之则不一定**。
 
 这个假设构成了 unordered_map 得以高效的基石，他使得 unordered_map 可以更快排除不可能的答案，而不必像 vector 的查找那样需要去暴力遍历全部元素，只需要遍历哈希相等的那一部分元素就够了。
 
@@ -5640,13 +6034,19 @@ template<typename _Key, typename _Tp,
 class unordered_map
 ```
 
+换言之，只要 unordered_map 发现两个键不相等，就不用再做具体值的比较了，他们不可能相等了！
+
 ---
 
 hash 返回的 size_t 这个整数可以理解为一个对任意类型的“摘要”。
 
-这种摘要的关键在于如何把一个复杂的类型“映射”到小小的 size_t 上去，并且分布得尽可能均匀，不要冲突。
+把一个很复杂的类型（例如 string）压缩成一个 unordered_map 很轻易就能比较的 size_t 整数，整数比较起来就很容易，而且还能直接作为数组的下标（string 不能直接作为数组的下标）。
 
-以字符串类型 string 为例，常见的一种生成“摘要”的方法是，用一个素数的乘方序列和各字符的 ASCII 码点积：
+这种摘要的关键在于如何把一个极为复杂的类型“映射”到小小的 size_t 上去，并且分布得尽可能均匀，不要冲突。
+
+这就需要我们把这个极为复杂类型的每个成员（对 string 而言就是每个字符）都加到最终结果的表达式中。
+
+以字符串类型 string 为例，常见的一种生成“摘要”的方法是，用一个任意素数的乘方序列和各字符的 ASCII 码做点积：
 
 ```cpp
 size_t hash_string(string const &s) {
@@ -5666,7 +6066,9 @@ size_t h = ((('h' * 37 + 'e') * 37 + 'l') * 37 + 'l') * 37 + 'o';
 
 相当于 $h \cdot 37^4 + e \cdot 37^3 + l \cdot 37^2 + l \cdot 37 + o$
 
-> 也有其他更高效的生成摘要的方法，例如借助位运算。甚至还有偷懒直接拿 strlen 当哈希函数的“世界上最好的哈希表”，我不说是谁。
+> {{ icon.tip }} 也有其他更高效的生成摘要的方法，例如借助位运算。
+
+> {{ icon.fun }} 甚至还有偷懒直接拿 strlen 当哈希函数的“世界上最好的哈希表”，我不说是谁。（其实是早期 PHP 啦）
 
 ---
 
@@ -6222,7 +6624,7 @@ map 和 variant 结合使用
 
 <!-- PG228 -->
 
-map 和 string_view 结合使用加速查找案例
+map 和 string_view 结合使用透明查找案例
 
 ---
 
@@ -6273,4 +6675,5 @@ TODO
 - 看到老鼠💩过激反应
 - 《好友清除计划》
 - 小学生早操排队
+- 小黄花表示黄牌警告
 - 托马斯破产回旋
