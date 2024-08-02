@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created on 2009-04-10 by Jorge Stolfi with the script make-hash-table-figure -->
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="620.0"
+  height="310.0"
+  id="fig"
+  stroke-linejoin="round"
+  stroke-opacity="1"
+  stroke-linecap="round"
+  fill-opacity="1"
+  fill-rule="evenodd"
+  font-family="Bitstream Courier"
+  font-style="normal"
+  font-weight="normal"
+  pagecolor="#ffff00"
+  pageopacity="0.0">
+
+
+  <g
+    font-size="12px"
+    transform="scale(1.0) translate(10,60)"
+  >
+
+  <defs>
+    <!-- Start marker for non-null pointers: -->
+    <marker id="linkdot_N" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="8" markerHeight="8" orient="auto">
+      <circle cx="4" cy="4" r="3" stroke="#000000" fill="#000000" />
+    </marker>
+    <!-- Start marker for null pointers: -->
+    <marker id="linkdot_U" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="8" markerHeight="8" orient="auto">
+      <line x1="1" y1="1" x2="7" y2="7" stroke="#000000" />
+      <line x1="1" y1="7" x2="7" y2="1" stroke="#000000" />
+    </marker>
+
+    <!-- Tip for arrows: -->
+    <marker id="arrowtip_N" viewBox="0 0 14 8" refX="13" refY="4" markerWidth="14" markerHeight="8" orient="auto">
+      <polygon points="1,4  1,1  13,4  1,7" stroke="#000000" fill="#000000" />
+    </marker>
+    <!-- Tip for highlighted arrows: -->
+    <marker id="arrowtip_C" viewBox="0 0 14 8" refX="13" refY="4" markerWidth="14" markerHeight="8" orient="auto">
+      <polygon points="1,4  1,1  13,4  1,7" stroke="#cc0000" fill="#cc0000" />
+    </marker>
+
+    <!-- Key box in input column, normal: -->
+    <rect id="key_box_N"   y="0" x="0" width="90" height="20" fill="#00ffff" stroke="none" />
+    <!-- Key box in input column, highlighted : -->
+    <rect id="key_box_C"   y="0" x="0" width="90" height="20" fill="#00ffff" stroke="none" />
+    <!-- Key box in bucket or overflow columns, normal: -->
+    <rect id="key_box_E"   y="0" x="0" width="90" height="20" fill="#9cff9c" stroke="#000000" />
+    <!-- Key box in bucket or overflow columns, vacant: -->
+    <rect id="key_box_U"   y="0" x="0" width="90" height="20" fill="#ddeedd" stroke="#000000" />
+
+    <!-- Value box in bucket or overflow columns, occupied: -->
+    <rect id="val_box_E"   y="0" x="0" width="80" height="20" fill="#9cff9c" stroke="#000000" />
+    <!-- Value box in bucket or overflow columns, vacant: -->
+    <rect id="val_box_U"   y="0" x="0" width="80" height="20" fill="#ddeedd" stroke="#000000" />
+
+    <!-- Pointer box in bucket or overflow columns, used and non-null: -->
+    <rect id="ptr_box_E"   y="0" x="0" width="20" height="20" fill="#9cff9c" stroke="#000000" />
+    <!-- Pointer box in bucket or overflow columns, null/vacant: -->
+    <rect id="ptr_box_U"   y="0" x="0" width="20" height="20" fill="#ddeedd" stroke="#000000" />
+
+    <!-- Background for hash value, unused: -->
+    <rect id="hsh_box_U" x="3" y="1" width="34" height="18" fill="#ddeedd" stroke="none" />
+    <!-- Background for hash value, used: -->
+    <rect id="hsh_box_N" x="3" y="1" width="34" height="18" fill="#a8a8ff" stroke="none" />
+    <!-- Background for hash value, highlighted: -->
+    <rect id="hsh_box_C" x="3" y="1" width="34" height="18" fill="#ee4444" stroke="none" />
+
+    <!-- Vertical dots: -->
+    <g id="vdots">
+      <rect x="0" y="06" width="2" height="2" />
+      <rect x="0" y="12" width="2" height="2" />
+    </g>
+ </defs>
+
+    <!-- Keys and hash function -->
+    <g transform="translate(0,000)" text-anchor="middle" stroke="none">
+
+      <text x="45" y="-10" font-size="15px" font-weight="bold" fill="#000000" stroke="none"> keys
+ </text>
+
+      <g transform="translate(0,30)">
+        <use xlink:href="#key_box_C" />
+        <text x="45" y="14" stroke="none">John Smith</text>
+        <line x1="95" y1="10" x2="100" y2="10" stroke="#dd0000" />
+        <line x1="100" y1="10" x2="130" y2="80" stroke="#dd0000" />
+        <line x1="130" y1="80" x2="150" y2="80" stroke="#dd0000" marker-end="url(#arrowtip_C)" />
+      </g>
+      <g transform="translate(0,70)">
+        <use xlink:href="#key_box_N" />
+        <text x="45" y="14" stroke="none">Lisa Smith</text>
+        <line x1="95" y1="10" x2="100" y2="10" stroke="#000000" />
+        <line x1="100" y1="10" x2="130" y2="-40" stroke="#000000" />
+        <line x1="130" y1="-40" x2="150" y2="-40" stroke="#000000" marker-end="url(#arrowtip_N)" />
+      </g>
+      <g transform="translate(0,110)">
+        <use xlink:href="#key_box_N" />
+        <text x="45" y="14" stroke="none">Sam Doe</text>
+        <line x1="95" y1="10" x2="100" y2="10" stroke="#000000" />
+        <line x1="100" y1="10" x2="130" y2="100" stroke="#000000" />
+        <line x1="130" y1="100" x2="150" y2="100" stroke="#000000" marker-end="url(#arrowtip_N)" />
+      </g>
+      <g transform="translate(0,150)">
+        <use xlink:href="#key_box_C" />
+        <text x="45" y="14" stroke="none">Sandra Dee</text>
+        <line x1="95" y1="10" x2="100" y2="10" stroke="#dd0000" />
+        <line x1="100" y1="10" x2="130" y2="-40" stroke="#dd0000" />
+        <line x1="130" y1="-40" x2="150" y2="-40" stroke="#dd0000" marker-end="url(#arrowtip_C)" />
+      </g>
+      <g transform="translate(0,190)">
+        <use xlink:href="#key_box_N" />
+        <text x="45" y="14" stroke="none">Ted Baker</text>
+        <line x1="95" y1="10" x2="100" y2="10" stroke="#000000" />
+        <line x1="100" y1="10" x2="130" y2="-60" stroke="#000000" />
+        <line x1="130" y1="-60" x2="150" y2="-60" stroke="#000000" marker-end="url(#arrowtip_N)" />
+      </g>
+
+    </g>
+
+    <!-- Hash values and bucket array -->
+    <g transform="translate(150,000)" text-anchor="middle" stroke="none">
+
+      <text x="135" y="-10" font-size="15px" font-weight="bold" fill="#000000" stroke="none">
+ buckets
+ </text>
+
+      <g transform="translate(000,0)">
+        <use x="0" xlink:href="#hsh_box_U" />
+        <text x="20" y="14">000</text>
+        <use x="40" xlink:href="#key_box_U" />
+        <use x="130" xlink:href="#val_box_U" />
+        <use x="210" xlink:href="#ptr_box_U" />
+        <line x1="220" y1="10" x2="220.001" y2="10" stroke="#000000" marker-start="url(#linkdot_U)" />
+      </g>
+      <g transform="translate(000,20)">
+        <use x="0" xlink:href="#hsh_box_N" />
+        <text x="20" y="14">001</text>
+        <use x="40" xlink:href="#key_box_E" />
+        <text x="85" y="14">Lisa Smith</text>
+        <use x="130" xlink:href="#val_box_E" />
+        <text x="170" y="14">521-8976</text>
+        <use x="210" xlink:href="#ptr_box_E" />
+        <line x1="220" y1="10" x2="220.001" y2="10" stroke="#000000" marker-start="url(#linkdot_N)" />
+      </g>
+      <g transform="translate(000,40)">
+        <use x="0" xlink:href="#hsh_box_U" />
+        <text x="20" y="14">002</text>
+        <use x="40" xlink:href="#key_box_U" />
+        <use x="130" xlink:href="#val_box_U" />
+        <use x="210" xlink:href="#ptr_box_U" />
+        <line x1="220" y1="10" x2="220.001" y2="10" stroke="#000000" marker-start="url(#linkdot_U)" />
+      </g>
+      <g transform="translate(000,60)">
+        <text x="20" y="14" font-weight="bold">:</text>
+        <text x="85" y="14" font-weight="bold">:</text>
+        <text x="170" y="14" font-weight="bold">:</text>
+        <text x="220" y="14" font-weight="bold">:</text>
+      </g>
+      <g transform="translate(000,80)">
+        <use x="0" xlink:href="#hsh_box_U" />
+        <text x="20" y="14">151</text>
+        <use x="40" xlink:href="#key_box_U" />
+        <use x="130" xlink:href="#val_box_U" />
+        <use x="210" xlink:href="#ptr_box_U" />
+        <line x1="220" y1="10" x2="220.001" y2="10" stroke="#000000" marker-start="url(#linkdot_U)" />
+      </g>
+      <g transform="translate(000,100)">
+        <use x="0" xlink:href="#hsh_box_C" />
+        <text x="20" y="14">152</text>
+        <use x="40" xlink:href="#key_box_E" />
+        <text x="85" y="14">John Smith</text>
+        <use x="130" xlink:href="#val_box_E" />
+        <text x="170" y="14">521-1234</text>
+        <use x="210" xlink:href="#ptr_box_E" />
+        <line x1="220" y1="10" x2="260" y2="20" stroke="#000000" marker-start="url(#linkdot_N)" marker-end="url(#arrowtip_N)" />
+      </g>
+      <g transform="translate(000,120)">
+        <use x="0" xlink:href="#hsh_box_N" />
+        <text x="20" y="14">153</text>
+        <use x="40" xlink:href="#key_box_E" />
+        <text x="85" y="14">Ted Baker</text>
+        <use x="130" xlink:href="#val_box_E" />
+        <text x="170" y="14">418-4165</text>
+        <use x="210" xlink:href="#ptr_box_E" />
+        <line x1="220" y1="10" x2="220.001" y2="10" stroke="#000000" marker-start="url(#linkdot_N)" />
+      </g>
+      <g transform="translate(000,140)">
+        <use x="0" xlink:href="#hsh_box_U" />
+        <text x="20" y="14">154</text>
+        <use x="40" xlink:href="#key_box_U" />
+        <use x="130" xlink:href="#val_box_U" />
+        <use x="210" xlink:href="#ptr_box_U" />
+        <line x1="220" y1="10" x2="220.001" y2="10" stroke="#000000" marker-start="url(#linkdot_U)" />
+      </g>
+      <g transform="translate(000,160)">
+        <text x="20" y="14" font-weight="bold">:</text>
+        <text x="85" y="14" font-weight="bold">:</text>
+        <text x="170" y="14" font-weight="bold">:</text>
+        <text x="220" y="14" font-weight="bold">:</text>
+      </g>
+      <g transform="translate(000,180)">
+        <use x="0" xlink:href="#hsh_box_U" />
+        <text x="20" y="14">253</text>
+        <use x="40" xlink:href="#key_box_U" />
+        <use x="130" xlink:href="#val_box_U" />
+        <use x="210" xlink:href="#ptr_box_U" />
+        <line x1="220" y1="10" x2="220.001" y2="10" stroke="#000000" marker-start="url(#linkdot_U)" />
+      </g>
+      <g transform="translate(000,200)">
+        <use x="0" xlink:href="#hsh_box_N" />
+        <text x="20" y="14">254</text>
+        <use x="40" xlink:href="#key_box_E" />
+        <text x="85" y="14">Sam Doe</text>
+        <use x="130" xlink:href="#val_box_E" />
+        <text x="170" y="14">521-5030</text>
+        <use x="210" xlink:href="#ptr_box_E" />
+        <line x1="220" y1="10" x2="220.001" y2="10" stroke="#000000" marker-start="url(#linkdot_N)" />
+      </g>
+      <g transform="translate(000,220)">
+        <use x="0" xlink:href="#hsh_box_U" />
+        <text x="20" y="14">255</text>
+        <use x="40" xlink:href="#key_box_U" />
+        <use x="130" xlink:href="#val_box_U" />
+        <use x="210" xlink:href="#ptr_box_U" />
+        <line x1="220" y1="10" x2="220.001" y2="10" stroke="#000000" marker-start="url(#linkdot_U)" />
+      </g>
+
+    </g>
+
+    <!-- Hash values and bucket array -->
+    <g transform="translate(410,000)" text-anchor="middle" stroke="none">
+
+      <text x="95" y="-30" font-size="15px" font-weight="bold" fill="#000000" stroke="none">
+ overflow
+ </text>
+      <text x="95" y="-10" font-size="15px" font-weight="bold" fill="#000000" stroke="none">
+ entries
+ </text>
+
+      <g transform="translate(000,110)">
+        <use x="0" xlink:href="#ptr_box_E" />
+        <line x1="10" y1="10" x2="10" y2="10.000999999999999" stroke="#000000" marker-start="url(#linkdot_U)" />
+        <use x="20" xlink:href="#key_box_E" />
+        <text x="65" y="14">Sandra Dee</text>
+        <use x="110" xlink:href="#val_box_E" />
+        <text x="150" y="14">521-9655</text>
+      </g>
+
+    </g>
+
+  </g>
+</svg>

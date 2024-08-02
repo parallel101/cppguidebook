@@ -84,7 +84,7 @@
 </li>
                                     
 <li>
-    <a href="../stl_map/" class="dropdown-item">深入浅出 STL 系列之 map</a>
+    <a href="../stl_map/" class="dropdown-item">STL 精讲：std::map 和他的朋友们</a>
 </li>
                                     
 <li>
@@ -116,6 +116,10 @@
 </li>
                                     
 <li>
+    <a href="../error_code/" class="dropdown-item">现代 C++ 中的错误处理 (未完工)</a>
+</li>
+                                    
+<li>
     <a href="../cpp_lifetime/" class="dropdown-item">深入理解析构函数与生命周期</a>
 </li>
                                     
@@ -125,10 +129,6 @@
                                     
 <li>
     <a href="../unicode/" class="dropdown-item">字符编码那些事</a>
-</li>
-                                    
-<li>
-    <a href="../error_code/" class="dropdown-item">现代 C++ 中的错误处理 (未完工)</a>
 </li>
                                     
 <li>
@@ -264,6 +264,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_6" class="nav-link">智能指针防止对象移动</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -291,6 +295,7 @@
 <li><a href="#lambda_1">Lambda 复用代码</a></li>
 <li><a href="#_5">类内静态成员</a></li>
 <li><a href="#const">const 居然应该后置&hellip;</a></li>
+<li><a href="#_6">智能指针防止对象移动</a></li>
 </ul>
 </li>
 </ul>
@@ -633,7 +638,7 @@ for (int i = 0; i &lt; 100; ++i) {
 };
 </code></pre>
 <p>会报错 <code>undefined reference to 'Class::instance'</code>。这是说的你需要找个 .cpp 文件，写出 <code>Class Class::instance</code> 才能消除该错误。</p>
-<p>C++17 中，只需加个 <code>inline</code> 就能解决。</p>
+<p>C++17 中，只需加个 <code>inline</code> 就能解决！</p>
 <pre><code class="language-cpp">struct Class {
     inline static Class instance;
 };
@@ -659,7 +664,9 @@ int *const p;
 <pre><code class="language-cpp">int const i;
 int const *p;
 int const &amp;r;
-</code></pre></div>
+</code></pre>
+<h2 id="_6">智能指针防止对象移动</h2>
+<p>TODO: <code>shared_ptr&lt;array&lt;int, 1000&gt;&gt;</code></p></div>
             </div>
         </div>
 

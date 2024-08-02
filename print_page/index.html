@@ -90,7 +90,7 @@
 </li>
                                     
 <li>
-    <a href="../stl_map/" class="dropdown-item">深入浅出 STL 系列之 map</a>
+    <a href="../stl_map/" class="dropdown-item">STL 精讲：std::map 和他的朋友们</a>
 </li>
                                     
 <li>
@@ -122,6 +122,10 @@
 </li>
                                     
 <li>
+    <a href="../error_code/" class="dropdown-item">现代 C++ 中的错误处理 (未完工)</a>
+</li>
+                                    
+<li>
     <a href="../cpp_lifetime/" class="dropdown-item">深入理解析构函数与生命周期</a>
 </li>
                                     
@@ -131,10 +135,6 @@
                                     
 <li>
     <a href="../unicode/" class="dropdown-item">字符编码那些事</a>
-</li>
-                                    
-<li>
-    <a href="../error_code/" class="dropdown-item">现代 C++ 中的错误处理 (未完工)</a>
 </li>
                                     
 <li>
@@ -232,7 +232,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#stl_map" class="nav-link">10. 深入浅出 STL 系列之 map</a>
+            <li class="nav-item" data-bs-level="1"><a href="#stl_map" class="nav-link">10. STL 精讲：std::map 和他的朋友们</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -264,19 +264,19 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#cpp_lifetime" class="nav-link">18. 深入理解析构函数与生命周期</a>
+            <li class="nav-item" data-bs-level="1"><a href="#error_code" class="nav-link">18. 现代 C++ 中的错误处理 (未完工)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#cpp_memory" class="nav-link">19. 真正的 C++ 内存模型！ (未完工)</a>
+            <li class="nav-item" data-bs-level="1"><a href="#cpp_lifetime" class="nav-link">19. 深入理解析构函数与生命周期</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#unicode" class="nav-link">20. 字符编码那些事</a>
+            <li class="nav-item" data-bs-level="1"><a href="#cpp_memory" class="nav-link">20. 真正的 C++ 内存模型！ (未完工)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#error_code" class="nav-link">21. 现代 C++ 中的错误处理 (未完工)</a>
+            <li class="nav-item" data-bs-level="1"><a href="#unicode" class="nav-link">21. 字符编码那些事</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -345,7 +345,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年08月02日 17:34:02 (UTC+08:00)</p>
+<p>更新时间：2024年08月03日 02:20:15 (UTC+08:00)</p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是温馨提示</p>
@@ -866,6 +866,7 @@ void try_call_foo(T &amp;) {
 <li><a href="#cpp_tricks-lambda_1">Lambda 复用代码</a></li>
 <li><a href="#cpp_tricks-_5">类内静态成员</a></li>
 <li><a href="#cpp_tricks-const">const 居然应该后置&hellip;</a></li>
+<li><a href="#cpp_tricks-_6">智能指针防止对象移动</a></li>
 </ul>
 </li>
 </ul>
@@ -1208,7 +1209,7 @@ for (int i = 0; i &lt; 100; ++i) {
 };
 </code></pre>
 <p>会报错 <code>undefined reference to 'Class::instance'</code>。这是说的你需要找个 .cpp 文件，写出 <code>Class Class::instance</code> 才能消除该错误。</p>
-<p>C++17 中，只需加个 <code>inline</code> 就能解决。</p>
+<p>C++17 中，只需加个 <code>inline</code> 就能解决！</p>
 <pre><code class="language-cpp">struct Class {
     inline static Class instance;
 };
@@ -1234,7 +1235,9 @@ int *const p;
 <pre><code class="language-cpp">int const i;
 int const *p;
 int const &amp;r;
-</code></pre></section><section class="print-page" id="lambda"><h1 id="lambda-_1">函数式编程</h1>
+</code></pre>
+<h2 id="cpp_tricks-_6">智能指针防止对象移动</h2>
+<p>TODO: <code>shared_ptr&lt;array&lt;int, 1000&gt;&gt;</code></p></section><section class="print-page" id="lambda"><h1 id="lambda-_1">函数式编程</h1>
 <div class="toc">
 <ul>
 <li><a href="#lambda-_1">函数式编程</a><ul>
@@ -2113,6 +2116,91 @@ int main() {
 <p>如何写出易于维护的代码，阻止犯错？</p>
 <p><strong>类型就是最好的注释！</strong></p>
 <p><strong>Type is all you need</strong></p>
+<div class="toc">
+<ul>
+<li><a href="#type_rich_api-api">现代化的 API 设计指南</a><ul>
+<li><a href="#type_rich_api-_1">&mdash;</a></li>
+<li><a href="#type_rich_api-_2">结构体传参</a></li>
+<li><a href="#type_rich_api-_3">&mdash;</a></li>
+<li><a href="#type_rich_api-_4">&mdash;</a></li>
+<li><a href="#type_rich_api-_5">&mdash;</a></li>
+<li><a href="#type_rich_api-_6">&mdash;</a></li>
+<li><a href="#type_rich_api-_7">&mdash;</a></li>
+<li><a href="#type_rich_api-_8">返回一个结构体</a></li>
+<li><a href="#type_rich_api-_9">&mdash;</a></li>
+<li><a href="#type_rich_api-_10">类型即注释</a></li>
+<li><a href="#type_rich_api-_11">&mdash;</a></li>
+<li><a href="#type_rich_api-_12">&mdash;</a></li>
+<li><a href="#type_rich_api-_13">拒绝指针！</a></li>
+<li><a href="#type_rich_api-_14">&mdash;</a></li>
+<li><a href="#type_rich_api-_15">&mdash;</a></li>
+<li><a href="#type_rich_api-_16">强类型封装</a></li>
+<li><a href="#type_rich_api-_17">&mdash;</a></li>
+<li><a href="#type_rich_api-_18">&mdash;</a></li>
+<li><a href="#type_rich_api-span">span “胖指针”</a></li>
+<li><a href="#type_rich_api-_19">&mdash;</a></li>
+<li><a href="#type_rich_api-_20">&mdash;</a></li>
+<li><a href="#type_rich_api-_21">&mdash;</a></li>
+<li><a href="#type_rich_api-_22">&mdash;</a></li>
+<li><a href="#type_rich_api-_23">&mdash;</a></li>
+<li><a href="#type_rich_api-_24">&mdash;</a></li>
+<li><a href="#type_rich_api-_25">&mdash;</a></li>
+<li><a href="#type_rich_api-_26">空值语义</a></li>
+<li><a href="#type_rich_api-_27">&mdash;</a></li>
+<li><a href="#type_rich_api-_28">&mdash;</a></li>
+<li><a href="#type_rich_api-_29">&mdash;</a></li>
+<li><a href="#type_rich_api-_30">&mdash;</a></li>
+<li><a href="#type_rich_api-_31">&mdash;</a></li>
+<li><a href="#type_rich_api-_32">&mdash;</a></li>
+<li><a href="#type_rich_api-_33">&mdash;</a></li>
+<li><a href="#type_rich_api-_34">&mdash;</a></li>
+<li><a href="#type_rich_api-_35">&mdash;</a></li>
+<li><a href="#type_rich_api-_36">&mdash;</a></li>
+<li><a href="#type_rich_api-_37">&mdash;</a></li>
+<li><a href="#type_rich_api-_38">&mdash;</a></li>
+<li><a href="#type_rich_api-_39">&mdash;</a></li>
+<li><a href="#type_rich_api-stl">点名批评的 STL 设计</a></li>
+<li><a href="#type_rich_api-_40">&mdash;</a></li>
+<li><a href="#type_rich_api-_41">&mdash;</a></li>
+<li><a href="#type_rich_api-_42">&mdash;</a></li>
+<li><a href="#type_rich_api-_43">&mdash;</a></li>
+<li><a href="#type_rich_api-stl_1">点名表扬的 STL 部分</a></li>
+<li><a href="#type_rich_api-_44">&mdash;</a></li>
+<li><a href="#type_rich_api-_45">&mdash;</a></li>
+<li><a href="#type_rich_api-_46">&mdash;</a></li>
+<li><a href="#type_rich_api-_47">&mdash;</a></li>
+<li><a href="#type_rich_api-_48">&mdash;</a></li>
+<li><a href="#type_rich_api-_49">&mdash;</a></li>
+<li><a href="#type_rich_api-_50">枚举类型</a></li>
+<li><a href="#type_rich_api-_51">&mdash;</a></li>
+<li><a href="#type_rich_api-_52">&mdash;</a></li>
+<li><a href="#type_rich_api-_53">&mdash;</a></li>
+<li><a href="#type_rich_api-_54">&mdash;</a></li>
+<li><a href="#type_rich_api-_55">&mdash;</a></li>
+<li><a href="#type_rich_api-_56">&mdash;</a></li>
+<li><a href="#type_rich_api-_57">&mdash;</a></li>
+<li><a href="#type_rich_api-_58">&mdash;</a></li>
+<li><a href="#type_rich_api-_59">其他类型套皮</a></li>
+<li><a href="#type_rich_api-_60">&mdash;</a></li>
+<li><a href="#type_rich_api-_61">&mdash;</a></li>
+<li><a href="#type_rich_api-raii">RAII 封装</a></li>
+<li><a href="#type_rich_api-_62">&mdash;</a></li>
+<li><a href="#type_rich_api-_63">&mdash;</a></li>
+<li><a href="#type_rich_api-_64">&mdash;</a></li>
+<li><a href="#type_rich_api-mutex">Mutex 封装</a></li>
+<li><a href="#type_rich_api-_65">&mdash;</a></li>
+<li><a href="#type_rich_api-_66">&mdash;</a></li>
+<li><a href="#type_rich_api-cuda">彩蛋：CUDA 封装实战</a></li>
+<li><a href="#type_rich_api-_67">&mdash;</a></li>
+<li><a href="#type_rich_api-_68">变量名与作用域限制</a></li>
+<li><a href="#type_rich_api-_69">&mdash;</a></li>
+<li><a href="#type_rich_api-_70">&mdash;</a></li>
+<li><a href="#type_rich_api-getset">你真的需要 get/set 吗？</a></li>
+<li><a href="#type_rich_api-_71">&mdash;</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <h2 id="type_rich_api-_1">&mdash;</h2>
 <hr />
 <h2 id="type_rich_api-_2">结构体传参</h2>
@@ -2766,7 +2854,8 @@ int i = cin.readInt().value();
 </code></pre>
 <p>这样如果用户要读取到值的话，必然要 <code>.value()</code>，从而如果 readInt 失败返回的是 nullopt，就必然抛出异常，避免了用户忘记判断错误的可能。</p>
 <blockquote>
-<p>在小彭老师自主研发的一款 co_async 协程库中，重新设计了异步的字符流，例如其中 getline 函数会返回 <code>std::expected&lt;std::string, std::system_error&gt;</code>。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 在小彭老师自主研发的一款 co_async 协程库中，就重新设计了自己的异步字符流类，例如其中 getline 函数会返回 <code>std::expected&lt;std::string, std::system_error&gt;</code>。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 在<a href="#error_code">错误处理专题</a>中有进一步的详解。</p>
 </blockquote>
 <h2 id="type_rich_api-_31">&mdash;</h2>
 <hr />
@@ -3425,7 +3514,7 @@ read(1, mem.get(), 1024);
 <p>绝大多数情况下，可维护性总是比性能重要的，你只需要比较 <strong>你重构代码花的时间</strong> 和 <strong>计算机运行这段代码所需时间</strong> 就明白值不值了。</p>
 </blockquote>
 <h3 id="no_more_new-13">贴士 1.3</h3>
-<p>如果是其他类型，可能需要乘以 <code>sizeof(元素类型)</code>，取决于那个 C 函数要求的是“字节数”还是“元素数&rdquo;”。</p>
+<p>如果是其他类型，可能需要乘以 <code>sizeof(元素类型)</code>，取决于那个 C 函数要求的是“字节数”还是“元素数”。</p>
 <pre><code class="language-cpp">auto mem = vector&lt;int&gt;(1024);
 read(1, mem.data(), mem.size() * sizeof(mem[0]));
 auto max = find_max(mem.data(), mem.size());
@@ -3482,6 +3571,12 @@ auto max = find_max(mem.data(), mem.size());
 <blockquote>
 <p>从 C++14 开始，内存安全的现代 C++ 程序中就不会出现任何显式的 new 了，哪怕是抱在 shared_ptr 或 unique_ptr 内的也不行。（除了最上面说的 3 种特殊情况）</p>
 </blockquote>
+<p>如果你需要调用的 C 语言接口还需要原始指针的话，用 <code>.get()</code> 可以从智能指针中获取原始指针。建议只在和 C 语言打交道时 <code>.get()</code>，其余时间一律 shared_ptr 保证安全。</p>
+<pre><code class="language-cpp">extern &quot;C&quot; void some_c_function(Foo *foo);
+
+auto foo = make_shared&lt;Foo&gt;();
+some_c_function(foo.get());
+</code></pre>
 <h2 id="no_more_new-raii-delete">RAII 比起手动 delete 的优势</h2>
 <p>在日常代码中，我们常常会使用“如果错误了就提前返回”的写法。这被称为<strong>提前返回 (early-return)</strong>，一种优质的代码写法，比弄个很大的 else 分支要可维护得多。</p>
 <blockquote>
@@ -3616,15 +3711,120 @@ void t1() {
 <li>你会两个线程同时写入同一个原始指针吗？同样地，如果你原始指针不会犯错，shared_ptr 为什么会犯错？</li>
 <li>你可以两个线程同时读取同一个全局的原始指针变量，同样地，shared_ptr 也可以，有任何区别吗？</li>
 </ul>
-<p>反正，shared_ptr 内部专门为线程安全做过设计，你不用去操心。</p></section><section class="print-page" id="stl_map"><h1 id="stl_map-stl-map">深入浅出 STL 系列之 map</h1>
+<p>反正，shared_ptr 内部专门为线程安全做过设计，你不用去操心。</p></section><section class="print-page" id="stl_map"><h1 id="stl_map-stl-stdmap">STL 精讲：std::map 和他的朋友们</h1>
 <!-- PG1 -->
 
 <p>让高性能数据结构惠及每一人</p>
+<div class="toc">
+<ul>
+<li><a href="#stl_map-stl-stdmap">STL 精讲：std::map 和他的朋友们</a><ul>
+<li><a href="#stl_map-layout-two-cols">layout: two-cols</a></li>
+<li><a href="#stl_map-_1">前言</a><ul>
+<li><a href="#stl_map-_2">课程简介</a></li>
+<li><a href="#stl_map-_3">课程亮点</a></li>
+<li><a href="#stl_map-_4">课程大纲</a></li>
+<li><a href="#stl_map-_5">实验环境</a></li>
+<li><a href="#stl_map-_6">如何使用课件</a></li>
+<li><a href="#stl_map-_7">如何运行案例代码</a></li>
+<li><a href="#stl_map-_8">课程书写习惯说明</a></li>
+</ul>
+</li>
+<li><a href="#stl_map-_9">什么是算法复杂度</a><ul>
+<li><a href="#stl_map-_10">关于算法复杂度，一个真实的小故事</a></li>
+<li><a href="#stl_map-_11">数据结构与复杂度</a></li>
+</ul>
+</li>
+<li><a href="#stl_map-map">map 的逻辑结构</a><ul>
+<li><a href="#stl_map-stdmap">为什么要学习 std::map</a></li>
+<li><a href="#stl_map-map_1">标准库中的 map 容器</a></li>
+</ul>
+</li>
+<li><a href="#stl_map-map_2">map 的物理结构</a><ul>
+<li><a href="#stl_map-_12">二叉排序树与二分法</a></li>
+<li><a href="#stl_map-_13">二叉排序树</a></li>
+<li><a href="#stl_map-_14">二叉树退化问题</a></li>
+<li><a href="#stl_map-vs">红黑树 vs 平衡树</a><ul>
+<li><a href="#stl_map-_15">平衡树</a></li>
+<li><a href="#stl_map-_16">红黑树</a></li>
+<li><a href="#stl_map-_17">红黑树实现平衡的秘密</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#stl_map-map_3">开始使用 map 容器</a></li>
+</ul>
+</li>
+<li><a href="#stl_map-_18">总结</a><ul>
+<li><a href="#stl_map-c">C 语言的退化规则真是害人不浅</a></li>
+<li><a href="#stl_map-layout-two-cols-header">layout: two-cols-header</a></li>
+<li><a href="#stl_map-layout-two-cols-header_1">layout: two-cols-header</a></li>
+<li><a href="#stl_map-layout-center">layout: center</a><ul>
+<li><a href="#stl_map-map_4">map 构建下标查找表</a></li>
+</ul>
+</li>
+<li><a href="#stl_map-value_type">元编程查询成员类型：value_type</a><ul>
+<li><a href="#stl_map-typename">typename 修饰</a></li>
+<li><a href="#stl_map-decltype">decltype 大法好</a></li>
+<li><a href="#stl_map-_19">查询类名小工具</a></li>
+<li><a href="#stl_map-map_5">map 真正的元素类型究竟是什么？</a></li>
+</ul>
+</li>
+<li><a href="#stl_map-layout-two-cols-header_2">layout: two-cols-header</a></li>
+<li><a href="#stl_map-layout-two-cols-header_3">layout: two-cols-header</a></li>
+<li><a href="#stl_map-layout-two-cols-header_4">layout: two-cols-header</a></li>
+<li><a href="#stl_map-layout-two-cols-header_5">layout: two-cols-header</a></li>
+<li><a href="#stl_map-layout-two-cols-header_6">layout: two-cols-header</a><ul>
+<li><a href="#stl_map-insert-map">批量 insert 实现 map 合并</a></li>
+<li><a href="#stl_map-insert">批量 insert 的冲突处理</a></li>
+<li><a href="#stl_map-insert_1">insert 一个初始化列表</a></li>
+<li><a href="#stl_map-insert_2">小彭老师锐评批量 insert 有什么用</a></li>
+<li><a href="#stl_map-_20">赋值函数和构造函数辨析</a></li>
+</ul>
+</li>
+<li><a href="#stl_map-layout-two-cols-header_7">layout: two-cols-header</a></li>
+<li><a href="#stl_map-layout-two-cols_1">layout: two-cols</a></li>
+<li><a href="#stl_map-layout-two-cols_2">layout: two-cols</a></li>
+<li><a href="#stl_map-layout-two-cols_3">layout: two-cols</a></li>
+</ul>
+</li>
+<li><a href="#stl_map-_21">增删</a></li>
+<li><a href="#stl_map-_22">改查</a></li>
+<li><a href="#stl_map-_23">初始化</a><ul>
+<li><a href="#stl_map-map_6">map 的合并操作（并集）</a><ul>
+<li><a href="#stl_map-find">泛型 find 的要求</a><ul>
+<li><a href="#stl_map-_24">字符串为键的字典</a></li>
+<li><a href="#stl_map-_25">智能指针为键的字典</a></li>
+<li><a href="#stl_map-_26">超大对象为键的字典</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#stl_map-multimap">神奇的 multimap</a><ul>
+<li><a href="#stl_map-multimap_1">multimap 查询某个键对应的多个值</a></li>
+<li><a href="#stl_map-lowerupper_bound">lower/upper_bound 实现范围查询</a></li>
+<li><a href="#stl_map-_27">课后练习</a></li>
+</ul>
+</li>
+<li><a href="#stl_map-_28">时间复杂度总结说明</a></li>
+</ul>
+</li>
+<li><a href="#stl_map-unordered_map">哈希表 unordered_map</a><ul>
+<li><a href="#stl_map-unordered_map-map">unordered_map 与 map 之争：适用场景不同</a></li>
+<li><a href="#stl_map-unordered_map_1">原理：unordered_map 中的“桶”</a></li>
+<li><a href="#stl_map-map_7">与 map 的异同</a><ul>
+<li><a href="#stl_map-1">区别 1：有序性</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
 <hr />
 <h2 id="stl_map-layout-two-cols">layout: two-cols</h2>
 <!-- PG2 -->
 
-<h1 id="stl_map-_1">课程简介</h1>
+<h2 id="stl_map-_1">前言</h2>
+<h3 id="stl_map-_2">课程简介</h3>
 <p>😀😀😀</p>
 <p>面向已经了解一定 C++ 语法，正在学习标准库的童鞋。</p>
 <p>C++ 标准库又称 STL，包含了大量程序员常用的算法和数据结构，是 Bjarne Stroustrup 送给所有 C++ 程序员的一把瑞士军刀，然而发现很多童鞋并没有完全用好他，反而还被其复杂性误伤了。</p>
@@ -3637,7 +3837,7 @@ void t1() {
 <hr />
 <!-- PG3 -->
 
-<h1 id="stl_map-_2">课程亮点</h1>
+<h3 id="stl_map-_3">课程亮点</h3>
 <p>👍👍👍</p>
 <p>本系列课程与《侯杰老师 STL 课》的区别：</p>
 <ul>
@@ -3650,7 +3850,7 @@ void t1() {
 <hr />
 <!-- PG4 -->
 
-<h1 id="stl_map-_3">课程大纲</h1>
+<h3 id="stl_map-_4">课程大纲</h3>
 <p>✨✨✨</p>
 <p>之前几期课程的录播已经上传到比站了<sup id="fnref:1"><a class="footnote-ref" href="#stl_map-fn:1">1</a></sup>。</p>
 <ol>
@@ -3668,7 +3868,7 @@ void t1() {
 <hr />
 <!-- PG5 -->
 
-<h1 id="stl_map-_4">实验环境</h1>
+<h3 id="stl_map-_5">实验环境</h3>
 <p>✅✅✅</p>
 <p>小彭老师个人推荐实验环境如下：</p>
 <table>
@@ -3723,7 +3923,7 @@ void t1() {
 <hr />
 <!-- PG6 -->
 
-<h1 id="stl_map-_5">如何使用课件</h1>
+<h3 id="stl_map-_6">如何使用课件</h3>
 <p>🥰🥰🥰</p>
 <p>本系列课件和源码均公布在：https://github.com/parallel101/course</p>
 <p>例如本期的课件位于 <code>course/stlseries/stl_map/slides.md</code>。</p>
@@ -3739,7 +3939,7 @@ void t1() {
 <hr />
 <!-- PG7 -->
 
-<h1 id="stl_map-_6">如何运行案例代码</h1>
+<h3 id="stl_map-_7">如何运行案例代码</h3>
 <p>🥺🥺🥺</p>
 <p>案例源码和所需头文件位于课件同目录的 <code>course/stlseries/stl_map/experiment/</code> 文件夹下。</p>
 <p>其中 <code>main.cpp</code> 仅导入运行案例所需的头文件，具体各个案例代码分布在 slides.md 里。</p>
@@ -3796,7 +3996,7 @@ void t1() {
 <hr />
 <!-- PG9 -->
 
-<h1 id="stl_map-_7">课程书写习惯说明</h1>
+<h3 id="stl_map-_8">课程书写习惯说明</h3>
 <pre><code class="language-cpp">int const &amp;i  // 本课程书写习惯
 const int&amp; i  // 官方文档书写习惯
 </code></pre>
@@ -3810,7 +4010,6 @@ template &lt;typename T&gt;  // 官方文档书写习惯
 <hr />
 <!-- PG10 -->
 
-<h1 id="stl_map-_8">课程书写习惯说明（续）</h1>
 <pre><code class="language-cpp">using namespace std; // 仅为教学方便目的，不建议在现实工程中使用 ⚠️
 </code></pre>
 <p>由于使用了 <code>using namespace std</code>，本课程代码中的 <code>std::</code> 前缀均可以省略不写：</p>
@@ -3838,12 +4037,11 @@ std::erase_if(m, pred);
 <hr />
 <!-- PG12 -->
 
-<h2 id="stl_map-_9">本期课程目录</h2>
-<p>${toc}</p>
 <hr />
 <!-- PG13 -->
 
-<h2 id="stl_map-_10">关于算法复杂度，一个真实的小故事</h2>
+<h2 id="stl_map-_9">什么是算法复杂度</h2>
+<h3 id="stl_map-_10">关于算法复杂度，一个真实的小故事</h3>
 <p>有一次一个同学发给我一份源码文件 tetreader.py，其功能是读取一个 tet 格式的文件（四面体网格模型）。</p>
 <p>他问我为什么他写的这个 Python 代码这么慢，读取一个稍微大一点的模型就需要好几秒，他说久仰小彭老师性能优化的大名，想要我帮他优化一下，还问是不是应该用 C++ 写会比较高效一点？</p>
 <p>我并不懂得四面体，但性能优化的思路是通用的。我打开文件看了一下，我发现他读取时需要查询一个点周围所有的面，他是这样查询的：</p>
@@ -3858,7 +4056,6 @@ for ... in ...:
 <hr />
 <!-- PG14 -->
 
-<h2 id="stl_map-_11">关于算法复杂度，一个真实的小故事（续）</h2>
 <p>后来我给他改了一下，把他的 face_lut 改成字典，用字典查找，高效得多了：</p>
 <pre><code class="language-python"># 以下为我优化后的大致伪代码
 face_lut = []
@@ -3870,13 +4067,14 @@ for ... in ...:
 <p>一次字典的查询只需要 <span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span>，加上他外面的循环总共只有 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span>，变成线性复杂度了。他一试，果然几毫秒就加载完了，我说用字典加速查找这不是常识吗？还搁着 C++ 呢？你就是 CUDA 来了也压不住复杂度的爆表呀？</p>
 <p>他很高兴，不知道怎么感谢我，于是就把我推荐给张心欣了。</p>
 <hr />
+<h3 id="stl_map-_11">数据结构与复杂度</h3>
 <!-- PG15 -->
 
 <p>不论什么语言，容器（或者用学校里的话说：数据结构）的正确使用，能够在复杂度层面上，大幅提升性能。</p>
 <p>C++ 中也是如此，有数组（vector），字典（map），还有上一课讲过的集合（set）。</p>
 <p>今天我们要介绍的就是 C++ 的字典容器 map，以及 C++11 引入的另一个字典容器 unordered_map，他们的区别我们最后会详细讨论。我们先学习较为简单的 map，随后学习 unordered_map 时也可以举一反三、融会贯通。</p>
 <blockquote>
-<p>除了这两个标准库自带的字典容器，我们还将介绍一些常用的第三方库容器及其各自优势，例如 absl::flat_hash_map、tbb::concurrent_hash_map、google::dense_hash_map、robin_hood::unordered_map、tsl::robin_pg_map 等。</p>
+<p>介绍完这两个标准库自带的字典容器后，我们还将介绍一些常用的第三方库容器，例如 absl::flat_hash_map、tbb::concurrent_hash_map、google::dense_hash_map、robin_hood::unordered_map、tsl::robin_pg_map 等，需要根据应用场景选择适合的容器。</p>
 </blockquote>
 <p>map/set 家族都是高效查找的专家：</p>
 <ul>
@@ -3884,37 +4082,43 @@ for ... in ...:
 <li>map 或 set 容器用 .find 查找：<span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span></li>
 <li>unordered_map 或 unordered_set 容器用 .find 查找：<span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span></li>
 </ul>
-<p>map 们不仅是查找的复杂度低，他们还支持高效的增删改查等操作。</p>
+<p>不仅是查找，map 们还支持高效的增删改查等操作。</p>
 <hr />
 <!-- PG16 -->
 
-<p>map 的逻辑结构</p>
+<h2 id="stl_map-map">map 的逻辑结构</h2>
 <p><img alt="logicmap" src="../img/stl/logicmap.png" /></p>
 <p>特点：</p>
 <ul>
-<li>由一系列<em>键值对</em>组成</li>
+<li>由一系列 <strong>键值对</strong> 组成</li>
 <li>一个键只能对应一个值</li>
 <li>键不得重复，值可以重复</li>
 </ul>
 <p><br/></p>
 <blockquote>
-<p>std::map, std::unordered_map, absl::flat_hash_map, tbb::concurrent_hash_map 都满足这一基本逻辑结构，但物理实现不同。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> std::map, std::unordered_map, absl::flat_hash_map, tbb::concurrent_hash_map 都满足“键值对”这一基本逻辑结构，只是物理实现不同。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 面壁者罗辑监督你的学习！</p>
 </blockquote>
+<p>在编程中我们常常需要用到“映射”的关系，这就非常需要用到以 map 为首的“键值对”这类容器了。</p>
 <hr />
-<p>为什么要学习 std::map</p>
+<h3 id="stl_map-stdmap">为什么要学习 std::map</h3>
 <p>map 的具体实现可以是红黑树、AVL 树、线性哈希表、链表哈希表、跳表……不同的实现在不同操作上的复杂度不同，分别适用于不同的场景。</p>
 <p>用法上几乎是差不多的，他们都有着几乎相同的接口（除了部分扩展功能）。当你觉得红黑树的 std::map 不合适时，可以轻松把对象类型就地替换为链表哈希表 std::unordered_map 或是是线性哈希表 absl::flat_hash_map，而不用对其他代码有任何更改。</p>
 <p>这就是所有 map 类容器都有着相同的<strong>逻辑结构</strong>：都是一个键-值映射，不同的只是他们的<strong>物理结构</strong>而已。</p>
 <p>所有的 map 实现，都会模仿提供和 std::map 一样的 API。这就是为什么虽然 std::map 实现的很低效，我们还是要学他的原因。std::map 本身并不是完美的，但却提供了一个所有第三方都会遵循的统一接口。学会了 std::map，任何第三方库的 map 类容器你都可以轻易举一反三。</p>
 <blockquote>
-<p>不仅是各种第三方的 map 库，比如 rapidjson 库中的 JSON 对象，也提供了类似 std::map 的 <code>find</code> 和 <code>end</code> 迭代器接口：<code>MemberFind</code> 和 <code>MemberEnd</code>，来查找一个字典的子键。几何处理库 cgal 中的“顶点查找”功能也是基于类似的迭代器接口，学会 std::map 将大大有助于你看懂这类业界公认的接口规范。</p>
+<p>不仅是各种第三方的 map 库，比如 rapidjson 库中的 JSON 对象，也提供了类似 std::map 的 <code>find</code> 和 <code>end</code> 迭代器接口：<code>MemberFind</code> 和 <code>MemberEnd</code>，来查找一个字典的子键；几何处理库 cgal 中的“顶点查找”功能也是基于类似的迭代器接口。总之，学会 std::map 将大大有助于你看懂这类业界公认的接口规范。</p>
 </blockquote>
 <hr />
 <!-- PG17 -->
 
-<p>标准库中的 map 容器<sup id="fnref4:1"><a class="footnote-ref" href="#stl_map-fn:1">1</a></sup></p>
-<p>标准库中，map 是一个<strong>模板类</strong>，他的键类型，值类型，可以由尖括号内的参数指定，便于适应不同的用户需求。</p>
+<h3 id="stl_map-map_1">标准库中的 map 容器</h3>
+<p>标准库中，map<sup id="fnref4:1"><a class="footnote-ref" href="#stl_map-fn:1">1</a></sup> 是一个<strong>模板类</strong>，他的键类型，值类型，可以由尖括号内的参数指定，便于适应不同的用户需求。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 由于 C++ 标准库的容器大多都是模板类，提供的算法也大多是模板函数，因此 C++ 标准库常被称为标准模板库 (Standard-Template-Library, STL)。</p>
+</blockquote>
 <p>键类型和值类型可以是任意类型，包括基本类型，用户自定义的类，其他 STL 容器等，体现了容器的泛用性。</p>
+<p>唯一的要求是：键必须支持比较，这里 map 要求的是小于运算符 <code>&lt;</code>。</p>
 <ul>
 <li>例如 <code>map&lt;string, int&gt;</code> 是一个键类型为 string，值类型为 int 的 map 容器。</li>
 <li>例如 <code>map&lt;int, Student&gt;</code> 是一个键类型为 int，值类型为 Student 的 map 容器。</li>
@@ -3930,33 +4134,26 @@ for ... in ...:
 <hr />
 <!-- PG18 -->
 
-<p>map 的物理结构</p>
+<h2 id="stl_map-map_2">map 的物理结构</h2>
 <p><img alt="physmap" src="../img/stl/physmap.png" /></p>
-<p>map 和 set 一样，都是基于红黑树的二叉排序树，实现高效查找。</p>
+<p>map 和 set 一样，都是基于红黑树的二叉排序树，实现 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span> 复杂度的高效查找。</p>
 <p>vector 就是因为元素没有固定的顺序，所以才需要暴力遍历查找。</p>
 <p>在持续的插入和删除操作下，始终维持元素的有序性，正是 map 实现高效查找的关键所在。</p>
 <hr />
 <!-- PG19 -->
 
-<p>map 查找时采用二分法：</p>
+<h3 id="stl_map-_12">二叉排序树与二分法</h3>
+<p>始终保存元素按键排序的好处是，如果需要寻找指定键值的元素，就可以采用二分法：</p>
 <ol>
-<li>
-<p>从根节点开始查找。</p>
-</li>
-<li>
-<p>如果当前节点的键小于要找的键，则往左子节点移动；</p>
-</li>
-<li>
-<p>如果当前节点的键大于要找的键，则往左子节点移动；</p>
-</li>
-<li>
-<p>如果当前节点的键等于要找的键，则该节点就是要找的节点，返回该节点。</p>
-</li>
-<li>
-<p>把左/右子节点设为新的当前节点，然后回到第 2 步，重复这一查找过程。</p>
-</li>
+<li>从根节点开始查找。</li>
+<li>如果当前节点的键小于要找的键，则往左子节点移动；</li>
+<li>如果当前节点的键大于要找的键，则往左子节点移动；</li>
+<li>如果当前节点的键等于要找的键，则该节点就是要找的节点，返回该节点。</li>
+<li>如果当前节点已经是最后一层叶子节点，也没找到相等的键，则说明该键不存在。</li>
+<li>把左/右子节点设为新的当前节点，然后回到第 2 步，重复这一查找过程。</li>
 </ol>
 <hr />
+<h3 id="stl_map-_13">二叉排序树</h3>
 <!-- PG20 -->
 
 <p>由于 map 的实现基于二叉排序树，map 额外有一个特点：<em>有序</em>。</p>
@@ -3974,7 +4171,82 @@ for ... in ...:
 <p>map 中的 V 类型不参与排序，只按照 K 进行排序。</p>
 <p>这样当用户根据 K 找到的是 K-V 对，然后可以取出 K 对应的 V。</p>
 <p>这就实现了从 K 到 V 的映射。</p>
+<h3 id="stl_map-_14">二叉树退化问题</h3>
+<p>二叉排序树只解决了查找的问题，但是他并不能保证经历一通插入后的树不会“退化”。</p>
+<p>如果插入的时候不小心，可能会让树的形状变得非常诡异！</p>
+<p>例如，若插入数据的顺序是从小到大的，那就会一直在往右插入，清一色的一边倒，以至于几乎成了一根往右跑的链表。</p>
+<p>如果插入顺序是从大到小，就变成一直往左边倒。即使插入的顺序不那么刻意，依然可能产生非常变态的形状，违背了二叉树的初衷。</p>
+<p><img alt="binary_tree_best_worst_cases" src="../img/stl/binary_tree_best_worst_cases.png" /></p>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 哥俩生异形呢？</p>
+</blockquote>
+<p>这样“退化”的二叉排序树，虽然能保持有序，但二分查找时就起不到加速作用了。</p>
+<p>如果要找一个中间的元素，几乎就和链表一样，需要遍历整个右枝干。</p>
+<p>为了限制二叉排序树不要长成畸形，我们引入一个指标：“深度”，表示从根节点到最底层叶子节点的距离。</p>
+<p>要最大化二分查找的效率，就需要二叉树的深度尽可能的低。</p>
+<p>因为二分查找的次数就取决于每个叶子节点的平均深度，要尽可能减少平均需要访问的次数，就是要减少二叉树的深度。</p>
+<p>也就是说要让大家都尽可能贴近根部，但我们不可能让所有叶子都最贴近根部。</p>
+<p>例如右侧只有一个叶子节点，他自己是深度最低了，但代价是左边全部挤在一条链表上了！这不公平。</p>
+<p><img alt="binary_tree_almost_worst_case" src="../img/stl/binary_tree_almost_worst_case.png" /></p>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 它自己倒是自由了，但它奴役了所有的人民</p>
+</blockquote>
+<p><img alt="slave-all" src="../img/stl/slave-all.jpg" /></p>
+<p>所以要最大化二分查找的效率，我们真正需要的是让所有叶子节点都尽可能“平等”！</p>
+<h3 id="stl_map-vs">红黑树 vs 平衡树</h3>
+<p>为了避免二叉树长成畸形，陷入一边倒的情况。我们需要在每次插入后，检查二叉树是否深度差距过大。</p>
+<p>如果差的太多了，就需要进行一系列矫正操作，“劫富济贫”，把太长的枝干砍断，接在短的地方，尽可能保持所有叶子路径的深度差不多，这个“劫富济贫”的动作就是<strong>平衡操作 (balancing)</strong>。</p>
+<p>问题是，最大能容忍叶子节点之间多大的深度差才开始矫正？针对这个问题，二叉排序树分为两派：</p>
+<h4 id="stl_map-_15">平衡树</h4>
+<p>最理想的情况下，一颗含有 <span class="arithmatex"><span class="MathJax_Preview">N</span><script type="math/tex">N</script></span> 个节点的二叉树，至少需要有 <span class="arithmatex"><span class="MathJax_Preview">\lceil \log N \rceil</span><script type="math/tex">\lceil \log N \rceil</script></span> 深度。</p>
+<p>这就是平衡树（AVL），他强制保证整个树处于完美的平衡状态，每个叶子节点之间的深度差距不会超过 1（当节点数量 <span class="arithmatex"><span class="MathJax_Preview">N</span><script type="math/tex">N</script></span> 不是 2 的整数倍时，这是不得不存在的 1 格差距）。</p>
+<p><img alt="balanced_binary_tree" src="../img/stl/balanced_binary_tree.png" /></p>
+<ul>
+<li>优点：始终保持最完美的平衡，平均复杂度和最坏复杂度最低。所以平衡树的查找性能是最好的。</li>
+<li>缺点：然而始终保持完美的平衡意味着，几乎每插入一个元素（可能会突然产生深度差距超过 1 的情况），就立即需要平衡一次。平衡一次的开销是比较大的，所以平衡树的性能是插入性能是比较差的。</li>
+</ul>
+<p>平衡树实现平衡的方式是“旋转”，他能始终保持最低的深度差：</p>
+<p><img alt="avltree_right_rotate_with_grandchild" src="../img/stl/avltree_right_rotate_with_grandchild.png" /></p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 这里的细节我们不会深究，那是数据结构课的内容，届时会带大家手搓平衡树和红黑树，本期只是稍微了解 map 常见的底层实现，帮助你理解为什么 map 是有序容器。</p>
+</blockquote>
+<h4 id="stl_map-_16">红黑树</h4>
+<p>而红黑树认为，我们不需要总是保持深度差距为 1 那么小，我们只需要保证最深叶子和最浅叶子的深度差不超过 2 倍即可。</p>
+<p>例如最浅的一个叶子是 6 深度，另一个最深的叶子可以是 12 深度。只有当最深的叶子超过 12 深度时，红黑树才会开始主动干预平衡，避免继续畸形发展下去。</p>
+<ul>
+<li>缺点：树可能有一定的一边倒情况，平均复杂度稍微降低，最坏复杂度可以达到原来的 2 倍！</li>
+<li>优点：因为对不平衡现象更加宽松，正常插入时基本不需要平衡，只有特别扭曲了才会下场“救急”。所以红黑树是牺牲了一部分查找性能，换取了更好的插入和删除性能。</li>
+</ul>
+<p>总之，如果你的用况是插入比较少，但是查询非常多，那就适合用平衡树。</p>
+<p>由于换来的这部分插入和删除性能实际上比损失的查找性能多，而 map 常见的用况确实需要经常增删改查，所以现在 C++ 标准库的 map 底层都是基于红黑树实现的。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 如果你的需求是大量查找的话，完全可以考虑用查找平均复杂度低至 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span> 的哈希表 unordered_map。</p>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 如果是一次性插入完毕后不会再修改，还可以用完美哈希表（frozen_map），他会为你的键值序列专门生成一个专用的哈希函数，编译期确定，且保证完全无冲突。例如你在做一种语言编译器，有很多“关键字”，比如“if”、“while”，你需要运行时频繁的查找这些关键字，而关键字有哪些在编译期是固定的，那就很适合用完美哈希。</p>
+</blockquote>
+<h4 id="stl_map-_17">红黑树实现平衡的秘密</h4>
+<p>红黑树是如何保证最深叶子和最浅叶子的深度差不超过 2 倍的呢？</p>
+<p>他设定了这样 5 条规则：</p>
+<ol>
+<li>节点可以是红色或黑色的。</li>
+<li>根节点总是黑色的。</li>
+<li>所有叶子节点都是黑色（叶子节点就是 NULL）。</li>
+<li>红色节点的两个子节点必须都是黑色的。</li>
+<li>从任一节点到其所有叶子节点的路径都包含相同数量的黑色节点。</li>
+</ol>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 什么规则类怪谈……</p>
+</blockquote>
+<p>看起来好像很复杂，但实际上大多是废话，有用的只是 4 和 5 这两条。</p>
+<p>规则 4 翻译一下就是：不得出现相邻的红色节点（相邻指两个节点是父子关系）。这条规则还有一个隐含的信息：黑色节点可以相邻！</p>
+<p>规则 5 翻译一下就是：从根节点到所有底层叶子的距离（以黑色节点数量计），必须相等。</p>
+<p>因为规则 4 的存在，红色节点不可能相邻，也就是说最深的枝干只能是：红-黑-红-黑-红-黑-红-黑。</p>
+<p>结合规则 5 来看，也就是说每条枝干上的黑色节点数量必须相同，因为最深的枝干是 4 个黑节点了，所以最浅的枝干至少也得有 4 个节点全是黑色的：黑-黑-黑-黑。</p>
+<p>可以看到，规则 4 和规则 5 联合起来实际上就保证了：最深枝干的深度不会超过最浅枝干的 2 倍。</p>
+<p><img alt="Red-black_tree_example" src="../img/stl/Red-black_tree_example.svg.png" /></p>
+<p>如果超出了 2 倍，就不得不破坏红黑树的规则 4 或 5，从而触发“劫富济贫”的平衡操作，从而阻止了二叉树过于畸形化。</p>
+<p>红黑树如何实现“劫富济贫”的细节我们就不再多谈了，小彭老师点到为止，接下来直接进入正题：</p>
 <hr />
+<h2 id="stl_map-map_3">开始使用 map 容器</h2>
 <!-- PG22 -->
 
 <p>创建一个 map 对象：</p>
@@ -3988,7 +4260,7 @@ config[&quot;delay&quot;] = 211;
 <pre><code class="language-cpp">print(config[&quot;timeout&quot;]);
 print(config[&quot;delay&quot;]);
 </code></pre>
-<p>查询时建议用 .at(key) 而不是 [key]：</p>
+<p>查询时建议用 <code>.at(key)</code> 而不是 <code>[key]</code>：</p>
 <pre><code class="language-cpp">print(config.at(&quot;timeout&quot;));
 print(config.at(&quot;delay&quot;));
 </code></pre>
@@ -4029,6 +4301,7 @@ true
 <table>
 <thead>
 <tr>
+<th>描述</th>
 <th>C++</th>
 <th>Java</th>
 <th>Python</th>
@@ -4036,14 +4309,16 @@ true
 </thead>
 <tbody>
 <tr>
-<td>string(&ldquo;hello&rdquo;) == string(&ldquo;hello&rdquo;)</td>
-<td>&ldquo;hello&rdquo;.equals(&ldquo;hello&rdquo;)</td>
-<td>&lsquo;hello&rsquo; == &lsquo;hello&rsquo;</td>
+<td>内容相等</td>
+<td><code>string("hello") == string("hello")</code></td>
+<td><code>"hello".equals("hello")</code></td>
+<td><code>'hello' == 'hello'</code></td>
 </tr>
 <tr>
-<td>&ldquo;hello&rdquo; == &ldquo;hello&rdquo;</td>
-<td>&ldquo;hello&rdquo; == &ldquo;hello&rdquo;</td>
-<td>id(&lsquo;hello&rsquo;) == id(&lsquo;hello&rsquo;)</td>
+<td>地址相等</td>
+<td><code>"hello" == "hello"</code></td>
+<td><code>"hello" == "hello"</code></td>
+<td><code>id('hello') == id('hello')</code></td>
 </tr>
 </tbody>
 </table>
@@ -4051,7 +4326,7 @@ true
 <!-- PG25 -->
 
 <p>如果你精通对象生命周期分析，能保证 key 指向的字符串活的比 m 久，想要避免拷贝，节省性能。</p>
-<p>可以用封装了正确 == 运算符的弱引用 string_view（会比较字符串内容而不是地址）：</p>
+<p>string 的弱引用版本：string_view，同样可以用封装了正确的 == 运算符，会比较字符串内容而不是地址：</p>
 <pre><code class="language-cpp">map&lt;string_view, string_view&gt; m;
 m[&quot;hello&quot;] = &quot;old&quot;;
 string_view key = &quot;hello&quot;;
@@ -4063,13 +4338,13 @@ print(key == &quot;hello&quot;);
 <pre><code>{&quot;hello&quot;: &quot;new&quot;}
 true
 </code></pre>
-<p>⚠️ string_view 属于不建议初学者使用的优化小寄巧，有手之前，非常好用。</p>
+<p>⚠️ string_view 属于不建议初学者使用的优化小寄巧：有手之前，非常好用。</p>
 <blockquote>
-<p>注：map 实际上完全没有用到 ==，用到的只有 &lt; 运算符，当需要判定 <code>a == b</code> 时，他会转而用 <code>!(a &lt; b || b &lt; a)</code> 来判定。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 注：map 实际上完全没有用到 ==，用到的只有 &lt; 运算符，当需要判定 <code>a == b</code> 时，他会转而用 <code>!(a &lt; b || b &lt; a)</code> 来判定。</p>
 </blockquote>
 <p><br/></p>
 <blockquote>
-<p>string_view 也具有正确的 hash<string_view> 特化，因此也可以用做 unordered_map 的键类型。string_view 试图和 string 表现得完全一样，区别在于他是个弱引用，不持有对象，拷贝构造函数是浅拷贝。string_view 大小只有 16 个字节，内部是一个 const char * 和 size_t，但封装了正确的 ==，&lt;，&gt; 和 hash。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> string_view 也具有正确的 <code>hash&lt;string_view&gt;</code> 特化，因此也可以用做 unordered_map 的键类型。string_view 试图和 string 表现得完全一样，区别在于他是个弱引用，不持有对象，拷贝构造函数是浅拷贝。string_view 大小只有 16 个字节，内部是一个 const char * 和 size_t，但封装了正确的 ==，&lt;，&gt; 和 hash。</p>
 </blockquote>
 <hr />
 <!-- PG26 -->
@@ -4118,7 +4393,7 @@ print(config.at(&quot;timeout&quot;));  // 985
 </code></pre>
 <p>都是等价的。</p>
 <blockquote>
-<p>关于构造函数、花括号列表的具体语法可以参考我的《高性能并行》系列第二课：https://www.bilibili.com/video/BV1LY411H7Gg</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 关于构造函数、花括号列表的具体语法可以参考我的《高性能并行》系列第二课：https://www.bilibili.com/video/BV1LY411H7Gg。在 <a href="#cpp_tricks">C++ 小妙招</a> 一章中也有介绍。</p>
 </blockquote>
 <hr />
 <!-- PG29 -->
@@ -4257,9 +4532,9 @@ V const &amp;at(K const &amp;k) const;       // 第二个版本的 at
 <pre><code class="language-cpp">V &amp;at(map&lt;K, V&gt; *this, K const &amp;k);                   // 第一个版本的 at
 V const &amp;at(map&lt;K, V&gt; const *this, K const &amp;k);       // 第二个版本的 at
 </code></pre>
-<p>原来实际上在函数括号后面加的 const，实际上是用于修饰 this 指针的！</p>
+<p>原来加在函数括号后面的 const，实际上是用于修饰 this 指针的！</p>
 <blockquote>
-<p>该写法仅供示意，并非真实语法</p>
+<p>该写法仅供示意，并不是真的可以把 this 写成参数</p>
 </blockquote>
 <p>所以两个 at 的参数列表不同，不同在于传入 this 指针的类型，所以可以重载，不会冲突。</p>
 <ul>
@@ -4276,17 +4551,20 @@ V const &amp;at(map&lt;K, V&gt; const *this, K const &amp;k);       // 第二个
 <p>会被编译器“翻译”成：</p>
 <pre><code class="language-cpp">m.operator[](&quot;key&quot;);
 </code></pre>
-<p>以上代码并非仅供示意，是可以通过编译运行之一。你还可以试试 <code>string("hel").operator+("lo")</code>。</p>
+<p>以上代码并非仅供示意，是可以通过编译运行的。</p>
 <blockquote>
-<p>operator[] 虽然看起来很复杂一个关键字加特殊符号，其实无非就是个特殊的函数名，学过 Python 的童鞋可以把他想象成 <code>__getitem__</code></p>
+<p>operator[] 虽然看起来很复杂一个关键字加特殊符号，其实无非就是个特殊的函数名，学过 Python 的童鞋可以把他想象成 <code>__getitem__</code>。</p>
 </blockquote>
 <pre><code class="language-cpp">V &amp;operator[](K const &amp;k);
 </code></pre>
 <p>结论：[] 运算符实际上是在调用 operator[] 函数。</p>
+<blockquote>
+<p>所有的所谓“运算符重载函数”实际上都是一个特殊的标识符，以<code>operator</code> + 运算符的形式，他们两个组成一个整体，你还可以试试 <code>string("hel").operator+("lo")</code>，和 <code>string("hel") + "lo"</code> 是等价的。</p>
+</blockquote>
 <hr />
 <!-- PG39 -->
 
-<p>而 operator[] 这个成员函数没有 const 修饰，因此当 map 修饰为 const 时编译会不通过<sup id="fnref7:1"><a class="footnote-ref" href="#stl_map-fn:1">1</a></sup>：</p>
+<p>因为 operator[] 这个成员函数后面没有 const 修饰，因此当 map 修饰为 const 时编译会不通过<sup id="fnref7:1"><a class="footnote-ref" href="#stl_map-fn:1">1</a></sup>：</p>
 <pre><code class="language-cpp">const map&lt;string, int&gt; config = {  // 此处如果是带 const &amp; 修饰的函数参数也是同理
     {&quot;timeout&quot;, 985},
     {&quot;delay&quot;, 211},
@@ -4298,12 +4576,15 @@ print(config[&quot;timeout&quot;]);          // 编译出错
    10 | print(config[&quot;timeout&quot;]);
 </code></pre>
 <p>编译器说 discards qualifiers，意思是 map 有 const 修饰，但是 operator[] 没有。</p>
-<p>这实际上就是在说：<code>map&lt;K, V&gt; const *</code> 不能转换成 <code>map&lt;K, V&gt; *</code>。</p>
-<p>有 const 修饰的 map 作为 this 指针传入没 const 修饰的 operator[] 函数，是减少了修饰（discards qualifers）。C++ 规定传参时只能增加修饰不能减少修饰：只能从 <code>map *</code> 转换到 <code>map const *</code> 而不能反之，所以对着一个 const map 调用非 const 的成员函数 operator[] 就出错了。相比之下 at() 就可以在 const 修饰下编译通过。</p>
+<p>这实际上就是在说：<code>map&lt;K, V&gt; const *this</code> 不能转换成 <code>map&lt;K, V&gt; *this</code>。</p>
+<p>有 const 修饰的 map 作为 this 指针传入没 const 修饰的 operator[] 函数，是减少了修饰（discards qualifers）。</p>
+<p>C++ 规定传参时只能增加修饰不能减少修饰：只能从 <code>map *</code> 转换到 <code>map const *</code> 而不能反之。</p>
+<p>所以对着一个 const map 调用非 const 的成员函数 operator[] 就出错了，相比之下 at() 就可以在 const 修饰下编译通过。</p>
 <hr />
 <!-- PG34 -->
 
-<p>非 const 的 [] 危险性演示，当所查询的键值不存在时：</p>
+<p>为什么 operator[] 是非 const 修饰的呢？通常来说，一个成员函数不是 const，意味着他会<strong>就地修改 this 对象</strong>。</p>
+<p>其实，operator[] 发现所查询的键值不存在时：</p>
 <pre><code class="language-cpp">map&lt;string, int&gt; config = {
     {&quot;timeout&quot;, 985},
     {&quot;delay&quot;, 211},
@@ -4316,12 +4597,13 @@ print(config);
 0
 {&quot;delay&quot;: 211, &quot;timeout&quot;: 985, &quot;tmeout&quot;: 0}
 </code></pre>
-<p>会自动创建那个不存在的键值！</p>
+<p><strong>会自动创建那个不存在的键值！</strong></p>
 <p>你以为你只是观察了一下 map 里的 &ldquo;tmeout&rdquo; 元素，却意外改变了 map 的内容，薛定谔直呼内行。</p>
 <hr />
 <!-- PG40 -->
 
-<p>既然 [] 这么危险，为什么还要存在呢？</p>
+<p>为什么把 [] 设计的这么危险？</p>
+<p>既然已经有更安全的 .at()，为什么还要让 [] 继续存在呢？</p>
 <pre><code class="language-cpp">map&lt;string, int&gt; config = {
     {&quot;delay&quot;, 211},
 };
@@ -4330,9 +4612,13 @@ config[&quot;timeout&quot;] = 985;     // 成功创建并写入 985
 </code></pre>
 <p>由上可见，当我们写入一个本不存在的键值的时候，恰恰需要 [] 的“自动创建”这一特性，这是 at() 所不具有的。</p>
 <p>总结：读取时应该用 at() 更安全，写入时才需要用带有自动创建功能的 []。</p>
+<blockquote>
+<p>许多第三方库，例如 jsoncpp，他们的字典类型也使用类似的接口，at() 负责读，[] 负责写，分工明确！</p>
+</blockquote>
 <hr />
 <!-- PG41 -->
 
+<h1 id="stl_map-_18">总结</h1>
 <ul>
 <li>读取元素时，统一用 at()</li>
 <li>写入元素时，统一用 []</li>
@@ -4348,7 +4634,7 @@ m[&quot;key&quot;] = val;
 <li>总而言之，我们用 C++ 的 map 读取元素时，需要显式地用 at() 告诉编译器我是打算读取。</li>
 </ul>
 <hr />
-<p>[] 找不到就返回个默认值，其实也是很多语言的传统异能了，只有 Python 是最为友善的给你报错</p>
+<p>[] 找不到就返回个“默认值”，其实也是很多语言的传统异能了，只有刚好 Python 比较对初学者友好，会自动判断你的 [] 是读取还是写入，如果是读取，当找不到键值时能友善的给你报错。</p>
 <table>
 <thead>
 <tr>
@@ -4371,7 +4657,11 @@ m[&quot;key&quot;] = val;
 </tr>
 </tbody>
 </table>
-<p>实际上 C++ 的 [] 最为恶劣，因为 C++ 中并没有一个 null 或 nil 之类的额外特殊常量，[] 返回的是个具体的类型，由于 [] 不能报错，值的类型千变万化，只能返回值类型默认构造的值，对于 int 而言是 0，对于 string 而言是 &ldquo;&rdquo;&hellip;</p>
+<p>其中 C++ 的 [] 最为恶劣，因为古代 C++ 中并没有一个 null 或 nil 之类的额外特殊常量。</p>
+<p>[] 返回的必须是个具体的类型，由于 [] 不能报错，值的类型又千变万化，<code>map&lt;K, V&gt;</code> 的 [] 只能返回“V 类型默认构造函数创建的值”：对于 int 而言是 0，对于 string 而言是 &ldquo;&rdquo;（空字符串）。</p>
+<blockquote>
+<p>也正因如此，如果一个 <code>map&lt;K, V&gt;</code> 中的 V 类型没有默认构造函数，就无法使用 [] 了。看似美好的 [] 只是骗骗小彭友的面子工程，模棱两可，充满危险。高手都使用更专业的写入函数：insert 或 insert_or_assign 代替。这两个函数不需要默认构造函数，还更高效一些，稍后会详细介绍。</p>
+</blockquote>
 <hr />
 <!-- PG43 -->
 
@@ -4470,14 +4760,14 @@ print(stus.at(&quot;相依&quot;));
 
 <p>引用是一个烫手的香香面包，普通变量就像一个臭臭的答辩马桶，把面包放到马桶（auto）里，面包就臭掉，腐烂掉，不能吃了！要让面包转移阵地了以后依然好吃，需要放到保鲜盒（auto &amp;）里。</p>
 <p>这就是 C++ 的 decay（中文刚好是“退化”、“变质”的意思）规则。</p>
-<p>以下都是香香面包，放进马桶里会变质：</p>
+<p>以下都是“香香面包”，放进马桶里会变质：</p>
 <ul>
 <li><code>T &amp;</code> 会变质成 <code>T</code>（引用变质成普通变量）</li>
 <li><code>T []</code> 会变质成 <code>T *</code>（数组变质成首地址指针）</li>
 <li><code>T ()</code> 会变质成 <code>T (*)()</code>（函数变质成函数指针）</li>
 </ul>
-<p>在函数的参数中、函数的返回值中、auto 捕获的变量中，放入这些香香面包都会发生变质！</p>
-<p>如何避免变质？那就不要用马桶（普通变量）装面包呗！用保鲜盒（引用）装！</p>
+<p>在函数的参数中、函数的返回值中、auto 捕获的变量中，放入这些“香香面包”都会发生变质！</p>
+<p>如何避免变质？那就不要用马桶（普通变量）装面包呗！用保鲜盒（引用变量）装！</p>
 <ul>
 <li>避免引用 <code>T &amp;t</code> 变质，就得把函数参数类型改成引用，或者用 <code>auto &amp;</code>，<code>auto const &amp;</code> 捕获才行。</li>
 <li>避免原生数组 <code>T t[N]</code> 变质，也可以改成引用 <code>T (&amp;t)[N]</code>，但比较繁琐，不如直接改用 C++11 封装的安全静态数组 <code>array&lt;T, N&gt;</code> 或 C++98 就有的安全动态数组 <code>vector&lt;T&gt;</code>。</li>
@@ -4487,7 +4777,8 @@ print(stus.at(&quot;相依&quot;));
 <hr />
 <!-- PG49 -->
 
-<p>邪恶的 decay 规则造成空悬指针的案例</p>
+<h3 id="stl_map-c">C 语言的退化规则真是害人不浅</h3>
+<p>题外话：邪恶的退化规则造成空悬指针的案例</p>
 <pre><code class="language-cpp">typedef double arr_t[10];
 
 auto func(arr_t val) {
@@ -4499,17 +4790,21 @@ auto func(arr_t val) {
 int main() {
     arr_t val = {1, 2, 3, 4};
     auto ret = func(val);             // 此处 auto 会被推导为 double *
-    print(std::span&lt;double&gt;(ret, ret + 10));
+    print(std::span(ret, ret + 10));
     return 0;
 }
 </code></pre>
 <pre><code>Segmentation fault (core dumped)
 </code></pre>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 小时候看这集 <span class="arithmatex"><span class="MathJax_Preview">^{14}C</span><script type="math/tex">^{14}C</script></span> 语言“衰变”导致程序 Segmentation fault 了。</p>
+</blockquote>
+<p><img alt="u235decay" src="../img/stl/u235decay.webp" /></p>
 <hr />
 <!-- PG50 -->
 
-<p>修复方法：不要用沙雕 C 语言的原生数组，用 C++ 封装好的 array</p>
-<pre><code class="language-cpp">typedef std::array&lt;double, 10&gt; arr_t;  // 或者 vector 亦可
+<p>修复方法：别再用 C 语言的煞笔原始人数组了！用 C++ 封装好的 array，无隐患</p>
+<pre><code class="language-cpp">typedef std::array&lt;double, 10&gt; arr_t;  // 如需动态长度，改用 vector 亦可
 
 auto func(arr_t val) {
     arr_t ret;
@@ -4529,7 +4824,7 @@ int main() {
 <hr />
 <!-- PG51 -->
 
-<p>当然如果你还是学不会怎么保留香香引用的话，也可以在修改后再次用 [] 写回学生表。这样学生表里不会 C++ 的“相依1号”就会被我们栈上培训过 C++ 的“相依1号”覆盖，现在学生表里的也是有 C++ 技能的相依辣！只不过需要翻来覆去克隆了好几次比较低效而已，至少能用了，建议只有学不懂引用的童鞋再用这种保底写法。</p>
+<p>如果你还是学不会怎么保留香香引用的话，土办法：也可以在修改后再次用 [] 写回学生表。这样学生表里不会 C++ 的“相依1号”就会被我们栈上培训过 C++ 的“相依1号”覆盖，现在学生表里的也是有 C++ 技能的“相依”辣！只不过需要翻来覆去克隆了好几次比较低效而已，至少能用了，建议只有学不懂引用的童鞋再用这种保底写法。</p>
 <pre><code class="language-cpp">void PeiXunCpp(string stuName) {
     auto stu = stus.at(stuName);  // 克隆了一份“相依2号”
     stu.money -= 2650;
@@ -4537,17 +4832,25 @@ int main() {
     stus[stuName] = stu;          // “相依2号”夺舍，把“相依1号”给覆盖掉了
 }
 </code></pre>
-<p>学生思考题：上面代码第 5 行也可以改用 at，为什么？小彭老师不是说 “at 用于读取，[] 用于写入” 吗？</p>
-<p>我们童鞋要学会变通！小彭老师说 [] 用于写入，是因为有时候我们经常需要写入一个不存在的元素，所以 [] 会自动创建元素而不是出错就很方便；但是现在的情况是我们第 2 行已经访问过 at(&ldquo;相依&rdquo;)，那么就确认过 &ldquo;相依&rdquo; 已经存在才对，因此我写入的一定是个已经存在的元素，这时 [] 和 at 已经没区别了，所以用 at 的非 const 那个重载，一样可以写入。</p>
-<p>我们童鞋不是去死记硬背《小彭老师语录》，把小彭老师名言当做“两个凡是”圣经。要理解小彭老师会这么说的原因是什么，这样才能根据不同实际情况，实事求是看问题，才是符合小彭老师唯物编程观的。</p>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 狂想：如果克隆“相依1号”同学，得到“相依2号”，然后把原来的杀……啊不对，“析构”掉，然后对外谎称“这还是原来的相依1号呀！”会不会被发现呢？</p>
+</blockquote>
+<p>脑筋急转弯：上面代码第 5 行也可以改用 at，为什么？小彭老师不是说 “at 用于读取，[] 用于写入” 吗？</p>
+<p>我们童鞋要学会变通！小彭老师警告说 “[] 只能用于写入”，是因为我们平时的写入，实际上都是需要写入到一个不存在的元素，所以 [] 会自动创建元素就很方便；如果是 at() 就不符合“写入时自动创建不存在的键“。但是现在的情况是我们第 2 行已经访问过 <code>at("相依")</code>，那么就可以确认 <code>"相依"</code> 已经存在了，因此我写入的一定是个已经存在的元素，这时 [] 和 at 已经没区别了，所以用 at 的非 const 重载，一样可以写入。</p>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 我们童鞋不是去死记硬背《小彭老师语录》，把小彭老师名言当做“两个凡是”圣经。要理解小彭老师会这么说的原因是什么，这样才能根据不同实际情况，实事求是看问题，才是符合小彭老师唯物编程观的（孝）</p>
+</blockquote>
 <hr />
 <!-- PG52 -->
 
 <p>如果要根据学号进行查找呢？那就以学号为键，然后把学生姓名放到 Student 结构体中。</p>
 <p>如果同时有根据学号进行查找和根据姓名查找两种需求呢？</p>
-<p>同时高效地根据多个键进行查找，甚至指定各种条件，比如查询所有会 C++ 的学生等，这可不是 map 能搞定的，或者说能搞定但不高效（只能暴力遍历查找，时间复杂度太高）。这是个专门的研究领域，称为：关系数据库。</p>
+<p>同时高效地根据多个键进行查找，甚至指定各种条件，比如查询所有会 C++ 的学生等，这可不是 map 能搞定的，或者说能搞定但不高效（最后往往只能暴力遍历查找，时间复杂度太高）。这是个专门的研究领域，称为：关系数据库。</p>
 <p>关系数据库的实现有 MySQL，SQLite，MongoDB 等。C++ 等编程语言只需调用他们提供的 API 即可，不必自己手动实现这些复杂的查找和插入算法。</p>
-<p>这就是为什么专业的“学生管理系统”都会用关系数据库，而不是自己手动维护一个 map，因为关系数据库的数据结构更复杂，但经过高度封装，提供的功能也更全面，何况 map 在内存中，电脑一关机，学生数据就没了。</p>
+<p>这就是为什么专业的“学生管理系统”都会用关系数据库，而不是自己手动维护一个 map。关系数据库底层的数据结构更复杂，但经过高度封装，效率更高，提供的功能也更全面，用起来也比较无感。何况 map 存在内存中，电脑一关机，学生数据就没了！而数据库可以把数据持久化到磁盘中，相当于在磁盘里构建出了一颗查找树，关机后数据依然保持。</p>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 相依同学好不容易考出满分，结果小彭老师一不小心踢了一脚电脑，重启，全部学生档案丢失，白考！</p>
+</blockquote>
 <hr />
 <!-- PG53 -->
 
@@ -4571,7 +4874,7 @@ m[&quot;fuck&quot;] = m.size();
 m[&quot;dick&quot;] = m.size();
 </code></pre>
 <blockquote>
-<p>注：需要 C++17 保证等号右边先求值</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 需要 C++17 以上的版本，才能保证等号右边的 <code>m.size()</code> 先于 <code>m["fuck"]</code> 求值。C++14 中上面这段代码行为未定义，需要改用 <code>m.insert({"fuck", m.size()})</code> 的写法（函数参数总是优先于函数求值，这保证 <code>m.size()</code> 先求值，然后才发生元素插入）。</p>
 </blockquote>
 <hr />
 <!-- PG55 -->
@@ -4606,7 +4909,7 @@ if (msg.count(&quot;dick&quot;)) {
 存在fuck，其值为 &quot;rust&quot;
 找不到dick
 </code></pre>
-<p>C++20 中还可以改用返回类型直接为 bool 的 contains 函数，满足你的命名强迫症。</p>
+<p>C++20 中建议改用返回类型为 <code>bool</code> 的 <code>contains</code> 函数，函数名和类型更加一目了然，但实际效果和 <code>count</code> 是一样的。</p>
 <pre><code class="language-cpp">if (msg.contains(&quot;fuck&quot;)) {
     print(&quot;存在fuck，其值为&quot;, msg.at(&quot;fuck&quot;));
 } else {
@@ -4643,6 +4946,7 @@ print(counter);
 <h2 id="stl_map-layout-two-cols-header">layout: two-cols-header</h2>
 <!-- PG59 -->
 
+<p>对比</p>
 <p>::left::</p>
 <p><center></p>
 <p>活用 [] 自动创建 0 元素的特性</p>
@@ -4687,6 +4991,7 @@ print(categories);
 </code></pre>
 <hr />
 <h2 id="stl_map-layout-two-cols-header_1">layout: two-cols-header</h2>
+<p>对比</p>
 <!-- PG61 -->
 
 <p>::left::</p>
@@ -4728,6 +5033,7 @@ for (auto const &amp;str: input) {
 <hr />
 <!-- PG63 -->
 
+<h3 id="stl_map-map_4">map 构建下标查找表</h3>
 <p>反面典型：查找特定元素在 vector 中的位置（下标）</p>
 <pre><code class="language-cpp">size_t array_find(vector&lt;string&gt; const &amp;arr, string const &amp;val) {
     for (size_t i = 0; i &lt; arr.size(); i++) {
@@ -4766,8 +5072,9 @@ print(&quot;nice在数组中的下标是：&quot;, arrinv.at(&quot;nice&quot;));
 fucker在数组中的下标是：4
 nice在数组中的下标是：2
 </code></pre>
-<!-- 轶事：在数据库这门学问中，这种反向查找表被称为“倒序索引”，小彭老师在不知道这个术语的情况下，独立产生了反向查找表的思想 -->
-
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 轶事：在数据库中，这种反向查找表被称为“倒序索引”，小彭老师之前在不知道这个术语的情况下，独立产生了反向查找表的思想</p>
+</blockquote>
 <hr />
 <!-- PG65 -->
 
@@ -4782,9 +5089,13 @@ nice在数组中的下标是：2
 </ul>
 <p>如果查询 N 次，则复杂度就是 <span class="arithmatex"><span class="MathJax_Preview">O(N \log N)</span><script type="math/tex">O(N \log N)</script></span>，比优化前高效。</p>
 <p>因此当需要多次查找且原数组保持不变时，强烈推荐用这种方法，更高效。</p>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 只有当 vector 更新时，才需要重新构建 map。如果 vector 的删除采用 back-swap-erase（见 <a href="#cpp_tricks">C++ 小妙招</a>），那么无需完全重构 map，只需更新 swap 的两个元素即可，总复杂度 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span>，这样就实现了一个 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span> 的有下标又能快速查找数组，兼具 map 和 vector 的优势。在之后的数据结构进阶课中我们会详细介绍此类复合数据结构。</p>
+</blockquote>
 <hr />
 <!-- PG66 -->
 
+<p>map 只能通过值映射到键，能不能反过来通过键查找值？</p>
 <p>案例：构建另一个 map 的反向查找表</p>
 <pre><code class="language-cpp">map&lt;string, string&gt; tab = {
     {&quot;hello&quot;, &quot;world&quot;},
@@ -4799,27 +5110,82 @@ print(tabinv);
 <p>效果就是，键变值，值变键，反一反，两个 map 互为逆运算：</p>
 <pre><code>{&quot;rust&quot;: &quot;fuck&quot;, &quot;world&quot;: &quot;hello&quot;}
 </code></pre>
-<p>注：假设 tab 中不存在重复的值，键和值一一对应</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意：要求 tab 中不能存在重复的值，键和值必须是一一对应关系，才能用这种方式构建双向查找表。否则一个值可能对应到两个键，反向表必须是 <code>map&lt;string, vector&lt;string&gt;</code> 了。</p>
+</blockquote>
 <hr />
 <!-- PG67 -->
 
+<h2 id="stl_map-value_type">元编程查询成员类型：<code>value_type</code></h2>
 <p>STL 容器的元素类型都可以通过成员 <code>value_type</code> 查询，常用于泛型编程（又称元编程）。</p>
 <pre><code class="language-cpp">set&lt;int&gt;::value_type      // int
 vector&lt;int&gt;::value_type   // int
 string::value_type        // char
 </code></pre>
-<p>此外还有引用类型 <code>reference</code>，迭代器类型 <code>iterator</code>，常迭代器类型 <code>const_iterator</code> 等。曾经在 C++98 中很常用，不过自从 C++11 有了 auto 和 decltype 以后，就不怎么用了，反正能自动推导返回类型。</p>
-<p>当容器有一个不确定的类型 T 作为模板参数时，就需要前面加上 <code>typename</code> 修饰：</p>
-<pre><code class="language-cpp">set&lt;int&gt;::value_type               // 没有不定类型，不需要
-typename set&lt;T&gt;::value_type        // 包含有 T 是不定类型
-typename set&lt;set&lt;T&gt;&gt;::value_type   // 包含有 T 是不定类型
-typename map&lt;int, T&gt;::value_type   // 包含有 T 是不定类型
-typename map&lt;K, T&gt;::value_type     // 包含有 K、T 是不定类型
-map&lt;int, string&gt;::value_type       // 没有不定类型，不需要
+<p>此外还有引用类型 <code>reference</code>，迭代器类型 <code>iterator</code>，常迭代器类型 <code>const_iterator</code> 等。</p>
+<p>曾经在 C++98 中很常用，不过自从 C++11 有了 auto 和 decltype 以后，就不怎么用了，反正能自动推导返回类型。</p>
+<p>C++23:</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; arr;
+for (auto const &amp;elem: arr) {
+    std::println(&quot;{}&quot;, elem);
+}
+</code></pre>
+<p>C++17:</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; arr;
+for (auto const &amp;elem: arr) {
+    std::cout &lt;&lt; elem &lt;&lt; '\n';
+}
+</code></pre>
+<p>C++11:</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; arr;
+for (auto it = arr.begin(); it != arr.end(); ++it) {
+    std::cout &lt;&lt; *it &lt;&lt; '\n';
+}
+</code></pre>
+<p>C++98:</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; arr;
+for (std::vector&lt;int&gt;::iterator it = arr.begin(); it != arr.end(); ++it) {
+    std::cout &lt;&lt; *it &lt;&lt; '\n';
+}
+</code></pre>
+<h3 id="stl_map-typename">typename 修饰</h3>
+<p>当容器有至少一个不确定的类型 T 作为模板参数时，就需要前面加上 <code>typename</code> 修饰了：</p>
+<pre><code class="language-cpp">set&lt;int&gt;::value_type;               // 没有不定类型，不需要
+typename set&lt;T&gt;::value_type;        // 包含有 T 是不定类型
+typename set&lt;set&lt;T&gt;&gt;::value_type;   // 包含有 T 是不定类型
+typename map&lt;int, T&gt;::value_type;   // 包含有 T 是不定类型
+typename map&lt;K, T&gt;::value_type;     // 包含有 K、T 是不定类型
+map&lt;int, string&gt;::value_type;       // 没有不定类型，不需要
+</code></pre>
+<p>如果你搞不清楚，始终加 <code>typename</code> 就行了，反正加多肯定不会有错。你就认为：这就是一个平时可以省略，偶尔不能省略的东西。</p>
+<pre><code class="language-cpp">typename set&lt;int&gt;::value_type;    // 可以省略，但你加了也没关系
+typename set&lt;T&gt;::value_type;      // 不能省略
+typename set&lt;set&lt;T&gt;&gt;::value_type; // 不能省略
+typename map&lt;int, T&gt;::value_type; // 不能省略
+typename map&lt;K, T&gt;::value_type;   // 不能省略
+typename map&lt;int, string&gt;::value_type; // 可以省略，但你加了也没关系
+</code></pre>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 含有 T 的类型表达式称为 dependant-type，根本原因是因为在不知道具体是类型表达式还是值表达式的情况下，编译器无法区分模板的 <code>&lt;</code> 和小于符号 <code>&lt;</code>，以及类型的指针 <code>*</code> 和数值乘法 <code>*</code>。默认会认为是小于符号和数值乘法，加上 <code>typename</code> 后明确前面这一串是类型表达式，才知道这是模板的 <code>&lt;</code> 和指针的 <code>*</code>。</p>
+</blockquote>
+<h3 id="stl_map-decltype">decltype 大法好</h3>
+<p>也有更直观的获取 STL 容器元素类型的方法：</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; arr;
+
+using T = std::decay_t&lt;decltype(arr[0])&gt;; // T = int
+</code></pre>
+<blockquote>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>decltype</code> 必须配合 <code>std::decay_t</code> 才能用！否则会得到引用类型 <code>int &amp;</code>，后续使用中就坑到你！（因为 arr 的 [] 返回的是一个引用类型）</p>
+</blockquote>
+<pre><code class="language-cpp">// 错误示范
+using T = decltype(arr[0]); // T = int &amp;
+
+T i = 0; // int &amp;i = 0; 后续使用中编译出错！
 </code></pre>
 <hr />
 <!-- PG68 -->
 
+<h3 id="stl_map-_19">查询类名小工具</h3>
 <p>在本课程的案例代码中附带的 &ldquo;cppdemangle.h&rdquo;，可以实现根据指定的类型查询类型名称并打印出来。</p>
 <p>跨平台，需要 C++11，支持 MSVC，Clang，GCC 三大编译器，例如：</p>
 <pre><code class="language-cpp">int i;
@@ -4835,7 +5201,8 @@ print(cppdemangle&lt;std::wstring::value_type&gt;());
 <hr />
 <!-- PG69 -->
 
-<p>问题: map 真正的元素类型究竟是什么？其具有三个成员类型<sup id="fnref9:1"><a class="footnote-ref" href="#stl_map-fn:1">1</a></sup>：</p>
+<h3 id="stl_map-map_5">map 真正的元素类型究竟是什么？</h3>
+<p>map 具有三个成员类型<sup id="fnref9:1"><a class="footnote-ref" href="#stl_map-fn:1">1</a></sup>：</p>
 <ul>
 <li>元素类型：<code>value_type</code></li>
 <li>键类型：<code>key_type</code></li>
@@ -4851,13 +5218,15 @@ map&lt;int, float&gt;::mapped_type  // float
 <hr />
 <!-- PG70 -->
 
-<p><code>pair&lt;const K, V&gt;</code> ——为什么 K 要加 const？</p>
-<p>上期 set 课说过，set 内部采用红黑树数据结构保持有序，这样才能实现在 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span> 时间内高效查找。</p>
-<p>键值改变的话会需要重新排序，如果只修改键值而不重新排序，会破坏有序性，导致二分查找结果错误！
-所以 set 只有不可变迭代器（const_iterator），不允许修改元素的值。</p>
+<p>疑惑：<code>pair&lt;const K, V&gt;</code> 中，为什么 K 要加 const？</p>
+<p>我们在 set 课中说过，set 内部采用红黑树数据结构保持有序，这样才能实现在 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span> 时间内高效查找。</p>
+<p>键值改变的话会需要重新排序，如果只修改键值而不重新排序，会破坏有序性，导致二分查找结果错误！所以 set 只提供了不可变迭代器（const_iterator），没有可变的迭代器，不允许用户修改任何元素的值。</p>
 <p>map 和 set 一样也是红黑树，不同在于：map 只有键 K 的部分会参与排序，V 是个旁观者，随便修改也没关系。</p>
-<p>所以 map 有可变迭代器，只是在其 value_type 中给 K 加上了 const 修饰：不允许修改 K，但可以修改 V。</p>
-<p>如果你确实需要修改键值，那么请先把这个键删了，然后再以同样的 V 重新插入一遍，保证红黑树的有序。</p>
+<p>所以 map 有可变迭代器，只是在其值类型 value_type 中给键的部分，K，加上了 const 修饰：不允许修改 K，但可以随意修改 V。</p>
+<p>如果你确实需要修改键值，那么请先取出旧值，把这个键删了，然后再以同样的值重新插入一遍到新的键。相当于重新构建了一个 <code>pair&lt;const K, V&gt;</code> 对象。</p>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> C++17 开始也可以用更高效 <code>node_handle</code> 系列 API，避免数据发生移动，稍后介绍。</p>
+</blockquote>
 <hr />
 <!-- PG71 -->
 
@@ -5272,7 +5641,7 @@ std::optional&lt;typename M::mapped_type&gt; map_get
 </code></pre>
 <p>当找不到时就返回 nullopt，找到就返回含有值的 optional。</p>
 <blockquote>
-<p>注：本段代码已附在案例代码库的 &ldquo;map_get.h&rdquo; 文件中，等课后可以去 GitHub 下载。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本段代码已附在案例代码库的 &ldquo;map_get.h&rdquo; 文件中，等课后可以去 GitHub 下载，赶紧用在你的项目中吧！</p>
 </blockquote>
 <hr />
 <!-- PG93 -->
@@ -5892,6 +6261,7 @@ print(config);
 <hr />
 <!-- PG127 -->
 
+<h3 id="stl_map-insert-map">批量 insert 实现 map 合并</h3>
 <p>批量 insert 运用案例：两个 map 合并</p>
 <p>这个批量 insert 输入的迭代器可以是任何容器，甚至可以是另一个 map 容器。</p>
 <p>运用这一点可以实现两个 map 的并集操作。</p>
@@ -5913,7 +6283,7 @@ print(m1);
 <!-- PG128 -->
 
 <p>使用 <code>m1.insert(m2.begin(), m2.end())</code> 后，合并的结果会就地写入 m1。</p>
-<p>如果希望合并结果放到一个新的 map 容器中而不是就地修改 m1，请自行生成一份 m1 的深拷贝：</p>
+<p>如果希望合并结果放到一个新的 map 容器中而不是就地修改 m1，请先自行生成一份 m1 的深拷贝：</p>
 <pre><code class="language-cpp">const map&lt;string, int&gt; m1 = {  // 第一个 map，修饰有 const 禁止修改
     {&quot;answer&quot;, 42},
     {&quot;timeout&quot;, 7},
@@ -5929,6 +6299,7 @@ print(m12);     // m1 和 m2 的合并结果
 <pre><code>{&quot;answer&quot;: 42, &quot;delay&quot;: 211, &quot;timeout&quot;: 7}
 </code></pre>
 <hr />
+<h3 id="stl_map-insert">批量 insert 的冲突处理</h3>
 <!-- PG129 -->
 
 <pre><code class="language-cpp">auto m12 = m1;
@@ -5966,7 +6337,8 @@ print(m12);     // m1 和 m2 的合并结果，键冲突时优先取 m2 的值
 <hr />
 <!-- PG131 -->
 
-<p>C++11 还引入了一个以初始化列表（initializer_list）为参数的版本：</p>
+<h3 id="stl_map-insert_1">insert 一个初始化列表</h3>
+<p>C++11 还引入了一个以初始化列表（initializer_list）为参数的 insert 版本：</p>
 <pre><code class="language-cpp">void insert(initializer_list&lt;pair&lt;const K, V&gt;&gt; ilist);
 </code></pre>
 <p>用法和 map 的构造函数一样，还是用花括号列表：</p>
@@ -5981,11 +6353,11 @@ m.insert({              // 批量再插入两个新元素
 </code></pre>
 <pre><code>{&quot;answer&quot;: 42, &quot;delay&quot;: 211, &quot;timeout&quot;: 7}
 </code></pre>
-<p>注：这里还是和 insert({k, v}) 一样的特性，重复的键 &ldquo;timeout&rdquo; 没有被覆盖，依旧了保留原值。</p>
+<p>注：这里还是和逐个 insert 一样，重复的键 &ldquo;timeout&rdquo; 没有被覆盖，依旧了保留原值。</p>
 <hr />
 <!-- PG132 -->
 
-<p>小彭老师锐评批量 insert</p>
+<h3 id="stl_map-insert_2">小彭老师锐评批量 insert 有什么用</h3>
 <pre><code class="language-cpp">m.insert({
     {&quot;timeout&quot;, 985},
     {&quot;delay&quot;, 211},
@@ -5996,22 +6368,24 @@ m.insert({              // 批量再插入两个新元素
 m.insert({&quot;delay&quot;, 211});
 </code></pre>
 <p>如果需要覆盖原值的批量写入，还是得乖乖写个 for 循环调用 [] 或 insert_or_assign。</p>
-<blockquote>
-<p>问：既然和批量插入没什么区别，那批量 insert 究竟还有什么存在的必要呢？</p>
-<p>map 又不是 vector 因为一个个分别插入会变成 <span class="arithmatex"><span class="MathJax_Preview">O(N^2)</span><script type="math/tex">O(N^2)</script></span> 复杂度，确实需要提供个批量插入的方法。</p>
-<p>答：是为了统一，既然 vector 都有批量 insert，那 set 和 map 也得有才符合完美主义美学，而且用他来合并两个 map 也很方便。</p>
-</blockquote>
+<p>问：既然和批量插入没什么区别，复杂度也一样是 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span>，那批量 insert 究竟还有什么存在的必要呢？map 又不像 vector 一个个分别插入会变成 <span class="arithmatex"><span class="MathJax_Preview">O(N^2)</span><script type="math/tex">O(N^2)</script></span> 复杂度，确实需要提供个批量插入的方法。</p>
+<p>答：</p>
+<ol>
+<li>是为了统一，既然 vector 都有批量 insert，那 set 和 map 也得有才符合完美主义美学，而且用他来合并两个 map 也很方便。</li>
+<li>复杂度并不一样，当输入已经有序时，批量 insert 会比逐个 insert 更快，只需 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span> 而不是 <span class="arithmatex"><span class="MathJax_Preview">O(N \log N)</span><script type="math/tex">O(N \log N)</script></span>；如果输入无序，那么依然是 <span class="arithmatex"><span class="MathJax_Preview">O(N \log N)</span><script type="math/tex">O(N \log N)</script></span>，稍后会讲原理。</li>
+</ol>
 <hr />
 <!-- PG133 -->
 
 <pre><code class="language-cpp">map &amp;operator=(initializer_list&lt;pair&lt;const K, V&gt;&gt; ilist);
 </code></pre>
-<p>map 支持赋值函数，用法是等号右边一个花括号列表，作用是清空原有内容，直接设为一个全新的 map：</p>
+<p>map 也支持赋值函数，不仅有 map 自己给自己赋值的移动赋值和拷贝赋值函数，还有从列表初始化的函数。</p>
+<p>用法是等号右边一个花括号列表，作用是清空原有内容，直接设为一个全新的 map：</p>
 <pre><code class="language-cpp">map&lt;string, int&gt; m = {  // 初始化时就插入两个元素
     {&quot;answer&quot;, 42},
     {&quot;timeout&quot;, 7},
 };
-m = {              // 原有内容全部清空！重新插入两个新元素
+m = {                   // 原有内容全部清空！重新插入两个新元素
     {&quot;timeout&quot;, 985},
     {&quot;delay&quot;, 211},
 };
@@ -6021,6 +6395,24 @@ m = {              // 原有内容全部清空！重新插入两个新元素
 <blockquote>
 <p>相当于 clear 了再重新 insert，原有的 &ldquo;answer&rdquo; 键也被删掉了。</p>
 </blockquote>
+<h3 id="stl_map-_20">赋值函数和构造函数辨析</h3>
+<p>要注意赋值函数 <code>operator=(initializer_list)</code> 和构造函数 <code>map(initializer_list)</code> 是不同的。</p>
+<p>构造函数是初始化时调用的（无论有没有 = 号），赋值函数是后期重新赋值时调用的。</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; m{    // 构造函数 map(initializer_list)
+    {&quot;answer&quot;, 42},
+    {&quot;timeout&quot;, 7},
+};
+map&lt;string, int&gt; m = {  // 虽然有等号，但这里是初始化语境，调用的依然是构造函数 map(initializer_list)
+    {&quot;answer&quot;, 42},
+    {&quot;timeout&quot;, 7},
+};
+m = {                   // m 已经初始化过，这里是重新赋值，才是赋值函数 operator=(initializer_list)
+    {&quot;timeout&quot;, 985},
+    {&quot;delay&quot;, 211},
+};
+</code></pre>
+<p>如果一个类要支持初始化，又要支持后期重新赋值，那么构造函数和赋值函数都要实现。</p>
+<p>但也可以选择只定义 <code>operator=(map &amp;&amp;)</code> 移动赋值函数而不定义 <code>operator=(initializer_list)</code>。这样当试图 <code>operator=(initializer_list)</code> 时，会匹配到 <code>map(initializer_list)</code> 这个隐式构造函数来转换，然后调用到 <code>operator=(map &amp;&amp;)</code>。标准库选择将两个都定义可能是处于避免一次 map 移动的效率考量。</p>
 <hr />
 <!-- PG134 -->
 
@@ -6046,27 +6438,28 @@ m = {              // 原有内容全部清空！重新插入两个新元素
 <ul>
 <li>当插入位置 pos 提示的准确时，insert 的复杂度可以低至 <span class="arithmatex"><span class="MathJax_Preview">O(1)+</span><script type="math/tex">O(1)+</script></span>。</li>
 <li>当插入位置 pos 提示不准确时，和普通的 insert 一样，还是 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span>。</li>
-<li>返回指向成功插入元素位置的迭代器</li>
+<li>返回指向成功插入元素位置的迭代器。</li>
 </ul>
 <p>想想看，这三个看似不相干的特性，能有什么用呢？</p>
 <hr />
 <!-- PG136 -->
 
-<p>可以让有序数据的插入更高效！</p>
+<p>可以让已经有序数据的批量插入更高效！</p>
 <p>众所周知，普通的批量 insert 复杂度为 <span class="arithmatex"><span class="MathJax_Preview">O(N \log N)</span><script type="math/tex">O(N \log N)</script></span>。</p>
 <pre><code class="language-cpp">vector&lt;pair&lt;int, int&gt;&gt; arr;
 map&lt;int, int&gt; tab;
 for (auto const &amp;[k, v]: arr) {
     tab.insert({k, v});               // O(log N)
-}
+}  // 总共 O(N log N)
 </code></pre>
-<p>假如输入有序，带提示的批量 insert 复杂度可以优化到 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span>，否则依然是 <span class="arithmatex"><span class="MathJax_Preview">O(N \log N)</span><script type="math/tex">O(N \log N)</script></span>。</p>
+<p>假如输入本就有序，带提示的批量 insert 复杂度可以降低到 <span class="arithmatex"><span class="MathJax_Preview">O(N)</span><script type="math/tex">O(N)</script></span>。</p>
+<p>如果输入无序，带提示的批量 insert 复杂度依然是 <span class="arithmatex"><span class="MathJax_Preview">O(N \log N)</span><script type="math/tex">O(N \log N)</script></span> 不变。</p>
 <pre><code class="language-cpp">vector&lt;pair&lt;int, int&gt;&gt; arr;
 map&lt;int, int&gt; tab;
 auto hint = tab.begin();
 for (auto const &amp;[k, v]: arr) {
     hint = tab.insert(hint, {k, v});  // 平均 O(1)
-}
+}  // 总共 O(N)
 </code></pre>
 <p>想一想，为什么？</p>
 <hr />
@@ -6083,8 +6476,14 @@ for (auto const &amp;[k, v]: arr) {
 
 <p>后来你发现一个规律，似乎学生来的早晚顺序和高矮有关：矮小的同学喜欢起的早，高大的同学喜欢起的晚。</p>
 <p>知道这个规律后，你改变你的策略：二分法时，不是先从最中间（1/2 处）开始查找，而是从最末尾开始查找。因为矮小同学会早到，导致每次新来的同学往往总是队列中最高的那一个。所以可以从队伍的末尾（最高的地方）开始找，例如有 64 名同学则优先和 65/64 处比较，找不到再往上一级和 31/32 处比较。</p>
-<p>这个策略也有缺点：对于早晚顺序和高矮无关、甚至负相关的情况，就会变成 <span class="arithmatex"><span class="MathJax_Preview">2 \log N</span><script type="math/tex">2 \log N</script></span> 了。</p>
+<p>这个策略也有缺点：对于早晚顺序和高矮无关、甚至负相关的情况，每次插入的消耗就会变成 <span class="arithmatex"><span class="MathJax_Preview">2 \log N</span><script type="math/tex">2 \log N</script></span> 了。</p>
 <p>最终我们决定采用的策略是：不是从中间，也不是从开头，也不是从末尾，而是<strong>记住上一次成功插入的位置</strong>，下一次从上一次成功插入的位置开始找。这个记忆的插入位置，就是刚刚代码中那个位置提示迭代器 hint。</p>
+<p>这正是我们代码的写法：</p>
+<pre><code class="language-cpp">hint = tab.insert(hint, {k, v});
+</code></pre>
+<p>实际上，insert 的批量插入版 <code>insert(arr.begin(), arr.end())</code> 内部就会使用这种带提示的方式，逐个插入。</p>
+<pre><code class="language-cpp">vector&lt;pair&lt;int, int&gt;&gt; arr;
+</code></pre>
 <hr />
 <!-- PG139 -->
 
@@ -6697,7 +7096,7 @@ print(m.at(&quot;answer&quot;)-&gt;value);  // 42
 <hr />
 <!-- PG160 -->
 
-<h1 id="stl_map-_12">增删</h1>
+<h1 id="stl_map-_21">增删</h1>
 <table>
 <thead>
 <tr>
@@ -6755,7 +7154,7 @@ print(m.at(&quot;answer&quot;)-&gt;value);  // 42
 <hr />
 <!-- PG161 -->
 
-<h1 id="stl_map-_13">改查</h1>
+<h1 id="stl_map-_22">改查</h1>
 <table>
 <thead>
 <tr>
@@ -6807,7 +7206,7 @@ print(m.at(&quot;answer&quot;)-&gt;value);  // 42
 <hr />
 <!-- PG162 -->
 
-<h1 id="stl_map-_14">初始化</h1>
+<h1 id="stl_map-_23">初始化</h1>
 <table>
 <thead>
 <tr>
@@ -6859,26 +7258,61 @@ print(m.at(&quot;answer&quot;)-&gt;value);  // 42
 <hr />
 <!-- PG163 -->
 
-<p>C++17 新增的 extract 函数<sup id="fnref24:1"><a class="footnote-ref" href="#stl_map-fn:1">1</a></sup></p>
+<p>C++17 新增的 extract 函数<sup id="fnref24:1"><a class="footnote-ref" href="#stl_map-fn:1">1</a></sup> 可以“剥离”出单个节点：</p>
 <pre><code class="language-cpp">node_type extract(K const &amp;key);
 node_type extract(const_iterator pos);
 </code></pre>
 <pre><code class="language-cpp">auto node = m.extract(&quot;fuck&quot;);
-auto &amp;k = node.key();
-auto &amp;v = node.mapped();
+auto &amp;k = node.key();    // 键（引用）
+auto &amp;v = node.mapped(); // 值（引用）
 </code></pre>
-<p>node_type 是指向游离红黑树节点的特殊智能指针，称为节点句柄<sup id="fnref2:2"><a class="footnote-ref" href="#stl_map-fn:2">2</a></sup>，只可移动不可拷贝，类似 unique_ptr。</p>
+<p>其功能与 erase 类似，都会将元素从 map 中删除，但 extract 只是把节点从 map 中移走，并不会直接销毁节点。</p>
+<p>extract 会返回这个刚被“剥离”出来节点的句柄，类型为 node_type，节点的生杀大权就这样返回给了用户来处置。</p>
+<p>node_type 是指向游离红黑树节点的特殊智能指针，称为节点句柄<sup id="fnref2:2"><a class="footnote-ref" href="#stl_map-fn:2">2</a></sup>。只可移动不可拷贝，类似一个指向节点的 unique_ptr。</p>
 <p>当调用 extract(key) 时会把 key 对应的键值对所在的红黑树节点“脱离”出来——不是直接释放节点内存并销毁键值对象，而是把删除的节点的所有权移交给了调用者，以返回一个特殊智能指针 node_type 的形式。</p>
-<p>调用 extract 后，节点句柄指向的这个红黑树节点已经从 map 中移除（其 next 和 prev 等为 NULL），处于游离状态，只是键 key() 和值 mapped() 没有被销毁，内存没有被释放。调用者可以稍后再销毁这个特殊智能指针，也可以稍后重新用 insert(node) 把他插入回去，或者插入到另一个不同的 map 里。</p>
+<p>调用 extract 后，节点句柄指向的这个红黑树节点已经从 map 中移除（其 left、right、parent 等指针为 NULL），处于游离状态。</p>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 节点中不仅存储着我们感兴趣的键和值，还有 left、right、parent、color 等用于维护数据结构的成员变量，对用户不可见。</p>
+</blockquote>
+<p>只是因为节点句柄类似于 unique_ptr，维持着节点的生命周期，保护着键 key() 和值 mapped() 没有被销毁，内存没有被释放。</p>
+<p>如果调用者接下来不做操作，那么当离开调用者所在的函数体时，这个特殊的 unique_ptr 会自动释放其指向节点。</p>
+<ul>
+<li>对于第一个按键取出节点句柄的 extract 重载：如果键值不存在，那么 extract 会返回一个特殊的空节点句柄，类似于空指针。可以通过 <code>(bool)node</code> 来判断一个节点句柄是否为空。</li>
+<li>对于第二个按迭代器取出句柄的 extract：总是成功，因为既然你已经获得了迭代器，肯定是 find 获得的，而 find 找不到返回的 end 传入 extract 是未定义行为。正如 erase 迭代器版重载 erase(it) 总是成功一样。</li>
+</ul>
+<p>调用者稍后可以直接销毁这个特殊智能指针：</p>
+<pre><code class="language-cpp">{
+    auto node = m.extract(&quot;fuck&quot;);
+    print(node.key(), node.value());
+} // node 在此自动销毁
+</code></pre>
+<p>也可以做一些修改后（例如修改键值），稍后重新用 insert(node) 重新把他插入回去：</p>
+<pre><code class="language-cpp">auto node = m.extract(&quot;fuck&quot;);
+nh.key() = &quot;love&quot;;
+m.insert(std::move(node));
+</code></pre>
+<p>或者插入到另一个不同的 map 对象（但键和值类型相同）里：</p>
+<pre><code class="language-cpp">// 从 m1 挪到 m2
+auto node = m1.extract(&quot;fuck&quot;);
+m2.insert(std::move(node));
+</code></pre>
+<p>优点在于，extract 和节点版 insert 不涉及内存的重新分配与释放，不涉及元素类型的移动（因为节点句柄类似于智能指针，智能指针的移动并不会导致其指向对象的移动），所以会比下面这种传统写法更高效：</p>
+<pre><code class="language-cpp">// 从 m1 挪到 m2：传统写法
+if (m1.count(&quot;fuck&quot;)) {
+    auto value = std::move(m1.at(&quot;fuck&quot;));
+    m2[&quot;fuck&quot;] = std::move(value);
+    m1.erase(it);
+}
+</code></pre>
 <hr />
 <!-- PG164 -->
 
-<p>不用 auto 完整写出全部类型的形式：</p>
-<pre><code class="language-cpp">map&lt;K, V&gt;::node_type node = m.extract(&quot;fuck&quot;);
+<p>不用 auto 完整写出全部类型的形式（古代 C++98 作风）：</p>
+<pre><code class="language-cpp">typename map&lt;K, V&gt;::node_type node = m.extract(&quot;fuck&quot;);
 K &amp;k = node.key();
 V &amp;v = node.mapped();
 </code></pre>
-<p>set 也有 extract 函数，其节点句柄没有 key() 和 mapped()，而是改用 value() 获取其中的值</p>
+<p>set 也有 extract 函数，其节点句柄没有 key() 和 mapped() 了，而是只有一个 value()，获取其中的值</p>
 <pre><code class="language-cpp">set&lt;V&gt; s = {&quot;fuck&quot;, &quot;suck&quot;, &quot;dick&quot;};
 set&lt;V&gt;::node_type node = s.extract(&quot;fuck&quot;);
 V &amp;v = node.value();
@@ -6888,7 +7322,7 @@ V &amp;v = node.value();
 
 <p>insert 函数：插入游离节点的版本</p>
 <pre><code class="language-cpp">insert_return_type insert(node_type &amp;&amp;node);
-iterator insert(const_iterator pos, node_type &amp;&amp;node);
+iterator insert(const_iterator pos, node_type &amp;&amp;node); // 带提示的版本
 </code></pre>
 <p>可以用 insert(move(node)) 直接插入一个节点。</p>
 <pre><code class="language-cpp">map&lt;string, int&gt; m1 = {
@@ -6897,7 +7331,7 @@ iterator insert(const_iterator pos, node_type &amp;&amp;node);
 };
 map&lt;string, int&gt; m2;
 auto node = m1.extract(&quot;fuck&quot;);
-m2.insert(move(node));  // 节点句柄类似于 unique_ptr 不可拷贝，需要用移动语义进行插入
+m2.insert(std::move(node));  // 节点句柄类似于 unique_ptr，不可拷贝，需要用移动语义进行插入
 </code></pre>
 <p>调用 insert(move(node)) 后由于所有权被移走，node 将会处于“空指针”状态，可以用 <code>node.empty()</code> 查询节点句柄是否为“空”状态，即节点所有权是否已经移走。</p>
 <hr />
@@ -7040,30 +7474,56 @@ m.insert(move(node)); // 把修改好的节点插入回去
 print(m);             // {{&quot;fxxk&quot;: 211}}
 </code></pre>
 <p>相当于你给小学生排队时，有一个小学生突然瞬间不知道吃了什么激素长高了，你的队伍就会乱掉。</p>
-<p>要是让这个小学生先出列，让他单独一个人长高，等他长高完了再插入回队列。</p>
-<p>这时插入可以优先从他长高之前的位置开始二分法，也就是用 extract 之前的迭代器的下一个作为 insert 的提示。</p>
-<pre><code class="language-cpp">TODO
+<p>所以需要让这个小学生先出列，让他单独一个人长高，等他长高完了再插入回队列。</p>
+<p>但是小学生长高的量可能是有限的（新的键可能和老键很接近）。</p>
+<p>这时插入可以优先从他长高之前的位置开始二分法，也就是用 extract 之前，这个小学生后一位同学的位置，作为 insert 的提示，让 insert 更快定位到这个小学生应该插入的位置。</p>
+<pre><code class="language-cpp">auto it = m.find(&quot;fuck&quot;);
+assert(it != m.end()); // 假定 &quot;fuck&quot; 必须存在（如果不存在会返回 end）
+auto next_it = std::next(it); // 下一位同学（可能会得到 end，但没关系，因为 insert 的提示也允许为 end 迭代器）
+auto node = m.extract(it);
+node.key() = &quot;fxxk&quot;;   // 修改键值，变化不大
+m.insert(next_it, move(node)); // 如果键值变动不大，优先尝试在老位置插入
+</code></pre>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 这里的 <code>std::next(it)</code> 对于等价于 it + 1。但是 map 属于双向迭代器（而不是随机迭代器），不支持加法操作，只支持就地 ++。所以 <code>std::next</code> 内部等价于：</p>
+</blockquote>
+<pre><code class="language-cpp">auto next(auto it) {
+    auto next_it = it; // 先拷贝一份，防止原迭代器被破坏（迭代器都支持拷贝，性质上是浅拷贝）
+    ++next_it;         // 再让 next_it 就地自增到下一位
+    return next_it;    // 返回现在已经相当于 it + 1 的 next_it
+}
+</code></pre>
+<p>如果键不变，或者键变了以后，插入位置不变的话，那么这次 insert 可以低至 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span> 复杂度。</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; m = {
+    {&quot;dick&quot;, 211},
+    {&quot;fuck&quot;, 985}, // &quot;fuck&quot; -&gt; &quot;fxxk&quot; 后，重新插入，其依字典序的“大小”依然是介于 &quot;dick&quot; 和 &quot;suck&quot;
+    {&quot;suck&quot;, 996},
+};
 </code></pre>
 <hr />
 <!-- PG174 -->
 
+<h2 id="stl_map-map_6">map 的合并操作（并集）</h2>
 <p>C++17 新增的 merge 函数<sup id="fnref26:1"><a class="footnote-ref" href="#stl_map-fn:1">1</a></sup></p>
 <pre><code class="language-cpp">template &lt;class Cmp2&gt;
 void merge(map&lt;K, V, Cmp2&gt; &amp;__source);
 </code></pre>
 <blockquote>
-<p>注：set 也有 merge 函数</p>
-<p>注：merge 的参数是另一个 map，可变引用，必须和本 map 同类型，但允许有不同的比较器</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 注：set 也有 merge 函数</p>
 </blockquote>
+<p>注意到 merge 的参数是另一个 map，可变引用，必须和本 map 同类型（这是为了保证节点句柄类型相同），但允许有不同的比较函数</p>
 <ul>
-<li>
-<p>merge(source) 会把 source 中的所有元素都<strong>移动</strong>到本 map，注意是<strong>移动</strong>而不是拷贝，source 将会被清空，这样是为了更高效。</p>
-</li>
-<li>
-<p>insert(source.begin(), source.end()) 则是把 source 里的元素拷贝后插入到本 map，但更低效，因为需要拷贝，还得新建红黑树节点，额外分配内存空间。</p>
-</li>
+<li><code>merge(source)</code> 会把 source 中的所有节点都<strong>移动</strong>并合并到本 map，注意是<strong>移动</strong>而不是拷贝，source 将会被清空，这样是为了更高效。</li>
+<li><code>insert(source.begin(), source.end())</code> 则是把 source 里的元素拷贝后插入到本 map，更低效，因为需要拷贝，还得新建红黑树节点，额外分配内存空间。</li>
 </ul>
-<p>如果 source 中有与本 map 重复的键，则该元素不会被移动，保留在 source 里。</p>
+<p>对于键存在冲突的情况：</p>
+<ul>
+<li>merge: 如果 source 中有与本 map 重复的键，则该元素不会被移动，保留在 source 里。</li>
+<li>insert: 如果 source 中有与本 map 重复的键，则该元素不会被插入本 map。无论有没有插入本 map，原 source 中的键都不会被清除。</li>
+</ul>
+<blockquote>
+<p>因此，merge 也并不总是完全清空 source，当 source 和本 map 有冲突时，冲突的键就保留在 source 里了。</p>
+</blockquote>
 <p>merge 等价于以下手动用 extract 和 insert 来移动节点的代码：</p>
 <pre><code class="language-cpp">// m1.merge(m2) 等价于：
 auto hint = m1.begin();
@@ -7077,13 +7537,51 @@ for (auto it = m2.begin(); it != m2.end(); ++it) {
 <hr />
 <!-- PG175 -->
 
-<p>两个 map 合并，<code>m1.merge(m2)</code> 与 <code>m1.insert(m2.begin(), m2.end())</code> 性能比较</p>
-<p>注意：merge 函数不会产生不必要的内存分配导致内存碎片化，所以更高效，但作为代价他会清空 m2！</p>
+<p>同样做到两个 map 合并，<code>m1.merge(m2)</code> 与 <code>m1.insert(m2.begin(), m2.end())</code> 性能比较：</p>
+<pre><code class="language-cpp">#include &lt;map&gt;
+#include &lt;string&gt;
+#include &quot;benchmark/benchmark.h&quot;
+
+using namespace std;
+
+static void BM_Insert(benchmark::State &amp;state) {
+    map&lt;string, int&gt; m1_init;
+    map&lt;string, int&gt; m2_init;
+    for (int i = 0; i &lt; state.range(0); i++) {
+        m1_init[to_string(i)] = i;
+        m2_init[to_string(i + state.range(0))] = i;
+    }
+    for (auto _ : state) {
+        auto m1 = m1_init;
+        auto m2 = m2_init;
+        m2.insert(m1.begin(), m1.end());
+        benchmark::DoNotOptimize(m3);
+    }
+}
+BENCHMARK(BM_Insert);
+
+static void BM_Merge(benchmark::State &amp;state) {
+    map&lt;string, int&gt; m1_init;
+    map&lt;string, int&gt; m2_init;
+    for (int i = 0; i &lt; state.range(0); i++) {
+        m1_init[to_string(i)] = i;
+        m2_init[to_string(i + state.range(0))] = i;
+    }
+    for (auto _ : state) {
+        auto m1 = m1_init;
+        auto m2 = m2_init;
+        m2.merge(m1);
+        benchmark::DoNotOptimize(m2);
+    }
+}
+BENCHMARK(BM_Merge);
+</code></pre>
+<p>merge 函数不会产生不必要的内存分配导致内存碎片化，所以更高效。但作为代价，他会清空 m2！</p>
 <ul>
 <li>merge 相当于把 m2 的元素“移动”到 m1 中去了。</li>
 <li>insert 则是把 m2 的元素“拷贝”了一份插入到 m1 中去，效率自然低下。</li>
 </ul>
-<p>如果不能破坏掉 m2 则仍需要 insert 大法。</p>
+<p>如果不想破坏掉 m2，或者你用不上 C++17，则仍需要传统的 insert。</p>
 <hr />
 <!-- PG176 -->
 
@@ -7374,47 +7872,6 @@ print(m1);
 print(m2);
 </code></pre>
 <hr />
-<!-- PG192 -->
-
-<p>C++14 新增了“透明(transparent)”运算符仿函数。</p>
-<p>参数为 void 即可让一个运算符仿函数变成“透明”的，对于 less 运算符仿函数而言，就是 <code>less&lt;void&gt;</code>。</p>
-<p>C++14 之前用的都是“不透明”版的仿函数，必须指定一个具体的类型，例如 <code>less&lt;int&gt;</code> 就只能用于 int 类型的比较，<code>less&lt;string&gt;</code> 就只能用于 string 类型的比较。无法用 <code>less&lt;int&gt;</code> 仿函数比较 string 类型。</p>
-<p>而 <code>less&lt;void&gt;</code> 是通用的，他的 <code>operator()</code> 函数是泛型的，可以接受任意类型。</p>
-<pre><code class="language-cpp">template &lt;&gt;
-struct less&lt;void&gt; {   // 针对 void 的特化
-    // 标准委员会想：由于 void 类型不可能有 &lt; 运算符的需求，所以他们干脆拿 void 作为透明版的模板参数“占位符”了
-    template &lt;class Tx, class Ty&gt;
-    constexpr decltype(auto) operator()(Tx &amp;&amp;x, Ty &amp;&amp;y) const {
-        return forward&lt;Tx&gt;(x) &lt; forward&lt;Ty&gt;(y);
-    }
-
-    struct is_transparent;  // 空类，仅供 SFINAE 元编程时检测一个仿函数是否透明时使用
-};
-</code></pre>
-<blockquote>
-<p>不透明版的 <code>less&lt;T&gt;</code> 泛型体现在类的模板参数上，</p>
-</blockquote>
-<hr />
-<!-- PG193 -->
-
-<p>“透明”版的好处是可以同一个兼容任意类型，而不必创建多个 cmp 对象。而不透明版的好处是方便特化 traits，但毕竟 &lt; 运算符是可以用户自定义(运算符重载)的，没必要用 traits 特化，所以他们逐步发现透明版香了，还能支持左右参数为不同类型。</p>
-<pre><code class="language-cpp">less&lt;void&gt; cmp;
-print(cmp(1, 2));  // 1 &lt; 2: true
-print(cmp(5, 2));  // 5 &lt; 2: false
-print(cmp(string(&quot;hello&quot;), &quot;world&quot;));  // &quot;hello&quot; &lt; &quot;world&quot;: false
-print(cmp(string(&quot;cmake&quot;), &quot;cppcon&quot;));  // &quot;cmake&quot; &lt; &quot;cppcon&quot;: true
-</code></pre>
-<blockquote>
-<p>但也要特别注意不能再依赖参数类型自动的隐式转换了，必须至少写完整其中一个 <code>string("hello")</code> 才能触发 <code>string</code> 的 <code>operator&lt;</code> 而不是 <code>const char *</code> 的指针比大小。如果只写 <code>cmp("cmake", "cppcon")</code> 则是在比较指针的地址大小，结果是不一定的。</p>
-</blockquote>
-<p>由于 C++14 的 less 模板参数 T 默认为 void，所以 <code>less&lt;void&gt;</code> 还可以简写成 <code>less&lt;&gt;</code>。</p>
-<pre><code class="language-cpp">less&lt;&gt; cmp;
-print(cmp(1, 2));  // 1 &lt; 2: true
-print(cmp(5, 2));  // 5 &lt; 2: false
-print(cmp(string(&quot;hello&quot;), &quot;world&quot;));  // &quot;hello&quot; &lt; &quot;world&quot;: false
-print(cmp(string(&quot;cmake&quot;), &quot;cppcon&quot;));  // &quot;cmake&quot; &lt; &quot;cppcon&quot;: true
-</code></pre>
-<hr />
 <!-- PG194 -->
 
 <p>自定义比较仿函数，实现无视键大小写的 map 容器：</p>
@@ -7445,7 +7902,7 @@ fuck对应的值为: &quot;rust&quot;
 <hr />
 <!-- PG195 -->
 
-<p>C++11 的 lambda 表达式也是仿函数：</p>
+<p>C++11 的 lambda 表达式也是仿函数，配合 decltype 后就可以传入 map 作为比较器：</p>
 <pre><code class="language-cpp">auto cmp = [] (std::string const &amp;lhs, std::string const &amp;rhs) {
     return std::lexicographical_compare
     ( lhs.begin(), lhs.end()
@@ -7527,6 +7984,49 @@ map&lt;int, int, function&lt;bool(int, int)&gt;&gt; m;
 <pre><code class="language-cpp">m.value_comp()({1, 0}, {2, 0});  // 等价于 cmp(1, 2)
 </code></pre>
 <hr />
+<!-- PG192 -->
+
+<p>C++14 新增了“透明(transparent)”运算符仿函数。</p>
+<p>参数为 void 即可让一个运算符仿函数变成“透明”的，对于 less 运算符仿函数而言，就是 <code>less&lt;void&gt;</code>。</p>
+<p>C++14 之前用的都是“不透明”版的仿函数，必须指定一个具体的类型，例如 <code>less&lt;int&gt;</code> 就只能用于 int 类型的比较，<code>less&lt;string&gt;</code> 就只能用于 string 类型的比较。</p>
+<p>无法用 <code>less&lt;int&gt;</code> 仿函数比较 string 类型。</p>
+<p>而 <code>less&lt;void&gt;</code> 是通用的，他的 <code>operator()</code> 函数是泛型的，可以接受任意类型。</p>
+<pre><code class="language-cpp">template &lt;&gt;
+struct less&lt;void&gt; {   // 针对 void 的特化
+    // 标准委员会想：由于 void 类型不可能有 &lt; 运算符的需求，所以他们干脆拿 void 作为透明版的模板参数“占位符”了
+    template &lt;class Tx, class Ty&gt;
+    constexpr decltype(auto) operator()(Tx &amp;&amp;x, Ty &amp;&amp;y) const {
+        return forward&lt;Tx&gt;(x) &lt; forward&lt;Ty&gt;(y);
+    }
+
+    struct is_transparent;  // 空类，仅供 SFINAE 元编程时检测一个仿函数是否透明时使用
+};
+</code></pre>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 我的思考：不透明版的 <code>less&lt;T&gt;</code> 泛型体现在类的模板参数上，而透明版的体现在了成员函数 <code>operator()</code> 的模板参数上。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 这里用 <code>void</code> 特化只是一个偷懒，<code>void</code> 并没有什么特殊的，实际上应该单独定义一个没有模板的 <code>transparent_less</code> 类，但他们就是懒得引入新标识符。</p>
+</blockquote>
+<hr />
+<!-- PG193 -->
+
+<p>“透明”版的好处是可以同一个兼容任意类型，而不必创建多个 cmp 对象。而不透明版的好处是方便特化 traits，但毕竟 &lt; 运算符是可以用户自定义(运算符重载)的，没必要用 traits 特化，所以他们逐步发现透明版香了，还能支持左右参数为不同类型。</p>
+<pre><code class="language-cpp">less&lt;void&gt; cmp;
+print(cmp(1, 2));  // 1 &lt; 2: true
+print(cmp(5, 2));  // 5 &lt; 2: false
+print(cmp(string(&quot;hello&quot;), &quot;world&quot;));  // &quot;hello&quot; &lt; &quot;world&quot;: false
+print(cmp(string(&quot;cmake&quot;), &quot;cppcon&quot;));  // &quot;cmake&quot; &lt; &quot;cppcon&quot;: true
+</code></pre>
+<blockquote>
+<p>但也要特别注意不能再依赖参数类型自动的隐式转换了，必须至少写完整其中一个 <code>string("hello")</code> 才能触发 <code>string</code> 的 <code>operator&lt;</code> 而不是 <code>const char *</code> 的指针比大小。如果只写 <code>cmp("cmake", "cppcon")</code> 则是在比较指针的地址大小，结果是不一定的。</p>
+</blockquote>
+<p>由于 C++14 的 less 模板参数 T 默认为 void，所以 <code>less&lt;void&gt;</code> 还可以简写成 <code>less&lt;&gt;</code>。</p>
+<pre><code class="language-cpp">less&lt;&gt; cmp;
+print(cmp(1, 2));  // 1 &lt; 2: true
+print(cmp(5, 2));  // 5 &lt; 2: false
+print(cmp(string(&quot;hello&quot;), &quot;world&quot;));  // &quot;hello&quot; &lt; &quot;world&quot;: false
+print(cmp(string(&quot;cmake&quot;), &quot;cppcon&quot;));  // &quot;cmake&quot; &lt; &quot;cppcon&quot;: true
+</code></pre>
+<hr />
 <!-- PG200 -->
 
 <p>普通 find 函数：键类型作为参数</p>
@@ -7544,17 +8044,91 @@ const_iterator find(Kt &amp;&amp;k) const;
 </blockquote>
 <p>相同点：找到了就返回一个迭代器指向与该参数相等的元素，如果找不到还是返回 end()。</p>
 <p>不同点：泛型版本的参数类型 Kt 不必和键类型 K 一致，只要 Kt 和 K 可以比较大小（&lt; 运算符）即可。</p>
-<hr />
-<!-- PG201 -->
+<p>不仅</p>
+<h3 id="stl_map-find">泛型 find 的要求</h3>
+<p>要想用泛型版的 find 函数有一个条件：</p>
+<p>map 的比较器必须是“透明(transparent)”的，也就是 <code>less&lt;void&gt;</code> 这种。否则泛型版的 <code>find(Kt &amp;&amp;)</code> 不会参与重载，也就是只能调用传统的 <code>find(K const &amp;)</code>。</p>
+<p>但是 <code>map&lt;K, V&gt;</code> 默认的比较器是 <code>less&lt;V&gt;</code>，他是不透明的，比较的两边必须都是 <code>V</code> 类型。如果其中一边不是的话，就得先隐式转换为 <code>V</code> 才能用。</p>
+<p>这是早期 C++98 设计的失败，当时他们没想到 <code>find</code> 还可以接受 <code>string_view</code> 和 <code>const char *</code> 这类可以和 <code>string</code> 比较，但构造会廉价得多的弱引用类型。</p>
+<p>只好后来引入了透明比较器企图，然而为了历史兼容，<code>map&lt;K, V&gt;</code> 默认仍然是 <code>map&lt;K, V, less&lt;K&gt;&gt;</code>。</p>
+<p>如果我们同学的编译器支持 C++14，建议全部改用这种写法 <code>map&lt;K, V, less&lt;&gt;&gt;</code>，从而用上更高效的 find、at、erase、count、contains 等需要按键查找元素的函数。</p>
+<h4 id="stl_map-_24">字符串为键的字典</h4>
+<p>除非传入的刚好就是一个 <code>string</code> 的 const 引用，否则就会发生隐式构造 <code>string</code> 的操作。</p>
+<p>如果传入的是一个 <code>string_view</code> 或 <code>const char *</code>，那么需要从他们构造出一个 <code>string</code>，然后才能传入传统的 <code>find(string const &amp;)</code> 函数。而 <code>string</code> 的构造会发生拷贝，且可能产生内存分配。</p>
+<p>对于比较大的字符串做键值，每次查找都需要重新构造一个 <code>string</code> 对象，开销会比较大。</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; lut;
 
-<p>泛型 find 如何提升性能</p>
-<pre><code class="language-cpp">map&lt;string, int&gt; table;
-table.find(&quot;hello&quot;);  // 等价于 table.find(string(&quot;hello&quot;))，调用了一次 string 构造函数，可能产生内存分配
+lut.at(&quot;a-very-very-very-very-long-key&quot;);
+// 等价于:
+lut.at(string(&quot;a-very-very-very-very-long-key&quot;)); // 隐式构造了一个 string，导致深拷贝了整个字符串！
 </code></pre>
-<hr />
+<p>而启用了透明比较后，就不需要每次都拷贝整个字符串来构造 <code>string</code> 了。因为 find、at 这类函数会启用一个泛型的版本 <code>at(Kt &amp;&amp;)</code>，Kt 可以是任何类型，只要他支持与 <code>string</code> 比较。可以是 <code>const char *</code>，<code>string_view</code> 或另一个 <code>string</code>。</p>
+<pre><code class="language-cpp">map&lt;string, int, less&lt;&gt;&gt; lut;
+
+lut.at(&quot;a-very-very-very-very-long-key&quot;);
+// 等价于:
+lut.at&lt;const char *&gt;(&quot;a-very-very-very-very-long-key&quot;);
+</code></pre>
+<p>因为不用拷贝了，更加高效，特别是对于键字符串非常长的情况。</p>
+<p>at 内部也不会构造任何新的 <code>string</code>，他会拿着 <code>const char *</code> 和红黑树中的每个节点调用 <code>==</code> 比较。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>string == const char *</code> 是安全的，会比较字符串的内容而不是地址。</p>
+</blockquote>
+<h4 id="stl_map-_25">智能指针为键的字典</h4>
+<p>某有某些特殊情况下，我们需要把指针，甚至智能指针！放进 map 或 set 的键中，用于快速按指针的值查找到元素。（是的你没听错，是放在<strong>键类型</strong>里！）</p>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 轶事：把指针放在键里并不罕见，常见的一个用法是 <code>set&lt;Node *&gt;</code>。好处是当 <code>Node</code> 析构时，他可以直接调用 <code>set.erase(this)</code> 把自己剔除掉。而普通的 <code>set&lt;Node&gt;</code> 就很难做到这一点了，你无法通过 Node 的 this 指针获得他在 set 中的迭代器，也无法知道自己位于哪个 set 中。侵入式红黑树完美解决了这一痛点，LLVM 和 Linux 内核中都大量运用了侵入式链表/LRU/红黑树，以后的高级数据结构课程中会为你讲解。</p>
+</blockquote>
+<pre><code class="language-cpp">map&lt;Node *, int&gt; lut;
+
+Node *raw_ptr = get_some_ptr();
+lut.find(raw_ptr);
+</code></pre>
+<p>如果是智能指针，就比较困难了，特别是 <code>unique_ptr</code>。如果你已知一个原始指针，想要在 map 中查找指向同样的智能指针键。</p>
+<pre><code class="language-cpp">map&lt;unique_ptr&lt;Node&gt;, int&gt; lut;
+Node *raw_ptr = get_some_ptr();
+lut.find(raw_ptr); // 错误：无法从 Node * 隐式构造 unique_ptr&lt;Node&gt;
+</code></pre>
+<p>过去，人们不得不用一种称为 stale-ptr（变质指针）的黑科技，来构造一个不掌握生命周期的伪 unique_ptr 出来：</p>
+<pre><code class="language-cpp">map&lt;unique_ptr&lt;Node&gt;, int&gt; lut;
+Node *raw_ptr = get_some_ptr();
+unique_ptr&lt;Node&gt; stale_ptr(raw_ptr);  // 一个并不掌握生命周期的“变质智能指针”
+lut.find(stale_ptr); // OK: 匹配到 find(unique_ptr&lt;Node&gt; const &amp;) 重载
+stale_ptr.release(); // 必须！否则会出现双重释放 (double-free) 错误
+</code></pre>
+<p>而 C++14 中，我们只需定义一个透明的比较函数，支持 <code>Node *</code> 与 <code>unique_ptr&lt;Node&gt;</code> 互相比较即可：</p>
+<pre><code class="language-cpp">struct transparent_ptr_less {
+    template &lt;class T&gt;
+    bool operator()(T *const &amp;p1, T const &amp;p2) const {
+        return p1 &lt; p2;
+    }
+
+    template &lt;class T&gt;
+    bool operator()(T *const &amp;p1, unique_ptr&lt;T&gt; const &amp;p2) const {
+        return p1 &lt; p2.get();
+    }
+
+    template &lt;class T&gt;
+    bool operator()(unique_ptr&lt;T&gt; const &amp;p1, T *const &amp;p2) const {
+        return p1.get() &lt; p2;
+    }
+
+    template &lt;class T&gt;
+    bool operator()(unique_ptr&lt;T&gt; const &amp;p1, unique_ptr&lt;T&gt; const &amp;p2) const {
+        return p1.get() &lt; p2.get();
+    }
+
+    using is_transparent = std::true_type;
+};
+
+map&lt;unique_ptr&lt;Node&gt;, int, transparent_ptr_less&gt; lut;
+Node *raw_ptr = get_some_ptr();
+lut.find(raw_ptr); // OK: 匹配到泛型的 find(Kt &amp;&amp;) 重载，其中 Kt 推导为 Node *const &amp;
+</code></pre>
+<h4 id="stl_map-_26">超大对象为键的字典</h4>
 <!-- PG201 -->
 
-<p>泛型 find 官方案例：</p>
+<p>以下摘自 cppreference 上泛型 find 的官方案例：</p>
 <pre><code class="language-cpp">struct FatKey   { int x; int data[1000]; };
 struct LightKey { int x; };
 // Note: as detailed above, the container must use std::less&lt;&gt; (or other 
@@ -7580,6 +8154,7 @@ int main() {
 <hr />
 <!-- PG202 -->
 
+<h2 id="stl_map-multimap">神奇的 multimap</h2>
 <p>允许重复键值的 multimap</p>
 <p>map 中一个键对应一个值，而 multimap 一个键可以对应多个值。</p>
 <ul>
@@ -7601,26 +8176,143 @@ iterator insert(pair&lt;K, V&gt; &amp;&amp;kv);
 tab.insert({&quot;rust&quot;, &quot;silly&quot;});
 tab.insert({&quot;rust&quot;, &quot;trash&quot;});
 tab.insert({&quot;rust&quot;, &quot;trash&quot;});
-tab.insert({&quot;rust&quot;, &quot;lazy&quot;});
 tab.insert({&quot;cpp&quot;, &quot;smart&quot;});
+tab.insert({&quot;rust&quot;, &quot;lazy&quot;});
 tab.insert({&quot;cpp&quot;, &quot;fast&quot;});
+tab.insert({&quot;java&quot;, &quot;pig&quot;});
 print(tab);
 </code></pre>
-<pre><code>{&quot;cpp&quot;: &quot;smart&quot;, &quot;cpp&quot;: &quot;fast&quot;, &quot;rust&quot;: &quot;silly&quot;, &quot;rust&quot;: &quot;trash&quot;, &quot;rust&quot;: &quot;trash&quot;, &quot;rust&quot;: &quot;lazy&quot;}
+<pre><code>{&quot;cpp&quot;: &quot;smart&quot;, &quot;cpp&quot;: &quot;fast&quot;, &quot;java&quot;: &quot;pig&quot;, &quot;rust&quot;: &quot;silly&quot;, &quot;rust&quot;: &quot;trash&quot;, &quot;rust&quot;: &quot;trash&quot;, &quot;rust&quot;: &quot;lazy&quot;}
 </code></pre>
+<p>插入进 multimap 的重复键会紧挨着，他们之间的顺序取决于插入的顺序。例如上面键同样是 &ldquo;cpp&rdquo; 的两个元素，&rdquo;smart&rdquo; 先于 &ldquo;fast&rdquo; 插入，所以 &ldquo;smart&rdquo; 靠前了。</p>
 <hr />
 <!-- PG204 -->
 
-<p>multimap 通常意义不大，可以用于实现动态排序。</p>
+<p>multimap / multiset 的作用通常就不是键值映射了，而是利用红黑树会保持元素有序的特性（任何二叉搜索树都这样）实现一边插入一边动态排序。</p>
+<p>传统排序方式：</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; arr;
+int i;
+while (cin &gt;&gt; i) {
+    arr.push_back(i);
+}
+std::sort(arr.begin(), arr.end(), std::less&lt;int&gt;());
+</code></pre>
+<p>multiset 排序方式：</p>
+<pre><code class="language-cpp">std::multiset&lt;int&gt; tab;
+int i;
+while (cin &gt;&gt; i) {
+    tab.insert(i);
+}
+// 无需再排序，tab 中的键已经是有序的了！
+// 如需取出到 vector:
+std::vector&lt;int&gt; arr(tab.begin(), tab.end());
+</code></pre>
+<p>利用 multimap 键-值对的特点，还能轻易实现只对键排序，值的部分不参与排序的效果。</p>
+<p>multimap 排序的好处是：</p>
+<ul>
+<li>动态排序，在插入的过程中就保持整个红黑树的有序性，最后任何无需额外操作。</li>
+<li>在一次次插入的过程中，每时每刻都是有序的，而不必等到最后才变得有序。</li>
+<li>可以随时动态删除一个元素，同样不会破坏有序性。</li>
+<li>还很方便随时按键值查找到和我相等的元素。</li>
+<li>如果还额外需要去重，则只需改用普通 map</li>
+</ul>
+<p>普通 map 轻松实现去重 + 动态排序，如何处置重复的键随你决定：</p>
+<ul>
+<li>普通 map 的 insert 只接受第一次出现的键-值对。</li>
+<li>普通 map 的 insert_or_assign 只保留最后一次出现的键-值对。</li>
+</ul>
 <hr />
 <!-- PG205 -->
 
-<p>multimap 查询某个键对应的多个值</p>
-<pre><code class="language-cpp"></code></pre>
+<h3 id="stl_map-multimap_1">multimap 查询某个键对应的多个值</h3>
+<p>因为 multimap 中，一个键不再对于单个值了；所以 multimap 没有 <code>[]</code> 和 <code>at</code> 了，也没有 <code>insert_or_assign</code>（反正 <code>insert</code> 永远不会发生键冲突！）</p>
+<p>要查询 multimap 中的一个键对应了哪些值，可以用 <code>equal_range</code> 获取一前一后两个迭代器，他们形成一个区间。这个区间内所有的元素都是同样的键。</p>
+<pre><code class="language-cpp">multimap&lt;string, string&gt; tab;
+tab.insert({&quot;rust&quot;, &quot;silly&quot;});
+tab.insert({&quot;rust&quot;, &quot;trash&quot;});
+tab.insert({&quot;rust&quot;, &quot;trash&quot;});
+tab.insert({&quot;cpp&quot;, &quot;smart&quot;});
+tab.insert({&quot;rust&quot;, &quot;lazy&quot;});
+tab.insert({&quot;cpp&quot;, &quot;fast&quot;});
+tab.insert({&quot;java&quot;, &quot;pig&quot;});
+
+auto range = tab.equal_range(&quot;cpp&quot;);
+for (auto it = range.first; it != range.second; ++it) {
+    print(it-&gt;first, it-&gt;second);
+}
+</code></pre>
+<pre><code>cpp smart
+cpp fast
+</code></pre>
+<p><code>equal_range</code> 返回两个迭代器相等时（即区间大小为 0），就代表找不到该键值。</p>
+<pre><code class="language-cpp">auto range = tab.equal_range(&quot;html&quot;);
+if (range.first == range.second) {
+    print(&quot;找不到该元素！&quot;);
+} else {
+    for (auto it = range.first; it != range.second; ++it) {
+        print(it-&gt;first, it-&gt;second);
+    }
+}
+</code></pre>
+<p><code>equal_range</code> 返回的两个迭代器，也可以用 <code>lower_bound</code> 和 <code>upper_bound</code> 分别获得：</p>
+<pre><code class="language-cpp">auto begin_it = tab.lower_bound(&quot;html&quot;);
+auto end_it = tab.upper_bound(&quot;html&quot;);
+if (begin_it == end_it) {
+    print(&quot;找不到该元素！&quot;);
+} else {
+    for (auto it = begin_it; it != end_it; ++it) {
+        print(it-&gt;first, it-&gt;second);
+    }
+}
+</code></pre>
+<h3 id="stl_map-lowerupper_bound">lower/upper_bound 实现范围查询</h3>
+<ul>
+<li><code>lower_bound(key)</code> 到 <code>end()</code> 迭代器之间的元素，都是大于等于（&gt;=）当前 key 的元素。</li>
+<li><code>upper_bound(key)</code> 到 <code>end()</code> 迭代器之间的元素，都是大于（&gt;）当前 key 的元素。</li>
+<li><code>begin()</code> 到 <code>lower_bound(key)</code> 迭代器之间的元素，都是小于（&lt;）当前 key 的元素。</li>
+<li><code>begin()</code> 到 <code>upper_bound(key)</code> 迭代器之间的元素，都是小于等于（&lt;=）当前 key 的元素。</li>
+</ul>
+<p>例如我要对一系列小彭友的成绩数据进行排序，要求查出大于等于 60 分的所有同学，发放“小红花”：</p>
+<pre><code class="language-cpp">struct Student {
+    string name;
+    int score;
+};
+
+vector&lt;Student&gt; students;
+</code></pre>
+<p>就可以把成绩 int 作为键，学生名字作为值，插入 multimap。</p>
+<p>插入的过程中 multimap 就自动为你动态排序了。</p>
+<pre><code class="language-cpp">multimap&lt;int, string&gt; sorted;
+for (auto const &amp;stu: students) {
+    sorted.insert({stu.score, stu.name});
+}
+</code></pre>
+<p>然后，要找出所有大于等于 60 分的同学，也就是 <code>lower_bound(60)</code> 到 <code>end()</code> 这个区间：</p>
+<pre><code class="language-cpp">// where score &gt;= 60
+for (auto it = sorted.lower_bound(60); it != sorted.end(); ++it) {
+    print(&quot;恭喜 {} 同学，考出了 {} 分，奖励你一朵小红花&quot;, it-&gt;second, it-&gt;first);
+}
+</code></pre>
+<p>找出 30（含）到 60（不含）分的同学也很容易：</p>
+<pre><code class="language-cpp">// where 30 &lt;= score and score &lt; 60
+for (auto it = sorted.upper_bound(30); it != sorted.lower_bound(60); ++it) {
+    print(&quot;{} 同学考出了 {} 分，不要灰心！小彭老师奖励你一朵小黄花，表示黄牌警告&quot;, it-&gt;second, it-&gt;first);
+}
+</code></pre>
+<h3 id="stl_map-_27">课后练习</h3>
+<p>尝试用 multimap 实现一个简单的学生成绩管理系统，要求如下：</p>
+<ol>
+<li>学生信息包括姓名和成绩。</li>
+<li>能够动态插入和删除学生信息，始终保持按成绩排序。</li>
+<li>能够查询给定成绩范围内的所有学生。</li>
+</ol>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 实际上，数据库就是这样实现的，我们的 multimap 只是简单地对成绩这一个字段排序，而专业的关系数据库会为每个字段都建立索引，分别排序后存储，以加速查找。学有余力的同学可以尝试让学生信息包含姓名、成绩、年龄、学号，然后分别构建这四个字段的索引，支持指定值查找和范围查找，其中姓名和学号要求唯一性。提示：用之前提到的 vector + map 的方法。做出来以后，面试数据库时你就可以秀理解了。</p>
+</blockquote>
 <hr />
 <!-- PG206 -->
 
-<p>时间复杂度总结说明</p>
+<h2 id="stl_map-_28">时间复杂度总结说明</h2>
 <hr />
 <!-- PG207 -->
 
@@ -7810,12 +8502,22 @@ print(tab);
 <hr />
 <!-- PG211 -->
 
-<p>C++11 新增：基于哈希的映射表 unordered_map</p>
+<h1 id="stl_map-unordered_map">哈希表 unordered_map</h1>
+<p>C++11 新增：基于哈希 (hash) 的映射表 unordered_map</p>
+<h2 id="stl_map-unordered_map-map">unordered_map 与 map 之争：适用场景不同</h2>
+<p>之前提到，map 底层基于红黑树，大多数操作的复杂度都是 <span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span> 级别的，其中部分按迭代器的插入和删除的复杂度可以降低到 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span>。</p>
+<p><img alt="hash_map" src="../img/stl/hash_map.png" /></p>
+<p>而 unordered_map 则是基于哈希表的更高效查找，只需 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span> 复杂度！他能实现如此高效查找得益于哈希函数可以把散列唯一定位到一个数组的下标中去，而数组的索引是 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span> 的。缺点是哈希值可能产生冲突，而且哈希数组可能有空位没有填满，浪费一部分内存空间。总的来说哈希表在平均复杂度上（<span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span>）比红黑树这类基于树的复杂度（<span class="arithmatex"><span class="MathJax_Preview">O(\log N)</span><script type="math/tex">O(\log N)</script></span>）更低，虽然固有延迟高，占用空间大，还容易被哈希冲突攻击。</p>
+<ul>
+<li>哈希表结构简单无脑，在巨量的键值对的存储时会发挥出明显的性能优势，常用于需要高吞吐量但不太在乎延迟的图形学应用。</li>
+<li>而各种基于树的数据结构，复杂度更加稳定，看似适合小规模数据，但是因为保持有序的特性，非常适合数据库这种需要范围查询的情况，且有序性反而有利于缓存局域性，无序的哈希表难以胜任。</li>
+<li>最近新提出的一种数据结构——跳表，也是有序的，但基于链表，更加高效，在 Redis 等软件中都有应用。别担心，小彭老师之后的数据结构课程会专门介绍并带你手搓所有这些！</li>
+</ul>
 <hr />
+<h2 id="stl_map-unordered_map_1">原理：unordered_map 中的“桶”</h2>
 <!-- PG212 -->
 
-<p>原理：unordered_map 中的桶</p>
-<p>unordered_map 如何快速检索数据？高效的秘诀在于 unordered_map 内部是一个数组，一个桶的数组。插入时把键值对存到键的 hash 对应编号的桶去，查询时就根据 hash 去线性地查找桶（这一操作是 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span> 的）。</p>
+<p>unordered_map 如何快速检索数据？高效的秘诀在于 unordered_map 内部是一个数组，一个由许多“桶”组成的数组。插入时把键值对存到键的 hash 对应编号的桶去，查询时就根据 hash 去线性地查找桶（这一操作是 <span class="arithmatex"><span class="MathJax_Preview">O(1)</span><script type="math/tex">O(1)</script></span> 的）。</p>
 <p>例如键为 &ldquo;hello&rdquo;，假设算出他的 hash 为 42。而当前桶的数量是 32 个，则会把 &ldquo;hello&rdquo; 存到 42 % 32 = 10 号桶去。查询时，同样计算出 hash(&ldquo;hello&rdquo;) % 32 = 10 号桶，然后就可以从 10 号桶取出 &ldquo;hello&rdquo; 对应的数据了。</p>
 <pre><code class="language-cpp">template &lt;class K, class V&gt;
 class unordered_map {
@@ -7904,11 +8606,12 @@ class unordered_map {
 <hr />
 <!-- PG213 -->
 
+<h2 id="stl_map-map_7">与 map 的异同</h2>
 <p>用法上，unordered_map 基本与 map 相同，以下着重介绍他们的不同点。</p>
 <hr />
 <!-- PG214 -->
 
-<p>区别 1：有序性</p>
+<h3 id="stl_map-1">区别 1：有序性</h3>
 <ul>
 <li>map 基于红黑树，元素从小到大顺序排列，遍历时也是从小到大的，键类型需要支持比大小（std::less 或 &lt;）。</li>
 <li>unordered_map 基于哈希散列表，里面元素顺序随机，键类型需要支持哈希值计算（std::hash）和判断相等（std::equal_to 或 ==）。</li>
@@ -7922,16 +8625,16 @@ class unordered_map {
 </code></pre>
 <ul>
 <li>
-<p>其中 allocator 我们照例先跳过不讲。</p>
+<p>其中 allocator 我们照例先跳过不讲，之后 STL 精讲：分配器专题课中会介绍。</p>
 </li>
 <li>
-<p>hash 是用于求键的哈希的仿函数类。他接受一个 K 返回一个 size_t（无符号 64 位整数）。</p>
+<p>hash 说的是，如何求键的哈希值？hash 仿函数接受一个 K 类型的键，返回一个 size_t（在 64 位系统上是个无符号 64 位整数，表示哈希值）。</p>
 </li>
 <li>
-<p>equal_to 是用于判断两个键相等的仿函数类。要求是，如果两个键相等，返回 true。</p>
+<p>equal_to 说的是，如何判断两个键相等？如果两个键完全相等，他会返回 true。</p>
 </li>
 </ul>
-<p>这里对 hash 的实现有一个要求，<strong>如果两个键相等，则他们的哈希必定也相等，反之则不一定</strong>。</p>
+<p>这里对 hash 的实现只有一个要求，<strong>如果两个键相等，则他们的哈希必定也相等，反之则不一定</strong>。</p>
 <p>这个假设构成了 unordered_map 得以高效的基石，他使得 unordered_map 可以更快排除不可能的答案，而不必像 vector 的查找那样需要去暴力遍历全部元素，只需要遍历哈希相等的那一部分元素就够了。</p>
 <pre><code class="language-cpp">template&lt;typename _Key, typename _Tp,
    typename _Hash = hash&lt;_Key&gt;,      // 默认的哈希函数实现，支持了 int, void *, string 等类型
@@ -7939,10 +8642,13 @@ class unordered_map {
    typename _Alloc = allocator&lt;pair&lt;const _Key, _Tp&gt;&gt;&gt;
 class unordered_map
 </code></pre>
+<p>换言之，只要 unordered_map 发现两个键不相等，就不用再做具体值的比较了，他们不可能相等了！</p>
 <hr />
 <p>hash 返回的 size_t 这个整数可以理解为一个对任意类型的“摘要”。</p>
-<p>这种摘要的关键在于如何把一个复杂的类型“映射”到小小的 size_t 上去，并且分布得尽可能均匀，不要冲突。</p>
-<p>以字符串类型 string 为例，常见的一种生成“摘要”的方法是，用一个素数的乘方序列和各字符的 ASCII 码点积：</p>
+<p>把一个很复杂的类型（例如 string）压缩成一个 unordered_map 很轻易就能比较的 size_t 整数，整数比较起来就很容易，而且还能直接作为数组的下标（string 不能直接作为数组的下标）。</p>
+<p>这种摘要的关键在于如何把一个极为复杂的类型“映射”到小小的 size_t 上去，并且分布得尽可能均匀，不要冲突。</p>
+<p>这就需要我们把这个极为复杂类型的每个成员（对 string 而言就是每个字符）都加到最终结果的表达式中。</p>
+<p>以字符串类型 string 为例，常见的一种生成“摘要”的方法是，用一个任意素数的乘方序列和各字符的 ASCII 码做点积：</p>
 <pre><code class="language-cpp">size_t hash_string(string const &amp;s) {
     size_t h = 0;
     for (char c: s) {
@@ -7956,7 +8662,8 @@ class unordered_map
 </code></pre>
 <p>相当于 <span class="arithmatex"><span class="MathJax_Preview">h \cdot 37^4 + e \cdot 37^3 + l \cdot 37^2 + l \cdot 37 + o</span><script type="math/tex">h \cdot 37^4 + e \cdot 37^3 + l \cdot 37^2 + l \cdot 37 + o</script></span></p>
 <blockquote>
-<p>也有其他更高效的生成摘要的方法，例如借助位运算。甚至还有偷懒直接拿 strlen 当哈希函数的“世界上最好的哈希表”，我不说是谁。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 也有其他更高效的生成摘要的方法，例如借助位运算。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 甚至还有偷懒直接拿 strlen 当哈希函数的“世界上最好的哈希表”，我不说是谁。（其实是早期 PHP 啦）</p>
 </blockquote>
 <hr />
 <pre><code class="language-cpp">size_t h = ((('h' * 37 + 'e') * 37 + 'l') * 37 + 'l') * 37 + 'o';
@@ -8462,7 +9169,7 @@ unordered_map&lt;array&lt;string, 3&gt;, int&gt; stutab;
 <hr />
 <!-- PG228 -->
 
-<p>map 和 string_view 结合使用加速查找案例</p>
+<p>map 和 string_view 结合使用透明查找案例</p>
 <hr />
 <!-- PG229 -->
 
@@ -8493,16 +9200,15 @@ unordered_map&lt;array&lt;string, 3&gt;, int&gt; stutab;
 <p>本期孝点总结：</p>
 <ul>
 <li>有手之前，非常好用</li>
-<li>面包、答辩 vs 保鲜盒、马桶</li>
-<li>老鼠💩的处理方案</li>
+<li>马桶装面包</li>
+<li>“析构”相依1号</li>
+<li>小彭老师语录</li>
+<li>看到老鼠💩过激反应</li>
 <li>《好友清除计划》</li>
 <li>小学生早操排队</li>
+<li>小黄花表示黄牌警告</li>
 <li>托马斯破产回旋</li>
 </ul>
-<p>顺便推个 CppCon 小视频：https://www.youtube.com/watch?v=ehyHyAIa5so</p>
-<blockquote>
-<p>CppCon 2017: Piotr Padlewski “Undefined Behaviour is awesome!”</p>
-</blockquote>
 <div class="footnote">
 <hr />
 <ol>
@@ -10772,7 +11478,26 @@ void test(function&lt;int (int)&gt; func) {
 <h2 id="design_concept-_1">虚函数的缺点</h2>
 <p>TODO</p>
 <h2 id="design_concept-_2">模板函数的缺点</h2>
-<p>TODO</p></section><section class="print-page" id="cpp_lifetime"><h1 id="cpp_lifetime-_1">深入理解析构函数与生命周期</h1>
+<p>TODO</p></section><section class="print-page" id="error_code"><h1 id="error_code-c">现代 C++ 中的错误处理 (未完工)</h1>
+<div class="toc">
+<ul>
+<li><a href="#error_code-c">现代 C++ 中的错误处理 (未完工)</a><ul>
+<li><a href="#error_code-_1">提前返回是好习惯！</a></li>
+<li><a href="#error_code-_2">异常</a></li>
+<li><a href="#error_code-_3">错误码</a></li>
+<li><a href="#error_code-stderror_code">std::error_code</a></li>
+<li><a href="#error_code-stdexpected">std::expected</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="error_code-_1">提前返回是好习惯！</h2>
+<p>TODO</p>
+<h2 id="error_code-_2">异常</h2>
+<h2 id="error_code-_3">错误码</h2>
+<h2 id="error_code-stderror_code"><code>std::error_code</code></h2>
+<h2 id="error_code-stdexpected"><code>std::expected</code></h2>
+<p><code>boost::expected</code></p></section><section class="print-page" id="cpp_lifetime"><h1 id="cpp_lifetime-_1">深入理解析构函数与生命周期</h1>
 <div class="toc">
 <ul>
 <li><a href="#cpp_lifetime-_1">深入理解析构函数与生命周期</a><ul>
@@ -14179,26 +14904,7 @@ base64.b64decode(secret).decode()
 <h3 id="unicode-utf-7">UTF-7</h3>
 <p>TODO</p>
 <h3 id="unicode-_28">字符编码猜测</h3>
-<p>TODO</p></section><section class="print-page" id="error_code"><h1 id="error_code-c">现代 C++ 中的错误处理 (未完工)</h1>
-<div class="toc">
-<ul>
-<li><a href="#error_code-c">现代 C++ 中的错误处理 (未完工)</a><ul>
-<li><a href="#error_code-_1">提前返回是好习惯！</a></li>
-<li><a href="#error_code-_2">异常</a></li>
-<li><a href="#error_code-_3">错误码</a></li>
-<li><a href="#error_code-stderror_code">std::error_code</a></li>
-<li><a href="#error_code-stdexpected">std::expected</a></li>
-</ul>
-</li>
-</ul>
-</div>
-<h2 id="error_code-_1">提前返回是好习惯！</h2>
-<p>TODO</p>
-<h2 id="error_code-_2">异常</h2>
-<h2 id="error_code-_3">错误码</h2>
-<h2 id="error_code-stderror_code"><code>std::error_code</code></h2>
-<h2 id="error_code-stdexpected"><code>std::expected</code></h2>
-<p><code>boost::expected</code></p></section><section class="print-page" id="undef"><h1 id="undef-_1">未定义行为完整列表</h1>
+<p>TODO</p></section><section class="print-page" id="undef"><h1 id="undef-_1">未定义行为完整列表</h1>
 <div class="toc">
 <ul>
 <li><a href="#undef-_1">未定义行为完整列表</a><ul>
@@ -14255,7 +14961,10 @@ base64.b64decode(secret).decode()
 </li>
 </ul>
 </li>
-<li><a href="#undef-_23">总结</a></li>
+<li><a href="#undef-_23">总结</a><ul>
+<li><a href="#undef-cppcon">CppCon 相关视频</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <p>如有疏漏，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 补充。</p>
@@ -14891,7 +15600,12 @@ void t1() {
 <ul>
 <li>Debug: 生成 <code>zenod.dll</code>，链接 Debug 的 ABI</li>
 <li>Release: 生成 <code>zeno.dll</code>，链接 Release 的 ABI</li>
-</ul></section><h1 class='nav-section-title-end'>Ended: 章节列表</h1>
+</ul>
+<h2 id="undef-cppcon">CppCon 相关视频</h2>
+<p>顺便推个 CppCon 小视频：https://www.youtube.com/watch?v=ehyHyAIa5so</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 标题是《CppCon 2017: Piotr Padlewski “Undefined Behaviour is awesome!”》（爆孝）</p>
+</blockquote></section><h1 class='nav-section-title-end'>Ended: 章节列表</h1>
                         <h1 class='nav-section-title' id='section-关于'>
                             关于 <a class='headerlink' href='#section-关于' title='Permanent link'>↵</a>
                         </h1>

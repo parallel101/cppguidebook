@@ -84,7 +84,7 @@
 </li>
                                     
 <li>
-    <a href="../stl_map/" class="dropdown-item">深入浅出 STL 系列之 map</a>
+    <a href="../stl_map/" class="dropdown-item">STL 精讲：std::map 和他的朋友们</a>
 </li>
                                     
 <li>
@@ -116,6 +116,10 @@
 </li>
                                     
 <li>
+    <a href="../error_code/" class="dropdown-item">现代 C++ 中的错误处理 (未完工)</a>
+</li>
+                                    
+<li>
     <a href="../cpp_lifetime/" class="dropdown-item">深入理解析构函数与生命周期</a>
 </li>
                                     
@@ -125,10 +129,6 @@
                                     
 <li>
     <a href="../unicode/" class="dropdown-item">字符编码那些事</a>
-</li>
-                                    
-<li>
-    <a href="../error_code/" class="dropdown-item">现代 C++ 中的错误处理 (未完工)</a>
 </li>
                                     
 <li>
@@ -292,7 +292,7 @@ read(1, mem.get(), 1024);
 <p>绝大多数情况下，可维护性总是比性能重要的，你只需要比较 <strong>你重构代码花的时间</strong> 和 <strong>计算机运行这段代码所需时间</strong> 就明白值不值了。</p>
 </blockquote>
 <h3 id="13">贴士 1.3</h3>
-<p>如果是其他类型，可能需要乘以 <code>sizeof(元素类型)</code>，取决于那个 C 函数要求的是“字节数”还是“元素数&rdquo;”。</p>
+<p>如果是其他类型，可能需要乘以 <code>sizeof(元素类型)</code>，取决于那个 C 函数要求的是“字节数”还是“元素数”。</p>
 <pre><code class="language-cpp">auto mem = vector&lt;int&gt;(1024);
 read(1, mem.data(), mem.size() * sizeof(mem[0]));
 auto max = find_max(mem.data(), mem.size());
@@ -349,6 +349,12 @@ auto max = find_max(mem.data(), mem.size());
 <blockquote>
 <p>从 C++14 开始，内存安全的现代 C++ 程序中就不会出现任何显式的 new 了，哪怕是抱在 shared_ptr 或 unique_ptr 内的也不行。（除了最上面说的 3 种特殊情况）</p>
 </blockquote>
+<p>如果你需要调用的 C 语言接口还需要原始指针的话，用 <code>.get()</code> 可以从智能指针中获取原始指针。建议只在和 C 语言打交道时 <code>.get()</code>，其余时间一律 shared_ptr 保证安全。</p>
+<pre><code class="language-cpp">extern &quot;C&quot; void some_c_function(Foo *foo);
+
+auto foo = make_shared&lt;Foo&gt;();
+some_c_function(foo.get());
+</code></pre>
 <h2 id="raii-delete">RAII 比起手动 delete 的优势</h2>
 <p>在日常代码中，我们常常会使用“如果错误了就提前返回”的写法。这被称为<strong>提前返回 (early-return)</strong>，一种优质的代码写法，比弄个很大的 else 分支要可维护得多。</p>
 <blockquote>

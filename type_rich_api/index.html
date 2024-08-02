@@ -84,7 +84,7 @@
 </li>
                                     
 <li>
-    <a href="../stl_map/" class="dropdown-item">深入浅出 STL 系列之 map</a>
+    <a href="../stl_map/" class="dropdown-item">STL 精讲：std::map 和他的朋友们</a>
 </li>
                                     
 <li>
@@ -116,6 +116,10 @@
 </li>
                                     
 <li>
+    <a href="../error_code/" class="dropdown-item">现代 C++ 中的错误处理 (未完工)</a>
+</li>
+                                    
+<li>
     <a href="../cpp_lifetime/" class="dropdown-item">深入理解析构函数与生命周期</a>
 </li>
                                     
@@ -125,10 +129,6 @@
                                     
 <li>
     <a href="../unicode/" class="dropdown-item">字符编码那些事</a>
-</li>
-                                    
-<li>
-    <a href="../error_code/" class="dropdown-item">现代 C++ 中的错误处理 (未完工)</a>
 </li>
                                     
 <li>
@@ -523,6 +523,91 @@
 <p>如何写出易于维护的代码，阻止犯错？</p>
 <p><strong>类型就是最好的注释！</strong></p>
 <p><strong>Type is all you need</strong></p>
+<div class="toc">
+<ul>
+<li><a href="#api">现代化的 API 设计指南</a><ul>
+<li><a href="#_1">&mdash;</a></li>
+<li><a href="#_2">结构体传参</a></li>
+<li><a href="#_3">&mdash;</a></li>
+<li><a href="#_4">&mdash;</a></li>
+<li><a href="#_5">&mdash;</a></li>
+<li><a href="#_6">&mdash;</a></li>
+<li><a href="#_7">&mdash;</a></li>
+<li><a href="#_8">返回一个结构体</a></li>
+<li><a href="#_9">&mdash;</a></li>
+<li><a href="#_10">类型即注释</a></li>
+<li><a href="#_11">&mdash;</a></li>
+<li><a href="#_12">&mdash;</a></li>
+<li><a href="#_13">拒绝指针！</a></li>
+<li><a href="#_14">&mdash;</a></li>
+<li><a href="#_15">&mdash;</a></li>
+<li><a href="#_16">强类型封装</a></li>
+<li><a href="#_17">&mdash;</a></li>
+<li><a href="#_18">&mdash;</a></li>
+<li><a href="#span">span “胖指针”</a></li>
+<li><a href="#_19">&mdash;</a></li>
+<li><a href="#_20">&mdash;</a></li>
+<li><a href="#_21">&mdash;</a></li>
+<li><a href="#_22">&mdash;</a></li>
+<li><a href="#_23">&mdash;</a></li>
+<li><a href="#_24">&mdash;</a></li>
+<li><a href="#_25">&mdash;</a></li>
+<li><a href="#_26">空值语义</a></li>
+<li><a href="#_27">&mdash;</a></li>
+<li><a href="#_28">&mdash;</a></li>
+<li><a href="#_29">&mdash;</a></li>
+<li><a href="#_30">&mdash;</a></li>
+<li><a href="#_31">&mdash;</a></li>
+<li><a href="#_32">&mdash;</a></li>
+<li><a href="#_33">&mdash;</a></li>
+<li><a href="#_34">&mdash;</a></li>
+<li><a href="#_35">&mdash;</a></li>
+<li><a href="#_36">&mdash;</a></li>
+<li><a href="#_37">&mdash;</a></li>
+<li><a href="#_38">&mdash;</a></li>
+<li><a href="#_39">&mdash;</a></li>
+<li><a href="#stl">点名批评的 STL 设计</a></li>
+<li><a href="#_40">&mdash;</a></li>
+<li><a href="#_41">&mdash;</a></li>
+<li><a href="#_42">&mdash;</a></li>
+<li><a href="#_43">&mdash;</a></li>
+<li><a href="#stl_1">点名表扬的 STL 部分</a></li>
+<li><a href="#_44">&mdash;</a></li>
+<li><a href="#_45">&mdash;</a></li>
+<li><a href="#_46">&mdash;</a></li>
+<li><a href="#_47">&mdash;</a></li>
+<li><a href="#_48">&mdash;</a></li>
+<li><a href="#_49">&mdash;</a></li>
+<li><a href="#_50">枚举类型</a></li>
+<li><a href="#_51">&mdash;</a></li>
+<li><a href="#_52">&mdash;</a></li>
+<li><a href="#_53">&mdash;</a></li>
+<li><a href="#_54">&mdash;</a></li>
+<li><a href="#_55">&mdash;</a></li>
+<li><a href="#_56">&mdash;</a></li>
+<li><a href="#_57">&mdash;</a></li>
+<li><a href="#_58">&mdash;</a></li>
+<li><a href="#_59">其他类型套皮</a></li>
+<li><a href="#_60">&mdash;</a></li>
+<li><a href="#_61">&mdash;</a></li>
+<li><a href="#raii">RAII 封装</a></li>
+<li><a href="#_62">&mdash;</a></li>
+<li><a href="#_63">&mdash;</a></li>
+<li><a href="#_64">&mdash;</a></li>
+<li><a href="#mutex">Mutex 封装</a></li>
+<li><a href="#_65">&mdash;</a></li>
+<li><a href="#_66">&mdash;</a></li>
+<li><a href="#cuda">彩蛋：CUDA 封装实战</a></li>
+<li><a href="#_67">&mdash;</a></li>
+<li><a href="#_68">变量名与作用域限制</a></li>
+<li><a href="#_69">&mdash;</a></li>
+<li><a href="#_70">&mdash;</a></li>
+<li><a href="#getset">你真的需要 get/set 吗？</a></li>
+<li><a href="#_71">&mdash;</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <h2 id="_1">&mdash;</h2>
 <hr />
 <h2 id="_2">结构体传参</h2>
@@ -1176,7 +1261,8 @@ int i = cin.readInt().value();
 </code></pre>
 <p>这样如果用户要读取到值的话，必然要 <code>.value()</code>，从而如果 readInt 失败返回的是 nullopt，就必然抛出异常，避免了用户忘记判断错误的可能。</p>
 <blockquote>
-<p>在小彭老师自主研发的一款 co_async 协程库中，重新设计了异步的字符流，例如其中 getline 函数会返回 <code>std::expected&lt;std::string, std::system_error&gt;</code>。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 在小彭老师自主研发的一款 co_async 协程库中，就重新设计了自己的异步字符流类，例如其中 getline 函数会返回 <code>std::expected&lt;std::string, std::system_error&gt;</code>。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 在<a href="../error_code/">错误处理专题</a>中有进一步的详解。</p>
 </blockquote>
 <h2 id="_31">&mdash;</h2>
 <hr />
