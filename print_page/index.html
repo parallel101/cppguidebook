@@ -345,7 +345,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年08月02日 14:35:06 (UTC+08:00)</p>
+<p>更新时间：2024年08月02日 17:34:02 (UTC+08:00)</p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是温馨提示</p>
@@ -14207,54 +14207,55 @@ base64.b64decode(secret).decode()
 <li><a href="#undef-_4">不能解引用空指针（通常会产生崩溃，但也可能被优化产生奇怪的现象）</a></li>
 <li><a href="#undef-end">不能解引用 end 迭代器</a></li>
 <li><a href="#undef-this">this 指针不能为空</a></li>
+<li><a href="#undef-_5">空指针不能调用成员函数</a></li>
 </ul>
 </li>
-<li><a href="#undef-_5">指针别名类</a><ul>
+<li><a href="#undef-_6">指针别名类</a><ul>
 <li><a href="#undef-reinterpret_cast">reinterpret_cast 后以不兼容的类型访问</a></li>
 <li><a href="#undef-union">union 访问不是激活的成员</a></li>
 <li><a href="#undef-t-alignoft">T 类型指针必须对齐到 alignof(T)</a></li>
 </ul>
 </li>
-<li><a href="#undef-_6">算数类</a><ul>
-<li><a href="#undef-_7">有符号整数的加减乘除模不能溢出</a></li>
-<li><a href="#undef-_8">左移或右移的位数，不得超过整数类型上限，不得为负</a></li>
+<li><a href="#undef-_7">算数类</a><ul>
+<li><a href="#undef-_8">有符号整数的加减乘除模不能溢出</a></li>
+<li><a href="#undef-_9">左移或右移的位数，不得超过整数类型上限，不得为负</a></li>
 <li><a href="#undef-0">除数不能为 0</a></li>
 </ul>
 </li>
-<li><a href="#undef-_9">函数类</a><ul>
+<li><a href="#undef-_10">函数类</a><ul>
 <li><a href="#undef-void-return">返回类型不为 void 的函数，必须有 return 语句</a></li>
-<li><a href="#undef-_10">函数指针被调用时，不能为空</a></li>
+<li><a href="#undef-_11">函数指针被调用时，不能为空</a></li>
 </ul>
 </li>
-<li><a href="#undef-_11">生命周期类</a><ul>
-<li><a href="#undef-_12">不能读取未初始化的变量</a></li>
-<li><a href="#undef-_13">指针的加减法不能超越数组边界</a></li>
+<li><a href="#undef-_12">生命周期类</a><ul>
+<li><a href="#undef-_13">不能读取未初始化的变量</a></li>
+<li><a href="#undef-_14">指针的加减法不能超越数组边界</a></li>
 <li><a href="#undef-end_1">可以有指向数组尾部的指针（类似 end 迭代器），但不能解引用</a></li>
-<li><a href="#undef-_14">不能访问未初始化的指针</a></li>
-<li><a href="#undef-_15">不能访问已释放的内存</a></li>
+<li><a href="#undef-_15">不能访问未初始化的指针</a></li>
+<li><a href="#undef-_16">不能访问已释放的内存</a></li>
 <li><a href="#undef-new-new-malloc-delete-delete-free">new / new[] / malloc 和 delete / delete[] / free 必须匹配</a></li>
-<li><a href="#undef-_16">不要访问已经析构的对象</a></li>
+<li><a href="#undef-_17">不要访问已经析构的对象</a></li>
 </ul>
 </li>
-<li><a href="#undef-_17">库函数类</a><ul>
+<li><a href="#undef-_18">库函数类</a><ul>
 <li><a href="#undef-ctypeh-0127-ascii">ctype.h 中一系列函数的字符参数，必须在 0~127 范围内（即只支持 ASCII 字符）</a></li>
 <li><a href="#undef-memcpy-src-dst">memcpy 函数的 src 和 dst 不能为空指针</a></li>
 <li><a href="#undef-memcpy-src-dst_1">memcpy 不能接受带有重叠的 src 和 dst</a></li>
 <li><a href="#undef-vback-v">v.back() 当 v 为空时是未定义行为</a></li>
 <li><a href="#undef-vector-operator-i">vector 的 operator[] 当 i 越界时，是未定义行为</a></li>
-<li><a href="#undef-_18">容器迭代器失效</a></li>
-<li><a href="#undef-_19">容器元素引用失效</a></li>
+<li><a href="#undef-_19">容器迭代器失效</a></li>
+<li><a href="#undef-_20">容器元素引用失效</a></li>
 </ul>
 </li>
-<li><a href="#undef-_20">多线程类</a><ul>
-<li><a href="#undef-_21">多个线程同时访问同一个对象，其中至少一个线程的访问为写访问，是未定义行为（俗称数据竞争）</a></li>
+<li><a href="#undef-_21">多线程类</a><ul>
+<li><a href="#undef-_22">多个线程同时访问同一个对象，其中至少一个线程的访问为写访问，是未定义行为（俗称数据竞争）</a></li>
 <li><a href="#undef-mutex">多个线程同时对两个 mutex 上锁，但顺序相反，会产生未定义行为（俗称死锁）</a></li>
 <li><a href="#undef-recursive_mutex-mutex">对于非 recursive_mutex，同一个线程对同一个 mutex 重复上锁，会产生未定义行为（俗称递归死锁）</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#undef-_22">总结</a></li>
+<li><a href="#undef-_23">总结</a></li>
 </ul>
 </div>
 <p>如有疏漏，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 补充。</p>
@@ -14311,7 +14312,24 @@ void func() {
     c-&gt;print(); // 错！
 }
 </code></pre>
-<h2 id="undef-_5">指针别名类</h2>
+<h3 id="undef-_5">空指针不能调用成员函数</h3>
+<pre><code class="language-cpp">struct C{
+    void f() {}
+    static void f2() {}
+};
+
+void func(){
+    C* c = nullptr;
+    c-&gt;f();  // 行为未定义
+    c-&gt;f2(); // 行为未定义
+}
+</code></pre>
+<p>本质上是因为<strong>空指针解引用</strong>。对于内建类型，表达式 <code>E1-&gt;E2</code> 与 <code>(*E1).E2</code> 严格等价，任何指针类型都是内建类型。</p>
+<p><code>c-&gt;f()</code>、<code>c-&gt;f2()</code> 等价于：</p>
+<pre><code class="language-cpp">(*c).f();
+(*c).f2();
+</code></pre>
+<h2 id="undef-_6">指针别名类</h2>
 <h3 id="undef-reinterpret_cast">reinterpret_cast 后以不兼容的类型访问</h3>
 <pre><code class="language-cpp">int i;
 float f = *(float *)&amp;i; // 错！
@@ -14379,8 +14397,8 @@ int *p = (int *)buf;  // 可以
 <pre><code class="language-cpp">char buf[sizeof(int) * 2];
 int *p = (int *)(((uintptr_t)buf + sizeof(int) - 1) &amp; ~(alignof(int) - 1));  // 可以
 </code></pre>
-<h2 id="undef-_6">算数类</h2>
-<h3 id="undef-_7">有符号整数的加减乘除模不能溢出</h3>
+<h2 id="undef-_7">算数类</h2>
+<h3 id="undef-_8">有符号整数的加减乘除模不能溢出</h3>
 <pre><code class="language-cpp">int i = INT_MAX;
 i + 1;  // 错！
 </code></pre>
@@ -14401,7 +14419,7 @@ i + 1;  // 可以，会得到 0
 <pre><code class="language-cpp">INT_MIN % -1; // 错！
 INT_MIN / -1; // 错！
 </code></pre>
-<h3 id="undef-_8">左移或右移的位数，不得超过整数类型上限，不得为负</h3>
+<h3 id="undef-_9">左移或右移的位数，不得超过整数类型上限，不得为负</h3>
 <pre><code class="language-cpp">unsigned int i = 0;
 i &lt;&lt; 31;  // 可以
 i &lt;&lt; 32;  // 错！
@@ -14430,7 +14448,7 @@ int j = 0;
 i / j;  // 错！
 i % j;  // 错！
 </code></pre>
-<h2 id="undef-_9">函数类</h2>
+<h2 id="undef-_10">函数类</h2>
 <h3 id="undef-void-return">返回类型不为 void 的函数，必须有 return 语句</h3>
 <pre><code class="language-cpp">int func() {
     int i = 42;
@@ -14466,7 +14484,7 @@ void func() {
 <li><code>main</code> 函数可以不写 <code>return</code> 语句，默认自带 <code>return 0;</code></li>
 <li>协程函数可以不写 <code>return</code> 语句，如果有 <code>co_return</code> 或者协程返回类型为 <code>void</code> 且具有至少一个 <code>co_await</code> 出现</li>
 </ol>
-<h3 id="undef-_10">函数指针被调用时，不能为空</h3>
+<h3 id="undef-_11">函数指针被调用时，不能为空</h3>
 <pre><code class="language-cpp">typedef void (*func_t)();
 
 func_t func = nullptr;
@@ -14492,8 +14510,8 @@ int main() {
     return 0;
 }
 </code></pre>
-<h2 id="undef-_11">生命周期类</h2>
-<h3 id="undef-_12">不能读取未初始化的变量</h3>
+<h2 id="undef-_12">生命周期类</h2>
+<h3 id="undef-_13">不能读取未初始化的变量</h3>
 <pre><code class="language-cpp">int i;
 cout &lt;&lt; i; // 错！
 
@@ -14506,7 +14524,7 @@ cout &lt;&lt; arr[0]; // 错！
 int arr[10] = {};
 cout &lt;&lt; arr[0]; // 可以，会读到 0
 </code></pre>
-<h3 id="undef-_13">指针的加减法不能超越数组边界</h3>
+<h3 id="undef-_14">指针的加减法不能超越数组边界</h3>
 <pre><code class="language-cpp">int arr[10];
 int *p = &amp;arr[0];
 p + 1;     // 可以
@@ -14519,7 +14537,7 @@ int *p = &amp;arr[0];
 int *end = p + 10; // 可以
 *end;              // 错！
 </code></pre>
-<h3 id="undef-_14">不能访问未初始化的指针</h3>
+<h3 id="undef-_15">不能访问未初始化的指针</h3>
 <pre><code class="language-cpp">int *p;
 *p; // 错！
 </code></pre>
@@ -14537,7 +14555,7 @@ cout &lt;&lt; p-&gt;dog-&gt;age; // 错！
 p-&gt;dog = new Dog;
 cout &lt;&lt; p-&gt;dog-&gt;age; // 可以
 </code></pre>
-<h3 id="undef-_15">不能访问已释放的内存</h3>
+<h3 id="undef-_16">不能访问已释放的内存</h3>
 <pre><code class="language-cpp">int *p = new int;
 *p; // 可以
 delete p;
@@ -14585,7 +14603,7 @@ delete[] p; // 正确
 <pre><code class="language-cpp">vector&lt;int&gt; a(3);
 unique_ptr&lt;int&gt; a = make_unique&lt;int&gt;(42);
 </code></pre>
-<h3 id="undef-_16">不要访问已经析构的对象</h3>
+<h3 id="undef-_17">不要访问已经析构的对象</h3>
 <pre><code class="language-cpp">struct C {
     int i;
     ~C() { i = 0; }
@@ -14603,7 +14621,7 @@ free(c);
     return s;  // 语言：OK，标准库作者：s 不一定是空字符串
 }
 </code></pre>
-<h2 id="undef-_17">库函数类</h2>
+<h2 id="undef-_18">库函数类</h2>
 <h3 id="undef-ctypeh-0127-ascii">ctype.h 中一系列函数的字符参数，必须在 0~127 范围内（即只支持 ASCII 字符）</h3>
 <pre><code class="language-cpp">isdigit('0');    // 可以，返回 true
 isdigit('a');    // 可以，返回 false
@@ -14667,7 +14685,7 @@ v[3]; // 错！相当于解引用了越界的指针
 <pre><code class="language-cpp">std::vector&lt;int&gt; v = { 1, 2, 3 };
 v.at(3); // 安全，会检测到越界，抛出 std::out_of_range 异常
 </code></pre>
-<h3 id="undef-_18">容器迭代器失效</h3>
+<h3 id="undef-_19">容器迭代器失效</h3>
 <pre><code class="language-cpp">std::vector&lt;int&gt; v = { 1, 2, 3 };
 auto it = v.begin();
 v.push_back(4); // push_back 可能导致扩容，会使之前保存的 v.begin() 迭代器失效
@@ -14683,7 +14701,7 @@ v.push_back(4); // deque 的 push_back 不会导致迭代器失效
 <li>https://www.geeksforgeeks.org/iterator-invalidation-cpp</li>
 <li>https://en.cppreference.com/w/cpp/container</li>
 </ul>
-<h3 id="undef-_19">容器元素引用失效</h3>
+<h3 id="undef-_20">容器元素引用失效</h3>
 <pre><code class="language-cpp">std::vector&lt;int&gt; v = {1, 2, 3};
 int &amp;ref = v[0];
 v.push_back(4); // push_back 可能导致扩容，使元素全部移动到了新的一段内存，会使之前保存的 ref 引用失效
@@ -14695,8 +14713,8 @@ int &amp;ref = v[0];
 v.push_back(4); // deque 的 push_back 不会导致元素移动，使引用失效
 ref = 0;        // 可以
 </code></pre>
-<h2 id="undef-_20">多线程类</h2>
-<h3 id="undef-_21">多个线程同时访问同一个对象，其中至少一个线程的访问为写访问，是未定义行为（俗称数据竞争）</h3>
+<h2 id="undef-_21">多线程类</h2>
+<h3 id="undef-_22">多个线程同时访问同一个对象，其中至少一个线程的访问为写访问，是未定义行为（俗称数据竞争）</h3>
 <pre><code class="language-cpp">std::string s;
 
 void t1() {
@@ -14851,7 +14869,7 @@ void t1() {
     m.unlock();
 }
 </code></pre>
-<h1 id="undef-_22">总结</h1>
+<h1 id="undef-_23">总结</h1>
 <ul>
 <li>不要玩空指针</li>
 <li>不要越界，用更安全的 at，subspan 等</li>
