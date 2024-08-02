@@ -831,3 +831,9 @@ void t1() {
 
 - Debug: 生成 `zenod.dll`，链接 Debug 的 ABI
 - Release: 生成 `zeno.dll`，链接 Release 的 ABI
+
+## CppCon 相关视频
+
+顺便推个 CppCon 小视频：https://www.youtube.com/watch?v=ehyHyAIa5so
+
+> {{ icon.tip }} 标题是《CppCon 2017: Piotr Padlewski “Undefined Behaviour is awesome!”》（爆孝）

@@ -487,7 +487,7 @@ struct Class {
 
 会报错 `undefined reference to 'Class::instance'`。这是说的你需要找个 .cpp 文件，写出 `Class Class::instance` 才能消除该错误。
 
-C++17 中，只需加个 `inline` 就能解决。
+C++17 中，只需加个 `inline` 就能解决！
 
 ```cpp
 struct Class {
