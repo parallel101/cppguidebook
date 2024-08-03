@@ -316,7 +316,6 @@
 <!-- PG1 -->
 
 <p>让高性能数据结构惠及每一人</p>
-<p>https://github.com/parallel101/course/tree/master/slides/stl_map/experiment/</p>
 <div class="toc">
 <ul>
 <li><a href="#stl-stdmap">STL 精讲：std::map 和他的朋友们</a><ul>
@@ -584,7 +583,6 @@
 <p>面向已经了解一定 C++ 语法，正在学习标准库的童鞋。</p>
 <p>C++ 标准库又称 STL，包含了大量程序员常用的算法和数据结构，是 Bjarne Stroustrup 送给所有 C++ 程序员的一把瑞士军刀，然而发现很多童鞋并没有完全用好他，反而还被其复杂性误伤了。</p>
 <p>如果你也对标准库一知半解，需要系统学习的话，那么本课程适合你。小彭老师将运用他特有的幽默答辩比喻，全面介绍各 STL 容器的所有用法。结合一系列实战案例，剖析常见坑点，使用技巧等。对比不同写法的性能与可读性，还会与 Python 语言相互类比方便记忆，科普的部分冷知识可以作为大厂面试加分项。</p>
-<p>::right::</p>
 <p><img alt="" src="../img/stl/maijiaxiu.jpg" width="320" /></p>
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 本课程受到童鞋一致好评</p>
@@ -680,17 +678,16 @@
 
 <h3 id="_6">如何使用课件</h3>
 <p>🥰🥰🥰</p>
-<p>本系列课件和源码均公布在：https://github.com/parallel101/course</p>
+<p>本期实验源码均公布在：https://github.com/parallel101/course/tree/master/slides/stl_map/experiment/</p>
 <p>例如本期的课件位于 <code>course/stlseries/stl_map/slides.md</code>。</p>
-<p>课件基于 Slidev<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup> 开发，Markdown 格式书写，在浏览器中显示，在本地运行课件需要 Node.js：</p>
+<p>课件基于 Mkdocs 开发，Markdown 格式书写，在浏览器中显示，在本地运行课件需要 Mkdocs 环境：</p>
 <ul>
-<li>运行命令 <code>npm install</code> 即可自动安装 Slidev</li>
-<li>运行命令 <code>npm run dev</code> 即可运行 Slidev 服务</li>
-<li>浏览器访问 http://localhost:3030 即可看到课件</li>
+<li>运行命令 <code>pip install -r requirements.txt</code> 即可自动安装 Mkdocs 等所需依赖</li>
+<li>运行命令 <code>mkdocs serve</code> 即可运行 Mkdocs 服务</li>
+<li>浏览器访问 http://127.0.0.1:8000 即可看到课件</li>
 </ul>
-<p>如果报错找不到 <code>slidev</code> 命令，可以试试 <code>export PATH="$PWD/node_modules/.bin:$PATH"</code>。</p>
-<p>如果不想自己配置 Node.js 也可以直接以文本文件格式打开 slides.md 浏览课件。</p>
-<p>Slidev 服务运行时，你对 slides.md 的所有修改会立刻实时显现在浏览器中。</p>
+<p>如果不想自己配置 Mkdocs 也可以直接以文本文件格式打开 docs/stl_map.md 浏览课件。</p>
+<p>Mkdocs 服务运行时，你对 docs/stl_map.md 的所有修改会立刻实时显现在浏览器中。</p>
 <hr />
 <!-- PG7 -->
 
@@ -707,7 +704,7 @@
 <hr />
 <!-- PG8 -->
 
-<p>附赠了一些实用头文件，同鞋们可以下载来研究，或者在自己的项目里随意运用。</p>
+<p>在实验源码仓库中，附赠了一些实用头文件，同鞋们可以下载来研究，或者在自己的项目里随意运用。</p>
 <p><font size="3px"></p>
 <table>
 <thead>
@@ -779,7 +776,7 @@ std::erase_if(m, pred);
 <!-- PG11 -->
 
 <p>我们自己做测试时经常会用 <code>&lt;bits/stdc++.h&gt;</code> 这个万能头文件。</p>
-<p>可惜这个万能头文件在 VS 中似乎不存在<sup id="fnref3:1"><a class="footnote-ref" href="#fn:1">1</a></sup>，因此我自己写了一个跨平台的 <code>"bits_stdc++.h"</code> 放在源码同目录：</p>
+<p>可惜这个万能头文件在 VS 中似乎不存在<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup>，因此我自己写了一个跨平台的 <code>"bits_stdc++.h"</code> 放在源码同目录：</p>
 <pre><code class="language-cpp">#include &quot;bits_stdc++.h&quot;  // 自动导入所有标准库的头文件
 </code></pre>
 <p>不过现实工程中，还是建议根据需要一个个导入，不要偷懒用这个不标准的头文件：</p>
@@ -868,7 +865,7 @@ for ... in ...:
 <!-- PG17 -->
 
 <h3 id="map_1">标准库中的 map 容器</h3>
-<p>标准库中，map<sup id="fnref4:1"><a class="footnote-ref" href="#fn:1">1</a></sup> 是一个<strong>模板类</strong>，他的键类型，值类型，可以由尖括号内的参数指定，便于适应不同的用户需求。</p>
+<p>标准库中，map<sup id="fnref3:1"><a class="footnote-ref" href="#fn:1">1</a></sup> 是一个<strong>模板类</strong>，他的键类型，值类型，可以由尖括号内的参数指定，便于适应不同的用户需求。</p>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 由于 C++ 标准库的容器大多都是模板类，提供的算法也大多是模板函数，因此 C++ 标准库常被称为标准模板库 (Standard-Template-Library, STL)。</p>
 </blockquote>
@@ -1237,7 +1234,7 @@ terminate called after throwing an instance of 'std::out_of_range'
   what():  map::at
 Aborted (core dumped)
 </code></pre>
-<p>有经验的老手都明白一个道理：<strong>及时奔溃</strong>比<strong>容忍错误</strong>更有利于调试。即 fail-early, fail-loudly<sup id="fnref5:1"><a class="footnote-ref" href="#fn:1">1</a></sup> 原则。</p>
+<p>有经验的老手都明白一个道理：<strong>及时奔溃</strong>比<strong>容忍错误</strong>更有利于调试。即 fail-early, fail-loudly<sup id="fnref4:1"><a class="footnote-ref" href="#fn:1">1</a></sup> 原则。</p>
 <p>例如 JS 和 Lua 的 [] 访问越界不报错而是返回 undefined / nil，导致实际出错的位置在好几十行之后，无法定位到真正出错的位置，这就是为什么后来发明了错误检查更严格的 TS。</p>
 <p>使用 at() 可以帮助你更容易定位到错误，是好事。</p>
 <hr />
@@ -1269,7 +1266,7 @@ V const &amp;at(K const &amp;k) const;       // 第二个版本的 at
 <li>C++ 支持重载，只有当函数名字相同，参数列表也相同时，才会发生冲突。</li>
 <li>返回值类型不影响重载，重载只看参数列表。</li>
 </ul>
-<p>菜鸟教程上对 C++ 重载的解释<sup id="fnref6:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<p>菜鸟教程上对 C++ 重载的解释<sup id="fnref5:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
 <blockquote>
 <p>C++ 允许在同一作用域中的某个函数和运算符指定多个定义，分别称为函数重载和运算符重载。</p>
 <p>重载声明是指一个与之前已经在该作用域内声明过的函数或方法具有相同名称的声明，但是它们的参数列表和定义（实现）不相同。</p>
@@ -1319,7 +1316,7 @@ V const &amp;at(map&lt;K, V&gt; const *this, K const &amp;k);       // 第二个
 <hr />
 <!-- PG39 -->
 
-<p>因为 operator[] 这个成员函数后面没有 const 修饰，因此当 map 修饰为 const 时编译会不通过<sup id="fnref7:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<p>因为 operator[] 这个成员函数后面没有 const 修饰，因此当 map 修饰为 const 时编译会不通过<sup id="fnref6:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
 <pre><code class="language-cpp">const map&lt;string, int&gt; config = {  // 此处如果是带 const &amp; 修饰的函数参数也是同理
     {&quot;timeout&quot;, 985},
     {&quot;delay&quot;, 211},
@@ -1675,7 +1672,7 @@ if (msg.count(&quot;dick&quot;)) {
 
 <h2 id="_19">你知道吗？[] 的妙用</h2>
 <p>除了写入元素需要用 [] 以外，还有一些案例中合理运用 [] 会非常的方便。</p>
-<p>[] 的效果：当所查询的键值不存在时，会调用默认构造函数创建一个元素<sup id="fnref8:1"><a class="footnote-ref" href="#fn:1">1</a></sup>。</p>
+<p>[] 的效果：当所查询的键值不存在时，会调用默认构造函数创建一个元素<sup id="fnref7:1"><a class="footnote-ref" href="#fn:1">1</a></sup>。</p>
 <ul>
 <li>对于 int, float 等数值类型而言，默认值是 0。</li>
 <li>对于指针（包括智能指针）而言，默认值是 nullptr。</li>
@@ -1924,7 +1921,7 @@ print(cppdemangle&lt;std::wstring::value_type&gt;());
 <!-- PG69 -->
 
 <h3 id="map_5">map 真正的元素类型究竟是什么？</h3>
-<p>map 具有三个成员类型<sup id="fnref9:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<p>map 具有三个成员类型<sup id="fnref8:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
 <ul>
 <li>元素类型：<code>value_type</code></li>
 <li>键类型：<code>key_type</code></li>
@@ -2004,7 +2001,7 @@ print(&quot;最高分:&quot;, bestStudent);
     print(&quot;Value:&quot;, it-&gt;second);
 }
 </code></pre>
-<p>运用 C++17 结构化绑定（structured-binding）语法<sup id="fnref10:1"><a class="footnote-ref" href="#fn:1">1</a></sup>直接拆开 pair 类型：</p>
+<p>运用 C++17 结构化绑定（structured-binding）语法<sup id="fnref9:1"><a class="footnote-ref" href="#fn:1">1</a></sup>直接拆开 pair 类型：</p>
 <pre><code class="language-cpp">for (auto it = m.begin(); it != m.end(); ++it) {
     auto [k, v] = *it;
     print(&quot;Key:&quot;, k);
@@ -2020,7 +2017,7 @@ print(&quot;最高分:&quot;, bestStudent);
     print(&quot;Value:&quot;, kv.second);
 }
 </code></pre>
-<p>同时运用 C++17 结构化绑定语法<sup id="fnref11:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<p>同时运用 C++17 结构化绑定语法<sup id="fnref10:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
 <pre><code class="language-cpp">for (auto [k, v]: m) {
     print(&quot;Key:&quot;, k);
     print(&quot;Value:&quot;, v);
@@ -2137,7 +2134,7 @@ print(m);
 <pre><code class="language-cpp">iterator find(K const &amp;k);
 const_iterator find(K const &amp;k) const;
 </code></pre>
-<p>m.find(key) 函数，根据指定的键 key 查找元素<sup id="fnref12:1"><a class="footnote-ref" href="#fn:1">1</a></sup>。</p>
+<p>m.find(key) 函数，根据指定的键 key 查找元素<sup id="fnref11:1"><a class="footnote-ref" href="#fn:1">1</a></sup>。</p>
 <ul>
 <li>成功找到，则返回指向找到元素的迭代器</li>
 <li>找不到，则返回 m.end()</li>
@@ -2366,7 +2363,7 @@ std::optional&lt;typename M::mapped_type&gt; map_get
 <hr />
 <!-- PG93 -->
 
-<p>调用者可以自行运用 optional 的 value_or 函数<sup id="fnref13:1"><a class="footnote-ref" href="#fn:1">1</a></sup>指定找不到时采用的默认值：</p>
+<p>调用者可以自行运用 optional 的 value_or 函数<sup id="fnref12:1"><a class="footnote-ref" href="#fn:1">1</a></sup>指定找不到时采用的默认值：</p>
 <pre><code class="language-cpp">int val = map_get(config, &quot;timeout&quot;).value_or(-1);
 </code></pre>
 <p>如果要实现 at 同样的找不到就自动报错功能，那就改用 value 函数：</p>
@@ -2403,7 +2400,7 @@ for (int i: std::views::iota(0, 6)
 <hr />
 <!-- PG95 -->
 
-<p>现在学习删除元素用的 erase 函数，其原型如下<sup id="fnref14:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<p>现在学习删除元素用的 erase 函数，其原型如下<sup id="fnref13:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
 <pre><code class="language-cpp">size_t erase(K const &amp;key);
 </code></pre>
 <p>指定键值 key，erase 会删除这个键值对应的元素。</p>
@@ -2614,7 +2611,7 @@ print(it-&gt;second);  // 没有失效，打印 985
 <hr />
 <!-- PG108 -->
 
-<p>一边遍历一边删除部分元素（正解<sup id="fnref15:1"><a class="footnote-ref" href="#fn:1">1</a></sup>）</p>
+<p>一边遍历一边删除部分元素（正解<sup id="fnref14:1"><a class="footnote-ref" href="#fn:1">1</a></sup>）</p>
 <pre><code class="language-cpp">map&lt;string, string&gt; msg = {
     {&quot;hello&quot;, &quot;world&quot;},
     {&quot;fucker&quot;, &quot;rust&quot;},
@@ -2659,7 +2656,7 @@ print(msg);
 <!-- PG110 -->
 
 <h3 id="c20-erase_if">C++20 更好的写法：erase_if</h3>
-<p>批量删除符合条件的元素（C++20<sup id="fnref16:1"><a class="footnote-ref" href="#fn:1">1</a></sup>）</p>
+<p>批量删除符合条件的元素（C++20<sup id="fnref15:1"><a class="footnote-ref" href="#fn:1">1</a></sup>）</p>
 <pre><code class="language-cpp">map&lt;string, string&gt; msg = {
     {&quot;hello&quot;, &quot;world&quot;},
     {&quot;fucker&quot;, &quot;rust&quot;},
@@ -2721,7 +2718,7 @@ msg = std::move(newmsg);        // 覆盖旧的 map，用更高效的移动赋�
 <hr />
 <!-- PG113 -->
 
-<p>接下来开始学习如何插入元素，map 的成员 insert 函数原型如下<sup id="fnref17:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<p>接下来开始学习如何插入元素，map 的成员 insert 函数原型如下<sup id="fnref16:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
 <pre><code class="language-cpp">pair&lt;iterator, bool&gt; insert(pair&lt;const K, V&gt; const &amp;kv);
 pair&lt;iterator, bool&gt; insert(pair&lt;const K, V&gt; &amp;&amp;kv);
 </code></pre>
@@ -2825,7 +2822,7 @@ print(m);
 <pre><code class="language-cpp">m.insert({k, v});     // 插入完就忘事了
 auto it = m.find(k);  // 重新遍历第二次，但结果一样
 </code></pre>
-<p>参考 C 编程网<sup id="fnref18:1"><a class="footnote-ref" href="#fn:1">1</a></sup>对 insert 返回值的解释：</p>
+<p>参考 C 编程网<sup id="fnref17:1"><a class="footnote-ref" href="#fn:1">1</a></sup>对 insert 返回值的解释：</p>
 <blockquote>
 <p>当该方法将新键值对成功添加到容器中时，返回的迭代器指向新添加的键值对；</p>
 <p>反之，如果添加失败，该迭代器指向的是容器中和要添加键值对键相同的那个键值对。</p>
@@ -2855,7 +2852,7 @@ if (!success) {  // 如果已经存在，则修改其值+1
 <h3 id="insert_or_assign">insert_or_assign</h3>
 <!-- PG120 -->
 
-<p>在 C++17 中，[] 写入有了个更高效的替代品 insert_or_assign<sup id="fnref19:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<p>在 C++17 中，[] 写入有了个更高效的替代品 insert_or_assign<sup id="fnref18:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
 <pre><code class="language-cpp">pair&lt;iterator, bool&gt; insert_or_assign(K const &amp;k, V v);
 pair&lt;iterator, bool&gt; insert_or_assign(K &amp;&amp;k, V v);
 </code></pre>
@@ -2954,7 +2951,7 @@ print(m);
 <pre><code class="language-cpp">template &lt;class InputIt&gt;
 void insert(InputIt beg, InputIt end);
 </code></pre>
-<p>参数<sup id="fnref20:1"><a class="footnote-ref" href="#fn:1">1</a></sup>是两个迭代器 beg 和 end，组成一个区间，之间是你要插入的数据。</p>
+<p>参数<sup id="fnref19:1"><a class="footnote-ref" href="#fn:1">1</a></sup>是两个迭代器 beg 和 end，组成一个区间，之间是你要插入的数据。</p>
 <p>该区间可以是任何其他容器的 begin() 和 end() 迭代器——那会把该容器中所有的元素都插入到本 map 中去。</p>
 <p>例如，把 vector 中的键值对批量插入 map：</p>
 <pre><code class="language-cpp">vector&lt;pair&lt;string, int&gt;&gt; kvs = {
@@ -3171,7 +3168,7 @@ void assign(InputIt first, InputIt last);
 <h2 id="insert_5">带插入位置提示的 insert</h2>
 <pre><code class="language-cpp">iterator insert(const_iterator pos, pair&lt;K, V&gt; const &amp;kv);
 </code></pre>
-<p>这又是 insert 函数的一个重载版，增加了 pos 参数提示插入位置，官方文档称<sup id="fnref21:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<p>这又是 insert 函数的一个重载版，增加了 pos 参数提示插入位置，官方文档称<sup id="fnref20:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
 <blockquote>
 <p>Inserts value in the position as close as possible to the position just prior to pos.</p>
 <p>把元素（键值对）插入到位于 pos 之前，又离 pos 尽可能近的地方。</p>
@@ -3399,7 +3396,7 @@ pair&lt;iterator, bool&gt; emplace(Args &amp;&amp;...args);
 <!-- PG141 -->
 
 <h3 id="emplace_hint">emplace_hint</h3>
-<p>insert 的宇宙无敌分奴版（不推荐）：emplace_hint<sup id="fnref22:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>insert 的宇宙无敌分奴版（不推荐）：emplace_hint<sup id="fnref21:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
 <pre><code class="language-cpp">template &lt;class ...Args&gt;
 iterator emplace_hint(const_iterator pos, Args &amp;&amp;...args);
 </code></pre>
@@ -3523,7 +3520,7 @@ m.insert({&quot;彭于斌&quot;, Student(&quot;自定义&quot;, 22)});     // ER
 <!-- PG148 -->
 
 <h3 id="_38">什么是聚合初始化</h3>
-<p>无构造函数时，C++11 支持花括号初始化（官方名: 聚合初始化<sup id="fnref23:1"><a class="footnote-ref" href="#fn:1">1</a></sup>），C++20 开始聚合初始化也能用圆括号（所以 emplace / try_emplace 这类函数变得更好用了）：</p>
+<p>无构造函数时，C++11 支持花括号初始化（官方名: 聚合初始化<sup id="fnref22:1"><a class="footnote-ref" href="#fn:1">1</a></sup>），C++20 开始聚合初始化也能用圆括号（所以 emplace / try_emplace 这类函数变得更好用了）：</p>
 <pre><code class="language-cpp">struct Student {
     string sex;
     int age;
@@ -3985,7 +3982,7 @@ print(m.at(&quot;answer&quot;)-&gt;value);  // 42
 </table>
 <h2 id="_47">节点句柄系列接口</h2>
 <h3 id="extract">extract</h3>
-<p>C++17 新增的 extract 函数<sup id="fnref24:1"><a class="footnote-ref" href="#fn:1">1</a></sup> 可以“剥离”出单个节点：</p>
+<p>C++17 新增的 extract 函数<sup id="fnref23:1"><a class="footnote-ref" href="#fn:1">1</a></sup> 可以“剥离”出单个节点：</p>
 <pre><code class="language-cpp">node_type extract(K const &amp;key);
 node_type extract(const_iterator pos);
 </code></pre>
@@ -4086,7 +4083,7 @@ m2.insert(std::move(node));  // 节点句柄类似于 unique_ptr，不可拷贝�
 </code></pre>
 <pre><code class="language-cpp">insert_return_type insert(node_type &amp;&amp;nh);
 </code></pre>
-<p>官方说法是<sup id="fnref25:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
+<p>官方说法是<sup id="fnref24:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：</p>
 <blockquote>
 <p>If nh is empty, inserted is false, position is end(), and node is empty.</p>
 <p>Otherwise if the insertion took place, inserted is true, position points to the inserted element, and node is empty.</p>
@@ -4233,7 +4230,7 @@ m.insert(next_it, move(node)); // 如果键值变动不大，优先尝试在老�
 <!-- PG174 -->
 
 <h3 id="mergemap">merge：map 的合并操作（并集）</h3>
-<p>C++17 新增的 merge 函数<sup id="fnref26:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>C++17 新增的 merge 函数<sup id="fnref25:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
 <pre><code class="language-cpp">template &lt;class Cmp2&gt;
 void merge(map&lt;K, V, Cmp2&gt; &amp;__source);
 </code></pre>
@@ -4747,7 +4744,7 @@ print(cmp(string(&quot;cmake&quot;), &quot;cppcon&quot;));  // &quot;cmake&quot;
 <pre><code class="language-cpp">iterator find(K const &amp;k);
 const_iterator find(K const &amp;k) const;
 </code></pre>
-<p>C++14 新增泛型版的 find 函数<sup id="fnref27:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：任意类型作为参数，只要该类型支持与和键比大小。</p>
+<p>C++14 新增泛型版的 find 函数<sup id="fnref26:1"><a class="footnote-ref" href="#fn:1">1</a></sup>：任意类型作为参数，只要该类型支持与和键比大小。</p>
 <pre><code class="language-cpp">template &lt;class Kt&gt;
 iterator find(Kt &amp;&amp;k);
 template &lt;class Kt&gt;
@@ -5631,7 +5628,7 @@ print(i, j);
 <!-- PG223 -->
 
 <h3 id="rehash">rehash 函数</h3>
-<p>在操作 unordered_map 容器过程（尤其是向容器中添加新键值对）中，一旦当前容器的负载因子超过最大负载因子（默认值为 1.0），该容器就会适当增加桶的数量（通常是翻一倍），并自动执行 rehash() 成员方法，重新调整各个键值对的存储位置（此过程又称“重哈希”），此过程很可能导致之前创建的迭代器失效。<sup id="fnref28:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>在操作 unordered_map 容器过程（尤其是向容器中添加新键值对）中，一旦当前容器的负载因子超过最大负载因子（默认值为 1.0），该容器就会适当增加桶的数量（通常是翻一倍），并自动执行 rehash() 成员方法，重新调整各个键值对的存储位置（此过程又称“重哈希”），此过程很可能导致之前创建的迭代器失效。<sup id="fnref27:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
 <blockquote>
 <p>除了扩容时自动的 rehash，确认数据插入完毕不会再改动时，我们也可以手动调用 rehash() 函数来优化容器中元素的排布，提升性能。</p>
 </blockquote>
@@ -5898,7 +5895,7 @@ unordered_map&lt;array&lt;string, 3&gt;, int&gt; stutab;
 <hr />
 <ol>
 <li id="fn:1">
-<p>http://c.biancheng.net/view/7236.html&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref5:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref6:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref7:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref8:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref9:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref10:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref11:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref12:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref13:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref14:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref15:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref16:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref17:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref18:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref19:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref20:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref21:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref22:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref23:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref24:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref25:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref26:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref27:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref28:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<p>http://c.biancheng.net/view/7236.html&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref5:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref6:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref7:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref8:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref9:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref10:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref11:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref12:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref13:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref14:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref15:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref16:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref17:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref18:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref19:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref20:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref21:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref22:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref23:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref24:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref25:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref26:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref27:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
 <li id="fn:2">
 <p>https://en.cppreference.com/w/cpp/container/node_handle&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:2" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:2" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
