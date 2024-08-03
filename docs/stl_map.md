@@ -2705,6 +2705,7 @@ for (auto it = m.begin(); it != m.end(); ++it /* 进入燃烧中的1号朋友家
 ```cpp
 for (auto it = m.begin(); it != m.end(); ++it) {
     m.erase(it);
+    // it 已经失效！
 }
 ```
 
@@ -2767,8 +2768,6 @@ print(msg);
 
 <!-- PG109 -->
 
-::left::
-
 不奔溃
 
 ```cpp
@@ -2781,8 +2780,6 @@ for (auto it = m.begin(); it != m.end(); ) {
     }
 }
 ```
-
-::right::
 
 奔溃
 
@@ -2889,8 +2886,8 @@ pair<iterator, bool> insert(pair<const K, V> &&kv);
 
 pair 是一个 STL 中常见的模板类型，`pair<K, V>` 有两个成员变量：
 
-- first：V 类型，表示要插入元素的键
-- second：K 类型，表示要插入元素的值
+- first：K 类型，表示要插入元素的键
+- second：V 类型，表示要插入元素的值
 
 我称之为"键值对"。
 
@@ -2970,8 +2967,6 @@ insert 插入和 [] 写入的异同：
 
 例子：
 
-::left::
-
 ```cpp
 map<string, string> m;
 m.insert({"key", "old"});
@@ -2982,8 +2977,6 @@ print(m);
 ```
 {"key": "old"}
 ```
-
-::right::
 
 ```cpp
 map<string, string> m;
@@ -3251,6 +3244,26 @@ print(config);
 
 ```
 {"delay": 211, "timeout": 985}
+```
+```cpp
+vector<pair<string, int>> kvs = {
+    {"timeout", 985},
+    {"delay", 211},
+    {"delay", 666},
+    {"delay", 233},
+    {"timeout", 996},
+};
+map<string, int> config = {
+    {"timeout", 404},
+};
+config.insert(kvs.begin(), kvs.end());
+print(config);
+
+vector<unique_ptr<int>> v;
+```
+
+```
+{"delay": 211, "timeout": 404}
 ```
 
 <!-- PG127 -->
@@ -3825,7 +3838,9 @@ emplace 对于 set，元素类型是比较大的类型时，例如 `set<array<in
 
 ## try_emplace 更好
 
-emplacec 只支持 pair 的就地构造，这有什么用？我们要的是 pair 中值类型的就地构造！这就是 try_emplace 的作用了，他对 key 部分依然是传统的移动，只对 value 部分采用就地构造。
+emplace 只支持 pair 的就地构造，这有什么用？我们要的是 pair 中值类型的就地构造！这就是 try_emplace 的作用了，他对 key 部分依然是传统的移动，只对 value 部分采用就地构造。
+
+> {{ icon.tip }} 这是观察到大多是值类型很大，急需就地构造，而键类型没用多少就地构造的需求。例如 `map<string, array<int, 1000>>`
 
 > {{ icon.detail }} 如果想不用 try_emplace，完全基于 emplace 实现针对值 value 的就地构造需要用到 std::piecewise_construct 和 std::forward_as_tuple，非常麻烦。
 
@@ -3846,6 +3861,18 @@ m.try_emplace(key, arg1, arg2, ...);
 
 ```cpp
 m.insert({key, V(arg1, arg2, ...)});
+```
+
+后面的变长参数也可以完全没有：
+
+```cpp
+m.try_emplace(key);
+```
+
+他等价于调用 V 的默认构造函数：
+
+```cpp
+m.insert({key, V()});
 ```
 
 由于 emplace 实在是憨憨，他变长参数列表就地构造的是 pair，然而 pair 的构造函数正常不就是只有两个参数吗，变长没有用。实际有用的往往是我们希望用变长参数列表就地构造值类型 V，对 K 部分并不关系。因此 C++17 引入了 try_emplace，其键部分保持 `K const &`，值部分采用变长参数列表。
@@ -3874,9 +3901,9 @@ m.try_emplace("key");                 // MyClass()
 m.try_emplace("key", 42);             // MyClass(int)
 m.try_emplace("key", "hell", 3.14f);  // MyClass(const char *, float)
 // 等价于：
-m.insert({"key", {}});                // MyClass()
-m.insert({"key", {42}});              // MyClass(int)
-m.insert({"key", {"hell", 3.14f}});   // MyClass(const char *, float)
+m.insert({"key", MyClass()});                // MyClass()
+m.insert({"key", MyClass(42)});              // MyClass(int)
+m.insert({"key", MyClass("hell", 3.14f)});   // MyClass(const char *, float)
 ```
 
 对于移动开销较大的类型（例如 `array<int, 1000>`），try_emplace 可以避免移动；对于不支持移动构造函数的值类型，就必须使用 try_emplace 了。
@@ -3889,6 +3916,7 @@ m.insert({"key", {"hell", 3.14f}});   // MyClass(const char *, float)
 // 以下两种方式效果等价，只有性能不同
 m.try_emplace(key, arg1, arg2, ...);           // 开销：1次构造函数
 m.insert({key, V(arg1, arg2, ...)});           // 开销：1次构造函数 + 2次移动函数
+m.insert(make_pair(key, V(arg1, arg2, ...)));  // 开销：1次构造函数 + 3次移动函数
 ```
 
 但是由于 try_emplace 是用圆括号帮你调用的构造函数，而不是花括号初始化。
@@ -4422,7 +4450,7 @@ node_type 是指向游离红黑树节点的特殊智能指针，称为节点句�
 ```cpp
 {
     auto node = m.extract("fuck");
-    print(node.key(), node.value());
+    print(node.key(), node.mapped());
 } // node 在此自动销毁
 ```
 
@@ -4430,9 +4458,22 @@ node_type 是指向游离红黑树节点的特殊智能指针，称为节点句�
 
 ```cpp
 auto node = m.extract("fuck");
-nh.key() = "love";
+node.key() = "love";
 m.insert(std::move(node));
 ```
+
+> {{ icon.tip }} 过去，通过迭代器来修改键值是不允许的：
+
+```cpp
+map<string, int> m;
+auto it = m.find("fuck");
+assert(it != m.end());
+// *it 是 pair<const string, int>
+it->first = "love"; // 错误！first 是 const string 类型
+m.insert(*it);
+```
+
+> {{ icon.tip }} 因为直接修改在 map 里面的一个节点的键，会导致排序失效，破坏红黑树的有序。而 extract 取出来的游离态节点，可以修改 `.key()`，不会影响任何红黑树的顺序，他已经不在树里面了。
 
 或者插入到另一个不同的 map 对象（但键和值类型相同）里：
 
@@ -4761,10 +4802,10 @@ static void BM_Insert(benchmark::State &state) {
         auto m1 = m1_init;
         auto m2 = m2_init;
         m2.insert(m1.begin(), m1.end());
-        benchmark::DoNotOptimize(m3);
+        benchmark::DoNotOptimize(m2);
     }
 }
-BENCHMARK(BM_Insert);
+BENCHMARK(BM_Insert)->Arg(1000);
 
 static void BM_Merge(benchmark::State &state) {
     map<string, int> m1_init;
@@ -4780,7 +4821,7 @@ static void BM_Merge(benchmark::State &state) {
         benchmark::DoNotOptimize(m2);
     }
 }
-BENCHMARK(BM_Merge);
+BENCHMARK(BM_Merge)->Arg(1000);
 ```
 
 merge 函数不会产生不必要的内存分配导致内存碎片化，所以更高效。但作为代价，他会清空 m2！
@@ -4944,7 +4985,9 @@ struct Student {
     string sex;
 
     bool operator<(Student const &that) const {
-        return name < that.name || id < that.id || sex < that.sex;
+        return x.name < y.name || (x.name == y.name && (x.id < y.id || (x.id == y.id && x.sex < y.sex)));
+        // 等价于：
+        return std::tie(x.name, x.id, y.sex) < std::tie(x.name, x.id, y.sex); // tuple 实现了正确的 operator< 运算符
     }
 };
 
@@ -4965,7 +5008,7 @@ struct Student {
 template <>
 struct std::less<Student> {  // 用户可以特化标准库中的 trait
     bool operator()(Student const &x, Student const &y) const {
-        return x.name < y.name || x.id < y.id || x.sex < y.sex;
+        return std::tie(x.name, x.id, y.sex) < std::tie(x.name, x.id, y.sex);
     }
 };
 
@@ -4987,10 +5030,7 @@ struct Student {
 
 struct LessStudent {
     bool operator()(Student const &x, Student const &y) const {
-        return x.name < y.name || (x.name == y.name && (x.id < y.id || (x.id == y.id && x.sex < y.sex)));
-        // 等价于：
         return std::tie(x.name, x.id, y.sex) < std::tie(x.name, x.id, y.sex);
-        // 因为 tuple 实现了正确的 operator< 运算符
     }
 };
 
@@ -5096,8 +5136,8 @@ auto ilist = {
     {985, "拳打"},
     {211, "脚踢"},
 };
-map<int, string> m1 = ilist;        // 从小到大排序
-map<int, string, greater<int>> m2 = ilist;
+map<int, string> m1 = ilist;                // 从小到大排序
+map<int, string, greater<int>> m2 = ilist;  // 从大到小排序
 print(m1); // {{211, "脚踢"}, {985, "拳打"}}
 print(m2); // {{985, "拳打"}, {211, "脚踢"}}
 ```
@@ -5345,11 +5385,11 @@ const_iterator find(Kt &&k) const;
 
 map 的比较器必须是“透明(transparent)”的，也就是 `less<void>` 这种。否则泛型版的 `find(Kt &&)` 不会参与重载，也就是只能调用传统的 `find(K const &)`。
 
-但是 `map<K, V>` 默认的比较器是 `less<V>`，他是不透明的，比较的两边必须都是 `V` 类型。如果其中一边不是的话，就得先隐式转换为 `V` 才能用。
+但是 `map<K, V>` 默认的比较器是 `less<K>`，他是不透明的，比较的两边必须都是 `K` 类型。如果其中一边不是的话，就得先隐式转换为 `K` 才能用。
 
 这是早期 C++98 设计的失败，当时他们没想到 `find` 还可以接受 `string_view` 和 `const char *` 这类可以和 `string` 比较，但构造会廉价得多的弱引用类型。
 
-只好后来引入了透明比较器企图，然而为了历史兼容，`map<K, V>` 默认仍然是 `map<K, V, less<K>>`。
+只好后来引入了透明比较器企图力挽狂澜，然而为了历史兼容，`map<K, V>` 默认仍然是 `map<K, V, less<K>>`。
 
 如果我们同学的编译器支持 C++14，建议全部改用这种写法 `map<K, V, less<>>`，从而用上更高效的 find、at、erase、count、contains 等需要按键查找元素的函数。
 
@@ -5576,6 +5616,13 @@ multimap 排序的好处是：
 ### 查询某个键对应的多个值
 
 因为 multimap 中，一个键不再对于单个值了；所以 multimap 没有 `[]` 和 `at` 了，也没有 `insert_or_assign`（反正 `insert` 永远不会发生键冲突！）
+
+```cpp
+pair<iterator, iterator> equal_range(K const &k);
+
+template <class Kt>
+pair<iterator, iterator> equal_range(Kt &&k);
+```
 
 要查询 multimap 中的一个键对应了哪些值，可以用 `equal_range` 获取一前一后两个迭代器，他们形成一个区间。这个区间内所有的元素都是同样的键。
 
