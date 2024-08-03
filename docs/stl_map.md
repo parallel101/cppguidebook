@@ -4,8 +4,6 @@
 
 让高性能数据结构惠及每一人
 
-https://github.com/parallel101/course/tree/master/slides/stl_map/experiment/
-
 [TOC]
 
 <!-- PG2 -->
@@ -21,8 +19,6 @@ https://github.com/parallel101/course/tree/master/slides/stl_map/experiment/
 C++ 标准库又称 STL，包含了大量程序员常用的算法和数据结构，是 Bjarne Stroustrup 送给所有 C++ 程序员的一把瑞士军刀，然而发现很多童鞋并没有完全用好他，反而还被其复杂性误伤了。
 
 如果你也对标准库一知半解，需要系统学习的话，那么本课程适合你。小彭老师将运用他特有的幽默答辩比喻，全面介绍各 STL 容器的所有用法。结合一系列实战案例，剖析常见坑点，使用技巧等。对比不同写法的性能与可读性，还会与 Python 语言相互类比方便记忆，科普的部分冷知识可以作为大厂面试加分项。
-
-::right::
 
 ![](img/stl/maijiaxiu.jpg){width="320"}
 
@@ -95,23 +91,19 @@ C++ 标准库又称 STL，包含了大量程序员常用的算法和数据结构
 
 🥰🥰🥰
 
-本系列课件和源码均公布在：https://github.com/parallel101/course
+本期实验源码均公布在：https://github.com/parallel101/course/tree/master/slides/stl_map/experiment/
 
 例如本期的课件位于 `course/stlseries/stl_map/slides.md`。
 
-课件基于 Slidev[^1] 开发，Markdown 格式书写，在浏览器中显示，在本地运行课件需要 Node.js：
+课件基于 Mkdocs 开发，Markdown 格式书写，在浏览器中显示，在本地运行课件需要 Mkdocs 环境：
 
-- 运行命令 `npm install` 即可自动安装 Slidev
-- 运行命令 `npm run dev` 即可运行 Slidev 服务
-- 浏览器访问 http://localhost:3030 即可看到课件
+- 运行命令 `pip install -r requirements.txt` 即可自动安装 Mkdocs 等所需依赖
+- 运行命令 `mkdocs serve` 即可运行 Mkdocs 服务
+- 浏览器访问 http://127.0.0.1:8000 即可看到课件
 
-如果报错找不到 `slidev` 命令，可以试试 `export PATH="$PWD/node_modules/.bin:$PATH"`。
+如果不想自己配置 Mkdocs 也可以直接以文本文件格式打开 docs/stl_map.md 浏览课件。
 
-如果不想自己配置 Node.js 也可以直接以文本文件格式打开 slides.md 浏览课件。
-
-Slidev 服务运行时，你对 slides.md 的所有修改会立刻实时显现在浏览器中。
-
-[^1]: https://sli.dev/
+Mkdocs 服务运行时，你对 docs/stl_map.md 的所有修改会立刻实时显现在浏览器中。
 
 ---
 
@@ -137,7 +129,7 @@ Slidev 服务运行时，你对 slides.md 的所有修改会立刻实时显现�
 
 <!-- PG8 -->
 
-附赠了一些实用头文件，同鞋们可以下载来研究，或者在自己的项目里随意运用。
+在实验源码仓库中，附赠了一些实用头文件，同鞋们可以下载来研究，或者在自己的项目里随意运用。
 
 <font size="3px">
 
