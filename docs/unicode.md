@@ -588,7 +588,7 @@ GBK 在保持 GB2312 部分不变的基础上，额外追加了 21886 个汉字�
 
 #### GB18030
 
-于 2000 年 3 月发布的汉字编码国家标准，完全兼容 GBK 诶 GB2312。
+于 2000 年 3 月发布的汉字编码国家标准，完全兼容 GBK 和 GB2312。
 
 采用多字节编码，每个字符可以编码为 1 字节、2 字节、或 4 字节。
 
@@ -628,7 +628,7 @@ GB18030 编码空间巨大，不仅囊括了中日韩汉字，所有 Unicode 中
 |Linux `char`|1 字节|取决于 `$LC_ALL`|"hello"|
 |Windows `char`|1 字节|取决于系统区域设置|"hello"|
 |Linux `wchar_t`|4 字节|UTF-32|L"hello"|
-|Windows `wchar_t`|2 字节|UTF-16|L"hello"|
+|Windows `wchar_t`|2 字节|UTF-16LE|L"hello"|
 |`char8_t`|1 字节|UTF-8|u8"hello"|
 |`char16_t`|2 字节|UTF-16|u"hello"|
 |`char32_t`|4 字节|UTF-32|U"hello"|
