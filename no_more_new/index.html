@@ -220,6 +220,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-bs-level="2"><a href="#placement-new" class="nav-link">placement new</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -347,8 +351,10 @@ auto max = find_max(mem.data(), mem.size());
 <pre><code class="language-cpp">auto foo = make_shared&lt;Foo&gt;();
 </code></pre>
 <blockquote>
-<p>从 C++14 开始，内存安全的现代 C++ 程序中就不会出现任何显式的 new 了，哪怕是抱在 shared_ptr 或 unique_ptr 内的也不行。（除了最上面说的 3 种特殊情况）</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 有趣的是，make_shared 在 C++11 就引入了，make_unique 却直到 C++14 才引入。</p>
 </blockquote>
+<p>从 C++14 开始，内存安全的现代 C++ 程序中就不会出现任何显式的 new 了，哪怕是包在 shared_ptr 或 unique_ptr 内的也不行。（除了最上面说的 3 种特殊情况）</p>
+<h3 id="23">贴士 2.3</h3>
 <p>如果你需要调用的 C 语言接口还需要原始指针的话，用 <code>.get()</code> 可以从智能指针中获取原始指针。建议只在和 C 语言打交道时 <code>.get()</code>，其余时间一律 shared_ptr 保证安全。</p>
 <pre><code class="language-cpp">extern &quot;C&quot; void some_c_function(Foo *foo);
 
@@ -489,7 +495,27 @@ void t1() {
 <li>你会两个线程同时写入同一个原始指针吗？同样地，如果你原始指针不会犯错，shared_ptr 为什么会犯错？</li>
 <li>你可以两个线程同时读取同一个全局的原始指针变量，同样地，shared_ptr 也可以，有任何区别吗？</li>
 </ul>
-<p>反正，shared_ptr 内部专门为线程安全做过设计，你不用去操心。</p></div>
+<p>反正，shared_ptr 内部专门为线程安全做过设计，你不用去操心。</p>
+<h2 id="placement-new">placement new</h2>
+<p>placement new 和 placement delete 也可以用 std::construct_at 和 std::destroy_at 代替：</p>
+<pre><code class="language-cpp">#include &lt;new&gt;
+
+struct Foo {
+    explicit Foo(int age) { ... }
+    Foo(Foo &amp;&amp;) = delete;
+    ~Foo() { ... }
+};
+
+void func() {
+    alignas(Foo) unsigned char buffer[sizeof(Foo)];
+    Foo *foo = std::construct_at(reinterpret_cast&lt;Foo*&gt;(buffer), 42, &quot;hello&quot;); // 等价于 new (buffer) Foo(42);
+    ...
+    std::destroy_at(foo); // 等价于 foo-&gt;~Foo();
+}
+</code></pre>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 在<a href="../cpp_memory/">内存模型专题</a>中有进一步的详解。</p>
+</blockquote></div>
             </div>
         </div>
 
