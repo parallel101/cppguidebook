@@ -154,7 +154,11 @@ shared_ptr<Foo> foo(new Foo());
 auto foo = make_shared<Foo>();
 ```
 
-> 从 C++14 开始，内存安全的现代 C++ 程序中就不会出现任何显式的 new 了，哪怕是抱在 shared_ptr 或 unique_ptr 内的也不行。（除了最上面说的 3 种特殊情况）
+> {{ icon.detail }} 有趣的是，make_shared 在 C++11 就引入了，make_unique 却直到 C++14 才引入。
+
+从 C++14 开始，内存安全的现代 C++ 程序中就不会出现任何显式的 new 了，哪怕是包在 shared_ptr 或 unique_ptr 内的也不行。（除了最上面说的 3 种特殊情况）
+
+### 贴士 2.3
 
 如果你需要调用的 C 语言接口还需要原始指针的话，用 `.get()` 可以从智能指针中获取原始指针。建议只在和 C 语言打交道时 `.get()`，其余时间一律 shared_ptr 保证安全。
 
@@ -328,3 +332,26 @@ void t1() {
 - 你可以两个线程同时读取同一个全局的原始指针变量，同样地，shared_ptr 也可以，有任何区别吗？
 
 反正，shared_ptr 内部专门为线程安全做过设计，你不用去操心。
+
+## placement new
+
+placement new 和 placement delete 也可以用 std::construct_at 和 std::destroy_at 代替：
+
+```cpp
+#include <new>
+
+struct Foo {
+    explicit Foo(int age) { ... }
+    Foo(Foo &&) = delete;
+    ~Foo() { ... }
+};
+
+void func() {
+    alignas(Foo) unsigned char buffer[sizeof(Foo)];
+    Foo *foo = std::construct_at(reinterpret_cast<Foo*>(buffer), 42, "hello"); // 等价于 new (buffer) Foo(42);
+    ...
+    std::destroy_at(foo); // 等价于 foo->~Foo();
+}
+```
+
+> {{ icon.detail }} 在[内存模型专题](cpp_memory.md)中有进一步的详解。
