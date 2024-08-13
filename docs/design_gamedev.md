@@ -77,8 +77,10 @@ private:
     Game() { ... }
 
 public:
-    inline static Game instance;  // 如果定义在头文件中，需要 inline！
+    static Game instance;  // 非定义声明，因为 Game 在此处为不完整类型
 };
+
+inline Game Game::instance;  // 如果定义在头文件中，需要 inline！
 
 Game::instance.updatePlayers();
 ```
