@@ -98,12 +98,12 @@ void try_call_foo(T &t) {
 ```cpp
 template <class T, class = void>
 struct has_foo {
-    inline constexpr bool value = false;
+    static constexpr bool value = false;
 };
 
 template <class T>
 struct has_foo<T, std::void_t<decltype(std::declval<T>().foo())>> {
-    inline constexpr bool value = true;
+    static constexpr bool value = true;
 };
 
 template <class T>
