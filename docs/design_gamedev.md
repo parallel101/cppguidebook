@@ -77,7 +77,8 @@ private:
     Game() { ... }
 
 public:
-    static Game instance;  // 非定义声明，因为 Game 在此处为不完整类型
+    // inline static Game instance;  // 虽然很爽，但不能这样写，因为 Game 在他的 }; 结束前都是不完整类型
+    static Game instance;  // 非定义声明，就好比全局变量的 extern Game instance 一样，不需要是完整类型
 };
 
 inline Game Game::instance;  // 如果定义在头文件中，需要 inline！
