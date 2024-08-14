@@ -345,7 +345,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年08月14日 11:48:21 (UTC+08:00)</p>
+<p>更新时间：2024年08月14日 11:49:15 (UTC+08:00)</p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是温馨提示</p>
@@ -393,12 +393,12 @@ void try_call_foo(T &amp;t) {
 <p>但仅仅是回到 C++17，没有 <code>requires</code> 语法，我们只能自己定义一个 trait 类，并运用烦人的 SFINAE 小技巧，检测表达式是否的合法，又臭又长。</p>
 <pre><code class="language-cpp">template &lt;class T, class = void&gt;
 struct has_foo {
-    inline constexpr bool value = false;
+    static constexpr bool value = false;
 };
 
 template &lt;class T&gt;
 struct has_foo&lt;T, std::void_t&lt;decltype(std::declval&lt;T&gt;().foo())&gt;&gt; {
-    inline constexpr bool value = true;
+    static constexpr bool value = true;
 };
 
 template &lt;class T&gt;
