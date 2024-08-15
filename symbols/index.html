@@ -8,7 +8,7 @@
         <meta name="author" content="小彭老师">
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>重新认识声明与定义 - ✝️小彭大典✝️</title>
+        <title>重新认识声明与定义（未完工） - ✝️小彭大典✝️</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/brands.min.css" rel="stylesheet">
@@ -68,7 +68,7 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active" aria-current="page">重新认识声明与定义</a>
+    <a href="./" class="dropdown-item active" aria-current="page">重新认识声明与定义（未完工）</a>
 </li>
                                     
 <li>
@@ -206,8 +206,24 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">重新认识声明与定义</a>
+            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">重新认识声明与定义（未完工）</a>
               <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#_2" class="nav-link">我们要牢记白指导说的道理</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_3" class="nav-link">多文件编译的必要性</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#tu" class="nav-link">翻译单元 (TU)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#linkage" class="nav-link">符号的链接类型 (linkage)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -215,15 +231,74 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="_1">重新认识声明与定义</h1>
+<h1 id="_1">重新认识声明与定义（未完工）</h1>
+<div class="toc">
+<ul>
+<li><a href="#_1">重新认识声明与定义（未完工）</a><ul>
+<li><a href="#_2">我们要牢记白指导说的道理</a></li>
+<li><a href="#_3">多文件编译的必要性</a></li>
+<li><a href="#tu">翻译单元 (TU)</a></li>
+<li><a href="#linkage">符号的链接类型 (linkage)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="_2">我们要牢记白指导说的道理</h2>
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> mq 白在<a href="https://github.com/parallel101/cppguidebook/pull/23">川上</a>曰：</p>
+<blockquote>
 <p>非定义声明，因为 Game 在此处为不完整类型</p>
+</blockquote>
 <p>我能明白其意思，定义一定是声明，声明却不一定是定义。所以用了：“非定义声明”这个词语，很专业的措辞。</p>
 <p>不过我觉得大多数普通开发者并不够清楚这一点，看到这段注释同样会感到疑惑。</p>
 <p>在他们眼里声明和定义是两种东西，此处如果直接用声明它们可能就不会有理解问题了。例如：“只是声明，不是定义”之类的措辞。</p>
 <p>或许我们应该考虑在保证专业以及严谨的情况下，稍微补充解释一下“非定义声明”这个用词。</p>
-</blockquote></div>
+</blockquote>
+<h2 id="_3">多文件编译的必要性</h2>
+<h2 id="tu">翻译单元 (TU)</h2>
+<h2 id="linkage">符号的链接类型 (linkage)</h2>
+<p>函数和变量，在对外的可见性这方面，有以下几种类型：</p>
+<ul>
+<li>外部链接 (ODR external linkage)：对其他翻译单元可见</li>
+<li>共享链接 (non-ODR external linkage)</li>
+<li>内部链接 (internal linkage)</li>
+<li>无链接 (no linkage)</li>
+</ul>
+<p>函数和变量的可见性这一属性，被 C++ 官方称为链接（linkage），是因为符号的可见性处理通常是链接器（ld）负责的，不同类型链接（linkage）的效果，在链接（link）的时候才会生效。</p>
+<p>定义在全局（名字空间）中的情况：</p>
+<pre><code class="language-cpp">int i;                  // 变量声明并定义为“外部链接”
+int f(int x);           // 函数声明为“外部链接”
+int f(int x) {}         // 函数声明并定义为“外部链接”
+
+extern int i;           // 变量声明为“外部链接”
+extern int f(int x);    // 函数声明为“外部链接”
+extern int f(int x) {}  // 函数声明并定义为“外部链接”
+
+inline int i;           // 变量声明并定义为“共享链接”
+inline int f(int x);    // 函数声明为“共享链接”
+inline int f(int x) {}  // 函数声明并定义为“共享链接”
+
+static int i;           // 变量声明并定义为“内部链接”
+static int f(int x);    // 函数声明为“内部链接”
+static int f(int x) {}  // 函数声明并定义为“内部链接”
+</code></pre>
+<p>定义在类（class）中的情况：</p>
+<pre><code class="language-cpp">struct Class {
+
+int i;                  // 变量声明并定义为“无链接”
+int f(int x);           // 函数声明为“外部链接”
+int f(int x) {}         // 函数声明并定义为“共享链接”
+
+inline static int i;           // 变量声明并定义为“共享链接”
+inline static int f(int x);    // 函数声明为“共享链接”
+inline static int f(int x) {}  // 函数声明并定义为“共享链接”
+
+static int i;           // 变量声明并定义为“外部链接”
+static int f(int x);    // 函数声明为“外部链接”
+static int f(int x) {}  // 函数声明并定义为“外部链接”
+
+};
+</code></pre></div>
             </div>
         </div>
 

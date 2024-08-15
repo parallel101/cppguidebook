@@ -68,7 +68,7 @@
 </li>
                                     
 <li>
-    <a href="../symbols/" class="dropdown-item">重新认识声明与定义</a>
+    <a href="../symbols/" class="dropdown-item">重新认识声明与定义（未完工）</a>
 </li>
                                     
 <li>
@@ -208,15 +208,19 @@
             
             <li class="nav-item" data-bs-level="1"><a href="#llvm" class="nav-link">小彭老师带你学 LLVM</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#llvm_1" class="nav-link">为什么选择 LLVM</a>
+            <li class="nav-item" data-bs-level="2"><a href="#llvm_1" class="nav-link">LLVM 介绍</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#llvm_4" class="nav-link">LLVM 开发环境搭建</a>
+            <li class="nav-item" data-bs-level="2"><a href="#llvm_2" class="nav-link">为什么选择 LLVM</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_5" class="nav-link">基本概念速览</a>
+            <li class="nav-item" data-bs-level="2"><a href="#llvm_5" class="nav-link">LLVM 开发环境搭建</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_6" class="nav-link">基本概念速览</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -228,12 +232,58 @@
                     <div class="col-md-9" role="main">
 
 <h1 id="llvm">小彭老师带你学 LLVM</h1>
+<div class="toc">
+<ul>
+<li><a href="#llvm">小彭老师带你学 LLVM</a><ul>
+<li><a href="#llvm_1">LLVM 介绍</a><ul>
+<li><a href="#_1">参考资料</a></li>
+</ul>
+</li>
+<li><a href="#llvm_2">为什么选择 LLVM</a><ul>
+<li><a href="#llvm_3">LLVM 上下游全家桶的宏伟图景</a></li>
+<li><a href="#llvm_4">学习 LLVM 前的准备</a></li>
+</ul>
+</li>
+<li><a href="#llvm_5">LLVM 开发环境搭建</a><ul>
+<li><a href="#_2">环境准备</a><ul>
+<li><a href="#linuxmacos">Linux/MacOS 用户</a></li>
+<li><a href="#windows">Windows 用户</a></li>
+</ul>
+</li>
+<li><a href="#_3">项目目录结构</a></li>
+<li><a href="#_4">开始构建</a></li>
+<li><a href="#_5">运行试试</a></li>
+</ul>
+</li>
+<li><a href="#_6">基本概念速览</a><ul>
+<li><a href="#_7">编译器的前、中、后端</a><ul>
+<li><a href="#ast">语法树（AST）</a></li>
+<li><a href="#ir">中间表示码（IR）</a><ul>
+<li><a href="#llvm-ir">轶事：LLVM IR 为什么不跨平台</a></li>
+</ul>
+</li>
+<li><a href="#ir_1">IR 的二进制压缩版：字节码</a></li>
+<li><a href="#asm">汇编语言（ASM）</a></li>
+<li><a href="#_8">汇编语言的终局：机器码</a></li>
+</ul>
+</li>
+<li><a href="#llvm-ir_1">LLVM IR</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="llvm_1">LLVM 介绍</h2>
 <p>LLVM 是一个跨平台的编译器基础设施，它不是一个单一的编译器，而是一系列工具和库的集合，其提供丰富的数据结构 (ADT) 和中间表示层 (IR)，是实现编译器的最佳框架。</p>
 <p>LLVM 是编译器的中后端，中端负责优化，后端负责最终汇编代码的生成，他并不在乎调用他的什么高级语言，只负责把抽象的代数运算，控制流，基本块，转化为计算机硬件可以直接执行的机器码。</p>
 <p>Clang 只是 LLVM 项目中的一个前端，其负责编译 C/C++ 这类语言，还有用于编译 Fotran 的 Flang 前端。除此之外，诸如 Rust、Swift 之类的语言，也都在使用 LLVM 做后端。</p>
-<p>举个例子，析构函数在 <code>}</code> 处调用，这是 C++ 的语法规则，在 Clang 前端中处理。当 Clang 完成 C++ 语法规则，语义规则的解析后，就会调用 LLVM，创建一种叫中间表示码（IR）的东西，IR 介于高级语言和汇编语言之间。IR 是为了统一来自不同语言，去往不同的一层抽象层。一是便于前端的统一实现，Clang 这样的前端只需要生成抽象的数学运算，控制流这些 IR 预先定义好的指令就可以了，不用去专门为每个硬件设计一套生成汇编的引擎；二是 LLVM IR 采用了对优化更友好的 SSA 格式，而不是糟糕的寄存器格式，大大方便了优化，等送到后端的末尾时才会开始将 IR 翻译为汇编代码，最终变成可执行的机器码。</p>
 <blockquote>
-<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 如果没有 IR 会怎样？假设有 <span class="arithmatex"><span class="MathJax_Preview">M</span><script type="math/tex">M</script></span> 种语言，<span class="arithmatex"><span class="MathJax_Preview">N</span><script type="math/tex">N</script></span> 种硬件，就需要重复实现 <span class="arithmatex"><span class="MathJax_Preview">M \times N</span><script type="math/tex">M \times N</script></span> 个编译器！而 IR 作为中间表示层，令语言和硬件的具体细节解耦了，从而只需要写 <span class="arithmatex"><span class="MathJax_Preview">M + N</span><script type="math/tex">M + N</script></span> 份代码就可以：语言的开发者只需要考虑语法如何变成数学运算和控制流，硬件厂商只需要考虑如何把数学和跳转指令变成自己特定的机器码。因此，不论是 LLVM/Clang 还是 GCC 家族，跨平台编译器内部都无一例外采用了 IR 做中间表示。</p>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 举个例子，析构函数在 <code>}</code> 处调用，这是 C++ 的语法规则，在 Clang 前端中处理。当 Clang 完成 C++ 语法规则，语义规则的解析后，就会调用 LLVM，创建一种叫中间表示码（IR）的东西，IR 介于高级语言和汇编语言之间。IR 是为了统一来自不同语言，去往不同的一层抽象层。一是便于前端的统一实现，Clang 这样的前端只需要生成抽象的数学运算，控制流这些 IR 预先定义好的指令就可以了，不用去专门为每个硬件设计一套生成汇编的引擎；二是 LLVM IR 采用了对优化更友好的 SSA 格式，而不是糟糕的寄存器格式，大大方便了优化，等送到后端的末尾时才会开始将 IR 翻译为汇编代码，最终变成可执行的机器码。</p>
+</blockquote>
+<p>如果没有 IR 会怎样？假设有 <span class="arithmatex"><span class="MathJax_Preview">M</span><script type="math/tex">M</script></span> 种语言，<span class="arithmatex"><span class="MathJax_Preview">N</span><script type="math/tex">N</script></span> 种硬件，就需要重复实现 <span class="arithmatex"><span class="MathJax_Preview">M \times N</span><script type="math/tex">M \times N</script></span> 个编译器！而 IR 作为中间表示层，令语言和硬件的具体细节解耦了，从而只需要写 <span class="arithmatex"><span class="MathJax_Preview">M + N</span><script type="math/tex">M + N</script></span> 份代码就可以：语言的开发者只需要考虑语法如何变成数学运算和控制流，硬件厂商只需要考虑如何把数学和跳转指令变成自己特定的机器码。因此，不论是 LLVM/Clang 还是 GCC 家族，跨平台编译器内部都无一例外采用了 IR 做中间表示。</p>
+<blockquote>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 有了统一的抽象 IR 以后，不管你是 C++ 析构函数还是 C 语言普通函数，进了 IR 以后都是一样的函数调用，减轻了编译器中后端开发者的心智负担。要开发一种新语言，只管解析完语法生成 IR 输入 LLVM，他会替你包办好优化和汇编的事。</p>
 </blockquote>
 <h3 id="_1">参考资料</h3>
 <ul>
@@ -242,7 +292,7 @@
 <li>LLVM 源码级文档：https://llvm.org/doxygen/</li>
 <li>《Learn LLVM 17》：https://github.com/xiaoweiChen/Learn-LLVM-17</li>
 </ul>
-<h2 id="llvm_1">为什么选择 LLVM</h2>
+<h2 id="llvm_2">为什么选择 LLVM</h2>
 <ul>
 <li>如果你对 C++ 语言的底层实现感兴趣，编译器是绕不过的一环。可御三家中，MSVC 是闭源的无法学习，GCC 代码高度耦合，且很多原始的 C 语言“古神低语”混杂其中，可读性较差。Clang 是一个跨平台的 C++ 编译器前端，而 LLVM 正是他的后端，高度模块化的设计，代码质量优秀，且很容易加入自己的新模块，最适合编译器新人上手学习。而除去 Clang 负责的 C++ 语法解析后，LLVM 后端占据了半壁江山。你想不想探究编译器是如何利用未定义行为优化的？想不想知道为什么有时 C++ 编译器出现异常的行为？想不想了解怎样才能写出对编译器友好的代码，方便 Clang 和 LLVM 自动帮你优化？那就来学习 LLVM 吧！</li>
 <li>前端和后端众多，无论你是打算开发一种新型语言，还是自研一种新的 CPU 架构，考虑支持 LLVM 作为中端几乎是你唯一的选择。</li>
@@ -257,12 +307,12 @@
 <blockquote>
 <p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 为什么有了 Clang 还要 nvcc？虽然 Clang 也能支持 CUDA，但 Clang 只能把 CUDA 编译成所有 NVIDIA 显卡都能通用的 PTX，无法生成专门对不同显卡型号特化 SASS 汇编（需要调用 NVIDIA CUDA Toolkit 提供的 ptxas 才能转换）。而 nvcc 的前端除了是自己的，后端同样是调用 LLVM 生成 PTX 汇编，只是 NVIDIA 对 LLVM 做了一些闭源的魔改（其实早期 nvcc 的后端是基于 NVIDIA 自研的 NVVM 后端，但是发现效果不好，最近正在逐步切换到 LLVM 后端，毕竟是老牌项目）。如果对 C++ 新特性有追求，可以用 Clang 前端 + LLVM 生成 PTX + ptxas 汇编的组合，实现自由世界的 CUDA 工作流（之后介绍）。但是因为 ptxas，以及 CUDA 其他运行时库的需要，Clang CUDA 依然需要安装 CUDA Toolkit 才能正常运行，且对 CUDA 版本要求比较严格，可能需要较多的配置功夫。</p>
 </blockquote>
-<h3 id="llvm_2">LLVM 上下游全家桶的宏伟图景</h3>
+<h3 id="llvm_3">LLVM 上下游全家桶的宏伟图景</h3>
 <p>LLVM 项目不仅包含了 LLVM 本体，还有一系列围绕 LLVM 开发的上下游工具。例如 Clang 编译器就是 LLVM 项目中的一个子项目，他是一个 C/C++/CUDA/OpenCL/SyCL/Objective-C 等 C 类语言的前端，只负责完成语法的解析，实际编译和二进制生成交给 LLVM 本体（中后端）来处理。通常说的 LLVM 指的是 LLVM 本体，其是一个通用的编译器基建，仅包含中端（各种优化）和后端（生成 x86/ARM/MIPS 等硬件的指令码）。Clang 解析 .cpp 文件后产生 IR，调用 LLVM 编译生成的 .o 对象文件，又会被输入到同属 LLVM 项目的一个子项目：LLD 链接器中，链接得到最终的单个可执行文件（.exe）或动态链接库（.dll），LLD 还可以开启链接时优化，这又会用到 BOLT 这个链接时优化器，对生成的单个二进制做进一步汇编级别的优化。不仅如此，著名的 C++ 标准库实现之一，libc++，也是 LLVM 项目的一部分，相比 GCC 家族的 libstdc++ 更简单，更适合学习。不仅如此，还有并行的 STL 实现 pstl，OpenCL 编译器 libclc 等……应有尽有，是编译器开发者的天堂。</p>
 <p>Clang 编译 C++ 程序的整个过程：</p>
 <p><strong>Clang 前端解析 C++ 语法 -&gt; LLVM 中端优化 -&gt; LLVM 后端生成指令码 -&gt; LLD 链接 -&gt; BOLT 链接后优化</strong></p>
 <p>而 GCC 就没有这么模块化了，虽然 GCC 内部同样是有前端和中端 IR，但是整个就是糊在一个 GCC 可执行文件里，难以重构，积重难反，也难以跨平台（MinGW 还是民间自己移植过去的，并非 GCC 官方项目）。和 Clang 能轻易作为 libclang 和 libLLVM 库发布相比，高下立判。MSVC 更是不必多说，连源码都开放，让人怎么学习和魔改啊？</p>
-<h3 id="llvm_3">学习 LLVM 前的准备</h3>
+<h3 id="llvm_4">学习 LLVM 前的准备</h3>
 <p>要学习 LLVM，肯定不能纸上谈兵。LLVM 是开源软件，最好是自己下载一个 LLVM 全家桶源码，然后自己从源码构建。</p>
 <p>注意：我们最好是从源码构建 LLVM 和 Clang，方便我们动手修改其源码，添加模块，查看效果。下载二进制发布版 LLVM 或 Clang 的话，虽然同样可以使用所有的命令行工具，就只能对着 IR 一通分析盲猜了。</p>
 <p>虽然 LLVM 几乎是无依赖的，只需要 CMake 和编译器就能构建，但依然推荐使用 Linux 系统进行实验，以获得和小彭老师同样的开发体验。Windows 用户建议使用 Virtual Studio 或 CLion 等强大 IDE 帮助阅读理解源码；Linux 用户建议安装 <a href="https://github.com/archibate/vimrc">小彭老师 vimrc</a>；或者如果你是远程 Linux，可以试试看 VSCode 的远程 SSH 连接插件；CLion 似乎也有远程插件，只不过需要在远程安装好客户端。</p>
@@ -270,12 +320,14 @@
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 强大的 IDE 和编辑器对学习任何大型项目都是必不可少的，特别是跳转到定义，以及返回这两个操作，是使用频率最高的，在源码之间的快速跳转将大大有助于快速。</p>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 如果实在没有条件自己构建 LLVM 源码，或者 IDE 比较拉胯：可以去 LLVM 的在线源码级文档（使用 Doxygen 生成）看看。其不仅提供了 LLVM 中所有类和函数的详尽文档，参数类型，用法说明等；还提供了每个函数的所在文件和行号信息，点击类型或函数名的超链接，就可以在源码和文档之间来回跳转。还能看到哪里引用了这个函数，还能显示类的继承关系图，非常适合上班路上没法打开电脑时偷学 LLVM 源码用。例如，<code>llvm::VectorType</code> 这个类的文档：https://llvm.org/doxygen/classllvm_1_1VectorType.html</p>
 </blockquote>
-<h2 id="llvm_4">LLVM 开发环境搭建</h2>
+<h2 id="llvm_5">LLVM 开发环境搭建</h2>
 <h3 id="_2">环境准备</h3>
 <p>LLVM（和 Clang）的构建依赖项几乎没有，只需要安装了编译器和 CMake 就行，非常的现代。</p>
 <h4 id="linuxmacos">Linux/MacOS 用户</h4>
 <p>首先安装 Git、CMake、Ninja、GCC（或 Clang）。</p>
-<p>其中 Ninja 可以不安装，只是因为 Ninja 构建速度比 Make 快，特别是当文件非常多，而你改动非常少时。所以大型项目，通常会尽量给 CMake 指定 <code>-G Ninja</code> 选项，让其使用 Ninja 后端构建。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 其中 Ninja 可以不安装，只是因为 Ninja 构建速度比 Make 快，特别是当文件非常多，而你改动非常少时。而且 Ninja 默认就开启多核并行构建，所以大型项目通常会尽量给 CMake 指定 <code>-G Ninja</code> 选项，让其使用更高效的 Ninja 后端构建。</p>
+</blockquote>
 <p>Arch Linux:</p>
 <pre><code class="language-bash">sudo pacman -S git cmake ninja gcc
 </code></pre>
@@ -333,11 +385,15 @@ compiler-rt         libunwind            polly
 <pre><code class="language-bash">cd llvm-project
 bash build.sh
 </code></pre>
-<p>注意，<code>build.sh</code> 的内容等价于：</p>
+<p><code>build.sh</code> 脚本的内容等价于：</p>
 <pre><code class="language-bash">cmake -Sllvm -Bbuild -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS=&quot;clang;clang-tools-extra&quot; -GNinja
 ninja -Cbuild
 </code></pre>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 你在命令行手动输入这两条命令也是等价的，<code>build.sh</code> 只是为了方便。</p>
+</blockquote>
 <p>此处 <code>-S llvm</code> 选项表示指定源码路径为根目录下的 <code>llvm</code> 子项目文件夹，和 <code>cd llvm &amp;&amp; cmake -B build</code> 等价，但是不用切换目录。</p>
+<p><code>-G Ninja</code> 表示使用 Ninja 后端，如果你没有 Ninja，可以去掉该选项，CMake 将会采用默认的 Makefile 后端（更慢）。</p>
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 如果你是 Wendous 受害者，请自行用鼠标点击序列在 VS2022 中模拟以上代码之同等效果，祝您腱鞘愉快！</p>
 </blockquote>
@@ -346,18 +402,95 @@ ninja -Cbuild
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 如果你口味比较重，想研究 Fortran 前端，也可以定义该 CMake 变量为 <code>-DLLVM_ENABLE_PROJECTS="flang"</code>。</p>
 </blockquote>
-<h2 id="_5">基本概念速览</h2>
-<h3 id="_6">编译器的前、中、后端</h3>
+<p><code>build.sh</code> 后，需要花费大约 10 分钟时间（取决于你的电脑配置），这段时间你可以先看下面的基本概念速览。等风扇停了以后，LLVM 和 Clang 就构建好了。</p>
+<h3 id="_5">运行试试</h3>
+<pre><code class="language-bash">ls build/bin
+</code></pre>
+<h2 id="_6">基本概念速览</h2>
+<p>学过 C 语言的同学都知道，一个 C/C++ 源码文件到计算机实际可执行的 EXE 文件之间，主要有两步操作：编译（compile）和链接（link）。</p>
+<p><img alt="" src="../img/compile-3-stage.png" /></p>
+<p>之所以把编译和链接分开，是因为一个项目常常由许多源码文件组成，而不只是单个文件。编译器把 C++ 源码编译成中间对象文件（.o 或 .obj 格式），如果有很多 .cpp 文件，就会得到很多 .o 文件，然后由链接器负责统一链接所有 .o 文件，就得到了最终的 .exe 或 .dll 目标文件。</p>
+<p>分离多 .cpp 文件的好处是，编译速度更快，可以并行编译。而且修改了其中一个 .cpp 文件，只需要重新编译那个 .cpp 对应的 .o 文件，然后重新链接最终的 .exe 即可，无需再重复编译其他 .cpp 文件的 .o 文件了。自动检测哪些 .cpp 文件更新了，需要重新编译 .o 文件，是 Makefile 和 Ninja 之类构建系统的职责。</p>
+<p>我们现在要来学习的就是其中的编译阶段，这也是大部分人关注的重点。</p>
+<p>编译器是如何将 .cpp 文件转换为充斥着机器指令码 .o 文件的？</p>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> .o 文件里几乎全是完成的机器指令码，除了部分 call 到外部函数的一部分指令，会留白，等待链接阶段时，由链接器在其他 .o 文件中找到相同的符号时替换上正确的地址和偏移量。</p>
+</blockquote>
+<p>过去，我们把编译器看作黑箱，进去源码，出来机器码，只能认为是魔法。</p>
+<p>现在，有了 LLVM 和 Clang 源码在手，终于可以一探究竟了。</p>
+<p>实际上，编译这一过程，还可以进一步拆分成三个阶段。</p>
+<h3 id="_7">编译器的前、中、后端</h3>
+<p>编译器（Compiler）的工作流程可以分为三个阶段：</p>
+<ol>
+<li>前端（Front-end）：负责接收源代码，解析出抽象语法树（AST），并进行语法和语义分析，生成中间表示码（IR）。</li>
+<li>中端（Middle-end）：负责优化中间表示码。</li>
+<li>后端（Back-end）：负责将优化完毕的中间表示码翻译成机器码。</li>
+</ol>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 链接阶段（Link）属于链接器，不算编译器的工作职责；前、中、后端只是对编译（Compile）这一阶段的进一步拆分。</p>
+</blockquote>
+<ul>
+<li>如果你想要研究 C++ 语法规则，比如做个 C++ 语法高亮插件，那就需要看前端。libclang 和 clangd 可以帮助你解析 C++ 繁琐的语法，并以 AST 树的结构提供给你。不仅如此，如果你要设计一门新语言，甚至是 OpenGL 驱动（其需要实现 GLSL 编译器），实际上也就是为 LLVM 添加一个前端。</li>
+<li>如果你对内存模型，性能优化感兴趣，那就去研究中端。这是目前学术研究比较活跃的领域，特别是多面体优化方向，可以尝试水两张 paper 或 PR。这部分都是基于 LLVM IR 操作的，有特别多的算法和数据结构。</li>
+<li>如果你对汇编语言，机器指令，硬件架构感兴趣，那就去看后端。这里面有把中间表示码翻译成真正可执行的汇编指令的完整过程，自研芯片的大厂通常想要为 LLVM 添加后端。</li>
+</ul>
+<p>接下来，让我们走进 LLVM 这座开源工厂，一步步观察一段 C++ 代码被编译成汇编的全过程。</p>
 <h4 id="ast">语法树（AST）</h4>
+<p>编译器的前端负责解析源代码，生成抽象语法树（Abstract Syntax Tree，AST）。AST 是源代码的一种抽象表示，其中每个节点代表源代码中的一个语法结构，例如 if、while、for、函数调用、运算符、变量声明等。每个 AST 节点都有自己的属性，例如类型、作用域、修饰符等。</p>
+<p>这部分在 clang 项目中。</p>
+<p>clang 解析源码生成语法树的案例：</p>
+<pre><code class="language-cpp">#include &lt;cstdio&gt;
+
+int main() {
+    printf(&quot;Hello, world!&quot;);
+    return 0;
+}
+</code></pre>
+<p>运行命令：</p>
+<pre><code class="language-bash">clang -fsyntax-only -Xclang -ast-dump test.cpp
+</code></pre>
+<ul>
+<li><code>-fsyntax-only</code> 意味着只解析语法，不进行编译和链接；</li>
+<li><code>-Xclang</code> 是指向 Clang 核心传递一个选项，也就是后面紧挨着的 <code>-ast-dump</code>；</li>
+<li><code>-ast-dump</code> 是 Clang 核心的选项，表示要求打印出语法树。</li>
+</ul>
+<p>输出：
+<img alt="" src="../img/clang-ast-example.png" /></p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 已省略 <code>&lt;cstdio&gt;</code> 头文件部分的语法树节点，仅展示了 main 的部分，否则就太长了。</p>
+</blockquote>
+<ul>
+<li>此处 FunctionDecl 就表明，该节点是一个函数（Function）的声明（Decleration）。注意到后面跟着许多和该函数定义有关的关键信息，让我们逐一分析：<ul>
+<li>这里的十六进制数 <code>0x567bdbf246d8</code> 是 AST 节点在编译器内存中的地址，每次都不一样，无意义。</li>
+<li>后面的尖括号 <code>&lt;a.cpp:3:1&gt;</code> 里还好心提醒了函数定义的位置。</li>
+<li>最后是函数名 <code>main</code> 和函数类型 <code>int ()</code>。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 该节点的类型是 FunctionDecl，翻译成中文就是函数声明。但是我们写的明明是一个函数的<strong>定义</strong>啊！为什么被 Clang AST 当作了<strong>声明</strong>呢？原来，C++ 官方的话语中，定义也是声明！但声明不都是定义。所以这里的 FunctionDecl 实际上是一个通用的节点，既可以是声明（后面直接接 <code>;</code> 的），也可以是定义（后面接着 <code>{}</code> 的），要根据是否有子节点（花括号语句块）来判断。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 总之，定义和声明是子集关系。当我们要强调一个声明只是声明，没有定义时，会用<strong>非定义声明</strong>这样严谨的律师说法。但日常提问时你说“声明”我也明白，你指的应该是非定义声明。更多相关概念请看<a href="../symbols/">重新认识声明与定义</a>章节和<a href="https://github.com/parallel101/cppguidebook/pull/23">白律师的锐评</a>，用文氏图来画就是：<img alt="" src="../img/decl-vs-def.png" width="150px" /></p>
+</blockquote>
+<ul>
+<li>函数定义节点又具有一个子节点，类型是 CompoundStmt。这个实际上就是我们所说的花括号语句块 <code>{}</code> 了。他本身也是一条语句，但里面由很多条子语句组成。规定函数声明 FunctionDecl 如果是定义，则其唯一子节点必须是语句块类型 CompoundStmt，也就是我们熟悉的函数声明后紧接着花括号，就能定义函数。如果是非定义声明（仅声明，不定义）那就没有这个子节点。</li>
+</ul>
 <h4 id="ir">中间表示码（IR）</h4>
+<h5 id="llvm-ir">轶事：LLVM IR 为什么不跨平台</h5>
+<p>Clang 编译时是什么平台就是什么平台了，不同目标平台的 IR 会有些微的不一样（但 IR 类型都是固定的那几个，除了部分特殊硬件 intrinsics），IR 永远只能变成指定目标平台的机器码。</p>
+<p>虽然 IR 是通用的中间表示层，但类型大小，矢量宽度等信息和硬件高度绑定，而且有时用户需要根据 <code>#ifdef __x86_64__</code> 判断，针对不同的硬件，使用不同的 intrinsics。而 intrinsics 产生的 IR 节点是和硬件高度相关的，无法在其他平台通用。</p>
+<p>总之，因为这样那样的原因，LLVM IR 并不支持跨平台共用，不同平台上 Clang 编译出来的 IR 是不同的。</p>
+<blockquote>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 也有一些支持跨平台的 IR，比如 SPIR-V 和 MLIR，适用于游戏客户端部署的场景。但显然 LLVM 作为追求极致优化的裸硬件编译器，其 LLVM IR 如果要求跨平台会很不利于 Clang 前端支持硬件 intrinsics，也不利于 LLVM 中端针对目标硬件特性做优化，也会无法支持内联汇编，所以就放弃了。所以现实中，人们会先把 Vulkan 着色器编译成跨平台的 SPIR-V 二进制发布，等部署到游戏玩家电脑上后，然后再输入显卡驱动中的 LLVM 得到 LLVM IR 后优化，编译生成最适合当前玩家显卡体质的 GPU 汇编。</p>
+</blockquote>
 <h4 id="ir_1">IR 的二进制压缩版：字节码</h4>
 <p>字节码和 IR 的关系，正如汇编语言和机器二进制码的关系，之间是一一对应的翻译关系。只不过字节码是压缩的，对计算机友好；而 IR 是人类可读的 ASCII 字符，方便人类阅读和调试。</p>
 <blockquote>
-<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意字节码和机器码不同，他依然属于中间表示（只不过是压缩得人类看不懂的高效二进制版 IR），并不能直接在计算机中执行。字节码只能在 lli 虚拟机中解释执行；但和 Java 的字节码又不一样，LLVM 的字节码本来就是二进制的 IR，IR 并不跨平台，clang 编译时是什么平台就是什么平台了，未来永远只能变成这种平台的机器码；LLVM 团队提供 lli 工具主要是为了方便临时测试 IR，用于生产环境的肯定还是 llc 编译好产生真正的高效机器码。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意字节码和机器码不同，他依然属于中间表示（只不过是压缩得人类看不懂的高效二进制版 IR），并不能直接在计算机中执行，LLVM 字节码只能在 lli 虚拟机中解释执行。</p>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 但和 Java 的字节码又不一样，LLVM 的字节码本来就是二进制的 IR。而 IR 并不跨平台，所以字节码也不跨平台。LLVM 团队提供 lli 工具主要是为了方便临时测试 IR，用于生产环境的肯定还是 llc 编译好产生真正的高效机器码。</p>
 </blockquote>
 <h4 id="asm">汇编语言（ASM）</h4>
-<h4 id="_7">汇编语言的终局：机器码</h4>
-<h3 id="llvm-ir">LLVM IR</h3>
+<h4 id="_8">汇编语言的终局：机器码</h4>
+<h3 id="llvm-ir_1">LLVM IR</h3>
 <p>LLVM IR 完全文档：https://llvm.org/docs/LangRef.html</p>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 不建议按顺序全部阅读完，这么多文档小彭老师都看不完。建议遇到了不熟悉的指令时，再去针对性地找到相应章节，学习</p>
