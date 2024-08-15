@@ -27,6 +27,7 @@ nav:
     - cpp_memory.md
     - unicode.md
     - undef.md
+    - llvm_intro.md
   - 关于:
     - about.md
     - donate.md
