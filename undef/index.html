@@ -134,6 +134,10 @@
 <li>
     <a href="./" class="dropdown-item active" aria-current="page">未定义行为完整列表</a>
 </li>
+                                    
+<li>
+    <a href="../llvm_intro/" class="dropdown-item">小彭老师带你学 LLVM</a>
+</li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -173,7 +177,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../about/" class="nav-link">
+                                <a rel="next" href="../llvm_intro/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -216,26 +220,30 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_10" class="nav-link">函数类</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_10" class="nav-link">求值顺序类</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_12" class="nav-link">生命周期类</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_14" class="nav-link">函数类</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_18" class="nav-link">库函数类</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_18" class="nav-link">生命周期类</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_21" class="nav-link">多线程类</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_25" class="nav-link">库函数类</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_28" class="nav-link">多线程类</a>
               <ul class="nav flex-column">
               </ul>
             </li>
               </ul>
             </li>
             
-            <li class="nav-item" data-bs-level="1"><a href="#_23" class="nav-link">总结</a>
+            <li class="nav-item" data-bs-level="1"><a href="#_30" class="nav-link">总结</a>
               <ul class="nav flex-column">
             <li class="nav-item" data-bs-level="2"><a href="#cppcon" class="nav-link">CppCon 相关视频</a>
               <ul class="nav flex-column">
@@ -272,40 +280,49 @@
 <li><a href="#0">除数不能为 0</a></li>
 </ul>
 </li>
-<li><a href="#_10">函数类</a><ul>
+<li><a href="#_10">求值顺序类</a><ul>
+<li><a href="#_11">同一表达式内，对同一个变量有多个自增/自减运算</a></li>
+<li><a href="#_12">内建类型的二元运算符，其左右两个参数求值的顺序是不确定的</a></li>
+<li><a href="#_13">函数参数求值的顺序是不确定的</a></li>
+</ul>
+</li>
+<li><a href="#_14">函数类</a><ul>
 <li><a href="#void-return">返回类型不为 void 的函数，必须有 return 语句</a></li>
-<li><a href="#_11">函数指针被调用时，不能为空</a></li>
+<li><a href="#_15">函数指针被调用时，不能为空</a></li>
+<li><a href="#_16">函数指针被调用时，参数列表或返回值必须匹配</a></li>
+<li><a href="#_17">普通函数指针与成员函数指针不能互转</a></li>
 </ul>
 </li>
-<li><a href="#_12">生命周期类</a><ul>
-<li><a href="#_13">不能读取未初始化的变量</a></li>
-<li><a href="#_14">指针的加减法不能超越数组边界</a></li>
+<li><a href="#_18">生命周期类</a><ul>
+<li><a href="#_19">不能读取未初始化的变量</a></li>
+<li><a href="#_20">指针的加减法不能超越数组边界</a></li>
 <li><a href="#end_1">可以有指向数组尾部的指针（类似 end 迭代器），但不能解引用</a></li>
-<li><a href="#_15">不能访问未初始化的指针</a></li>
-<li><a href="#_16">不能访问已释放的内存</a></li>
+<li><a href="#_21">不能访问未初始化的指针</a></li>
+<li><a href="#_22">不能访问已释放的内存</a></li>
 <li><a href="#new-new-malloc-delete-delete-free">new / new[] / malloc 和 delete / delete[] / free 必须匹配</a></li>
-<li><a href="#_17">不要访问已经析构的对象</a></li>
+<li><a href="#_23">不要访问已经析构的对象</a></li>
+<li><a href="#_24">不能把函数指针转换为普通类型指针解引用</a></li>
 </ul>
 </li>
-<li><a href="#_18">库函数类</a><ul>
+<li><a href="#_25">库函数类</a><ul>
 <li><a href="#ctypeh-0127-ascii">ctype.h 中一系列函数的字符参数，必须在 0~127 范围内（即只支持 ASCII 字符）</a></li>
 <li><a href="#memcpy-src-dst">memcpy 函数的 src 和 dst 不能为空指针</a></li>
 <li><a href="#memcpy-src-dst_1">memcpy 不能接受带有重叠的 src 和 dst</a></li>
 <li><a href="#vback-v">v.back() 当 v 为空时是未定义行为</a></li>
 <li><a href="#vector-operator-i">vector 的 operator[] 当 i 越界时，是未定义行为</a></li>
-<li><a href="#_19">容器迭代器失效</a></li>
-<li><a href="#_20">容器元素引用失效</a></li>
+<li><a href="#_26">容器迭代器失效</a></li>
+<li><a href="#_27">容器元素引用失效</a></li>
 </ul>
 </li>
-<li><a href="#_21">多线程类</a><ul>
-<li><a href="#_22">多个线程同时访问同一个对象，其中至少一个线程的访问为写访问，是未定义行为（俗称数据竞争）</a></li>
+<li><a href="#_28">多线程类</a><ul>
+<li><a href="#_29">多个线程同时访问同一个对象，其中至少一个线程的访问为写访问，是未定义行为（俗称数据竞争）</a></li>
 <li><a href="#mutex">多个线程同时对两个 mutex 上锁，但顺序相反，会产生未定义行为（俗称死锁）</a></li>
 <li><a href="#recursive_mutex-mutex">对于非 recursive_mutex，同一个线程对同一个 mutex 重复上锁，会产生未定义行为（俗称递归死锁）</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#_23">总结</a><ul>
+<li><a href="#_30">总结</a><ul>
 <li><a href="#cppcon">CppCon 相关视频</a></li>
 </ul>
 </li>
@@ -501,7 +518,76 @@ int j = 0;
 i / j;  // 错！
 i % j;  // 错！
 </code></pre>
-<h2 id="_10">函数类</h2>
+<h2 id="_10">求值顺序类</h2>
+<h3 id="_11">同一表达式内，对同一个变量有多个自增/自减运算</h3>
+<pre><code class="language-cpp">int i = 5;
+int j = (++i) + (++i);    // j 的值未定义
+</code></pre>
+<pre><code class="language-cpp">int j = (++i) + i;        // j 的值未定义
+</code></pre>
+<pre><code class="language-cpp">int i1 = 5;
+int i2 = 5;
+int j = (++i1) + (++i2); // j = 12
+</code></pre>
+<h3 id="_12">内建类型的二元运算符，其左右两个参数求值的顺序是不确定的</h3>
+<p>在标准看来，+ 运算符两侧是“同时”求值的，即“interleaved”，实际执行顺序并不确定。</p>
+<p>对于 a + b，我们不能假定总是左侧表达式 a 先求值。</p>
+<p>不过，虽然运算符两个参数的求值顺序“未指定(unspecified)”，但并不是“未定义(undefined)”。</p>
+<blockquote>
+<p>但左右两侧涉及自增/自减运算符的情况仍然是未定义行为。</p>
+</blockquote>
+<pre><code class="language-cpp">int f1() {
+    printf(&quot;f1\n&quot;);
+    return 1;
+}
+
+int f2() {
+    printf(&quot;f2\n&quot;);
+    return 2;
+}
+
+int j = f1() + f2();   // 可能打印 f1 f2，也可能打印 f2 f1，但 j 最终的结果一定是 3
+</code></pre>
+<p>未指定和未定义是不同的！有未定义行为的程序是非法(ill-formed)的，但未指定只是会让结果无法确定，但一定能正常运行：要么 f1 先运行，要么 f2 先运行。</p>
+<h3 id="_13">函数参数求值的顺序是不确定的</h3>
+<pre><code class="language-cpp">int f1() {
+    printf(&quot;f1\n&quot;);
+    return 1;
+}
+
+int f2() {
+    printf(&quot;f2\n&quot;);
+    return 2;
+}
+
+void foo(int i, int j) {
+    printf(&quot;%d %d\n&quot;, i, j);
+}
+
+foo(f1(), f2());   // 可能打印 f1 f2 1 2，也可能打印 f2 f1 1 2
+</code></pre>
+<p>代码中，f1 和 f2 的求值顺序虽然未指定，但可以保证 foo 函数体一定在执行完毕后才会开始。</p>
+<p>同一条语句中所有子表达式的执行顺序就像一颗树，树中两个子节点执行顺序是不确定的；但可以肯定的是，树的子节点一定先于他们的父节点执行。</p>
+<p>同样地，这只是未指定(unspecified)行为而不是未定义(undefined)行为，结果必然是 f1 f2 或 f2 f1 两种可能之一，不会让程序出现未定义值的情况。</p>
+<p>注意，求值顺序未指定仅限同一语句（“同一行”）内，对于互相独立的多条语句，依然是有强先后顺序的。</p>
+<pre><code class="language-cpp">int f1() {
+    printf(&quot;f1\n&quot;);
+    return 1;
+}
+
+int f2() {
+    printf(&quot;f2\n&quot;);
+    return 2;
+}
+
+void foo(int i, int j) {
+}
+
+foo(f1(), f2());  // 可能打印 f1 f2，也可能打印 f2 f1
+
+f1(); f2();       // 必然打印 f1 f2
+</code></pre>
+<h2 id="_14">函数类</h2>
 <h3 id="void-return">返回类型不为 void 的函数，必须有 return 语句</h3>
 <pre><code class="language-cpp">int func() {
     int i = 42;
@@ -537,7 +623,7 @@ void func() {
 <li><code>main</code> 函数可以不写 <code>return</code> 语句，默认自带 <code>return 0;</code></li>
 <li>协程函数可以不写 <code>return</code> 语句，如果有 <code>co_return</code> 或者协程返回类型为 <code>void</code> 且具有至少一个 <code>co_await</code> 出现</li>
 </ol>
-<h3 id="_11">函数指针被调用时，不能为空</h3>
+<h3 id="_15">函数指针被调用时，不能为空</h3>
 <pre><code class="language-cpp">typedef void (*func_t)();
 
 func_t func = nullptr;
@@ -563,8 +649,34 @@ int main() {
     return 0;
 }
 </code></pre>
-<h2 id="_12">生命周期类</h2>
-<h3 id="_13">不能读取未初始化的变量</h3>
+<h3 id="_16">函数指针被调用时，参数列表或返回值必须匹配</h3>
+<pre><code class="language-cpp">void f1(int *p) {
+    printf(&quot;f1(%p)&quot;, p);
+}
+
+void (*fp)(const int *);
+fp = (void (*)(const int *)) f1;  // 错误
+
+int i;
+fp = (void (*)(const int *)) &amp;i;  // 错误
+</code></pre>
+<h3 id="_17">普通函数指针与成员函数指针不能互转</h3>
+<pre><code class="language-cpp">struct Class {
+    void mf() {
+        printf(&quot;成员函数\n&quot;);
+    }
+};
+
+union {
+    void (Class::*member_func)();
+    void (*free_func)(Class *);
+} u;
+u.member_func = &amp;Class::mf;
+Class c;
+u.free_func(&amp;c); // 错误
+</code></pre>
+<h2 id="_18">生命周期类</h2>
+<h3 id="_19">不能读取未初始化的变量</h3>
 <pre><code class="language-cpp">int i;
 cout &lt;&lt; i; // 错！
 
@@ -577,7 +689,7 @@ cout &lt;&lt; arr[0]; // 错！
 int arr[10] = {};
 cout &lt;&lt; arr[0]; // 可以，会读到 0
 </code></pre>
-<h3 id="_14">指针的加减法不能超越数组边界</h3>
+<h3 id="_20">指针的加减法不能超越数组边界</h3>
 <pre><code class="language-cpp">int arr[10];
 int *p = &amp;arr[0];
 p + 1;     // 可以
@@ -590,7 +702,7 @@ int *p = &amp;arr[0];
 int *end = p + 10; // 可以
 *end;              // 错！
 </code></pre>
-<h3 id="_15">不能访问未初始化的指针</h3>
+<h3 id="_21">不能访问未初始化的指针</h3>
 <pre><code class="language-cpp">int *p;
 *p; // 错！
 </code></pre>
@@ -608,7 +720,7 @@ cout &lt;&lt; p-&gt;dog-&gt;age; // 错！
 p-&gt;dog = new Dog;
 cout &lt;&lt; p-&gt;dog-&gt;age; // 可以
 </code></pre>
-<h3 id="_16">不能访问已释放的内存</h3>
+<h3 id="_22">不能访问已释放的内存</h3>
 <pre><code class="language-cpp">int *p = new int;
 *p; // 可以
 delete p;
@@ -656,7 +768,7 @@ delete[] p; // 正确
 <pre><code class="language-cpp">vector&lt;int&gt; a(3);
 unique_ptr&lt;int&gt; a = make_unique&lt;int&gt;(42);
 </code></pre>
-<h3 id="_17">不要访问已经析构的对象</h3>
+<h3 id="_23">不要访问已经析构的对象</h3>
 <pre><code class="language-cpp">struct C {
     int i;
     ~C() { i = 0; }
@@ -674,7 +786,15 @@ free(c);
     return s;  // 语言：OK，标准库作者：s 不一定是空字符串
 }
 </code></pre>
-<h2 id="_18">库函数类</h2>
+<h3 id="_24">不能把函数指针转换为普通类型指针解引用</h3>
+<pre><code class="language-cpp">void func() {}
+
+printf(&quot;*func = %d\n&quot;, *((int *)func));  // 错误
+</code></pre>
+<blockquote>
+<p>C++ 内存模型是哈佛架构（代码与数据分离），不是冯诺依曼架构（代码也是数据）</p>
+</blockquote>
+<h2 id="_25">库函数类</h2>
 <h3 id="ctypeh-0127-ascii">ctype.h 中一系列函数的字符参数，必须在 0~127 范围内（即只支持 ASCII 字符）</h3>
 <pre><code class="language-cpp">isdigit('0');    // 可以，返回 true
 isdigit('a');    // 可以，返回 false
@@ -738,7 +858,7 @@ v[3]; // 错！相当于解引用了越界的指针
 <pre><code class="language-cpp">std::vector&lt;int&gt; v = { 1, 2, 3 };
 v.at(3); // 安全，会检测到越界，抛出 std::out_of_range 异常
 </code></pre>
-<h3 id="_19">容器迭代器失效</h3>
+<h3 id="_26">容器迭代器失效</h3>
 <pre><code class="language-cpp">std::vector&lt;int&gt; v = { 1, 2, 3 };
 auto it = v.begin();
 v.push_back(4); // push_back 可能导致扩容，会使之前保存的 v.begin() 迭代器失效
@@ -754,7 +874,7 @@ v.push_back(4); // deque 的 push_back 不会导致迭代器失效
 <li>https://www.geeksforgeeks.org/iterator-invalidation-cpp</li>
 <li>https://en.cppreference.com/w/cpp/container</li>
 </ul>
-<h3 id="_20">容器元素引用失效</h3>
+<h3 id="_27">容器元素引用失效</h3>
 <pre><code class="language-cpp">std::vector&lt;int&gt; v = {1, 2, 3};
 int &amp;ref = v[0];
 v.push_back(4); // push_back 可能导致扩容，使元素全部移动到了新的一段内存，会使之前保存的 ref 引用失效
@@ -766,8 +886,8 @@ int &amp;ref = v[0];
 v.push_back(4); // deque 的 push_back 不会导致元素移动，使引用失效
 ref = 0;        // 可以
 </code></pre>
-<h2 id="_21">多线程类</h2>
-<h3 id="_22">多个线程同时访问同一个对象，其中至少一个线程的访问为写访问，是未定义行为（俗称数据竞争）</h3>
+<h2 id="_28">多线程类</h2>
+<h3 id="_29">多个线程同时访问同一个对象，其中至少一个线程的访问为写访问，是未定义行为（俗称数据竞争）</h3>
 <pre><code class="language-cpp">std::string s;
 
 void t1() {
@@ -922,7 +1042,7 @@ void t1() {
     m.unlock();
 }
 </code></pre>
-<h1 id="_23">总结</h1>
+<h1 id="_30">总结</h1>
 <ul>
 <li>不要玩空指针</li>
 <li>不要越界，用更安全的 at，subspan 等</li>
