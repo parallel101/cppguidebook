@@ -68,6 +68,10 @@
 </li>
                                     
 <li>
+    <a href="../symbols/" class="dropdown-item">重新认识声明与定义</a>
+</li>
+                                    
+<li>
     <a href="../cpp_tricks/" class="dropdown-item">应知应会 C++ 小技巧</a>
 </li>
                                     
@@ -523,12 +527,20 @@ i % j;  // 错！
 <pre><code class="language-cpp">int i = 5;
 int j = (++i) + (++i);    // j 的值未定义
 </code></pre>
-<pre><code class="language-cpp">int j = (++i) + i;        // j 的值未定义
+<pre><code class="language-cpp">int i = 5;
+int a[10] = {};
+int j = a[i++] + a[i++];  // j 的值未定义
+</code></pre>
+<pre><code class="language-cpp">int i = 5;
+int j = (++i) + i;        // j 的值未定义
 </code></pre>
 <pre><code class="language-cpp">int i1 = 5;
 int i2 = 5;
-int j = (++i1) + (++i2); // j = 12
+int j = (++i1) + (++i2); // 正确，j 会得到 12
 </code></pre>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 转发给你身边的谭浩强受害者看（<code>i+++++i</code>）。</p>
+</blockquote>
 <h3 id="_12">内建类型的二元运算符，其左右两个参数求值的顺序是不确定的</h3>
 <p>在标准看来，+ 运算符两侧是“同时”求值的，即“interleaved”，实际执行顺序并不确定。</p>
 <p>对于 a + b，我们不能假定总是左侧表达式 a 先求值。</p>
@@ -586,6 +598,14 @@ void foo(int i, int j) {
 foo(f1(), f2());  // 可能打印 f1 f2，也可能打印 f2 f1
 
 f1(); f2();       // 必然打印 f1 f2
+</code></pre>
+<p>不过，涉及自增的话，就还是未定义行为，而不是未指定了。</p>
+<pre><code class="language-cpp">int i = 5;
+foo(i++, i++);   // 会打印出什么？未定义行为
+</code></pre>
+<pre><code class="language-cpp">int i = 5;
+int j = 5;
+foo(i++, j++);   // 必然打印出 5 5
 </code></pre>
 <h2 id="_14">函数类</h2>
 <h3 id="void-return">返回类型不为 void 的函数，必须有 return 语句</h3>
