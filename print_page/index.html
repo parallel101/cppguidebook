@@ -361,7 +361,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年08月15日 17:47:55 (UTC+08:00)</p>
+<p>更新时间：2024年08月16日 22:42:54 (UTC+08:00)</p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是温馨提示</p>
@@ -9569,9 +9569,9 @@ int product(vector&lt;int&gt; v) {
 };
 
 int reduce(vector&lt;int&gt; v, Reducer *reducer) {
-    int res = reducer.init();
+    int res = reducer-&gt;init();
     for (int i = 0; i &lt; v.size(); i++) {
-        res = reducer.add(res, v[i]);
+        res = reducer-&gt;add(res, v[i]);
     }
     return res;
 }
@@ -9627,12 +9627,12 @@ struct MaxReducer : Reducer {
 <p>还好你早已提前抽出公共部分，现在只需要修改 reduce 函数本身就可以了。</p>
 <p>SumReducer 和 ProductReducer 无需任何修改，体现了<strong>开闭原则</strong>。</p>
 <pre><code class="language-cpp">int reduce(Reducer *reducer) {
-    int res = reducer.init();
+    int res = reducer-&gt;init();
     while (true) {
         int tmp;
         cin &gt;&gt; tmp;
         if (tmp == -1) break;
-        res = reducer.add(res, tmp);
+        res = reducer-&gt;add(res, tmp);
     }
     return res;
 }
@@ -9640,20 +9640,20 @@ struct MaxReducer : Reducer {
 <p>现在，老板需求又改回来，他突然又想要从 vector 里读取数据了。</p>
 <p>在破口大骂老板出尔反尔的同时，你开始思考，这两个函数似乎还是有一些重复可以抽取出来？</p>
 <pre><code class="language-cpp">int cin_reduce(Reducer *reducer) {
-    int res = reducer.init();
+    int res = reducer-&gt;init();
     while (true) {
         int tmp;
         cin &gt;&gt; tmp;
         if (tmp == -1) break;
-        res = reducer.add(res, tmp);
+        res = reducer-&gt;add(res, tmp);
     }
     return res;
 }
 
 int vector_reduce(vector&lt;int&gt; v, Reducer *reducer) {
-    int res = reducer.init();
+    int res = reducer-&gt;init();
     for (int i = 0; i &lt; v.size(); i++) {
-        res = reducer.add(res, v[i]);
+        res = reducer-&gt;add(res, v[i]);
     }
     return res;
 }
@@ -9665,9 +9665,9 @@ int vector_reduce(vector&lt;int&gt; v, Reducer *reducer) {
 };
 
 int reduce(Inputer *inputer, Reducer *reducer) {
-    int res = reducer.init();
-    while (int tmp = inputer.fetch()) {
-        res = reducer.add(res, tmp);
+    int res = reducer-&gt;init();
+    while (int tmp = inputer-&gt;fetch()) {
+        res = reducer-&gt;add(res, tmp);
     }
     return res;
 }
@@ -9710,9 +9710,9 @@ reduce(new VectorInputer(v), new ProductReducer());
 <h2 id="design_virtual-_4">不要什么东西都塞一块</h2>
 <p>有些糟糕的实现会把分明不属于同一层次的东西强行放在一起，比如没能分清 Inputer 和 Reducer 类，错误地把他们设计成了一个类！</p>
 <pre><code class="language-cpp">int reduce(Reducer *reducer) {
-    int res = reducer.init();
-    while (int tmp = reducer.fetch()) {  // fetch 凭什么和 init、add 放在一起？
-        res = reducer.add(res, tmp);
+    int res = reducer-&gt;init();
+    while (int tmp = reducer-&gt;fetch()) {  // fetch 凭什么和 init、add 放在一起？
+        res = reducer-&gt;add(res, tmp);
     }
     return res;
 }
@@ -9772,7 +9772,7 @@ struct VectorInputer : Inputer {
     {}
 
     optional&lt;int&gt; fetch() override {
-        auto tmp = inputer.fetch();
+        auto tmp = inputer-&gt;fetch();
         if (tmp == stopMark)
             return nullopt;
         return tmp;
@@ -9801,7 +9801,7 @@ reduce(new VectorInputer(), new SumReducer());  // 从 vector 读，但无需截
 
     optional&lt;int&gt; fetch() override {
         while (true) {
-            auto tmp = inputer.fetch();
+            auto tmp = inputer-&gt;fetch();
             if (!tmp.has_value()) {
                 return nullopt;
             }
@@ -9847,7 +9847,7 @@ struct FilterInputerAdapter : Inputer {
 
     optional&lt;int&gt; fetch() override {
         while (true) {
-            auto tmp = inputer.fetch();
+            auto tmp = inputer-&gt;fetch();
             if (!tmp.has_value()) {
                 return nullopt;
             }
@@ -9914,8 +9914,8 @@ struct FilterInputerAdapter : Inputer {
             return res;
         }
 
-        if (poostIn.hasNext()) {
-            return poostIn.getNext();
+        if (poostIn-&gt;hasNext()) {
+            return poostIn-&gt;getNext();
         } else {
             return nullopt;
         }
