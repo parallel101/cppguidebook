@@ -758,6 +758,7 @@ for (llvm::Use &amp;U: pi-&gt;operands()) {
 <li>分析类 pass 的输入是一段 IR，输出是一个用户自定义的分析结果类型。例如对于 <code>def-use</code> pass，输出是一个 <code>Analysis</code> 类型的对象，这个对象中维护了一个 “定义-使用” 的双向映射，我们 <code>def-use</code> pass 分析得到结果后就可以使用这个映射来查询。</li>
 <li>优化类 pass 的输入是一段 IR，输出也是一段 IR，被改变后的 IR。LLVM 实现优化，就是通过一系列优化 pass 的组合完成的。有时，优化 pass 会需要一些分析的结果，才能进行，因此优化 pass 有时会请求一些分析 pass 的结果，LLVM 会检查这个分析之前有没有进行过，如果有，就会复用上次分析的结果，不会重新分析浪费时间。优化 pass 在修改了 IR 后，需要返回一个标志位，表示 IR 修改后，哪些分析 pass 的结果可能会失效。如果不确定，就返回 <code>all</code> 吧：本优化 pass 修改过 IR 后所有之前分析 pass 缓存的结果都会失效。</li>
 </ul>
+<p>如何判断一个虚拟寄存器是否可以被优化掉？检测他有没有被别人“使用”，也就是查询他的“定义-使用”映射，如果发现“使用者列表”为空，就说明没人使用，可以优化掉。</p>
 <h3 id="clang-ir">Clang 生成 IR 汇编</h3>
 <p>我们编写一段简单的 C++ 代码：</p>
 <pre><code class="language-cpp">int main() {
