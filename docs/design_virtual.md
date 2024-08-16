@@ -178,9 +178,9 @@ struct Reducer {
 };
 
 int reduce(vector<int> v, Reducer *reducer) {
-    int res = reducer.init();
+    int res = reducer->init();
     for (int i = 0; i < v.size(); i++) {
-        res = reducer.add(res, v[i]);
+        res = reducer->add(res, v[i]);
     }
     return res;
 }
@@ -251,12 +251,12 @@ SumReducer 和 ProductReducer 无需任何修改，体现了**开闭原则**。
 
 ```cpp
 int reduce(Reducer *reducer) {
-    int res = reducer.init();
+    int res = reducer->init();
     while (true) {
         int tmp;
         cin >> tmp;
         if (tmp == -1) break;
-        res = reducer.add(res, tmp);
+        res = reducer->add(res, tmp);
     }
     return res;
 }
@@ -268,20 +268,20 @@ int reduce(Reducer *reducer) {
 
 ```cpp
 int cin_reduce(Reducer *reducer) {
-    int res = reducer.init();
+    int res = reducer->init();
     while (true) {
         int tmp;
         cin >> tmp;
         if (tmp == -1) break;
-        res = reducer.add(res, tmp);
+        res = reducer->add(res, tmp);
     }
     return res;
 }
 
 int vector_reduce(vector<int> v, Reducer *reducer) {
-    int res = reducer.init();
+    int res = reducer->init();
     for (int i = 0; i < v.size(); i++) {
-        res = reducer.add(res, v[i]);
+        res = reducer->add(res, v[i]);
     }
     return res;
 }
@@ -297,9 +297,9 @@ struct Inputer {
 };
 
 int reduce(Inputer *inputer, Reducer *reducer) {
-    int res = reducer.init();
-    while (int tmp = inputer.fetch()) {
-        res = reducer.add(res, tmp);
+    int res = reducer->init();
+    while (int tmp = inputer->fetch()) {
+        res = reducer->add(res, tmp);
     }
     return res;
 }
@@ -353,9 +353,9 @@ Inputer 负责告诉 reduce 函数如何读取数据，Reducer 负责告诉 redu
 
 ```cpp
 int reduce(Reducer *reducer) {
-    int res = reducer.init();
-    while (int tmp = reducer.fetch()) {  // fetch 凭什么和 init、add 放在一起？
-        res = reducer.add(res, tmp);
+    int res = reducer->init();
+    while (int tmp = reducer->fetch()) {  // fetch 凭什么和 init、add 放在一起？
+        res = reducer->add(res, tmp);
     }
     return res;
 }
@@ -430,7 +430,7 @@ struct StopInputerAdapter : Inputer {
     {}
 
     optional<int> fetch() override {
-        auto tmp = inputer.fetch();
+        auto tmp = inputer->fetch();
         if (tmp == stopMark)
             return nullopt;
         return tmp;
@@ -466,7 +466,7 @@ struct FilterInputerAdapter {
 
     optional<int> fetch() override {
         while (true) {
-            auto tmp = inputer.fetch();
+            auto tmp = inputer->fetch();
             if (!tmp.has_value()) {
                 return nullopt;
             }
@@ -515,7 +515,7 @@ struct FilterInputerAdapter : Inputer {
 
     optional<int> fetch() override {
         while (true) {
-            auto tmp = inputer.fetch();
+            auto tmp = inputer->fetch();
             if (!tmp.has_value()) {
                 return nullopt;
             }
@@ -595,8 +595,8 @@ struct PoostInputerAdapter {
             return res;
         }
 
-        if (poostIn.hasNext()) {
-            return poostIn.getNext();
+        if (poostIn->hasNext()) {
+            return poostIn->getNext();
         } else {
             return nullopt;
         }
