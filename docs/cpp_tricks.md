@@ -367,7 +367,7 @@ for (int i = 0; i < 100; ++i) {
 
 ```cpp
 void babysitter(Baby *baby) {
-    if (baby->is_alive()) {
+    if (!baby->is_alive()) {
         puts("宝宝已经去世了");
     } else {
         puts("正在检查宝宝喂食情况...");
@@ -386,7 +386,7 @@ void babysitter(Baby *baby) {
 
 ```cpp
 void babysitter(Baby *baby) {
-    if (baby->is_alive()) {
+    if (!baby->is_alive()) {
         puts("宝宝已经去世了");
         return;
     }

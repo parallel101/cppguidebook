@@ -582,19 +582,12 @@ struct PoostInputer {
 ```cpp
 struct PoostInputerAdapter {
     PoostInputer *poostIn;
-    optional<int> next;
 
     PoostInputerAdapter(PoostInputer *poostIn)
         : poostIn(poostIn)
     {}
 
     optional<int> fetch() override {
-        if (next.has_value()) {
-            auto res = next;
-            next = nullopt;
-            return res;
-        }
-
         if (poostIn.hasNext()) {
             return poostIn.getNext();
         } else {
