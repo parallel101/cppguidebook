@@ -10,6 +10,7 @@ nav:
     - platform.md
     - variable_types.md
     - functions.md
+    - symbols.md
     - cpp_tricks.md
     - lambda.md
     - type_rich_api.md
@@ -27,6 +28,7 @@ nav:
     - cpp_memory.md
     - unicode.md
     - undef.md
+    - llvm_intro.md
   - 关于:
     - about.md
     - donate.md

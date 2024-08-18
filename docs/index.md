@@ -30,7 +30,7 @@
 
 也可以在 [B 站](https://space.bilibili.com/263032155) 发私信给小彭老师哦。
 
-> {{ icon.tip }} 本书还在持续更新中……要追番的话，可以在 [GitHub]({{ config.repo_url }}) 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一峰电子邮件，提醒你小彭老师更新了。
+> {{ icon.tip }} 本书还在持续更新中……要追番的话，可以在 [GitHub]({{ config.repo_url }}) 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。
 
 更新时间：{{ build_date }}
 
@@ -98,12 +98,12 @@ void try_call_foo(T &t) {
 ```cpp
 template <class T, class = void>
 struct has_foo {
-    inline constexpr bool value = false;
+    static constexpr bool value = false;
 };
 
 template <class T>
 struct has_foo<T, std::void_t<decltype(std::declval<T>().foo())>> {
-    inline constexpr bool value = true;
+    static constexpr bool value = true;
 };
 
 template <class T>
@@ -160,7 +160,7 @@ void try_call_foo(T &) {
 }
 ```
 
-如果回到 C++98，那又要罪加一等！`enable_if` 和 是 C++11 引入的 `<type_traits>` 头文件的帮手类，在 C++98 中，我们需要自己实现 `enable_if`…… `declval` 也是 C++11 引入的 `<utility>` 头文件中的帮手函数……假设你自己好不容易实现出来了 `enable_if` 和 `declval`，还没完：因为 constexpr 在 C++98 中也不存在了！你无法定义 value 成员变量为编译期常量，我们只好又用一个抽象的枚举小技巧来实现定义类成员常量的效果。
+如果回到 C++98，那又要罪加一等！`enable_if` 和 `declval` 是 C++11 引入的 `<type_traits>` 头文件的帮手类和帮手函数，在 C++98 中，我们需要自己实现 `enable_if`…… `declval` 也是 C++11 引入的 `<utility>` 头文件中的帮手函数……假设你自己好不容易实现出来了 `enable_if` 和 `declval`，还没完：因为 constexpr 在 C++98 中也不存在了！你无法定义 value 成员变量为编译期常量，我们只好又用一个抽象的枚举小技巧来实现定义类成员常量的效果。
 
 ```cpp
 template <class T, class = void>
