@@ -361,7 +361,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年08月16日 22:46:55 (UTC+08:00)</p>
+<p>更新时间：2024年08月18日 14:10:31 (UTC+08:00)</p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是温馨提示</p>
@@ -1197,7 +1197,7 @@ for (int i = 0; i &lt; 100; ++i) {
 </code></pre>
 <h2 id="cpp_tricks-_4">提前返回</h2>
 <pre><code class="language-cpp">void babysitter(Baby *baby) {
-    if (baby-&gt;is_alive()) {
+    if (!baby-&gt;is_alive()) {
         puts(&quot;宝宝已经去世了&quot;);
     } else {
         puts(&quot;正在检查宝宝喂食情况...&quot;);
@@ -1213,7 +1213,7 @@ for (int i = 0; i &lt; 100; ++i) {
 </code></pre>
 <p>这个函数有很多层嵌套，很不美观。用<strong>提前返回</strong>的写法来优化：</p>
 <pre><code class="language-cpp">void babysitter(Baby *baby) {
-    if (baby-&gt;is_alive()) {
+    if (!baby-&gt;is_alive()) {
         puts(&quot;宝宝已经去世了&quot;);
         return;
     }
@@ -9901,19 +9901,12 @@ struct FilterInputerAdapter : Inputer {
 <p>他们要求的用法是先判断 hasNext()，然后才能调用 getNext 读取出真正的值。小彭老师设计了一个 Poost 适配器，把 PoostInputer 翻译成我们的 Inputer：</p>
 <pre><code class="language-cpp">struct PoostInputerAdapter {
     PoostInputer *poostIn;
-    optional&lt;int&gt; next;
 
     PoostInputerAdapter(PoostInputer *poostIn)
         : poostIn(poostIn)
     {}
 
     optional&lt;int&gt; fetch() override {
-        if (next.has_value()) {
-            auto res = next;
-            next = nullopt;
-            return res;
-        }
-
         if (poostIn-&gt;hasNext()) {
             return poostIn-&gt;getNext();
         } else {
