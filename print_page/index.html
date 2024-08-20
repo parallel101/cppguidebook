@@ -361,7 +361,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年08月18日 18:24:32 (UTC+08:00)</p>
+<p>更新时间：2024年08月20日 16:31:01 (UTC+08:00)</p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 用这种颜色字体书写的内容是温馨提示</p>
@@ -4800,6 +4800,22 @@ V const &amp;at(map&lt;K, V&gt; const *this, K const &amp;k);       // 第二个
 <li>当 map 对象为 const 时，传入的 this 指针为 <code>map&lt;K, V&gt; const *</code>，所以只能调用第二个版本的 at。</li>
 <li>当 map 对象不为 const 时，传入的 this 指针为 <code>map&lt;K, V&gt; *</code>，两个重载都可以调用，但由于第一个重载更加符合，所以会调用第一个版本的 at。</li>
 </ul>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 有趣的是，C++23 支持了显式对象形参（deducing-this），this 也能像普通参数一样定义了！上面的代码可以写成：</p>
+</blockquote>
+<pre><code class="language-cpp">class map {
+    ...
+
+    V &amp;at(this map &amp;self, K const &amp;k) {
+        // 函数体内可以使用self代替原来的this（this将不再可用）
+        ...
+    }
+
+    V const &amp;at(this map const &amp;self, K const &amp;k) {
+        ...
+    }
+};
+</code></pre>
 <hr />
 <!-- PG38 -->
 
@@ -11667,22 +11683,24 @@ void test(function&lt;int (int)&gt; func) {
 <div class="toc">
 <ul>
 <li><a href="#error_code-c">现代 C++ 中的错误处理 (未完工)</a><ul>
-<li><a href="#error_code-_1">提前返回是好习惯！</a></li>
-<li><a href="#error_code-_2">异常</a></li>
-<li><a href="#error_code-_3">错误码</a></li>
+<li><a href="#error_code-_1">为什么错误很重要？</a></li>
+<li><a href="#error_code-_2">提前返回是好习惯！</a></li>
+<li><a href="#error_code-_3">异常</a></li>
+<li><a href="#error_code-_4">错误码</a></li>
 <li><a href="#error_code-stderror_code">std::error_code</a></li>
 <li><a href="#error_code-stdexpected">std::expected</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<h2 id="error_code-_1">提前返回是好习惯！</h2>
+<h2 id="error_code-_1">为什么错误很重要？</h2>
+<h2 id="error_code-_2">提前返回是好习惯！</h2>
 <p>TODO</p>
-<h2 id="error_code-_2">异常</h2>
-<h2 id="error_code-_3">错误码</h2>
+<h2 id="error_code-_3">异常</h2>
+<h2 id="error_code-_4">错误码</h2>
 <h2 id="error_code-stderror_code"><code>std::error_code</code></h2>
 <h2 id="error_code-stdexpected"><code>std::expected</code></h2>
-<p><code>boost::expected</code></p></section><section class="print-page" id="cpp_lifetime"><h1 id="cpp_lifetime-_1">深入理解析构函数与生命周期</h1>
+<p>也可以 <code>boost::expected</code> 替代。</p></section><section class="print-page" id="cpp_lifetime"><h1 id="cpp_lifetime-_1">深入理解析构函数与生命周期</h1>
 <div class="toc">
 <ul>
 <li><a href="#cpp_lifetime-_1">深入理解析构函数与生命周期</a><ul>
@@ -15948,18 +15966,30 @@ void t1() {
 <li><a href="#llvm_intro-ast">语法树（AST）</a></li>
 <li><a href="#llvm_intro-ir">中间表示码（IR）</a><ul>
 <li><a href="#llvm_intro-ir-x86">IR 汇编不是 x86 汇编</a></li>
-<li><a href="#llvm_intro-llvm-ir">LLVM IR 的特点</a></li>
-<li><a href="#llvm_intro-llvm-ir_1">LLVM IR 的特点</a><ul>
+<li><a href="#llvm_intro-llvm-ir">LLVM IR 的特点</a><ul>
 <li><a href="#llvm_intro-_9">以函数为单位</a></li>
 <li><a href="#llvm_intro-_10">任意多个寄存器</a></li>
 <li><a href="#llvm_intro-_11">虚拟寄存器只读</a></li>
 <li><a href="#llvm_intro-_12">三操作数指令</a></li>
-<li><a href="#llvm_intro-_13">定义与使用</a><ul>
+<li><a href="#llvm_intro-_13">强类型</a></li>
+<li><a href="#llvm_intro-_14">不区分整数类型有无符号</a></li>
+<li><a href="#llvm_intro-_15">定义与使用</a><ul>
 <li><a href="#llvm_intro--">“使用-定义”映射</a></li>
 <li><a href="#llvm_intro--_1">“定义-使用”映射</a></li>
 </ul>
 </li>
 <li><a href="#llvm_intro-pass">优化与分析 pass</a></li>
+</ul>
+</li>
+<li><a href="#llvm_intro-llvm-ir_1">LLVM IR 案例分析</a><ul>
+<li><a href="#llvm_intro-target">target 指定目标平台信息</a></li>
+<li><a href="#llvm_intro-define">define 定义函数</a></li>
+<li><a href="#llvm_intro-alloca">alloca 指令</a></li>
+<li><a href="#llvm_intro-store">store 指令</a></li>
+<li><a href="#llvm_intro-_16">未定义值（毒值）</a></li>
+<li><a href="#llvm_intro-load">load 指令</a></li>
+<li><a href="#llvm_intro-add">add 指令</a></li>
+<li><a href="#llvm_intro-ret">ret 指令</a></li>
 </ul>
 </li>
 <li><a href="#llvm_intro-clang-ir">Clang 生成 IR 汇编</a></li>
@@ -15968,28 +15998,28 @@ void t1() {
 </li>
 <li><a href="#llvm_intro-ir_1">IR 的二进制压缩版：字节码</a><ul>
 <li><a href="#llvm_intro-ir-ir">IR 汇编和 IR 字节码的不同之处</a><ul>
-<li><a href="#llvm_intro-_14">后缀名不同</a></li>
-<li><a href="#llvm_intro-_15">生成用的命令不同</a></li>
-<li><a href="#llvm_intro-_16">内容格式不同</a></li>
-<li><a href="#llvm_intro-_17">之间的转换</a></li>
-<li><a href="#llvm_intro-_18">一一对应的翻译关系</a></li>
+<li><a href="#llvm_intro-_17">后缀名不同</a></li>
+<li><a href="#llvm_intro-_18">生成用的命令不同</a></li>
+<li><a href="#llvm_intro-_19">内容格式不同</a></li>
+<li><a href="#llvm_intro-_20">之间的转换</a></li>
+<li><a href="#llvm_intro-_21">一一对应的翻译关系</a></li>
 </ul>
 </li>
-<li><a href="#llvm_intro-_19">字节码文件就是模块</a><ul>
-<li><a href="#llvm_intro-_20">字节码模块和对象文件的区别</a></li>
+<li><a href="#llvm_intro-_22">字节码文件就是模块</a><ul>
+<li><a href="#llvm_intro-_23">字节码模块和对象文件的区别</a></li>
 <li><a href="#llvm_intro-llvm_6">LLVM 编译的全过程图</a></li>
-<li><a href="#llvm_intro-_21">轶事：多个字节码模块可以链接</a></li>
+<li><a href="#llvm_intro-_24">轶事：多个字节码模块可以链接</a></li>
 </ul>
 </li>
 <li><a href="#llvm_intro-llvm-pass">调用 LLVM pass 优化</a><ul>
-<li><a href="#llvm_intro-_22">案例</a></li>
+<li><a href="#llvm_intro-_25">案例</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#llvm_intro-asm">汇编语言（ASM）</a></li>
-<li><a href="#llvm_intro-_23">汇编语言的终局：机器码</a></li>
-<li><a href="#llvm_intro-_24">构建好了吗</a></li>
+<li><a href="#llvm_intro-_26">汇编语言的终局：机器码</a></li>
+<li><a href="#llvm_intro-_27">构建好了吗</a></li>
 </ul>
 </li>
 </ul>
@@ -16311,108 +16341,6 @@ int main() {
 </ul>
 <p>在进入后端的“指令选择”阶段后，IR 节点中通用的那部分节点，会逐步被替换为和硬件绑定的相应 MachineInstr 节点，在“指令选择”后的阶段看来，就好像前面输出了一大堆内联汇编一样，最终，逐渐变成了完全的目标平台汇编，最终输出。</p>
 <h3 id="llvm_intro-llvm-ir">LLVM IR 的特点</h3>
-<p>以下是一段 C++ 代码：</p>
-<pre><code class="language-cpp">int main() {
-    int a = 0;
-    int b = 1;
-    return a + 1;
-}
-</code></pre>
-<p>及其所对应的 LLVM IR 汇编：</p>
-<pre><code class="language-wasm">; ModuleID = 'a.cpp'
-source_filename = &quot;a.cpp&quot;
-target datalayout = &quot;e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128&quot;
-target triple = &quot;x86_64-pc-linux-gnu&quot;
-
-; Function Attrs: mustprogress noinline norecurse nounwind optnone sspstrong uwtable
-define dso_local noundef i32 @main() #0 {
-  %1 = alloca i32, align 4
-  %2 = alloca i32, align 4
-  %3 = alloca i32, align 4
-  store i32 0, ptr %1, align 4
-  store i32 0, ptr %2, align 4
-  store i32 1, ptr %3, align 4
-  %4 = load i32, ptr %2, align 4
-  %5 = add nsw i32 %4, 1
-  ret i32 %5
-}
-
-attributes #0 = { mustprogress noinline norecurse nounwind optnone sspstrong uwtable &quot;frame-pointer&quot;=&quot;all&quot; &quot;min-legal-vector-width&quot;=&quot;0&quot; &quot;no-trapping-math&quot;=&quot;true&quot; &quot;stack-p
-rotector-buffer-size&quot;=&quot;8&quot; &quot;target-cpu&quot;=&quot;x86-64&quot; &quot;target-features&quot;=&quot;+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87&quot; &quot;tune-cpu&quot;=&quot;generic&quot; }
-
-!llvm.module.flags = !{!0, !1, !2, !3, !4}
-!llvm.ident = !{!5}
-
-!0 = !{i32 1, !&quot;wchar_size&quot;, i32 4}
-!1 = !{i32 8, !&quot;PIC Level&quot;, i32 2}
-!2 = !{i32 7, !&quot;PIE Level&quot;, i32 2}
-!3 = !{i32 7, !&quot;uwtable&quot;, i32 2}
-!4 = !{i32 7, !&quot;frame-pointer&quot;, i32 2}
-!5 = !{!&quot;clang version 18.1.8&quot;}
-</code></pre>
-<p>看起来好复杂！让我们一行一行来解读：</p>
-<pre><code class="language-wasm">; ModuleID = 'a.cpp'
-</code></pre>
-<p>这种以分号开头的，就是 IR 汇编语法中的注释，分号后面的东西会被无视，不影响实际结果。就和 C 语言的 <code>//</code> 一样，属于行注释。</p>
-<p>Clang 生成的 IR 汇编有时带有注释，仅仅是提示给人看的，并不影响后端的解析。这里的注释很明显是在提示，该汇编是由哪个源码文件产生的？是一个叫 <code>a.cpp</code> 的文件，但他并没有实际效力，只是给读汇编的你我看。</p>
-<pre><code class="language-wasm">source_filename = &quot;a.cpp&quot;
-</code></pre>
-<p>这才是真正对 LLVM 中端有效力的东西，他赋值了一个字符串，提示该 IR 汇编由哪个源码文件产生。这个 <code>source_filename</code> 属性，是由 Clang 在生成 IR 汇编时，主动加上告知 LLVM 后端的。也是为了方便调试，例如当 LLVM 中端中触发了报错，他可以以这个文件名来提示用户。</p>
-<pre><code class="language-wasm">target datalayout = &quot;e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128&quot;
-target triple = &quot;x86_64-pc-linux-gnu&quot;
-</code></pre>
-<p>这里指定的是关于“目标平台”的一些信息，分为两个部分。</p>
-<blockquote>
-<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 目标平台指的是当前源码要编译到什么硬件上执行，比如在我们的案例中，目标平台就是 x86。</p>
-</blockquote>
-<p>其中 <code>target triple</code> 是指定的目标平台的名字，这里我们是 <code>x86_64-pc-linux-gnu</code>，表示 64 位 x86 架构，桌面端，Linux 系统，GNU 编译器接口。不同的 <code>target triple</code> 会影响最终生成的汇编中函数调用约定、C++ 函数名重组等细节，可以认为这个 <code>triple</code> 就是我们常说的 ABI（二进制应用程序接口）。</p>
-<blockquote>
-<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如，在 Windows 上使用 <code>clang</code>，可能得到 <code>target triple</code> 是 <code>x86_64-pc-windows-msvc</code>（如果你是 MSVC 编译器）或者 <code>x86_64-pc-windows-gnu</code>（如果你是 MinGW 编译器），这两者产生的 C++ 函数名称重组会有不同。</p>
-<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 不同的操作系统和硬件，都会有不同的 ABI，例如 Linux 在 x86_64 上的 ABI 规定第一个参数由 <code>rdi</code> 传入，而 Windows 则是 <code>rcx</code>。这些细节都是由 <code>target triple</code> 确定的。</p>
-</blockquote>
-<p><code>target datalayout</code> 则是指定了目标平台的数据类型大小和布局等信息，例如指针大小、对齐方式等。例如在 x86_64-pc-linux-gnu 这个 ABI 上，<code>long</code> 是 64 位。而在 x86_64-pc-windows-msvc 上，<code>long</code> 是 32 位。这些信息会影响后端产生汇编的内存布局，因此，IR 是不跨平台的。</p>
-<p><code>target datalayout</code> 是一个很长的字符串，里面有多个由 <code>-</code> 分隔的字段。每个字段可以分别用来描述指针、整型、浮点型、矢量、数组、结构体、联合体等的大小和内存布局。</p>
-<p>例如上面的 <code>e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128</code>，我们首先按 <code>-</code> 拆分，得到每一个子字段。</p>
-<pre><code>e           // 表示目标平台的字节序，e=小端，E=大端
-m:e         // 表示 C++ 函数名称重组采用何种机制，e=ELF风格，w=Windows风格……等
-p270:32:32  // 垃圾信息，无视
-p271:32:32  // 垃圾信息，无视
-p272:64:64  // 指针大小 64 位，对齐到 64 位
-i64:64      // __int64 采用 64 位来存储
-i128:128    // __int128 采用 128 位来存储
-f80:128     // long double 采用 128 位来存储
-n8:16:32:64 // 指定哪些是目标 CPU 原生的类型大小，对于 64 位 x86 来说，分别有 8 位、16 位、32 位、64 位寄存器，所以都写上
-S128        // 栈指针（rsp）对齐到 128 位（16 字节），这是 64 位 x86 ABI 所要求的
-</code></pre>
-<blockquote>
-<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>target datalayout</code> 的详细语法，可以参考 <a href="https://llvm.org/docs/LangRef.html#data-layout">LLVM 官方文档</a>。</p>
-</blockquote>
-<p>继续看下去:</p>
-<pre><code class="language-wasm">; Function Attrs: mustprogress noinline norecurse nounwind optnone sspstrong uwtable
-define dso_local noundef i32 @main() #0 {
-    ...
-}
-</code></pre>
-<p>首先，以分号开头的 <code>; Function Attrs: ...</code> 是注释，可以忽略。</p>
-<blockquote>
-<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 注释里面的 <code>mustprogress noinline ...</code> 等，表示的是下面一个函数的“属性”。但是注释并没有实际效果，仅仅是提示作用，真正设置了属性的是更下面的 <code>attributes #0</code> 指令，Clang 生成一个注释只是让你看起来方便，不用跑到下面才能看到属性。</p>
-</blockquote>
-<p>那么，只剩下函数的定义了：</p>
-<pre><code class="language-wasm">define dso_local noundef i32 @main() #0 {
-    ...
-}
-</code></pre>
-<ul>
-<li><code>define</code> 表示这是一个函数的定义。</li>
-<li><code>dso_local</code> 和 <code>noundef</code> 是一些无关紧要的修饰，可以暂时无视。</li>
-<li><code>i32</code> 表示函数的返回类型，也就是 32 位整数类型，对应于 C++ 中的 <code>int</code>。</li>
-<li><code>@main</code> 是函数名字，其中 <code>@</code> 是所有函数名的固有前缀，后面的 <code>main</code> 就是我们当前定义的函数名称。</li>
-<li>函数名字后面紧接着的 <code>()</code> 表示参数列表，此处我们的 <code>main</code> 函数刚好没有任何参数，所以是一个空的括号（稍后我们会看一个有参数的案例）。</li>
-<li><code>#0</code> 表示该函数的编号，和寄存器编号一样。值得注意的是，函数编号和寄存器编号共用一个序列，当函数占用了 <code>#0</code> 以后，寄存器就不能再用 <code>%0</code> 了，要从 <code>%1</code> 开始。</li>
-<li><code>{</code> 中的内容，就是函数块内部的 IR 了。</li>
-</ul>
-<p>&hellip;</p>
-<h3 id="llvm_intro-llvm-ir_1">LLVM IR 的特点</h3>
 <p>IR 和目标平台的汇编相比，不仅仅是统一，好处有很多。</p>
 <h4 id="llvm_intro-_9">以函数为单位</h4>
 <p>每个 C++ 文件编译得到的 IR 汇编均由一系列函数定义（和少量特殊指令，比如 <code>target triple</code>）组成，所有的 IR 指令都包在函数中。</p>
@@ -16426,7 +16354,7 @@ define dso_local noundef i32 @main() #0 {
 <p>在后端的“寄存器分配”阶段，会把这些寄存器映射到相应的硬件寄存器。</p>
 <p>不用担心！如果后端发现 IR 中的寄存器用量超出了目标平台的寄存器数量上限，那么会选择一部分“打翻”（spill）到内存中去。</p>
 <p>而且如果发现寄存器可以复用，也会复用之前已经没用到的寄存器。例如以下 IR 中，看似用到了五个虚拟寄存器，实际只需要一个硬件寄存器就可以了，因为 %1 在被 %2 的 add 指令用完以后，就没人再使用了。这时就空出了一个硬件寄存器的资源，后来新的寄存器可以从这里顶替。</p>
-<pre><code class="language-wasm">%1 = 0
+<pre><code class="language-llvm">%1 = 0
 %2 = add %1, 1
 %2 = add %3, 1
 %3 = add %4, 1
@@ -16434,14 +16362,14 @@ define dso_local noundef i32 @main() #0 {
 </code></pre>
 <p>在 LLVM 中，是利用线性扫描法（电梯算法）来确定一个寄存器的生命周期（从第一次创建，到最后一次使用之间的时间段），对于生命周期有重叠的多个虚拟寄存器，才需要为他们分配独立的硬件寄存器，如果生命周期没有交集，那么可以让新来的虚拟寄存器复用老的硬件寄存器。</p>
 <p>线性扫描后，发现只需要用到一个硬件寄存器就够了：</p>
-<pre><code class="language-wasm">eax = 0
+<pre><code class="language-nasm">eax = 0
 eax = add eax, 1
 eax = add eax, 1
 eax = add eax, 1
 eax = add eax, 1
 </code></pre>
 <p>而如果 <code>%1</code> 寄存器后面还有使用，那就不能把 <code>%1</code> 所在的硬件寄存器复用了。</p>
-<pre><code class="language-wasm">%1 = 0
+<pre><code class="language-llvm">%1 = 0
 %2 = add %1, 1
 %2 = add %3, 1
 %3 = add %4, 1
@@ -16449,7 +16377,7 @@ eax = add eax, 1
 %5 = add %1, %4  ; 此处的使用延长了 %1 寄存器的生命周期！导致不能被优化掉
 </code></pre>
 <p>线性扫描后，发现至多需要分配两个硬件寄存器资源：</p>
-<pre><code class="language-wasm">eax = 0
+<pre><code class="language-nasm">eax = 0
 ecx = add eax, 1
 ecx = add ecx, 1
 ecx = add ecx, 1
@@ -16479,10 +16407,10 @@ return y;
 </code></pre>
 <p>很明显，我们可以把 <code>x = 1</code> 这一行优化掉，因为后面的 <code>x = 2</code> 已经把他覆盖了。但是如何确定这一点？很困难。</p>
 <p>而如果先通过 <code>mem2reg</code> 转成 SSA IR 的虚拟寄存器，这时他会注意到 <code>x = 1</code> 和 <code>x = 2</code> 是两个独立的赋值，生命周期互不重叠，可以拆成两个常量，安全放进只读的虚拟寄存器。</p>
-<pre><code class="language-cpp">%x1 = 1;
-%x2 = 2;
-%y = %x2;
-return %y;
+<pre><code class="language-cpp">x1 = 1;
+x2 = 2;
+y = x2;
+return y;
 </code></pre>
 <p>然后，由于 <code>%x1</code> 根本没有使用过，在后端的“寄存器分配”阶段，很容易就把 <code>%x1</code> 这个未使用的变量剔除掉。即使不是后端，中端的一些其他优化 pass 也很容易清除这些未使用的常量寄存器。</p>
 <p>总之，通过 SSA 规则，把“寄存器被覆盖”这个比较难检测的条件，变成了“寄存器只定义，没人使用”这个很容易检测的事实，大大方便了优化。</p>
@@ -16490,21 +16418,25 @@ return %y;
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 由于 LLVM 的研究主要集中在中端，在中端的语境下提到的寄存器，如非特别说明，读者应当默认指的就是 LLVM 虚拟寄存器，而不是硬件寄存器。</p>
 </blockquote>
 <h4 id="llvm_intro-_12">三操作数指令</h4>
-<h4 id="llvm_intro-_13">定义与使用</h4>
+<p>&hellip;</p>
+<h4 id="llvm_intro-_13">强类型</h4>
+<p>强类型的 IR 可以大大帮助优化</p>
+<h4 id="llvm_intro-_14">不区分整数类型有无符号</h4>
+<h4 id="llvm_intro-_15">定义与使用</h4>
 <p>这里我们有必要明确一下“定义(define)”和“使用(use)”。这是两个编译器领域的术语，用于描述 SSA IR 的寄存器及其用况。</p>
 <p>定义：一个寄存器被赋值的地方，就是他的定义。</p>
-<pre><code class="language-wasm">%1 = 1            ; %1 的定义
+<pre><code class="language-llvm">%1 = 1            ; %1 的定义
 %2 = 2            ; %2 的定义
 %3 = add %1, %2   ; %3 的定义
 </code></pre>
 <p>因为 LLVM IR 是 SSA 的，所有寄存器都是常量，只能在初始化时被赋值一次。所以寄存器的定义是唯一的，也就是初始化的那一次赋值的地方。</p>
 <p>表示一个寄存器的定义中，其初始化，用到了哪些其他寄存器做参数。这些被引用了的“参数寄存器”，就是他的“使用”。</p>
-<pre><code class="language-wasm">%1 = 1
+<pre><code class="language-llvm">%1 = 1
 %2 = 2
 %3 = add %1, %2   ; %3 使用了 %1 和 %2
 </code></pre>
 <p>初始化为常数的寄存器，没有使用任何其他寄存器。</p>
-<pre><code class="language-wasm">%1 = 233         ; %1 没有使用任何人！
+<pre><code class="language-llvm">%1 = 233         ; %1 没有使用任何人！
 </code></pre>
 <p>在 LLVM 中维护有“定义-使用(def-use)”和“使用-定义(use-def)”的双向映射关系。</p>
 <ul>
@@ -16537,28 +16469,254 @@ for (llvm::Use &amp;U: pi-&gt;operands()) {
 <li>优化类 pass 的输入是一段 IR，输出也是一段 IR，被改变后的 IR。LLVM 实现优化，就是通过一系列优化 pass 的组合完成的。有时，优化 pass 会需要一些分析的结果，才能进行，因此优化 pass 有时会请求一些分析 pass 的结果，LLVM 会检查这个分析之前有没有进行过，如果有，就会复用上次分析的结果，不会重新分析浪费时间。优化 pass 在修改了 IR 后，需要返回一个标志位，表示 IR 修改后，哪些分析 pass 的结果可能会失效。如果不确定，就返回 <code>all</code> 吧：本优化 pass 修改过 IR 后所有之前分析 pass 缓存的结果都会失效。</li>
 </ul>
 <p>如何判断一个虚拟寄存器是否可以被优化掉？检测他有没有被别人“使用”：也就是查询他的“定义-使用”映射，如果发现“使用者列表”为空，就说明该寄存器的“定义”没人使用，可以优化掉。</p>
-<h3 id="llvm_intro-clang-ir">Clang 生成 IR 汇编</h3>
-<p>我们编写一段简单的 C++ 代码：</p>
+<h3 id="llvm_intro-llvm-ir_1">LLVM IR 案例分析</h3>
+<p>以下是一段 C++ 代码：</p>
 <pre><code class="language-cpp">int main() {
     int a = 0;
     int b = 1;
     return a + 1;
 }
 </code></pre>
+<p>及其所对应的 LLVM IR 汇编：</p>
+<pre><code class="language-llvm">; ModuleID = 'a.cpp'
+source_filename = &quot;a.cpp&quot;
+target datalayout = &quot;e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128&quot;
+target triple = &quot;x86_64-pc-linux-gnu&quot;
+
+; Function Attrs: mustprogress noinline norecurse nounwind optnone sspstrong uwtable
+define dso_local noundef i32 @main() #0 {
+  %1 = alloca i32, align 4
+  %2 = alloca i32, align 4
+  store i32 1, ptr %1, align 4
+  store i32 2, ptr %2, align 4
+  %3 = load i32, ptr %1, align 4
+  %4 = load i32, ptr %2, align 4
+  %5 = add nsw i32 %3, %4
+  ret i32 %5
+}
+
+attributes #0 = { mustprogress noinline norecurse nounwind optnone sspstrong uwtable &quot;frame-pointer&quot;=&quot;all&quot; &quot;min-legal-vector-width&quot;=&quot;0&quot; &quot;no-trapping-math&quot;=&quot;true&quot; &quot;stack-p
+rotector-buffer-size&quot;=&quot;8&quot; &quot;target-cpu&quot;=&quot;x86-64&quot; &quot;target-features&quot;=&quot;+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87&quot; &quot;tune-cpu&quot;=&quot;generic&quot; }
+
+!llvm.module.flags = !{!0, !1, !2, !3, !4}
+!llvm.ident = !{!5}
+
+!0 = !{i32 1, !&quot;wchar_size&quot;, i32 4}
+!1 = !{i32 8, !&quot;PIC Level&quot;, i32 2}
+!2 = !{i32 7, !&quot;PIE Level&quot;, i32 2}
+!3 = !{i32 7, !&quot;uwtable&quot;, i32 2}
+!4 = !{i32 7, !&quot;frame-pointer&quot;, i32 2}
+!5 = !{!&quot;clang version 18.1.8&quot;}
+</code></pre>
+<p>看起来好复杂！让我们一行一行来解读：</p>
+<pre><code class="language-llvm">; ModuleID = 'a.cpp'
+</code></pre>
+<p>这种以分号开头的，就是 IR 汇编语法中的注释，分号后面的东西会被无视，不影响实际结果。就和 C 语言的 <code>//</code> 一样，属于行注释。</p>
+<p>Clang 生成的 IR 汇编有时带有注释，仅仅是提示给人看的，并不影响后端的解析。这里的注释很明显是在提示，该汇编是由哪个源码文件产生的？是一个叫 <code>a.cpp</code> 的文件，但他并没有实际效力，只是给读汇编的你我看。</p>
+<pre><code class="language-llvm">source_filename = &quot;a.cpp&quot;
+</code></pre>
+<h4 id="llvm_intro-target">target 指定目标平台信息</h4>
+<p>这才是真正对 LLVM 中端有效力的东西，他赋值了一个字符串，提示该 IR 汇编由哪个源码文件产生。这个 <code>source_filename</code> 属性，是由 Clang 在生成 IR 汇编时，主动加上告知 LLVM 后端的。也是为了方便调试，例如当 LLVM 中端中触发了报错，他可以以这个文件名来提示用户。</p>
+<pre><code class="language-llvm">target datalayout = &quot;e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128&quot;
+target triple = &quot;x86_64-pc-linux-gnu&quot;
+</code></pre>
+<p>这里指定的是关于“目标平台”的一些信息，分为两个部分。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 目标平台指的是当前源码要编译到什么硬件上执行，比如在我们的案例中，目标平台就是 x86。</p>
+</blockquote>
+<p>其中 <code>target triple</code> 是指定的目标平台的名字，这里我们是 <code>x86_64-pc-linux-gnu</code>，表示 64 位 x86 架构，桌面端，Linux 系统，GNU 编译器接口。不同的 <code>target triple</code> 会影响最终生成的汇编中函数调用约定、C++ 函数名重组等细节，可以认为这个 <code>triple</code> 就是我们常说的 ABI（二进制应用程序接口）。</p>
+<blockquote>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如，在 Windows 上使用 <code>clang</code>，可能得到 <code>target triple</code> 是 <code>x86_64-pc-windows-msvc</code>（如果你是 MSVC 编译器）或者 <code>x86_64-pc-windows-gnu</code>（如果你是 MinGW 编译器），产生的 C++ 函数名称重组会有不同。在 MacOS 上还会得到 <code>x86_64-apple-darwin</code> 或 <code>aarch64-apple-darmin</code>。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 不同的操作系统和硬件，都会有不同的 ABI，例如 Linux 在 x86_64 上的 ABI 规定第一个参数由 <code>rdi</code> 传入，而 Windows 则是 <code>rcx</code>。这些细节都是由 <code>target triple</code> 确定的。</p>
+</blockquote>
+<p><code>target datalayout</code> 则是指定了目标平台的数据类型大小和布局等信息，例如指针大小、对齐方式等。例如在 x86_64-pc-linux-gnu 这个 ABI 上，<code>long</code> 是 64 位。而在 x86_64-pc-windows-msvc 上，<code>long</code> 是 32 位。这些信息会影响后端产生汇编的内存布局，因此，IR 是不跨平台的。</p>
+<p><code>target datalayout</code> 是一个很长的字符串，里面有多个由 <code>-</code> 分隔的字段。每个字段可以分别用来描述指针、整型、浮点型、矢量、数组、结构体、联合体等的大小和内存布局。</p>
+<p>例如上面的 <code>e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128</code>，我们首先按 <code>-</code> 拆分，得到每一个子字段。</p>
+<pre><code>e           // 表示目标平台的字节序，e=小端，E=大端
+m:e         // 表示 C++ 函数名称重组采用何种机制，e=ELF风格，w=Windows风格……等
+p270:32:32  // 垃圾信息，无视
+p271:32:32  // 垃圾信息，无视
+p272:64:64  // 指针大小 64 位，对齐到 64 位
+i64:64      // __int64 采用 64 位来存储
+i128:128    // __int128 采用 128 位来存储
+f80:128     // long double 采用 128 位来存储
+n8:16:32:64 // 指定哪些是目标 CPU 原生的类型大小，对于 64 位 x86 来说，分别有 8 位、16 位、32 位、64 位寄存器，所以都写上
+S128        // 栈指针（rsp）对齐到 128 位（16 字节），这是 64 位 x86 ABI 所要求的
+</code></pre>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>target datalayout</code> 的详细语法，可以参考 <a href="https://llvm.org/docs/LangRef.html#data-layout">LLVM 官方文档</a>。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 270、271、272 是三个枚举值，分别表示 <code>PTR32_SPTR</code>、<code>PTR32_UPTR</code> 和 <code>PTR64</code>，表示不同的指针类型。前两个是因为 <code>x86_64</code> 架构依然支持以 32 位寄存器做地址访问内存（非常愚蠢的设定，请忽视），后面的 <code>PTR64</code> 才是我们正常使用的 64 位指针。枚举的定义请看 <a href="https://github.com/llvm/llvm-project/blob/release/12.x/llvm/lib/Target/X86/X86.h#L178"><code>llvm/lib/Target/X86/X86.h</code></a>。</p>
+</blockquote>
+<h4 id="llvm_intro-define">define 定义函数</h4>
+<p>继续看下去:</p>
+<pre><code class="language-llvm">; Function Attrs: mustprogress noinline norecurse nounwind optnone sspstrong uwtable
+define dso_local noundef i32 @main() #0 {
+    ...
+}
+</code></pre>
+<p>首先，以分号开头的 <code>; Function Attrs: ...</code> 是注释，可以忽略。</p>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 注释里面的 <code>mustprogress noinline ...</code> 等，表示的是下面一个函数的“属性”。但是注释并没有实际效果，仅仅是提示作用，真正设置了属性的是更下面的 <code>attributes #0</code> 指令，Clang 生成一个注释只是让你看起来方便，不用跑到下面才能看到属性。</p>
+</blockquote>
+<p>那么，只剩下函数的定义了：</p>
+<pre><code class="language-llvm">define dso_local noundef i32 @main() #0 {
+    ...
+}
+</code></pre>
+<ul>
+<li><code>define</code> 表示这是一个函数的定义。</li>
+<li><code>dso_local</code> 是函数 <code>main</code> 的修饰符，意味着编译器可以假设标记该函数或变量被解析为同一链接单元内的符号，dso代表动态共享对象（dynamic shared object），可以先无视。</li>
+<li><code>noundef</code> 是返回类型 <code>i32</code> 的修饰符，表示该函数不会返回一个未定义的值，注意 <code>noundef</code> 修饰的是右边的返回类型 <code>i32</code> 而不是函数本身。这个属性可以用于帮助编译器排除一些未定义行为，也可以先无视。</li>
+<li><code>i32</code> 表示函数的返回类型，也就是 32 位整数类型，对应于 C++ 中的 <code>int</code>。</li>
+<li><code>@main</code> 是函数名字，其中 <code>@</code> 是所有函数名的固有前缀，后面的 <code>main</code> 就是我们当前定义的函数名称。</li>
+<li>函数名字后面紧接着的 <code>()</code> 表示参数列表，此处我们的 <code>main</code> 函数刚好没有任何参数，所以是一个空的括号（稍后我们会看一个有参数的案例）。</li>
+<li><code>#0</code> 表示该函数的编号，就和寄存器编号一样，所有函数都有一个从 0 开始的编号。</li>
+<li><code>{}</code> 中的内容，就是函数块内部的 IR 了，这些是 <code>main</code> 函数的函数体，每当函数被调用时，就会执行其中的所有 IR 节点。</li>
+</ul>
+<p>总之，函数或全局变量的定义也是一个 IR 节点，同样有从 0 开始递增的“寄存器编号”，但他并不是寄存器，所以函数或全局变量用 <code>#n</code> 表示，而寄存器用 <code>%n</code> 表示。</p>
+<pre><code class="language-llvm">define dso_local noundef i32 @main() #0 {
+  %1 = alloca i32, align 4
+  %2 = alloca i32, align 4
+  store i32 1, ptr %1, align 4
+  store i32 2, ptr %2, align 4
+  %3 = load i32, ptr %1, align 4
+  %4 = load i32, ptr %2, align 4
+  %5 = add nsw i32 %3, %4
+  ret i32 %5
+}
+</code></pre>
+<p>让我们一条一条解析函数体内的这些 IR 节点吧！</p>
+<h4 id="llvm_intro-alloca">alloca 指令</h4>
+<pre><code class="language-llvm">%1 = alloca i32, align 4
+</code></pre>
+<ul>
+<li><code>%1</code> 表示了寄存器的名字，<code>=</code> 右边就是该寄存器的定义。这里要介绍 LLVM IR 的一个重要规则：所有寄存器都是常量！寄存器一旦定义（赋值）过一次后就不能再修改，除非定义一个新的寄存器。为了产生可以动态修改的变量，Clang 必须使用 <code>alloca</code> 指令分配一块“栈内存”，栈内存总是可读写的。</li>
+<li><code>alloca</code> 表示这是一个栈内存分配指令，他会在当前函数 <code>main</code> 的栈上分配一个类型为 <code>i32</code> 的内存空间。</li>
+<li><code>i32</code> 指定了栈内存要分配的类型是 “32 位整数”。注意 LLVM IR 是一个有类型的 IR，此处我们需要指定变量的实际类型 <code>i32</code> 而不是指定一个 <code>4</code> 表示大小。</li>
+<li><code>align 4</code> 表示返回地址所要求的对齐度，根据 C 语言规则要求，<code>int</code> 类型必须对齐到 4 字节，因此指定 <code>align 4</code>。其他语言若没有此规定，也可以生成 <code>align 1</code> 在 IR 中。</li>
+<li><code>alloca</code> 会“返回”一个指针，用于初始化 <code>%1</code>。类型是 <code>i32*</code>（这里的 <code>*</code> 和 C 语言的指针一样，表示前面类型的指针类型），该指针指向栈上分配好的 <code>i32</code> 变量。<code>%1</code> 寄存器就这样被定义为实际变量的地址值。</li>
+<li>这条 IR 指令执行完毕后，<code>%1</code> 寄存器里的值，就是指向的指针。由于寄存器都是常量，<code>%1</code> 这个指针本身在函数退出前，将永远不变。但是指针不能变，指针指向的值可以变，所以之后只需要以指针形式读写其指向的地址，就可以实现可变的变量，而不用受制于寄存器不可变。</li>
+</ul>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 在 LLVM IR 层面，不存在取地址运算符 <code>&amp;</code>。或者说，所有局部变量保存的本来就是他们的地址（通过 <code>alloca</code> 返回的）。正常赋值和读取变量的操作都是通过 <code>store</code> 和 <code>load</code> 间接通过变量的指针来修改变量的，寄存器本身不可变。如果使用了取地址运算符 <code>&amp;</code>，那么实际上就是原封不动把寄存器的指针值赋给你而已。</p>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 如果有一个局部变量的类型本身就是指针（比如 <code>char *</code>），那么通过 <code>alloca i8*</code> 定义的寄存器的类型就会是一个二级指针（<code>i8**</code>）。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> C++ 引用在 LLVM IR 层面同样也会变成指针类型的变量。注意，我只是说 C++ 引用和指针会在 LLVM 中会同样变成指针类型，并不是说在 Clang 前端里引用和指针没区别。</p>
+</blockquote>
+<p>所以，这里的 <code>%1</code> 和 <code>%2</code> 其实是对应源码中的 <code>a</code> 和 <code>b</code> 变量（的指针）。</p>
+<pre><code class="language-llvm">%1 = alloca i32, align 4  ; int a
+%2 = alloca i32, align 4  ; int b
+</code></pre>
+<h4 id="llvm_intro-store">store 指令</h4>
+<p>继续接着看：</p>
+<pre><code class="language-llvm">store i32 1, ptr %1, align 4
+</code></pre>
+<p>这是一条 <code>store</code> 指令。</p>
+<ul>
+<li>指令的第一个参数 <code>i32 1</code> 表示要存入的值，这里我们写入一个常数 <code>1</code>。LLVM IR 中指令所有的参数都需要在前面指定类型名，我们要写入的 <code>a</code> 变量是 <code>int</code> 也就是 <code>i32</code> 类型，所以用 <code>i32</code> 修饰要写入的值 <code>1</code>。</li>
+<li>第二个参数 <code>ptr %1</code> 表示要写入到的地址，必须是指针类型。这里的 <code>ptr</code> 是 <code>i32*</code> 的简写，等价于 <code>i32* %1</code>。由于刚才 <code>%1</code> 定义为 <code>alloca</code>，也就是在栈上分配了一个变量（C++ 源码中的 <code>a</code>）。<code>%1</code> 是一个指针，其值是 <code>a</code> 的地址。所以此处 <code>store</code> 的效果是往变量 <code>a</code> 中写入了一个常数 <code>1</code>。</li>
+<li>第三个参数 <code>align 4</code> 告诉编译器可以假定 <code>ptr %1</code> 是对齐到 4 字节的，提供该信息有助于之后矢量化 pass 的优化。</li>
+</ul>
+<p><code>alloca</code> 和紧接着的 <code>store</code> 这两条指令，连起来，就是在栈上分配（<code>alloca</code>）了一个变量 <code>a</code> 之后，向其中赋了一个初始值 <code>0</code>。</p>
+<p>注意到，<code>store</code> 并没有用于定义一个寄存器（例如 <code>%1 = store ...</code>）。</p>
+<p><code>store</code> 指令没有“返回值”，因此他不会定义任何寄存器；<code>store</code> 本身是因为其写入产生的副作用而存在，不需要有人“使用”他的值。</p>
+<blockquote>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 因为有副作用，<code>store</code> 就不能简单地被 def-use 分析 pass 优化掉了，所以需要先过一个 mem2reg pass 把能转化掉的 <code>store</code> 尽可能转成容易优化的寄存器。</p>
+</blockquote>
+<pre><code class="language-llvm">%1 = alloca i32, align 4      ; int a
+%2 = alloca i32, align 4      ; int b
+store i32 1, ptr %1, align 4  ; a = 1
+store i32 2, ptr %2, align 4  ; a = 2
+</code></pre>
+<h4 id="llvm_intro-_16">未定义值（毒值）</h4>
+<p>如果你只是 <code>alloca</code>，而没有往里面 <code>store</code> 赋值过的话，那么该栈变量的值是“未定义值”，在 C++ 标准中，访问（<code>load</code>）一个“未定义值”是未定义行为，例如：</p>
+<pre><code class="language-cpp">int a;
+return a;  // 错误：a 未初始化，里面的值是未定义值！
+</code></pre>
+<p>读取没有初始化过的栈变量，在 x86 和 ARM 等具体架构中，你可能会读到内存中的随机变量。</p>
+<p>在 LLVM 中，这类处于未初始化状态的值有一个特殊的名字，叫“毒值”（poison value）。</p>
+<p>毒值不是 C++ 标准的一部分，也不是硬件架构的一部分，而是 LLVM 中端人为定义的（因为很多系统级语言都有支持未初始化的内存，知道哪些值是不可能的有助于 LLVM 优化）。</p>
+<blockquote>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> “毒值”并不是随机值，他是 <code>i32</code> 表示空间之外的一个特殊值，不是被 0 到 4294967295 范围内的任何整数，而是一个特殊的用于标识“未定义行为”的一个 LLVM 中才有的抽象概念，意思是“这个值现在不能使用”。只不过在转换为具体架构的汇编代码后往往会变成“随机值”这一具体实现，依赖这一点的后果是未定义的。（例如你不能用一个“未初始化变量”生成随机数，在高优化下可能产生匪夷所思的结果，而且也并不一定够随机）</p>
+</blockquote>
+<ul>
+<li><code>alloca</code> 后没有 <code>store</code> 过的栈变量初始就是为毒值。如果尝试直接 <code>load</code> 这个地址，那么 <code>load</code> 返回的寄存器就和初始化为“毒值”。</li>
+<li>毒值会感染所有“使用”了他的寄存器。例如 <code>%1</code> 是毒值，那么 <code>%2 = add %1, 1</code> 也是毒值，因为 <code>%2</code> “使用”了的 <code>%1</code> 是毒值。</li>
+<li>标记为 <code>noundef</code> 类型的变量（例如 <code>noundef i32</code>），必须不能是毒值，否则触发未定义行为。</li>
+</ul>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如，一个返回类型标记为 <code>noundef</code>（表示该函数不应返回毒值）的函数返回了毒值，那么就触发了未定义行为。</p>
+</blockquote>
+<h4 id="llvm_intro-load">load 指令</h4>
+<pre><code class="language-llvm">%3 = load i32, ptr %1, align 4   ; 加载 a
+%4 = load i32, ptr %2, align 4   ; 加载 b
+</code></pre>
+<p>TODO</p>
+<h4 id="llvm_intro-add">add 指令</h4>
+<pre><code class="language-llvm">%5 = add nsw i32 %3, %4
+</code></pre>
+<p>LLVM 中有加减乘除的指令，其中 <code>add</code> 就是其中负责整数加法运算的指令，他接受两个操作数做参数。</p>
+<ul>
+<li><code>add</code> 表示这是一条加法运算指令。</li>
+<li><code>nsw</code> 是一个修饰符，可以先忽略不管。</li>
+<li><code>i32</code> 表示加法操作的类型是 32 位整数类型，在进行加法前，必须先把两边的整数类型转换到相同的类型，否则无法相加。</li>
+</ul>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 在 Clang 前端中，如果发现两边的类型大小不同：会先用 <code>sext</code>（有符号扩展）或 <code>zext</code>（无符号扩展）指令，把较小那边的类型，转换到两者之间最大的那个类型。然后再做加法。对于浮点数和整数相加的情况，则是先把整数转换为浮点数后再调用浮点数加法 <code>fadd</code>。总之，LLVM IR 里所有的数学运算指令都发生在相同类型之间。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 对于好奇宝宝：<code>nsw</code> 表示 no signed wrap，意思是告诉 LLVM 后端，这个是有符号加法，并且保证不会溢出。为什么不会溢出？因为 C++ 标准规定“有符号整数类型加法如果发生溢出是未定义行为，并不一定会回环（wrap）”，所以 Clang 把这个信息告诉 LLVM 后端，用户这个加法如果溢出了是未定义行为，LLVM 可以利用这一点来优化！换句话说：<code>nsw</code> 表示左右两个 <code>i32</code> 作为有符号数相加如果溢出会返回“毒值”。但是 C++ 标准又规定无符号整数类型溢出是必定回环，不会未定义行为，所以你可以试试看把 <code>int</code> 替换为 <code>unsigned int</code>，你会发现 <code>nsw</code> 没了，因为 Clang 知道 C++ 标准允许 <code>unsigned int</code> 加法出现回环。另外，如果使用 Rust 的 <code>i32</code> 加法，也会没有 <code>nsw</code>，因为 Rust 标准规定整数无论有没有符号，其加法溢出总是回环，不会有未定义行为，那么 LLVM 后端收到 Rust 编译器产生的 IR 后，就不会假定加法不会溢出来优化了。</p>
+</blockquote>
+<p>这条指令对应于 C++ 中的 <code>a + b</code> 表达式，用于计算两个变量的和，计算结果存入 <code>%5</code> 寄存器。</p>
+<h4 id="llvm_intro-ret">ret 指令</h4>
+<pre><code class="language-llvm">ret i32 %5
+</code></pre>
+<p><code>ret</code> 表示函数返回。通常出现在函数的末尾，对应于 C++ 中的 <code>return</code> 语句。</p>
+<p>如果函数返回类型不为 <code>void</code>，则可以指定一个返回值（常数或寄存器的形式）。例如这里指定了 <code>i32 %5</code> 就表示函数会返回寄存器 <code>%5</code> 的值。</p>
+<p>而 <code>%5</code> 就是刚才我们 <code>add</code> 指令的运算结果，所以 <code>ret</code> 和 <code>add</code> 这两条指令就对应于 C++ 中的 <code>return a + b</code>。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 和 <code>store</code> 一样，<code>ret</code> 也是一条无寄存器定义的指令。</p>
+</blockquote>
+<h3 id="llvm_intro-clang-ir">Clang 生成 IR 汇编</h3>
+<p>我们编写一段简单的 C++ 代码：</p>
+<pre><code class="language-cpp">#include &lt;cstdio&gt;
+
+int main() {
+    printf(&quot;Hello, world!&quot;);
+    return 0;
+}
+</code></pre>
 <p>指定 <code>-S -emit-llvm</code> 选项，就可以让 <code>clang</code> 生成 IR 汇编供你查看了（<code>-o</code> 可以指定输出到的文件路径）。</p>
 <pre><code>clang -S -emit-llvm a.cpp -o a.ll
 </code></pre>
 <p>以下是 Clang 解析得到的 IR（汇编形式打印）：</p>
-<pre><code class="language-wasm">define dso_local noundef i32 @main() #0 {
-  %1 = alloca i32, align 4
-  %2 = alloca i32, align 4
-  store i32 0, ptr %1, align 4
-  store i32 1, ptr %2, align 4
-  %3 = load i32, ptr %2, align 4
-  %4 = add nsw i32 %3, 1
-  ret i32 %4
+<pre><code class="language-llvm">; ModuleID = 'a.cpp'
+source_filename = &quot;a.cpp&quot;
+target datalayout = &quot;e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128&quot;
+target triple = &quot;x86_64-pc-linux-gnu&quot;
+
+@.str = private unnamed_addr constant [14 x i8] c&quot;Hello, world!\00&quot;, align 1
+
+; Function Attrs: mustprogress noinline norecurse optnone sspstrong uwtable
+define dso_local noundef i32 @main() #0 {
+  %1 = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  ret i32 0
 }
+
+declare i32 @printf(ptr noundef, ...) #1
+
+attributes #0 = { mustprogress noinline norecurse optnone sspstrong uwtable &quot;frame-pointer&quot;=&quot;all&quot; &quot;min-legal-vector-width&quot;=&quot;0&quot; &quot;no-trapping-math&quot;=&quot;true&quot; &quot;stack-protector-buffer-size&quot;=&quot;8&quot; &quot;target-cpu&quot;=&quot;x86-64&quot; &quot;target-features&quot;=&quot;+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87&quot; &quot;tune-cpu&quot;=&quot;generic&quot; }
+attributes #1 = { &quot;frame-pointer&quot;=&quot;all&quot; &quot;no-trapping-math&quot;=&quot;true&quot; &quot;stack-protector-buffer-size&quot;=&quot;8&quot; &quot;target-cpu&quot;=&quot;x86-64&quot; &quot;target-features&quot;=&quot;+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87&quot; &quot;tune-cpu&quot;=&quot;generic&quot; }
+
+!llvm.module.flags = !{!0, !1, !2, !3, !4}
+!llvm.ident = !{!5}
+
+!0 = !{i32 1, !&quot;wchar_size&quot;, i32 4}
+!1 = !{i32 8, !&quot;PIC Level&quot;, i32 2}
+!2 = !{i32 7, !&quot;PIE Level&quot;, i32 2}
+!3 = !{i32 7, !&quot;uwtable&quot;, i32 2}
+!4 = !{i32 7, !&quot;frame-pointer&quot;, i32 2}
+!5 = !{!&quot;clang version 18.1.8&quot;}
 </code></pre>
+<p>还是照例介绍一下新出现的指令：</p>
+<p>TODO</p>
 <h3 id="llvm_intro-llvm-ir_2">轶事：LLVM IR 不跨平台</h3>
 <p>Clang 编译时是什么平台就是什么平台了，不同目标平台的 IR 会有些微的不一样（由于一些软件需要利用硬件 intrinsics）。一份 IR 从生成开始，就注定永远只能变成指定目标平台的机器码。</p>
 <p>这是因为虽然 IR 是通用的中间表示层，但类型大小，矢量宽度等信息和硬件高度绑定。</p>
@@ -16575,12 +16733,12 @@ for (llvm::Use &amp;U: pi-&gt;operands()) {
 <p>他们是<strong>完全等价的</strong>，都是 IR 的两种表现方式：一个是文本格式（适合人类阅读），一个是二进制格式（适合程序阅读）。</p>
 <p>IR 字节码中的每个（或多个）字节都可以和 IR 汇编中的一行 IR 指令一一对应。</p>
 <h3 id="llvm_intro-ir-ir">IR 汇编和 IR 字节码的不同之处</h3>
-<h4 id="llvm_intro-_14">后缀名不同</h4>
+<h4 id="llvm_intro-_17">后缀名不同</h4>
 <ul>
 <li>IR 汇编：<code>.ll</code></li>
 <li>IR 字节码: <code>.bc</code></li>
 </ul>
-<h4 id="llvm_intro-_15">生成用的命令不同</h4>
+<h4 id="llvm_intro-_18">生成用的命令不同</h4>
 <ul>
 <li>Clang 生成 IR 汇编：使用 <code>-S -emit-llvm</code> 选项。</li>
 </ul>
@@ -16591,11 +16749,11 @@ for (llvm::Use &amp;U: pi-&gt;operands()) {
 </ul>
 <pre><code class="language-bash">clang -c -emit-llvm a.cpp -o a.bc
 </code></pre>
-<h4 id="llvm_intro-_16">内容格式不同</h4>
+<h4 id="llvm_intro-_19">内容格式不同</h4>
 <ul>
 <li>IR 汇编: 文本格式（a.ll）</li>
 </ul>
-<pre><code class="language-wasm">; ModuleID = 'a.cpp'
+<pre><code class="language-llvm">; ModuleID = 'a.cpp'
 source_filename = &quot;a.cpp&quot;
 target datalayout = &quot;e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128&quot;
 target triple = &quot;x86_64-pc-linux-gnu&quot;
@@ -16636,7 +16794,7 @@ attributes #0 = { mustprogress noinline norecurse nounwind optnone sspstrong uwt
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 以上为使用 <code>hexdump</code> 工具查看的十六进制字节可视化结果。<code>.bc</code> 的实际内容完全是二进制，直接 <code>cat</code> 到终端会乱码。</p>
 </blockquote>
-<h4 id="llvm_intro-_17">之间的转换</h4>
+<h4 id="llvm_intro-_20">之间的转换</h4>
 <ul>
 <li>IR 汇编到 IR 字节码：<code>llvm-as</code>，把文本 IR 编译成紧凑压缩的字节码。</li>
 </ul>
@@ -16647,7 +16805,7 @@ attributes #0 = { mustprogress noinline norecurse nounwind optnone sspstrong uwt
 </ul>
 <pre><code class="language-bash">llvm-dis test.bc -o test.ll
 </code></pre>
-<h4 id="llvm_intro-_18">一一对应的翻译关系</h4>
+<h4 id="llvm_intro-_21">一一对应的翻译关系</h4>
 <p>IR 字节码和 IR 汇编的关系，正如 x86 汇编和 x86 机器码的关系，之间是一一对应的翻译关系。</p>
 <p>IR 字节码是二进制的，对计算机友好；而 IR 汇编是人类可读的 ASCII 字符，方便人类阅读和调试，他们本质上都是 IR。</p>
 <blockquote>
@@ -16657,14 +16815,14 @@ attributes #0 = { mustprogress noinline norecurse nounwind optnone sspstrong uwt
 <blockquote>
 <p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 但和 Java 的字节码又不一样，LLVM 的字节码本来就是二进制的 IR。而 IR 并不跨平台，所以字节码也不跨平台。LLVM 团队提供 lli 工具主要是为了方便临时测试 IR，用于生产环境的肯定还是 llc 编译好产生真正的高效机器码。</p>
 </blockquote>
-<h3 id="llvm_intro-_19">字节码文件就是模块</h3>
+<h3 id="llvm_intro-_22">字节码文件就是模块</h3>
 <p><strong>得到的 .bc 字节码文件也被称为一个模块（Module），模块由一系列 IR 阶段的组成；正如对象文件（.o）由大量汇编指令组成一样。</strong></p>
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 这里说的 LLVM 模块和 C++20 的 Modules 特性关系不大，模块是 LLVM 很早就有的概念，撞名了而已。</p>
 </blockquote>
 <p>一个 .cpp 文件编译可以产生 IR 汇编（.ll），IR 汇编可以通过 <code>llvm-as</code> 编译得到一个模块（.bc）。因此可以粗略的认为，<strong>一个源文件（.cpp）编译后就是一个模块（.bc）</strong>。</p>
 <p>而 LLVM 模块（.bc）可以进一步编译成通用的对象文件（.o），从而就是我们看到的：一个 .cpp 文件对应一个 .o 文件了。</p>
-<h4 id="llvm_intro-_20">字节码模块和对象文件的区别</h4>
+<h4 id="llvm_intro-_23">字节码模块和对象文件的区别</h4>
 <ul>
 <li>字节码（.bc）是 LLVM 内部的文件格式，不通用。但由于其直接存储 IR，方便 LLVM 处理和优化，且可以很容易通过 llvm-dis 反汇编成人类可读的 IR 汇编来查看（.ll）。通常用于调试 LLVM，以及目标平台不是 CPU 的情况（例如 CUDA PTX）。</li>
 <li>对象文件（.o）是类 Unix 平台通用的 ELF 格式（在 Windows 平台则是 .obj 文件，COFF 格式），其他支持 ELF 的编译器和链接器也可以使用。例如 GCC 产生的 .o 文件也可以同 LLVM 编译产生的 .o 文件一起链接，而如果是 .bc 格式 GCC 就认不出来。缺点是一旦编译成 .o 文件，就无法再反推出 IR 了，只能通过 objdump 反汇编得到汇编代码，就不方便 LLVM 再处理和优化了。</li>
@@ -16679,7 +16837,7 @@ attributes #0 = { mustprogress noinline norecurse nounwind optnone sspstrong uwt
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 小彭老师绘制一副世界名画《Intel 赋能 AI 编译器》，同学问，我只看到按摩店和淫威大，樱特尔在哪呢？答：樱特尔在赋能。</p>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 这里的 cubin 其实就是常听到的 fatbin，二进制版的 PTX 汇编，NVCC 的流程也和这个差不多。</p>
 </blockquote>
-<h4 id="llvm_intro-_21">轶事：多个字节码模块可以链接</h4>
+<h4 id="llvm_intro-_24">轶事：多个字节码模块可以链接</h4>
 <p>多个字节码模块（.bc）之间可以互相链接，形成一个更大的模块，其中包含所有子模块的内容。</p>
 <pre><code class="language-bash">llvm-link test1.bc test2.bc -o test.bc
 </code></pre>
@@ -16699,7 +16857,7 @@ cat a-opt.ll
 opt -p mem2reg a.bc -o a-opt.bc
 llvm-dis a-opt.bc -o a-opt.ll  # 如果输出字节码格式，还需要 llvm-dis 才能让人类看懂
 </code></pre>
-<h4 id="llvm_intro-_22">案例</h4>
+<h4 id="llvm_intro-_25">案例</h4>
 <p>还是这段 C++ 代码：</p>
 <pre><code class="language-cpp">int main() {
     int a = 0;
@@ -16711,7 +16869,7 @@ llvm-dis a-opt.bc -o a-opt.ll  # 如果输出字节码格式，还需要 llvm-di
 <pre><code class="language-bash">clang -S -emit-llvm a.cpp -o a.ll
 </code></pre>
 <p>得到 a.ll：</p>
-<pre><code class="language-wasm">; ModuleID = 'a.cpp'
+<pre><code class="language-llvm">; ModuleID = 'a.cpp'
 source_filename = &quot;a.cpp&quot;
 target datalayout = &quot;e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128&quot;
 target triple = &quot;x86_64-pc-linux-gnu&quot;
@@ -16743,8 +16901,8 @@ rotector-buffer-size&quot;=&quot;8&quot; &quot;target-cpu&quot;=&quot;x86-64&quo
 !5 = !{!&quot;clang version 18.1.8&quot;}
 </code></pre>
 <h2 id="llvm_intro-asm">汇编语言（ASM）</h2>
-<h2 id="llvm_intro-_23">汇编语言的终局：机器码</h2>
-<h2 id="llvm_intro-_24">构建好了吗</h2></section><h1 class='nav-section-title-end'>Ended: 章节列表</h1>
+<h2 id="llvm_intro-_26">汇编语言的终局：机器码</h2>
+<h2 id="llvm_intro-_27">构建好了吗</h2></section><h1 class='nav-section-title-end'>Ended: 章节列表</h1>
                         <h1 class='nav-section-title' id='section-关于'>
                             关于 <a class='headerlink' href='#section-关于' title='Permanent link'>↵</a>
                         </h1>

@@ -24,6 +24,15 @@ for (var i = 0; i < links.length; i++) {
     }
 }
 
+var llvms = document.querySelectorAll('code.language-llvm');
+for (var i = 0; i < llvms.length; i++) {
+    var llvm = llvms[i];
+    // add class .language-wasm .hljs
+    llvm.classList.add('language-wasm', 'hljs');
+    // remove class .language-llvm
+    llvm.classList.remove('language-llvm');
+}
+
 var stylesheets = [
     'https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.0.19/index.min.css',
     'https://cdn.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono.min.css',

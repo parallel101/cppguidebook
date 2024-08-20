@@ -1301,6 +1301,22 @@ V const &amp;at(map&lt;K, V&gt; const *this, K const &amp;k);       // 第二个
 <li>当 map 对象为 const 时，传入的 this 指针为 <code>map&lt;K, V&gt; const *</code>，所以只能调用第二个版本的 at。</li>
 <li>当 map 对象不为 const 时，传入的 this 指针为 <code>map&lt;K, V&gt; *</code>，两个重载都可以调用，但由于第一个重载更加符合，所以会调用第一个版本的 at。</li>
 </ul>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 有趣的是，C++23 支持了显式对象形参（deducing-this），this 也能像普通参数一样定义了！上面的代码可以写成：</p>
+</blockquote>
+<pre><code class="language-cpp">class map {
+    ...
+
+    V &amp;at(this map &amp;self, K const &amp;k) {
+        // 函数体内可以使用self代替原来的this（this将不再可用）
+        ...
+    }
+
+    V const &amp;at(this map const &amp;self, K const &amp;k) {
+        ...
+    }
+};
+</code></pre>
 <hr />
 <!-- PG38 -->
 
