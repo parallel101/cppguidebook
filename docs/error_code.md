@@ -2,6 +2,8 @@
 
 [TOC]
 
+## 为什么错误很重要？
+
 ## 提前返回是好习惯！
 
 TODO
@@ -14,4 +16,4 @@ TODO
 
 ## `std::expected`
 
-`boost::expected`
+也可以 `boost::expected` 替代。

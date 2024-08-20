@@ -911,6 +911,23 @@ V const &at(map<K, V> const *this, K const &k);       // 第二个版本的 at
 - 当 map 对象为 const 时，传入的 this 指针为 `map<K, V> const *`，所以只能调用第二个版本的 at。
 - 当 map 对象不为 const 时，传入的 this 指针为 `map<K, V> *`，两个重载都可以调用，但由于第一个重载更加符合，所以会调用第一个版本的 at。
 
+> {{ icon.detail }} 有趣的是，C++23 支持了显式对象形参（deducing-this），this 也能像普通参数一样定义了！上面的代码可以写成：
+
+```cpp
+class map {
+    ...
+
+    V &at(this map &self, K const &k) {
+        // 函数体内可以使用self代替原来的this（this将不再可用）
+        ...
+    }
+
+    V const &at(this map const &self, K const &k) {
+        ...
+    }
+};
+```
+
 ---
 
 <!-- PG38 -->
