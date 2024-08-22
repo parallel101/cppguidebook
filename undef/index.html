@@ -27,6 +27,18 @@
         <link href="../css/print-site-mkdocs.css" rel="stylesheet">
         <link href="../extra.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/c.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/diff.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/json.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/llvm.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/nasm.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/txt.min.js"></script>
         <script>hljs.highlightAll();</script> 
     </head>
 
@@ -276,6 +288,8 @@
 <li><a href="#reinterpret_cast">reinterpret_cast 后以不兼容的类型访问</a></li>
 <li><a href="#union">union 访问不是激活的成员</a></li>
 <li><a href="#t-alignoft">T 类型指针必须对齐到 alignof(T)</a></li>
+<li><a href="#static_cast">从父类 static_cast 到不符合的子类后访问</a></li>
+<li><a href="#bool-0-1">bool 类型不得出现 0 和 1 以外的值</a></li>
 </ul>
 </li>
 <li><a href="#_7">算数类</a><ul>
@@ -407,12 +421,28 @@ void func(){
 <h3 id="reinterpret_cast">reinterpret_cast 后以不兼容的类型访问</h3>
 <pre><code class="language-cpp">int i;
 float f = *(float *)&amp;i; // 错！
-*(int *)(uintptr_t)&amp;i;  // 可以
 </code></pre>
 <p>例外：char、signed char、unsigned char 和 std::byte 总是兼容任何类型</p>
 <pre><code class="language-cpp">int i;
 char *buf = (char *)&amp;i; // 可以
 buf[0] = 1;             // 可以
+</code></pre>
+<blockquote>
+<p>uint8_t 是 unsigned char 的别名，所以也兼容任何类型</p>
+</blockquote>
+<p>例外：int 和 unsigned int 互相兼容</p>
+<pre><code class="language-cpp">int i;
+unsigned int f = *(unsigned int *)&amp;i; // 可以
+</code></pre>
+<p>例外：const int * 和 int * 互相兼容（二级指针强转）</p>
+<pre><code class="language-cpp">const int *cp;
+int *p = *(int **)&amp;cp;  // 可以
+</code></pre>
+<p>注意：只取决于访问时的类型是否正确，中间可以转换为别的类型（如 void * 和 uintptr_t），只需最后访问时转换回正确的指针类型即可</p>
+<pre><code class="language-cpp">int i;
+*(int *)(uintptr_t)&amp;i;  // 可以
+*(int *)(void *)&amp;i;  // 可以
+*(int *)(float *)&amp;i;  // 可以
 </code></pre>
 <h3 id="union">union 访问不是激活的成员</h3>
 <pre><code class="language-cpp">float bitCast(int i) {
@@ -470,6 +500,35 @@ int *p = (int *)buf;  // 可以
 </code></pre>
 <pre><code class="language-cpp">char buf[sizeof(int) * 2];
 int *p = (int *)(((uintptr_t)buf + sizeof(int) - 1) &amp; ~(alignof(int) - 1));  // 可以
+</code></pre>
+<h3 id="static_cast">从父类 static_cast 到不符合的子类后访问</h3>
+<pre><code class="language-cpp">struct Base {};
+struct Derived : Base {};
+
+Base b;
+Derived d = *(Derived *)&amp;b;              // 错！
+Derived d = *static_cast&lt;Derived *&gt;(&amp;b); // 错！
+Derived d = static_cast&lt;Derived &amp;&gt;(b);   // 错！
+</code></pre>
+<pre><code class="language-cpp">Derived obj;
+Base *bp = &amp;obj;
+Derived d = *(Derived *)bp;              // 可以
+Derived d = *static_cast&lt;Derived *&gt;(bp); // 可以
+Derived d = static_cast&lt;Derived &amp;&gt;(*bp); // 可以
+</code></pre>
+<h3 id="bool-0-1">bool 类型不得出现 0 和 1 以外的值</h3>
+<p>布尔类型 bool，只有 true 和 false 两种取值。</p>
+<p>bool 虽然占据 1 字节（8 位）内存空间，但其中只有一个有效位，也就是最低位。</p>
+<p>只有这个最低位可以是 0 或 1，其余 7 位必须始终保持为 0。</p>
+<p>如果其余位中出现了非 0 的位，也就是出现 0 和 1 以外的取值，则是未定义行为。</p>
+<pre><code class="language-cpp">char c = 0;
+bool b = *(bool *)c;   // 可以，b = false
+</code></pre>
+<pre><code class="language-cpp">char c = 1;
+bool b = *(bool *)c;   // 可以，b = true
+</code></pre>
+<pre><code class="language-cpp">char c = 2;
+bool b = *(bool *)c;   // 未定义行为
 </code></pre>
 <h2 id="_7">算数类</h2>
 <h3 id="_8">有符号整数的加减乘除模不能溢出</h3>
@@ -640,7 +699,7 @@ void func() {
 </blockquote>
 <p>但也有例外：</p>
 <ol>
-<li><code>main</code> 函数可以不写 <code>return</code> 语句，默认自带 <code>return 0;</code></li>
+<li>主函数 <code>main</code> 可以不写 <code>return</code> 语句，默认自带 <code>return 0;</code></li>
 <li>协程函数可以不写 <code>return</code> 语句，如果有 <code>co_return</code> 或者协程返回类型为 <code>void</code> 且具有至少一个 <code>co_await</code> 出现</li>
 </ol>
 <h3 id="_15">函数指针被调用时，不能为空</h3>
