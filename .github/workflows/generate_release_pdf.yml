@@ -40,44 +40,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./site
 
-      - name: Cache Fonts
-        uses: actions/cache@v4
-        id: cache-fonts
-        with:
-          path: fonts
-          key: ${{ runner.os }}-fonts-noto_sans_sc-lxgwwenkai
-
-      - name: Download Fonts
-        if: steps.cache-fonts.outputs.cache-hit != 'true'
-        run: |
-          if [ -f "${{ env.TYPST_FONT_PATH }}/NotoSansSC-Regular.ttf" ]; then
-            echo "Font already existed."
-          else
-            # Download font metadata
-            mkdir -p cv
-            curl -sL "https://fonts.google.com/download/list?family=Noto%20Sans%20SC" > cv/noto_sans_sc_raw.txt
-
-            # Remove ")]}'" from the beginning of the file
-            tail -c +5 cv/noto_sans_sc_raw.txt > cv/noto_sans_sc_metadata.json
-
-            # Extract the necessary information from the JSON file
-            file_refs=$(jq -rc '.manifest.fileRefs[]' cv/noto_sans_sc_metadata.json)
-
-            # Download, save the font file to /fonts
-            mkdir -p ${{ env.TYPST_FONT_PATH }}
-            while IFS= read -r file_ref; do
-                filename=$(echo "$file_ref" | jq -r '.filename')
-                url=$(echo "$file_ref" | jq -r '.url')
-                fontname=$(basename "$filename")
-                echo $url $fontname
-                curl -L "$url" -o "${{ env.TYPST_FONT_PATH }}/$fontname"
-            done <<< "$file_refs"
-            ls -l ${{ env.TYPST_FONT_PATH }}
-          fi
-          for form in Light Regular Bold; do
-              curl -L "https://github.com/lxgw/LxgwWenKai/releases/download/v1.330/LXGWWenKai-$form.ttf" -o "${{ env.TYPST_FONT_PATH }}/LXGWWenKai-$form.ttf"
-          done
-
       - name: Install Fonts
         run: |
             sudo apt-get install -y fonts-noto-cjk

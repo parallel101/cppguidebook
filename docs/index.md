@@ -34,6 +34,8 @@
 
 更新时间：{{ build_date }}
 
+[在 GitHub Pages 浏览本书](https://parallel101.github.io/cppguidebook) | [在小彭老师自己维护的镜像上浏览本书](https://142857.red/book)
+
 ## 格式约定
 
 > {{ icon.tip }} 用这种颜色字体书写的内容是温馨提示
