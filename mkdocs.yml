@@ -48,6 +48,20 @@ theme:
   features:
     - search.suggest
     - search.highlight
+  highlightjs: true
+  hljs_languages: # rg '^```\w+' | sed 's/.*:```\(\w*\)/    - \1/g' | sort | uniq
+    - bash
+    - c
+    - cmake
+    - cpp
+    - diff
+    - java
+    - json
+    - llvm
+    - nasm
+    - python
+    - rust
+    - txt
 extra_javascript:
   - extra.js
   - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML

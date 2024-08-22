@@ -24,13 +24,13 @@ for (var i = 0; i < links.length; i++) {
     }
 }
 
-var llvms = document.querySelectorAll('code.language-llvm');
-for (var i = 0; i < llvms.length; i++) {
-    var llvm = llvms[i];
+var nasms = document.querySelectorAll('code.language-nasm');
+for (var i = 0; i < nasms.length; i++) {
+    var nasm = nasms[i];
     // add class .language-wasm .hljs
-    llvm.classList.add('language-wasm', 'hljs');
-    // remove class .language-llvm
-    llvm.classList.remove('language-llvm');
+    nasm.classList.add('language-x86asm', 'hljs');
+    // remove class .language-nasm
+    nasm.classList.remove('language-nasm');
 }
 
 var stylesheets = [

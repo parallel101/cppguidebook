@@ -110,7 +110,6 @@ void func(){
 ```cpp
 int i;
 float f = *(float *)&i; // 错！
-*(int *)(uintptr_t)&i;  // 可以
 ```
 
 例外：char、signed char、unsigned char 和 std::byte 总是兼容任何类型
@@ -119,6 +118,31 @@ float f = *(float *)&i; // 错！
 int i;
 char *buf = (char *)&i; // 可以
 buf[0] = 1;             // 可以
+```
+
+> uint8_t 是 unsigned char 的别名，所以也兼容任何类型
+
+例外：int 和 unsigned int 互相兼容
+
+```cpp
+int i;
+unsigned int f = *(unsigned int *)&i; // 可以
+```
+
+例外：const int * 和 int * 互相兼容（二级指针强转）
+
+```cpp
+const int *cp;
+int *p = *(int **)&cp;  // 可以
+```
+
+注意：只取决于访问时的类型是否正确，中间可以转换为别的类型（如 void * 和 uintptr_t），只需最后访问时转换回正确的指针类型即可
+
+```cpp
+int i;
+*(int *)(uintptr_t)&i;  // 可以
+*(int *)(void *)&i;  // 可以
+*(int *)(float *)&i;  // 可以
 ```
 
 ### union 访问不是激活的成员
@@ -197,6 +221,51 @@ int *p = (int *)buf;  // 可以
 ```cpp
 char buf[sizeof(int) * 2];
 int *p = (int *)(((uintptr_t)buf + sizeof(int) - 1) & ~(alignof(int) - 1));  // 可以
+```
+
+### 从父类 static_cast 到不符合的子类后访问
+
+```cpp
+struct Base {};
+struct Derived : Base {};
+
+Base b;
+Derived d = *(Derived *)&b;              // 错！
+Derived d = *static_cast<Derived *>(&b); // 错！
+Derived d = static_cast<Derived &>(b);   // 错！
+```
+
+```cpp
+Derived obj;
+Base *bp = &obj;
+Derived d = *(Derived *)bp;              // 可以
+Derived d = *static_cast<Derived *>(bp); // 可以
+Derived d = static_cast<Derived &>(*bp); // 可以
+```
+
+### bool 类型不得出现 0 和 1 以外的值
+
+布尔类型 bool，只有 true 和 false 两种取值。
+
+bool 虽然占据 1 字节（8 位）内存空间，但其中只有一个有效位，也就是最低位。
+
+只有这个最低位可以是 0 或 1，其余 7 位必须始终保持为 0。
+
+如果其余位中出现了非 0 的位，也就是出现 0 和 1 以外的取值，则是未定义行为。
+
+```cpp
+char c = 0;
+bool b = *(bool *)c;   // 可以，b = false
+```
+
+```cpp
+char c = 1;
+bool b = *(bool *)c;   // 可以，b = true
+```
+
+```cpp
+char c = 2;
+bool b = *(bool *)c;   // 未定义行为
 ```
 
 ## 算数类
@@ -431,7 +500,7 @@ int func(int x) {
 
 但也有例外：
 
-1. `main` 函数可以不写 `return` 语句，默认自带 `return 0;`
+1. 主函数 `main` 可以不写 `return` 语句，默认自带 `return 0;`
 2. 协程函数可以不写 `return` 语句，如果有 `co_return` 或者协程返回类型为 `void` 且具有至少一个 `co_await` 出现
 
 ### 函数指针被调用时，不能为空
