@@ -27,11 +27,12 @@ Clang 只是 LLVM 项目中的一个前端，其负责编译 C/C++ 这类语言�
 - LLVM 官方仓库：https://github.com/llvm/llvm-project
 - LLVM 用户文档：https://llvm.org/docs/
 - LLVM 源码级文档：https://llvm.org/doxygen/
-- 《Learn LLVM 17》：https://github.com/xiaoweiChen/Learn-LLVM-17
 - LLVM IR 全文档：https://llvm.org/docs/LangRef.html
+- 《Learn LLVM 17》：https://github.com/xiaoweiChen/Learn-LLVM-17
 - 《开始学习 LLVM》：https://getting-started-with-llvm-core-libraries-zh-cn.readthedocs.io/zh-cn/latest/
 - 《miniSysY 编译实验》：https://buaa-se-compiling.github.io/miniSysY-tutorial/pre/llvm.html
-- A Gentle Introduction to LLVM IR：https://mcyoung.xyz/2023/08/01/llvm-ir/
+- 《A Gentle Introduction to LLVM IR》：https://mcyoung.xyz/2023/08/01/llvm-ir/
+- 《LLVM IR C++ API Tutorial》：https://mukulrathi.com/create-your-own-programming-language/llvm-ir-cpp-api-tutorial/
 
 > {{ icon.warn }} 不建议按顺序全部逐个阅读完，这么多文档小彭老师都看不完。建议遇到了不熟悉的指令时，再去针对性地找到相应章节，学习。
 
@@ -1180,7 +1181,7 @@ define dso_local noundef i32 @main() #0 {
 
 > {{ icon.story }} 如果直接 `ret i32 @i` 的话，就变成 `return &i` 的效果了。
 
-#### 调用其他函数
+#### `call` 调用其他函数
 
 ```llvm
 define dso_local noundef i32 @main() #0 {
@@ -1188,7 +1189,8 @@ define dso_local noundef i32 @main() #0 {
   ret i32 0
 }
 ```
- todo
+
+TODO
 
 ### 轶事：LLVM IR 不跨平台
 
@@ -1428,6 +1430,14 @@ attributes #0 = { mustprogress noinline norecurse nounwind optnone sspstrong uwt
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 18.1.8"}
 ```
+
+现在，我们用 `opt` 工具对其进行优化：
+
+TODO
+
+## 基本块与分支
+
+![](img/llvm-basic-block-branch.png)
 
 ## 汇编语言（ASM）
 
