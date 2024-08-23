@@ -373,7 +373,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年08月23日 00:25:43 (UTC+08:00)</p>
+<p>更新时间：2024年08月23日 18:51:05 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -16158,7 +16158,7 @@ void t1() {
 <li><a href="#llvm_intro-_22">注意，定义得到的是地址</a></li>
 </ul>
 </li>
-<li><a href="#llvm_intro-_23">调用其他函数</a></li>
+<li><a href="#llvm_intro-call">call 调用其他函数</a></li>
 </ul>
 </li>
 <li><a href="#llvm_intro-llvm-ir_2">轶事：LLVM IR 不跨平台</a></li>
@@ -16166,25 +16166,26 @@ void t1() {
 </li>
 <li><a href="#llvm_intro-ir_1">IR 的二进制压缩版：字节码</a><ul>
 <li><a href="#llvm_intro-ir-ir">IR 汇编和 IR 字节码的不同之处</a><ul>
-<li><a href="#llvm_intro-_24">后缀名不同</a></li>
-<li><a href="#llvm_intro-_25">生成用的命令不同</a></li>
-<li><a href="#llvm_intro-_26">内容格式不同</a></li>
-<li><a href="#llvm_intro-_27">之间的转换</a></li>
-<li><a href="#llvm_intro-_28">一一对应的翻译关系</a></li>
+<li><a href="#llvm_intro-_23">后缀名不同</a></li>
+<li><a href="#llvm_intro-_24">生成用的命令不同</a></li>
+<li><a href="#llvm_intro-_25">内容格式不同</a></li>
+<li><a href="#llvm_intro-_26">之间的转换</a></li>
+<li><a href="#llvm_intro-_27">一一对应的翻译关系</a></li>
 </ul>
 </li>
-<li><a href="#llvm_intro-_29">字节码文件就是模块</a><ul>
-<li><a href="#llvm_intro-_30">字节码模块和对象文件的区别</a></li>
+<li><a href="#llvm_intro-_28">字节码文件就是模块</a><ul>
+<li><a href="#llvm_intro-_29">字节码模块和对象文件的区别</a></li>
 <li><a href="#llvm_intro-llvm_6">LLVM 编译的全过程图</a></li>
-<li><a href="#llvm_intro-_31">轶事：多个字节码模块可以链接</a></li>
+<li><a href="#llvm_intro-_30">轶事：多个字节码模块可以链接</a></li>
 </ul>
 </li>
 <li><a href="#llvm_intro-llvm-pass">调用 LLVM pass 优化</a><ul>
-<li><a href="#llvm_intro-_32">案例</a></li>
+<li><a href="#llvm_intro-_31">案例</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li><a href="#llvm_intro-_32">基本块与分支</a></li>
 <li><a href="#llvm_intro-asm">汇编语言（ASM）</a></li>
 <li><a href="#llvm_intro-_33">汇编语言的终局：机器码</a></li>
 <li><a href="#llvm_intro-_34">构建好了吗</a></li>
@@ -16213,11 +16214,12 @@ void t1() {
 <li>LLVM 官方仓库：https://github.com/llvm/llvm-project</li>
 <li>LLVM 用户文档：https://llvm.org/docs/</li>
 <li>LLVM 源码级文档：https://llvm.org/doxygen/</li>
-<li>《Learn LLVM 17》：https://github.com/xiaoweiChen/Learn-LLVM-17</li>
 <li>LLVM IR 全文档：https://llvm.org/docs/LangRef.html</li>
+<li>《Learn LLVM 17》：https://github.com/xiaoweiChen/Learn-LLVM-17</li>
 <li>《开始学习 LLVM》：https://getting-started-with-llvm-core-libraries-zh-cn.readthedocs.io/zh-cn/latest/</li>
 <li>《miniSysY 编译实验》：https://buaa-se-compiling.github.io/miniSysY-tutorial/pre/llvm.html</li>
-<li>A Gentle Introduction to LLVM IR：https://mcyoung.xyz/2023/08/01/llvm-ir/</li>
+<li>《A Gentle Introduction to LLVM IR》：https://mcyoung.xyz/2023/08/01/llvm-ir/</li>
+<li>《LLVM IR C++ API Tutorial》：https://mukulrathi.com/create-your-own-programming-language/llvm-ir-cpp-api-tutorial/</li>
 </ul>
 <blockquote>
 <p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 不建议按顺序全部逐个阅读完，这么多文档小彭老师都看不完。建议遇到了不熟悉的指令时，再去针对性地找到相应章节，学习。</p>
@@ -17168,13 +17170,13 @@ define dso_local noundef i32 @main() #0 {
 <blockquote>
 <p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 如果直接 <code>ret i32 @i</code> 的话，就变成 <code>return &amp;i</code> 的效果了。</p>
 </blockquote>
-<h4 id="llvm_intro-_23">调用其他函数</h4>
+<h4 id="llvm_intro-call"><code>call</code> 调用其他函数</h4>
 <pre><code class="language-llvm">define dso_local noundef i32 @main() #0 {
   %1 = call i32 (ptr, ...) @printf(ptr noundef @.str)
   ret i32 0
 }
 </code></pre>
-<p>todo</p>
+<p>TODO</p>
 <h3 id="llvm_intro-llvm-ir_2">轶事：LLVM IR 不跨平台</h3>
 <p>Clang 编译时是什么平台就是什么平台了，不同目标平台的 IR 会有些微的不一样（由于一些软件需要利用硬件 intrinsics）。一份 IR 从生成开始，就注定永远只能变成指定目标平台的机器码。</p>
 <p>这是因为虽然 IR 是通用的中间表示层，但类型大小，矢量宽度等信息和硬件高度绑定。</p>
@@ -17191,12 +17193,12 @@ define dso_local noundef i32 @main() #0 {
 <p>他们是<strong>完全等价的</strong>，都是 IR 的两种表现方式：一个是文本格式（适合人类阅读），一个是二进制格式（适合程序阅读）。</p>
 <p>IR 字节码中的每个（或多个）字节都可以和 IR 汇编中的一行 IR 指令一一对应。</p>
 <h3 id="llvm_intro-ir-ir">IR 汇编和 IR 字节码的不同之处</h3>
-<h4 id="llvm_intro-_24">后缀名不同</h4>
+<h4 id="llvm_intro-_23">后缀名不同</h4>
 <ul>
 <li>IR 汇编：<code>.ll</code></li>
 <li>IR 字节码: <code>.bc</code></li>
 </ul>
-<h4 id="llvm_intro-_25">生成用的命令不同</h4>
+<h4 id="llvm_intro-_24">生成用的命令不同</h4>
 <ul>
 <li>Clang 生成 IR 汇编：使用 <code>-S -emit-llvm</code> 选项。</li>
 </ul>
@@ -17207,7 +17209,7 @@ define dso_local noundef i32 @main() #0 {
 </ul>
 <pre><code class="language-bash">clang -c -emit-llvm a.cpp -o a.bc
 </code></pre>
-<h4 id="llvm_intro-_26">内容格式不同</h4>
+<h4 id="llvm_intro-_25">内容格式不同</h4>
 <ul>
 <li>IR 汇编: 文本格式（a.ll）</li>
 </ul>
@@ -17252,7 +17254,7 @@ attributes #0 = { mustprogress noinline norecurse nounwind optnone sspstrong uwt
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 以上为使用 <code>hexdump</code> 工具查看的十六进制字节可视化结果。<code>.bc</code> 的实际内容完全是二进制，直接 <code>cat</code> 到终端会乱码。</p>
 </blockquote>
-<h4 id="llvm_intro-_27">之间的转换</h4>
+<h4 id="llvm_intro-_26">之间的转换</h4>
 <ul>
 <li>IR 汇编到 IR 字节码：<code>llvm-as</code>，把文本 IR 编译成紧凑压缩的字节码。</li>
 </ul>
@@ -17263,7 +17265,7 @@ attributes #0 = { mustprogress noinline norecurse nounwind optnone sspstrong uwt
 </ul>
 <pre><code class="language-bash">llvm-dis test.bc -o test.ll
 </code></pre>
-<h4 id="llvm_intro-_28">一一对应的翻译关系</h4>
+<h4 id="llvm_intro-_27">一一对应的翻译关系</h4>
 <p>IR 字节码和 IR 汇编的关系，正如 x86 汇编和 x86 机器码的关系，之间是一一对应的翻译关系。</p>
 <p>IR 字节码是二进制的，对计算机友好；而 IR 汇编是人类可读的 ASCII 字符，方便人类阅读和调试，他们本质上都是 IR。</p>
 <blockquote>
@@ -17273,7 +17275,7 @@ attributes #0 = { mustprogress noinline norecurse nounwind optnone sspstrong uwt
 <blockquote>
 <p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 但和 Java 的字节码又不一样，LLVM 的字节码本来就是二进制的 IR。而 IR 并不跨平台，所以字节码也不跨平台。LLVM 团队提供 lli 工具主要是为了方便临时测试 IR，用于生产环境的肯定还是 llc 编译好产生真正的高效机器码。</p>
 </blockquote>
-<h3 id="llvm_intro-_29">字节码文件就是模块</h3>
+<h3 id="llvm_intro-_28">字节码文件就是模块</h3>
 <p><strong>得到的 .bc 字节码文件也被称为一个模块（Module），模块由一系列 IR 阶段的组成；正如对象文件（.o）由大量汇编指令组成一样。</strong></p>
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 这里说的 LLVM 模块和 C++20 的 Modules 特性关系不大，模块是 LLVM 很早就有的概念，撞名了而已。</p>
@@ -17282,7 +17284,7 @@ attributes #0 = { mustprogress noinline norecurse nounwind optnone sspstrong uwt
 <p>而 LLVM 模块（.bc）可以进一步编译成通用的对象文件（.o），从而就是我们看到的：一个 .cpp 文件对应一个 .o 文件了。</p>
 <p>模块中包含了之前介绍的 IR 汇编中所有的信息，例如目标平台的数据布局信息，全局变量，类型声明，函数定义和声明等。</p>
 <p><img alt="" src="../img/llvm-module.png" /></p>
-<h4 id="llvm_intro-_30">字节码模块和对象文件的区别</h4>
+<h4 id="llvm_intro-_29">字节码模块和对象文件的区别</h4>
 <ul>
 <li>字节码（.bc）是 LLVM 内部的文件格式，不通用。但由于其直接存储 IR，方便 LLVM 处理和优化，且可以很容易通过 llvm-dis 反汇编成人类可读的 IR 汇编来查看（.ll）。通常用于调试 LLVM，以及目标平台不是 CPU 的情况（例如 CUDA PTX）。</li>
 <li>对象文件（.o）是类 Unix 平台通用的 ELF 格式（在 Windows 平台则是 .obj 文件，COFF 格式），其他支持 ELF 的编译器和链接器也可以使用。例如 GCC 产生的 .o 文件也可以同 LLVM 编译产生的 .o 文件一起链接，而如果是 .bc 格式 GCC 就认不出来。缺点是一旦编译成 .o 文件，就无法再反推出 IR 了，只能通过 objdump 反汇编得到汇编代码，就不方便 LLVM 再处理和优化了。</li>
@@ -17297,7 +17299,7 @@ attributes #0 = { mustprogress noinline norecurse nounwind optnone sspstrong uwt
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 小彭老师绘制一副世界名画《Intel 赋能 AI 编译器》，同学问，我只看到按摩店和淫威大，樱特尔在哪呢？答：樱特尔在赋能。</p>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 这里的 cubin 其实就是常听到的 fatbin，二进制版的 PTX 汇编，NVCC 的流程也和这个差不多。</p>
 </blockquote>
-<h4 id="llvm_intro-_31">轶事：多个字节码模块可以链接</h4>
+<h4 id="llvm_intro-_30">轶事：多个字节码模块可以链接</h4>
 <p>多个字节码模块（.bc）之间可以互相链接，形成一个更大的模块，其中包含所有子模块的内容。</p>
 <pre><code class="language-bash">llvm-link test1.bc test2.bc -o test.bc
 </code></pre>
@@ -17317,7 +17319,7 @@ cat a-opt.ll
 opt -p mem2reg a.bc -o a-opt.bc
 llvm-dis a-opt.bc -o a-opt.ll  # 如果输出字节码格式，还需要 llvm-dis 才能让人类看懂
 </code></pre>
-<h4 id="llvm_intro-_32">案例</h4>
+<h4 id="llvm_intro-_31">案例</h4>
 <p>还是这段 C++ 代码：</p>
 <pre><code class="language-cpp">int main() {
     int a = 0;
@@ -17359,6 +17361,10 @@ attributes #0 = { mustprogress noinline norecurse nounwind optnone sspstrong uwt
 !4 = !{i32 7, !&quot;frame-pointer&quot;, i32 2}
 !5 = !{!&quot;clang version 18.1.8&quot;}
 </code></pre>
+<p>现在，我们用 <code>opt</code> 工具对其进行优化：</p>
+<p>TODO</p>
+<h2 id="llvm_intro-_32">基本块与分支</h2>
+<p><img alt="" src="../img/llvm-basic-block-branch.png" /></p>
 <h2 id="llvm_intro-asm">汇编语言（ASM）</h2>
 <h2 id="llvm_intro-_33">汇编语言的终局：机器码</h2>
 <h2 id="llvm_intro-_34">构建好了吗</h2></section><h1 class='nav-section-title-end'>Ended: 章节列表</h1>
