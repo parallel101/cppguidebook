@@ -1,12 +1,18 @@
 #include <fmt/core.h>
 #include <system_error>
 #include "tl-expected.hpp"
+#include <fcntl.h>
 // 今日主题：现代 C++ 中的错误处理
 
 // int : [INT_MIN, INT_MAX]
 // optional<int> : [INT_MIN, INT_MAX] | {nullopt}
 // variant<int, error_code> : [INT_MIN, INT_MAX] | {error_code}
 // expected<int, error_code> : [INT_MIN, INT_MAX] | {error_code}
+
+template <>
+struct tl::bad_expected_access<std::error_code> : std::system_error {
+  explicit bad_expected_access(std::error_code e) : std::system_error(std::move(e)) {}
+};
 
 namespace mybuss {
 
@@ -90,12 +96,45 @@ tl::expected<int, std::error_code> sqrfloor(int x) {
     // }
 }
 
-int main() {
-    auto ret = sqrfloor(3);
-    if (ret.has_value()) {
-        fmt::println("结果: {}", ret.value());
-    } else {
-        fmt::println("出错: {}", ret.error().message());
+tl::expected<int, std::error_code> expectedStdError(int ret) {
+    if (ret == -1) {
+        return tl::unexpected{std::error_code(errno, std::generic_category())};
     }
+    return ret;
+}
+
+int checkStdError(int ret) {
+    if (ret == -1) {
+        throw std::system_error(std::error_code(errno, std::system_category()));
+    }
+    return ret;
+}
+
+// tl::expected<void, std::error_code> expectedCudaError(int ret) {
+//     if (ret != 0) {
+//         return tl::unexpected{std::error_code(ret, cuda_category())};
+//     }
+//     return {};
+// }
+
+template <class T>
+using expected = tl::expected<T, std::error_code>;
+
+struct RAIIFile {
+    int fd;
+
+    tl::expected<size_t, std::error_code> write(std::span<const char> buf) {
+        return expectedStdError(::write(fd, buf.data(), buf.size()));
+    }
+};
+
+// tl::expected<void *, std::error_code> cppCudaMalloc(size_t size) {
+//     expectedCudaError(cudaMalloc(p));
+// }
+
+int main() {
+    RAIIFile file{expectedStdError(open("/tmp/test.log", O_WRONLY)).value()};
+    std::string s = "asasasas";
+    file.write(s).value();
     return 0;
 }

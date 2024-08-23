@@ -1244,10 +1244,10 @@ private:
 /// has been destroyed. The initialization state of the contained object is
 /// tracked by the expected object.
 template <class T, class E>
-class expected : private detail::expected_move_assign_base<T, E>,
-                 private detail::expected_delete_ctor_base<T, E>,
-                 private detail::expected_delete_assign_base<T, E>,
-                 private detail::expected_default_ctor_base<T, E> {
+class [[nodiscard]] expected : private detail::expected_move_assign_base<T, E>,
+                               private detail::expected_delete_ctor_base<T, E>,
+                               private detail::expected_delete_assign_base<T, E>,
+                               private detail::expected_default_ctor_base<T, E> {
   static_assert(!std::is_reference<T>::value, "T must not be a reference");
   static_assert(!std::is_same<T, std::remove_cv<in_place_t>::type>::value,
                 "T must not be in_place_t");
