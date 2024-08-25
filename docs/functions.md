@@ -65,6 +65,15 @@ auto f() {
 void f() {
   std::println("hello");
 }
+
+// 值得注意的是，返回类型用 `auto` 来推导的函数，如果有多条 `return` 语句，那么他们必须是相同的类型；否则报错
+auto f(int x) {
+  if (x > 0) {
+    return 1;    // int
+  } else {
+    return 3.14; // double
+  }
+} // 错误：有歧义，无法确定 auto 应该推导为 int 还是 double
 ```
 
 <!-- decltype(auto)... -->
