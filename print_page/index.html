@@ -373,7 +373,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年08月23日 18:51:05 (UTC+08:00)</p>
+<p>更新时间：2024年08月25日 17:00:32 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -852,7 +852,7 @@ void try_call_foo(T &amp;) {
 <pre><code class="language-cpp">TODO: println 参数演示
 </code></pre>
 <h2 id="functions-_4">函数的返回值</h2>
-<p>函数可以没有返回值，只需要返回类型写 <code>void</code> 即可，这样的函数调用的目的只是为了他的副作用（如修改全局变量，输出文本到控制台，修改引用参数等）。</p>
+<p>函数可以没有返回值，只需要声明函数时返回类型声明为 <code>void</code> 即可，调用这样的函数只是为了他的副作用（如修改全局变量，输出文本到控制台，修改引用参数等）。</p>
 <pre><code class="language-cpp">void compute()
 {
     return;
@@ -867,10 +867,46 @@ void try_call_foo(T &amp;) {
 }
 </code></pre>
 <blockquote>
-<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 对于有返回值的函数，必须写 return 语句，如果漏写，会出现可怕的未定义行为 (undefined behaviour)。编译器不会报错，而是到运行时才出现崩溃等现象，建议 GCC 用户开启 <code>-Werror=return-type</code> 让编译器检测此类错误。更多未定义行为可以看我们的<a href="#undef">未定义行为列表</a>章节。</p>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 对于返回类型不为 <code>void</code> 的函数，必须写 <code>return</code> 语句，如果漏写，会出现可怕的未定义行为 (undefined behaviour)。编译器不一定会报错，而是到运行时才出现崩溃等现象。建议 GCC 用户开启 <code>-Werror=return-type</code> 让编译器在编译时就检测此类错误，MSVC 则是开启 <code>/we4716</code>。更多未定义行为可以看我们的<a href="#undef">未定义行为列表</a>章节。
+<img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 但有两个例外：1. main 函数是特殊的可以不写 return 语句，默认会自动帮你 <code>return 0;</code>。2. 具有 co_return 或 co_await 的协程函数可以不写 return 语句。</p>
 </blockquote>
 <h3 id="functions-_5">接住返回值</h3>
 <h3 id="functions-auto">返回类型 <code>auto</code></h3>
+<p>C++11 <code>auto</code> 可以用作函数的返回类型，但它只是一个<strong>占位</strong>，让我们得以后置返回类型。</p>
+<pre><code class="language-cpp">auto f() -&gt; int;
+// 等价于：
+int f();
+</code></pre>
+<p>C++14 引入了函数<strong>返回类型推导</strong>，<code>auto</code> 才算真正意义上的用做了函数返回类型，它会根据函数中的 <code>return</code> 表达式推导出函数的返回类型。</p>
+<pre><code class="language-cpp">int x = 1;
+auto f() {
+  return x;
+}
+// 等价于：
+int f() {
+  return x;
+}
+
+// 如果函数中没有return语句，那么 `auto` 会被自动推导为 `void`
+auto f() {
+  std::println(&quot;hello&quot;);
+}
+// 等价于：
+void f() {
+  std::println(&quot;hello&quot;);
+}
+
+// 值得注意的是，返回类型用 `auto` 来推导的函数，如果有多条 `return` 语句，那么他们必须是相同的类型；否则报错
+auto f(int x) {
+  if (x &gt; 0) {
+    return 1;    // int
+  } else {
+    return 3.14; // double
+  }
+} // 错误：有歧义，无法确定 auto 应该推导为 int 还是 double
+</code></pre>
+<!-- decltype(auto)... -->
+
 <h2 id="functions-_6">函数的参数</h2>
 <h3 id="functions-vs">形参 vs 实参</h3>
 <h3 id="functions-vs_1">按引用传参 vs 按值传参</h3>
