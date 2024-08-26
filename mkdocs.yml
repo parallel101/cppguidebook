@@ -27,6 +27,8 @@ nav:
     - cpp_lifetime.md
     - cpp_memory.md
     - unicode.md
+    - threading.md
+    - test_and_safe.md
     - undef.md
     - llvm_intro.md
   - 关于:

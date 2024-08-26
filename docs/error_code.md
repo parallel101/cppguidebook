@@ -1,4 +1,6 @@
-# 现代 C++ 错误处理知多少
+# 现代 C++ 错误处理知多少（未完工）
+
+配套视频：[BV1QpWSekEJY](https://www.bilibili.com/video/BV1QpWSekEJY)
 
 [TOC]
 
