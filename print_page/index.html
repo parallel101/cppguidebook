@@ -138,7 +138,7 @@
 </li>
                                     
 <li>
-    <a href="../error_code/" class="dropdown-item">现代 C++ 错误处理知多少</a>
+    <a href="../error_code/" class="dropdown-item">现代 C++ 错误处理知多少（未完工）</a>
 </li>
                                     
 <li>
@@ -151,6 +151,14 @@
                                     
 <li>
     <a href="../unicode/" class="dropdown-item">字符编码那些事</a>
+</li>
+                                    
+<li>
+    <a href="../threading/" class="dropdown-item">C++ 多线程编程（未完工）</a>
+</li>
+                                    
+<li>
+    <a href="../test_and_safe/" class="dropdown-item">测试与安全话题（未完工）</a>
 </li>
                                     
 <li>
@@ -288,7 +296,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#error_code" class="nav-link">19. 现代 C++ 错误处理知多少</a>
+            <li class="nav-item" data-bs-level="1"><a href="#error_code" class="nav-link">19. 现代 C++ 错误处理知多少（未完工）</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -304,11 +312,19 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#undef" class="nav-link">23. 未定义行为完整列表</a>
+            <li class="nav-item" data-bs-level="1"><a href="#threading" class="nav-link">23. C++ 多线程编程（未完工）</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#llvm_intro" class="nav-link">24. 小彭老师带你学 LLVM</a>
+            <li class="nav-item" data-bs-level="1"><a href="#test_and_safe" class="nav-link">24. 测试与安全话题（未完工）</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="1"><a href="#undef" class="nav-link">25. 未定义行为完整列表</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="1"><a href="#llvm_intro" class="nav-link">26. 小彭老师带你学 LLVM</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -317,15 +333,15 @@
             
             <li class="nav-item" data-bs-level="0"><a href="#section-关于" class="nav-link">II. 关于</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="1"><a href="#about" class="nav-link">25. 关于小彭老师</a>
+            <li class="nav-item" data-bs-level="1"><a href="#about" class="nav-link">27. 关于小彭老师</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#donate" class="nav-link">26. 赞助名单</a>
+            <li class="nav-item" data-bs-level="1"><a href="#donate" class="nav-link">28. 赞助名单</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#recommend" class="nav-link">27. 参考资料与项目</a>
+            <li class="nav-item" data-bs-level="1"><a href="#recommend" class="nav-link">29. 参考资料与项目</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -373,7 +389,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年08月25日 17:28:19 (UTC+08:00)</p>
+<p>更新时间：2024年08月27日 00:28:27 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -1036,21 +1052,40 @@ static int f(int x) {}  // 函数声明并定义为“外部链接”
 <li><a href="#cpp_tricks-c">应知应会 C++ 小技巧</a><ul>
 <li><a href="#cpp_tricks-_1">交换两个变量</a></li>
 <li><a href="#cpp_tricks-_2">别再写构造函数啦！</a></li>
-<li><a href="#cpp_tricks-_3">别再 [] 啦！</a></li>
-<li><a href="#cpp_tricks-make_pair">别再 make_pair 啦！</a></li>
-<li><a href="#cpp_tricks-insert">insert 不会替换现有值</a></li>
+<li><a href="#cpp_tricks-_3">别再写拷贝构造函数啦！</a></li>
 <li><a href="#cpp_tricks-cout-endl">cout 不需要 endl</a></li>
 <li><a href="#cpp_tricks-cout">多线程中 cout 出现乱序？</a></li>
+<li><a href="#cpp_tricks-raii">RAII 地分配一段内存空间</a></li>
+<li><a href="#cpp_tricks-auto">函数参数也可以 auto</a></li>
+<li><a href="#cpp_tricks-_4">别再 [] 啦！</a></li>
+<li><a href="#cpp_tricks-make_pair">别再 make_pair 啦！</a></li>
+<li><a href="#cpp_tricks-insert">insert 不会替换现有值哦</a></li>
 <li><a href="#cpp_tricks-map">一边遍历 map，一边删除？</a></li>
-<li><a href="#cpp_tricks-vector">高效删除 vector 元素</a></li>
-<li><a href="#cpp_tricks-vector_1">批量删除 vector 元素</a></li>
-<li><a href="#cpp_tricks-vector_2">有序的 vector</a></li>
-<li><a href="#cpp_tricks-_4">提前返回</a></li>
+<li><a href="#cpp_tricks-vector">高效删除单个 vector 元素</a></li>
+<li><a href="#cpp_tricks-vector_1">批量删除部分 vector 元素</a></li>
+<li><a href="#cpp_tricks-const">const 居然应该后置&hellip;</a></li>
+<li><a href="#cpp_tricks-_5">提前返回</a></li>
 <li><a href="#cpp_tricks-lambda">立即调用的 Lambda</a></li>
 <li><a href="#cpp_tricks-lambda_1">Lambda 复用代码</a></li>
-<li><a href="#cpp_tricks-_5">类内静态成员</a></li>
-<li><a href="#cpp_tricks-const">const 居然应该后置&hellip;</a></li>
-<li><a href="#cpp_tricks-_6">智能指针防止对象移动</a></li>
+<li><a href="#cpp_tricks-inline">类内静态成员 inline</a></li>
+<li><a href="#cpp_tricks-vector_2">保持有序的 vector</a></li>
+<li><a href="#cpp_tricks-c_1">C++ 随机数的正确生成方式</a></li>
+<li><a href="#cpp_tricks-raii-finally">RAII 的 finally</a></li>
+<li><a href="#cpp_tricks-swap-mutex">swap 缩小 mutex 区间代价</a></li>
+<li><a href="#cpp_tricks-map-any">map + any 外挂属性</a></li>
+<li><a href="#cpp_tricks-bind-lambda">bind 是历史糟粕，应该由 Lambda 表达式取代</a></li>
+<li><a href="#cpp_tricks-forward-fwd">forward 迷惑性地不好用，建议改用 FWD 宏</a></li>
+<li><a href="#cpp_tricks-_6">智能指针防止大对象移动</a></li>
+<li><a href="#cpp_tricks-optional">optional 实现延迟初始化</a></li>
+<li><a href="#cpp_tricks-if-auto-while-auto">if-auto 与 while-auto</a></li>
+<li><a href="#cpp_tricks-_7">临时右值转左值</a></li>
+<li><a href="#cpp_tricks-vector-unordered_map-lru-cache">vector + unordered_map = LRU cache</a></li>
+<li><a href="#cpp_tricks-_8">多线程通信应基于队列，而不是共享全局变量</a></li>
+<li><a href="#cpp_tricks-shared_ptr-deleter">自定义 shared_ptr 的 deleter</a></li>
+<li><a href="#cpp_tricks-lambda-unique_ptr-function">Lambda 捕获 unique_ptr 导致 function 报错怎么办</a></li>
+<li><a href="#cpp_tricks-check_cuda">CHECK_CUDA 类错误检测宏</a></li>
+<li><a href="#cpp_tricks-bit-field">位域（bit-field）</a></li>
+<li><a href="#cpp_tricks-locale-utf8">设置 locale 为 .utf8</a></li>
 </ul>
 </li>
 </ul>
@@ -1120,53 +1155,8 @@ Student stu{&quot;小彭老师&quot;, 24, 9999};
 <pre><code class="language-cpp">Student stu{.name = &quot;小彭老师&quot;, .age = 24, .id = 9999};
 Student stu{.name = &quot;小彭老师&quot;, .id = 9999, .age = 24};
 </code></pre>
-<h2 id="cpp_tricks-_3">别再 <code>[]</code> 啦！</h2>
-<p>你知道吗？在 map 中使用 <code>[]</code> 查找元素，如果不存在，会自动创建一个默认值。这个特性有时很方便，但如果你不小心写错了，就会在 map 中创建一个多余的默认元素。</p>
-<pre><code class="language-cpp">map&lt;string, int&gt; table;
-table[&quot;小彭老师&quot;] = 24;
-
-cout &lt;&lt; table[&quot;侯捷老师&quot;];
-</code></pre>
-<p>table 中明明没有 &ldquo;侯捷老师&rdquo; 这个元素，但由于 <code>[]</code> 的特性，他会默认返回一个 0，不会爆任何错误！</p>
-<p>改用更安全的 <code>at()</code> 函数，当查询的元素不存在时，会抛出异常，方便你调试：</p>
-<pre><code class="language-cpp">map&lt;string, int&gt; table;
-table.at(&quot;小彭老师&quot;) = 24;
-
-cout &lt;&lt; table.at(&quot;侯捷老师&quot;);  // 抛出异常
-</code></pre>
-<p><code>[]</code> 的用途是“写入新元素”时，如果元素不存在，他可以自动帮你创建一个默认值，供你以引用的方式赋值进去。</p>
-<h2 id="cpp_tricks-make_pair">别再 make_pair 啦！</h2>
-<pre><code class="language-cpp">map&lt;string, int&gt; table;
-table.insert(pair&lt;string, int&gt;(&quot;侯捷老师&quot;, 42));
-</code></pre>
-<p>为避免写出类型名的麻烦，很多老师都会让你写 make_pair：</p>
-<pre><code class="language-cpp">map&lt;string, int&gt; table;
-table.insert(make_pair(&quot;侯捷老师&quot;, 42));
-</code></pre>
-<p>然而 C++11 提供了更好的写法，那就是通过 <code>{}</code> 隐式构造，不用写出类型名或 make_pair：</p>
-<pre><code class="language-cpp">map&lt;string, int&gt; table;
-table.insert({&quot;侯捷老师&quot;, 42});
-</code></pre>
-<p>即使需要写出类型名的情况，也可以用 C++17 的 CTAD 语法，免去模板参数，make_xxx 系列函数就此完全被 C++17 平替：</p>
-<pre><code class="language-cpp">map&lt;string, int&gt; table;
-table.insert(pair(&quot;侯捷老师&quot;, 42));
-</code></pre>
-<h2 id="cpp_tricks-insert">insert 不会替换现有值</h2>
-<pre><code class="language-cpp">map&lt;string, int&gt; table;
-table.insert({&quot;小彭老师&quot;, 24});
-table.insert({&quot;小彭老师&quot;, 42});
-</code></pre>
-<p>这时，<code>table["小彭老师"]</code> 仍然会是 24，而不是 42。因为 insert 不会替换 map 里已经存在的值。</p>
-<p>如果希望如果已经存在时，替换现有元素，可以使用 <code>[]</code> 运算符：</p>
-<pre><code class="language-cpp">map&lt;string, int&gt; table;
-table[&quot;小彭老师&quot;] = 24;
-table[&quot;小彭老师&quot;] = 42;
-</code></pre>
-<p>C++17 提供了比 <code>[]</code> 运算符更适合覆盖性插入的 insert_or_assign 函数：</p>
-<pre><code class="language-cpp">map&lt;string, int&gt; table;
-table.insert_or_assign(&quot;小彭老师&quot;, 24);
-table.insert_or_assign(&quot;小彭老师&quot;, 42);
-</code></pre>
+<h2 id="cpp_tricks-_3">别再写拷贝构造函数啦！</h2>
+<p>只有当你需要有“自定义钩子逻辑”的时候，才需要自定义构造函数。</p>
 <h2 id="cpp_tricks-cout-endl">cout 不需要 endl</h2>
 <pre><code class="language-cpp">int a = 42;
 printf(&quot;%d\n&quot;, a);
@@ -1193,6 +1183,85 @@ cout.flush();
 <pre><code class="language-cpp">cout &lt;&lt; &quot;Hello, World!&quot; &lt;&lt; '\n';
 </code></pre>
 <h2 id="cpp_tricks-cout">多线程中 cout 出现乱序？</h2>
+<p>TODO</p>
+<h2 id="cpp_tricks-raii">RAII 地分配一段内存空间</h2>
+<p>所谓“内存空间”实际上就是“char 数组”。</p>
+<p>TODO</p>
+<h2 id="cpp_tricks-auto">函数参数也可以 auto</h2>
+<p>TODO</p>
+<h2 id="cpp_tricks-_4">别再 <code>[]</code> 啦！</h2>
+<p>你知道吗？在 map 中使用 <code>[]</code> 查找元素，如果不存在，会自动创建一个默认值。这个特性有时很方便，但如果你不小心写错了，就会在 map 中创建一个多余的默认元素。</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table[&quot;小彭老师&quot;] = 24;
+
+cout &lt;&lt; table[&quot;侯捷老师&quot;];
+</code></pre>
+<p>table 中明明没有 &ldquo;侯捷老师&rdquo; 这个元素，但由于 <code>[]</code> 的特性，他会默认返回一个 0，不会爆任何错误！</p>
+<p>改用更安全的 <code>at()</code> 函数，当查询的元素不存在时，会抛出异常，方便你调试：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.at(&quot;小彭老师&quot;) = 24;
+
+cout &lt;&lt; table.at(&quot;侯捷老师&quot;);  // 抛出异常
+</code></pre>
+<p><code>[]</code> 真正的用途是“写入新元素”时，如果元素不存在，他可以自动帮你创建一个默认值，供你以引用的方式赋值进去。</p>
+<p>检测元素是否存在可以用 <code>count</code>：</p>
+<pre><code class="language-cpp">if (table.count(&quot;小彭老师&quot;)) {
+    return table.at(&quot;小彭老师&quot;);
+} else {
+    return 0;
+}
+</code></pre>
+<p>即使你想要默认值 0 这一特性，这也比 <code>[]</code> 更好，因为 <code>[]</code> 的默认值是会对 table 做破坏性修改的。</p>
+<pre><code class="language-cpp">return table[&quot;小彭老师&quot;]; // 如果&quot;小彭老师&quot;这一键不存在，会创建&quot;小彭老师&quot;并设为默认值 0
+</code></pre>
+<pre><code class="language-cpp">const map&lt;string, int&gt; table;
+return table[&quot;小彭老师&quot;]; // 编译器报错：[] 需要非 const 的 map 对象，因为他会破坏性修改
+</code></pre>
+<h2 id="cpp_tricks-make_pair">别再 make_pair 啦！</h2>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert(pair&lt;string, int&gt;(&quot;侯捷老师&quot;, 42));
+</code></pre>
+<p>为避免写出类型名的麻烦，很多老师都会让你写 make_pair：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert(make_pair(&quot;侯捷老师&quot;, 42));
+</code></pre>
+<p>然而 C++11 提供了更好的写法，那就是通过 <code>{}</code> 隐式构造，不用写出类型名或 make_pair：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert({&quot;侯捷老师&quot;, 42});
+</code></pre>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 即使你出于某种“抖m”情节，还想写出类型名，也可以用 C++17 的 CTAD 语法，免去模板参数：</p>
+</blockquote>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert(pair(&quot;侯捷老师&quot;, 42));
+
+// tuple 也支持 CTAD：
+auto t = tuple(&quot;侯捷老师&quot;, 42, string(&quot;小彭老师&quot;));
+// 等价于：
+auto t = make_tuple(&quot;侯捷老师&quot;, 42, string(&quot;小彭老师&quot;));
+
+println(&quot;{}&quot;, typeid(t).name()); // tuple&lt;const char *, int, string&gt;
+</code></pre>
+<h2 id="cpp_tricks-insert">insert 不会替换现有值哦</h2>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert({&quot;小彭老师&quot;, 24});
+table.insert({&quot;小彭老师&quot;, 42});
+</code></pre>
+<p>这时，<code>table["小彭老师"]</code> 仍然会是 24，而不是 42。因为 insert 不会替换 map 里已经存在的值。</p>
+<p>如果希望如果已经存在时，替换现有元素，可以使用 <code>[]</code> 运算符：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table[&quot;小彭老师&quot;] = 24;
+table[&quot;小彭老师&quot;] = 42;
+</code></pre>
+<p>C++17 提供了比 <code>[]</code> 运算符更适合覆盖性插入的 <code>insert_or_assign</code> 函数：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert_or_assign(&quot;小彭老师&quot;, 24);
+table.insert_or_assign(&quot;小彭老师&quot;, 42);
+</code></pre>
+<p>好处：<code>insert_or_assign</code> 不需要值类型支持默认构造，可以避免一次默认构造函数 + 一次移动赋值函数的开销。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 建议把 <code>insert_or_assign</code> 改名成 <code>set</code>，<code>at</code> 改名成 <code>get</code>；只是由于历史原因名字迷惑了。</p>
+</blockquote>
 <h2 id="cpp_tricks-map">一边遍历 map，一边删除？</h2>
 <pre><code class="language-cpp">map&lt;string, int&gt; table;
 for (auto it = table.begin(); it != table.end(); ++it) {
@@ -1217,7 +1286,7 @@ erase_if(table, [](pair&lt;string, int&gt; it) {
     return it.second &lt; 0;
 });
 </code></pre>
-<h2 id="cpp_tricks-vector">高效删除 vector 元素</h2>
+<h2 id="cpp_tricks-vector">高效删除单个 vector 元素</h2>
 <pre><code class="language-cpp">vector&lt;int&gt; v = {48, 23, 76, 11, 88, 63, 45, 28, 59};
 </code></pre>
 <p>众所周知，在 vector 中删除元素，会导致后面的所有元素向前移动，十分低效。复杂度：<span class="arithmatex"><span class="MathJax_Preview">O(n)</span><script type="math/tex">O(n)</script></span></p>
@@ -1231,7 +1300,7 @@ swap(v[3], v[v.size() - 1]);
 v.pop_back();
 </code></pre>
 <p>这样就不用移动一大堆元素了。这被称为 back-swap-erase。</p>
-<h2 id="cpp_tricks-vector_1">批量删除 vector 元素</h2>
+<h2 id="cpp_tricks-vector_1">批量删除部分 vector 元素</h2>
 <p>vector 中只删除一个元素需要 <span class="arithmatex"><span class="MathJax_Preview">O(n)</span><script type="math/tex">O(n)</script></span>。如果一边遍历，一边删除多个符合条件的元素，就需要复杂度 <span class="arithmatex"><span class="MathJax_Preview">O(n^2)</span><script type="math/tex">O(n^2)</script></span> 了。</p>
 <p>标准库提供了 <code>remove</code> 和 <code>remove_if</code> 函数，其内部采用类似 back-swap-erase 的方法，先把要删除的元素移动到末尾。然后一次性 <code>erase</code> 掉末尾同样数量的元素。</p>
 <p>且他们都能保持顺序不变。</p>
@@ -1252,48 +1321,49 @@ erase_if(v, [](int x) {
     return x &gt; 0;   // 删除所有值大于 0 的元素
 });
 </code></pre>
-<h2 id="cpp_tricks-vector_2">有序的 vector</h2>
-<p>如果你想要维护一个有序的数组，用 <code>lower_bound</code> 或 <code>upper_bound</code> 来插入元素，保证插入后仍保持有序：</p>
-<pre><code class="language-cpp">vector&lt;int&gt; s;
-s.push_back(1);
-s.push_back(2);
-s.push_back(4);
-s.push_back(6);
-// s = { 1, 2, 4, 6 }
-s.insert(lower_bound(s.begin(), s.end(), 3), 3);
-// s = { 1, 2, 3, 4, 6 }
-s.insert(lower_bound(s.begin(), s.end(), 5), 5);
-// s = { 1, 2, 3, 4, 5, 6 }
+<h2 id="cpp_tricks-const">const 居然应该后置&hellip;</h2>
+<pre><code class="language-cpp">const int *p;
+int *const p;
 </code></pre>
-<p>有序数组中，可以利用 <code>lower_bound</code> 或 <code>upper_bound</code> 快速二分查找到想要的值：</p>
-<pre><code class="language-cpp">vector&lt;int&gt; s;
-s.push_back(1);
-s.push_back(2);
-s.push_back(4);
-s.push_back(6);
-// s = { 1, 2, 4, 6 }
-lower_bound(s.begin(), s.end(), 3); // s.begin() + 2;
-lower_bound(s.begin(), s.end(), 5); // s.begin() + 3;
+<p>你能看出来上面这个 const 分别修饰的是谁吗？</p>
+<ol>
+<li>指针指向的 <code>int</code></li>
+<li>指针本身 <code>int *</code></li>
+</ol>
+<pre><code class="language-cpp">const int *p;  // 1
+int *const p;  // 2
 </code></pre>
-<p>利用 CDF 积分 + 二分法可以实现生成任意指定分布的随机数。</p>
-<p>例如抽卡概率要求：</p>
-<ul>
-<li>2% 出金卡</li>
-<li>10% 出蓝卡</li>
-<li>80% 出白卡</li>
-<li>8% 出答辩</li>
-</ul>
-<pre><code class="language-cpp">vector&lt;double&gt; probs = {0.02, 0.1, 0.8, 0.08};
-vector&lt;double&gt; cdf = {0.02, 0.12, 0.92, 1.00};
-vector&lt;string&gt; result = {&quot;金卡&quot;, &quot;蓝卡&quot;, &quot;白卡&quot;, &quot;答辩&quot;};
-// 生成 100 个随机数：
-for (int i = 0; i &lt; 100; ++i) {
-    double r = rand() / (RAND_MAX + 1.);
-    int index = lower_bound(cdf.begin(), cdf.end(), r) - cdf.begin();
-    cout &lt;&lt; &quot;你抽到了&quot; &lt;&lt; result[index] &lt;&lt; endl;
-}
+<p>为了看起来更加明确，我通常都会后置所有的 const 修饰。</p>
+<pre><code class="language-cpp">int const *p;
+int *const p;
 </code></pre>
-<h2 id="cpp_tricks-_4">提前返回</h2>
+<p>这样就一目了然，const 总是在修饰他前面的东西，而不是后面。</p>
+<p>为什么 <code>int *const</code> 修饰的是 <code>int *</code> 也就很容易理解了。</p>
+<pre><code class="language-cpp">int const i;
+int const *p;
+int *const q;
+int const &amp;r;
+</code></pre>
+<p>举个例子：</p>
+<pre><code class="language-cpp">int i, j;
+int *const p = &amp;i;
+*p = 1;  // OK：p 指向的对象可变
+p = &amp;j;  // 错误：p 本身不可变，不能改变指向
+</code></pre>
+<pre><code class="language-cpp">int i, j;
+int const *p = &amp;i;
+*p = 1;  // 错误：p 指向的对象不可变
+p = &amp;j;  // OK：p 本身可变，可以改变指向
+</code></pre>
+<pre><code class="language-cpp">int i, j;
+const int *p = &amp;i;
+*p = 1;  // 错误：p 指向的对象不可变
+p = &amp;j;  // OK：p 本身可变，可以改变指向
+</code></pre>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>int const *</code> 和 <code>const int *</code> 等价！只有 <code>int *const</code> 是不同的。</p>
+</blockquote>
+<h2 id="cpp_tricks-_5">提前返回</h2>
 <pre><code class="language-cpp">void babysitter(Baby *baby) {
     if (!baby-&gt;is_alive()) {
         puts(&quot;宝宝已经去世了&quot;);
@@ -1386,7 +1456,7 @@ for (int i = 0; i &lt; 100; ++i) {
     return list;
 }
 </code></pre>
-<h2 id="cpp_tricks-_5">类内静态成员</h2>
+<h2 id="cpp_tricks-inline">类内静态成员 inline</h2>
 <p>在头文件中定义结构体的 static 成员时：</p>
 <pre><code class="language-cpp">struct Class {
     static Class instance;
@@ -1398,30 +1468,174 @@ for (int i = 0; i &lt; 100; ++i) {
     inline static Class instance;
 };
 </code></pre>
-<h2 id="cpp_tricks-const">const 居然应该后置&hellip;</h2>
-<pre><code class="language-cpp">const int *p;
-int *const p;
+<h2 id="cpp_tricks-vector_2">保持有序的 vector</h2>
+<p>如果你想要维护一个有序的数组，用 <code>lower_bound</code> 或 <code>upper_bound</code> 来插入元素，保证插入后仍保持有序：</p>
+<pre><code class="language-cpp">vector&lt;int&gt; s;
+s.push_back(1);
+s.push_back(2);
+s.push_back(4);
+s.push_back(6);
+// s = { 1, 2, 4, 6 }
+s.insert(lower_bound(s.begin(), s.end(), 3), 3);
+// s = { 1, 2, 3, 4, 6 }
+s.insert(lower_bound(s.begin(), s.end(), 5), 5);
+// s = { 1, 2, 3, 4, 5, 6 }
 </code></pre>
-<p>你能看出来上面这个 const 分别修饰的是谁吗？</p>
+<p>有序数组中，可以利用 <code>lower_bound</code> 或 <code>upper_bound</code> 快速二分查找到想要的值：</p>
+<pre><code class="language-cpp">vector&lt;int&gt; s;
+s.push_back(1);
+s.push_back(2);
+s.push_back(4);
+s.push_back(6);
+// s = { 1, 2, 4, 6 }
+lower_bound(s.begin(), s.end(), 3); // s.begin() + 2;
+lower_bound(s.begin(), s.end(), 5); // s.begin() + 3;
+</code></pre>
+<p>有序 vector 应用案例：利用 CDF 积分 + 二分法可以实现生成任意指定分布的随机数。</p>
+<p>例如抽卡概率要求：</p>
+<ul>
+<li>2% 出金卡</li>
+<li>10% 出蓝卡</li>
+<li>80% 出白卡</li>
+<li>8% 出答辩</li>
+</ul>
+<pre><code class="language-cpp">vector&lt;double&gt; probs = {0.02, 0.1, 0.8, 0.08};
+vector&lt;double&gt; cdf;
+// 计算 probs 的 CDF 积分，存入 cdf 数组
+std::partial_sum(probs.begin(), probs.end(), std::back_inserter(cdf));
+// cdf = {0.02, 0.12, 0.92, 1.00} 是一个有序 vector，可以运用二分法
+
+vector&lt;string&gt; result = {&quot;金卡&quot;, &quot;蓝卡&quot;, &quot;白卡&quot;, &quot;答辩&quot;};
+// 生成 100 个随机数：
+for (int i = 0; i &lt; 100; ++i) {
+    double r = rand() / (RAND_MAX + 1.);
+    int index = lower_bound(cdf.begin(), cdf.end(), r) - cdf.begin();
+    cout &lt;&lt; &quot;你抽到了&quot; &lt;&lt; result[index] &lt;&lt; endl;
+}
+</code></pre>
+<h2 id="cpp_tricks-c_1">C++ 随机数的正确生成方式</h2>
+<p>TODO</p>
+<h2 id="cpp_tricks-raii-finally">RAII 的 finally</h2>
+<h2 id="cpp_tricks-swap-mutex">swap 缩小 mutex 区间代价</h2>
+<h2 id="cpp_tricks-map-any">map + any 外挂属性</h2>
+<h2 id="cpp_tricks-bind-lambda">bind 是历史糟粕，应该由 Lambda 表达式取代</h2>
+<h2 id="cpp_tricks-forward-fwd">forward 迷惑性地不好用，建议改用 FWD 宏</h2>
+<h2 id="cpp_tricks-_6">智能指针防止大对象移动</h2>
+<p>我们说一个类型大，有两种情况。</p>
 <ol>
-<li>指针本身 <code>int *</code></li>
-<li>指针指向的 <code>int</code></li>
+<li>类本身很大：例如 array</li>
+<li>类本身不大，但其指向的对象大，且该类是深拷贝，对该类的拷贝会引起其指向对象的拷贝：例如 vector</li>
 </ol>
-<pre><code class="language-cpp">const int *p;  // 2
-int *const p;  // 1
+<pre><code class="language-cpp">sizeof(array&lt;int, 1000&gt;);  // 本身 4000 字节
+sizeof(vector&lt;int&gt;);       // 本身 24 字节（成员是 3 个指针），指向的数组可以无限增大
 </code></pre>
-<p>为了看起来更加明确，我通常都会后置所有的 const 修饰。</p>
-<pre><code class="language-cpp">int const *p;
-int *const p;
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>sizeof(vector)</code> 为 24 字节仅为 <code>x86_64-pc-linux-gnu</code> 平台 <code>libstdc++</code> 库的实测结果，在 32 位系统以及 MSVC 的 Debug 模式 STL 下可能得出不同的结果，不可以依赖这个平台相关的结果来编程。</p>
+</blockquote>
+<p>对于 vector，我们可以使用 <code>std::move</code> 移动语义，只拷贝该类本身的三个指针成员，而不对其指向的 4000 字节数组进行深拷贝。</p>
+<p>对于 array，则 <code>std::move</code> 移动语义与普通的拷贝没有区别：array 作为静态数组容器，不是通过“指针成员”来保存数组的，而是直接把数组存在他的体内，对 array 的移动和拷贝是完全一样的！</p>
+<p>总之，移动语义的加速效果，只对采用了“指针间接存储动态数据”的类型（如 vector、map、set、string）有效。对“直接存储静态大小数据”的类型（array、tuple、variant、成功“小字符串优化”的 string）无效。</p>
+<p>所以，让很多“移动语义”孝子失望了：“本身很大”的类，移动和拷贝一样慢！</p>
+<p>那么现在我们有个超大的类：</p>
+<pre><code class="language-cpp">using BigType = array&lt;int, 1000&gt;;  // 4000 字节大小的平坦类型
+
+vector&lt;BigType&gt; arr;
+
+void func(BigType x) {
+    arr.push_back(std::move(x));  // 拷贝 4000 字节，超慢，move 也没用
+}
+
+int main() {
+    BigType x;
+    func(std::move(x));  // 拷贝 4000 字节，超慢，move 也没用
+}
 </code></pre>
-<p>这样就一目了然，const 总是在修饰他前面的东西，而不是后面。</p>
-<p>为什么 <code>int *const</code> 修饰的是 <code>int *</code> 也就很容易理解了。</p>
-<pre><code class="language-cpp">int const i;
-int const *p;
-int const &amp;r;
+<p>如何加速这种本身超大的变量转移？使用 <code>const</code> 引用：</p>
+<pre><code class="language-cpp">void func(BigType const &amp;x)
 </code></pre>
-<h2 id="cpp_tricks-_6">智能指针防止对象移动</h2>
-<p>TODO: <code>shared_ptr&lt;array&lt;int, 1000&gt;&gt;</code></p></section><section class="print-page" id="lambda"><h1 id="lambda-_1">函数式编程</h1>
+<p>似乎可以避免传参时的拷贝，但是依然不能避免 <code>push_back</code> 推入 <code>vector</code> 时所不得已的拷贝。</p>
+<p>小技巧：改用 <code>unique_ptr&lt;BigType&gt;</code></p>
+<pre><code class="language-cpp">using BigType = array&lt;int, 1000&gt;;  // 4000 字节大小的平坦类型
+
+using BigTypePtr = unique_ptr&lt;BigType&gt;;
+
+vector&lt;BigType&gt; arr;
+
+void func(BigTypePtr x) {
+    arr.push_back(std::move(x));  // 只拷贝 8 字节的指针，其指向的 4000 字节不用深拷贝了，直接移动所有权给 vector 里的 BigTypePtr 智能指针
+    // 由于移走了所有权，x 此时已经为 nullptr
+}
+
+int main() {
+    BigTypePtr x = make_unique&lt;BigType&gt;();  // 注意：用智能指针的话，需要用 make_unique 才能创建对象了
+    func(std::move(x));  // 只拷贝 8 字节的指针
+    // 由于移走了所有权，x 此时已经为 nullptr
+}
+</code></pre>
+<p>上面整个程序中，一开始通过 <code>make_unique</code> 创建的超大对象，全程没有发生任何移动，避免了无谓的深拷贝。</p>
+<p>对于不支持移动构造函数的类型来说，也可以用这个方法，就能在函数之间穿梭自如了。</p>
+<pre><code class="language-cpp">// 热知识：std::mutex 不支持移动
+
+void func(std::mutex lock);
+
+int main() {
+    std::mutex lock;
+    func(std::move(lock));  // 错误：mutex(mutex &amp;&amp;) = delete
+}
+</code></pre>
+<pre><code class="language-cpp">void func(std::unique_ptr&lt;std::mutex&gt; lock);
+
+int main() {
+    std::unique_ptr&lt;std::mutex&gt; lock = std::make_unique&lt;std::mutex&gt;();
+    func(std::move(lock));  // OK：调用的是 unique_ptr(unique_ptr &amp;&amp;)，不关 mutex 什么事
+}
+</code></pre>
+<p>更好的是 <code>shared_ptr</code>，连 <code>std::move</code> 都不用写，更省心。</p>
+<pre><code class="language-cpp">void func(std::shared_ptr&lt;std::mutex&gt; lock);
+
+int main() {
+    std::shared_ptr&lt;std::mutex&gt; lock = std::make_shared&lt;std::mutex&gt;();
+    func(lock);  // OK：调用的是 shared_ptr(shared_ptr const &amp;)，不关 mutex 什么事
+    func(lock);  // OK：shared_ptr 的拷贝构造函数是浅拷贝，即使浅拷贝发生多次，指向的对象也不会被拷贝或移动
+}
+</code></pre>
+<h2 id="cpp_tricks-optional">optional 实现延迟初始化</h2>
+<pre><code class="language-cpp">struct SomeClass {
+    int m_i;
+    int m_j;
+
+    SomeClass(int i, int j) : m_i(i), m_j(j) {}
+};
+</code></pre>
+<h2 id="cpp_tricks-if-auto-while-auto">if-auto 与 while-auto</h2>
+<p>TODO</p>
+<h2 id="cpp_tricks-_7">临时右值转左值</h2>
+<p>C++ 有个特性：支持纯右值(prvalue)隐式转换成 const 的左值引用。</p>
+<p>翻译：<code>int &amp;&amp;</code> 可以自动转换成 <code>int const &amp;</code>。</p>
+<pre><code class="language-cpp">void func(int const &amp;i);
+
+func(1);  // OK：自动创建一个变量保存 1，然后作为 int const &amp; 参数传入
+
+// 等价于：
+const int tmp = 1;
+func(tmp);
+</code></pre>
+<p>但是，<code>int &amp;&amp;</code> 却不能自动转换成 <code>int &amp;</code>。</p>
+<pre><code class="language-cpp">void func(int &amp;i);
+
+func(1);  // 错误：无法从 int &amp;&amp; 自动转换成 int &amp;
+</code></pre>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 设置这个限制，可能是出于语义安全性考虑，因为参数接受 <code>int &amp;</code> 的，一般都意味着这个是用作返回值，而如果 <code>func</code> 的参数是，<code>func(1)</code>。</p>
+</blockquote>
+<h2 id="cpp_tricks-vector-unordered_map-lru-cache">vector + unordered_map = LRU cache</h2>
+<h2 id="cpp_tricks-_8">多线程通信应基于队列，而不是共享全局变量</h2>
+<h2 id="cpp_tricks-shared_ptr-deleter">自定义 shared_ptr 的 deleter</h2>
+<h2 id="cpp_tricks-lambda-unique_ptr-function">Lambda 捕获 unique_ptr 导致 function 报错怎么办</h2>
+<h2 id="cpp_tricks-check_cuda">CHECK_CUDA 类错误检测宏</h2>
+<h2 id="cpp_tricks-bit-field">位域（bit-field）</h2>
+<h2 id="cpp_tricks-locale-utf8">设置 locale 为 .utf8</h2>
+<p>TODO</p></section><section class="print-page" id="lambda"><h1 id="lambda-_1">函数式编程</h1>
 <div class="toc">
 <ul>
 <li><a href="#lambda-_1">函数式编程</a><ul>
@@ -11777,10 +11991,11 @@ void test(function&lt;int (int)&gt; func) {
 <h2 id="design_concept-_1">虚函数的缺点</h2>
 <p>TODO</p>
 <h2 id="design_concept-_2">模板函数的缺点</h2>
-<p>TODO</p></section><section class="print-page" id="error_code"><h1 id="error_code-c">现代 C++ 错误处理知多少</h1>
+<p>TODO</p></section><section class="print-page" id="error_code"><h1 id="error_code-c">现代 C++ 错误处理知多少（未完工）</h1>
+<p>配套视频：<a href="https://www.bilibili.com/video/BV1QpWSekEJY">BV1QpWSekEJY</a></p>
 <div class="toc">
 <ul>
-<li><a href="#error_code-c">现代 C++ 错误处理知多少</a><ul>
+<li><a href="#error_code-c">现代 C++ 错误处理知多少（未完工）</a><ul>
 <li><a href="#error_code-_1">错误的分类</a><ul>
 <li><a href="#error_code-_2">不可恢复错误</a></li>
 <li><a href="#error_code-_3">可恢复错误</a></li>
@@ -15296,7 +15511,21 @@ base64.b64decode(secret).decode()
 <h3 id="unicode-utf-7">UTF-7</h3>
 <p>TODO</p>
 <h3 id="unicode-_28">字符编码猜测</h3>
-<p>TODO</p></section><section class="print-page" id="undef"><h1 id="undef-_1">未定义行为完整列表</h1>
+<p>TODO</p></section><section class="print-page" id="threading"><h1 id="threading-c">C++ 多线程编程（未完工）</h1>
+<h2 id="threading-_1">为什么数据竞争</h2>
+<pre><code class="language-cpp">if (table.count(&quot;小彭老师&quot;)) {
+    return table.at(&quot;小彭老师&quot;);
+} else {
+    return 0;
+}
+</code></pre>
+<pre><code class="language-cpp">auto it = table.find(&quot;小彭老师&quot;);
+if (it != table.end()) {
+    return it-&gt;second;
+} else {
+    return 0;
+}
+</code></pre></section><section class="print-page" id="test_and_safe"><h1 id="test_and_safe-_1">测试与安全话题（未完工）</h1></section><section class="print-page" id="undef"><h1 id="undef-_1">未定义行为完整列表</h1>
 <div class="toc">
 <ul>
 <li><a href="#undef-_1">未定义行为完整列表</a><ul>
