@@ -26,6 +26,8 @@ read(1, mem, 1024);           // 用于供 C 语言的读文件函数使用
 delete[] mem;                 // 需要手动 delete
 ```
 
+> {{ icon.fun }} 可以看到，他所谓的“内存空间”实际上就是一个“char 数组”。
+
 小彭老师：有没有一种可能，vector 就可以分配内存空间。
 
 ```cpp
@@ -33,12 +35,37 @@ vector<char> mem(1024);
 read(1, mem.data(), mem.size());
 ```
 
-vector 一样符合 RAII 思想，构造时自动申请内存，离开作用域时自动释放。如需取出原始指针：
+vector 一样符合 RAII 思想，构造时自动申请内存，离开作用域时自动释放。
+
+只需在调用 C 语言接口时，取出原始指针：
 
 - 用 data() 即可获取出首个 char 元素的指针，用于传递给 C 语言函数使用。
 - 用 size() 取出数组的长度，即是内存空间的字节数，因为我们的元素类型是 char，char 刚好就是 1 字节的，size() 刚好就是字节的数量。
 
-> 更现代的 C++ 思想家还会用 `vector<std::byte>`，明确区分这是“字节”不是“字符”。如果你读出来的目的是当作字符串，可以用 `std::string`。
+此处 read 函数读完后，数据就直接进入了 vector 中，根本不需要什么 new。
+
+> {{ icon.detail }} 更现代的 C++ 思想家还会用 `vector<std::byte>`，明确区分这是“字节”不是“字符”。如果你读出来的目的是当作字符串，可以用 `std::string`。
+
+> {{ icon.warn }} 注意：一些愚蠢的教材中，用 `shared_ptr` 和 `unique_ptr` 来管理数组，这是错误的。
+>
+> `shared_ptr` 和 `unique_ptr` 智能指针主要是用于管理“单个对象”的，不是管理“数组”的。
+>
+> `vector` 一直都是数组的管理方式，且从 C++98 就有。不要看到 “new 的替代品” 只想到智能指针啊！“new [] 的替代品” 是 `vector` 啊！
+
+此处放出一个利用 `std::wstring` 分配 `wchar_t *` 内存的案例：
+
+```cpp
+std::wstring utf8_to_wstring(std::string const &s) {
+    int len = MultiByteToWideChar(CP_UTF8, 0,
+                                  s.data(), s.size(),
+                                  nullptr, 0);  // 先确定长度
+    std::wstring ws(len, 0);
+    MultiByteToWideChar(CP_UTF8, 0,
+                        s.data(), s.size(), 
+                        ws.data(), ws.size());  // 再读出数据
+    return ws;
+}
+```
 
 ### 贴士 1.1
 

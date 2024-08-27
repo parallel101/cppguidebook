@@ -27,6 +27,59 @@ std::swap(a, b);
 
 > {{ icon.tip }} 只需要 `#include <utility>` 就可以使用！
 
+## RAII 地分配一段内存空间
+
+小彭老师：不要让我看到 new 和 delete。
+
+同学：我想要**分配一段内存空间**，你不让我 new，我还能怎么办呢？
+
+```cpp
+char *mem = new char[1024];   // 同学想要 1024 字节的缓冲区
+read(1, mem, 1024);           // 用于供 C 语言的读文件函数使用
+delete[] mem;                 // 需要手动 delete
+```
+
+> {{ icon.fun }} 可以看到，他所谓的“内存空间”实际上就是一个“char 数组”。
+
+小彭老师：有没有一种可能，vector 就可以分配内存空间。
+
+```cpp
+vector<char> mem(1024);
+read(1, mem.data(), mem.size());
+```
+
+vector 一样符合 RAII 思想，构造时自动申请内存，离开作用域时自动释放。
+
+只需在调用 C 语言接口时，取出原始指针：
+
+- 用 data() 即可获取出首个 char 元素的指针，用于传递给 C 语言函数使用。
+- 用 size() 取出数组的长度，即是内存空间的字节数，因为我们的元素类型是 char，char 刚好就是 1 字节的，size() 刚好就是字节的数量。
+
+此处 read 函数读完后，数据就直接进入了 vector 中，根本不需要什么 new。
+
+> {{ icon.detail }} 更现代的 C++ 思想家还会用 `vector<std::byte>`，明确区分这是“字节”不是“字符”。如果你读出来的目的是当作字符串，可以用 `std::string`。
+
+> {{ icon.warn }} 注意：一些愚蠢的教材中，用 `shared_ptr` 和 `unique_ptr` 来管理数组，这是错误的。
+>
+> `shared_ptr` 和 `unique_ptr` 智能指针主要是用于管理“单个对象”的，不是管理“数组”的。
+>
+> `vector` 一直都是数组的管理方式，且从 C++98 就有。不要看到 “new 的替代品” 只想到智能指针啊！“new [] 的替代品” 是 `vector` 啊！
+
+此处放出一个利用 `std::wstring` 分配 `wchar_t *` 内存的案例：
+
+```cpp
+std::wstring utf8_to_wstring(std::string const &s) {
+    int len = MultiByteToWideChar(CP_UTF8, 0,
+                                  s.data(), s.size(),
+                                  nullptr, 0);  // 先确定长度
+    std::wstring ws(len, 0);
+    MultiByteToWideChar(CP_UTF8, 0,
+                        s.data(), s.size(), 
+                        ws.data(), ws.size());  // 再读出数据
+    return ws;
+}
+```
+
 ## 别再写构造函数啦！
 
 ```cpp
@@ -100,63 +153,189 @@ Student stu{.name = "小彭老师", .id = 9999, .age = 24};
 
 只有当你需要有“自定义钩子逻辑”的时候，才需要自定义构造函数。
 
-## cout 不需要 endl
-
 ```cpp
-int a = 42;
-printf("%d\n", a);
+struct Student {
+    string name;
+    int age;
+    int id;
+
+    Student(string name_, int age_, int id_) : name(name_), age(age_), id(id_) {}
+
+    Student(Student const &other) : name(other.name), age(other.age), id(other.id) {
+        std::cout << "拷贝构造\n";
+    }
+
+    Student &operator=(Student const &other) {
+        name = other.name;
+        age = other.age;
+        id = other.id;
+        std::cout << "拷贝赋值\n";
+        return *this;
+    }
+};
+
+Student stu1("侯捷老师", 42, 123);
+Student stu2 = stu1;  // 拷贝构造
+stu2 = stu1;          // 拷贝赋值
 ```
 
-万一你写错了 `%` 后面的类型，编译器不会有任何报错，留下隐患。
+如果你不需要这个 `std::cout`，只是平凡地拷贝所有成员，完全可以不写，让编译器自动生成拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数：
 
 ```cpp
-int a = 42;
-printf("%s\n", a);  // 编译器不报错，但是运行时会崩溃！
+struct Student {
+    string name;
+    int age;
+    int id;
+
+    Student(string name_, int age_, int id_) : name(name_), age(age_), id(id_) {}
+
+    // 编译器自动生成 Student(Student const &other)
+    // 编译器自动生成 Student &operator=(Student const &other)
+};
+
+Student stu1("侯捷老师", 42, 123);
+Student stu2 = stu1;  // 拷贝构造
+stu2 = stu1;          // 拷贝赋值
+assert(stu2.name == "侯捷老师");
 ```
 
-C++ 中有更安全的输出方式 `cout`，通过 C++ 的重载机制，无需手动指定 `%`，自动就能推导类型。
+总之，很多 C++ 教材把拷贝/移动构造函数过于夸大，搞得好像每个类都需要自己定义一样。
+
+实际上，只有在“自己实现容器”的情况下，才需要自定义拷贝构造函数。可是谁会整天手搓容器？
+
+大多数情况下，我们只需要在类里面存 vector、string 等封装好的容器，编译器默认生成的拷贝构造函数会自动调用他们的拷贝构造函数，用户只需专注于业务逻辑即可，不需要操心底层细节。
+
+## 提前返回
 
 ```cpp
-int a = 42;
-cout << a << endl;
-double d = 3.14;
-cout << d << endl;
+void babysitter(Baby *baby) {
+    if (!baby->is_alive()) {
+        puts("宝宝已经去世了");
+    } else {
+        puts("正在检查宝宝喂食情况...");
+        if (baby->is_feeded()) {
+            puts("宝宝已经喂食过了");
+        } else {
+            puts("正在喂食宝宝...");
+            puts("正在调教宝宝...");
+            puts("正在安抚宝宝...");
+        }
+    }
+}
 ```
+
+这个函数有很多层嵌套，很不美观。用**提前返回**的写法来优化：
 
 ```cpp
-cout << "Hello, World!" << endl;
+void babysitter(Baby *baby) {
+    if (!baby->is_alive()) {
+        puts("宝宝已经去世了");
+        return;
+    }
+    puts("正在检查宝宝喂食情况...");
+    if (baby->is_feeded()) {
+        puts("宝宝已经喂食过了");
+        return;
+    }
+    puts("正在喂食宝宝...");
+    puts("正在调教宝宝...");
+    puts("正在安抚宝宝...");
+}
 ```
 
-endl 是一个特殊的流操作符，作用等价于先输出一个 `'\n'` 然后 `flush`。
+## 立即调用的 Lambda
+
+有时，需要在一个列表里循环查找某样东西，也可以用提前返回的写法优化：
 
 ```cpp
-cout << "Hello, World!" << '\n';
-cout.flush();
+bool find(const vector<int> &v, int target) {
+    for (int i = 0; i < v.size(); ++i) {
+        if (v[i] == target) {
+            return true;
+        }
+    }
+    return false;
+}
 ```
 
-但实际上，输出流 cout 默认的设置就是“行刷新缓存”，也就是说，检测到 `'\n'` 时，就会自动刷新一次，根本不需要我们手动刷新！
-
-如果还用 endl 的话，就相当于刷新了两次，浪费性能。
-
-所以，我们只需要输出 `'\n'` 就可以了，每次换行时 cout 都会自动刷新，endl 是一个典型的以讹传讹错误写法。
+可以包裹一个立即调用的 Lambda 块 `[&] { ... } ()`，限制提前返回的范围：
 
 ```cpp
-cout << "Hello, World!" << '\n';
+void find(const vector<int> &v, int target) {
+    bool found = [&] {
+        for (int i = 0; i < v.size(); ++i) {
+            if (v[i] == target) {
+                return true;
+            }
+        }
+        return false;
+    } ();
+    if (found) {
+        ...
+    }
+}
 ```
 
-## 多线程中 cout 出现乱序？
+## Lambda 复用代码
 
-TODO
+```cpp
+vector<string> spilt(string str) {
+    vector<string> list;
+    string last;
+    for (char c: str) {
+        if (c == ' ') {
+            list.push_back(last);
+            last.clear();
+        } else {
+            last.push_back(c);
+        }
+    }
+    list.push_back(last);
+    return list;
+}
+```
 
-## RAII 地分配一段内存空间
+上面的代码可以用 Lambda 复用：
 
-所谓“内存空间”实际上就是“char 数组”。
+```cpp
+vector<string> spilt(string str) {
+    vector<string> list;
+    string last;
+    auto push = [&] {
+        list.push_back(last);
+        last.clear();
+    };
+    for (char c: str) {
+        if (c == ' ') {
+            push();
+        } else {
+            last.push_back(c);
+        }
+    }
+    push();
+    return list;
+}
+```
 
-TODO
+## 类内静态成员 inline
 
-## 函数参数也可以 auto
+在头文件中定义结构体的 static 成员时：
 
-TODO
+```cpp
+struct Class {
+    static Class instance;
+};
+```
+
+会报错 `undefined reference to 'Class::instance'`。这是说的你需要找个 .cpp 文件，写出 `Class Class::instance` 才能消除该错误。
+
+C++17 中，只需加个 `inline` 就能解决！
+
+```cpp
+struct Class {
+    inline static Class instance;
+};
+```
 
 ## 别再 `[]` 啦！
 
@@ -192,16 +371,19 @@ if (table.count("小彭老师")) {
 }
 ```
 
-即使你想要默认值 0 这一特性，这也比 `[]` 更好，因为 `[]` 的默认值是会对 table 做破坏性修改的。
+即使你想要默认值 0 这一特性，`count` + `at` 也比 `[]` 更好，因为 `[]` 的默认值是会对 table 做破坏性修改的，这导致 `[]` 需要 `map` 的声明不为 `const`：
 
 ```cpp
+map<string, int> table;
 return table["小彭老师"]; // 如果"小彭老师"这一键不存在，会创建"小彭老师"并设为默认值 0
 ```
 
 ```cpp
 const map<string, int> table;
-return table["小彭老师"]; // 编译器报错：[] 需要非 const 的 map 对象，因为他会破坏性修改
+return table["小彭老师"]; // 编译失败！[] 需要非 const 的 map 对象，因为他会破坏性修改
 ```
+
+> {{ icon.tip }} 更多 map 知识请看我们的 [map 专题课](stl_map.md)。
 
 ## 别再 make_pair 啦！
 
@@ -359,198 +541,6 @@ erase_if(v, [](int x) {
 });
 ```
 
-## const 居然应该后置...
-
-```cpp
-const int *p;
-int *const p;
-```
-
-你能看出来上面这个 const 分别修饰的是谁吗？
-
-1. 指针指向的 `int`
-2. 指针本身 `int *`
-
-```cpp
-const int *p;  // 1
-int *const p;  // 2
-```
-
-为了看起来更加明确，我通常都会后置所有的 const 修饰。
-
-```cpp
-int const *p;
-int *const p;
-```
-
-这样就一目了然，const 总是在修饰他前面的东西，而不是后面。
-
-为什么 `int *const` 修饰的是 `int *` 也就很容易理解了。
-
-```cpp
-int const i;
-int const *p;
-int *const q;
-int const &r;
-```
-
-举个例子：
-
-```cpp
-int i, j;
-int *const p = &i;
-*p = 1;  // OK：p 指向的对象可变
-p = &j;  // 错误：p 本身不可变，不能改变指向
-```
-
-```cpp
-int i, j;
-int const *p = &i;
-*p = 1;  // 错误：p 指向的对象不可变
-p = &j;  // OK：p 本身可变，可以改变指向
-```
-
-```cpp
-int i, j;
-const int *p = &i;
-*p = 1;  // 错误：p 指向的对象不可变
-p = &j;  // OK：p 本身可变，可以改变指向
-```
-
-> {{ icon.tip }} `int const *` 和 `const int *` 等价！只有 `int *const` 是不同的。
-
-## 提前返回
-
-```cpp
-void babysitter(Baby *baby) {
-    if (!baby->is_alive()) {
-        puts("宝宝已经去世了");
-    } else {
-        puts("正在检查宝宝喂食情况...");
-        if (baby->is_feeded()) {
-            puts("宝宝已经喂食过了");
-        } else {
-            puts("正在喂食宝宝...");
-            puts("正在调教宝宝...");
-            puts("正在安抚宝宝...");
-        }
-    }
-}
-```
-
-这个函数有很多层嵌套，很不美观。用**提前返回**的写法来优化：
-
-```cpp
-void babysitter(Baby *baby) {
-    if (!baby->is_alive()) {
-        puts("宝宝已经去世了");
-        return;
-    }
-    puts("正在检查宝宝喂食情况...");
-    if (baby->is_feeded()) {
-        puts("宝宝已经喂食过了");
-        return;
-    }
-    puts("正在喂食宝宝...");
-    puts("正在调教宝宝...");
-    puts("正在安抚宝宝...");
-}
-```
-
-## 立即调用的 Lambda
-
-有时，需要在一个列表里循环查找某样东西，也可以用提前返回的写法优化：
-
-```cpp
-bool find(const vector<int> &v, int target) {
-    for (int i = 0; i < v.size(); ++i) {
-        if (v[i] == target) {
-            return true;
-        }
-    }
-    return false;
-}
-```
-
-可以包裹一个立即调用的 Lambda 块 `[&] { ... } ()`，限制提前返回的范围：
-
-```cpp
-void find(const vector<int> &v, int target) {
-    bool found = [&] {
-        for (int i = 0; i < v.size(); ++i) {
-            if (v[i] == target) {
-                return true;
-            }
-        }
-        return false;
-    } ();
-    if (found) {
-        ...
-    }
-}
-```
-
-## Lambda 复用代码
-
-```cpp
-vector<string> spilt(string str) {
-    vector<string> list;
-    string last;
-    for (char c: str) {
-        if (c == ' ') {
-            list.push_back(last);
-            last.clear();
-        } else {
-            last.push_back(c);
-        }
-    }
-    list.push_back(last);
-    return list;
-}
-```
-
-上面的代码可以用 Lambda 复用：
-
-```cpp
-vector<string> spilt(string str) {
-    vector<string> list;
-    string last;
-    auto push = [&] {
-        list.push_back(last);
-        last.clear();
-    };
-    for (char c: str) {
-        if (c == ' ') {
-            push();
-        } else {
-            last.push_back(c);
-        }
-    }
-    push();
-    return list;
-}
-```
-
-## 类内静态成员 inline
-
-在头文件中定义结构体的 static 成员时：
-
-```cpp
-struct Class {
-    static Class instance;
-};
-```
-
-会报错 `undefined reference to 'Class::instance'`。这是说的你需要找个 .cpp 文件，写出 `Class Class::instance` 才能消除该错误。
-
-C++17 中，只需加个 `inline` 就能解决！
-
-```cpp
-struct Class {
-    inline static Class instance;
-};
-```
-
 ## 保持有序的 vector
 
 如果你想要维护一个有序的数组，用 `lower_bound` 或 `upper_bound` 来插入元素，保证插入后仍保持有序：
@@ -608,17 +598,252 @@ for (int i = 0; i < 100; ++i) {
 
 ## C++ 随机数的正确生成方式
 
-TODO
+```cpp
+// 错误的写法：
+int r = rand() % 10; // 这样写是错误的！
+```
 
-## RAII 的 finally
+rand() 的返回值范围是 [0, RAND_MAX]，RAND_MAX 在不同平台下不同，在 Windows 平台的是 32767，即 rand() 只能生成 0～32767 之间的随机数。
 
-## swap 缩小 mutex 区间代价
+如果想要生成 0～9 之间的随机数，最简单的办法是：
+
+```cpp
+int r = rand() % 10;
+```
+
+然而这种方法有个致命的问题：不同的随机数生成概率不一样。
+
+例如把 [0, RAND_MAX] 均匀地分成 10 份，每份 3276.7。那么 0～6 之间的数字出现的概率是 3276.7 / 32767 = 10.0003%，而 7～9 之间的数字出现的概率是 3276.7 / 32767 = 9.997%。
+
+这样就不是真正的均匀分布，这可能会影响程序的正确性。
+
+- 当模数大的时候不均匀性会变得特别明显，例如 `rand() % 10000`。
+- RAND_MAX 在不同平台不同的特性也让跨平台开发者很头大。
+- `rand` 使用全局变量存储种子，对多线程不友好。
+- 无法独立的为多个生成序列设定独立的种子，一些游戏可能需要用到多个随机序列，各自有独立的种子。
+- 只能生成均匀分布的整数，不能生成幂率分布、正太分布等，生成浮点数也比较麻烦。
+- 使用 `srand(time(NULL))` 无法安全地生成随机数的初始种子，容易被黑客预测并攻击。
+- `rand` 的算法实现没有官方规定，在不同平台各有不同，产生的随机数序列可能不同。
+
+为此，C++ 提出了更加专业的随机数生成器：`<random>` 库。
+
+```cpp
+// 使用 <random> 库生成 0～9 之间的随机数：
+#include <random>
+#include <iostream>
+
+int main() {
+    uint64_t seed = std::random_device()();
+    std::mt19937 gen(seed);
+    std::uniform_int_distribution<int> dis(0, 9);
+
+    for (int i = 0; i < 100; ++i) {
+        int r = dis(gen);
+        std::cout << r << " ";
+    }
+}
+```
+
+这样就可以生成 0～9 之间的均匀分布的随机数了。
+
+- `std::random_device` 是一个随机数种子生成器，它会利用系统的随机设备（如果有的话，否则会抛出异常）生成一个安全的随机数种子，黑客无法预测。
+- `std::mt19937` 是一个随机数生成器，它会利用初始种子生成一个随机数序列。并且必定是 MT19937 这个高强度的随机算法，所有平台都一样。
+- `std::uniform_int_distribution` 是一个分布器，它可以把均匀分布的随机数映射到我们想要的上下界中。里面的实现类似于 `gen() % 10`，但通过数学机制保证了绝对均匀性。
+
+类似的还有 `std::uniform_real_distribution` 用于生成浮点数，`std::normal_distribution` 用于生成正太分布的随机数，`std::poisson_distribution` 用于生成泊松分布的随机数，等等。
+
+如果喜欢老式的函数调用风格接口，可以封装一个新的 C++ 重置版安全 `rand`：
+
+```cpp
+thread_local std::mt19937 gen(std::random_device()()); // 每线程一个，互不冲突
+
+int randint(int min, int max) {
+    return std::uniform_int_distribution<int>(min, max)(gen);
+}
+
+float randfloat(float min, float max) {
+    return std::uniform_real_distribution<float>(min, max)(gen);
+}
+```
+
+## const 居然应该后置...
+
+众所周知，`const` 在指针符号 `*` 的前后，效果是不同的。
+
+```cpp
+const int *p;
+int *const p;
+```
+
+你能看出来上面这个 const 分别修饰的是谁吗？
+
+```cpp
+const int *p;  // 指针指向的 int 不可变
+int *const p;  // 指针本身不可改变指向
+```
+
+为了看起来更加明确，我通常都会后置所有的 const 修饰。
+
+```cpp
+int const *p;  // 指针指向的 int 不可变
+int *const p;  // 指针本身不可改变指向
+```
+
+这样就一目了然，const 总是在修饰他前面的东西，而不是后面。
+
+为什么 `int *const` 修饰的是 `int *` 也就很容易理解了。
+
+```cpp
+int const i;
+int const *p;
+int *const q;
+int const &r;
+```
+
+举个例子：
+
+```cpp
+int i, j;
+int *const p = &i;
+*p = 1;  // OK：p 指向的对象可变
+p = &j;  // 错误：p 本身不可变，不能改变指向
+```
+
+```cpp
+int i, j;
+int const *p = &i;
+*p = 1;  // 错误：p 指向的对象不可变
+p = &j;  // OK：p 本身可变，可以改变指向
+```
+
+```cpp
+int i, j;
+int const *const p = &i;
+*p = 1;  // 错误：p 指向的对象不可变
+p = &j;  // 错误：p 本身也不可变，不能改变指向
+```
+
+> {{ icon.tip }} `int const *` 和 `const int *` 等价！只有 `int *const` 是不同的。
+
+## cout 不需要 endl
+
+```cpp
+int a = 42;
+printf("%d\n", a);
+```
+
+万一你写错了 `%` 后面的类型，编译器不会有任何报错，留下隐患。
+
+```cpp
+int a = 42;
+printf("%s\n", a);  // 编译器不报错，但是运行时会崩溃！
+```
+
+C++ 中有更安全的输出方式 `cout`，通过 C++ 的重载机制，无需手动指定 `%`，自动就能推导类型。
+
+```cpp
+int a = 42;
+cout << a << endl;
+double d = 3.14;
+cout << d << endl;
+```
+
+```cpp
+cout << "Hello, World!" << endl;
+```
+
+endl 是一个特殊的流操作符，作用等价于先输出一个 `'\n'` 然后 `flush`。
+
+```cpp
+cout << "Hello, World!" << '\n';
+cout.flush();
+```
+
+但实际上，输出流 cout 默认的设置就是“行刷新缓存”，也就是说，检测到 `'\n'` 时，就会自动刷新一次，根本不需要我们手动刷新！
+
+如果还用 endl 的话，就相当于刷新了两次，浪费性能。
+
+所以，我们只需要输出 `'\n'` 就可以了，每次换行时 cout 都会自动刷新，endl 是一个典型的以讹传讹错误写法。
+
+```cpp
+cout << "Hello, World!" << '\n';
+```
+
+## 多线程中 cout 出现乱序？
+
+同学：小彭老师，我在多线程环境中使用：
+
+```cpp
+cout << "the answer is " << 42 << '\n';
+```
+
+发现输出乱套了！这是不是说明 cout 不是**多线程安全**的呢？
+
+小彭老师：cout 是一个“同步流”，是**多线程安全**的，错误的是你的使用方式。
+
+> {{ icon.story }} 如果他不多线程安全，那多线程地调用他就不是输出乱序，而是程序崩溃了。
+
+但是，cout 的线程安全，只能保证每一次 `operator<<` 都是原子的，每一次单独的 `operator<<` 不会被其他人打断。
+
+但众所周知，cout 为了支持级联调用，他的 `operator<<` 都是返回自己的，上面的代码实际上等价于分别三次调用 `cout` 的 `operator<<`。
+
+```cpp
+cout << "the answer is " << 42 << '\n';
+// 等价于：
+cout << "the answer is ";
+cout << 42;
+cout << '\n';
+```
+
+变成了三次 `operator<<`，每一次都是“各自”原子的，但三个原子加在一起就不是原子了。
+
+> {{ icon.fun }} 而是分子了 :)
+
+他们中间可能穿插了其他线程的 cout，从而导致你 `"the answer is"` 打印完后，被其他线程的 `'\n'` 插入进来，导致换行混乱。
+
+> {{ icon.tip }} 更多细节请看我们的 [多线程专题](threading.md)。
+
+解决方法是，先创建一个只属于当前线程的 `ostringstream`，最后一次性调用一次 cout 的 `operator<<`，让“原子”的单位变成“一行”而不是一个字符串。
+
+```cpp
+ostringstream oss;
+oss << "the answer is " << 42 << '\n';
+cout << oss.str();
+```
+
+或者，使用 `std::format`：
+
+```cpp
+cout << std::format("the answer is {}\n", 42);
+```
+
+总之，就是要让 `operator<<` 只有一次。
+
+建议各位升级到 C++23，然后改用 `std::println` 吧：
+
+```cpp
+std::println("the answer is {}", 42);
+```
 
 ## map + any 外挂属性
+
+TODO
 
 ## bind 是历史糟粕，应该由 Lambda 表达式取代
 
 ## forward 迷惑性地不好用，建议改用 FWD 宏
+
+## 函数参数也可以 auto
+
+大家都知道，函数的返回类型可以声明为 `auto`，让其自动推导。
+
+```cpp
+auto func() {  // int func();
+    return 1;
+}
+```
+
+但你知道从 C++20 开始，参数也可以声明为 auto 了吗？
 
 ## 智能指针防止大对象移动
 
@@ -726,6 +951,8 @@ int main() {
 
 ## optional 实现延迟初始化
 
+假设我们有一个类，具有自定义的构造函数，且没有默认构造函数：
+
 ```cpp
 struct SomeClass {
     int m_i;
@@ -735,9 +962,175 @@ struct SomeClass {
 };
 ```
 
+当我们需要“延迟初始化”时怎么办？
+
+```cpp
+SomeClass c;
+if (test()) {
+    c = SomeClass(1, 2);
+} else {
+    c = SomeClass(2, 3);
+}
+do_something(c);
+```
+
+可以利用 optional 默认初始化为“空”的特性，实现延迟赋值：
+
+```cpp
+std::optional<SomeClass> c;
+if (test()) {
+    c = SomeClass(1, 2);
+} else {
+    c = SomeClass(2, 3);
+}
+do_something(c.value());  // 如果抵达此处前，c 没有初始化，就会报错，从而把编译期的未初始化转换为运行时异常
+```
+
+> {{ icon.story }} 就类似于 Python 中先给变量赋值为 None，然后在循环或 if 里条件性地赋值一样。
+
+如果要进一步避免 `c =` 时，移动构造的开销，也可以用 `unique_ptr` 或 `shared_ptr`：
+
+```cpp
+std::shared_ptr<SomeClass> c;
+if (test()) {
+    c = std::make_shared<SomeClass>(1, 2);
+} else {
+    c = std::make_shared<SomeClass>(2, 3);
+}
+do_something(c);  // 如果抵达此处前，c 没有初始化，那么传入的就是一个 nullptr，do_something 内部需要负责检测指针是否为 nullptr
+```
+
+如果 `do_something` 参数需要的是原始指针，可以用 `.get()` 获取出来：
+
+```cpp
+do_something(c.get());  // .get() 可以把智能指针转换回原始指针，但请注意原始指针不持有引用，不会延伸指向对象的生命周期
+```
+
+> {{ icon.story }} 实际上，Java、Python 中的一切对象（除 int、str 等“钦定”的基础类型外）都是引用计数的智能指针 `shared_ptr`，只不过因为一切皆指针了，所以看起来好像没有指针了。
+
 ## if-auto 与 while-auto
 
+需要先定义一个变量，然后判断某些条件的情况，非常常见：
+
+```cpp
+extern std::optional<int> some_func();
+
+auto opt = some_func();
+if (opt.has_value()) {
+    std::cout << opt.value();
+}
+```
+
+C++17 引入的 if-auto 语法，可以就地书写变量定义和判断条件：
+
+```cpp
+extern std::optional<int> some_func();
+
+if (auto opt = some_func(); opt.has_value()) {
+    std::cout << opt.value();
+}
+```
+
+对于支持 `(bool)opt` 的 `optional` 类型来说，后面的条件也可以省略：
+
+```cpp
+extern std::optional<int> some_func();
+
+if (auto opt = some_func()) {
+    std::cout << opt.value();
+}
+
+// 等价于：
+auto opt = some_func();
+if (opt) {
+    std::cout << opt.value();
+}
+```
+
+类似的还有 while-auto：
+
+```cpp
+extern std::optional<int> some_func();
+
+while (auto opt = some_func()) {
+    std::cout << opt.value();
+}
+
+// 等价于：
+while (true) {
+    auto opt = some_func();
+    if (!opt) break;
+    std::cout << opt.value();
+}
+```
+
+if-auto 最常见的配合莫过于 map.find：
+
+```cpp
+std::map<int, int> table;
+
+int key = 42;
+if (auto it = table.find(key); it != table.end()) {
+    std::cout << it->second << '\n';
+} else {
+    std::cout << "not found\n";
+}
+```
+
+## 检测是否存在指定成员函数
+
 TODO
+
+## 位域（bit-field）
+
+## vector + unordered_map = LRU cache
+
+## 多线程通信应基于队列，而不是共享全局变量
+
+## 自定义 shared_ptr 的 deleter
+
+## 读取整个文件
+
+## RAII 的 finally
+
+## swap 缩小 mutex 区间代价
+
+## Lambda 捕获 unique_ptr 导致 function 报错怎么办
+
+## CHECK_CUDA 类错误检测宏
+
+## 函数默认参数求值的位置是调用者
+
+## 设置 locale 为 .utf8
+
+## 花括号实现安全的类型转换检查
+
+## 成员函数针对 this 的移动重载
+## 位域（bit-field）
+
+## vector + unordered_map = LRU cache
+
+## 多线程通信应基于队列，而不是共享全局变量
+
+## 自定义 shared_ptr 的 deleter
+
+## 读取整个文件到字符串
+
+## RAII 的 finally
+
+## swap 缩小 mutex 区间代价
+
+## Lambda 捕获 unique_ptr 导致 function 报错怎么办
+
+## CHECK_CUDA 类错误检测宏
+
+## 函数默认参数求值的位置是调用者
+
+## 设置 locale 为 .utf8
+
+## 花括号实现安全的类型转换检查
+
+## 成员函数针对 this 的移动重载
 
 ## 临时右值转左值
 
@@ -749,8 +1142,11 @@ C++ 有个特性：支持纯右值(prvalue)隐式转换成 const 的左值引用
 void func(int const &i);
 
 func(1);  // OK：自动创建一个变量保存 1，然后作为 int const & 参数传入
+```
 
-// 等价于：
+实际上就等价于：
+
+```cpp
 const int tmp = 1;
 func(tmp);
 ```
@@ -763,22 +1159,31 @@ void func(int &i);
 func(1);  // 错误：无法从 int && 自动转换成 int &
 ```
 
-> {{ icon.tip }} 设置这个限制，可能是出于语义安全性考虑，因为参数接受 `int &` 的，一般都意味着这个是用作返回值，而如果 `func` 的参数是，`func(1)`。
+> {{ icon.tip }} C++ 官方设置这个限制，是出于语义安全性考虑，因为参数接受 `int &` 的，一般都意味着这个是用作返回值，而如果 `func` 的参数是，`func(1)`。
 
-## vector + unordered_map = LRU cache
+为了绕开这个规则，我们可以定义一个帮手函数：
 
-## 多线程通信应基于队列，而不是共享全局变量
+```cpp
+T &temporary(T const &t) {
+    return const_cast<T &>(t);
+}
 
-## 自定义 shared_ptr 的 deleter
+// 或者：
+T &temporary(T &&t) {
+    return const_cast<T &>(t);
+}
+```
 
-## Lambda 捕获 unique_ptr 导致 function 报错怎么办
+然后，就可以快乐地转换纯右值为非 const 左值了：
 
-## CHECK_CUDA 类错误检测宏
+```cpp
+void func(int &i);
 
-## 位域（bit-field）
+func(temporary(1));
+```
 
-## 设置 locale 为 .utf8
+在 Libreoffice 源码中就有应用。
+
+## 临时变量的生命周期是一行
 
 TODO
-
-## 读取整个文件
