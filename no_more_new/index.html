@@ -281,18 +281,38 @@
 read(1, mem, 1024);           // 用于供 C 语言的读文件函数使用
 delete[] mem;                 // 需要手动 delete
 </code></pre>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 可以看到，他所谓的“内存空间”实际上就是一个“char 数组”。</p>
+</blockquote>
 <p>小彭老师：有没有一种可能，vector 就可以分配内存空间。</p>
 <pre><code class="language-cpp">vector&lt;char&gt; mem(1024);
 read(1, mem.data(), mem.size());
 </code></pre>
-<p>vector 一样符合 RAII 思想，构造时自动申请内存，离开作用域时自动释放。如需取出原始指针：</p>
+<p>vector 一样符合 RAII 思想，构造时自动申请内存，离开作用域时自动释放。</p>
+<p>只需在调用 C 语言接口时，取出原始指针：</p>
 <ul>
 <li>用 data() 即可获取出首个 char 元素的指针，用于传递给 C 语言函数使用。</li>
 <li>用 size() 取出数组的长度，即是内存空间的字节数，因为我们的元素类型是 char，char 刚好就是 1 字节的，size() 刚好就是字节的数量。</li>
 </ul>
+<p>此处 read 函数读完后，数据就直接进入了 vector 中，根本不需要什么 new。</p>
 <blockquote>
-<p>更现代的 C++ 思想家还会用 <code>vector&lt;std::byte&gt;</code>，明确区分这是“字节”不是“字符”。如果你读出来的目的是当作字符串，可以用 <code>std::string</code>。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 更现代的 C++ 思想家还会用 <code>vector&lt;std::byte&gt;</code>，明确区分这是“字节”不是“字符”。如果你读出来的目的是当作字符串，可以用 <code>std::string</code>。</p>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意：一些愚蠢的教材中，用 <code>shared_ptr</code> 和 <code>unique_ptr</code> 来管理数组，这是错误的。</p>
+<p><code>shared_ptr</code> 和 <code>unique_ptr</code> 智能指针主要是用于管理“单个对象”的，不是管理“数组”的。</p>
+<p><code>vector</code> 一直都是数组的管理方式，且从 C++98 就有。不要看到 “new 的替代品” 只想到智能指针啊！“new [] 的替代品” 是 <code>vector</code> 啊！</p>
 </blockquote>
+<p>此处放出一个利用 <code>std::wstring</code> 分配 <code>wchar_t *</code> 内存的案例：</p>
+<pre><code class="language-cpp">std::wstring utf8_to_wstring(std::string const &amp;s) {
+    int len = MultiByteToWideChar(CP_UTF8, 0,
+                                  s.data(), s.size(),
+                                  nullptr, 0);  // 先确定长度
+    std::wstring ws(len, 0);
+    MultiByteToWideChar(CP_UTF8, 0,
+                        s.data(), s.size(), 
+                        ws.data(), ws.size());  // 再读出数据
+    return ws;
+}
+</code></pre>
 <h3 id="11">贴士 1.1</h3>
 <p>我一般会用更直观的 auto 写法，这样更能明确这是在创建一个 vector 对象，然后保存到 mem 这个变量名中。</p>
 <pre><code class="language-cpp">auto mem = vector&lt;char&gt;(1024);
