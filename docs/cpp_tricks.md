@@ -83,14 +83,22 @@ std::wstring utf8_to_wstring(std::string const &s) {
 ## 读取整个文件到字符串
 
 ```cpp
-TODO
+std::string file_get_content(std::string const &filename) {
+    std::ifstream ifs(filename, std::ios::in | std::ios::binary);
+    std::istreambuf_iterator<char> iit(ifs), iite;
+    std::string content(iit, iite);
+    return content;
+}
+
+void file_put_content(std::string const &filename, std::string const &content) {
+    std::ofstream ofs(filename, std::ios::out | std::ios::binary);
+    ofs << content;
+}
 ```
 
-## 位域（bit-field）
+这样就可以把整个文件读取到内存中，进行处理后再写回文件。
 
-```cpp
-TODO
-```
+> {{ icon.detail }} 用 `std::ios::binary` 选项打开文件，是为了避免文件中出现 `'\n'` 时，被 MSVC 标准库自动转换成 `'\r\n'`，以保证跨平台。
 
 ## 别再写构造函数啦！
 
@@ -1739,7 +1747,41 @@ func(temporary(1));
 
 > {{ icon.warn }} 临时变量的生命周期是一行
 
+## ostringstream 格式化字符串
+
+```cpp
+std::string name = "你好";
+int answer = 42;
+auto str = std::format("你好，{}！答案是 {}，十六进制：0x{:02x}\n", name, answer, answer);
+```
+
+没有 C++20 之前，要么使用第三方的 `fmt::format`，要么只能使用字符串的 `+` 运算符拙劣地拼接：
+
+```cpp
+auto str = std::string("你好，") + name + "！答案是 " + std::to_string(answer) + "，十六进制：0x" + std::to_string(answer) + "\n";
+```
+
+这样做效率低下，且不易阅读。而且也无法实现数字按“十六进制”转字符串。
+
+可以用 `std::ostringstream`，其用法与 `std::cout` 相同。只不过会把结果写入一个字符串（而不是直接输出），可以用 `.str()` 取出那个字符串。
+
+```cpp
+#include <sstream>
+
+std::ostringstream oss;
+oss << "你好，" << name << "！答案是 " << answer << "，十六进制：0x" << std::hex << std::setfill('0') << std::setw(2) << answer << "\n";
+auto str = oss.str();
+```
+
+利用临时变量语法，可以浓缩写在一行里，做个 format 拙劣的模仿者：
+
+```cpp
+auto str = (std::ostringstream() << "你好，" << name << "！答案是 " << answer << "，十六进制：0x" << std::hex << std::setfill('0') << std::setw(2) << answer << "\n").str();
+```
+
 ## ADL 机制
+
+TODO
 
 ## shared_from_this
 
@@ -1748,6 +1790,35 @@ func(temporary(1));
 ## 设置 locale 为 .utf8 解决编码问题
 
 ## 成员函数针对 this 的移动重载
+
+## 位域（bit-field）
+
+在互联网编程和各种与硬盘、序列化打交道的场景中，常常需要按位拆分单个字节。
+
+C 语言有专门照顾此类工作的语法糖：位域。
+
+位域是一种特殊的结构体成员，可以对位进行分组，方便读取。例如，我们想要从一个字节中读取三个状态位：
+
+```cpp
+struct Flag {
+    uint8_t a : 4;  // 低 4 位
+    uint8_t b : 4;  // 高 4 位
+};
+
+sizeof(Flag); // 1 字节大小（共 8 位）
+
+Flag f = std::bit_cast<Flag>(0x21);
+f.a; // 0x1
+f.b; // 0x2
+```
+
+以上的代码等价于：
+
+```cpp
+uint8_t f = 0x21;
+int a = f & 0xF; // 0x1
+int b = f >> 4;  // 0x2
+```
 
 <!-- ## vector + unordered_map = LRU cache -->
 <!--  -->

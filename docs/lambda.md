@@ -1028,6 +1028,26 @@ int main() {
 
 > {{ icon.warn }} 如果不使用 `std::ref`，那么 `main` 里的局部变量 `x` 不会改变！因为 `std::bind` 有一个恼人的设计：默认按拷贝捕获，会把参数拷贝一份，而不是保留引用。
 
+有趣的是，placeholder 指定的参数，却不需要 `std::ref` 才能保持引用：
+
+```cpp
+int inc(int &x, int y) {
+    x += y;
+}
+
+int main() {
+    int x = 0;
+    auto inc1 = std::bind(inc, std::placeholders::_1, 1);
+    inc1(x);  // 此处 x 是按引用传递的
+    fmt::println("x = {}", x); // x = 1
+    inc1(x);
+    fmt::println("x = {}", x); // x = 2
+    return 0;
+}
+```
+
+那是因为，`std::placeholders::_1` 指定的参数会被直接完美转发给 `inc` 里的 `x`，相当于 `inc(x, 2);`。只有捕获的参数会发生拷贝，不会完美转发。
+
 ### bind 是一个失败的设计
 
 当我们绑定出来的函数对象还需要接受参数时，就变得尤为复杂：需要使用占位符（placeholder）。
