@@ -553,7 +553,7 @@ erase_if(v, [](int x) {
 });
 ```
 
-## 保持有序的 vector
+## 保持有序的 vector 用于二分法
 
 如果你想要维护一个有序的数组，用 `lower_bound` 或 `upper_bound` 来插入元素，保证插入后仍保持有序：
 
@@ -585,28 +585,41 @@ lower_bound(s.begin(), s.end(), 5); // s.begin() + 3;
 
 有序 vector 应用案例：利用 CDF 积分 + 二分法可以实现生成任意指定分布的随机数。
 
-例如抽卡概率要求：
+例如数值策划要求的抽卡概率分布是：
 
 - 2% 出金卡
 - 10% 出蓝卡
 - 80% 出白卡
 - 8% 出答辩
 
+那么你转换一下任务。变成随机生成一个 0 到 1 的浮点数，然后判断：
+
+- 小于 0.02 时，出金卡
+- 小于 0.12 时，出蓝卡
+- 小于 0.92 时，出白卡
+- 小于 1.00 时，出答辩
+
+这个转换过程就是 CDF 积分。如果你把这 4 个数按照顺序排列，就是一个有序 vector。
+
+标准库提供了 `std::partial_sum`（不精准）或 `std::inclusive_scan`（更精准，C++17 引入）都可以计算一个数组的 CDF 离散积分。
+
 ```cpp
 vector<double> probs = {0.02, 0.1, 0.8, 0.08};
 vector<double> cdf;
 // 计算 probs 的 CDF 积分，存入 cdf 数组
-std::partial_sum(probs.begin(), probs.end(), std::back_inserter(cdf));
-// cdf = {0.02, 0.12, 0.92, 1.00} 是一个有序 vector，可以运用二分法
+std::inclusive_scan(probs.begin(), probs.end(), std::back_inserter(cdf));
+// cdf = {0.02, 0.12, 0.92, 1.00} 是一个有序 vector，可以运用二分法定位
 
 vector<string> result = {"金卡", "蓝卡", "白卡", "答辩"};
 // 生成 100 个随机数：
 for (int i = 0; i < 100; ++i) {
-    double r = rand() / (RAND_MAX + 1.);
+    double r = rand() / (RAND_MAX + 1.0);
     int index = lower_bound(cdf.begin(), cdf.end(), r) - cdf.begin();
     cout << "你抽到了" << result[index] << endl;
 }
 ```
+
+> {{ icon.detail }} 顺便一提，CDF 积分的逆运算是离散微分：`std::adjacent_difference`，可以从 `cdf` 数组复原出 `probs` 数组。
 
 ## C++ 随机数的正确生成方式
 
