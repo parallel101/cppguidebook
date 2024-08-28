@@ -304,6 +304,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-bs-level="2"><a href="#auto" class="nav-link">函数参数也可以 auto</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-bs-level="2"><a href="#cout-endl" class="nav-link">cout 不需要 endl</a>
               <ul class="nav flex-column">
               </ul>
@@ -312,7 +316,15 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#auto" class="nav-link">函数参数也可以 auto</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_7" class="nav-link">智能指针防止大对象移动</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#optional" class="nav-link">optional 实现延迟初始化</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#if-auto-while-auto" class="nav-link">if-auto 与 while-auto</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -328,19 +340,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_8" class="nav-link">救命！为什么我的全局函数不能作为函数对象？</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_9" class="nav-link">智能指针防止大对象移动</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="2"><a href="#optional" class="nav-link">optional 实现延迟初始化</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="2"><a href="#if-auto-while-auto" class="nav-link">if-auto 与 while-auto</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_9" class="nav-link">救命！为什么我的全局函数不能作为函数对象？</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -438,21 +438,21 @@
 <li><a href="#vector_2">保持有序的 vector</a></li>
 <li><a href="#c_1">C++ 随机数的正确生成方式</a></li>
 <li><a href="#const">const 居然应该后置&hellip;</a></li>
+<li><a href="#auto">函数参数也可以 auto</a></li>
 <li><a href="#cout-endl">cout 不需要 endl</a></li>
 <li><a href="#cout">多线程中 cout 出现乱序？</a></li>
-<li><a href="#auto">函数参数也可以 auto</a></li>
+<li><a href="#_7">智能指针防止大对象移动</a></li>
+<li><a href="#optional">optional 实现延迟初始化</a></li>
+<li><a href="#if-auto-while-auto">if-auto 与 while-auto</a></li>
 <li><a href="#bind-lambda">bind 是历史糟粕，应该由 Lambda 表达式取代</a><ul>
 <li><a href="#bind">bind 的历史</a></li>
 <li><a href="#thread">thread 膝盖中箭</a></li>
-<li><a href="#_7">举个绑定随机数生成器例子</a></li>
+<li><a href="#_8">举个绑定随机数生成器例子</a></li>
 </ul>
 </li>
 <li><a href="#forward-fwd">forward 迷惑性地不好用，建议改用 FWD 宏</a></li>
 <li><a href="#bind-lambda-bind_front">bind 绑定成员函数是陋习，改用 lambda 或 bind_front</a></li>
-<li><a href="#_8">救命！为什么我的全局函数不能作为函数对象？</a></li>
-<li><a href="#_9">智能指针防止大对象移动</a></li>
-<li><a href="#optional">optional 实现延迟初始化</a></li>
-<li><a href="#if-auto-while-auto">if-auto 与 while-auto</a></li>
+<li><a href="#_9">救命！为什么我的全局函数不能作为函数对象？</a></li>
 <li><a href="#map-any">map + any 外挂属性</a></li>
 <li><a href="#shared_ptr-deleter">自定义 shared_ptr 的 deleter</a></li>
 <li><a href="#check_cuda">CHECK_CUDA 类错误检测宏</a></li>
@@ -1008,6 +1008,65 @@ p = &amp;j;  // 错误：p 本身也不可变，不能改变指向
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>int const *</code> 和 <code>const int *</code> 等价！只有 <code>int *const</code> 是不同的。</p>
 </blockquote>
+<h2 id="auto">函数参数也可以 auto</h2>
+<p>大家都知道，函数的返回类型可以声明为 <code>auto</code>，让其自动推导。</p>
+<pre><code class="language-cpp">auto func() {  // int func();
+    return 1;
+}
+</code></pre>
+<p>但你知道从 C++20 开始，参数也可以声明为 auto 了吗？</p>
+<pre><code class="language-cpp">auto func(auto x) {  // T func(T x);
+    return x * x;
+}
+
+func(1);    // func(int)
+func(3.14); // func(double)
+</code></pre>
+<p>等价于以下“模板函数”的传统写法：</p>
+<pre><code class="language-cpp">template &lt;typename T&gt;
+T func(T x) {
+    return x * x;
+}
+
+func(1);    // func&lt;int&gt;(int)
+func(3.14); // func&lt;double&gt;(double)
+</code></pre>
+<p>因为是模板函数，所以也很难分离声明和定义，只适用于头文件中就地定义函数的情况。</p>
+<p><code>auto</code> 参数还可以带有引用：</p>
+<pre><code class="language-cpp">auto func(auto const &amp;x) {  // T func(T const &amp;x);
+    return x * x;
+}
+
+func(1);    // func(int const &amp;)
+func(3.14); // func(double const &amp;)
+</code></pre>
+<p>等价于：</p>
+<pre><code class="language-cpp">template &lt;typename T&gt;
+T func(T const &amp;x) {
+    return x * x;
+}
+</code></pre>
+<p><code>auto</code> 参数最好的配合莫过于是与同样 C++20 引入的 concept：</p>
+<pre><code class="language-cpp">auto func(std::integral auto x) {  // T func(T x) requires std::integral&lt;T&gt;
+    return x * x;
+}
+
+func(1);    // func(int)
+func(3.14); // 错误：double 不是整数类型
+</code></pre>
+<p>等价于：</p>
+<pre><code class="language-cpp">template &lt;typename T&gt;
+     requires std::integral&lt;T&gt;
+T func(T x) {
+    return x * x;
+}
+</code></pre>
+<p>或者：</p>
+<pre><code class="language-cpp">template &lt;std::integral T&gt;
+T func(T x) {
+    return x * x;
+}
+</code></pre>
 <h2 id="cout-endl">cout 不需要 endl</h2>
 <pre><code class="language-cpp">int a = 42;
 printf(&quot;%d\n&quot;, a);
@@ -1070,30 +1129,183 @@ cout &lt;&lt; oss.str();
 <p>建议各位升级到 C++23，然后改用 <code>std::println</code> 吧：</p>
 <pre><code class="language-cpp">std::println(&quot;the answer is {}&quot;, 42);
 </code></pre>
-<h2 id="auto">函数参数也可以 auto</h2>
-<p>大家都知道，函数的返回类型可以声明为 <code>auto</code>，让其自动推导。</p>
-<pre><code class="language-cpp">auto func() {  // int func();
-    return 1;
-}
+<h2 id="_7">智能指针防止大对象移动</h2>
+<p>我们说一个类型大，有两种情况。</p>
+<ol>
+<li>类本身很大：例如 array</li>
+<li>类本身不大，但其指向的对象大，且该类是深拷贝，对该类的拷贝会引起其指向对象的拷贝：例如 vector</li>
+</ol>
+<pre><code class="language-cpp">sizeof(array&lt;int, 1000&gt;);  // 本身 4000 字节
+sizeof(vector&lt;int&gt;);       // 本身 24 字节（成员是 3 个指针），指向的数组可以无限增大
 </code></pre>
-<p>但你知道从 C++20 开始，参数也可以声明为 auto 了吗？</p>
-<pre><code class="language-cpp">auto func(auto x) {  // T func(T x);
-    return x * x;
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>sizeof(vector)</code> 为 24 字节仅为 <code>x86_64-pc-linux-gnu</code> 平台 <code>libstdc++</code> 库的实测结果，在 32 位系统以及 MSVC 的 Debug 模式 STL 下可能得出不同的结果，不可以依赖这个平台相关的结果来编程。</p>
+</blockquote>
+<p>对于 vector，我们可以使用 <code>std::move</code> 移动语义，只拷贝该类本身的三个指针成员，而不对其指向的 4000 字节数组进行深拷贝。</p>
+<p>对于 array，则 <code>std::move</code> 移动语义与普通的拷贝没有区别：array 作为静态数组容器，不是通过“指针成员”来保存数组的，而是直接把数组存在他的体内，对 array 的移动和拷贝是完全一样的！</p>
+<p>总之，移动语义的加速效果，只对采用了“指针间接存储动态数据”的类型（如 vector、map、set、string）有效。对“直接存储静态大小数据”的类型（array、tuple、variant、成功“小字符串优化”的 string）无效。</p>
+<p>所以，让很多“移动语义”孝子失望了：“本身很大”的类，移动和拷贝一样慢！</p>
+<p>那么现在我们有个超大的类：</p>
+<pre><code class="language-cpp">using BigType = array&lt;int, 1000&gt;;  // 4000 字节大小的平坦类型
+
+vector&lt;BigType&gt; arr;
+
+void func(BigType x) {
+    arr.push_back(std::move(x));  // 拷贝 4000 字节，超慢，move 也没用
 }
 
-func(1);    // func(int)
-func(3.14); // func(double)
+int main() {
+    BigType x;
+    func(std::move(x));  // 拷贝 4000 字节，超慢，move 也没用
+}
 </code></pre>
-<p>等价于以下“模板函数”的传统写法：</p>
-<pre><code class="language-cpp">template &lt;typename T&gt;
-T func(T x) {
-    return x * x;
+<p>如何加速这种本身超大的变量转移？使用 <code>const</code> 引用：</p>
+<pre><code class="language-cpp">void func(BigType const &amp;x)
+</code></pre>
+<p>似乎可以避免传参时的拷贝，但是依然不能避免 <code>push_back</code> 推入 <code>vector</code> 时所不得已的拷贝。</p>
+<p>小技巧：改用 <code>unique_ptr&lt;BigType&gt;</code></p>
+<pre><code class="language-cpp">using BigType = array&lt;int, 1000&gt;;  // 4000 字节大小的平坦类型
+
+using BigTypePtr = unique_ptr&lt;BigType&gt;;
+
+vector&lt;BigType&gt; arr;
+
+void func(BigTypePtr x) {
+    arr.push_back(std::move(x));  // 只拷贝 8 字节的指针，其指向的 4000 字节不用深拷贝了，直接移动所有权给 vector 里的 BigTypePtr 智能指针
+    // 由于移走了所有权，x 此时已经为 nullptr
 }
 
-func(1);    // func&lt;int&gt;(int)
-func(3.14); // func&lt;double&gt;(double)
+int main() {
+    BigTypePtr x = make_unique&lt;BigType&gt;();  // 注意：用智能指针的话，需要用 make_unique 才能创建对象了
+    func(std::move(x));  // 只拷贝 8 字节的指针
+    // 由于移走了所有权，x 此时已经为 nullptr
+}
 </code></pre>
-<p>因为是模板函数，所以也很难分离声明和定义，只适用于头文件中就地定义函数的情况。</p>
+<p>上面整个程序中，一开始通过 <code>make_unique</code> 创建的超大对象，全程没有发生任何移动，避免了无谓的深拷贝。</p>
+<p>对于不支持移动构造函数的类型来说，也可以用这个方法，就能在函数之间穿梭自如了。</p>
+<pre><code class="language-cpp">// 热知识：std::mutex 不支持移动
+
+void func(std::mutex lock);
+
+int main() {
+    std::mutex lock;
+    func(std::move(lock));  // 错误：mutex(mutex &amp;&amp;) = delete
+}
+</code></pre>
+<pre><code class="language-cpp">void func(std::unique_ptr&lt;std::mutex&gt; lock);
+
+int main() {
+    std::unique_ptr&lt;std::mutex&gt; lock = std::make_unique&lt;std::mutex&gt;();
+    func(std::move(lock));  // OK：调用的是 unique_ptr(unique_ptr &amp;&amp;)，不关 mutex 什么事
+}
+</code></pre>
+<p>更好的是 <code>shared_ptr</code>，连 <code>std::move</code> 都不用写，更省心。</p>
+<pre><code class="language-cpp">void func(std::shared_ptr&lt;std::mutex&gt; lock);
+
+int main() {
+    std::shared_ptr&lt;std::mutex&gt; lock = std::make_shared&lt;std::mutex&gt;();
+    func(lock);  // OK：调用的是 shared_ptr(shared_ptr const &amp;)，不关 mutex 什么事
+    func(lock);  // OK：shared_ptr 的拷贝构造函数是浅拷贝，即使浅拷贝发生多次，指向的对象也不会被拷贝或移动
+}
+</code></pre>
+<h2 id="optional">optional 实现延迟初始化</h2>
+<p>假设我们有一个类，具有自定义的构造函数，且没有默认构造函数：</p>
+<pre><code class="language-cpp">struct SomeClass {
+    int m_i;
+    int m_j;
+
+    SomeClass(int i, int j) : m_i(i), m_j(j) {}
+};
+</code></pre>
+<p>当我们需要“延迟初始化”时怎么办？</p>
+<pre><code class="language-cpp">SomeClass c;
+if (test()) {
+    c = SomeClass(1, 2);
+} else {
+    c = SomeClass(2, 3);
+}
+do_something(c);
+</code></pre>
+<p>可以利用 optional 默认初始化为“空”的特性，实现延迟赋值：</p>
+<pre><code class="language-cpp">std::optional&lt;SomeClass&gt; c;
+if (test()) {
+    c = SomeClass(1, 2);
+} else {
+    c = SomeClass(2, 3);
+}
+do_something(c.value());  // 如果抵达此处前，c 没有初始化，就会报错，从而把编译期的未初始化转换为运行时异常
+</code></pre>
+<blockquote>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 就类似于 Python 中先给变量赋值为 None，然后在循环或 if 里条件性地赋值一样。</p>
+</blockquote>
+<p>如果要进一步避免 <code>c =</code> 时，移动构造的开销，也可以用 <code>unique_ptr</code> 或 <code>shared_ptr</code>：</p>
+<pre><code class="language-cpp">std::shared_ptr&lt;SomeClass&gt; c;
+if (test()) {
+    c = std::make_shared&lt;SomeClass&gt;(1, 2);
+} else {
+    c = std::make_shared&lt;SomeClass&gt;(2, 3);
+}
+do_something(c);  // 如果抵达此处前，c 没有初始化，那么传入的就是一个 nullptr，do_something 内部需要负责检测指针是否为 nullptr
+</code></pre>
+<p>如果 <code>do_something</code> 参数需要的是原始指针，可以用 <code>.get()</code> 获取出来：</p>
+<pre><code class="language-cpp">do_something(c.get());  // .get() 可以把智能指针转换回原始指针，但请注意原始指针不持有引用，不会延伸指向对象的生命周期
+</code></pre>
+<blockquote>
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 实际上，Java、Python 中的一切对象（除 int、str 等“钦定”的基础类型外）都是引用计数的智能指针 <code>shared_ptr</code>，只不过因为一切皆指针了，所以看起来好像没有指针了。</p>
+</blockquote>
+<h2 id="if-auto-while-auto">if-auto 与 while-auto</h2>
+<p>需要先定义一个变量，然后判断某些条件的情况，非常常见：</p>
+<pre><code class="language-cpp">extern std::optional&lt;int&gt; some_func();
+
+auto opt = some_func();
+if (opt.has_value()) {
+    std::cout &lt;&lt; opt.value();
+}
+</code></pre>
+<p>C++17 引入的 if-auto 语法，可以就地书写变量定义和判断条件：</p>
+<pre><code class="language-cpp">extern std::optional&lt;int&gt; some_func();
+
+if (auto opt = some_func(); opt.has_value()) {
+    std::cout &lt;&lt; opt.value();
+}
+</code></pre>
+<p>对于支持 <code>(bool)opt</code> 的 <code>optional</code> 类型来说，后面的条件也可以省略：</p>
+<pre><code class="language-cpp">extern std::optional&lt;int&gt; some_func();
+
+if (auto opt = some_func()) {
+    std::cout &lt;&lt; opt.value();
+}
+
+// 等价于：
+auto opt = some_func();
+if (opt) {
+    std::cout &lt;&lt; opt.value();
+}
+</code></pre>
+<p>类似的还有 while-auto：</p>
+<pre><code class="language-cpp">extern std::optional&lt;int&gt; some_func();
+
+while (auto opt = some_func()) {
+    std::cout &lt;&lt; opt.value();
+}
+
+// 等价于：
+while (true) {
+    auto opt = some_func();
+    if (!opt) break;
+    std::cout &lt;&lt; opt.value();
+}
+</code></pre>
+<p>if-auto 最常见的配合莫过于 map.find：</p>
+<pre><code class="language-cpp">std::map&lt;int, int&gt; table;
+
+int key = 42;
+if (auto it = table.find(key); it != table.end()) {
+    std::cout &lt;&lt; it-&gt;second &lt;&lt; '\n';
+} else {
+    std::cout &lt;&lt; &quot;not found\n&quot;;
+}
+</code></pre>
 <h2 id="bind-lambda">bind 是历史糟粕，应该由 Lambda 表达式取代</h2>
 <pre><code class="language-cpp">int func(int x, int y, int z, int &amp;w);
 
@@ -1180,7 +1392,7 @@ std::thread t([&amp;x] {  // [&amp;x] 表示按引用捕获 x；如果写作 [x]
 t.join();
 printf(&quot;%d\n&quot;, x); // 42
 </code></pre>
-<h3 id="_7">举个绑定随机数生成器例子</h3>
+<h3 id="_8">举个绑定随机数生成器例子</h3>
 <pre><code class="language-cpp">std::mt19937 gen(seed);
 std::uniform_real_distribution&lt;double&gt; uni(0, 1);
 auto frand = std::bind(uni, std::ref(gen));
@@ -1391,7 +1603,7 @@ int main() {
 auto memfn = BIND(world, this);                    // 小彭老师的 BIND 宏，C++14 起可用
 </code></pre>
 <p>你更喜欢哪一种呢？</p>
-<h2 id="_8">救命！为什么我的全局函数不能作为函数对象？</h2>
+<h2 id="_9">救命！为什么我的全局函数不能作为函数对象？</h2>
 <p>当你的全局函数是模板函数，或带有重载的函数时：</p>
 <pre><code class="language-cpp">template &lt;class T&gt;
 T square(T const t) {
@@ -1459,183 +1671,6 @@ test.cpp:14:21: note:   couldn't deduce template parameter 'Fn'
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 建议修改标准库，把小彭老师这两个真正好用的宏塞到 <code>&lt;utility&gt;</code> 和 <code>&lt;functional&gt;</code> 里，作为 C++26 标准的一部分。</p>
 </blockquote>
-<h2 id="_9">智能指针防止大对象移动</h2>
-<p>我们说一个类型大，有两种情况。</p>
-<ol>
-<li>类本身很大：例如 array</li>
-<li>类本身不大，但其指向的对象大，且该类是深拷贝，对该类的拷贝会引起其指向对象的拷贝：例如 vector</li>
-</ol>
-<pre><code class="language-cpp">sizeof(array&lt;int, 1000&gt;);  // 本身 4000 字节
-sizeof(vector&lt;int&gt;);       // 本身 24 字节（成员是 3 个指针），指向的数组可以无限增大
-</code></pre>
-<blockquote>
-<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>sizeof(vector)</code> 为 24 字节仅为 <code>x86_64-pc-linux-gnu</code> 平台 <code>libstdc++</code> 库的实测结果，在 32 位系统以及 MSVC 的 Debug 模式 STL 下可能得出不同的结果，不可以依赖这个平台相关的结果来编程。</p>
-</blockquote>
-<p>对于 vector，我们可以使用 <code>std::move</code> 移动语义，只拷贝该类本身的三个指针成员，而不对其指向的 4000 字节数组进行深拷贝。</p>
-<p>对于 array，则 <code>std::move</code> 移动语义与普通的拷贝没有区别：array 作为静态数组容器，不是通过“指针成员”来保存数组的，而是直接把数组存在他的体内，对 array 的移动和拷贝是完全一样的！</p>
-<p>总之，移动语义的加速效果，只对采用了“指针间接存储动态数据”的类型（如 vector、map、set、string）有效。对“直接存储静态大小数据”的类型（array、tuple、variant、成功“小字符串优化”的 string）无效。</p>
-<p>所以，让很多“移动语义”孝子失望了：“本身很大”的类，移动和拷贝一样慢！</p>
-<p>那么现在我们有个超大的类：</p>
-<pre><code class="language-cpp">using BigType = array&lt;int, 1000&gt;;  // 4000 字节大小的平坦类型
-
-vector&lt;BigType&gt; arr;
-
-void func(BigType x) {
-    arr.push_back(std::move(x));  // 拷贝 4000 字节，超慢，move 也没用
-}
-
-int main() {
-    BigType x;
-    func(std::move(x));  // 拷贝 4000 字节，超慢，move 也没用
-}
-</code></pre>
-<p>如何加速这种本身超大的变量转移？使用 <code>const</code> 引用：</p>
-<pre><code class="language-cpp">void func(BigType const &amp;x)
-</code></pre>
-<p>似乎可以避免传参时的拷贝，但是依然不能避免 <code>push_back</code> 推入 <code>vector</code> 时所不得已的拷贝。</p>
-<p>小技巧：改用 <code>unique_ptr&lt;BigType&gt;</code></p>
-<pre><code class="language-cpp">using BigType = array&lt;int, 1000&gt;;  // 4000 字节大小的平坦类型
-
-using BigTypePtr = unique_ptr&lt;BigType&gt;;
-
-vector&lt;BigType&gt; arr;
-
-void func(BigTypePtr x) {
-    arr.push_back(std::move(x));  // 只拷贝 8 字节的指针，其指向的 4000 字节不用深拷贝了，直接移动所有权给 vector 里的 BigTypePtr 智能指针
-    // 由于移走了所有权，x 此时已经为 nullptr
-}
-
-int main() {
-    BigTypePtr x = make_unique&lt;BigType&gt;();  // 注意：用智能指针的话，需要用 make_unique 才能创建对象了
-    func(std::move(x));  // 只拷贝 8 字节的指针
-    // 由于移走了所有权，x 此时已经为 nullptr
-}
-</code></pre>
-<p>上面整个程序中，一开始通过 <code>make_unique</code> 创建的超大对象，全程没有发生任何移动，避免了无谓的深拷贝。</p>
-<p>对于不支持移动构造函数的类型来说，也可以用这个方法，就能在函数之间穿梭自如了。</p>
-<pre><code class="language-cpp">// 热知识：std::mutex 不支持移动
-
-void func(std::mutex lock);
-
-int main() {
-    std::mutex lock;
-    func(std::move(lock));  // 错误：mutex(mutex &amp;&amp;) = delete
-}
-</code></pre>
-<pre><code class="language-cpp">void func(std::unique_ptr&lt;std::mutex&gt; lock);
-
-int main() {
-    std::unique_ptr&lt;std::mutex&gt; lock = std::make_unique&lt;std::mutex&gt;();
-    func(std::move(lock));  // OK：调用的是 unique_ptr(unique_ptr &amp;&amp;)，不关 mutex 什么事
-}
-</code></pre>
-<p>更好的是 <code>shared_ptr</code>，连 <code>std::move</code> 都不用写，更省心。</p>
-<pre><code class="language-cpp">void func(std::shared_ptr&lt;std::mutex&gt; lock);
-
-int main() {
-    std::shared_ptr&lt;std::mutex&gt; lock = std::make_shared&lt;std::mutex&gt;();
-    func(lock);  // OK：调用的是 shared_ptr(shared_ptr const &amp;)，不关 mutex 什么事
-    func(lock);  // OK：shared_ptr 的拷贝构造函数是浅拷贝，即使浅拷贝发生多次，指向的对象也不会被拷贝或移动
-}
-</code></pre>
-<h2 id="optional">optional 实现延迟初始化</h2>
-<p>假设我们有一个类，具有自定义的构造函数，且没有默认构造函数：</p>
-<pre><code class="language-cpp">struct SomeClass {
-    int m_i;
-    int m_j;
-
-    SomeClass(int i, int j) : m_i(i), m_j(j) {}
-};
-</code></pre>
-<p>当我们需要“延迟初始化”时怎么办？</p>
-<pre><code class="language-cpp">SomeClass c;
-if (test()) {
-    c = SomeClass(1, 2);
-} else {
-    c = SomeClass(2, 3);
-}
-do_something(c);
-</code></pre>
-<p>可以利用 optional 默认初始化为“空”的特性，实现延迟赋值：</p>
-<pre><code class="language-cpp">std::optional&lt;SomeClass&gt; c;
-if (test()) {
-    c = SomeClass(1, 2);
-} else {
-    c = SomeClass(2, 3);
-}
-do_something(c.value());  // 如果抵达此处前，c 没有初始化，就会报错，从而把编译期的未初始化转换为运行时异常
-</code></pre>
-<blockquote>
-<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 就类似于 Python 中先给变量赋值为 None，然后在循环或 if 里条件性地赋值一样。</p>
-</blockquote>
-<p>如果要进一步避免 <code>c =</code> 时，移动构造的开销，也可以用 <code>unique_ptr</code> 或 <code>shared_ptr</code>：</p>
-<pre><code class="language-cpp">std::shared_ptr&lt;SomeClass&gt; c;
-if (test()) {
-    c = std::make_shared&lt;SomeClass&gt;(1, 2);
-} else {
-    c = std::make_shared&lt;SomeClass&gt;(2, 3);
-}
-do_something(c);  // 如果抵达此处前，c 没有初始化，那么传入的就是一个 nullptr，do_something 内部需要负责检测指针是否为 nullptr
-</code></pre>
-<p>如果 <code>do_something</code> 参数需要的是原始指针，可以用 <code>.get()</code> 获取出来：</p>
-<pre><code class="language-cpp">do_something(c.get());  // .get() 可以把智能指针转换回原始指针，但请注意原始指针不持有引用，不会延伸指向对象的生命周期
-</code></pre>
-<blockquote>
-<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 实际上，Java、Python 中的一切对象（除 int、str 等“钦定”的基础类型外）都是引用计数的智能指针 <code>shared_ptr</code>，只不过因为一切皆指针了，所以看起来好像没有指针了。</p>
-</blockquote>
-<h2 id="if-auto-while-auto">if-auto 与 while-auto</h2>
-<p>需要先定义一个变量，然后判断某些条件的情况，非常常见：</p>
-<pre><code class="language-cpp">extern std::optional&lt;int&gt; some_func();
-
-auto opt = some_func();
-if (opt.has_value()) {
-    std::cout &lt;&lt; opt.value();
-}
-</code></pre>
-<p>C++17 引入的 if-auto 语法，可以就地书写变量定义和判断条件：</p>
-<pre><code class="language-cpp">extern std::optional&lt;int&gt; some_func();
-
-if (auto opt = some_func(); opt.has_value()) {
-    std::cout &lt;&lt; opt.value();
-}
-</code></pre>
-<p>对于支持 <code>(bool)opt</code> 的 <code>optional</code> 类型来说，后面的条件也可以省略：</p>
-<pre><code class="language-cpp">extern std::optional&lt;int&gt; some_func();
-
-if (auto opt = some_func()) {
-    std::cout &lt;&lt; opt.value();
-}
-
-// 等价于：
-auto opt = some_func();
-if (opt) {
-    std::cout &lt;&lt; opt.value();
-}
-</code></pre>
-<p>类似的还有 while-auto：</p>
-<pre><code class="language-cpp">extern std::optional&lt;int&gt; some_func();
-
-while (auto opt = some_func()) {
-    std::cout &lt;&lt; opt.value();
-}
-
-// 等价于：
-while (true) {
-    auto opt = some_func();
-    if (!opt) break;
-    std::cout &lt;&lt; opt.value();
-}
-</code></pre>
-<p>if-auto 最常见的配合莫过于 map.find：</p>
-<pre><code class="language-cpp">std::map&lt;int, int&gt; table;
-
-int key = 42;
-if (auto it = table.find(key); it != table.end()) {
-    std::cout &lt;&lt; it-&gt;second &lt;&lt; '\n';
-} else {
-    std::cout &lt;&lt; &quot;not found\n&quot;;
-}
-</code></pre>
 <h2 id="map-any">map + any 外挂属性</h2>
 <h2 id="shared_ptr-deleter">自定义 shared_ptr 的 deleter</h2>
 <h2 id="check_cuda">CHECK_CUDA 类错误检测宏</h2>
