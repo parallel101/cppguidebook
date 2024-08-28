@@ -248,7 +248,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_6" class="nav-link">临时变量的生命周期</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_6" class="nav-link">临时变量的生命周期是一行</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -268,7 +268,7 @@
 <li><a href="#_3">总结</a></li>
 <li><a href="#_4">析构函数的逆天大坑</a></li>
 <li><a href="#_5">虚类的析构函数必须是虚的</a></li>
-<li><a href="#_6">临时变量的生命周期</a></li>
+<li><a href="#_6">临时变量的生命周期是一行</a></li>
 </ul>
 </li>
 </ul>
@@ -420,8 +420,22 @@ int main() {
 <li><code>-Wdelete-non-virtual-dtor</code></li>
 </ul>
 <p>TODO: 介绍</p>
-<h2 id="_6">临时变量的生命周期</h2>
-<p>TODO</p></div>
+<h2 id="_6">临时变量的生命周期是一行</h2>
+<p>TODO</p>
+<pre><code class="language-cpp">int main() {
+    std::string const &amp;s = std::string(&quot;hello&quot;);
+    std::cout &lt;&lt; s;  // OK
+}
+</code></pre>
+<pre><code class="language-cpp">std::string const &amp;identity(std::string const &amp;s) {
+    return s;
+}
+
+int main() {
+    std::string const &amp;s = identity(std::string(&quot;hello&quot;));
+    std::cout &lt;&lt; s;  // BOOM!
+}
+</code></pre></div>
             </div>
         </div>
 
