@@ -240,10 +240,6 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#bit-field" class="nav-link">位域（bit-field）</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
             <li class="nav-item" data-bs-level="2"><a href="#_3" class="nav-link">别再写构造函数啦！</a>
               <ul class="nav flex-column">
               </ul>
@@ -388,6 +384,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-bs-level="2"><a href="#ostringstream" class="nav-link">ostringstream 格式化字符串</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-bs-level="2"><a href="#adl" class="nav-link">ADL 机制</a>
               <ul class="nav flex-column">
               </ul>
@@ -408,6 +408,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-bs-level="2"><a href="#bit-field" class="nav-link">位域（bit-field）</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -422,7 +426,6 @@
 <li><a href="#_1">交换两个变量</a></li>
 <li><a href="#raii">RAII 地分配一段内存空间</a></li>
 <li><a href="#_2">读取整个文件到字符串</a></li>
-<li><a href="#bit-field">位域（bit-field）</a></li>
 <li><a href="#_3">别再写构造函数啦！</a></li>
 <li><a href="#_4">别再写拷贝构造函数啦！</a></li>
 <li><a href="#_5">提前返回</a></li>
@@ -464,11 +467,13 @@
 <li><a href="#_12">函数默认参数求值的位置是调用者</a></li>
 <li><a href="#_13">花括号实现安全的类型转换检查</a></li>
 <li><a href="#_14">临时右值转左值</a></li>
+<li><a href="#ostringstream">ostringstream 格式化字符串</a></li>
 <li><a href="#adl">ADL 机制</a></li>
 <li><a href="#shared_from_this">shared_from_this</a></li>
 <li><a href="#requires">requires 语法检测是否存在指定成员函数</a></li>
 <li><a href="#locale-utf8_1">设置 locale 为 .utf8 解决编码问题</a></li>
 <li><a href="#this_1">成员函数针对 this 的移动重载</a></li>
+<li><a href="#bit-field">位域（bit-field）</a></li>
 </ul>
 </li>
 </ul>
@@ -529,11 +534,22 @@ read(1, mem.data(), mem.size());
 }
 </code></pre>
 <h2 id="_2">读取整个文件到字符串</h2>
-<pre><code class="language-cpp">TODO
+<pre><code class="language-cpp">std::string file_get_content(std::string const &amp;filename) {
+    std::ifstream ifs(filename, std::ios::in | std::ios::binary);
+    std::istreambuf_iterator&lt;char&gt; iit(ifs), iite;
+    std::string content(iit, iite);
+    return content;
+}
+
+void file_put_content(std::string const &amp;filename, std::string const &amp;content) {
+    std::ofstream ofs(filename, std::ios::out | std::ios::binary);
+    ofs &lt;&lt; content;
+}
 </code></pre>
-<h2 id="bit-field">位域（bit-field）</h2>
-<pre><code class="language-cpp">TODO
-</code></pre>
+<p>这样就可以把整个文件读取到内存中，进行处理后再写回文件。</p>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 用 <code>std::ios::binary</code> 选项打开文件，是为了避免文件中出现 <code>'\n'</code> 时，被 MSVC 标准库自动转换成 <code>'\r\n'</code>，以保证跨平台。</p>
+</blockquote>
 <h2 id="_3">别再写构造函数啦！</h2>
 <pre><code class="language-cpp">// C++98
 struct Student {
@@ -1747,11 +1763,51 @@ func(temporary(1));
 <p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 在 Libreoffice 源码中就有应用这个帮手函数。</p>
 <p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 临时变量的生命周期是一行</p>
 </blockquote>
+<h2 id="ostringstream">ostringstream 格式化字符串</h2>
+<pre><code class="language-cpp">std::string name = &quot;你好&quot;;
+int answer = 42;
+auto str = std::format(&quot;你好，{}！答案是 {}，十六进制：0x{:02x}\n&quot;, name, answer, answer);
+</code></pre>
+<p>没有 C++20 之前，要么使用第三方的 <code>fmt::format</code>，要么只能使用字符串的 <code>+</code> 运算符拙劣地拼接：</p>
+<pre><code class="language-cpp">auto str = std::string(&quot;你好，&quot;) + name + &quot;！答案是 &quot; + std::to_string(answer) + &quot;，十六进制：0x&quot; + std::to_string(answer) + &quot;\n&quot;;
+</code></pre>
+<p>这样做效率低下，且不易阅读。而且也无法实现数字按“十六进制”转字符串。</p>
+<p>可以用 <code>std::ostringstream</code>，其用法与 <code>std::cout</code> 相同。只不过会把结果写入一个字符串（而不是直接输出），可以用 <code>.str()</code> 取出那个字符串。</p>
+<pre><code class="language-cpp">#include &lt;sstream&gt;
+
+std::ostringstream oss;
+oss &lt;&lt; &quot;你好，&quot; &lt;&lt; name &lt;&lt; &quot;！答案是 &quot; &lt;&lt; answer &lt;&lt; &quot;，十六进制：0x&quot; &lt;&lt; std::hex &lt;&lt; std::setfill('0') &lt;&lt; std::setw(2) &lt;&lt; answer &lt;&lt; &quot;\n&quot;;
+auto str = oss.str();
+</code></pre>
+<p>利用临时变量语法，可以浓缩写在一行里，做个 format 拙劣的模仿者：</p>
+<pre><code class="language-cpp">auto str = (std::ostringstream() &lt;&lt; &quot;你好，&quot; &lt;&lt; name &lt;&lt; &quot;！答案是 &quot; &lt;&lt; answer &lt;&lt; &quot;，十六进制：0x&quot; &lt;&lt; std::hex &lt;&lt; std::setfill('0') &lt;&lt; std::setw(2) &lt;&lt; answer &lt;&lt; &quot;\n&quot;).str();
+</code></pre>
 <h2 id="adl">ADL 机制</h2>
+<p>TODO</p>
 <h2 id="shared_from_this">shared_from_this</h2>
 <h2 id="requires">requires 语法检测是否存在指定成员函数</h2>
 <h2 id="locale-utf8_1">设置 locale 为 .utf8 解决编码问题</h2>
 <h2 id="this_1">成员函数针对 this 的移动重载</h2>
+<h2 id="bit-field">位域（bit-field）</h2>
+<p>在互联网编程和各种与硬盘、序列化打交道的场景中，常常需要按位拆分单个字节。</p>
+<p>C 语言有专门照顾此类工作的语法糖：位域。</p>
+<p>位域是一种特殊的结构体成员，可以对位进行分组，方便读取。例如，我们想要从一个字节中读取三个状态位：</p>
+<pre><code class="language-cpp">struct Flag {
+    uint8_t a : 4;  // 低 4 位
+    uint8_t b : 4;  // 高 4 位
+};
+
+sizeof(Flag); // 1 字节大小（共 8 位）
+
+Flag f = std::bit_cast&lt;Flag&gt;(0x21);
+f.a; // 0x1
+f.b; // 0x2
+</code></pre>
+<p>以上的代码等价于：</p>
+<pre><code class="language-cpp">uint8_t f = 0x21;
+int a = f &amp; 0xF; // 0x1
+int b = f &gt;&gt; 4;  // 0x2
+</code></pre>
 <!-- ## vector + unordered_map = LRU cache -->
 <!--  -->
 <!-- ## Lambda 捕获 unique_ptr 导致 function 报错怎么办 -->

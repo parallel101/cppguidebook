@@ -1160,6 +1160,22 @@ int main() {
 <blockquote>
 <p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 如果不使用 <code>std::ref</code>，那么 <code>main</code> 里的局部变量 <code>x</code> 不会改变！因为 <code>std::bind</code> 有一个恼人的设计：默认按拷贝捕获，会把参数拷贝一份，而不是保留引用。</p>
 </blockquote>
+<p>有趣的是，placeholder 指定的参数，却不需要 <code>std::ref</code> 才能保持引用：</p>
+<pre><code class="language-cpp">int inc(int &amp;x, int y) {
+    x += y;
+}
+
+int main() {
+    int x = 0;
+    auto inc1 = std::bind(inc, std::placeholders::_1, 1);
+    inc1(x);  // 此处 x 是按引用传递的
+    fmt::println(&quot;x = {}&quot;, x); // x = 1
+    inc1(x);
+    fmt::println(&quot;x = {}&quot;, x); // x = 2
+    return 0;
+}
+</code></pre>
+<p>那是因为，<code>std::placeholders::_1</code> 指定的参数会被直接完美转发给 <code>inc</code> 里的 <code>x</code>，相当于 <code>inc(x, 2);</code>。只有捕获的参数会发生拷贝，不会完美转发。</p>
 <h3 id="bind_1">bind 是一个失败的设计</h3>
 <p>当我们绑定出来的函数对象还需要接受参数时，就变得尤为复杂：需要使用占位符（placeholder）。</p>
 <pre><code class="language-cpp">int func(int x, int y, int z, int &amp;w);
