@@ -176,3 +176,7 @@ int main() {
 - `-Wdelete-non-virtual-dtor`
 
 TODO: 介绍
+
+## 临时变量的生命周期
+
+TODO

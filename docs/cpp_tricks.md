@@ -80,6 +80,18 @@ std::wstring utf8_to_wstring(std::string const &s) {
 }
 ```
 
+## 读取整个文件到字符串
+
+```cpp
+TODO
+```
+
+## 位域（bit-field）
+
+```cpp
+TODO
+```
+
 ## 别再写构造函数啦！
 
 ```cpp
@@ -874,7 +886,7 @@ int res = bound(5, 6); // 等价于 func(6, 1, 5, w);
 
 这是一个绑定器，把 `func` 的第二个参数和第四个参数固定下来，形成一个新的函数对象，然后只需要传入前面两个参数就可以调用原来的函数了。
 
-这是一个非常旧的技术，C++11 时代就有了。但是，现在有了 Lambda 表达式，可以更简洁地实现：
+这是一个非常旧的技术，C++98 时代就有了。但是，现在有了 Lambda 表达式，可以更简洁地实现：
 
 ```cpp
 int func(int x, int y, int z, int &w);
@@ -897,6 +909,8 @@ Lambda 表达式有许多优势：
 ```cpp
 auto lambda = [&w](int x, int y) { return func(y + 8, 1, x * x, ++w) * 2; };
 ```
+
+### bind 的历史
 
 为什么 C++11 有了 Lambda 表达式，还要提出 `std::bind` 呢？
 
@@ -945,6 +959,8 @@ void some_func(int i1, int i2, int i3, int i4);
 
 > {{ icon.fun }} 所以，现在还坚持用 bind 的，都是些 2005 年前后在象牙塔接受 C++ 教育，但又不肯“终身学习”的劳保。这批劳保又去“上岸”当“教师”，继续复制 2005 年的错误毒害青少年，实现了劳保的再生产。
 
+### thread 膝盖中箭
+
 糟糕的是，bind 的这种荼毒，甚至影响到了线程库：`std::thread` 的构造函数就是基于 `std::bind` 的！
 
 这导致了 `std::thread` 和 `std::bind` 一样，无法捕获引用。
@@ -975,7 +991,7 @@ t.join();
 printf("%d\n", x); // 42
 ```
 
-最后再举个绑定随机数生成器例子：
+### 举个绑定随机数生成器例子
 
 ```cpp
 std::mt19937 gen(seed);
@@ -1049,7 +1065,7 @@ void some_func(auto &&arg) {
 
 少了烦人的尖括号，看起来容易懂多了。
 
-> {{ icon.tip }} 但是，这里有一个问题，为什么 `std::forward` 要写成 `std::forward<T>` 的形式呢？为什么不是 `std::forward(t)` 呢？因为这样写的话，`forward` 也没法知道你的 `t` 是左是右了（函数参数始终会默认推导为左，即使定义的 `t` 是右）因此必须告诉 `forward`，`t` 的定义类型，也就是 `T`，或者通过 `decltype(t)` 来获得 `T`。
+> {{ icon.detail }} 但是，我们同学有一个问题，为什么 `std::forward` 要写成 `std::forward<T>` 的形式呢？为什么不是 `std::forward(t)` 呢？因为这样写的话，`forward` 也没法知道你的 `t` 是左是右了（函数参数始终会默认推导为左，即使定义的 `t` 是右）因此必须告诉 `forward`，`t` 的定义类型，也就是 `T`，或者通过 `decltype(t)` 来获得 `T`。
 
 总之，如果你用的是 `auto &&` 参数，那么 `FWD` 会很方便（自动帮你 `decltype`）。但是如果你用的是模板参数 `T &&`，那么 `FWD` 也可以用，因为 `decltype(t)` 总是得到 `T`。
 
@@ -1064,7 +1080,7 @@ struct Class {
     }
 
     void hello() {
-        auto memfn = std::bind(&Class::world, this); // 将 this->world 绑定成一个函数对象
+        auto memfn = std::bind(&Class::world, this); // 将 this->world 绑定成一个可以延后调用的函数对象
         memfn();
         memfn();
     }
@@ -1089,7 +1105,7 @@ struct Class {
 }
 ```
 
-问题是，当我们的成员函数含有多个参数时，bind 就非常麻烦了，需要一个个写出 placeholder，而且数量必须和 `world` 的参数数量一致。每次 `world` 要新增参数时，都需要加一下 placeholder，非常沙雕。
+bind 的缺点是，当我们的成员函数含有多个参数时，bind 就非常麻烦了：需要一个个写出 placeholder，而且数量必须和 `world` 的参数数量一致。每次 `world` 要新增参数时，所有 bind 的地方都需要加一下 placeholder，非常沙雕。
 
 ```cpp
 struct Class {
@@ -1128,7 +1144,7 @@ struct Class {
 }
 ```
 
-而 C++14 起 lambda 支持变长参数，就没有这么死板：
+而 C++14 起 lambda 支持了变长参数，就不用这么死板：
 
 ```cpp
 struct Class {
@@ -1150,7 +1166,7 @@ struct Class {
 }
 ```
 
-更好的是配合 `FWD` 宏实现参数的完美转发：
+更好的是配合上文提到的 `FWD` 宏实现参数的完美转发：
 
 ```cpp
 struct Class {
@@ -1562,27 +1578,9 @@ if (auto it = table.find(key); it != table.end()) {
 }
 ```
 
-## 检测是否存在指定成员函数
-
-TODO
-
-## 位域（bit-field）
-
 ## map + any 外挂属性
 
-## vector + unordered_map = LRU cache
-
-## 多线程通信应基于队列，而不是共享全局变量
-
 ## 自定义 shared_ptr 的 deleter
-
-## 读取整个文件
-
-## RAII 的 finally
-
-## swap 缩小 mutex 区间代价
-
-## Lambda 捕获 unique_ptr 导致 function 报错怎么办
 
 ## CHECK_CUDA 类错误检测宏
 
@@ -1593,31 +1591,12 @@ TODO
 ## 花括号实现安全的类型转换检查
 
 ## 成员函数针对 this 的移动重载
-## 位域（bit-field）
-
-## vector + unordered_map = LRU cache
-
-## 多线程通信应基于队列，而不是共享全局变量
-
-## 自定义 shared_ptr 的 deleter
-
-## 读取整个文件到字符串
-
-## RAII 的 finally
-
-## swap 缩小 mutex 区间代价
-
-## Lambda 捕获 unique_ptr 导致 function 报错怎么办
 
 ## CHECK_CUDA 类错误检测宏
 
 ## 函数默认参数求值的位置是调用者
 
-## 设置 locale 为 .utf8
-
 ## 花括号实现安全的类型转换检查
-
-## 成员函数针对 this 的移动重载
 
 ## 临时右值转左值
 
@@ -1671,10 +1650,24 @@ func(temporary(1));
 
 > {{ icon.story }} 在 Libreoffice 源码中就有应用这个帮手函数。
 
-## 临时变量的生命周期是一行
+> {{ icon.warn }} 临时变量的生命周期是一行
 
-TODO
+## ADL 机制
 
-### ADL 机制
+## shared_from_this
 
-### `shared_from_this`
+## requires 语法检测是否存在指定成员函数
+
+## 设置 locale 为 .utf8 解决编码问题
+
+## 成员函数针对 this 的移动重载
+
+<!-- ## vector + unordered_map = LRU cache -->
+<!--  -->
+<!-- ## Lambda 捕获 unique_ptr 导致 function 报错怎么办 -->
+<!--  -->
+<!-- ## 多线程通信应基于队列，而不是共享全局变量 -->
+<!--  -->
+<!-- ## RAII 的 finally -->
+<!--  -->
+<!-- ## swap 缩小 mutex 区间代价 -->
