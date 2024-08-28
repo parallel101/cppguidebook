@@ -177,6 +177,24 @@ int main() {
 
 TODO: 介绍
 
-## 临时变量的生命周期
+## 临时变量的生命周期是一行
 
 TODO
+
+```cpp
+int main() {
+    std::string const &s = std::string("hello");
+    std::cout << s;  // OK
+}
+```
+
+```cpp
+std::string const &identity(std::string const &s) {
+    return s;
+}
+
+int main() {
+    std::string const &s = identity(std::string("hello"));
+    std::cout << s;  // BOOM!
+}
+```

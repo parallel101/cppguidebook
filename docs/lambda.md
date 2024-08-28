@@ -956,6 +956,8 @@ int main() {
 
 ## bind 为函数对象绑定参数
 
+原始函数：
+
 ```cpp
 int hello(int x, int y) {
     fmt::println("hello({}, {})", x, y);
@@ -963,12 +965,14 @@ int hello(int x, int y) {
 }
 
 int main() {
-    fmt::println("main 调用 hello(2, 3) 结果：{}", hello(2, 3));
-    fmt::println("main 调用 hello(2, 4) 结果：{}", hello(2, 4));
-    fmt::println("main 调用 hello(2, 5) 结果：{}", hello(2, 5));
+    hello(2, 3);
+    hello(2, 4);
+    hello(2, 5);
     return 0;
 }
 ```
+
+绑定部分参数：
 
 ```cpp
 int hello(int x, int y) {
@@ -978,15 +982,195 @@ int hello(int x, int y) {
 
 int main() {
     auto hello2 = std::bind(hello, 2, std::placeholders::_1);
-    fmt::println("main 调用 hello2(3) 结果：{}", hello2(3));
-    fmt::println("main 调用 hello2(4) 结果：{}", hello2(4));
-    fmt::println("main 调用 hello2(5) 结果：{}", hello2(5));
+    hello2(3);  // hello(2, 3)
+    hello2(4);  // hello(2, 4)
+    hello2(5);  // hello(2, 5)
     return 0;
 }
 ```
 
-### `std::placeholders`
+> {{ icon.tip }} `std::placeholders::_1` 表示 `hello2` 的第一参数。
+
+> {{ icon.tip }} std::placeholders::_1 在 bind 表达式中位于 hello 的的第二参数位置，这意味着：把 hello2 的第一参数，传递到 hello 的第二参数上去。
+
+绑定全部参数：
+
+```cpp
+int hello(int x, int y) {
+    fmt::println("hello({}, {})", x, y);
+    return x + y;
+}
+
+int main() {
+    auto hello23 = std::bind(hello, 2, 3);
+    hello23();  // hello(2, 3)
+    return 0;
+}
+```
+
+绑定引用参数：
+
+```cpp
+int inc(int &x) {
+    x += 1;
+}
+
+int main() {
+    int x = 0;
+    auto incx = std::bind(inc, std::ref(x));
+    incx();
+    fmt::println("x = {}", x); // x = 1
+    incx();
+    fmt::println("x = {}", x); // x = 2
+    return 0;
+}
+```
+
+> {{ icon.warn }} 如果不使用 `std::ref`，那么 `main` 里的局部变量 `x` 不会改变！因为 `std::bind` 有一个恼人的设计：默认按拷贝捕获，会把参数拷贝一份，而不是保留引用。
 
 ### bind 是一个失败的设计
+
+当我们绑定出来的函数对象还需要接受参数时，就变得尤为复杂：需要使用占位符（placeholder）。
+
+```cpp
+int func(int x, int y, int z, int &w);
+
+int w = rand();
+
+auto bound = std::bind(func, std::placeholders::_2, 1, std::placeholders::_1, std::ref(w)); //
+
+int res = bound(5, 6); // 等价于 func(6, 1, 5, w);
+```
+
+这是一个绑定器，把 `func` 的第二个参数和第四个参数固定下来，形成一个新的函数对象，然后只需要传入前面两个参数就可以调用原来的函数了。
+
+这是一个非常旧的技术，C++98 时代就有了。但是，现在有了 Lambda 表达式，可以更简洁地实现：
+
+```cpp
+int func(int x, int y, int z, int &w);
+
+int w = rand();
+
+auto lambda = [&w](int x, int y) { return func(y, 1, x, w); };
+
+int res = lambda(5, 6);
+```
+
+Lambda 表达式有许多优势：
+
+- 简洁：不需要写一大堆看不懂的 `std::placeholders::_1`，直接写变量名就可以了。
+- 灵活：可以在 Lambda 中使用任意多的变量，调整顺序，而不仅仅是 `std::placeholders::_1`。
+- 易懂：写起来和普通函数调用一样，所有人都容易看懂。
+- 捕获引用：`std::bind` 不支持捕获引用，总是拷贝参数，必须配合 `std::ref` 才能捕获到引用。而 Lambda 可以随意捕获不同类型的变量，按值（`[x]`）或按引用（`[&x]`），还可以移动捕获（`[x = move(x)]`），甚至捕获 this（`[this]`）。
+- 夹带私货：可以在 lambda 体内很方便地夹带其他额外转换操作，比如：
+
+```cpp
+auto lambda = [&w](int x, int y) { return func(y + 8, 1, x * x, ++w) * 2; };
+```
+
+#### bind 的历史
+
+为什么 C++11 有了 Lambda 表达式，还要提出 `std::bind` 呢？
+
+虽然 bind 和 lambda 看似都是在 C++11 引入的，实际上 bind 的提出远远早于 lambda。
+
+> {{ icon.fun }} 标准委员会：我们不生产库，我们只是 boost 的搬运工。
+
+当时还是 C++98，由于没有 lambda，难以创建函数对象，“捕获参数”非常困难。
+
+为了解决“捕获难”问题，在第三方库 boost 中提出了 `boost::bind`，由于当时只有 C++98，很多有益于函数式编程的特性都没有，所以实现的非常丑陋。
+
+例如，因为 C++98 没有变长模板参数，无法实现 `<class ...Args>`。所以实际上当时 boost 所有支持多参数的函数，实际上都是通过：
+
+```cpp
+void some_func();
+void some_func(int i1);
+void some_func(int i1, int i2);
+void some_func(int i1, int i2, int i3);
+void some_func(int i1, int i2, int i3, int i4);
+// ...
+```
+
+这样暴力重载几十个函数来实现的，而且参数数量有上限。通常会实现 0 到 20 个参数的重载，更多就不支持了。
+
+例如，我们知道现在 bind 需要配合各种 `std::placeholders::_1` 使用，有没有想过这套丑陋的占位符是为什么？为什么不用 `std::placeholder<1>`，这样不是更可扩展吗？
+
+没错，当时 `boost::bind` 就是用暴力重载几十个参数数量不等的函数，排列组合，嗯是排出来的，所以我们会看到 `boost::placeholders` 只有有限个数的占位符数量。
+
+糟糕的是，标准库的 `std::bind` 把 `boost::bind` 原封不动搬了过来，甚至 `placeholders` 的暴力组合也没有变，造成了 `std::bind` 如今丑陋的接口。
+
+人家 `boost::bind` 是因为不能修改语言语法，才只能那样憋屈的啊？可现在你码是标准委员会啊，你可以修改语言语法啊？
+
+然而，C++ 标准的更新是以“提案”的方式，逐步“增量”更新进入语言标准的。即使是在 C++98 到 C++11 这段时间内，内部也是有一个很长的消化流程的，也就是说有很多子版本，只是对外看起来好像只有一个 C++11。
+
+比方说，我 2001 年提出 `std::bind` 提案，2005 年被批准进入未来将要发布的 C++11 标准。然后又一个人在 2006 年提出其实不需要 bind，完全可以用更好的 lambda 语法来代替 bind，然后等到了 2008 年才批准进入即将发布的 C++11 标准。但是已经进入标准的东西就不会再退出了，哪怕还没有发布。就这样 bind 和 lambda 同时进入了标准。
+
+所以闹了半天，lambda 实际上是 bind 的上位替代，有了 lambda 根本不需要 bind 的。只不过是由于 C++ 委员会前后扯皮的“制度优势”，导致 bind 和他的上位替代 lambda 同时进入了 C++11 标准一起发布。
+
+> {{ icon.fun }} 这下看懂了。
+
+很多同学就不理解，小彭老师说“lambda 是 bind 的上位替代”，他就质疑“可他们不都是 C++11 提出的吗？”
+
+有没有一种可能，C++11 和 C++98 之间为什么年代差了那么久远，就是因为一个标准一拖再拖，内部实际上已经迭代了好几个小版本了，才发布出来。
+
+> {{ icon.story }} 再举个例子，CTAD 和 `optional` 都是 C++17 引入的，为什么还要 `make_optional` 这个帮手函数？不是说 CTAD 是 `make_xxx` 的上位替代吗？可见，C++ 标准中这种“同一个版本内”自己打自己耳光的现象比比皆是。
+
+> {{ icon.fun }} 所以，现在还坚持用 bind 的，都是些 2005 年前后在象牙塔接受 C++ 教育，但又不肯“终身学习”的劳保。这批劳保又去“上岸”当“教师”，继续复制 2005 年的错误毒害青少年，实现了劳保的再生产。
+
+#### thread 膝盖中箭
+
+糟糕的是，bind 的这种荼毒，甚至影响到了线程库：`std::thread` 的构造函数就是基于 `std::bind` 的！
+
+这导致了 `std::thread` 和 `std::bind` 一样，无法捕获引用。
+
+```cpp
+void thread_func(int &x) {
+    x = 42;
+}
+
+int x = 0;
+std::thread t(thread_func, x);
+t.join();
+printf("%d\n", x); // 0
+```
+
+为了避免踩到 bind 的坑，我建议所有同学，构造 `std::thread` 时，统一只指定“单个参数”，也就是函数本身。如果需要捕获参数，请使用 lambda。因为 lambda 中，捕获了哪些变量，参数的顺序是什么，哪些捕获是引用，哪些捕获是拷贝，非常清晰。
+
+```cpp
+void thread_func(int &x) {
+    x = 42;
+}
+
+int x = 0;
+std::thread t([&x] {  // [&x] 表示按引用捕获 x；如果写作 [x]，那就是拷贝捕获
+    thread_func(x);
+});
+t.join();
+printf("%d\n", x); // 42
+```
+
+#### 举个绑定随机数生成器例子
+
+bind 写法：
+
+```cpp
+std::mt19937 gen(seed);
+std::uniform_real_distribution<double> uni(0, 1);
+auto frand = std::bind(uni, std::ref(gen));
+double x = frand();
+double y = frand();
+```
+
+改用 lambda：
+
+```cpp
+std::mt19937 gen(seed);
+std::uniform_real_distribution<double> uni(0, 1);
+auto frand = [uni, &gen] {
+    return uni(gen);
+};
+double x = frand();
+double y = frand();
+```
 
 ### `std::bind_front` 和 `std::bind_back`

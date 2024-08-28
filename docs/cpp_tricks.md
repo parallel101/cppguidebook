@@ -1169,6 +1169,28 @@ if (auto it = table.find(key); it != table.end()) {
 
 ## bind 是历史糟粕，应该由 Lambda 表达式取代
 
+众所周知， `std::bind` 可以为函数绑定一部分参数，形成一个新的函数（对象）。
+
+```cpp
+int func(int x, int y) {
+    printf("func(%d, %d)\n", x, y);
+    return x + y;
+}
+
+auto new_func = std::bind(func, 1, std::placeholders::_1);
+
+new_func(2);  // 调用 new_func(2) 时，实际上调用的是 func(1, 2)
+}
+```
+
+输出：
+
+```
+func(1, 2)
+```
+
+当我们绑定出来的函数对象还需要接受参数时，就变得尤为复杂：需要使用占位符（placeholder）。
+
 ```cpp
 int func(int x, int y, int z, int &w);
 
@@ -1287,6 +1309,8 @@ printf("%d\n", x); // 42
 ```
 
 ### 举个绑定随机数生成器例子
+
+bind 写法：
 
 ```cpp
 std::mt19937 gen(seed);
