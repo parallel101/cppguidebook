@@ -389,7 +389,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年08月28日 22:32:41 (UTC+08:00)</p>
+<p>更新时间：2024年08月28日 22:39:05 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -1066,7 +1066,7 @@ static int f(int x) {}  // 函数声明并定义为“外部链接”
 <li><a href="#cpp_tricks-map">一边遍历 map，一边删除？</a></li>
 <li><a href="#cpp_tricks-vector">高效删除单个 vector 元素</a></li>
 <li><a href="#cpp_tricks-vector_1">批量删除部分 vector 元素</a></li>
-<li><a href="#cpp_tricks-vector_2">保持有序的 vector</a></li>
+<li><a href="#cpp_tricks-vector_2">保持有序的 vector 用于二分法</a></li>
 <li><a href="#cpp_tricks-c_1">C++ 随机数的正确生成方式</a></li>
 <li><a href="#cpp_tricks-const">const 居然应该后置&hellip;</a></li>
 <li><a href="#cpp_tricks-auto">函数参数也可以 auto</a></li>
@@ -1501,7 +1501,7 @@ erase_if(v, [](int x) {
     return x &gt; 0;   // 删除所有值大于 0 的元素
 });
 </code></pre>
-<h2 id="cpp_tricks-vector_2">保持有序的 vector</h2>
+<h2 id="cpp_tricks-vector_2">保持有序的 vector 用于二分法</h2>
 <p>如果你想要维护一个有序的数组，用 <code>lower_bound</code> 或 <code>upper_bound</code> 来插入元素，保证插入后仍保持有序：</p>
 <pre><code class="language-cpp">vector&lt;int&gt; s;
 s.push_back(1);
@@ -1525,27 +1525,39 @@ lower_bound(s.begin(), s.end(), 3); // s.begin() + 2;
 lower_bound(s.begin(), s.end(), 5); // s.begin() + 3;
 </code></pre>
 <p>有序 vector 应用案例：利用 CDF 积分 + 二分法可以实现生成任意指定分布的随机数。</p>
-<p>例如抽卡概率要求：</p>
+<p>例如数值策划要求的抽卡概率分布是：</p>
 <ul>
 <li>2% 出金卡</li>
 <li>10% 出蓝卡</li>
 <li>80% 出白卡</li>
 <li>8% 出答辩</li>
 </ul>
+<p>那么你转换一下任务。变成随机生成一个 0 到 1 的浮点数，然后判断：</p>
+<ul>
+<li>小于 0.02 时，出金卡</li>
+<li>小于 0.12 时，出蓝卡</li>
+<li>小于 0.92 时，出白卡</li>
+<li>小于 1.00 时，出答辩</li>
+</ul>
+<p>这个转换过程就是 CDF 积分。如果你把这 4 个数按照顺序排列，就是一个有序 vector。</p>
+<p>标准库提供了 <code>std::partial_sum</code>（不精准）或 <code>std::inclusive_scan</code>（更精准，C++17 引入）都可以计算一个数组的 CDF 离散积分。</p>
 <pre><code class="language-cpp">vector&lt;double&gt; probs = {0.02, 0.1, 0.8, 0.08};
 vector&lt;double&gt; cdf;
 // 计算 probs 的 CDF 积分，存入 cdf 数组
-std::partial_sum(probs.begin(), probs.end(), std::back_inserter(cdf));
-// cdf = {0.02, 0.12, 0.92, 1.00} 是一个有序 vector，可以运用二分法
+std::inclusive_scan(probs.begin(), probs.end(), std::back_inserter(cdf));
+// cdf = {0.02, 0.12, 0.92, 1.00} 是一个有序 vector，可以运用二分法定位
 
 vector&lt;string&gt; result = {&quot;金卡&quot;, &quot;蓝卡&quot;, &quot;白卡&quot;, &quot;答辩&quot;};
 // 生成 100 个随机数：
 for (int i = 0; i &lt; 100; ++i) {
-    double r = rand() / (RAND_MAX + 1.);
+    double r = rand() / (RAND_MAX + 1.0);
     int index = lower_bound(cdf.begin(), cdf.end(), r) - cdf.begin();
     cout &lt;&lt; &quot;你抽到了&quot; &lt;&lt; result[index] &lt;&lt; endl;
 }
 </code></pre>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 顺便一提，CDF 积分的逆运算是离散微分：<code>std::adjacent_difference</code>，可以从 <code>cdf</code> 数组复原出 <code>probs</code> 数组。</p>
+</blockquote>
 <h2 id="cpp_tricks-c_1">C++ 随机数的正确生成方式</h2>
 <pre><code class="language-cpp">// 错误的写法：
 int r = rand() % 10; // 这样写是错误的！
