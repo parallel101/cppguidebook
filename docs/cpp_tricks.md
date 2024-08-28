@@ -737,6 +737,91 @@ p = &j;  // 错误：p 本身也不可变，不能改变指向
 
 > {{ icon.tip }} `int const *` 和 `const int *` 等价！只有 `int *const` 是不同的。
 
+## 函数参数也可以 auto
+
+大家都知道，函数的返回类型可以声明为 `auto`，让其自动推导。
+
+```cpp
+auto func() {  // int func();
+    return 1;
+}
+```
+
+但你知道从 C++20 开始，参数也可以声明为 auto 了吗？
+
+```cpp
+auto func(auto x) {  // T func(T x);
+    return x * x;
+}
+
+func(1);    // func(int)
+func(3.14); // func(double)
+```
+
+等价于以下“模板函数”的传统写法：
+
+```cpp
+template <typename T>
+T func(T x) {
+    return x * x;
+}
+
+func(1);    // func<int>(int)
+func(3.14); // func<double>(double)
+```
+
+因为是模板函数，所以也很难分离声明和定义，只适用于头文件中就地定义函数的情况。
+
+`auto` 参数还可以带有引用：
+
+```cpp
+auto func(auto const &x) {  // T func(T const &x);
+    return x * x;
+}
+
+func(1);    // func(int const &)
+func(3.14); // func(double const &)
+```
+
+等价于：
+
+```cpp
+template <typename T>
+T func(T const &x) {
+    return x * x;
+}
+```
+
+`auto` 参数最好的配合莫过于是与同样 C++20 引入的 concept：
+
+```cpp
+auto func(std::integral auto x) {  // T func(T x) requires std::integral<T>
+    return x * x;
+}
+
+func(1);    // func(int)
+func(3.14); // 错误：double 不是整数类型
+```
+
+等价于：
+
+```cpp
+template <typename T>
+     requires std::integral<T>
+T func(T x) {
+    return x * x;
+}
+```
+
+或者：
+
+```cpp
+template <std::integral T>
+T func(T x) {
+    return x * x;
+}
+```
+
 ## cout 不需要 endl
 
 ```cpp
@@ -837,40 +922,237 @@ cout << std::format("the answer is {}\n", 42);
 std::println("the answer is {}", 42);
 ```
 
-## 函数参数也可以 auto
+## 智能指针防止大对象移动
 
-大家都知道，函数的返回类型可以声明为 `auto`，让其自动推导。
+我们说一个类型大，有两种情况。
+
+1. 类本身很大：例如 array
+2. 类本身不大，但其指向的对象大，且该类是深拷贝，对该类的拷贝会引起其指向对象的拷贝：例如 vector
 
 ```cpp
-auto func() {  // int func();
-    return 1;
+sizeof(array<int, 1000>);  // 本身 4000 字节
+sizeof(vector<int>);       // 本身 24 字节（成员是 3 个指针），指向的数组可以无限增大
+```
+
+> {{ icon.detail }} `sizeof(vector)` 为 24 字节仅为 `x86_64-pc-linux-gnu` 平台 `libstdc++` 库的实测结果，在 32 位系统以及 MSVC 的 Debug 模式 STL 下可能得出不同的结果，不可以依赖这个平台相关的结果来编程。
+
+对于 vector，我们可以使用 `std::move` 移动语义，只拷贝该类本身的三个指针成员，而不对其指向的 4000 字节数组进行深拷贝。
+
+对于 array，则 `std::move` 移动语义与普通的拷贝没有区别：array 作为静态数组容器，不是通过“指针成员”来保存数组的，而是直接把数组存在他的体内，对 array 的移动和拷贝是完全一样的！
+
+总之，移动语义的加速效果，只对采用了“指针间接存储动态数据”的类型（如 vector、map、set、string）有效。对“直接存储静态大小数据”的类型（array、tuple、variant、成功“小字符串优化”的 string）无效。
+
+所以，让很多“移动语义”孝子失望了：“本身很大”的类，移动和拷贝一样慢！
+
+那么现在我们有个超大的类：
+
+```cpp
+using BigType = array<int, 1000>;  // 4000 字节大小的平坦类型
+
+vector<BigType> arr;
+
+void func(BigType x) {
+    arr.push_back(std::move(x));  // 拷贝 4000 字节，超慢，move 也没用
+}
+
+int main() {
+    BigType x;
+    func(std::move(x));  // 拷贝 4000 字节，超慢，move 也没用
 }
 ```
 
-但你知道从 C++20 开始，参数也可以声明为 auto 了吗？
+如何加速这种本身超大的变量转移？使用 `const` 引用：
 
 ```cpp
-auto func(auto x) {  // T func(T x);
-    return x * x;
-}
-
-func(1);    // func(int)
-func(3.14); // func(double)
+void func(BigType const &x)
 ```
 
-等价于以下“模板函数”的传统写法：
+似乎可以避免传参时的拷贝，但是依然不能避免 `push_back` 推入 `vector` 时所不得已的拷贝。
+
+小技巧：改用 `unique_ptr<BigType>`
 
 ```cpp
-template <typename T>
-T func(T x) {
-    return x * x;
+using BigType = array<int, 1000>;  // 4000 字节大小的平坦类型
+
+using BigTypePtr = unique_ptr<BigType>;
+
+vector<BigType> arr;
+
+void func(BigTypePtr x) {
+    arr.push_back(std::move(x));  // 只拷贝 8 字节的指针，其指向的 4000 字节不用深拷贝了，直接移动所有权给 vector 里的 BigTypePtr 智能指针
+    // 由于移走了所有权，x 此时已经为 nullptr
 }
 
-func(1);    // func<int>(int)
-func(3.14); // func<double>(double)
+int main() {
+    BigTypePtr x = make_unique<BigType>();  // 注意：用智能指针的话，需要用 make_unique 才能创建对象了
+    func(std::move(x));  // 只拷贝 8 字节的指针
+    // 由于移走了所有权，x 此时已经为 nullptr
+}
 ```
 
-因为是模板函数，所以也很难分离声明和定义，只适用于头文件中就地定义函数的情况。
+上面整个程序中，一开始通过 `make_unique` 创建的超大对象，全程没有发生任何移动，避免了无谓的深拷贝。
+
+对于不支持移动构造函数的类型来说，也可以用这个方法，就能在函数之间穿梭自如了。
+
+```cpp
+// 热知识：std::mutex 不支持移动
+
+void func(std::mutex lock);
+
+int main() {
+    std::mutex lock;
+    func(std::move(lock));  // 错误：mutex(mutex &&) = delete
+}
+```
+
+```cpp
+void func(std::unique_ptr<std::mutex> lock);
+
+int main() {
+    std::unique_ptr<std::mutex> lock = std::make_unique<std::mutex>();
+    func(std::move(lock));  // OK：调用的是 unique_ptr(unique_ptr &&)，不关 mutex 什么事
+}
+```
+
+更好的是 `shared_ptr`，连 `std::move` 都不用写，更省心。
+
+```cpp
+void func(std::shared_ptr<std::mutex> lock);
+
+int main() {
+    std::shared_ptr<std::mutex> lock = std::make_shared<std::mutex>();
+    func(lock);  // OK：调用的是 shared_ptr(shared_ptr const &)，不关 mutex 什么事
+    func(lock);  // OK：shared_ptr 的拷贝构造函数是浅拷贝，即使浅拷贝发生多次，指向的对象也不会被拷贝或移动
+}
+```
+
+## optional 实现延迟初始化
+
+假设我们有一个类，具有自定义的构造函数，且没有默认构造函数：
+
+```cpp
+struct SomeClass {
+    int m_i;
+    int m_j;
+
+    SomeClass(int i, int j) : m_i(i), m_j(j) {}
+};
+```
+
+当我们需要“延迟初始化”时怎么办？
+
+```cpp
+SomeClass c;
+if (test()) {
+    c = SomeClass(1, 2);
+} else {
+    c = SomeClass(2, 3);
+}
+do_something(c);
+```
+
+可以利用 optional 默认初始化为“空”的特性，实现延迟赋值：
+
+```cpp
+std::optional<SomeClass> c;
+if (test()) {
+    c = SomeClass(1, 2);
+} else {
+    c = SomeClass(2, 3);
+}
+do_something(c.value());  // 如果抵达此处前，c 没有初始化，就会报错，从而把编译期的未初始化转换为运行时异常
+```
+
+> {{ icon.story }} 就类似于 Python 中先给变量赋值为 None，然后在循环或 if 里条件性地赋值一样。
+
+如果要进一步避免 `c =` 时，移动构造的开销，也可以用 `unique_ptr` 或 `shared_ptr`：
+
+```cpp
+std::shared_ptr<SomeClass> c;
+if (test()) {
+    c = std::make_shared<SomeClass>(1, 2);
+} else {
+    c = std::make_shared<SomeClass>(2, 3);
+}
+do_something(c);  // 如果抵达此处前，c 没有初始化，那么传入的就是一个 nullptr，do_something 内部需要负责检测指针是否为 nullptr
+```
+
+如果 `do_something` 参数需要的是原始指针，可以用 `.get()` 获取出来：
+
+```cpp
+do_something(c.get());  // .get() 可以把智能指针转换回原始指针，但请注意原始指针不持有引用，不会延伸指向对象的生命周期
+```
+
+> {{ icon.story }} 实际上，Java、Python 中的一切对象（除 int、str 等“钦定”的基础类型外）都是引用计数的智能指针 `shared_ptr`，只不过因为一切皆指针了，所以看起来好像没有指针了。
+
+## if-auto 与 while-auto
+
+需要先定义一个变量，然后判断某些条件的情况，非常常见：
+
+```cpp
+extern std::optional<int> some_func();
+
+auto opt = some_func();
+if (opt.has_value()) {
+    std::cout << opt.value();
+}
+```
+
+C++17 引入的 if-auto 语法，可以就地书写变量定义和判断条件：
+
+```cpp
+extern std::optional<int> some_func();
+
+if (auto opt = some_func(); opt.has_value()) {
+    std::cout << opt.value();
+}
+```
+
+对于支持 `(bool)opt` 的 `optional` 类型来说，后面的条件也可以省略：
+
+```cpp
+extern std::optional<int> some_func();
+
+if (auto opt = some_func()) {
+    std::cout << opt.value();
+}
+
+// 等价于：
+auto opt = some_func();
+if (opt) {
+    std::cout << opt.value();
+}
+```
+
+类似的还有 while-auto：
+
+```cpp
+extern std::optional<int> some_func();
+
+while (auto opt = some_func()) {
+    std::cout << opt.value();
+}
+
+// 等价于：
+while (true) {
+    auto opt = some_func();
+    if (!opt) break;
+    std::cout << opt.value();
+}
+```
+
+if-auto 最常见的配合莫过于 map.find：
+
+```cpp
+std::map<int, int> table;
+
+int key = 42;
+if (auto it = table.find(key); it != table.end()) {
+    std::cout << it->second << '\n';
+} else {
+    std::cout << "not found\n";
+}
+```
 
 ## bind 是历史糟粕，应该由 Lambda 表达式取代
 
@@ -1345,238 +1627,6 @@ struct Class {
 ```
 
 > {{ icon.fun }} 建议修改标准库，把小彭老师这两个真正好用的宏塞到 `<utility>` 和 `<functional>` 里，作为 C++26 标准的一部分。
-
-## 智能指针防止大对象移动
-
-我们说一个类型大，有两种情况。
-
-1. 类本身很大：例如 array
-2. 类本身不大，但其指向的对象大，且该类是深拷贝，对该类的拷贝会引起其指向对象的拷贝：例如 vector
-
-```cpp
-sizeof(array<int, 1000>);  // 本身 4000 字节
-sizeof(vector<int>);       // 本身 24 字节（成员是 3 个指针），指向的数组可以无限增大
-```
-
-> {{ icon.detail }} `sizeof(vector)` 为 24 字节仅为 `x86_64-pc-linux-gnu` 平台 `libstdc++` 库的实测结果，在 32 位系统以及 MSVC 的 Debug 模式 STL 下可能得出不同的结果，不可以依赖这个平台相关的结果来编程。
-
-对于 vector，我们可以使用 `std::move` 移动语义，只拷贝该类本身的三个指针成员，而不对其指向的 4000 字节数组进行深拷贝。
-
-对于 array，则 `std::move` 移动语义与普通的拷贝没有区别：array 作为静态数组容器，不是通过“指针成员”来保存数组的，而是直接把数组存在他的体内，对 array 的移动和拷贝是完全一样的！
-
-总之，移动语义的加速效果，只对采用了“指针间接存储动态数据”的类型（如 vector、map、set、string）有效。对“直接存储静态大小数据”的类型（array、tuple、variant、成功“小字符串优化”的 string）无效。
-
-所以，让很多“移动语义”孝子失望了：“本身很大”的类，移动和拷贝一样慢！
-
-那么现在我们有个超大的类：
-
-```cpp
-using BigType = array<int, 1000>;  // 4000 字节大小的平坦类型
-
-vector<BigType> arr;
-
-void func(BigType x) {
-    arr.push_back(std::move(x));  // 拷贝 4000 字节，超慢，move 也没用
-}
-
-int main() {
-    BigType x;
-    func(std::move(x));  // 拷贝 4000 字节，超慢，move 也没用
-}
-```
-
-如何加速这种本身超大的变量转移？使用 `const` 引用：
-
-```cpp
-void func(BigType const &x)
-```
-
-似乎可以避免传参时的拷贝，但是依然不能避免 `push_back` 推入 `vector` 时所不得已的拷贝。
-
-小技巧：改用 `unique_ptr<BigType>`
-
-```cpp
-using BigType = array<int, 1000>;  // 4000 字节大小的平坦类型
-
-using BigTypePtr = unique_ptr<BigType>;
-
-vector<BigType> arr;
-
-void func(BigTypePtr x) {
-    arr.push_back(std::move(x));  // 只拷贝 8 字节的指针，其指向的 4000 字节不用深拷贝了，直接移动所有权给 vector 里的 BigTypePtr 智能指针
-    // 由于移走了所有权，x 此时已经为 nullptr
-}
-
-int main() {
-    BigTypePtr x = make_unique<BigType>();  // 注意：用智能指针的话，需要用 make_unique 才能创建对象了
-    func(std::move(x));  // 只拷贝 8 字节的指针
-    // 由于移走了所有权，x 此时已经为 nullptr
-}
-```
-
-上面整个程序中，一开始通过 `make_unique` 创建的超大对象，全程没有发生任何移动，避免了无谓的深拷贝。
-
-对于不支持移动构造函数的类型来说，也可以用这个方法，就能在函数之间穿梭自如了。
-
-```cpp
-// 热知识：std::mutex 不支持移动
-
-void func(std::mutex lock);
-
-int main() {
-    std::mutex lock;
-    func(std::move(lock));  // 错误：mutex(mutex &&) = delete
-}
-```
-
-```cpp
-void func(std::unique_ptr<std::mutex> lock);
-
-int main() {
-    std::unique_ptr<std::mutex> lock = std::make_unique<std::mutex>();
-    func(std::move(lock));  // OK：调用的是 unique_ptr(unique_ptr &&)，不关 mutex 什么事
-}
-```
-
-更好的是 `shared_ptr`，连 `std::move` 都不用写，更省心。
-
-```cpp
-void func(std::shared_ptr<std::mutex> lock);
-
-int main() {
-    std::shared_ptr<std::mutex> lock = std::make_shared<std::mutex>();
-    func(lock);  // OK：调用的是 shared_ptr(shared_ptr const &)，不关 mutex 什么事
-    func(lock);  // OK：shared_ptr 的拷贝构造函数是浅拷贝，即使浅拷贝发生多次，指向的对象也不会被拷贝或移动
-}
-```
-
-## optional 实现延迟初始化
-
-假设我们有一个类，具有自定义的构造函数，且没有默认构造函数：
-
-```cpp
-struct SomeClass {
-    int m_i;
-    int m_j;
-
-    SomeClass(int i, int j) : m_i(i), m_j(j) {}
-};
-```
-
-当我们需要“延迟初始化”时怎么办？
-
-```cpp
-SomeClass c;
-if (test()) {
-    c = SomeClass(1, 2);
-} else {
-    c = SomeClass(2, 3);
-}
-do_something(c);
-```
-
-可以利用 optional 默认初始化为“空”的特性，实现延迟赋值：
-
-```cpp
-std::optional<SomeClass> c;
-if (test()) {
-    c = SomeClass(1, 2);
-} else {
-    c = SomeClass(2, 3);
-}
-do_something(c.value());  // 如果抵达此处前，c 没有初始化，就会报错，从而把编译期的未初始化转换为运行时异常
-```
-
-> {{ icon.story }} 就类似于 Python 中先给变量赋值为 None，然后在循环或 if 里条件性地赋值一样。
-
-如果要进一步避免 `c =` 时，移动构造的开销，也可以用 `unique_ptr` 或 `shared_ptr`：
-
-```cpp
-std::shared_ptr<SomeClass> c;
-if (test()) {
-    c = std::make_shared<SomeClass>(1, 2);
-} else {
-    c = std::make_shared<SomeClass>(2, 3);
-}
-do_something(c);  // 如果抵达此处前，c 没有初始化，那么传入的就是一个 nullptr，do_something 内部需要负责检测指针是否为 nullptr
-```
-
-如果 `do_something` 参数需要的是原始指针，可以用 `.get()` 获取出来：
-
-```cpp
-do_something(c.get());  // .get() 可以把智能指针转换回原始指针，但请注意原始指针不持有引用，不会延伸指向对象的生命周期
-```
-
-> {{ icon.story }} 实际上，Java、Python 中的一切对象（除 int、str 等“钦定”的基础类型外）都是引用计数的智能指针 `shared_ptr`，只不过因为一切皆指针了，所以看起来好像没有指针了。
-
-## if-auto 与 while-auto
-
-需要先定义一个变量，然后判断某些条件的情况，非常常见：
-
-```cpp
-extern std::optional<int> some_func();
-
-auto opt = some_func();
-if (opt.has_value()) {
-    std::cout << opt.value();
-}
-```
-
-C++17 引入的 if-auto 语法，可以就地书写变量定义和判断条件：
-
-```cpp
-extern std::optional<int> some_func();
-
-if (auto opt = some_func(); opt.has_value()) {
-    std::cout << opt.value();
-}
-```
-
-对于支持 `(bool)opt` 的 `optional` 类型来说，后面的条件也可以省略：
-
-```cpp
-extern std::optional<int> some_func();
-
-if (auto opt = some_func()) {
-    std::cout << opt.value();
-}
-
-// 等价于：
-auto opt = some_func();
-if (opt) {
-    std::cout << opt.value();
-}
-```
-
-类似的还有 while-auto：
-
-```cpp
-extern std::optional<int> some_func();
-
-while (auto opt = some_func()) {
-    std::cout << opt.value();
-}
-
-// 等价于：
-while (true) {
-    auto opt = some_func();
-    if (!opt) break;
-    std::cout << opt.value();
-}
-```
-
-if-auto 最常见的配合莫过于 map.find：
-
-```cpp
-std::map<int, int> table;
-
-int key = 42;
-if (auto it = table.find(key); it != table.end()) {
-    std::cout << it->second << '\n';
-} else {
-    std::cout << "not found\n";
-}
-```
 
 ## map + any 外挂属性
 
