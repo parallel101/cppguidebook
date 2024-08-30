@@ -580,7 +580,7 @@ struct PoostInputer {
 他们要求的用法是先判断 hasNext()，然后才能调用 getNext 读取出真正的值。小彭老师设计了一个 Poost 适配器，把 PoostInputer 翻译成我们的 Inputer：
 
 ```cpp
-struct PoostInputerAdapter {
+struct PoostInputerAdapter : Inputer {
     PoostInputer *poostIn;
 
     PoostInputerAdapter(PoostInputer *poostIn)
