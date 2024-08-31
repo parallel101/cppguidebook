@@ -763,7 +763,7 @@ p = &j;  // 错误：p 本身也不可变，不能改变指向
 大家都知道，函数的返回类型可以声明为 `auto`，让其自动推导。
 
 ```cpp
-auto func() {  // int func();
+auto square() {  // int square();
     return 1;
 }
 ```
@@ -771,24 +771,24 @@ auto func() {  // int func();
 但你知道从 C++20 开始，参数也可以声明为 auto 了吗？
 
 ```cpp
-auto func(auto x) {  // T func(T x);
+auto square(auto x) {  // T square(T x);
     return x * x;
 }
 
-func(1);    // func(int)
-func(3.14); // func(double)
+square(1);    // square(int)
+square(3.14); // square(double)
 ```
 
 等价于以下“模板函数”的传统写法：
 
 ```cpp
 template <typename T>
-T func(T x) {
+T square(T x) {
     return x * x;
 }
 
-func(1);    // func<int>(int)
-func(3.14); // func<double>(double)
+square(1);    // square<int>(int)
+square(3.14); // square<double>(double)
 ```
 
 因为是模板函数，所以也很难分离声明和定义，只适用于头文件中就地定义函数的情况。
@@ -796,19 +796,19 @@ func(3.14); // func<double>(double)
 `auto` 参数还可以带有引用：
 
 ```cpp
-auto func(auto const &x) {  // T func(T const &x);
+auto square(auto const &x) {  // T square(T const &x);
     return x * x;
 }
 
-func(1);    // func(int const &)
-func(3.14); // func(double const &)
+square(1);    // square(int const &)
+square(3.14); // square(double const &)
 ```
 
 等价于：
 
 ```cpp
 template <typename T>
-T func(T const &x) {
+T square(T const &x) {
     return x * x;
 }
 ```
@@ -816,12 +816,12 @@ T func(T const &x) {
 `auto` 参数最好的配合莫过于是与同样 C++20 引入的 concept：
 
 ```cpp
-auto func(std::integral auto x) {  // T func(T x) requires std::integral<T>
+auto square(std::integral auto x) {  // T square(T x) requires std::integral<T>
     return x * x;
 }
 
-func(1);    // func(int)
-func(3.14); // 错误：double 不是整数类型
+square(1);    // square(int)
+square(3.14); // 错误：double 不是整数类型
 ```
 
 等价于：
@@ -829,7 +829,7 @@ func(3.14); // 错误：double 不是整数类型
 ```cpp
 template <typename T>
      requires std::integral<T>
-T func(T x) {
+T square(T x) {
     return x * x;
 }
 ```
@@ -838,7 +838,7 @@ T func(T x) {
 
 ```cpp
 template <std::integral T>
-T func(T x) {
+T square(T x) {
     return x * x;
 }
 ```
@@ -881,11 +881,18 @@ cout.flush();
 
 如果还用 endl 的话，就相当于刷新了两次，浪费性能。
 
-所以，我们只需要输出 `'\n'` 就可以了，每次换行时 cout 都会自动刷新，endl 是一个典型的以讹传讹错误写法。
+可见，endl 是一个被很多无脑教材错误宣传，实际上根本多此一举的东西。
+
+我们只需要输出 `'\n'` 就可以了，每次换行时 cout 都会自动刷新。
 
 ```cpp
 cout << "Hello, World!" << '\n';
 ```
+
+endl 是一个典型的以讹传讹错误写法，只有当你的输出是指向另一个进程的管道时，其附带的刷新功能才有作用。
+
+- 当输出是管道时，`cout` 需要 `endl` 才能刷新。
+- 当输出是普通控制台时，`cout` 需要 `endl` 才能刷新。
 
 ## 多线程中 cout 出现乱序？
 
@@ -941,6 +948,66 @@ cout << std::format("the answer is {}\n", 42);
 
 ```cpp
 std::println("the answer is {}", 42);
+```
+
+## cerr 与 cout 的抉择
+
+如果你的目的是调试和报错，可以考虑用 `cerr`！
+
+他会在每次 `<<` 时刷新，`cerr` 才是最适合打印错误和调试信息的流。
+
+`cout` 的优点是不需要时刻刷新，有更好的性能。
+
+```cpp
+cout << "hello\n";
+cout << "the answer is ";
+cout << 42;
+*(int *)1 = 1; // 崩溃！
+cout << "!\n"; // 因为还没有抵达 \n 产生刷新就崩溃，导致之前尚未刷新的 the answer is 42 丢失
+```
+
+可能的输出：
+
+```
+hello[换行]
+```
+
+```cpp
+cerr << "hello\n";
+cerr << "the answer is ";
+cerr << 42;
+*(int *)1 = 1; // 崩溃！
+cerr << "!\n";
+```
+
+输出：
+
+```
+hello[换行]
+the answer is 42
+```
+
+还有一个特点：`cout` 输出到“标准输出流”，可以被输出重定向到文件管道。而 `cerr` 输出到“标准错误流”，通常不会被重定向到文件或管道。
+
+例如，可以把程序预订的计算结果写到 `cout`，把调试和报错信息写到 `cerr`，这样用户就可以通过 `>` 重定向计算结果，而调试和报错信息则正常输出到屏幕上，不受重定向影响。
+
+```cpp
+cout << "1 3 5 7\n";
+cerr << "ERROR: this is an error message!\n";
+cout << "11 13 17 19\n";
+```
+
+```
+$ g++ prime.cpp -o prime
+$ ./prime
+1 3 5 7
+ERROR: this is an error message!
+11 13 17 19
+$ ./prime > output.txt
+ERROR: this is an error message!
+$ cat output.txt
+1 3 5 7
+11 13 17 19
 ```
 
 ## 智能指针防止大对象移动
@@ -1556,7 +1623,7 @@ int main() {
 
 > {{ icon.fun }} `BIND` 这个名字是随便取的，取这个名字是为了辱 `std::bind`。
 
-为了解决 bind 不能捕获多参数重载的情况，C++17 还引入了 `std::bind_front` 和 `std::bind_back`，他们不需要 placeholder，但只能用于参数在最前或者最后的特殊情况。
+为了解决 bind 不能捕获多参数重载的情况，C++17 还引入了 `std::bind_front` 和 `std::bind_back`，他们不需要 placeholder，但只能用于要绑定的参数在最前或者最后的特殊情况。
 
 其中 `std::bind_front` 对于我们只需要把第一个参数绑定为 `this`，其他参数如数转发的场景，简直是雪中送炭！
 

@@ -31,6 +31,8 @@ nav:
     - test_and_safe.md
     - undef.md
     - llvm_intro.md
+    - cuda_intro.md
+    - cmake_tutor.md
   - 关于:
     - about.md
     - donate.md
