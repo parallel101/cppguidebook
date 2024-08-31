@@ -168,6 +168,14 @@
 <li>
     <a href="../llvm_intro/" class="dropdown-item">小彭老师带你学 LLVM</a>
 </li>
+                                    
+<li>
+    <a href="../cuda_intro/" class="dropdown-item">现代 C++ 的 CUDA 编程</a>
+</li>
+                                    
+<li>
+    <a href="../cmake_tutor/" class="dropdown-item">学现代 C++ 从现代 CMake 学起（未完工）</a>
+</li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -328,20 +336,28 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-bs-level="1"><a href="#cuda_intro" class="nav-link">27. 现代 C++ 的 CUDA 编程</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="1"><a href="#cmake_tutor" class="nav-link">28. 学现代 C++ 从现代 CMake 学起（未完工）</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
             
             <li class="nav-item" data-bs-level="0"><a href="#section-关于" class="nav-link">II. 关于</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="1"><a href="#about" class="nav-link">27. 关于小彭老师</a>
+            <li class="nav-item" data-bs-level="1"><a href="#about" class="nav-link">29. 关于小彭老师</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#donate" class="nav-link">28. 赞助名单</a>
+            <li class="nav-item" data-bs-level="1"><a href="#donate" class="nav-link">30. 赞助名单</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#recommend" class="nav-link">29. 参考资料与项目</a>
+            <li class="nav-item" data-bs-level="1"><a href="#recommend" class="nav-link">31. 参考资料与项目</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -389,7 +405,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年08月30日 17:36:18 (UTC+08:00)</p>
+<p>更新时间：2024年08月31日 17:35:00 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -1071,6 +1087,7 @@ static int f(int x) {}  // 函数声明并定义为“外部链接”
 <li><a href="#cpp_tricks-auto">函数参数也可以 auto</a></li>
 <li><a href="#cpp_tricks-cout-endl">cout 不需要 endl</a></li>
 <li><a href="#cpp_tricks-cout">多线程中 cout 出现乱序？</a></li>
+<li><a href="#cpp_tricks-cerr-cout">cerr 与 cout 的抉择</a></li>
 <li><a href="#cpp_tricks-_7">智能指针防止大对象移动</a></li>
 <li><a href="#cpp_tricks-optional">optional 实现延迟初始化</a></li>
 <li><a href="#cpp_tricks-if-auto-while-auto">if-auto 与 while-auto</a></li>
@@ -1665,60 +1682,60 @@ p = &amp;j;  // 错误：p 本身也不可变，不能改变指向
 </blockquote>
 <h2 id="cpp_tricks-auto">函数参数也可以 auto</h2>
 <p>大家都知道，函数的返回类型可以声明为 <code>auto</code>，让其自动推导。</p>
-<pre><code class="language-cpp">auto func() {  // int func();
+<pre><code class="language-cpp">auto square() {  // int square();
     return 1;
 }
 </code></pre>
 <p>但你知道从 C++20 开始，参数也可以声明为 auto 了吗？</p>
-<pre><code class="language-cpp">auto func(auto x) {  // T func(T x);
+<pre><code class="language-cpp">auto square(auto x) {  // T square(T x);
     return x * x;
 }
 
-func(1);    // func(int)
-func(3.14); // func(double)
+square(1);    // square(int)
+square(3.14); // square(double)
 </code></pre>
 <p>等价于以下“模板函数”的传统写法：</p>
 <pre><code class="language-cpp">template &lt;typename T&gt;
-T func(T x) {
+T square(T x) {
     return x * x;
 }
 
-func(1);    // func&lt;int&gt;(int)
-func(3.14); // func&lt;double&gt;(double)
+square(1);    // square&lt;int&gt;(int)
+square(3.14); // square&lt;double&gt;(double)
 </code></pre>
 <p>因为是模板函数，所以也很难分离声明和定义，只适用于头文件中就地定义函数的情况。</p>
 <p><code>auto</code> 参数还可以带有引用：</p>
-<pre><code class="language-cpp">auto func(auto const &amp;x) {  // T func(T const &amp;x);
+<pre><code class="language-cpp">auto square(auto const &amp;x) {  // T square(T const &amp;x);
     return x * x;
 }
 
-func(1);    // func(int const &amp;)
-func(3.14); // func(double const &amp;)
+square(1);    // square(int const &amp;)
+square(3.14); // square(double const &amp;)
 </code></pre>
 <p>等价于：</p>
 <pre><code class="language-cpp">template &lt;typename T&gt;
-T func(T const &amp;x) {
+T square(T const &amp;x) {
     return x * x;
 }
 </code></pre>
 <p><code>auto</code> 参数最好的配合莫过于是与同样 C++20 引入的 concept：</p>
-<pre><code class="language-cpp">auto func(std::integral auto x) {  // T func(T x) requires std::integral&lt;T&gt;
+<pre><code class="language-cpp">auto square(std::integral auto x) {  // T square(T x) requires std::integral&lt;T&gt;
     return x * x;
 }
 
-func(1);    // func(int)
-func(3.14); // 错误：double 不是整数类型
+square(1);    // square(int)
+square(3.14); // 错误：double 不是整数类型
 </code></pre>
 <p>等价于：</p>
 <pre><code class="language-cpp">template &lt;typename T&gt;
      requires std::integral&lt;T&gt;
-T func(T x) {
+T square(T x) {
     return x * x;
 }
 </code></pre>
 <p>或者：</p>
 <pre><code class="language-cpp">template &lt;std::integral T&gt;
-T func(T x) {
+T square(T x) {
     return x * x;
 }
 </code></pre>
@@ -1744,9 +1761,15 @@ cout.flush();
 </code></pre>
 <p>但实际上，输出流 cout 默认的设置就是“行刷新缓存”，也就是说，检测到 <code>'\n'</code> 时，就会自动刷新一次，根本不需要我们手动刷新！</p>
 <p>如果还用 endl 的话，就相当于刷新了两次，浪费性能。</p>
-<p>所以，我们只需要输出 <code>'\n'</code> 就可以了，每次换行时 cout 都会自动刷新，endl 是一个典型的以讹传讹错误写法。</p>
+<p>可见，endl 是一个被很多无脑教材错误宣传，实际上根本多此一举的东西。</p>
+<p>我们只需要输出 <code>'\n'</code> 就可以了，每次换行时 cout 都会自动刷新。</p>
 <pre><code class="language-cpp">cout &lt;&lt; &quot;Hello, World!&quot; &lt;&lt; '\n';
 </code></pre>
+<p>endl 是一个典型的以讹传讹错误写法，只有当你的输出是指向另一个进程的管道时，其附带的刷新功能才有作用。</p>
+<ul>
+<li>当输出是管道时，<code>cout</code> 需要 <code>endl</code> 才能刷新。</li>
+<li>当输出是普通控制台时，<code>cout</code> 需要 <code>endl</code> 才能刷新。</li>
+</ul>
 <h2 id="cpp_tricks-cout">多线程中 cout 出现乱序？</h2>
 <p>同学：小彭老师，我在多线程环境中使用：</p>
 <pre><code class="language-cpp">cout &lt;&lt; &quot;the answer is &quot; &lt;&lt; 42 &lt;&lt; '\n';
@@ -1783,6 +1806,46 @@ cout &lt;&lt; oss.str();
 <p>总之，就是要让 <code>operator&lt;&lt;</code> 只有一次。</p>
 <p>建议各位升级到 C++23，然后改用 <code>std::println</code> 吧：</p>
 <pre><code class="language-cpp">std::println(&quot;the answer is {}&quot;, 42);
+</code></pre>
+<h2 id="cpp_tricks-cerr-cout">cerr 与 cout 的抉择</h2>
+<p>如果你的目的是调试和报错，可以考虑用 <code>cerr</code>！</p>
+<p>他会在每次 <code>&lt;&lt;</code> 时刷新，<code>cerr</code> 才是最适合打印错误和调试信息的流。</p>
+<p><code>cout</code> 的优点是不需要时刻刷新，有更好的性能。</p>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;hello\n&quot;;
+cout &lt;&lt; &quot;the answer is &quot;;
+cout &lt;&lt; 42;
+*(int *)1 = 1; // 崩溃！
+cout &lt;&lt; &quot;!\n&quot;; // 因为还没有抵达 \n 产生刷新就崩溃，导致之前尚未刷新的 the answer is 42 丢失
+</code></pre>
+<p>可能的输出：</p>
+<pre><code>hello[换行]
+</code></pre>
+<pre><code class="language-cpp">cerr &lt;&lt; &quot;hello\n&quot;;
+cerr &lt;&lt; &quot;the answer is &quot;;
+cerr &lt;&lt; 42;
+*(int *)1 = 1; // 崩溃！
+cerr &lt;&lt; &quot;!\n&quot;;
+</code></pre>
+<p>输出：</p>
+<pre><code>hello[换行]
+the answer is 42
+</code></pre>
+<p>还有一个特点：<code>cout</code> 输出到“标准输出流”，可以被输出重定向到文件管道。而 <code>cerr</code> 输出到“标准错误流”，通常不会被重定向到文件或管道。</p>
+<p>例如，可以把程序预订的计算结果写到 <code>cout</code>，把调试和报错信息写到 <code>cerr</code>，这样用户就可以通过 <code>&gt;</code> 重定向计算结果，而调试和报错信息则正常输出到屏幕上，不受重定向影响。</p>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;1 3 5 7\n&quot;;
+cerr &lt;&lt; &quot;ERROR: this is an error message!\n&quot;;
+cout &lt;&lt; &quot;11 13 17 19\n&quot;;
+</code></pre>
+<pre><code>$ g++ prime.cpp -o prime
+$ ./prime
+1 3 5 7
+ERROR: this is an error message!
+11 13 17 19
+$ ./prime &gt; output.txt
+ERROR: this is an error message!
+$ cat output.txt
+1 3 5 7
+11 13 17 19
 </code></pre>
 <h2 id="cpp_tricks-_7">智能指针防止大对象移动</h2>
 <p>我们说一个类型大，有两种情况。</p>
@@ -2252,7 +2315,7 @@ int main() {
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>BIND</code> 这个名字是随便取的，取这个名字是为了辱 <code>std::bind</code>。</p>
 </blockquote>
-<p>为了解决 bind 不能捕获多参数重载的情况，C++17 还引入了 <code>std::bind_front</code> 和 <code>std::bind_back</code>，他们不需要 placeholder，但只能用于参数在最前或者最后的特殊情况。</p>
+<p>为了解决 bind 不能捕获多参数重载的情况，C++17 还引入了 <code>std::bind_front</code> 和 <code>std::bind_back</code>，他们不需要 placeholder，但只能用于要绑定的参数在最前或者最后的特殊情况。</p>
 <p>其中 <code>std::bind_front</code> 对于我们只需要把第一个参数绑定为 <code>this</code>，其他参数如数转发的场景，简直是雪中送炭！</p>
 <pre><code class="language-cpp">struct Class {
     void world(int x, int y) {
@@ -2472,21 +2535,31 @@ int b = f &gt;&gt; 4;  // 0x2
 <li><a href="#lambda-_17">案例：函数对象的动态分发用于多线程任务队列</a></li>
 <li><a href="#lambda-_18">函数对象的重要机制：闭包</a><ul>
 <li><a href="#lambda-_19">闭包的本质是语法糖</a></li>
-<li><a href="#lambda-_20">闭包捕获变量的生命周期问题</a></li>
 <li><a href="#lambda-operator">operator() 很有迷惑性</a></li>
+<li><a href="#lambda-_20">闭包捕获变量的生命周期问题</a></li>
+<li><a href="#lambda-mutable">mutable 的函数对象</a></li>
+<li><a href="#lambda-auto">auto 推导返回值</a></li>
+<li><a href="#lambda-auto_1">auto 推导参数</a></li>
+<li><a href="#lambda-decltype">与 decltype 的配合</a></li>
+<li><a href="#lambda-lambda">无状态 lambda 隐式转换为函数指针</a></li>
 </ul>
 </li>
-<li><a href="#lambda-c">函数指针是 C 语言陋习，改掉</a></li>
 </ul>
 </li>
 <li><a href="#lambda-bind">bind 为函数对象绑定参数</a><ul>
 <li><a href="#lambda-bind_1">bind 是一个失败的设计</a><ul>
 <li><a href="#lambda-bind_2">bind 的历史</a></li>
 <li><a href="#lambda-thread">thread 膝盖中箭</a></li>
-<li><a href="#lambda-_21">举个绑定随机数生成器例子</a></li>
+<li><a href="#lambda-_21">案例：绑定随机数生成器</a></li>
 </ul>
 </li>
 <li><a href="#lambda-stdbind_front-stdbind_back">std::bind_front 和 std::bind_back</a></li>
+<li><a href="#lambda-_22">案例：绑定成员函数</a></li>
+</ul>
+</li>
+<li><a href="#lambda-stdbind_front">使用 std::bind_front 代替</a><ul>
+<li><a href="#lambda-lambda_1">使用 lambda 代替</a></li>
+<li><a href="#lambda-c">函数指针是 C 语言陋习，改掉</a></li>
 </ul>
 </li>
 </ul>
@@ -3259,42 +3332,313 @@ auto add_x = [x](int a) {
 };
 fmt::println(&quot;{}&quot;, add_x(5)); // 输出 15
 </code></pre>
-<p>闭包捕获的变量默认是只读的，如果需要修改捕获的变量，需要使用 <code>mutable</code>。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 闭包捕获的变量默认是只读的，如果需要修改捕获的变量，可以加上 <code>mutable</code> 修饰，见后文。</p>
+</blockquote>
 <h4 id="lambda-_19">闭包的本质是语法糖</h4>
 <p>Lambda 函数对象的闭包语法：</p>
-<pre><code class="language-cpp">auto add_x = [x](int a) {
+<pre><code class="language-cpp">int x = 10;
+auto add_x = [x](int a) {
     return a + x;
 };
 </code></pre>
-<p>实际上等价于一个带有 <code>operator()()</code> 的结构体：</p>
+<p>实际上等价于一个带有 <code>operator()</code> 成员函数的结构体：</p>
 <pre><code class="language-cpp">struct Lambda {
     int x;
     Lambda(int val) : x(val) {}
 
-    int operator()(int a) {
+    int operator() (int a) const {
         return a + x;
     }
 };
 
 int main() {
-    Lambda add_x(10);
+    int x = 10;
+    Lambda add_x(x);
     fmt::println(&quot;{}&quot;, add_x(5)); // 输出 15
     return 0;
 }
 </code></pre>
-<p>而且这结构体是匿名的，没有确定的名字，此处类名 <code>Lambda</code> 只是示意。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 相当于我们写的 lambda 函数体，实际上被编译器移到了 <code>Lambda</code> 类的 <code>operator()</code> 成员函数体内。</p>
+</blockquote>
+<p>而且这结构体是匿名的，没有确定的名字，此处类名 <code>Lambda</code> 只是示意，因而平时只能通过 <code>auto</code> 保存即时创建的 lambda 对象。</p>
 <p><strong>而所谓的闭包捕获变量，实际上就是这个结构体的成员！</strong></p>
 <p>按值捕获，就相当于结构体成员里拷贝了一份同名的成员；如果是引用捕获，就相当于结构体里的成员是个引用。</p>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 可以在 https://cppinsights.io 这个网站，自动拆解包括 Lambda 在内的所有现代 C++ 语法糖为原始的结构体和函数。更多好用的工具网站可以看我们 <a href="#recommend">工具和项目推荐</a> 专题章节。</p>
 </blockquote>
+<p>对于引用，则是等价于结构体成员中含有一份引用作为成员：</p>
+<pre><code class="language-cpp">int x = 10;
+auto inc_x = [&amp;x](int a) {
+    return x++;
+};
+</code></pre>
+<pre><code class="language-cpp">struct Lambda {
+    int &amp;x;
+    Lambda(int &amp;val) : x(val) {}
+
+    int operator() () const {
+        return x++;
+    }
+};
+
+int main() {
+    int x = 10;
+    Lambda inc_x(x);
+    fmt::println(&quot;{}&quot;, inc_x()); // 输出 10
+    fmt::println(&quot;{}&quot;, inc_x()); // 输出 11
+    fmt::println(&quot;{}&quot;, inc_x()); // 输出 12
+    fmt::println(&quot;{}&quot;, x);       // 输出 13
+    return 0;
+}
+</code></pre>
+<h4 id="lambda-operator"><code>operator()</code> 很有迷惑性</h4>
+<p>匿名 lambda 对象：</p>
+<pre><code class="language-cpp">auto lambda = [] (int a) {
+    return a + 1;
+};
+int ret = lambda(2);
+</code></pre>
+<p>等价于以下的类：</p>
+<pre><code class="language-cpp">struct Lambda {
+    int operator() (int a) const {
+        return a + 1;
+    }
+};
+Lambda lambda;
+int ret = lambda(2);
+</code></pre>
+<p>很多同学都分不清 <code>operator</code> <code>operator()</code> <code>opeartor()()</code>，这个括号确实很有迷惑性，今天我来解释一下。</p>
+<p>你现在，把上面这段代码，改成这样：</p>
+<pre><code class="language-cpp">struct Lambda {
+    int call (int a) const {
+        return a + 1;
+    }
+};
+Lambda lambda;
+int ret = lambda.call(2);
+</code></pre>
+<p>是不是很容易看懂？这就是定义了一个成员函数 <code>call</code>，然后调用这个成员函数。</p>
+<p>现在，进一步改成：</p>
+<pre><code class="language-cpp">struct Lambda {
+    int operator_call (int a) const {
+        return a + 1;
+    }
+};
+Lambda lambda;
+int ret = lambda.operator_call(2);
+</code></pre>
+<p>能不能理解？这就是把函数名改成了 <code>operator_call</code>，依然是一个成员函数。</p>
+<p>重点来了，我们把函数名，注意是函数名叫 <code>operator()</code>，这个空的圆括号是函数名的一部分！</p>
+<pre><code class="language-cpp">struct Lambda {
+    int operator() (int a) const {
+        return a + 1;
+    }
+};
+Lambda lambda;
+int ret = lambda.operator() (2);
+</code></pre>
+<p>能不能理解？<code>operator</code> 是一个特殊的关键字，效果是和后面的一个运算符结合，形成一个特殊的“标识符”，这个“标识符”和普通函数名一样，都是“单个单词”，不可分割。</p>
+<p>例如 <code>operator+</code> 就是一个标识符，<code>operator[]</code> 也是一个标识符，我们这里的 <code>operator()</code> 也是一个标识符，没有什么稀奇的，只不过后面连的运算符刚好是括号而已。</p>
+<p>这里我们可以通过 <code>lambda . operator()</code> 来访问这个成员，就可以看出，<code>operator()</code> 就和一个普通成员名字一样，没有区别，一样可以通过 <code>.</code> 访问。</p>
+<p>例如，对于运算符 <code>+</code> 来说，当编译器检测到 <code>lambda + 2</code> 这样的表达式时，会自动翻译成 <code>lambda.operator+ (2)</code>，这就是所谓的运算符重载。</p>
+<pre><code class="language-cpp">struct Lambda {
+    int operator+ (int a) const {
+        return a + 1;
+    }
+};
+Lambda lambda;
+int ret = lambda + 2;
+// 会被编译器翻译成：
+int ret = lambda.operator+ (2);
+</code></pre>
+<p>同样的，对于 <code>()</code> 运算符，也会被编译器翻译成 <code>operator()</code> 这个函数的调用，由于对 <code>operator()</code> 函数本身的调用也需要一个括号（参数列表），所以看起来就有两个括号了。实际上根本不搭界，一个是函数名标识符的一部分，一个是产生函数调用。</p>
+<pre><code class="language-cpp">struct Lambda {
+    int operator() (int a) const {
+        return a + 1;
+    }
+};
+Lambda lambda;
+int ret = lambda(2);
+// 会被编译器翻译成：
+int ret = lambda.operator() (2);
+</code></pre>
+<p>这时候，去掉 <code>(2)</code> 里的参数 <code>2</code>，就变成了让你很困惑的双括号。而很多人喜欢紧挨者连写，看起来就很迷惑。</p>
+<p>实际上，第一个 <code>()</code> 是函数名字的一部分，和 <code>operator</code> 是连在一起的，不可分割，中间也不能有其他参数。第二个 <code>()</code> 是函数参数列表，只不过这里刚好是没有参数，所以看起来也是个空括号，很多初学者看到就迷糊了，还看不懂建议从上面有一个参数的 <code>operator() (int a)</code> 看。</p>
+<pre><code class="language-cpp">struct Lambda {
+    int operator() () const {
+        return 1;
+    }
+};
+Lambda lambda;
+int ret = lambda();
+// 会被编译器翻译成：
+int ret = lambda.operator() ();
+</code></pre>
+<p>所以，这就是为什么说定义了 <code>operator()</code> 成员函数的类，是“函数对象”或者说“仿函数”，因为当你使用函数的语法 <code>lambda(2)</code> 调用他们时，会触发他们的成员函数 <code>operator()(2)</code> 从而用法和普通函数一样，但其实际又是对象，也就得名“函数对象”和“仿函数”了。</p>
+<p>我建议你自己去 https://cppinsights.io 这个解构语法糖的工具网站动动手试试看：</p>
+<pre><code class="language-cpp">auto lambda = [] (int a) {
+    return a + 1;
+};
+int ret = lambda();
+</code></pre>
+<p>实际被编译器翻译成：</p>
+<pre><code class="language-cpp">struct Lambda {
+    int operator() (int a) const {
+        return a + 1;
+    }
+};
+Lambda lambda;
+int ret = lambda.operator() ();
+</code></pre>
+<p>而捕获了变量的：</p>
+<pre><code class="language-cpp">int x = 4;
+auto lambda = [&amp;x] (int a) {
+    return a + x;
+};
+int ret = lambda();
+</code></pre>
+<p>实际被编译器翻译成：</p>
+<pre><code class="language-cpp">struct Lambda {
+    int &amp;x;
+
+    Lambda(int &amp;x_) : x(x_) {}
+
+    int operator() (int a) const {
+        return a + 1;
+    }
+};
+int x = 4;
+Lambda lambda(x);
+int ret = lambda.operator() ();
+</code></pre>
 <h4 id="lambda-_20">闭包捕获变量的生命周期问题</h4>
 <p>正因如此，闭包按值捕获（<code>[=]</code>）的变量，其生命周期和 Lambda 对象相同。</p>
 <p>当 Lambda 对象被拷贝时，其按值捕获的所有变量也会被重新拷贝一份。</p>
 <p>当 Lambda 对象被移动时，其按值捕获的所有变量也会随之一起移动。</p>
+<pre><code class="language-cpp">struct C {
+    C() { fmt::println(&quot;C 默认构造&quot;); }
+    C(C const &amp;) { fmt::println(&quot;C 拷贝构造&quot;); }
+    C(C &amp;&amp;) { fmt::println(&quot;C 移动构造&quot;); }
+    C &amp;operator=(C const &amp;) { fmt::println(&quot;C 拷贝赋值&quot;); }
+    C &amp;operator=(C &amp;&amp;) { fmt::println(&quot;C 移动赋值&quot;); }
+    ~C() { fmt::println(&quot;C 析构&quot;); }
+};
+
+C c;
+fmt::println(&quot;构造 lambda&quot;);
+auto lambda = [c] {};
+fmt::println(&quot;拷贝 lambda 到 lambda2&quot;);
+auto lambda2 = lambda;
+fmt::println(&quot;移动 lambda 到 lambda3&quot;);
+auto lambda3 = lambda;
+</code></pre>
+<p>输出：</p>
+<pre><code>C 默认构造
+构造 lambda
+C 拷贝构造
+拷贝 lambda 到 lambda2
+C 拷贝构造
+移动 lambda 到 lambda3
+C 移动构造
+C 析构
+C 析构
+C 析构
+C 析构
+</code></pre>
 <p>如果按值捕获了不能拷贝的对象（比如 <code>std::unique_ptr</code>），那么 Lambda 对象也会无法拷贝，只能移动。</p>
-<h4 id="lambda-operator"><code>operator()</code> 很有迷惑性</h4>
-<h3 id="lambda-c">函数指针是 C 语言陋习，改掉</h3>
+<pre><code class="language-cpp">std::unique_ptr&lt;int&gt; p = std::make_unique&lt;int&gt;(10);
+auto lambda = [p] {};                // 编译错误💣因为这里等价于 [p' = p]，是对 p' 的拷贝构造
+auto lambda = [p = std::move(p)] {}; // 编译通过✅unique_ptr 支持移动构造
+auto lambda2 = lambda;               // 编译错误💣std::unique_ptr 只支持移动，不支持拷贝
+auto lambda2 = std::move(lambda);    // 编译通过✅
+</code></pre>
+<p>用我们之前的方法解构语法糖后：</p>
+<pre><code class="language-cpp">struct Lambda {
+    std::unique_ptr&lt;int&gt; p;
+    Lambda(std::unique_ptr&lt;int&gt; ptr) : p(std::move(ptr)) {}
+
+    // Lambda(Lambda const &amp;) = delete;  // 因为有 unique_ptr 成员，导致 Lambda 的拷贝构造函数被隐式删除
+
+    void operator()() const {
+    }
+};
+
+int main() {
+    std::unique_ptr&lt;int&gt; p = std::make_unique&lt;int&gt;(10);
+    Lambda lambda(p);            // 编译错误💣
+    Lambda lambda(std::move(p)); // 编译通过✅
+    return 0;
+}
+</code></pre>
+<h4 id="lambda-mutable"><code>mutable</code> 的函数对象</h4>
+<pre><code class="language-cpp">int x = 10;
+auto lambda = [x] () {
+    return x++; // 编译错误💣lambda 捕获的 x 默认是只读的
+};
+int ret = lambda();
+</code></pre>
+<p>会被编译器翻译成：</p>
+<pre><code class="language-cpp">struct Lambda {
+    int x;
+
+    int operator() () const {
+        return x++; // 编译错误💣const 成员函数不能修改成员变量
+    }
+};
+int x = 10;
+Lambda lambda{x};
+int ret = lambda.operator() ();
+</code></pre>
+<p>注意到，这里的 <code>operator()</code> 成员函数有一个 <code>const</code> 修饰，意味着该成员函数不能修改其体内的变量。</p>
+<p>所有 lambda 函数对象生成时默认，就会给他的 <code>operator()</code> 成员函数加上 <code>const</code> 修饰。</p>
+<p>也就是说闭包捕获的变量默认是只读的，如果需要修改捕获的变量，可以给 lambda 加上 <code>mutable</code> 修饰，就加在 <code>()</code> 后面。</p>
+<pre><code class="language-cpp">int x = 10;
+auto lambda = [x] () mutable {
+    return x++; // 编译通过✅
+};
+fmt::println(&quot;lambda() = {}&quot;, lambda()); // 10
+fmt::println(&quot;lambda() = {}&quot;, lambda()); // 11
+fmt::println(&quot;lambda() = {}&quot;, lambda()); // 12
+</code></pre>
+<p>编译器翻译产生的 <code>Lambda</code> 类的成员函数，就不会带 <code>const</code> 修饰了，从而允许我们的函数体修改捕获的非引用变量。</p>
+<pre><code class="language-cpp">struct Lambda {
+    int x;
+
+    int operator() () {
+        return x++; // 编译通过✅
+    }
+};
+int x = 10;
+Lambda lambda{x};
+fmt::println(&quot;lambda() = {}&quot;, lambda.operator() ()); // 10
+fmt::println(&quot;lambda() = {}&quot;, lambda.operator() ()); // 11
+fmt::println(&quot;lambda() = {}&quot;, lambda.operator() ()); // 12
+</code></pre>
+<p>注意：由于使用了值捕获，lambda 修改的是在他创建时对 <code>x</code> 的一份拷贝，外面的 <code>x</code> 不会改变！</p>
+<pre><code class="language-cpp">int x = 10;
+Lambda lambda{x};
+fmt::println(&quot;lambda() = {}&quot;, lambda.operator() ()); // 10
+fmt::println(&quot;lambda() = {}&quot;, lambda.operator() ()); // 11
+fmt::println(&quot;lambda() = {}&quot;, lambda.operator() ()); // 12
+fmt::println(&quot;x = {}&quot;, x);                           // 10
+fmt::println(&quot;lambda.x = {}&quot;, lambda.x);             // 13
+</code></pre>
+<pre><code class="language-cpp">int x = 10;
+auto lambda = [x] () mutable {
+    return x++; // 编译通过✅
+};
+fmt::println(&quot;ret = {}&quot;, lambda()); // 10
+fmt::println(&quot;ret = {}&quot;, lambda()); // 11
+fmt::println(&quot;ret = {}&quot;, lambda()); // 12
+fmt::println(&quot;x = {}&quot;, x);          // 10
+fmt::println(&quot;lambda.x = {}&quot;, lambda.x); // 编译错误💣编译器产生的匿名 lambda 对象中捕获产生的 x 成员变量是匿名的，无法访问
+</code></pre>
+<h4 id="lambda-auto"><code>auto</code> 推导返回值</h4>
+<h4 id="lambda-auto_1"><code>auto</code> 推导参数</h4>
+<h4 id="lambda-decltype">与 <code>decltype</code> 的配合</h4>
+<h4 id="lambda-lambda">无状态 lambda 隐式转换为函数指针</h4>
 <h2 id="lambda-bind">bind 为函数对象绑定参数</h2>
 <p>原始函数：</p>
 <pre><code class="language-cpp">int hello(int x, int y) {
@@ -3460,7 +3804,7 @@ std::thread t([&amp;x] {  // [&amp;x] 表示按引用捕获 x；如果写作 [x]
 t.join();
 printf(&quot;%d\n&quot;, x); // 42
 </code></pre>
-<h4 id="lambda-_21">举个绑定随机数生成器例子</h4>
+<h4 id="lambda-_21">案例：绑定随机数生成器</h4>
 <p>bind 写法：</p>
 <pre><code class="language-cpp">std::mt19937 gen(seed);
 std::uniform_real_distribution&lt;double&gt; uni(0, 1);
@@ -3477,7 +3821,159 @@ auto frand = [uni, &amp;gen] {
 double x = frand();
 double y = frand();
 </code></pre>
-<h3 id="lambda-stdbind_front-stdbind_back"><code>std::bind_front</code> 和 <code>std::bind_back</code></h3></section><section class="print-page" id="type_rich_api"><h1 id="type_rich_api-api">现代化的 API 设计指南</h1>
+<h3 id="lambda-stdbind_front-stdbind_back"><code>std::bind_front</code> 和 <code>std::bind_back</code></h3>
+<p>C++17 引入了两个新绑定函数：</p>
+<ul>
+<li><code>std::bind_front</code>：绑定最前的若干个参数，后面的参数自动添加占位符；</li>
+<li><code>std::bind_back</code>：绑定末尾的若干个参数，前面的参数自动添加占位符。</li>
+</ul>
+<p>和普通的 <code>std::bind</code> 相比有什么好处呢？</p>
+<p>对于函数参数非常多，但实际只需要绑定一两个参数的情况，用 <code>std::bind</code> 会需要添加非常多的 placeholder，数量和函数的剩余参数数量一样多。而 <code>std::bind_front</code> 则相当于一个简写，后面的占位符可以省略不写了。</p>
+<p>例如绑定 x = 42：</p>
+<pre><code class="language-cpp">int func(int x, int y, int z);
+
+auto bound = std::bind(func, 42, std::placeholders::_1, std::placeholders::_2);
+// 等价于：
+auto bound = std::bind_front(func, 42);
+</code></pre>
+<p>绑定 z = 42：</p>
+<pre><code class="language-cpp">int func(int x, int y, int z);
+
+auto bound = std::bind(func, std::placeholders::_1, std::placeholders::_2, 42);
+// 等价于：
+auto bound = std::bind_back(func, 42);
+</code></pre>
+<p>可以看到，使用这两个新绑定函数明显写的代码少了。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 其中最常用的是 <code>std::bind_front</code>，用于绑定类成员的 <code>this</code> 指针。</p>
+</blockquote>
+<h3 id="lambda-_22">案例：绑定成员函数</h3>
+<p>使用“成员函数指针”语法（这一奇葩语法在 C++98 就有）配合 <code>std::bind</code>，可以实现绑定一个类型的成员函数：</p>
+<pre><code class="language-cpp">struct Class {
+    void world() {
+        puts(&quot;world!&quot;);
+    }
+
+    void hello() {
+        auto memfn = std::bind(&amp;Class::world, this); // 将 this-&gt;world 绑定成一个可以延后调用的函数对象
+        memfn();
+        memfn();
+    }
+}
+</code></pre>
+<p>不就是捕获 this 吗？我们 lambda 也可以轻易做到！且无需繁琐地写出 this 类的完整类名，还写个脑瘫 <code>&amp;::</code> 强碱你的键盘。</p>
+<pre><code class="language-cpp">struct Class {
+    void world() {
+        puts(&quot;world!&quot;);
+    }
+
+    void hello() {
+        auto memfn = [this] {
+            world(); // 等价于 this-&gt;world()
+        };
+        memfn();
+        memfn();
+    }
+}
+</code></pre>
+<p>bind 的缺点是，当我们的成员函数含有多个参数时，bind 就非常麻烦了：需要一个个写出 placeholder，而且数量必须和 <code>world</code> 的参数数量一致。每次 <code>world</code> 要新增参数时，所有 bind 的地方都需要加一下 placeholder，非常沙雕。</p>
+<pre><code class="language-cpp">struct Class {
+    void world(int x, int y) {
+        printf(&quot;world(%d, %d)\n&quot;);
+    }
+
+    void hello() {
+        auto memfn = std::bind(&amp;Class::world, this, std::placeholders::_1, std::placeholders::_2);
+        memfn(1, 2);
+        memfn(3, 4);
+    }
+}
+</code></pre>
+<p>而且，如果有要绑定的目标函数有多个参数数量不同的重载，那 bind 就完全不能工作了！</p>
+<pre><code class="language-cpp">struct Class {
+    void world(int x, int y) {
+        printf(&quot;world(%d, %d)\n&quot;);
+    }
+
+    void world(double x) {
+        printf(&quot;world(%d)\n&quot;);
+    }
+
+    void hello() {
+        auto memfn = std::bind(&amp;Class::world, this, std::placeholders::_1, std::placeholders::_2);
+        memfn(1, 2);
+        memfn(3.14); // 编译出错！死扣占位符的 bind 必须要求两个参数，即使 world 明明有单参数的重载
+
+        auto memfn_1arg = std::bind(&amp;Class::world, this, std::placeholders::_1);
+        memfn_1arg(3.14); // 必须重新绑定一个“单参数版”才 OK
+    }
+}
+</code></pre>
+<h2 id="lambda-stdbind_front">使用 <code>std::bind_front</code> 代替</h2>
+<p>为了解决 bind 不能捕获多参数重载的情况，C++17 引入了 <code>std::bind_front</code> 和 <code>std::bind_back</code>，他们不需要 placeholder，但只能用于要绑定的参数在最前或者最后的特殊情况。</p>
+<p>其中 <code>std::bind_front</code> 对于我们只需要把第一个参数绑定为 <code>this</code>，其他参数如数转发的场景，简直是雪中送炭！</p>
+<pre><code class="language-cpp">struct Class {
+    void world(int x, int y) {
+        printf(&quot;world(%d, %d)\n&quot;);
+    }
+
+    void world(double x) {
+        printf(&quot;world(%d)\n&quot;);
+    }
+
+    void hello() {
+        auto memfn = std::bind_front(&amp;Class::world, this);
+        memfn(1, 2);
+        memfn(3.14); // OK！
+    }
+}
+</code></pre>
+<pre><code class="language-cpp">auto memfn = std::bind_front(&amp;Class::world, this); // C++17 的 bind 孝子补救措施
+auto memfn = BIND(world, this);                    // 小彭老师的 BIND 宏，C++14 起可用
+</code></pre>
+<p>你更喜欢哪一种呢？</p>
+<h4 id="lambda-lambda_1">使用 lambda 代替</h4>
+<p>而 C++14 起 lambda 支持了变长参数，就不用这么死板：</p>
+<pre><code class="language-cpp">struct Class {
+    void world(int x, int y) {
+        printf(&quot;world(%d, %d)\n&quot;);
+    }
+
+    void world(double x) {
+        printf(&quot;world(%d)\n&quot;);
+    }
+
+    void hello() {
+        auto memfn = [this] (auto ...args) { // 让 lambda 接受任意参数
+            world(args...); // 拷贝转发所有参数给 world
+        };
+        memfn(1, 2); // 双参数：OK
+        memfn(3.14); // 单参数：OK
+    }
+}
+</code></pre>
+<p>更好的是配合 <code>forward</code> 实现参数的完美转发：</p>
+<pre><code class="language-cpp">struct Class {
+    void world(int &amp;x, int &amp;&amp;y) {
+        printf(&quot;world(%d, %d)\n&quot;);
+        ++x;
+    }
+
+    void world(double const &amp;x) {
+        printf(&quot;world(%d)\n&quot;);
+    }
+
+    void hello() {
+        auto memfn = [this] (auto &amp;&amp;...args) { // 让 lambda 接受万能引用做参数
+            world(std::forward&lt;decltype(args)&gt;(args)...); // 通过 FWD 完美转发给 world，避免引用退化
+        };
+        int x = 1;
+        memfn(x, 2); // 双参数：OK
+        memfn(3.14); // 单参数：OK
+    }
+}
+</code></pre>
+<h3 id="lambda-c">函数指针是 C 语言陋习，改掉</h3></section><section class="print-page" id="type_rich_api"><h1 id="type_rich_api-api">现代化的 API 设计指南</h1>
 <p>如何写出易于维护的代码，阻止犯错？</p>
 <p><strong>类型就是最好的注释！</strong></p>
 <p><strong>Type is all you need</strong></p>
@@ -18685,7 +19181,220 @@ attributes #0 = { mustprogress noinline norecurse nounwind optnone sspstrong uwt
 <p><img alt="" src="../img/llvm-basic-block-branch.png" /></p>
 <h2 id="llvm_intro-asm">汇编语言（ASM）</h2>
 <h2 id="llvm_intro-_33">汇编语言的终局：机器码</h2>
-<h2 id="llvm_intro-_34">构建好了吗</h2></section><h1 class='nav-section-title-end'>Ended: 章节列表</h1>
+<h2 id="llvm_intro-_34">构建好了吗</h2></section><section class="print-page" id="cuda_intro"><h1 id="cuda_intro-c-cuda">现代 C++ 的 CUDA 编程</h1>
+<div class="toc">
+<ul>
+<li><a href="#cuda_intro-c-cuda">现代 C++ 的 CUDA 编程</a><ul>
+<li><a href="#cuda_intro-cuda">配置 CUDA 开发环境</a><ul>
+<li><a href="#cuda_intro-nvidia">安装 NVIDIA 驱动</a></li>
+<li><a href="#cuda_intro-cuda_1">安装 CUDA</a></li>
+<li><a href="#cuda_intro-_1">常见问题解答</a></li>
+<li><a href="#cuda_intro-cmake">建议开启的 CMake 选项</a><ul>
+<li><a href="#cuda_intro-cuda_2">CUDA 编译器路径</a></li>
+<li><a href="#cuda_intro-cuda-c">CUDA C++ 版本</a></li>
+</ul>
+</li>
+<li><a href="#cuda_intro-c">赋能现代 C++ 语法糖</a><ul>
+<li><a href="#cuda_intro-_2">显卡架构版本号</a></li>
+<li><a href="#cuda_intro-_3">设备函数分离定义</a></li>
+<li><a href="#cuda_intro-cuda_3">创建 CUDA 项目</a></li>
+<li><a href="#cuda_intro-cmake_1">CMake 配置总结</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#cuda_intro-cuda_4">开始编写 CUDA</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>参考资料：</p>
+<ul>
+<li>https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html</li>
+<li>https://www.cs.sfu.ca/~ashriram/Courses/CS431/assets/lectures/Part8/GPU1.pdf</li>
+</ul>
+<h2 id="cuda_intro-cuda">配置 CUDA 开发环境</h2>
+<p>硬件方面建议使用至少 GTX 1060 以上显卡，但是更老的显卡也可以运行。</p>
+<p>软件方面则可以尽可能最新，以获得 CUDA C++20 支持，我安装的版本是 CUDA 12.5。</p>
+<p>以下仅演示 Arch Linux 中安装 CUDA 的方法，因为 Arch Linux 官方源中就自带 <code>nvidia</code> 驱动和 <code>cuda</code> 包，而且开箱即用，其他发行版请自行如法炮制。</p>
+<p>Wendous 用户可能在安装完后遇到“找不到 cuxxx.dll”报错，说明你需要拷贝 CUDA 安装目录下的所有 DLL 到 <code>C:\\Windows\\System32</code>。</p>
+<p>WSL 用户要注意，WSL 环境和真正的 Linux 相差甚远。很多 Linux 下的教程，你会发现在 WSL 里复刻不出来。这是 WSL 的 bug，应该汇报去让微软统一修复，而不是让教程的作者零零散散一个个代它擦屁股。建议直接在 Wendous 本地安装 CUDA 反而比伺候 WSL 随机拉的 bug 省力。</p>
+<p>Ubuntu 用户可能考虑卸载 Ubuntu，因为 Ubuntu 源中的版本永不更新。想要安装新出的软件都非常困难，基本只能安装到五六年前的古董软件，要么只能从网上下 deb 包，和 Wendous 一个软耸样。所有官方 apt 源中包的版本从 Ubuntu 发布那一天就定死了，永远不会更新了。这是为了起夜级服务器安全稳定的需要，对于个人电脑而言却只是白白阻碍我们学习，Arch Linux 这样的滚动更新的发行版才更适合个人桌面用户。</p>
+<h3 id="cuda_intro-nvidia">安装 NVIDIA 驱动</h3>
+<p>首先确保你安装了 NVIDIA 最新驱动：</p>
+<pre><code class="language-bash">pacman -S nvidia
+</code></pre>
+<p>运行以下命令，确认显卡驱动正常工作：</p>
+<pre><code class="language-bash">nvidia-smi
+</code></pre>
+<p>应该能得到：</p>
+<pre><code>Mon Aug 26 14:09:15 2024
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 555.58.02              Driver Version: 555.58.02      CUDA Version: 12.5     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 4070 ...    Off |   00000000:01:00.0  On |                  N/A |
+|  0%   30C    P8             17W /  285W |     576MiB /  16376MiB |     41%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A       583      G   /usr/lib/Xorg                                 370MiB |
+|    0   N/A  N/A       740      G   xfwm4                                           4MiB |
+|    0   N/A  N/A       783      G   /usr/lib/firefox/firefox                      133MiB |
+|    0   N/A  N/A      4435      G   obs                                            37MiB |
++-----------------------------------------------------------------------------------------+
+</code></pre>
+<p>如果不行，那就重启。</p>
+<h3 id="cuda_intro-cuda_1">安装 CUDA</h3>
+<p>然后安装 CUDA Toolkit（即 nvcc 编译器）：</p>
+<pre><code class="language-bash">pacman -S cuda
+</code></pre>
+<p>打开 <code>.bashrc</code>（如果你是 zsh 用户就打开 <code>.zshrc</code>），在末尾添加两行：</p>
+<pre><code class="language-bash">export PATH=&quot;/opt/cuda/bin:$PATH&quot;    # 这是默认的 cuda 安装位置
+export NVCC_CCBIN=&quot;/usr/bin/g++-13&quot;  # Arch Linux 用户才需要这一行
+</code></pre>
+<p>然后重启 <code>bash</code>，或者执行以下命令重载环境变量：</p>
+<pre><code class="language-bash">source .bashrc
+</code></pre>
+<p>运行以下命令测试 CUDA 编译器是否可用：</p>
+<pre><code class="language-bash">nvcc --version
+</code></pre>
+<p>应该能得到：</p>
+<pre><code>nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2024 NVIDIA Corporation
+Built on Thu_Jun__6_02:18:23_PDT_2024
+Cuda compilation tools, release 12.5, V12.5.82
+Build cuda_12.5.r12.5/compiler.34385749_0
+</code></pre>
+<h3 id="cuda_intro-_1">常见问题解答</h3>
+<p>CMake 报错找不到 CUDA？添加环境变量：</p>
+<pre><code class="language-bash">export PATH=&quot;/opt/cuda/bin:$PATH&quot;    # 这里换成你的 cuda 安装位置
+export NVCC_CCBIN=&quot;/usr/bin/g++-13&quot;  # 只有 Arch Linux 需要这一行
+</code></pre>
+<p>IDE 使用了 Clangd 静态检查插件，报错不认识 <code>-forward-unknown-to-host-compiler</code> 选项？</p>
+<p>创建文件 <code>~/.config/clangd/config.yaml</code>：</p>
+<pre><code class="language-yaml">CompileFlags:
+  Add:     # 要额外添加到 Clang 的 NVCC 没有的参数
+    - --no-cuda-version-check
+  Remove:  # 移除 Clang 不认识的 NVCC 参数
+    - -forward-unknown-to-host-compiler
+    - --expt-*
+    - --generate-code=*
+    - -arch=*
+    - -rdc=*
+</code></pre>
+<h3 id="cuda_intro-cmake">建议开启的 CMake 选项</h3>
+<h4 id="cuda_intro-cuda_2">CUDA 编译器路径</h4>
+<p>如果你无法搞定环境变量，也可以通过 <code>CMAKE_CUDA_COMPILER</code> 直接设置 <code>nvcc</code> 编译器的路径：</p>
+<pre><code class="language-cmake">set(CMAKE_CUDA_COMPILER &quot;/opt/cuda/bin/nvcc&quot;)  # 这里换成你的 cuda 安装位置
+</code></pre>
+<p>不建议这样写，因为会让使用你项目的人也被迫把 CUDA 安装到这个路径去。</p>
+<p>建议是把你的 <code>nvcc</code> 安装好后，通过 <code>PATH</code> 环境变量，<code>cmake</code> 就能找到了，不需要设置这个变量。</p>
+<h4 id="cuda_intro-cuda-c">CUDA C++ 版本</h4>
+<p>CUDA 是一种基于 C++ 的领域特定语言，CUDA C++ 的版本和正规 C++ 一一对应。</p>
+<p>目前最新的是 CUDA C++20，可以完全使用 C++20 特性的同时书写 CUDA 代码。</p>
+<ul>
+<li>在 <code>__host__</code> 函数（未经特殊修饰的函数默认就是此类，在 CPU 端执行）中，CUDA 和普通 C++ 没有区别，任何普通 C++ 代码，都可以用 CUDA 编译器编译。</li>
+<li>在 <code>__device__</code> 函数（CUDA kernel，在 GPU 端执行）中，能使用的函数和类就有一定限制了：<ul>
+<li>例如你不能在 <code>__device__</code> 函数里使用仅限 <code>__host__</code> 用的 <code>std::cout</code>（但 <code>printf</code> 可以，因为 CUDA 团队为了方便用户调试，为你做了 <code>printf</code> 的 <code>__device__</code> 版特化）。</li>
+<li><code>__device__</code> 中不能使用绝大多数非 <code>constexpr</code> 的 STL 容器，例如 <code>std::map</code> 等，但是在 <code>__host__</code> 侧还是可以用的！</li>
+<li>所有的 <code>constexpr</code> 函数也是可以使用的，例如各种 C++ 风格的数学函数如 <code>std::max</code>，<code>std::sin</code>，这些函数都是 <code>constexpr</code> 的，在 <code>__host__</code> 和 <code>__device__</code> 都能用。</li>
+<li>如果一个容器的成员全是 <code>constexpr</code> 的，那么他可以在 <code>__device__</code> 函数中使用。例如 <code>std::tuple</code>、<code>std::array</code> 等等，因为不涉及 I/O 和内存分配，都是可以在 <code>__device__</code> 中使用的。</li>
+<li>例如 C++20 增加了 constexpr-new 的支持，让 <code>std::vector</code> 和 <code>std::string</code> 变成了 <code>constexpr</code> 的容器，因此可以在 <code>__device__</code> 中使用 <code>std::vector</code>（会用到 <code>__device__</code> 版本的 <code>malloc</code> 函数，这是 CUDA 的一大特色：你可以在 kernel 内部用 <code>malloc</code> 动态分配设备内存，并且从 CUDA C++20 开始 <code>new</code> 也可以了）。</li>
+<li><code>std::variant</code> 现在也是 <code>constexpr</code> 的容器，也可以在 <code>__device__</code> 函数中使用了。</li>
+<li>异常目前还不是 <code>constexpr</code> 的，因此无法在 <code>__device__</code> 函数中使用 <code>try/catch/throw</code> 系列关键字。</li>
+<li>总之，随着，我们可以期待越来越多纯计算的函数和容器能在 CUDA kernel（<code>__device__</code> 环境）中使用。</li>
+</ul>
+</li>
+</ul>
+<p>正如 <code>CMAKE_CXX_STANDARD</code> 设置了 <code>.cpp</code> 文件所用的 C++ 版本，也可以用 <code>CMAKE_CUDA_STANDARD</code> 设置 <code>.cu</code> 文件所用的 CUDA C++ 版本。</p>
+<pre><code class="language-cmake">set(CMAKE_CXX_STANDARD 20)       # .cpp 文件采用的 C++ 版本是 C++20
+set(CMAKE_CUDA_STANDARD 20)      # .cu 文件采用的 CUDA C++ 版本是 C++20
+</code></pre>
+<h3 id="cuda_intro-c">赋能现代 C++ 语法糖</h3>
+<pre><code class="language-cmake">set(CMAKE_CUDA_FLAGS &quot;${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr --expt-extended-lambda&quot;)
+</code></pre>
+<ul>
+<li><code>--expt-relaxed-constexpr</code>: 让所有 <code>constexpr</code> 函数默认自动带有 <code>__host__ __device__</code></li>
+<li><code>--expt-extended-lambda</code>: 允许为 lambda 表达式指定 <code>__host__</code> 或 <code>__device__</code></li>
+</ul>
+<h4 id="cuda_intro-_2">显卡架构版本号</h4>
+<p>不同的显卡有不同的“架构版本号”，架构版本号必须与你的硬件匹配才能最佳状态运行，可以略低，但将不能发挥完整性能。</p>
+<pre><code class="language-cmake">set(CMAKE_CUDA_ARCHITECTURES 86)      # 表示针对 RTX 30xx 系列（Ampere 架构）生成
+set(CMAKE_CUDA_ARCHITECTURES native)  # 如果 CMake 版本高于 3.24，该变量可以设为 &quot;native&quot;，让 CMake 自动检测当前显卡的架构版本号
+</code></pre>
+<p>架构版本号：例如 75 表示 RTX 20xx 系列（Turing 架构）；86 表示 RTX 30xx 系列（Ampere 架构）；89 表示 RTX 40xx 系列（Ada 架构）等。</p>
+<p>完整的架构版本号列表可以在 <a href="https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html#virtual-architecture-feature-list">CUDA 文档</a> 中找到。</p>
+<p>也可以运行如下命令（如果有的话）查询当前显卡的架构版本号：</p>
+<pre><code class="language-bash">__nvcc_device_query
+</code></pre>
+<h4 id="cuda_intro-_3">设备函数分离定义</h4>
+<p>默认只有 <code>__host__</code> 函数可分离声明和定义。如果你需要分离 <code>__device__</code> 函数的声明和定义，就要开启这个选项：</p>
+<pre><code class="language-cmake">set(CMAKE_CUDA_SEPARABLE_COMPILATION ON)  # 可选
+</code></pre>
+<h4 id="cuda_intro-cuda_3">创建 CUDA 项目</h4>
+<p>完成以上选项的设定后，使用 <code>project</code> 命令正式创建 CUDA C++ 项目。</p>
+<pre><code class="language-cmake">project(这里填你的项目名 LANGUAGES CXX CUDA)
+</code></pre>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 我见过有人照抄代码把“这里填你的项目名”抄进去的。</p>
+</blockquote>
+<p>如需在特定条件下才开启 CUDA，可以用 <code>enable_language()</code> 命令延迟 CUDA 环境在 CMake 中的初始化：</p>
+<pre><code class="language-cmake">project(这里填你的项目名 LANGUAGES CXX)
+
+...
+
+option(ENABLE_CUDA &quot;Enable CUDA&quot; ON)
+
+if (ENABLE_CUDA)
+    enable_language(CUDA)
+endif()
+</code></pre>
+<h4 id="cuda_intro-cmake_1">CMake 配置总结</h4>
+<p>注意！以上这些选项设定都必须在 <code>project()</code> 命令之前！否则设定了也无效。</p>
+<p>因为实际上是 <code>project()</code> 命令会检测这些选项，用这些选项来找到编译器和 CUDA 版本等信息。</p>
+<p>总之，我的选项是：</p>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.12)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CUDA_STANDARD 20)
+set(CMAKE_CUDA_SEPARABLE_COMPILATION OFF)
+set(CMAKE_CUDA_FLAGS &quot;${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr --expt-extended-lambda&quot;)
+if (NOT DEFINED CMAKE_CUDA_ARCHITECTURES AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
+    set(CMAKE_CUDA_ARCHITECTURES native)
+endif()
+
+project(你的项目名 LANGUAGES CXX CUDA)
+
+file(GLOB sources &quot;*.cpp&quot; &quot;*.cu&quot;)
+add_executable(${PROJECT_NAME} ${sources})
+target_link_libraries(${PROJECT_NAME} PRIVATE cusparse cublas)
+</code></pre>
+<h2 id="cuda_intro-cuda_4">开始编写 CUDA</h2>
+<p>CUDA 有两套 API：</p>
+<ul>
+<li><a href="https://docs.nvidia.com/cuda/cuda-runtime-api/index.html">CUDA runtime API</a>：更加简单，兼顾性能，无需手动编译 kernel，都替你包办好了，但不够灵活。</li>
+<li><a href="https://docs.nvidia.com/cuda/cuda-driver-api/index.html">CUDA driver API</a>：更加灵活多变，但操作繁琐，需要手动编译 kernel，适合有特殊需求的用户。</li>
+</ul>
+<p>他们都提供了大量用于管理 CUDA 资源和内存的函数。</p>
+<p>我们要学习的是比较易懂、用的也最多的 CUDA runtime API。</p>
+<p>使用 <code>&lt;cuda_runtime.h&gt;</code> 头文件即可导入所有 CUDA runtime API 的函数和类型：</p>
+<pre><code class="language-cuda">#include &lt;cuda_runtime.h&gt;
+</code></pre>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 虽然 CUDA 基于 C++（而不是 C 语言），支持所有 C++ 语言特性。但其 CUDA runtime API 依然是仿 C 风格的接口，可能是照顾了部分从 C 语言转过来的土木老哥，也可能是为了方便被第三方二次封装。</p>
+</blockquote>
+<p>TODO: 更多话题</p></section><section class="print-page" id="cmake_tutor"><h1 id="cmake_tutor-c-cmake">学现代 C++ 从现代 CMake 学起（未完工）</h1>
+<pre><code class="language-cmake">TODO
+</code></pre></section><h1 class='nav-section-title-end'>Ended: 章节列表</h1>
                         <h1 class='nav-section-title' id='section-关于'>
                             关于 <a class='headerlink' href='#section-关于' title='Permanent link'>↵</a>
                         </h1>

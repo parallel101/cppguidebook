@@ -162,6 +162,14 @@
 <li>
     <a href="../llvm_intro/" class="dropdown-item">小彭老师带你学 LLVM</a>
 </li>
+                                    
+<li>
+    <a href="../cuda_intro/" class="dropdown-item">现代 C++ 的 CUDA 编程</a>
+</li>
+                                    
+<li>
+    <a href="../cmake_tutor/" class="dropdown-item">学现代 C++ 从现代 CMake 学起（未完工）</a>
+</li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -312,6 +320,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cerr-cout" class="nav-link">cerr 与 cout 的抉择</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-bs-level="2"><a href="#_7" class="nav-link">智能指针防止大对象移动</a>
               <ul class="nav flex-column">
               </ul>
@@ -444,6 +456,7 @@
 <li><a href="#auto">函数参数也可以 auto</a></li>
 <li><a href="#cout-endl">cout 不需要 endl</a></li>
 <li><a href="#cout">多线程中 cout 出现乱序？</a></li>
+<li><a href="#cerr-cout">cerr 与 cout 的抉择</a></li>
 <li><a href="#_7">智能指针防止大对象移动</a></li>
 <li><a href="#optional">optional 实现延迟初始化</a></li>
 <li><a href="#if-auto-while-auto">if-auto 与 while-auto</a></li>
@@ -1038,60 +1051,60 @@ p = &amp;j;  // 错误：p 本身也不可变，不能改变指向
 </blockquote>
 <h2 id="auto">函数参数也可以 auto</h2>
 <p>大家都知道，函数的返回类型可以声明为 <code>auto</code>，让其自动推导。</p>
-<pre><code class="language-cpp">auto func() {  // int func();
+<pre><code class="language-cpp">auto square() {  // int square();
     return 1;
 }
 </code></pre>
 <p>但你知道从 C++20 开始，参数也可以声明为 auto 了吗？</p>
-<pre><code class="language-cpp">auto func(auto x) {  // T func(T x);
+<pre><code class="language-cpp">auto square(auto x) {  // T square(T x);
     return x * x;
 }
 
-func(1);    // func(int)
-func(3.14); // func(double)
+square(1);    // square(int)
+square(3.14); // square(double)
 </code></pre>
 <p>等价于以下“模板函数”的传统写法：</p>
 <pre><code class="language-cpp">template &lt;typename T&gt;
-T func(T x) {
+T square(T x) {
     return x * x;
 }
 
-func(1);    // func&lt;int&gt;(int)
-func(3.14); // func&lt;double&gt;(double)
+square(1);    // square&lt;int&gt;(int)
+square(3.14); // square&lt;double&gt;(double)
 </code></pre>
 <p>因为是模板函数，所以也很难分离声明和定义，只适用于头文件中就地定义函数的情况。</p>
 <p><code>auto</code> 参数还可以带有引用：</p>
-<pre><code class="language-cpp">auto func(auto const &amp;x) {  // T func(T const &amp;x);
+<pre><code class="language-cpp">auto square(auto const &amp;x) {  // T square(T const &amp;x);
     return x * x;
 }
 
-func(1);    // func(int const &amp;)
-func(3.14); // func(double const &amp;)
+square(1);    // square(int const &amp;)
+square(3.14); // square(double const &amp;)
 </code></pre>
 <p>等价于：</p>
 <pre><code class="language-cpp">template &lt;typename T&gt;
-T func(T const &amp;x) {
+T square(T const &amp;x) {
     return x * x;
 }
 </code></pre>
 <p><code>auto</code> 参数最好的配合莫过于是与同样 C++20 引入的 concept：</p>
-<pre><code class="language-cpp">auto func(std::integral auto x) {  // T func(T x) requires std::integral&lt;T&gt;
+<pre><code class="language-cpp">auto square(std::integral auto x) {  // T square(T x) requires std::integral&lt;T&gt;
     return x * x;
 }
 
-func(1);    // func(int)
-func(3.14); // 错误：double 不是整数类型
+square(1);    // square(int)
+square(3.14); // 错误：double 不是整数类型
 </code></pre>
 <p>等价于：</p>
 <pre><code class="language-cpp">template &lt;typename T&gt;
      requires std::integral&lt;T&gt;
-T func(T x) {
+T square(T x) {
     return x * x;
 }
 </code></pre>
 <p>或者：</p>
 <pre><code class="language-cpp">template &lt;std::integral T&gt;
-T func(T x) {
+T square(T x) {
     return x * x;
 }
 </code></pre>
@@ -1117,9 +1130,15 @@ cout.flush();
 </code></pre>
 <p>但实际上，输出流 cout 默认的设置就是“行刷新缓存”，也就是说，检测到 <code>'\n'</code> 时，就会自动刷新一次，根本不需要我们手动刷新！</p>
 <p>如果还用 endl 的话，就相当于刷新了两次，浪费性能。</p>
-<p>所以，我们只需要输出 <code>'\n'</code> 就可以了，每次换行时 cout 都会自动刷新，endl 是一个典型的以讹传讹错误写法。</p>
+<p>可见，endl 是一个被很多无脑教材错误宣传，实际上根本多此一举的东西。</p>
+<p>我们只需要输出 <code>'\n'</code> 就可以了，每次换行时 cout 都会自动刷新。</p>
 <pre><code class="language-cpp">cout &lt;&lt; &quot;Hello, World!&quot; &lt;&lt; '\n';
 </code></pre>
+<p>endl 是一个典型的以讹传讹错误写法，只有当你的输出是指向另一个进程的管道时，其附带的刷新功能才有作用。</p>
+<ul>
+<li>当输出是管道时，<code>cout</code> 需要 <code>endl</code> 才能刷新。</li>
+<li>当输出是普通控制台时，<code>cout</code> 需要 <code>endl</code> 才能刷新。</li>
+</ul>
 <h2 id="cout">多线程中 cout 出现乱序？</h2>
 <p>同学：小彭老师，我在多线程环境中使用：</p>
 <pre><code class="language-cpp">cout &lt;&lt; &quot;the answer is &quot; &lt;&lt; 42 &lt;&lt; '\n';
@@ -1156,6 +1175,46 @@ cout &lt;&lt; oss.str();
 <p>总之，就是要让 <code>operator&lt;&lt;</code> 只有一次。</p>
 <p>建议各位升级到 C++23，然后改用 <code>std::println</code> 吧：</p>
 <pre><code class="language-cpp">std::println(&quot;the answer is {}&quot;, 42);
+</code></pre>
+<h2 id="cerr-cout">cerr 与 cout 的抉择</h2>
+<p>如果你的目的是调试和报错，可以考虑用 <code>cerr</code>！</p>
+<p>他会在每次 <code>&lt;&lt;</code> 时刷新，<code>cerr</code> 才是最适合打印错误和调试信息的流。</p>
+<p><code>cout</code> 的优点是不需要时刻刷新，有更好的性能。</p>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;hello\n&quot;;
+cout &lt;&lt; &quot;the answer is &quot;;
+cout &lt;&lt; 42;
+*(int *)1 = 1; // 崩溃！
+cout &lt;&lt; &quot;!\n&quot;; // 因为还没有抵达 \n 产生刷新就崩溃，导致之前尚未刷新的 the answer is 42 丢失
+</code></pre>
+<p>可能的输出：</p>
+<pre><code>hello[换行]
+</code></pre>
+<pre><code class="language-cpp">cerr &lt;&lt; &quot;hello\n&quot;;
+cerr &lt;&lt; &quot;the answer is &quot;;
+cerr &lt;&lt; 42;
+*(int *)1 = 1; // 崩溃！
+cerr &lt;&lt; &quot;!\n&quot;;
+</code></pre>
+<p>输出：</p>
+<pre><code>hello[换行]
+the answer is 42
+</code></pre>
+<p>还有一个特点：<code>cout</code> 输出到“标准输出流”，可以被输出重定向到文件管道。而 <code>cerr</code> 输出到“标准错误流”，通常不会被重定向到文件或管道。</p>
+<p>例如，可以把程序预订的计算结果写到 <code>cout</code>，把调试和报错信息写到 <code>cerr</code>，这样用户就可以通过 <code>&gt;</code> 重定向计算结果，而调试和报错信息则正常输出到屏幕上，不受重定向影响。</p>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;1 3 5 7\n&quot;;
+cerr &lt;&lt; &quot;ERROR: this is an error message!\n&quot;;
+cout &lt;&lt; &quot;11 13 17 19\n&quot;;
+</code></pre>
+<pre><code>$ g++ prime.cpp -o prime
+$ ./prime
+1 3 5 7
+ERROR: this is an error message!
+11 13 17 19
+$ ./prime &gt; output.txt
+ERROR: this is an error message!
+$ cat output.txt
+1 3 5 7
+11 13 17 19
 </code></pre>
 <h2 id="_7">智能指针防止大对象移动</h2>
 <p>我们说一个类型大，有两种情况。</p>
@@ -1625,7 +1684,7 @@ int main() {
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>BIND</code> 这个名字是随便取的，取这个名字是为了辱 <code>std::bind</code>。</p>
 </blockquote>
-<p>为了解决 bind 不能捕获多参数重载的情况，C++17 还引入了 <code>std::bind_front</code> 和 <code>std::bind_back</code>，他们不需要 placeholder，但只能用于参数在最前或者最后的特殊情况。</p>
+<p>为了解决 bind 不能捕获多参数重载的情况，C++17 还引入了 <code>std::bind_front</code> 和 <code>std::bind_back</code>，他们不需要 placeholder，但只能用于要绑定的参数在最前或者最后的特殊情况。</p>
 <p>其中 <code>std::bind_front</code> 对于我们只需要把第一个参数绑定为 <code>this</code>，其他参数如数转发的场景，简直是雪中送炭！</p>
 <pre><code class="language-cpp">struct Class {
     void world(int x, int y) {

@@ -56,7 +56,7 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">章节列表</a>
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">章节列表</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -162,6 +162,14 @@
 <li>
     <a href="../llvm_intro/" class="dropdown-item">小彭老师带你学 LLVM</a>
 </li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active" aria-current="page">现代 C++ 的 CUDA 编程</a>
+</li>
+                                    
+<li>
+    <a href="../cmake_tutor/" class="dropdown-item">学现代 C++ 从现代 CMake 学起（未完工）</a>
+</li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -195,6 +203,16 @@
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../llvm_intro/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../cmake_tutor/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a href="https://github.com/parallel101/cppguidebook/edit/master/docs/cuda_intro.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
                             </li>
@@ -443,7 +461,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE cusparse cublas)
 </code></pre>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 虽然 CUDA 基于 C++（而不是 C 语言），支持所有 C++ 语言特性。但其 CUDA runtime API 依然是仿 C 风格的接口，可能是照顾了部分从 C 语言转过来的土木老哥，也可能是为了方便被第三方二次封装。</p>
-</blockquote></div>
+</blockquote>
+<p>TODO: 更多话题</p></div>
             </div>
         </div>
 

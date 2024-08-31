@@ -162,6 +162,14 @@
 <li>
     <a href="../llvm_intro/" class="dropdown-item">小彭老师带你学 LLVM</a>
 </li>
+                                    
+<li>
+    <a href="../cuda_intro/" class="dropdown-item">现代 C++ 的 CUDA 编程</a>
+</li>
+                                    
+<li>
+    <a href="../cmake_tutor/" class="dropdown-item">学现代 C++ 从现代 CMake 学起（未完工）</a>
+</li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -240,6 +248,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-bs-level="2"><a href="#stdbind_front" class="nav-link">使用 std::bind_front 代替</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -275,21 +287,31 @@
 <li><a href="#_17">案例：函数对象的动态分发用于多线程任务队列</a></li>
 <li><a href="#_18">函数对象的重要机制：闭包</a><ul>
 <li><a href="#_19">闭包的本质是语法糖</a></li>
-<li><a href="#_20">闭包捕获变量的生命周期问题</a></li>
 <li><a href="#operator">operator() 很有迷惑性</a></li>
+<li><a href="#_20">闭包捕获变量的生命周期问题</a></li>
+<li><a href="#mutable">mutable 的函数对象</a></li>
+<li><a href="#auto">auto 推导返回值</a></li>
+<li><a href="#auto_1">auto 推导参数</a></li>
+<li><a href="#decltype">与 decltype 的配合</a></li>
+<li><a href="#lambda">无状态 lambda 隐式转换为函数指针</a></li>
 </ul>
 </li>
-<li><a href="#c">函数指针是 C 语言陋习，改掉</a></li>
 </ul>
 </li>
 <li><a href="#bind">bind 为函数对象绑定参数</a><ul>
 <li><a href="#bind_1">bind 是一个失败的设计</a><ul>
 <li><a href="#bind_2">bind 的历史</a></li>
 <li><a href="#thread">thread 膝盖中箭</a></li>
-<li><a href="#_21">举个绑定随机数生成器例子</a></li>
+<li><a href="#_21">案例：绑定随机数生成器</a></li>
 </ul>
 </li>
 <li><a href="#stdbind_front-stdbind_back">std::bind_front 和 std::bind_back</a></li>
+<li><a href="#_22">案例：绑定成员函数</a></li>
+</ul>
+</li>
+<li><a href="#stdbind_front">使用 std::bind_front 代替</a><ul>
+<li><a href="#lambda_1">使用 lambda 代替</a></li>
+<li><a href="#c">函数指针是 C 语言陋习，改掉</a></li>
 </ul>
 </li>
 </ul>
@@ -1062,42 +1084,313 @@ auto add_x = [x](int a) {
 };
 fmt::println(&quot;{}&quot;, add_x(5)); // 输出 15
 </code></pre>
-<p>闭包捕获的变量默认是只读的，如果需要修改捕获的变量，需要使用 <code>mutable</code>。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 闭包捕获的变量默认是只读的，如果需要修改捕获的变量，可以加上 <code>mutable</code> 修饰，见后文。</p>
+</blockquote>
 <h4 id="_19">闭包的本质是语法糖</h4>
 <p>Lambda 函数对象的闭包语法：</p>
-<pre><code class="language-cpp">auto add_x = [x](int a) {
+<pre><code class="language-cpp">int x = 10;
+auto add_x = [x](int a) {
     return a + x;
 };
 </code></pre>
-<p>实际上等价于一个带有 <code>operator()()</code> 的结构体：</p>
+<p>实际上等价于一个带有 <code>operator()</code> 成员函数的结构体：</p>
 <pre><code class="language-cpp">struct Lambda {
     int x;
     Lambda(int val) : x(val) {}
 
-    int operator()(int a) {
+    int operator() (int a) const {
         return a + x;
     }
 };
 
 int main() {
-    Lambda add_x(10);
+    int x = 10;
+    Lambda add_x(x);
     fmt::println(&quot;{}&quot;, add_x(5)); // 输出 15
     return 0;
 }
 </code></pre>
-<p>而且这结构体是匿名的，没有确定的名字，此处类名 <code>Lambda</code> 只是示意。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 相当于我们写的 lambda 函数体，实际上被编译器移到了 <code>Lambda</code> 类的 <code>operator()</code> 成员函数体内。</p>
+</blockquote>
+<p>而且这结构体是匿名的，没有确定的名字，此处类名 <code>Lambda</code> 只是示意，因而平时只能通过 <code>auto</code> 保存即时创建的 lambda 对象。</p>
 <p><strong>而所谓的闭包捕获变量，实际上就是这个结构体的成员！</strong></p>
 <p>按值捕获，就相当于结构体成员里拷贝了一份同名的成员；如果是引用捕获，就相当于结构体里的成员是个引用。</p>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 可以在 https://cppinsights.io 这个网站，自动拆解包括 Lambda 在内的所有现代 C++ 语法糖为原始的结构体和函数。更多好用的工具网站可以看我们 <a href="../recommend/">工具和项目推荐</a> 专题章节。</p>
 </blockquote>
+<p>对于引用，则是等价于结构体成员中含有一份引用作为成员：</p>
+<pre><code class="language-cpp">int x = 10;
+auto inc_x = [&amp;x](int a) {
+    return x++;
+};
+</code></pre>
+<pre><code class="language-cpp">struct Lambda {
+    int &amp;x;
+    Lambda(int &amp;val) : x(val) {}
+
+    int operator() () const {
+        return x++;
+    }
+};
+
+int main() {
+    int x = 10;
+    Lambda inc_x(x);
+    fmt::println(&quot;{}&quot;, inc_x()); // 输出 10
+    fmt::println(&quot;{}&quot;, inc_x()); // 输出 11
+    fmt::println(&quot;{}&quot;, inc_x()); // 输出 12
+    fmt::println(&quot;{}&quot;, x);       // 输出 13
+    return 0;
+}
+</code></pre>
+<h4 id="operator"><code>operator()</code> 很有迷惑性</h4>
+<p>匿名 lambda 对象：</p>
+<pre><code class="language-cpp">auto lambda = [] (int a) {
+    return a + 1;
+};
+int ret = lambda(2);
+</code></pre>
+<p>等价于以下的类：</p>
+<pre><code class="language-cpp">struct Lambda {
+    int operator() (int a) const {
+        return a + 1;
+    }
+};
+Lambda lambda;
+int ret = lambda(2);
+</code></pre>
+<p>很多同学都分不清 <code>operator</code> <code>operator()</code> <code>opeartor()()</code>，这个括号确实很有迷惑性，今天我来解释一下。</p>
+<p>你现在，把上面这段代码，改成这样：</p>
+<pre><code class="language-cpp">struct Lambda {
+    int call (int a) const {
+        return a + 1;
+    }
+};
+Lambda lambda;
+int ret = lambda.call(2);
+</code></pre>
+<p>是不是很容易看懂？这就是定义了一个成员函数 <code>call</code>，然后调用这个成员函数。</p>
+<p>现在，进一步改成：</p>
+<pre><code class="language-cpp">struct Lambda {
+    int operator_call (int a) const {
+        return a + 1;
+    }
+};
+Lambda lambda;
+int ret = lambda.operator_call(2);
+</code></pre>
+<p>能不能理解？这就是把函数名改成了 <code>operator_call</code>，依然是一个成员函数。</p>
+<p>重点来了，我们把函数名，注意是函数名叫 <code>operator()</code>，这个空的圆括号是函数名的一部分！</p>
+<pre><code class="language-cpp">struct Lambda {
+    int operator() (int a) const {
+        return a + 1;
+    }
+};
+Lambda lambda;
+int ret = lambda.operator() (2);
+</code></pre>
+<p>能不能理解？<code>operator</code> 是一个特殊的关键字，效果是和后面的一个运算符结合，形成一个特殊的“标识符”，这个“标识符”和普通函数名一样，都是“单个单词”，不可分割。</p>
+<p>例如 <code>operator+</code> 就是一个标识符，<code>operator[]</code> 也是一个标识符，我们这里的 <code>operator()</code> 也是一个标识符，没有什么稀奇的，只不过后面连的运算符刚好是括号而已。</p>
+<p>这里我们可以通过 <code>lambda . operator()</code> 来访问这个成员，就可以看出，<code>operator()</code> 就和一个普通成员名字一样，没有区别，一样可以通过 <code>.</code> 访问。</p>
+<p>例如，对于运算符 <code>+</code> 来说，当编译器检测到 <code>lambda + 2</code> 这样的表达式时，会自动翻译成 <code>lambda.operator+ (2)</code>，这就是所谓的运算符重载。</p>
+<pre><code class="language-cpp">struct Lambda {
+    int operator+ (int a) const {
+        return a + 1;
+    }
+};
+Lambda lambda;
+int ret = lambda + 2;
+// 会被编译器翻译成：
+int ret = lambda.operator+ (2);
+</code></pre>
+<p>同样的，对于 <code>()</code> 运算符，也会被编译器翻译成 <code>operator()</code> 这个函数的调用，由于对 <code>operator()</code> 函数本身的调用也需要一个括号（参数列表），所以看起来就有两个括号了。实际上根本不搭界，一个是函数名标识符的一部分，一个是产生函数调用。</p>
+<pre><code class="language-cpp">struct Lambda {
+    int operator() (int a) const {
+        return a + 1;
+    }
+};
+Lambda lambda;
+int ret = lambda(2);
+// 会被编译器翻译成：
+int ret = lambda.operator() (2);
+</code></pre>
+<p>这时候，去掉 <code>(2)</code> 里的参数 <code>2</code>，就变成了让你很困惑的双括号。而很多人喜欢紧挨者连写，看起来就很迷惑。</p>
+<p>实际上，第一个 <code>()</code> 是函数名字的一部分，和 <code>operator</code> 是连在一起的，不可分割，中间也不能有其他参数。第二个 <code>()</code> 是函数参数列表，只不过这里刚好是没有参数，所以看起来也是个空括号，很多初学者看到就迷糊了，还看不懂建议从上面有一个参数的 <code>operator() (int a)</code> 看。</p>
+<pre><code class="language-cpp">struct Lambda {
+    int operator() () const {
+        return 1;
+    }
+};
+Lambda lambda;
+int ret = lambda();
+// 会被编译器翻译成：
+int ret = lambda.operator() ();
+</code></pre>
+<p>所以，这就是为什么说定义了 <code>operator()</code> 成员函数的类，是“函数对象”或者说“仿函数”，因为当你使用函数的语法 <code>lambda(2)</code> 调用他们时，会触发他们的成员函数 <code>operator()(2)</code> 从而用法和普通函数一样，但其实际又是对象，也就得名“函数对象”和“仿函数”了。</p>
+<p>我建议你自己去 https://cppinsights.io 这个解构语法糖的工具网站动动手试试看：</p>
+<pre><code class="language-cpp">auto lambda = [] (int a) {
+    return a + 1;
+};
+int ret = lambda();
+</code></pre>
+<p>实际被编译器翻译成：</p>
+<pre><code class="language-cpp">struct Lambda {
+    int operator() (int a) const {
+        return a + 1;
+    }
+};
+Lambda lambda;
+int ret = lambda.operator() ();
+</code></pre>
+<p>而捕获了变量的：</p>
+<pre><code class="language-cpp">int x = 4;
+auto lambda = [&amp;x] (int a) {
+    return a + x;
+};
+int ret = lambda();
+</code></pre>
+<p>实际被编译器翻译成：</p>
+<pre><code class="language-cpp">struct Lambda {
+    int &amp;x;
+
+    Lambda(int &amp;x_) : x(x_) {}
+
+    int operator() (int a) const {
+        return a + 1;
+    }
+};
+int x = 4;
+Lambda lambda(x);
+int ret = lambda.operator() ();
+</code></pre>
 <h4 id="_20">闭包捕获变量的生命周期问题</h4>
 <p>正因如此，闭包按值捕获（<code>[=]</code>）的变量，其生命周期和 Lambda 对象相同。</p>
 <p>当 Lambda 对象被拷贝时，其按值捕获的所有变量也会被重新拷贝一份。</p>
 <p>当 Lambda 对象被移动时，其按值捕获的所有变量也会随之一起移动。</p>
+<pre><code class="language-cpp">struct C {
+    C() { fmt::println(&quot;C 默认构造&quot;); }
+    C(C const &amp;) { fmt::println(&quot;C 拷贝构造&quot;); }
+    C(C &amp;&amp;) { fmt::println(&quot;C 移动构造&quot;); }
+    C &amp;operator=(C const &amp;) { fmt::println(&quot;C 拷贝赋值&quot;); }
+    C &amp;operator=(C &amp;&amp;) { fmt::println(&quot;C 移动赋值&quot;); }
+    ~C() { fmt::println(&quot;C 析构&quot;); }
+};
+
+C c;
+fmt::println(&quot;构造 lambda&quot;);
+auto lambda = [c] {};
+fmt::println(&quot;拷贝 lambda 到 lambda2&quot;);
+auto lambda2 = lambda;
+fmt::println(&quot;移动 lambda 到 lambda3&quot;);
+auto lambda3 = lambda;
+</code></pre>
+<p>输出：</p>
+<pre><code>C 默认构造
+构造 lambda
+C 拷贝构造
+拷贝 lambda 到 lambda2
+C 拷贝构造
+移动 lambda 到 lambda3
+C 移动构造
+C 析构
+C 析构
+C 析构
+C 析构
+</code></pre>
 <p>如果按值捕获了不能拷贝的对象（比如 <code>std::unique_ptr</code>），那么 Lambda 对象也会无法拷贝，只能移动。</p>
-<h4 id="operator"><code>operator()</code> 很有迷惑性</h4>
-<h3 id="c">函数指针是 C 语言陋习，改掉</h3>
+<pre><code class="language-cpp">std::unique_ptr&lt;int&gt; p = std::make_unique&lt;int&gt;(10);
+auto lambda = [p] {};                // 编译错误💣因为这里等价于 [p' = p]，是对 p' 的拷贝构造
+auto lambda = [p = std::move(p)] {}; // 编译通过✅unique_ptr 支持移动构造
+auto lambda2 = lambda;               // 编译错误💣std::unique_ptr 只支持移动，不支持拷贝
+auto lambda2 = std::move(lambda);    // 编译通过✅
+</code></pre>
+<p>用我们之前的方法解构语法糖后：</p>
+<pre><code class="language-cpp">struct Lambda {
+    std::unique_ptr&lt;int&gt; p;
+    Lambda(std::unique_ptr&lt;int&gt; ptr) : p(std::move(ptr)) {}
+
+    // Lambda(Lambda const &amp;) = delete;  // 因为有 unique_ptr 成员，导致 Lambda 的拷贝构造函数被隐式删除
+
+    void operator()() const {
+    }
+};
+
+int main() {
+    std::unique_ptr&lt;int&gt; p = std::make_unique&lt;int&gt;(10);
+    Lambda lambda(p);            // 编译错误💣
+    Lambda lambda(std::move(p)); // 编译通过✅
+    return 0;
+}
+</code></pre>
+<h4 id="mutable"><code>mutable</code> 的函数对象</h4>
+<pre><code class="language-cpp">int x = 10;
+auto lambda = [x] () {
+    return x++; // 编译错误💣lambda 捕获的 x 默认是只读的
+};
+int ret = lambda();
+</code></pre>
+<p>会被编译器翻译成：</p>
+<pre><code class="language-cpp">struct Lambda {
+    int x;
+
+    int operator() () const {
+        return x++; // 编译错误💣const 成员函数不能修改成员变量
+    }
+};
+int x = 10;
+Lambda lambda{x};
+int ret = lambda.operator() ();
+</code></pre>
+<p>注意到，这里的 <code>operator()</code> 成员函数有一个 <code>const</code> 修饰，意味着该成员函数不能修改其体内的变量。</p>
+<p>所有 lambda 函数对象生成时默认，就会给他的 <code>operator()</code> 成员函数加上 <code>const</code> 修饰。</p>
+<p>也就是说闭包捕获的变量默认是只读的，如果需要修改捕获的变量，可以给 lambda 加上 <code>mutable</code> 修饰，就加在 <code>()</code> 后面。</p>
+<pre><code class="language-cpp">int x = 10;
+auto lambda = [x] () mutable {
+    return x++; // 编译通过✅
+};
+fmt::println(&quot;lambda() = {}&quot;, lambda()); // 10
+fmt::println(&quot;lambda() = {}&quot;, lambda()); // 11
+fmt::println(&quot;lambda() = {}&quot;, lambda()); // 12
+</code></pre>
+<p>编译器翻译产生的 <code>Lambda</code> 类的成员函数，就不会带 <code>const</code> 修饰了，从而允许我们的函数体修改捕获的非引用变量。</p>
+<pre><code class="language-cpp">struct Lambda {
+    int x;
+
+    int operator() () {
+        return x++; // 编译通过✅
+    }
+};
+int x = 10;
+Lambda lambda{x};
+fmt::println(&quot;lambda() = {}&quot;, lambda.operator() ()); // 10
+fmt::println(&quot;lambda() = {}&quot;, lambda.operator() ()); // 11
+fmt::println(&quot;lambda() = {}&quot;, lambda.operator() ()); // 12
+</code></pre>
+<p>注意：由于使用了值捕获，lambda 修改的是在他创建时对 <code>x</code> 的一份拷贝，外面的 <code>x</code> 不会改变！</p>
+<pre><code class="language-cpp">int x = 10;
+Lambda lambda{x};
+fmt::println(&quot;lambda() = {}&quot;, lambda.operator() ()); // 10
+fmt::println(&quot;lambda() = {}&quot;, lambda.operator() ()); // 11
+fmt::println(&quot;lambda() = {}&quot;, lambda.operator() ()); // 12
+fmt::println(&quot;x = {}&quot;, x);                           // 10
+fmt::println(&quot;lambda.x = {}&quot;, lambda.x);             // 13
+</code></pre>
+<pre><code class="language-cpp">int x = 10;
+auto lambda = [x] () mutable {
+    return x++; // 编译通过✅
+};
+fmt::println(&quot;ret = {}&quot;, lambda()); // 10
+fmt::println(&quot;ret = {}&quot;, lambda()); // 11
+fmt::println(&quot;ret = {}&quot;, lambda()); // 12
+fmt::println(&quot;x = {}&quot;, x);          // 10
+fmt::println(&quot;lambda.x = {}&quot;, lambda.x); // 编译错误💣编译器产生的匿名 lambda 对象中捕获产生的 x 成员变量是匿名的，无法访问
+</code></pre>
+<h4 id="auto"><code>auto</code> 推导返回值</h4>
+<h4 id="auto_1"><code>auto</code> 推导参数</h4>
+<h4 id="decltype">与 <code>decltype</code> 的配合</h4>
+<h4 id="lambda">无状态 lambda 隐式转换为函数指针</h4>
 <h2 id="bind">bind 为函数对象绑定参数</h2>
 <p>原始函数：</p>
 <pre><code class="language-cpp">int hello(int x, int y) {
@@ -1263,7 +1556,7 @@ std::thread t([&amp;x] {  // [&amp;x] 表示按引用捕获 x；如果写作 [x]
 t.join();
 printf(&quot;%d\n&quot;, x); // 42
 </code></pre>
-<h4 id="_21">举个绑定随机数生成器例子</h4>
+<h4 id="_21">案例：绑定随机数生成器</h4>
 <p>bind 写法：</p>
 <pre><code class="language-cpp">std::mt19937 gen(seed);
 std::uniform_real_distribution&lt;double&gt; uni(0, 1);
@@ -1280,7 +1573,159 @@ auto frand = [uni, &amp;gen] {
 double x = frand();
 double y = frand();
 </code></pre>
-<h3 id="stdbind_front-stdbind_back"><code>std::bind_front</code> 和 <code>std::bind_back</code></h3></div>
+<h3 id="stdbind_front-stdbind_back"><code>std::bind_front</code> 和 <code>std::bind_back</code></h3>
+<p>C++17 引入了两个新绑定函数：</p>
+<ul>
+<li><code>std::bind_front</code>：绑定最前的若干个参数，后面的参数自动添加占位符；</li>
+<li><code>std::bind_back</code>：绑定末尾的若干个参数，前面的参数自动添加占位符。</li>
+</ul>
+<p>和普通的 <code>std::bind</code> 相比有什么好处呢？</p>
+<p>对于函数参数非常多，但实际只需要绑定一两个参数的情况，用 <code>std::bind</code> 会需要添加非常多的 placeholder，数量和函数的剩余参数数量一样多。而 <code>std::bind_front</code> 则相当于一个简写，后面的占位符可以省略不写了。</p>
+<p>例如绑定 x = 42：</p>
+<pre><code class="language-cpp">int func(int x, int y, int z);
+
+auto bound = std::bind(func, 42, std::placeholders::_1, std::placeholders::_2);
+// 等价于：
+auto bound = std::bind_front(func, 42);
+</code></pre>
+<p>绑定 z = 42：</p>
+<pre><code class="language-cpp">int func(int x, int y, int z);
+
+auto bound = std::bind(func, std::placeholders::_1, std::placeholders::_2, 42);
+// 等价于：
+auto bound = std::bind_back(func, 42);
+</code></pre>
+<p>可以看到，使用这两个新绑定函数明显写的代码少了。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 其中最常用的是 <code>std::bind_front</code>，用于绑定类成员的 <code>this</code> 指针。</p>
+</blockquote>
+<h3 id="_22">案例：绑定成员函数</h3>
+<p>使用“成员函数指针”语法（这一奇葩语法在 C++98 就有）配合 <code>std::bind</code>，可以实现绑定一个类型的成员函数：</p>
+<pre><code class="language-cpp">struct Class {
+    void world() {
+        puts(&quot;world!&quot;);
+    }
+
+    void hello() {
+        auto memfn = std::bind(&amp;Class::world, this); // 将 this-&gt;world 绑定成一个可以延后调用的函数对象
+        memfn();
+        memfn();
+    }
+}
+</code></pre>
+<p>不就是捕获 this 吗？我们 lambda 也可以轻易做到！且无需繁琐地写出 this 类的完整类名，还写个脑瘫 <code>&amp;::</code> 强碱你的键盘。</p>
+<pre><code class="language-cpp">struct Class {
+    void world() {
+        puts(&quot;world!&quot;);
+    }
+
+    void hello() {
+        auto memfn = [this] {
+            world(); // 等价于 this-&gt;world()
+        };
+        memfn();
+        memfn();
+    }
+}
+</code></pre>
+<p>bind 的缺点是，当我们的成员函数含有多个参数时，bind 就非常麻烦了：需要一个个写出 placeholder，而且数量必须和 <code>world</code> 的参数数量一致。每次 <code>world</code> 要新增参数时，所有 bind 的地方都需要加一下 placeholder，非常沙雕。</p>
+<pre><code class="language-cpp">struct Class {
+    void world(int x, int y) {
+        printf(&quot;world(%d, %d)\n&quot;);
+    }
+
+    void hello() {
+        auto memfn = std::bind(&amp;Class::world, this, std::placeholders::_1, std::placeholders::_2);
+        memfn(1, 2);
+        memfn(3, 4);
+    }
+}
+</code></pre>
+<p>而且，如果有要绑定的目标函数有多个参数数量不同的重载，那 bind 就完全不能工作了！</p>
+<pre><code class="language-cpp">struct Class {
+    void world(int x, int y) {
+        printf(&quot;world(%d, %d)\n&quot;);
+    }
+
+    void world(double x) {
+        printf(&quot;world(%d)\n&quot;);
+    }
+
+    void hello() {
+        auto memfn = std::bind(&amp;Class::world, this, std::placeholders::_1, std::placeholders::_2);
+        memfn(1, 2);
+        memfn(3.14); // 编译出错！死扣占位符的 bind 必须要求两个参数，即使 world 明明有单参数的重载
+
+        auto memfn_1arg = std::bind(&amp;Class::world, this, std::placeholders::_1);
+        memfn_1arg(3.14); // 必须重新绑定一个“单参数版”才 OK
+    }
+}
+</code></pre>
+<h2 id="stdbind_front">使用 <code>std::bind_front</code> 代替</h2>
+<p>为了解决 bind 不能捕获多参数重载的情况，C++17 引入了 <code>std::bind_front</code> 和 <code>std::bind_back</code>，他们不需要 placeholder，但只能用于要绑定的参数在最前或者最后的特殊情况。</p>
+<p>其中 <code>std::bind_front</code> 对于我们只需要把第一个参数绑定为 <code>this</code>，其他参数如数转发的场景，简直是雪中送炭！</p>
+<pre><code class="language-cpp">struct Class {
+    void world(int x, int y) {
+        printf(&quot;world(%d, %d)\n&quot;);
+    }
+
+    void world(double x) {
+        printf(&quot;world(%d)\n&quot;);
+    }
+
+    void hello() {
+        auto memfn = std::bind_front(&amp;Class::world, this);
+        memfn(1, 2);
+        memfn(3.14); // OK！
+    }
+}
+</code></pre>
+<pre><code class="language-cpp">auto memfn = std::bind_front(&amp;Class::world, this); // C++17 的 bind 孝子补救措施
+auto memfn = BIND(world, this);                    // 小彭老师的 BIND 宏，C++14 起可用
+</code></pre>
+<p>你更喜欢哪一种呢？</p>
+<h4 id="lambda_1">使用 lambda 代替</h4>
+<p>而 C++14 起 lambda 支持了变长参数，就不用这么死板：</p>
+<pre><code class="language-cpp">struct Class {
+    void world(int x, int y) {
+        printf(&quot;world(%d, %d)\n&quot;);
+    }
+
+    void world(double x) {
+        printf(&quot;world(%d)\n&quot;);
+    }
+
+    void hello() {
+        auto memfn = [this] (auto ...args) { // 让 lambda 接受任意参数
+            world(args...); // 拷贝转发所有参数给 world
+        };
+        memfn(1, 2); // 双参数：OK
+        memfn(3.14); // 单参数：OK
+    }
+}
+</code></pre>
+<p>更好的是配合 <code>forward</code> 实现参数的完美转发：</p>
+<pre><code class="language-cpp">struct Class {
+    void world(int &amp;x, int &amp;&amp;y) {
+        printf(&quot;world(%d, %d)\n&quot;);
+        ++x;
+    }
+
+    void world(double const &amp;x) {
+        printf(&quot;world(%d)\n&quot;);
+    }
+
+    void hello() {
+        auto memfn = [this] (auto &amp;&amp;...args) { // 让 lambda 接受万能引用做参数
+            world(std::forward&lt;decltype(args)&gt;(args)...); // 通过 FWD 完美转发给 world，避免引用退化
+        };
+        int x = 1;
+        memfn(x, 2); // 双参数：OK
+        memfn(3.14); // 单参数：OK
+    }
+}
+</code></pre>
+<h3 id="c">函数指针是 C 语言陋习，改掉</h3></div>
             </div>
         </div>
 
