@@ -8,7 +8,7 @@
         <meta name="author" content="小彭老师">
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>函数式编程 - ✝️小彭大典✝️</title>
+        <title>小彭老师带你学函数式编程 - ✝️小彭大典✝️</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/brands.min.css" rel="stylesheet">
@@ -88,7 +88,7 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active" aria-current="page">函数式编程</a>
+    <a href="./" class="dropdown-item active" aria-current="page">小彭老师带你学函数式编程</a>
 </li>
                                     
 <li>
@@ -234,13 +234,25 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">函数式编程</a>
+            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">小彭老师带你学函数式编程</a>
               <ul class="nav flex-column">
             <li class="nav-item" data-bs-level="2"><a href="#_2" class="nav-link">为什么需要函数？</a>
               <ul class="nav flex-column">
               </ul>
             </li>
             <li class="nav-item" data-bs-level="2"><a href="#_9" class="nav-link">为什么需要函数式？</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#lambda" class="nav-link">深入认识 lambda 语法</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#lambda_1" class="nav-link">lambda 常见的三大用法</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#lambda_2" class="nav-link">lambda 进阶案例</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -252,6 +264,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-bs-level="2"><a href="#stl" class="nav-link">在 STL 算法模板库中的应用</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -259,10 +275,10 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="_1">函数式编程</h1>
+<h1 id="_1">小彭老师带你学函数式编程</h1>
 <div class="toc">
 <ul>
-<li><a href="#_1">函数式编程</a><ul>
+<li><a href="#_1">小彭老师带你学函数式编程</a><ul>
 <li><a href="#_2">为什么需要函数？</a><ul>
 <li><a href="#_3">狂想：没有函数的世界？</a></li>
 <li><a href="#_4">设计模式追求的是“可改”而不是“可读”！</a></li>
@@ -270,7 +286,7 @@
 <li><a href="#_6">要封装，但不要耦合</a></li>
 <li><a href="#_7">每个函数应该职责单一，别一心多用</a></li>
 <li><a href="#_8">二次封装</a></li>
-<li><a href="#linus-3-24">Linus 的最佳实践：每个函数不要超过 3 层嵌套，函数体不要超过 24 行</a></li>
+<li><a href="#linus-3-80-24">Linus 的最佳实践：每个函数不要超过 3 层嵌套，一行不要超过 80 字符，每个函数体不要超过 24 行</a></li>
 </ul>
 </li>
 <li><a href="#_9">为什么需要函数式？</a><ul>
@@ -290,28 +306,76 @@
 <li><a href="#operator">operator() 很有迷惑性</a></li>
 <li><a href="#_20">闭包捕获变量的生命周期问题</a></li>
 <li><a href="#mutable">mutable 的函数对象</a></li>
-<li><a href="#auto">auto 推导返回值</a></li>
-<li><a href="#auto_1">auto 推导参数</a></li>
-<li><a href="#decltype">与 decltype 的配合</a></li>
-<li><a href="#lambda">无状态 lambda 隐式转换为函数指针</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a href="#lambda">深入认识 lambda 语法</a><ul>
+<li><a href="#_21">捕获列表语法</a></li>
+<li><a href="#_22">类型推导</a><ul>
+<li><a href="#auto">auto 推导返回类型</a></li>
+<li><a href="#auto_1">auto 推导参数类型</a></li>
+<li><a href="#auto_2">auto 实现多次实例化的应用</a></li>
+<li><a href="#auto-auto-const">auto &amp; 与 auto const &amp; 的应用</a></li>
+<li><a href="#auto_3">auto &amp;&amp; 万能引用</a></li>
+<li><a href="#decltypeauto">decltype(auto) 保留真正的原始返回类型</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#lambda_1">lambda 常见的三大用法</a><ul>
+<li><a href="#_23">储存一个函数对象做局部变量</a><ul>
+<li><a href="#_24">应用案例</a><ul>
+<li><a href="#_25">代码复用</a></li>
+<li><a href="#lambda-idiom">就地调用 lambda-idiom</a></li>
+</ul>
+</li>
+<li><a href="#_26">注意捕获变量的生命周期</a></li>
+</ul>
+</li>
+<li><a href="#_27">返回一个函数对象做返回值</a><ul>
+<li><a href="#_28">应用案例</a></li>
+<li><a href="#_29">注意捕获变量的生命周期</a></li>
+</ul>
+</li>
+<li><a href="#_30">接受一个函数对象做参数</a><ul>
+<li><a href="#_31">应用案例</a></li>
+<li><a href="#_32">注意捕获变量的生命周期</a></li>
+</ul>
+</li>
+<li><a href="#_33">生命周期问题总结：何时使用 [=] 或 [&amp;]</a></li>
+</ul>
+</li>
+<li><a href="#lambda_2">lambda 进阶案例</a><ul>
+<li><a href="#lambda_3">lambda 实现递归</a></li>
+<li><a href="#lambda_4">lambda 避免全局重载函数捕获为变量时恼人的错误</a></li>
+<li><a href="#lambda-if-constexpr">lambda 配合 if-constexpr 实现编译期三目运算符</a></li>
+<li><a href="#c23-stdmove_only_function-stdfunction">推荐用 C++23 的 std::move_only_function 取代 std::function</a></li>
+<li><a href="#decltype">用于类模板参数的仿函数时，需与 decltype 的配合</a></li>
+<li><a href="#lambda_5">无状态 lambda 隐式转换为函数指针</a></li>
+<li><a href="#stdvariant">与 std::variant 配合实现动态多态</a></li>
+<li><a href="#shared_from_this-this">配合 shared_from_this 实现延长 this 生命周期</a></li>
+<li><a href="#mutable-lambda">mutable lambda 实现计数器</a></li>
 </ul>
 </li>
 <li><a href="#bind">bind 为函数对象绑定参数</a><ul>
 <li><a href="#bind_1">bind 是一个失败的设计</a><ul>
 <li><a href="#bind_2">bind 的历史</a></li>
 <li><a href="#thread">thread 膝盖中箭</a></li>
-<li><a href="#_21">案例：绑定随机数生成器</a></li>
+<li><a href="#_34">案例：绑定随机数生成器</a></li>
 </ul>
 </li>
 <li><a href="#stdbind_front-stdbind_back">std::bind_front 和 std::bind_back</a></li>
-<li><a href="#_22">案例：绑定成员函数</a></li>
+<li><a href="#_35">案例：绑定成员函数</a></li>
 </ul>
 </li>
 <li><a href="#stdbind_front">使用 std::bind_front 代替</a><ul>
-<li><a href="#lambda_1">使用 lambda 代替</a></li>
+<li><a href="#lambda_6">使用 lambda 代替</a></li>
 <li><a href="#c">函数指针是 C 语言陋习，改掉</a></li>
+</ul>
+</li>
+<li><a href="#stl">在 STL 算法模板库中的应用</a><ul>
+<li><a href="#_36">标准库自带的运算符仿函数</a></li>
 </ul>
 </li>
 </ul>
@@ -591,9 +655,10 @@ int main() {
 <pre><code>- `curl_multi` 提供了超详细的参数，把每个操作分拆成多步，方便用户插手细节，满足高级用户的定制化需求，但太过复杂，难以学习。
 - `curl_easy` 是对 `curl_multi` 的再封装，提供了更简单的 API，但是对具体细节就难以操控了，适合初学者上手。
 </code></pre>
-<h3 id="linus-3-24">Linus 的最佳实践：每个函数不要超过 3 层嵌套，函数体不要超过 24 行</h3>
-<p>Linux 内核为什么坚持使用 <code>TAB=8</code> 为代码风格？</p>
-<p>TODO：还在写</p>
+<h3 id="linus-3-80-24">Linus 的最佳实践：每个函数不要超过 3 层嵌套，一行不要超过 80 字符，每个函数体不要超过 24 行</h3>
+<p>Linux 内核为什么坚持使用 8 缩进为代码风格？</p>
+<p>因为高缩进可以避免程序员写出嵌套层数太深的代码，当他写出太深嵌套时，巨大的 8 缩进会让代码变得非常偏右，写不下多少空间。从而让程序员自己红着脸“对不起，我把单个函数写太深了”然后赶紧拆分出多个函数来。</p>
+<p>此外，他还规定了单一一个函数必须在终端宽度 80 x 24 中显示得下，否则就需要拆分成多个函数重写，这配合 8 缩进，有效的限制了嵌套的层数，迫使程序员不得不重新思考，更解耦的写法出来。</p>
 <h2 id="_9">为什么需要函数式？</h2>
 <p>你产生了两个需求，分别封装了两个函数：</p>
 <ul>
@@ -610,7 +675,7 @@ int main() {
 
 int product(std::vector&lt;int&gt; const &amp;v) {
     int ret = v[0];
-    for (int i = 1; i &lt; v.size(); i++) {
+for (int i = 1; i &lt; v.size(); i++) {
         ret *= v[i];
     }
     return ret;
@@ -1387,10 +1452,232 @@ fmt::println(&quot;ret = {}&quot;, lambda()); // 12
 fmt::println(&quot;x = {}&quot;, x);          // 10
 fmt::println(&quot;lambda.x = {}&quot;, lambda.x); // 编译错误💣编译器产生的匿名 lambda 对象中捕获产生的 x 成员变量是匿名的，无法访问
 </code></pre>
-<h4 id="auto"><code>auto</code> 推导返回值</h4>
-<h4 id="auto_1"><code>auto</code> 推导参数</h4>
-<h4 id="decltype">与 <code>decltype</code> 的配合</h4>
-<h4 id="lambda">无状态 lambda 隐式转换为函数指针</h4>
+<h2 id="lambda">深入认识 lambda 语法</h2>
+<h3 id="_21">捕获列表语法</h3>
+<p>一个变量的三种捕获方式：</p>
+<ul>
+<li>按值拷贝捕获 <code>[x]</code></li>
+<li>按值移动捕获 <code>[x = std::move(x)]</code></li>
+<li>按引用捕获 <code>[&amp;x]</code></li>
+</ul>
+<p>TODO</p>
+<p>批量捕获：</p>
+<ul>
+<li>按值拷贝捕获所有用到的变量 <code>[=]</code></li>
+<li>按引用捕获所有用到的变量 <code>[&amp;]</code></li>
+</ul>
+<p>TODO：与语法糖解构后比较</p>
+<h3 id="_22">类型推导</h3>
+<h4 id="auto"><code>auto</code> 推导返回类型</h4>
+<p>lambda 函数可以通过在参数列表后使用 <code>-&gt;</code> 指定函数返回类型：</p>
+<pre><code class="language-cpp">auto lambda = [] (int a) -&gt; int {
+    return a;
+};
+int i = lambda();
+</code></pre>
+<p>如果不指定返回类型，默认是 <code>-&gt; auto</code>，也就是和返回类型声明为 <code>auto</code> 一样，会自动根据表达式为你推导返回类型：</p>
+<pre><code class="language-cpp">auto lambda = [] (int a) {
+    return a;
+};
+// 等价于：
+auto lambda = [] (int a) -&gt; int {
+    return a;
+};
+</code></pre>
+<pre><code class="language-cpp">auto lambda2 = [] (int a) {
+    return a * 2.0; // 此表达式返回 double
+};
+// 等价于：
+auto lambda2 = [] (int a) -&gt; double { // 所以 auto 推导出的返回类型也为 double
+    return a * 2.0;
+};
+</code></pre>
+<h4 id="auto_1"><code>auto</code> 推导参数类型</h4>
+<p>TODO</p>
+<h4 id="auto_2"><code>auto</code> 实现多次实例化的应用</h4>
+<h4 id="auto-auto-const"><code>auto &amp;</code> 与 <code>auto const &amp;</code> 的应用</h4>
+<h4 id="auto_3"><code>auto &amp;&amp;</code> 万能引用</h4>
+<h4 id="decltypeauto"><code>decltype(auto)</code> 保留真正的原始返回类型</h4>
+<h2 id="lambda_1">lambda 常见的三大用法</h2>
+<h3 id="_23">储存一个函数对象做局部变量</h3>
+<p>我们总是用 <code>auto</code> 来保存一个函数对象作为局部变量，这会自动推导 lambda 的匿名类型。</p>
+<p>为什么不能显式写出类型名字？因为 lambda 的类型是匿名的，你无法写出类型名，只能通过 <code>auto</code> 推导。</p>
+<pre><code class="language-cpp">int b = 2;
+auto lambda = [b] (int a) {
+    return a + b;
+};
+</code></pre>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 这也是为什么 C++11 同时引入 <code>auto</code> 和 lambda 语法的原因。</p>
+</blockquote>
+<p>如果你实在需要显式的类名，那就需要使用 <code>std::function</code> 容器。虽然 lambda 表达式产生的类型是匿名的，但是该类型符合“可调用”的约束，可以被 <code>std::function</code> 容器接纳。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 即 lambda 类型可隐式转换为相应参数列表的 <code>std::function</code> 容器。因为 <code>std::function&lt;Ret(Args)&gt;</code> 容器可以接纳任何“可接受 <code>(Args...)</code> 参数调用并返回 <code>Ret</code> 类型”的任意函数对象。</p>
+</blockquote>
+<pre><code class="language-cpp">int b = 2;
+std::function&lt;void(int)&gt; lambda = [b] (int a) {
+    return a + b;
+};
+</code></pre>
+<p>例如当我们需要把 lambda 对象推入 <code>vector</code> 等容器中时，就需要显式写出函数对象的类型，此时万能函数对象容器 <code>std::function</code> 就能派上用场了：</p>
+<pre><code class="language-cpp">// vector&lt;auto&gt; lambda_list;             // 错误：不支持的语法
+vector&lt;function&lt;void(int)&gt;&gt; lambda_list; // OK
+
+int b = 2;
+lambda_list.push_back([b] (int a) {
+    return a + b;
+};
+lambda_list.push_back([b] (int a) {
+    return a * b;
+};
+
+for (auto lambda: lambda_list) {
+    int ret = lambda(2);
+    fmt::println(&quot;{}&quot;, ret);
+}
+</code></pre>
+<h4 id="_24">应用案例</h4>
+<h5 id="_25">代码复用</h5>
+<p>TODO</p>
+<p><code>[&amp;]</code> 和 <code>[=]</code></p>
+<h5 id="lambda-idiom">就地调用 lambda-idiom</h5>
+<p>TODO</p>
+<h4 id="_26">注意捕获变量的生命周期</h4>
+<p>新手用 lambda 常见的错误就是搞不清捕获变量的生命周期，总是想当然地无脑用 <code>[&amp;]</code>，非常危险。</p>
+<p>如果你有“自知之明”，自知不熟悉生命周期分析，那就全部 <code>[=]</code>。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 等我们稍后的 <a href="../cpp_lifetime/">生命周期专题课程</a> 中介绍。</p>
+</blockquote>
+<p>实际上，<code>[=]</code> 应该是你默认的捕获方式。</p>
+<p>只有当类型无法拷贝会深拷贝成本过高时，才会选择性地把一些可以改成引用捕获的部分 lambda，使用 <code>[&amp;]</code> 来捕获部分需要避免拷贝的变量，或者使用 <code>shared_ptr</code> 配合 <code>[=]</code> 将深拷贝化为浅拷贝。</p>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 一些习惯了 Python、JS 等全员 <code>shared_ptr</code> 的垃圾回收语言巨婴，一上来就全部无脑 <code>[&amp;]</code>，用实际行动证明了智商和勇气成反比定律。</p>
+</blockquote>
+<p>好消息是，对于代码复用和就地调用的情况，lambda 对象的生命都不会出函数体，可以安全地改成按引用捕获 <code>[&amp;]</code>。</p>
+<p>但是对于下面两种情况（作为参数传入和作为返回值），就不一定有这么幸运了。</p>
+<p>总之，无论如何要保证 lambda 对象的生命周期 小于等于 按引用捕获的所有变量的生命周期。如果做不到，那就得把这些可能超出的变量改成按值捕获 <code>[=]</code>。</p>
+<h3 id="_27">返回一个函数对象做返回值</h3>
+<p>如果你想让返回一个函数对象，分为两种情况：</p>
+<p>就地定义（声明与定义合体）的函数，建议填写 <code>auto</code> 为返回值类型，自动推导 lambda 的匿名类型（因为你无法写出具体类型名）。</p>
+<p>然后，在 <code>return</code> 语句中就地写出 lambda 表达式即可：</p>
+<pre><code class="language-cpp">auto make_adder(int x) {
+    return [x] (int y) {
+        return x + y;
+    };
+}
+</code></pre>
+<p>分离声明与定义的函数，无法使用 <code>auto</code> 推导返回类型，不得不使用万能的函数容器 <code>std::function</code> 来擦屁股：</p>
+<pre><code class="language-cpp">// adder.h
+std::function&lt;int()&gt; make_adder(int x);
+
+// adder.cpp
+std::function&lt;int()&gt; make_adder(int x) {
+    return [x] (int y) {
+        return x + y;
+    };
+}
+</code></pre>
+<p>“函数返回一个函数对象”，这种用法在函数式编程非常常见。</p>
+<h4 id="_28">应用案例</h4>
+<p>例如上述的 <code>make_adder</code> 等于绑定了一个固定参数 <code>x</code> 的加法函数，之后每次调用这个返回的函数对象，就固定增加之前在 <code>make_adder</code> 参数中 <code>x</code> 的增量了。</p>
+<p>TODO</p>
+<h4 id="_29">注意捕获变量的生命周期</h4>
+<p>此类“返回一个函数对象”的写法，其 lambda 捕获必须是按值捕获的！</p>
+<p>否则，因为调用者调用返回的函数对象时，局部变量和实参所对应的函数局部栈空间已经释放，相当于在 lambda 体内存有空悬引用，导致出现未定义行为（要么直接崩溃，要么非常隐蔽地留下内存非法访问的隐患）。</p>
+<pre><code class="language-cpp">auto make_adder(int x) {
+    return [x] (int y) {
+        return x + y;
+    };
+}
+
+int main() { // 我是调用者
+    auto adder = make_adder(2);
+    adder(3);  // 2 + 3 = 5
+}
+</code></pre>
+<h3 id="_30">接受一个函数对象做参数</h3>
+<p>TODO：代码</p>
+<h4 id="_31">应用案例</h4>
+<p>TODO：策略模式</p>
+<p>TODO：延迟回调</p>
+<h4 id="_32">注意捕获变量的生命周期</h4>
+<p>函数对象做参数的生命周期问题，需要分就地调用和延迟调用两种情况讨论。</p>
+<h3 id="_33">生命周期问题总结：何时使用 <code>[=]</code> 或 <code>[&amp;]</code></h3>
+<p>如果你的智力暂不足以搞懂生命周期分析，没关系，始终使用 <code>[=]</code> 肯定没错。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 一个同学询问：我口渴！在不知道他的耐受度的情况下，我肯定是直接给他吃水，而不是给他吃酒精。虽然一些孝子曰“适量”“适度”“计量”各种一连串附加条件下，宣称“酒精也是安全的”。但是“水永远是安全的”，“永远”，那我直接给他喝水，是肯定不会错的。等你长大成年了，有辨别能力了，再去根据自己的小计机瘙痒程度，选择性地喝有机溶剂。此处 <code>[=]</code> 就是这个万能的水，虽然不一定高效，但是肯定没错。初学者总是从 <code>[=]</code> 用起，等学明白了，再来尝试突破“小计机性能焦虑优化”也不迟。</p>
+</blockquote>
+<p>如果你自认为能分得清：</p>
+<ul>
+<li>在当前函数体内创建，当前函数体内立即调用，可以引用捕获 <code>[&amp;]</code>，但值捕获 <code>[=]</code> 也没错。</li>
+<li>返回一个 lambda，必须值捕获 <code>[=]</code>。</li>
+<li>接受一个 lambda 做参数，需要进一步分为两种情况：<ul>
+<li>在当前函数体内立即调用，可以引用捕获 <code>[&amp;]</code>，但值捕获 <code>[=]</code> 也没错。</li>
+<li>作为回调函数，延迟调用，那就必须值捕获 <code>[=]</code>。</li>
+</ul>
+</li>
+</ul>
+<p>以上四种情况，分别代码演示：</p>
+<pre><code class="language-cpp">void func() {
+    int i = 1;
+    auto lambda = [&amp;] () { return i; };
+    lambda();
+}
+
+int main() {
+    func();
+}
+</code></pre>
+<pre><code class="language-cpp">auto func() {
+    int i = 1;
+    return [=] () { return i; };
+}
+
+int main() {
+    auto lambda = func();
+    lambda();
+}
+</code></pre>
+<pre><code class="language-cpp">auto func(auto lambda) {
+    lambda();
+}
+
+int main() {
+    int i = 1;
+    func([&amp;] () { return i; });
+}
+</code></pre>
+<pre><code class="language-cpp">vector&lt;function&lt;int()&gt;&gt; g_callbacks;
+auto func(auto lambda) {
+    g_callbacks.push_back(lambda);
+}
+
+void init() {
+    int i = 1;
+    func([=] () { return i; });
+}
+
+int main() {
+    init();
+    for (auto cb: g_callbacks) {
+        cb();
+    }
+}
+</code></pre>
+<h2 id="lambda_2">lambda 进阶案例</h2>
+<h3 id="lambda_3">lambda 实现递归</h3>
+<h3 id="lambda_4">lambda 避免全局重载函数捕获为变量时恼人的错误</h3>
+<h3 id="lambda-if-constexpr">lambda 配合 if-constexpr 实现编译期三目运算符</h3>
+<h3 id="c23-stdmove_only_function-stdfunction">推荐用 C++23 的 <code>std::move_only_function</code> 取代 <code>std::function</code></h3>
+<p>通过按值移动捕获，lambda 可以持有一个 unique_ptr 作为捕获变量。</p>
+<p>TODO</p>
+<h3 id="decltype">用于类模板参数的仿函数时，需与 <code>decltype</code> 的配合</h3>
+<h3 id="lambda_5">无状态 lambda 隐式转换为函数指针</h3>
+<h3 id="stdvariant">与 <code>std::variant</code> 配合实现动态多态</h3>
+<p>TODO</p>
+<p>在之后的 <code>std::variant</code> 专题章节中会进一步介绍。</p>
+<h3 id="shared_from_this-this">配合 <code>shared_from_this</code> 实现延长 this 生命周期</h3>
+<h3 id="mutable-lambda"><code>mutable</code> lambda 实现计数器</h3>
 <h2 id="bind">bind 为函数对象绑定参数</h2>
 <p>原始函数：</p>
 <pre><code class="language-cpp">int hello(int x, int y) {
@@ -1556,7 +1843,7 @@ std::thread t([&amp;x] {  // [&amp;x] 表示按引用捕获 x；如果写作 [x]
 t.join();
 printf(&quot;%d\n&quot;, x); // 42
 </code></pre>
-<h4 id="_21">案例：绑定随机数生成器</h4>
+<h4 id="_34">案例：绑定随机数生成器</h4>
 <p>bind 写法：</p>
 <pre><code class="language-cpp">std::mt19937 gen(seed);
 std::uniform_real_distribution&lt;double&gt; uni(0, 1);
@@ -1599,7 +1886,7 @@ auto bound = std::bind_back(func, 42);
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 其中最常用的是 <code>std::bind_front</code>，用于绑定类成员的 <code>this</code> 指针。</p>
 </blockquote>
-<h3 id="_22">案例：绑定成员函数</h3>
+<h3 id="_35">案例：绑定成员函数</h3>
 <p>使用“成员函数指针”语法（这一奇葩语法在 C++98 就有）配合 <code>std::bind</code>，可以实现绑定一个类型的成员函数：</p>
 <pre><code class="language-cpp">struct Class {
     void world() {
@@ -1684,7 +1971,7 @@ auto bound = std::bind_back(func, 42);
 auto memfn = BIND(world, this);                    // 小彭老师的 BIND 宏，C++14 起可用
 </code></pre>
 <p>你更喜欢哪一种呢？</p>
-<h4 id="lambda_1">使用 lambda 代替</h4>
+<h4 id="lambda_6">使用 lambda 代替</h4>
 <p>而 C++14 起 lambda 支持了变长参数，就不用这么死板：</p>
 <pre><code class="language-cpp">struct Class {
     void world(int x, int y) {
@@ -1725,7 +2012,10 @@ auto memfn = BIND(world, this);                    // 小彭老师的 BIND 宏�
     }
 }
 </code></pre>
-<h3 id="c">函数指针是 C 语言陋习，改掉</h3></div>
+<h3 id="c">函数指针是 C 语言陋习，改掉</h3>
+<h2 id="stl">在 STL 算法模板库中的应用</h2>
+<h3 id="_36">标准库自带的运算符仿函数</h3>
+<p>TODO：<code>std::less</code></p></div>
             </div>
         </div>
 
