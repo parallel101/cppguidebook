@@ -1,4 +1,4 @@
-# 函数式编程
+# 小彭老师带你学函数式编程
 
 [TOC]
 
@@ -320,12 +320,13 @@ int main() {
     - `curl_multi` 提供了超详细的参数，把每个操作分拆成多步，方便用户插手细节，满足高级用户的定制化需求，但太过复杂，难以学习。
     - `curl_easy` 是对 `curl_multi` 的再封装，提供了更简单的 API，但是对具体细节就难以操控了，适合初学者上手。
 
+### Linus 的最佳实践：每个函数不要超过 3 层嵌套，一行不要超过 80 字符，每个函数体不要超过 24 行
 
-### Linus 的最佳实践：每个函数不要超过 3 层嵌套，函数体不要超过 24 行
+Linux 内核为什么坚持使用 8 缩进为代码风格？
 
-Linux 内核为什么坚持使用 `TAB=8` 为代码风格？
+因为高缩进可以避免程序员写出嵌套层数太深的代码，当他写出太深嵌套时，巨大的 8 缩进会让代码变得非常偏右，写不下多少空间。从而让程序员自己红着脸“对不起，我把单个函数写太深了”然后赶紧拆分出多个函数来。
 
-TODO：还在写
+此外，他还规定了单一一个函数必须在终端宽度 80 x 24 中显示得下，否则就需要拆分成多个函数重写，这配合 8 缩进，有效的限制了嵌套的层数，迫使程序员不得不重新思考，更解耦的写法出来。
 
 ## 为什么需要函数式？
 
@@ -345,7 +346,7 @@ int sum(std::vector<int> const &v) {
 
 int product(std::vector<int> const &v) {
     int ret = v[0];
-    for (int i = 1; i < v.size(); i++) {
+for (int i = 1; i < v.size(); i++) {
         ret *= v[i];
     }
     return ret;
@@ -1295,13 +1296,320 @@ fmt::println("x = {}", x);          // 10
 fmt::println("lambda.x = {}", lambda.x); // 编译错误💣编译器产生的匿名 lambda 对象中捕获产生的 x 成员变量是匿名的，无法访问
 ```
 
-#### `auto` 推导返回值
+## 深入认识 lambda 语法
 
-#### `auto` 推导参数
+### 捕获列表语法
 
-#### 与 `decltype` 的配合
+一个变量的三种捕获方式：
 
-#### 无状态 lambda 隐式转换为函数指针
+- 按值拷贝捕获 `[x]`
+- 按值移动捕获 `[x = std::move(x)]`
+- 按引用捕获 `[&x]`
+
+TODO
+
+批量捕获：
+
+- 按值拷贝捕获所有用到的变量 `[=]`
+- 按引用捕获所有用到的变量 `[&]`
+
+TODO：与语法糖解构后比较
+
+### 类型推导
+
+#### `auto` 推导返回类型
+
+lambda 函数可以通过在参数列表后使用 `->` 指定函数返回类型：
+
+```cpp
+auto lambda = [] (int a) -> int {
+    return a;
+};
+int i = lambda();
+```
+
+如果不指定返回类型，默认是 `-> auto`，也就是和返回类型声明为 `auto` 一样，会自动根据表达式为你推导返回类型：
+
+```cpp
+auto lambda = [] (int a) {
+    return a;
+};
+// 等价于：
+auto lambda = [] (int a) -> int {
+    return a;
+};
+```
+
+```cpp
+auto lambda2 = [] (int a) {
+    return a * 2.0; // 此表达式返回 double
+};
+// 等价于：
+auto lambda2 = [] (int a) -> double { // 所以 auto 推导出的返回类型也为 double
+    return a * 2.0;
+};
+```
+
+#### `auto` 推导参数类型
+
+TODO
+
+#### `auto` 实现多次实例化的应用
+
+#### `auto &` 与 `auto const &` 的应用
+
+#### `auto &&` 万能引用
+
+#### `decltype(auto)` 保留真正的原始返回类型
+
+## lambda 常见的三大用法
+
+### 储存一个函数对象做局部变量
+
+我们总是用 `auto` 来保存一个函数对象作为局部变量，这会自动推导 lambda 的匿名类型。
+
+为什么不能显式写出类型名字？因为 lambda 的类型是匿名的，你无法写出类型名，只能通过 `auto` 推导。
+
+```cpp
+int b = 2;
+auto lambda = [b] (int a) {
+    return a + b;
+};
+```
+
+> {{ icon.fun }} 这也是为什么 C++11 同时引入 `auto` 和 lambda 语法的原因。
+
+如果你实在需要显式的类名，那就需要使用 `std::function` 容器。虽然 lambda 表达式产生的类型是匿名的，但是该类型符合“可调用”的约束，可以被 `std::function` 容器接纳。
+
+> {{ icon.tip }} 即 lambda 类型可隐式转换为相应参数列表的 `std::function` 容器。因为 `std::function<Ret(Args)>` 容器可以接纳任何“可接受 `(Args...)` 参数调用并返回 `Ret` 类型”的任意函数对象。
+
+```cpp
+int b = 2;
+std::function<void(int)> lambda = [b] (int a) {
+    return a + b;
+};
+```
+
+例如当我们需要把 lambda 对象推入 `vector` 等容器中时，就需要显式写出函数对象的类型，此时万能函数对象容器 `std::function` 就能派上用场了：
+
+```cpp
+// vector<auto> lambda_list;             // 错误：不支持的语法
+vector<function<void(int)>> lambda_list; // OK
+
+int b = 2;
+lambda_list.push_back([b] (int a) {
+    return a + b;
+};
+lambda_list.push_back([b] (int a) {
+    return a * b;
+};
+
+for (auto lambda: lambda_list) {
+    int ret = lambda(2);
+    fmt::println("{}", ret);
+}
+```
+
+#### 应用案例
+
+##### 代码复用
+
+TODO
+
+`[&]` 和 `[=]`
+
+##### 就地调用 lambda-idiom
+
+TODO
+
+#### 注意捕获变量的生命周期
+
+新手用 lambda 常见的错误就是搞不清捕获变量的生命周期，总是想当然地无脑用 `[&]`，非常危险。
+
+如果你有“自知之明”，自知不熟悉生命周期分析，那就全部 `[=]`。
+
+> {{ icon.tip }} 等我们稍后的 [生命周期专题课程](cpp_lifetime.md) 中介绍。
+
+实际上，`[=]` 应该是你默认的捕获方式。
+
+只有当类型无法拷贝会深拷贝成本过高时，才会选择性地把一些可以改成引用捕获的部分 lambda，使用 `[&]` 来捕获部分需要避免拷贝的变量，或者使用 `shared_ptr` 配合 `[=]` 将深拷贝化为浅拷贝。
+
+> {{ icon.fun }} 一些习惯了 Python、JS 等全员 `shared_ptr` 的垃圾回收语言巨婴，一上来就全部无脑 `[&]`，用实际行动证明了智商和勇气成反比定律。
+
+好消息是，对于代码复用和就地调用的情况，lambda 对象的生命都不会出函数体，可以安全地改成按引用捕获 `[&]`。
+
+但是对于下面两种情况（作为参数传入和作为返回值），就不一定有这么幸运了。
+
+总之，无论如何要保证 lambda 对象的生命周期 小于等于 按引用捕获的所有变量的生命周期。如果做不到，那就得把这些可能超出的变量改成按值捕获 `[=]`。
+
+### 返回一个函数对象做返回值
+
+如果你想让返回一个函数对象，分为两种情况：
+
+就地定义（声明与定义合体）的函数，建议填写 `auto` 为返回值类型，自动推导 lambda 的匿名类型（因为你无法写出具体类型名）。
+
+然后，在 `return` 语句中就地写出 lambda 表达式即可：
+
+```cpp
+auto make_adder(int x) {
+    return [x] (int y) {
+        return x + y;
+    };
+}
+```
+
+分离声明与定义的函数，无法使用 `auto` 推导返回类型，不得不使用万能的函数容器 `std::function` 来擦屁股：
+
+```cpp
+// adder.h
+std::function<int()> make_adder(int x);
+
+// adder.cpp
+std::function<int()> make_adder(int x) {
+    return [x] (int y) {
+        return x + y;
+    };
+}
+```
+
+“函数返回一个函数对象”，这种用法在函数式编程非常常见。
+
+#### 应用案例
+
+例如上述的 `make_adder` 等于绑定了一个固定参数 `x` 的加法函数，之后每次调用这个返回的函数对象，就固定增加之前在 `make_adder` 参数中 `x` 的增量了。
+
+TODO
+
+#### 注意捕获变量的生命周期
+
+此类“返回一个函数对象”的写法，其 lambda 捕获必须是按值捕获的！
+
+否则，因为调用者调用返回的函数对象时，局部变量和实参所对应的函数局部栈空间已经释放，相当于在 lambda 体内存有空悬引用，导致出现未定义行为（要么直接崩溃，要么非常隐蔽地留下内存非法访问的隐患）。
+
+```cpp
+auto make_adder(int x) {
+    return [x] (int y) {
+        return x + y;
+    };
+}
+
+int main() { // 我是调用者
+    auto adder = make_adder(2);
+    adder(3);  // 2 + 3 = 5
+}
+```
+
+### 接受一个函数对象做参数
+
+TODO：代码
+
+#### 应用案例
+
+TODO：策略模式
+
+TODO：延迟回调
+
+#### 注意捕获变量的生命周期
+
+函数对象做参数的生命周期问题，需要分就地调用和延迟调用两种情况讨论。
+
+### 生命周期问题总结：何时使用 `[=]` 或 `[&]`
+
+如果你的智力暂不足以搞懂生命周期分析，没关系，始终使用 `[=]` 肯定没错。
+
+> {{ icon.tip }} 一个同学询问：我口渴！在不知道他的耐受度的情况下，我肯定是直接给他吃水，而不是给他吃酒精。虽然一些孝子曰“适量”“适度”“计量”各种一连串附加条件下，宣称“酒精也是安全的”。但是“水永远是安全的”，“永远”，那我直接给他喝水，是肯定不会错的。等你长大成年了，有辨别能力了，再去根据自己的小计机瘙痒程度，选择性地喝有机溶剂。此处 `[=]` 就是这个万能的水，虽然不一定高效，但是肯定没错。初学者总是从 `[=]` 用起，等学明白了，再来尝试突破“小计机性能焦虑优化”也不迟。
+
+如果你自认为能分得清：
+
+- 在当前函数体内创建，当前函数体内立即调用，可以引用捕获 `[&]`，但值捕获 `[=]` 也没错。
+- 返回一个 lambda，必须值捕获 `[=]`。
+- 接受一个 lambda 做参数，需要进一步分为两种情况：
+    - 在当前函数体内立即调用，可以引用捕获 `[&]`，但值捕获 `[=]` 也没错。
+    - 作为回调函数，延迟调用，那就必须值捕获 `[=]`。
+
+以上四种情况，分别代码演示：
+
+```cpp
+void func() {
+    int i = 1;
+    auto lambda = [&] () { return i; };
+    lambda();
+}
+
+int main() {
+    func();
+}
+```
+
+```cpp
+auto func() {
+    int i = 1;
+    return [=] () { return i; };
+}
+
+int main() {
+    auto lambda = func();
+    lambda();
+}
+```
+
+```cpp
+auto func(auto lambda) {
+    lambda();
+}
+
+int main() {
+    int i = 1;
+    func([&] () { return i; });
+}
+```
+
+```cpp
+vector<function<int()>> g_callbacks;
+auto func(auto lambda) {
+    g_callbacks.push_back(lambda);
+}
+
+void init() {
+    int i = 1;
+    func([=] () { return i; });
+}
+
+int main() {
+    init();
+    for (auto cb: g_callbacks) {
+        cb();
+    }
+}
+```
+
+## lambda 进阶案例
+
+### lambda 实现递归
+
+### lambda 避免全局重载函数捕获为变量时恼人的错误
+
+### lambda 配合 if-constexpr 实现编译期三目运算符
+
+### 推荐用 C++23 的 `std::move_only_function` 取代 `std::function`
+
+通过按值移动捕获，lambda 可以持有一个 unique_ptr 作为捕获变量。
+
+TODO
+
+### 用于类模板参数的仿函数时，需与 `decltype` 的配合
+
+### 无状态 lambda 隐式转换为函数指针
+
+### 与 `std::variant` 配合实现动态多态
+
+TODO
+
+在之后的 `std::variant` 专题章节中会进一步介绍。
+
+### 配合 `shared_from_this` 实现延长 this 生命周期
+
+### `mutable` lambda 实现计数器
 
 ## bind 为函数对象绑定参数
 
