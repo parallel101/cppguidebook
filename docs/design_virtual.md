@@ -482,7 +482,7 @@ struct FilterInputerAdapter {
 
 ```cpp
 struct FilterStrategy {
-    virtual bool shouldDrop(int value) = 0;  // 返回 true 表示该值应该被丢弃
+    virtual bool shouldPass(int value) = 0;  // 返回 true 表示该值应该被保留
 };
 
 struct FilterStrategyAbove : FilterStrategy { // 大于一定值（threshold）才能通过
@@ -732,7 +732,6 @@ void player(Gun *gun) {
 
 player(new GunWithBullet<AK47Bullet>());
 player(new GunWithBullet<MagicBullet>());
-};
 ```
 
 这样就不必每次添加新子弹类型时，都得新建一个相应的枪类型了，进一步避免了代码重复。可见模板元编程完全可与传统面向对象强强联手。
@@ -1068,7 +1067,7 @@ struct Sprite {
     virtual void draw(glm::vec3 position) = 0;
 };
 
-struct FireSprite {
+struct FireSprite : Sprite {
     vector<char> fireTexture;
 
     FireSprite() : fireTexture(loadTexture("fire.jpg")) {}
@@ -1078,7 +1077,7 @@ struct FireSprite {
     }
 };
 
-struct IceSprite { // 假如寒冰弹需要两张贴图，也没问题！因为虚接口类允许子类有不同的成员，不同的结构体大小
+struct IceSprite : Sprite { // 假如寒冰弹需要两张贴图，也没问题！因为虚接口类允许子类有不同的成员，不同的结构体大小
     vector<char> iceTexture1;
     vector<char> iceTexture2;
 
