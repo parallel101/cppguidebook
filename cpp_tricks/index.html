@@ -185,6 +185,10 @@
 </li>
                                     
 <li>
+    <a href="../interview/" class="dropdown-item">小彭老师面试经验</a>
+</li>
+                                    
+<li>
     <a href="../recommend/" class="dropdown-item">参考资料与项目</a>
 </li>
                                 </ul>
@@ -754,13 +758,13 @@ assert(stu2.name == &quot;侯捷老师&quot;);
 <h2 id="inline">类内静态成员 inline</h2>
 <p>在头文件中定义结构体的 static 成员时：</p>
 <pre><code class="language-cpp">struct Class {
-    static Class instance;
+    static int member;
 };
 </code></pre>
-<p>会报错 <code>undefined reference to 'Class::instance'</code>。这是说的你需要找个 .cpp 文件，写出 <code>Class Class::instance</code> 才能消除该错误。</p>
+<p>会报错 <code>undefined reference to 'Class::member'</code>。这是说的你需要找个 .cpp 文件，写出 <code>int Class::member</code> 才能消除该错误。</p>
 <p>C++17 中，只需加个 <code>inline</code> 就能解决！</p>
 <pre><code class="language-cpp">struct Class {
-    inline static Class instance;
+    inline static int member;
 };
 </code></pre>
 <h2 id="_6">别再 <code>[]</code> 啦！</h2>
