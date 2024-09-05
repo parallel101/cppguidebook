@@ -71,13 +71,13 @@ g++ main.cpp -o main
 Windows 上：
 
 ```bash
-clang++.exe -c main.cpp -o main.exe
+clang++.exe main.cpp -o main.exe
 ```
 
 Linux / MacOS 上：
 
 ```bash
-clang++ -c main.cpp -o main
+clang++ main.cpp -o main
 ```
 
 ## 编译器选项
@@ -87,7 +87,7 @@ clang++ -c main.cpp -o main
 例如当我们说“编译这个源码时，我用了 GCC 编译器，`-O3` 和 `-std=c++20` 选项”，说的就是把这些选项加到了 `g++` 的命令行参数中：
 
 ```bash
-g++ -O3 -std=c++20 -c main.cpp -o main
+g++ -O3 -std=c++20 main.cpp -o main
 ```
 
 其中 Clang 和 GCC 的编译器选项有很大交集。而 MSVC 基本自成一派。
@@ -109,13 +109,13 @@ MSVC：`/std:c++98`、`/std:c++11`、`/std:c++14`、`/std:c++17`、`/std:c++20`�
 GCC（Linux）：
 
 ```bash
-g++ -std=c++20 -c main.cpp -o main
+g++ -std=c++20 main.cpp -o main
 ```
 
 Clang（Linux）：
 
 ```bash
-clang++ -std=c++20 -c main.cpp -o main
+clang++ -std=c++20 main.cpp -o main
 ```
 
 MSVC（Windows）：
