@@ -51,7 +51,7 @@ C++ 源码 `.cpp` 是写给人类看的！计算机并不认识，计算机只�
 ### MSVC
 
 ```bash
-cl.exe /c main.cpp 
+cl.exe main.cpp
 ```
 
 这样就可以得到可执行文件 `main.exe` 了。
@@ -59,7 +59,7 @@ cl.exe /c main.cpp
 ### GCC
 
 ```bash
-g++ -c main.cpp -o main
+g++ main.cpp -o main
 ```
 
 这样就可以得到可执行文件 `main` 了。
