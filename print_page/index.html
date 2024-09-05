@@ -413,7 +413,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年09月04日 20:28:49 (UTC+08:00)</p>
+<p>更新时间：2024年09月05日 13:49:05 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -11907,7 +11907,7 @@ reduce(new VectorInputer(), new SumReducer());  // 从 vector 读，但无需截
 </code></pre>
 <p>改进：Filter 的条件不应为写死的 <code>tmp &gt;= 0</code>，而应该是传入一个 FilterStrategy，允许用户扩展。</p>
 <pre><code class="language-cpp">struct FilterStrategy {
-    virtual bool shouldDrop(int value) = 0;  // 返回 true 表示该值应该被丢弃
+    virtual bool shouldPass(int value) = 0;  // 返回 true 表示该值应该被保留
 };
 
 struct FilterStrategyAbove : FilterStrategy { // 大于一定值（threshold）才能通过
@@ -12116,7 +12116,6 @@ void player(Gun *gun) {
 
 player(new GunWithBullet&lt;AK47Bullet&gt;());
 player(new GunWithBullet&lt;MagicBullet&gt;());
-};
 </code></pre>
 <p>这样就不必每次添加新子弹类型时，都得新建一个相应的枪类型了，进一步避免了代码重复。可见模板元编程完全可与传统面向对象强强联手。</p>
 <h2 id="design_virtual-_8">超级工厂模式</h2>
@@ -12403,7 +12402,7 @@ Bullet 类只需要专注于位置、速度的更新即可，不必去操心着�
     virtual void draw(glm::vec3 position) = 0;
 };
 
-struct FireSprite {
+struct FireSprite : Sprite {
     vector&lt;char&gt; fireTexture;
 
     FireSprite() : fireTexture(loadTexture(&quot;fire.jpg&quot;)) {}
@@ -12413,7 +12412,7 @@ struct FireSprite {
     }
 };
 
-struct IceSprite { // 假如寒冰弹需要两张贴图，也没问题！因为虚接口类允许子类有不同的成员，不同的结构体大小
+struct IceSprite : Sprite { // 假如寒冰弹需要两张贴图，也没问题！因为虚接口类允许子类有不同的成员，不同的结构体大小
     vector&lt;char&gt; iceTexture1;
     vector&lt;char&gt; iceTexture2;
 
