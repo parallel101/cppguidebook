@@ -370,15 +370,15 @@
 </blockquote>
 <h3 id="clang">Clang</h3>
 <p>Windows 上：</p>
-<pre><code class="language-bash">clang++.exe -c main.cpp -o main.exe
+<pre><code class="language-bash">clang++.exe main.cpp -o main.exe
 </code></pre>
 <p>Linux / MacOS 上：</p>
-<pre><code class="language-bash">clang++ -c main.cpp -o main
+<pre><code class="language-bash">clang++ main.cpp -o main
 </code></pre>
 <h2 id="_5">编译器选项</h2>
 <p>编译器选项是用来控制编译器的行为的。不同的编译器有不同的选项，语法有微妙的不同，但大致功效相同。</p>
 <p>例如当我们说“编译这个源码时，我用了 GCC 编译器，<code>-O3</code> 和 <code>-std=c++20</code> 选项”，说的就是把这些选项加到了 <code>g++</code> 的命令行参数中：</p>
-<pre><code class="language-bash">g++ -O3 -std=c++20 -c main.cpp -o main
+<pre><code class="language-bash">g++ -O3 -std=c++20 main.cpp -o main
 </code></pre>
 <p>其中 Clang 和 GCC 的编译器选项有很大交集。而 MSVC 基本自成一派。</p>
 <p>Clang 和 GCC 的选项都是 <code>-xxx</code> 的形式，MSVC 的选项是 <code>/xxx</code> 的形式。</p>
@@ -389,10 +389,10 @@
 <p>MSVC：<code>/std:c++98</code>、<code>/std:c++11</code>、<code>/std:c++14</code>、<code>/std:c++17</code>、<code>/std:c++20</code>、<code>/std:c++latest</code></p>
 <p>例如要编译一个 C++20 源码文件，分别用 GCC、Clang、MSVC：</p>
 <p>GCC（Linux）：</p>
-<pre><code class="language-bash">g++ -std=c++20 -c main.cpp -o main
+<pre><code class="language-bash">g++ -std=c++20 main.cpp -o main
 </code></pre>
 <p>Clang（Linux）：</p>
-<pre><code class="language-bash">clang++ -std=c++20 -c main.cpp -o main
+<pre><code class="language-bash">clang++ -std=c++20 main.cpp -o main
 </code></pre>
 <p>MSVC（Windows）：</p>
 <pre><code class="language-bash">cl.exe /std:c++20 /c main.cpp
