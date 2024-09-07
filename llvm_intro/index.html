@@ -80,6 +80,10 @@
 </li>
                                     
 <li>
+    <a href="../auto/" class="dropdown-item">`auto` 神教 (未完工)</a>
+</li>
+                                    
+<li>
     <a href="../symbols/" class="dropdown-item">重新认识声明与定义（未完工）</a>
 </li>
                                     
@@ -338,14 +342,10 @@
 </ul>
 </li>
 <li><a href="#_18">不区分整数类型有无符号</a></li>
-<li><a href="#_19">定义与使用</a><ul>
-<li><a href="#-">“使用-定义”映射</a></li>
-<li><a href="#-_1">“定义-使用”映射</a></li>
+<li><a href="#_19">定义与使用</a></li>
 </ul>
 </li>
 <li><a href="#pass">优化与分析 pass</a></li>
-</ul>
-</li>
 <li><a href="#llvm-ir_1">LLVM IR 案例分析</a><ul>
 <li><a href="#target">target 指定目标平台信息</a></li>
 <li><a href="#define">define 定义函数</a></li>
@@ -977,7 +977,7 @@ return y;
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> “定义-使用”和“使用定义”是两个互逆的映射。不过要注意，他们都不是一一映射：一个寄存器可以被多个其他寄存器重复使用，一个寄存器的定义也可能使用到了多个其他寄存器。</p>
 </blockquote>
-<h5 id="-">“使用-定义”映射</h5>
+<p><strong>“使用-定义”映射</strong></p>
 <p>由于指令在他的源操作数中指定了操作数来自哪个寄存器，“使用-定义”关系是 IR 天生自带的，直接通过 IR 节点的 <code>op</code> 成员函数，就能查到他使用了哪些其他寄存器（或常数）。</p>
 <pre><code class="language-cpp">llvm::Instruction *pi = ...;
 for (llvm::Use &amp;U: pi-&gt;operands()) {
@@ -985,10 +985,10 @@ for (llvm::Use &amp;U: pi-&gt;operands()) {
     // v 使用了 pi
 }
 </code></pre>
-<h5 id="-_1">“定义-使用”映射</h5>
+<p><strong>“定义-使用”映射</strong></p>
 <p>而“定义-使用”关系，就需要我们自己构建了。</p>
 <p>幸运的是，LLVM 给我们提供了一个方便的分析工具，来自动构建这个关系：<code>def-use</code> pass。</p>
-<h4 id="pass">优化与分析 pass</h4>
+<h3 id="pass">优化与分析 pass</h3>
 <p>LLVM 中的 pass，是指一组对 IR 进行操作的函数。pass 分为分析类 pass 和优化类 pass。</p>
 <ul>
 <li>分析类 pass 只是帮助我们观察 IR，获得某些概括信息，并不修改 IR。现在我们要用的 <code>def-use</code> pass 就属于分析类 pass，他通过一次遍历找到所有的“定义-使用”映射关系。只要 IR 不修改，就可以缓存之前的结果，供后来者重复使用。</li>
@@ -1473,6 +1473,9 @@ attributes #0 = { mustprogress noinline norecurse nounwind optnone sspstrong uwt
 </ul>
 <pre><code class="language-bash">llvm-dis test.bc -o test.ll
 </code></pre>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 再次提醒：这些是 LLVM 内部的 IR 的两种形式，并不是真正的汇编和机器码。</p>
+</blockquote>
 <h4 id="_27">一一对应的翻译关系</h4>
 <p>IR 字节码和 IR 汇编的关系，正如 x86 汇编和 x86 机器码的关系，之间是一一对应的翻译关系。</p>
 <p>IR 字节码是二进制的，对计算机友好；而 IR 汇编是人类可读的 ASCII 字符，方便人类阅读和调试，他们本质上都是 IR。</p>

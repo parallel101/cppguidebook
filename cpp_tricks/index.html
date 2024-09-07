@@ -80,6 +80,10 @@
 </li>
                                     
 <li>
+    <a href="../auto/" class="dropdown-item">`auto` 神教 (未完工)</a>
+</li>
+                                    
+<li>
     <a href="../symbols/" class="dropdown-item">重新认识声明与定义（未完工）</a>
 </li>
                                     
@@ -428,6 +432,26 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-bs-level="2"><a href="#vector-unordered_map-lru-cache" class="nav-link">vector + unordered_map = LRU cache</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#lambda-unique_ptr-function" class="nav-link">Lambda 捕获 unique_ptr 导致 function 报错怎么办</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_15" class="nav-link">多线程通信应基于队列，而不是共享全局变量</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#raii-finally" class="nav-link">RAII 的 finally</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#swap-mutex" class="nav-link">swap 缩小 mutex 区间代价</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -491,6 +515,11 @@
 <li><a href="#locale-utf8_1">设置 locale 为 .utf8 解决编码问题</a></li>
 <li><a href="#this_1">成员函数针对 this 的移动重载</a></li>
 <li><a href="#bit-field">位域（bit-field）</a></li>
+<li><a href="#vector-unordered_map-lru-cache">vector + unordered_map = LRU cache</a></li>
+<li><a href="#lambda-unique_ptr-function">Lambda 捕获 unique_ptr 导致 function 报错怎么办</a></li>
+<li><a href="#_15">多线程通信应基于队列，而不是共享全局变量</a></li>
+<li><a href="#raii-finally">RAII 的 finally</a></li>
+<li><a href="#swap-mutex">swap 缩小 mutex 区间代价</a></li>
 </ul>
 </li>
 </ul>
@@ -1872,15 +1901,11 @@ f.b; // 0x2
 int a = f &amp; 0xF; // 0x1
 int b = f &gt;&gt; 4;  // 0x2
 </code></pre>
-<!-- ## vector + unordered_map = LRU cache -->
-<!--  -->
-<!-- ## Lambda 捕获 unique_ptr 导致 function 报错怎么办 -->
-<!--  -->
-<!-- ## 多线程通信应基于队列，而不是共享全局变量 -->
-<!--  -->
-<!-- ## RAII 的 finally -->
-<!--  -->
-<!-- ## swap 缩小 mutex 区间代价 --></div>
+<h2 id="vector-unordered_map-lru-cache">vector + unordered_map = LRU cache</h2>
+<h2 id="lambda-unique_ptr-function">Lambda 捕获 unique_ptr 导致 function 报错怎么办</h2>
+<h2 id="_15">多线程通信应基于队列，而不是共享全局变量</h2>
+<h2 id="raii-finally">RAII 的 finally</h2>
+<h2 id="swap-mutex">swap 缩小 mutex 区间代价</h2></div>
             </div>
         </div>
 
