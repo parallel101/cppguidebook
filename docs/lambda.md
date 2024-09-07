@@ -1303,23 +1303,203 @@ fmt::println("lambda.x = {}", lambda.x); // 编译错误💣编译器产生的�
 一个变量的三种捕获方式：
 
 - 按值拷贝捕获 `[x]`
-- 按值移动捕获 `[x = std::move(x)]`
 - 按引用捕获 `[&x]`
+- 按值移动捕获 `[x = std::move(x)]`
+- 按自定义表达式捕获 `[x = ...]`
 
 批量捕获：
 
 - 按值拷贝捕获所有用到的变量 `[=]`
 - 按引用捕获所有用到的变量 `[&]`
+- 多个捕获 + 默认捕获方式 `[x, y, &]` 或 `[&x, &y, =]`
 
-按值拷贝捕获：
+#### 按值拷贝捕获
+
+语法：`[变量名]`
+
+按值拷贝捕获的变量，在 lambda 对象创建时，会拷贝一份捕获的变量。
+
+lambda 捕获的变量 x 与原先 main 函数中的 x 已经是两个不同的变量，对 main 函数中 x 的修改不会影响 lambda 捕获 x 的值。
+
+main 中的修改对 lambda 不可见。
 
 ```cpp
-int x = 4;
-auto lambda = [x] (int i) {
-};
+int main() {
+    int x = 985;
+    auto lambda = [x] (int i) {
+        fmt::println("in lambda: x = {}", x);
+    };
+    fmt::println("in main: x = {}", x);
+    lambda();
+    x = 211;
+    fmt::println("in main: x = {}", x);
+    lambda();
+}
 ```
 
-### 类型推导
+输出：
+
+```
+in main: x = 985
+in lambda: x = 985
+in main: x = 211
+in lambda: x = 985
+```
+
+演示：lambda 中的修改对 main 不可见。
+
+```cpp
+int main() {
+    int x = 985;
+    auto lambda = [x] (int i) mutable {
+        fmt::println("in lambda: x = {}", x);
+        x = 211;
+    };
+    fmt::println("in main: x = {}", x);
+    lambda();
+    fmt::println("in main: x = {}", x);
+    lambda();
+}
+```
+
+> {{ icon.tip }} 由于 lambda 按值捕获的成员默认都是不可修改（`const`），需要 `mutable` 才能修改按值捕获的成员。而按引用捕获就不需要 `mutable`，因为虽然 lambda 本身不可修改，但他指向的东西可以修改呀！
+
+输出：
+
+```
+in main: x = 985
+in lambda: x = 985
+in main: x = 985
+in lambda: x = 211
+```
+
+演示：main 中 x 生命周期结束后，lambda 中的 x 依然有效。
+
+```cpp
+int main() {
+    std::function<void(int)> lambda;
+    {
+        int x = 985;
+        lambda = [x] (int i) {
+            fmt::println("in lambda: x = {}", x);
+        };
+        fmt::println("in main: x = {}", x);
+        lambda();
+    }
+    fmt::println("in main: x 已经析构");
+    lambda();
+}
+```
+
+输出：
+
+```
+in main: x = 985
+in lambda: x = 985
+in main: x 已经析构
+in lambda: x = 985
+```
+
+#### 按引用捕获
+
+语法：`[&变量名]`
+
+按引用捕获的变量，在 lambda 对象创建时，会创建一份指向变量的引用。
+
+lambda 捕获的变量引用 &x 与原先 main 函数中的 x 是同一个变量，对 main 函数中 x 的修改会直接影响 lambda 捕获中 x 的值，反之亦然。
+
+演示：main 中的修改对 lambda 可见。
+
+```cpp
+int main() {
+    int x = 985;
+    auto lambda = [&x] (int i) {
+        fmt::println("in lambda: x = {}", x);
+    };
+    fmt::println("in main: x = {}", x);
+    lambda();
+    x = 211;
+    fmt::println("in main: x = {}", x);
+    lambda();
+}
+```
+
+输出：
+
+```
+in main: x = 985
+in lambda: x = 985
+in main: x = 211
+in lambda: x = 211
+```
+
+演示：lambda 中的修改对 main 也可见。
+
+```cpp
+int main() {
+    int x = 985;
+    auto lambda = [&x] (int i) {
+        fmt::println("in lambda: x = {}", x);
+        x = 211;
+    };
+    fmt::println("in main: x = {}", x);
+    lambda();
+    fmt::println("in main: x = {}", x);
+    lambda();
+}
+```
+
+输出：
+
+```
+in main: x = 985
+in lambda: x = 985
+in main: x = 211
+in lambda: x = 211
+```
+
+演示：main 中 x 生命周期结束后，lambda 中的 x 将成为危险的“空悬引用（dangling-reference）”！此时再尝试访问 x，将产生未定义行为。
+
+```cpp
+int main() {
+    std::function<void(int)> lambda;
+    {
+        int x = 985;
+        lambda = [&x] (int i) {
+            fmt::println("in lambda: x = {}", x);
+        };
+        fmt::println("in main: x = {}", x);
+        lambda();
+    }
+    fmt::println("in main: x 已经析构");
+    lambda();
+}
+```
+
+输出：
+
+```
+in main: x = 985
+in lambda: x = 985
+in main: x 已经析构
+in lambda: x = -858993460
+```
+
+> {{ icon.tip }} `-858993460` 为内存中的垃圾值，你读到的结果可能随平台，编译器版本，优化选项的不同而不同，正常读到 `985` 也是有可能的，开发者不能依赖此类随机性的结果。
+
+> {{ icon.fun }} 正常读到 985（大学）也是有可能的。
+
+> {{ icon.detail }} `-858993460` 是在 Windows 平台的调试模式下可能的输出，因为 Windows 倾向于把栈内存填满 `0xcccccccc` 以方便调试，其中 `0xcc` 刚好也是 `int3` 这条 x86 调试指令的二进制码，可能是为了避免指令指针执行到堆栈里去。
+
+#### 按值移动捕获
+
+TODO
+
+#### 自定义表达式捕获
+
+TODO
+
+### lambda 中的 `auto` 类型推导
 
 #### `auto` 推导返回类型
 
@@ -1332,25 +1512,85 @@ auto lambda = [] (int a) -> int {
 int i = lambda();
 ```
 
-如果不指定返回类型，默认是 `-> auto`，也就是和返回类型声明为 `auto` 一样，会自动根据表达式为你推导返回类型：
+如果返回类型省略不写，默认是 `-> auto`，也就是根据你的 return 语句自动推导返回类型。
 
 ```cpp
 auto lambda = [] (int a) {
     return a;
 };
 // 等价于：
-auto lambda = [] (int a) -> int {
+auto lambda = [] (int a) -> auto {
+    return a;
+};
+```
+
+和普通函数返回类型声明为 `auto` 一样，会自动根据表达式为你推导返回类型：
+
+```cpp
+auto lambda = [] (int a) {
+    return a; // 此表达式类型为 int
+};
+// 等价于：
+auto lambda = [] (int a) -> int { // 所以 auto 推导出的返回类型也是 int
     return a;
 };
 ```
 
 ```cpp
 auto lambda2 = [] (int a) {
-    return a * 2.0; // 此表达式返回 double
+    return a * 2.0; // 此返回表达式的类型为 double
 };
 // 等价于：
-auto lambda2 = [] (int a) -> double { // 所以 auto 推导出的返回类型也为 double
+auto lambda2 = [] (int a) -> double { // 所以 auto 推导出的返回类型也是 double
     return a * 2.0;
+};
+```
+
+如果没有返回语句，那么会推导为返回 `void` 类型的 lambda。
+
+```cpp
+auto lambda = [] (int a) {
+    fmt::println("a = {}", a);
+};
+// 等价于：
+auto lambda = [] (int a) -> void {
+    fmt::println("a = {}", a);
+};
+
+auto lambda = [] (int a) {
+    return;
+};
+// 等价于：
+auto lambda = [] (int a) -> void {
+    return;
+};
+```
+
+和函数的 `auto` 返回类型推导一样，当返回类型为 `auto` 的 lambda 具有多个返回语句时，必须保证所有分支上的返回值具有相同的类型，否则编译器报错，需要手动写出返回类型，或者把所有分支的返回值改成相同的。
+
+```cpp
+auto lambda_error = [] (double x) { // 编译错误：两个分支的返回类型不同，无法自动推导
+    if (x > 0) {
+        return x; // double
+    } else {
+        return 0; // int
+    }
+};
+
+auto lambda_ok = [] (double x) { // 编译通过
+    if (x > 0) {
+        return x;          // double
+    } else {
+        return (double)0; // double
+    }
+};
+
+auto lambda_also_ok = [] (double x) -> double { // 手动明确返回类型，编译也能通过
+    if (x > 0) {
+        return x; // double
+    } else {
+        return 0; // int，但会隐式转换为 double
+    }
 };
 ```
 
@@ -1358,7 +1598,7 @@ auto lambda2 = [] (int a) -> double { // 所以 auto 推导出的返回类型也
 
 TODO
 
-#### `auto` 实现多次实例化的应用
+#### `auto` 参数实现多次实例化的应用
 
 #### `auto &` 与 `auto const &` 的应用
 
@@ -1420,9 +1660,7 @@ for (auto lambda: lambda_list) {
 
 TODO
 
-`[&]` 和 `[=]`
-
-##### 就地调用 lambda-idiom
+##### 就地调用的 lambda-idiom
 
 TODO
 
@@ -1587,33 +1825,105 @@ int main() {
 }
 ```
 
-## lambda 进阶案例
+## lambda 用于 STL 模板的仿函数参数
 
-### lambda 实现递归
+分为两种情况：
 
-### lambda 避免全局重载函数捕获为变量时恼人的错误
+### 模板函数
 
-### lambda 配合 if-constexpr 实现编译期三目运算符
+模板函数比较简单，直接往函数参数中传入 lambda 对象即可。
 
-### 推荐用 C++23 的 `std::move_only_function` 取代 `std::function`
+`sort`：
 
-通过按值移动捕获，lambda 可以持有一个 unique_ptr 作为捕获变量。
+```cpp
+std::vector<int, int> a = {1, 4, 2, 8, 5, 7};
+auto comp = [] (int i, int j) {
+    return i < j;
+};
+std::sort(a.begin(), a.end(), comp);
+fmt::println("a = {}", a);
+```
 
-TODO
+效果：将 a 数组从大到小排序后打印。
 
-### 用于类模板参数的仿函数时，需与 `decltype` 的配合
+`shared_ptr`：
 
-### 无状态 lambda 隐式转换为函数指针
+```cpp
+auto deleter = [] (FILE *fp) {
+    fclose(fp);
+};
+std::shared_ptr<FILE> p(fopen("hello.txt", "r"), deleter);
+```
 
-### 与 `std::variant` 配合实现动态多态
+效果：当 p 的引用计数归零时，调用 `fclose(p.get())`。
 
-TODO
+### 模板类
 
-在之后的 `std::variant` 专题章节中会进一步介绍。
+而模板类则需要先在模板参数中指定类型，然后在构造函数中传入参数。
 
-### 配合 `shared_from_this` 实现延长 this 生命周期
+```cpp
+std::vector<int, int> a = {1, 4, 2, 8, 5, 7};
+auto comp = [] (int i, int j) {
+    return i < j;
+};
+std::set<int, decltype(comp)> sorted(comp);
+sorted.assign(a.begin(), a.end());
+a.assign(sorted.begin(), sorted.end());
+fmt::println("a = {}", a);
+```
 
-### `mutable` lambda 实现计数器
+效果：利用 `set` 容器有序的特点，将 a 数组从大到小排序后打印。
+
+`unique_ptr`：
+
+```cpp
+auto deleter = [] (FILE *fp) {
+    fclose(fp);
+};
+std::unique_ptr<FILE, decltype(deleter)> p(fopen("hello.txt", "r"), deleter);
+```
+
+效果：当 p 析构时，调用 `fclose(p.get())`。
+
+### lambda 在 STL 中的使用案例
+
+```cpp
+TODO: count_if, erase_if, argsort
+```
+
+### 标准库自带的运算符仿函数
+
+二元运算符
+
+| 运算符 | 仿函数类型 |
+|-|-|
+|`a < b`|`std::less`|
+|`a > b`|`std::greater`|
+|`a <= b`|`std::less_equal`|
+|`a >= b`|`std::greater_equal`|
+|`a == b`|`std::equal_to`|
+|`a != b`|`std::not_equal_to`|
+|`a <=> b`|`std::compare_three_way` (C++20)|
+|`a && b`|`std::logical_and`|
+|`a \|\| b`|`std::logical_or`|
+|`a & b`|`std::bit_and`|
+|`a \| b`|`std::bit_or`|
+|`a ^ b`|`std::bit_xor`|
+|`a + b`|`std::plus`|
+|`a - b`|`std::minus`|
+|`a * b`|`std::multiplies`|
+|`a / b`|`std::divides`|
+|`a % b`|`std::modulus`|
+
+
+一元运算符
+
+| 运算符 | 仿函数类型 |
+|-|-|
+|`!a`|`std::logical_not`|
+|`~a`|`std::bit_not`|
+|`-a`|`std::negate`|
+|`a`|`std::identity`|
 
 ## bind 为函数对象绑定参数
 
@@ -2043,10 +2353,38 @@ struct Class {
 }
 ```
 
+### bind 与标准库自带的运算符仿函数配合
+
+TODO：`std::less` 和 `std::bind`
+
 ### 函数指针是 C 语言陋习，改掉
 
-## 在 STL 算法模板库中的应用
+## lambda 进阶案例
 
-### 标准库自带的运算符仿函数
+### lambda 实现递归
 
-TODO：`std::less`
+### lambda 避免全局重载函数捕获为变量时恼人的错误
+
+### lambda 配合 if-constexpr 实现编译期三目运算符
+
+### 推荐用 C++23 的 `std::move_only_function` 取代 `std::function`
+
+通过按值移动捕获 `[p = std::move(p)]`，lambda 可以持有一个 unique_ptr 作为捕获变量。
+
+但是，我们会发现，这样创建出来的 lambda，存入 `std::function` 时会报错：
+
+TODO: 代码
+
+### 无状态 lambda 隐式转换为函数指针
+
+### 与 `std::variant` 和 `std::visit` 配合实现动态多态
+
+TODO: 代码案例
+
+在之后的 [`std::variant` 专题章节](design_variant.md)中会进一步介绍。
+
+### 配合 `shared_from_this` 实现延长 this 生命周期
+
+### `mutable` lambda 实现计数器
+
+### C++20 中的 lambda 扩展用法
