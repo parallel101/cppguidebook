@@ -1889,12 +1889,12 @@ int a = f & 0xF; // 0x1
 int b = f >> 4;  // 0x2
 ```
 
-<!-- ## vector + unordered_map = LRU cache -->
-<!--  -->
-<!-- ## Lambda 捕获 unique_ptr 导致 function 报错怎么办 -->
-<!--  -->
-<!-- ## 多线程通信应基于队列，而不是共享全局变量 -->
-<!--  -->
-<!-- ## RAII 的 finally -->
-<!--  -->
-<!-- ## swap 缩小 mutex 区间代价 -->
+## vector + unordered_map = LRU cache
+
+## Lambda 捕获 unique_ptr 导致 function 报错怎么办
+
+## 多线程通信应基于队列，而不是共享全局变量
+
+## RAII 的 finally
+
+## swap 缩小 mutex 区间代价

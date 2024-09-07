@@ -1098,7 +1098,7 @@ int ret = lambda.operator() ();
 auto lambda = [] (int a) {
     return a + 1;
 };
-int ret = lambda();
+int ret = lambda(2);
 ```
 
 实际被编译器翻译成：
@@ -1110,7 +1110,7 @@ struct Lambda {
     }
 };
 Lambda lambda;
-int ret = lambda.operator() ();
+int ret = lambda.operator() (2);
 ```
 
 而捕获了变量的：
@@ -1120,7 +1120,7 @@ int x = 4;
 auto lambda = [&x] (int a) {
     return a + x;
 };
-int ret = lambda();
+int ret = lambda(2);
 ```
 
 实际被编译器翻译成：
@@ -1132,12 +1132,12 @@ struct Lambda {
     Lambda(int &x_) : x(x_) {}
 
     int operator() (int a) const {
-        return a + 1;
+        return a + x;
     }
 };
 int x = 4;
 Lambda lambda(x);
-int ret = lambda.operator() ();
+int ret = lambda.operator() (2);
 ```
 
 #### 闭包捕获变量的生命周期问题
@@ -1306,14 +1306,18 @@ fmt::println("lambda.x = {}", lambda.x); // 编译错误💣编译器产生的�
 - 按值移动捕获 `[x = std::move(x)]`
 - 按引用捕获 `[&x]`
 
-TODO
-
 批量捕获：
 
 - 按值拷贝捕获所有用到的变量 `[=]`
 - 按引用捕获所有用到的变量 `[&]`
 
-TODO：与语法糖解构后比较
+按值拷贝捕获：
+
+```cpp
+int x = 4;
+auto lambda = [x] (int i) {
+};
+```
 
 ### 类型推导
 
