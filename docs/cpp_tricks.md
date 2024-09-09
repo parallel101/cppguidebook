@@ -98,7 +98,7 @@ void file_put_content(std::string const &filename, std::string const &content) {
 
 这样就可以把整个文件读取到内存中，进行处理后再写回文件。
 
-> {{ icon.detail }} 用 `std::ios::binary` 选项打开文件，是为了避免文件中出现 `'\n'` 时，被 MSVC 标准库自动转换成 `'\r\n'`，以保证跨平台。
+> {{ icon.tip }} 推荐用 `std::ios::binary` 选项打开二进制文件，否则字符串中出现 `'\n'` 时，会被 MSVC 标准库自动转换成 `'\r\n'` 来写入，妨碍我们跨平台。
 
 ## 别再写构造函数啦！
 
@@ -1064,7 +1064,7 @@ using BigType = array<int, 1000>;  // 4000 字节大小的平坦类型
 
 using BigTypePtr = unique_ptr<BigType>;
 
-vector<BigType> arr;
+vector<BigTypePtr> arr;
 
 void func(BigTypePtr x) {
     arr.push_back(std::move(x));  // 只拷贝 8 字节的指针，其指向的 4000 字节不用深拷贝了，直接移动所有权给 vector 里的 BigTypePtr 智能指针
@@ -1848,7 +1848,7 @@ auto str = oss.str();
 auto str = (std::ostringstream() << "你好，" << name << "！答案是 " << answer << "，十六进制：0x" << std::hex << std::setfill('0') << std::setw(2) << answer << "\n").str();
 ```
 
-## ADL 机制
+## ADL 机制实现静态多态
 
 TODO
 
