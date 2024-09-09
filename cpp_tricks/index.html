@@ -408,7 +408,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#adl" class="nav-link">ADL 机制</a>
+            <li class="nav-item" data-bs-level="2"><a href="#adl" class="nav-link">ADL 机制实现静态多态</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -509,7 +509,7 @@
 <li><a href="#_13">花括号实现安全的类型转换检查</a></li>
 <li><a href="#_14">临时右值转左值</a></li>
 <li><a href="#ostringstream">ostringstream 格式化字符串</a></li>
-<li><a href="#adl">ADL 机制</a></li>
+<li><a href="#adl">ADL 机制实现静态多态</a></li>
 <li><a href="#shared_from_this">shared_from_this</a></li>
 <li><a href="#requires">requires 语法检测是否存在指定成员函数</a></li>
 <li><a href="#locale-utf8_1">设置 locale 为 .utf8 解决编码问题</a></li>
@@ -594,7 +594,7 @@ void file_put_content(std::string const &amp;filename, std::string const &amp;co
 </code></pre>
 <p>这样就可以把整个文件读取到内存中，进行处理后再写回文件。</p>
 <blockquote>
-<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 用 <code>std::ios::binary</code> 选项打开文件，是为了避免文件中出现 <code>'\n'</code> 时，被 MSVC 标准库自动转换成 <code>'\r\n'</code>，以保证跨平台。</p>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 推荐用 <code>std::ios::binary</code> 选项打开二进制文件，否则字符串中出现 <code>'\n'</code> 时，会被 MSVC 标准库自动转换成 <code>'\r\n'</code> 来写入，妨碍我们跨平台。</p>
 </blockquote>
 <h2 id="_3">别再写构造函数啦！</h2>
 <pre><code class="language-cpp">// C++98
@@ -1288,7 +1288,7 @@ int main() {
 
 using BigTypePtr = unique_ptr&lt;BigType&gt;;
 
-vector&lt;BigType&gt; arr;
+vector&lt;BigTypePtr&gt; arr;
 
 void func(BigTypePtr x) {
     arr.push_back(std::move(x));  // 只拷贝 8 字节的指针，其指向的 4000 字节不用深拷贝了，直接移动所有权给 vector 里的 BigTypePtr 智能指针
@@ -1875,7 +1875,7 @@ auto str = oss.str();
 <p>利用临时变量语法，可以浓缩写在一行里，做个 format 拙劣的模仿者：</p>
 <pre><code class="language-cpp">auto str = (std::ostringstream() &lt;&lt; &quot;你好，&quot; &lt;&lt; name &lt;&lt; &quot;！答案是 &quot; &lt;&lt; answer &lt;&lt; &quot;，十六进制：0x&quot; &lt;&lt; std::hex &lt;&lt; std::setfill('0') &lt;&lt; std::setw(2) &lt;&lt; answer &lt;&lt; &quot;\n&quot;).str();
 </code></pre>
-<h2 id="adl">ADL 机制</h2>
+<h2 id="adl">ADL 机制实现静态多态</h2>
 <p>TODO</p>
 <h2 id="shared_from_this">shared_from_this</h2>
 <h2 id="requires">requires 语法检测是否存在指定成员函数</h2>
