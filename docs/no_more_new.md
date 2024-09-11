@@ -203,7 +203,7 @@ some_c_function(foo.get());
 
 > {{ icon.detail }} 在[错误处理专题](error_code.md)中有进一步的详解。
 
-然而这有时我们会忘记在提前返回的分支中 delete 之前分配过的所有指向堆内存的指针。
+然而这有时我们会忘记在提前返回的分支中 delete 之前分配过的所有指向动态内存的指针。
 
 ```cpp
 int func() {
