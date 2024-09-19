@@ -421,7 +421,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年09月18日 12:29:27 (UTC+08:00)</p>
+<p>更新时间：2024年09月19日 10:55:53 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -7904,7 +7904,7 @@ typename map&lt;K, T&gt;::value_type;   // 不能省略
 typename map&lt;int, string&gt;::value_type; // 可以省略，但你加了也没关系
 </code></pre>
 <blockquote>
-<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 含有 T 的类型表达式称为 dependant-type，根本原因是因为在不知道具体是类型表达式还是值表达式的情况下，编译器无法区分模板的 <code>&lt;</code> 和小于符号 <code>&lt;</code>，以及类型的指针 <code>*</code> 和数值乘法 <code>*</code>。默认会认为是小于符号和数值乘法，加上 <code>typename</code> 后明确前面这一串是类型表达式，才知道这是模板的 <code>&lt;</code> 和指针的 <code>*</code>。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 含有 T 的类型表达式称为 dependent-type，根本原因是因为在不知道具体是类型表达式还是值表达式的情况下，编译器无法区分模板的 <code>&lt;</code> 和小于符号 <code>&lt;</code>，以及类型的指针 <code>*</code> 和数值乘法 <code>*</code>。默认会认为是小于符号和数值乘法，加上 <code>typename</code> 后明确前面这一串是类型表达式，才知道这是模板的 <code>&lt;</code> 和指针的 <code>*</code>。</p>
 </blockquote>
 <h3 id="stl_map-decltype">decltype 大法好</h3>
 <p>也有更直观的获取 STL 容器元素类型的方法：</p>
