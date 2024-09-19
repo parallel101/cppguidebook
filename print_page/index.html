@@ -421,7 +421,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年09月19日 10:56:23 (UTC+08:00)</p>
+<p>更新时间：2024年09月19日 11:52:45 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -1078,15 +1078,16 @@ static int f(int x) {}  // 函数声明并定义为“外部链接”
 <ul>
 <li><a href="#cpp_tricks-c">应知应会 C++ 小技巧</a><ul>
 <li><a href="#cpp_tricks-_1">交换两个变量</a></li>
-<li><a href="#cpp_tricks-raii">RAII 地分配一段内存空间</a></li>
-<li><a href="#cpp_tricks-_2">读取整个文件到字符串</a></li>
-<li><a href="#cpp_tricks-_3">别再写构造函数啦！</a></li>
-<li><a href="#cpp_tricks-_4">别再写拷贝构造函数啦！</a></li>
-<li><a href="#cpp_tricks-_5">提前返回</a></li>
+<li><a href="#cpp_tricks-_2">安全地分配一段内存空间</a></li>
+<li><a href="#cpp_tricks-_3">地板除与天花板除</a></li>
+<li><a href="#cpp_tricks-_4">读取整个文件到字符串</a></li>
+<li><a href="#cpp_tricks-_5">别再写构造函数啦！</a></li>
+<li><a href="#cpp_tricks-_6">别再写拷贝构造函数啦！</a></li>
+<li><a href="#cpp_tricks-_7">提前返回</a></li>
 <li><a href="#cpp_tricks-lambda">立即调用的 Lambda</a></li>
 <li><a href="#cpp_tricks-lambda_1">Lambda 复用代码</a></li>
 <li><a href="#cpp_tricks-inline">类内静态成员 inline</a></li>
-<li><a href="#cpp_tricks-_6">别再 [] 啦！</a></li>
+<li><a href="#cpp_tricks-_8">别再 [] 啦！</a></li>
 <li><a href="#cpp_tricks-make_pair">别再 make_pair 啦！</a></li>
 <li><a href="#cpp_tricks-insert">insert 不会替换现有值哦</a></li>
 <li><a href="#cpp_tricks-map">一边遍历 map，一边删除？</a></li>
@@ -1099,29 +1100,29 @@ static int f(int x) {}  // 函数声明并定义为“外部链接”
 <li><a href="#cpp_tricks-cout-endl">cout 不需要 endl</a></li>
 <li><a href="#cpp_tricks-cout">多线程中 cout 出现乱序？</a></li>
 <li><a href="#cpp_tricks-cerr-cout">cerr 与 cout 的抉择</a></li>
-<li><a href="#cpp_tricks-_7">智能指针防止大对象移动</a></li>
+<li><a href="#cpp_tricks-_9">智能指针防止大对象移动</a></li>
 <li><a href="#cpp_tricks-optional">optional 实现延迟初始化</a></li>
 <li><a href="#cpp_tricks-if-auto-while-auto">if-auto 与 while-auto</a></li>
 <li><a href="#cpp_tricks-bind-lambda">bind 是历史糟粕，应该由 Lambda 表达式取代</a><ul>
 <li><a href="#cpp_tricks-bind">bind 的历史</a></li>
 <li><a href="#cpp_tricks-thread">thread 膝盖中箭</a></li>
-<li><a href="#cpp_tricks-_8">举个绑定随机数生成器例子</a></li>
+<li><a href="#cpp_tricks-_10">举个绑定随机数生成器例子</a></li>
 </ul>
 </li>
 <li><a href="#cpp_tricks-forward-fwd">forward 迷惑性地不好用，建议改用 FWD 宏</a></li>
 <li><a href="#cpp_tricks-bind-lambda-bind_front">bind 绑定成员函数是陋习，改用 lambda 或 bind_front</a></li>
-<li><a href="#cpp_tricks-_9">救命！为什么我的全局函数不能作为函数对象？</a></li>
+<li><a href="#cpp_tricks-_11">救命！为什么我的全局函数不能作为函数对象？</a></li>
 <li><a href="#cpp_tricks-map-any">map + any 外挂属性</a></li>
 <li><a href="#cpp_tricks-shared_ptr-deleter">自定义 shared_ptr 的 deleter</a></li>
 <li><a href="#cpp_tricks-check_cuda">CHECK_CUDA 类错误检测宏</a></li>
-<li><a href="#cpp_tricks-_10">函数默认参数求值的位置是调用者</a></li>
+<li><a href="#cpp_tricks-_12">函数默认参数求值的位置是调用者</a></li>
 <li><a href="#cpp_tricks-locale-utf8">设置 locale 为 .utf8</a></li>
-<li><a href="#cpp_tricks-_11">花括号实现安全的类型转换检查</a></li>
+<li><a href="#cpp_tricks-_13">花括号实现安全的类型转换检查</a></li>
 <li><a href="#cpp_tricks-this">成员函数针对 this 的移动重载</a></li>
 <li><a href="#cpp_tricks-check_cuda_1">CHECK_CUDA 类错误检测宏</a></li>
-<li><a href="#cpp_tricks-_12">函数默认参数求值的位置是调用者</a></li>
-<li><a href="#cpp_tricks-_13">花括号实现安全的类型转换检查</a></li>
-<li><a href="#cpp_tricks-_14">临时右值转左值</a></li>
+<li><a href="#cpp_tricks-_14">函数默认参数求值的位置是调用者</a></li>
+<li><a href="#cpp_tricks-_15">花括号实现安全的类型转换检查</a></li>
+<li><a href="#cpp_tricks-_16">临时右值转左值</a></li>
 <li><a href="#cpp_tricks-ostringstream">ostringstream 格式化字符串</a></li>
 <li><a href="#cpp_tricks-adl">ADL 机制实现静态多态</a></li>
 <li><a href="#cpp_tricks-shared_from_this">shared_from_this</a></li>
@@ -1131,7 +1132,7 @@ static int f(int x) {}  // 函数声明并定义为“外部链接”
 <li><a href="#cpp_tricks-bit-field">位域（bit-field）</a></li>
 <li><a href="#cpp_tricks-vector-unordered_map-lru-cache">vector + unordered_map = LRU cache</a></li>
 <li><a href="#cpp_tricks-lambda-unique_ptr-function">Lambda 捕获 unique_ptr 导致 function 报错怎么办</a></li>
-<li><a href="#cpp_tricks-_15">多线程通信应基于队列，而不是共享全局变量</a></li>
+<li><a href="#cpp_tricks-_17">多线程通信应基于队列，而不是共享全局变量</a></li>
 <li><a href="#cpp_tricks-raii-finally">RAII 的 finally</a></li>
 <li><a href="#cpp_tricks-swap-mutex">swap 缩小 mutex 区间代价</a></li>
 </ul>
@@ -1154,8 +1155,8 @@ b = tmp;
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 只需要 <code>#include &lt;utility&gt;</code> 就可以使用！</p>
 </blockquote>
-<h2 id="cpp_tricks-raii">RAII 地分配一段内存空间</h2>
-<p>小彭老师：不要让我看到 new 和 delete。</p>
+<h2 id="cpp_tricks-_2">安全地分配一段内存空间</h2>
+<p>小彭老师：不要出现 new 和 delete，不安全。</p>
 <p>同学：我想要<strong>分配一段内存空间</strong>，你不让我 new，我还能怎么办呢？</p>
 <pre><code class="language-cpp">char *mem = new char[1024];   // 同学想要 1024 字节的缓冲区
 read(1, mem, 1024);           // 用于供 C 语言的读文件函数使用
@@ -1193,7 +1194,37 @@ read(1, mem.data(), mem.size());
     return ws;
 }
 </code></pre>
-<h2 id="cpp_tricks-_2">读取整个文件到字符串</h2>
+<h2 id="cpp_tricks-_3">地板除与天花板除</h2>
+<p>众所周知，C语言中 <code>int</code> 相除 <code>/</code>，得到的结果也是 <code>int</code>，如果除法产生了余数，那么只会保留整数部分。</p>
+<p>例如 <code>14 / 5</code>，本来应该得到 2.8。但是因为 C 语言的除法返回 <code>int</code>，结果会自动向下取整，导致得到 2。</p>
+<pre><code class="language-cpp">int a, b;
+int c = a / b;
+</code></pre>
+<p>等价于</p>
+<pre><code class="language-cpp">int c = floor((float)a / b);
+</code></pre>
+<p>如果 <code>a</code> 除以 <code>b</code> 除不尽，那么会找到比他大的第一个整数作为结果，这就是<strong>地板除 (floor div)</strong>。</p>
+<p>C 语言默认的就是地板除。</p>
+<p>如果我想要的是向上取整，该怎么写？</p>
+<p>最原始的写法是先转成浮点数来除，然后ceil函数向上取整：</p>
+<pre><code class="language-cpp">int c = ceil((float)a / b);
+</code></pre>
+<p>但是浮点数不仅低效，还有糟糕的浮点数精度误差！对于很大的整数（大于 <span class="arithmatex"><span class="MathJax_Preview">2^{23}</span><script type="math/tex">2^{23}</script></span>）会产生错误的结果。</p>
+<p>更合理的写法是先把 <code>a</code> 加上 <code>b - 1</code>，然后再下取整地除以 <code>b</code>：</p>
+<pre><code class="language-cpp">int c = (a + b - 1) / b;
+</code></pre>
+<p>这样就能产生一个向上取整的除法了。</p>
+<p>如果 <code>a</code> 除以 <code>b</code> 除不尽，那么会找到比他大的第一个整数作为结果，这就是<strong>天花板除 (ceil div)</strong>。</p>
+<p>试试看：14 除以 5，应该得到 2.8；如果用地板除，会得到 2；如果用天花板除，会得到 3。</p>
+<pre><code class="language-cpp">14 / 5 = 2
+(14 + 5 - 1) / 5 = (14 + 4) / 5 = 18 / 5 = 3
+</code></pre>
+<p>试试看：10 除以 5，应该得到 2；那么无论是地板除还是天花板除，都应该得到 2。</p>
+<pre><code class="language-cpp">10 / 5 = 2
+(10 + 5 - 1) / 5 = (10 + 4) / 5 = 14 / 5 = 2
+</code></pre>
+<p>这就是 C 语言中实现天花板除的业界公认标准方式。</p>
+<h2 id="cpp_tricks-_4">读取整个文件到字符串</h2>
 <pre><code class="language-cpp">std::string file_get_content(std::string const &amp;filename) {
     std::ifstream ifs(filename, std::ios::in | std::ios::binary);
     std::istreambuf_iterator&lt;char&gt; iit(ifs), iite;
@@ -1210,7 +1241,7 @@ void file_put_content(std::string const &amp;filename, std::string const &amp;co
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 推荐用 <code>std::ios::binary</code> 选项打开二进制文件，否则字符串中出现 <code>'\n'</code> 时，会被 MSVC 标准库自动转换成 <code>'\r\n'</code> 来写入，妨碍我们跨平台。</p>
 </blockquote>
-<h2 id="cpp_tricks-_3">别再写构造函数啦！</h2>
+<h2 id="cpp_tricks-_5">别再写构造函数啦！</h2>
 <pre><code class="language-cpp">// C++98
 struct Student {
     string name;
@@ -1233,7 +1264,7 @@ struct Student {
 
 Student stu{&quot;小彭老师&quot;, 24, 123};
 </code></pre>
-<p>这被称为<strong>聚合初始化</strong> (aggergate initialize)。只要你的类没有自定义构造函数，没有 private 成员，都可以用 <code>{}</code> 聚合初始化。</p>
+<p>这被称为<strong>聚合初始化</strong> (aggregate initialize)。只要你的类没有自定义构造函数，没有 private 成员，都可以用 <code>{}</code> 聚合初始化。</p>
 <p>好消息：C++20 中，聚合初始化也支持 <code>()</code> 了，用起来就和传统的 C++98 构造函数一样！</p>
 <pre><code class="language-cpp">// C++20
 Student stu(&quot;小彭老师&quot;, 24, 123);
@@ -1259,7 +1290,7 @@ Student stu{&quot;小彭老师&quot;, 24, 9999};
 <pre><code class="language-cpp">Student stu{.name = &quot;小彭老师&quot;, .age = 24, .id = 9999};
 Student stu{.name = &quot;小彭老师&quot;, .id = 9999, .age = 24};
 </code></pre>
-<h2 id="cpp_tricks-_4">别再写拷贝构造函数啦！</h2>
+<h2 id="cpp_tricks-_6">别再写拷贝构造函数啦！</h2>
 <p>只有当你需要有“自定义钩子逻辑”的时候，才需要自定义构造函数。</p>
 <pre><code class="language-cpp">struct Student {
     string name;
@@ -1305,7 +1336,7 @@ assert(stu2.name == &quot;侯捷老师&quot;);
 <p>总之，很多 C++ 教材把拷贝/移动构造函数过于夸大，搞得好像每个类都需要自己定义一样。</p>
 <p>实际上，只有在“自己实现容器”的情况下，才需要自定义拷贝构造函数。可是谁会整天手搓容器？</p>
 <p>大多数情况下，我们只需要在类里面存 vector、string 等封装好的容器，编译器默认生成的拷贝构造函数会自动调用他们的拷贝构造函数，用户只需专注于业务逻辑即可，不需要操心底层细节。</p>
-<h2 id="cpp_tricks-_5">提前返回</h2>
+<h2 id="cpp_tricks-_7">提前返回</h2>
 <pre><code class="language-cpp">void babysitter(Baby *baby) {
     if (!baby-&gt;is_alive()) {
         puts(&quot;宝宝已经去世了&quot;);
@@ -1410,7 +1441,7 @@ assert(stu2.name == &quot;侯捷老师&quot;);
     inline static int member;
 };
 </code></pre>
-<h2 id="cpp_tricks-_6">别再 <code>[]</code> 啦！</h2>
+<h2 id="cpp_tricks-_8">别再 <code>[]</code> 啦！</h2>
 <p>你知道吗？在 map 中使用 <code>[]</code> 查找元素，如果不存在，会自动创建一个默认值。这个特性有时很方便，但如果你不小心写错了，就会在 map 中创建一个多余的默认元素。</p>
 <pre><code class="language-cpp">map&lt;string, int&gt; table;
 table[&quot;小彭老师&quot;] = 24;
@@ -1863,7 +1894,7 @@ $ cat output.txt
 1 3 5 7
 11 13 17 19
 </code></pre>
-<h2 id="cpp_tricks-_7">智能指针防止大对象移动</h2>
+<h2 id="cpp_tricks-_9">智能指针防止大对象移动</h2>
 <p>我们说一个类型大，有两种情况。</p>
 <ol>
 <li>类本身很大：例如 array</li>
@@ -2141,7 +2172,7 @@ std::thread t([&amp;x] {  // [&amp;x] 表示按引用捕获 x；如果写作 [x]
 t.join();
 printf(&quot;%d\n&quot;, x); // 42
 </code></pre>
-<h3 id="cpp_tricks-_8">举个绑定随机数生成器例子</h3>
+<h3 id="cpp_tricks-_10">举个绑定随机数生成器例子</h3>
 <p>bind 写法：</p>
 <pre><code class="language-cpp">std::mt19937 gen(seed);
 std::uniform_real_distribution&lt;double&gt; uni(0, 1);
@@ -2353,7 +2384,7 @@ int main() {
 auto memfn = BIND(world, this);                    // 小彭老师的 BIND 宏，C++14 起可用
 </code></pre>
 <p>你更喜欢哪一种呢？</p>
-<h2 id="cpp_tricks-_9">救命！为什么我的全局函数不能作为函数对象？</h2>
+<h2 id="cpp_tricks-_11">救命！为什么我的全局函数不能作为函数对象？</h2>
 <p>当你的全局函数是模板函数，或带有重载的函数时：</p>
 <pre><code class="language-cpp">template &lt;class T&gt;
 T square(T const t) {
@@ -2425,14 +2456,14 @@ test.cpp:14:21: note:   couldn't deduce template parameter 'Fn'
 <p>TODO</p>
 <h2 id="cpp_tricks-shared_ptr-deleter">自定义 shared_ptr 的 deleter</h2>
 <h2 id="cpp_tricks-check_cuda">CHECK_CUDA 类错误检测宏</h2>
-<h2 id="cpp_tricks-_10">函数默认参数求值的位置是调用者</h2>
+<h2 id="cpp_tricks-_12">函数默认参数求值的位置是调用者</h2>
 <h2 id="cpp_tricks-locale-utf8">设置 locale 为 .utf8</h2>
-<h2 id="cpp_tricks-_11">花括号实现安全的类型转换检查</h2>
+<h2 id="cpp_tricks-_13">花括号实现安全的类型转换检查</h2>
 <h2 id="cpp_tricks-this">成员函数针对 this 的移动重载</h2>
 <h2 id="cpp_tricks-check_cuda_1">CHECK_CUDA 类错误检测宏</h2>
-<h2 id="cpp_tricks-_12">函数默认参数求值的位置是调用者</h2>
-<h2 id="cpp_tricks-_13">花括号实现安全的类型转换检查</h2>
-<h2 id="cpp_tricks-_14">临时右值转左值</h2>
+<h2 id="cpp_tricks-_14">函数默认参数求值的位置是调用者</h2>
+<h2 id="cpp_tricks-_15">花括号实现安全的类型转换检查</h2>
+<h2 id="cpp_tricks-_16">临时右值转左值</h2>
 <p>C++ 有个特性：支持纯右值(prvalue)隐式转换成 const 的左值引用。</p>
 <p>翻译：<code>int &amp;&amp;</code> 可以自动转换成 <code>int const &amp;</code>。</p>
 <pre><code class="language-cpp">void func(int const &amp;i);
@@ -2517,7 +2548,7 @@ int b = f &gt;&gt; 4;  // 0x2
 </code></pre>
 <h2 id="cpp_tricks-vector-unordered_map-lru-cache">vector + unordered_map = LRU cache</h2>
 <h2 id="cpp_tricks-lambda-unique_ptr-function">Lambda 捕获 unique_ptr 导致 function 报错怎么办</h2>
-<h2 id="cpp_tricks-_15">多线程通信应基于队列，而不是共享全局变量</h2>
+<h2 id="cpp_tricks-_17">多线程通信应基于队列，而不是共享全局变量</h2>
 <h2 id="cpp_tricks-raii-finally">RAII 的 finally</h2>
 <h2 id="cpp_tricks-swap-mutex">swap 缩小 mutex 区间代价</h2></section><section class="print-page" id="lambda"><h1 id="lambda-_1">小彭老师带你学函数式编程</h1>
 <div class="toc">
