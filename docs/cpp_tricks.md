@@ -87,14 +87,14 @@ std::wstring utf8_to_wstring(std::string const &s) {
 例如 `14 / 5`，本来应该得到 2.8。但是因为 C 语言的除法返回 `int`，结果会自动向下取整，导致得到 2。
 
 ```cpp
-int a, b;
-int c = a / b;
+int a = 14, b = 5;
+int c = a / b;                // c = 14 / 5 = 3
 ```
 
 等价于
 
 ```cpp
-int c = floor((float)a / b);
+int c = floor((float)a / b);  // c = floor(2.8) = 3
 ```
 
 如果 `a` 除以 `b` 除不尽，那么会找到比他大的第一个整数作为结果，这就是**地板除 (floor div)**。
@@ -135,27 +135,55 @@ int c = (a + b - 1) / b;
 (10 + 5 - 1) / 5 = (10 + 4) / 5 = 14 / 5 = 2
 ```
 
-这就是 C 语言中实现天花板除的业界公认标准方式。
+这就是 C 语言中实现天花板除的业界公认方式。
 
-## 读取整个文件到字符串
+## 别再 `[]` 啦！
+
+你知道吗？在 map 中使用 `[]` 查找元素，如果不存在，会自动创建一个默认值。这个特性有时很方便，但如果你不小心写错了，就会在 map 中创建一个多余的默认元素。
 
 ```cpp
-std::string file_get_content(std::string const &filename) {
-    std::ifstream ifs(filename, std::ios::in | std::ios::binary);
-    std::istreambuf_iterator<char> iit(ifs), iite;
-    std::string content(iit, iite);
-    return content;
-}
+map<string, int> table;
+table["小彭老师"] = 24;
 
-void file_put_content(std::string const &filename, std::string const &content) {
-    std::ofstream ofs(filename, std::ios::out | std::ios::binary);
-    ofs << content;
+cout << table["侯捷老师"];
+```
+
+table 中明明没有 "侯捷老师" 这个元素，但由于 `[]` 的特性，他会默认返回一个 0，不会爆任何错误！
+
+改用更安全的 `at()` 函数，当查询的元素不存在时，会抛出异常，方便你调试：
+
+```cpp
+map<string, int> table;
+table.at("小彭老师") = 24;
+
+cout << table.at("侯捷老师");  // 抛出异常
+```
+
+`[]` 真正的用途是“写入新元素”时，如果元素不存在，他可以自动帮你创建一个默认值，供你以引用的方式赋值进去。
+
+检测元素是否存在可以用 `count`：
+
+```cpp
+if (table.count("小彭老师")) {
+    return table.at("小彭老师");
+} else {
+    return 0;
 }
 ```
 
-这样就可以把整个文件读取到内存中，进行处理后再写回文件。
+即使你想要默认值 0 这一特性，`count` + `at` 也比 `[]` 更好，因为 `[]` 的默认值是会对 table 做破坏性修改的，这导致 `[]` 需要 `map` 的声明不为 `const`：
 
-> {{ icon.tip }} 推荐用 `std::ios::binary` 选项打开二进制文件，否则字符串中出现 `'\n'` 时，会被 MSVC 标准库自动转换成 `'\r\n'` 来写入，妨碍我们跨平台。
+```cpp
+map<string, int> table;
+return table["小彭老师"]; // 如果"小彭老师"这一键不存在，会创建"小彭老师"并设为默认值 0
+```
+
+```cpp
+const map<string, int> table;
+return table["小彭老师"]; // 编译失败！[] 需要非 const 的 map 对象，因为他会破坏性修改
+```
+
+> {{ icon.tip }} 更多 map 知识请看我们的 [map 专题课](stl_map.md)。
 
 ## 别再写构造函数啦！
 
@@ -413,54 +441,6 @@ struct Class {
     inline static int member;
 };
 ```
-
-## 别再 `[]` 啦！
-
-你知道吗？在 map 中使用 `[]` 查找元素，如果不存在，会自动创建一个默认值。这个特性有时很方便，但如果你不小心写错了，就会在 map 中创建一个多余的默认元素。
-
-```cpp
-map<string, int> table;
-table["小彭老师"] = 24;
-
-cout << table["侯捷老师"];
-```
-
-table 中明明没有 "侯捷老师" 这个元素，但由于 `[]` 的特性，他会默认返回一个 0，不会爆任何错误！
-
-改用更安全的 `at()` 函数，当查询的元素不存在时，会抛出异常，方便你调试：
-
-```cpp
-map<string, int> table;
-table.at("小彭老师") = 24;
-
-cout << table.at("侯捷老师");  // 抛出异常
-```
-
-`[]` 真正的用途是“写入新元素”时，如果元素不存在，他可以自动帮你创建一个默认值，供你以引用的方式赋值进去。
-
-检测元素是否存在可以用 `count`：
-
-```cpp
-if (table.count("小彭老师")) {
-    return table.at("小彭老师");
-} else {
-    return 0;
-}
-```
-
-即使你想要默认值 0 这一特性，`count` + `at` 也比 `[]` 更好，因为 `[]` 的默认值是会对 table 做破坏性修改的，这导致 `[]` 需要 `map` 的声明不为 `const`：
-
-```cpp
-map<string, int> table;
-return table["小彭老师"]; // 如果"小彭老师"这一键不存在，会创建"小彭老师"并设为默认值 0
-```
-
-```cpp
-const map<string, int> table;
-return table["小彭老师"]; // 编译失败！[] 需要非 const 的 map 对象，因为他会破坏性修改
-```
-
-> {{ icon.tip }} 更多 map 知识请看我们的 [map 专题课](stl_map.md)。
 
 ## 别再 make_pair 啦！
 
@@ -898,6 +878,56 @@ template <std::integral T>
 T square(T x) {
     return x * x;
 }
+```
+
+## 读取整个文件到字符串
+
+```cpp
+std::string file_get_content(std::string const &filename) {
+    std::ifstream ifs(filename, std::ios::in | std::ios::binary);
+    std::istreambuf_iterator<char> iit(ifs), iite;
+    std::string content(iit, iite);
+    return content;
+}
+
+void file_put_content(std::string const &filename, std::string const &content) {
+    std::ofstream ofs(filename, std::ios::out | std::ios::binary);
+    ofs << content;
+}
+```
+
+这样就可以把整个文件读取到内存中，很方便地进行处理后再写回文件。
+
+> {{ icon.tip }} 推荐用 `std::ios::binary` 选项打开二进制文件，否则字符串中出现 `'\n'` 时，会被 MSVC 标准库自动转换成 `'\r\n'` 来写入，妨碍我们跨平台。
+
+## 逐行读取文本文件
+
+```cpp
+std::ifstream fin("test.txt");
+std::string line;
+while (std::getline(fin, line)) {
+    std::cout << "读取到一行：" << line << '\n';
+}
+```
+
+## 字符串切片
+
+```cpp
+#include <sstream>
+#include <string>
+#include <vector>
+
+std::vector<std::string> split_str(std::string const &str, char ch) {
+    std::stringstream ss(str);
+    std::string line;
+    std::vector<std::string> res;
+    while (std::getline(ss, line, ch)) {
+        res.push_back(std::move(line));
+    }
+    return res;
+}
+
+auto res = split_str("hello world", ' '); // res = {"hello", "world"}
 ```
 
 ## cout 不需要 endl
@@ -1952,6 +1982,8 @@ int b = f >> 4;  // 0x2
 
 ## 多线程通信应基于队列，而不是共享全局变量
 
-## RAII 的 finally
+## RAII 的 finally 帮手类
 
 ## swap 缩小 mutex 区间代价
+
+## namespace 别名
