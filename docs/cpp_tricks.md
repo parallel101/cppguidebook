@@ -725,7 +725,7 @@ int main() {
 如果喜欢老式的函数调用风格接口，可以封装一个新的 C++ 重置版安全 `rand`：
 
 ```cpp
-thread_local std::mt19937 gen(std::random_device()()); // 每线程一个，互不冲突
+thread_local std::mt19937 gen(std::random_device{}()); // 每线程一个，互不冲突
 
 int randint(int min, int max) {
     return std::uniform_int_distribution<int>(min, max)(gen);
