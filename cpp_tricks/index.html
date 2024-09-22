@@ -1066,7 +1066,7 @@ int main() {
 </ul>
 <p>类似的还有 <code>std::uniform_real_distribution</code> 用于生成浮点数，<code>std::normal_distribution</code> 用于生成正太分布的随机数，<code>std::poisson_distribution</code> 用于生成泊松分布的随机数，等等。</p>
 <p>如果喜欢老式的函数调用风格接口，可以封装一个新的 C++ 重置版安全 <code>rand</code>：</p>
-<pre><code class="language-cpp">thread_local std::mt19937 gen(std::random_device()()); // 每线程一个，互不冲突
+<pre><code class="language-cpp">thread_local std::mt19937 gen(std::random_device{}()); // 每线程一个，互不冲突
 
 int randint(int min, int max) {
     return std::uniform_int_distribution&lt;int&gt;(min, max)(gen);
