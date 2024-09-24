@@ -1243,9 +1243,22 @@ cout.flush();
 </code></pre>
 <p>endl 是一个典型的以讹传讹错误写法，只有当你的输出是指向另一个进程的管道时，其附带的刷新功能才有作用。</p>
 <ul>
-<li>当输出是管道时，<code>cout</code> 需要 <code>endl</code> 才能刷新。</li>
-<li>当输出是普通控制台时，<code>cout</code> 需要 <code>endl</code> 才能刷新。</li>
+<li>当输出是管道或文件时，<code>cout</code> 需要 <code>endl</code> 才能刷新。</li>
+<li>当输出是普通控制台时，<code>cout</code> 只需 <code>'\n'</code> 就能刷新了，根本用不着 <code>endl</code>。</li>
 </ul>
+<p>而且，管道或文件实际上也不存在频繁刷新的需求，反正 <code>ifstream</code> 析构时总是会自动刷新写入磁盘。</p>
+<p>因此，<code>endl</code> 操纵符大多时候都是冗余的：控制台输出的 <code>cout</code> 只需要字符或字符串中含有 <code>'\n'</code> 就刷新了，即使是文件读写也很少会使用 <code>endl</code>。</p>
+<p>如果确实需要强制刷新，也可以用 <code>flush</code> 这种更加可读的写法：</p>
+<pre><code class="language-cpp">int num;
+cout &lt;&lt; &quot;please input the number: &quot; &lt;&lt; flush;
+cin &gt;&gt; num;
+
+ofstream fout(&quot;log.txt&quot;);
+fout &lt;&lt; &quot;immediate write 1\n&quot; &lt;&lt; flush;
+sleep(1);
+fout &lt;&lt; &quot;immediate write 2\n&quot; &lt;&lt; flush;
+fout.close(); // 关闭文件时总是自动 flush，不会有残留未写入的字符
+</code></pre>
 <h2 id="cout">多线程中 cout 出现乱序？</h2>
 <p>同学：小彭老师，我在多线程环境中使用：</p>
 <pre><code class="language-cpp">cout &lt;&lt; &quot;the answer is &quot; &lt;&lt; 42 &lt;&lt; '\n';
