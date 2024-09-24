@@ -978,8 +978,26 @@ cout << "Hello, World!" << '\n';
 
 endl 是一个典型的以讹传讹错误写法，只有当你的输出是指向另一个进程的管道时，其附带的刷新功能才有作用。
 
-- 当输出是管道时，`cout` 需要 `endl` 才能刷新。
-- 当输出是普通控制台时，`cout` 需要 `endl` 才能刷新。
+- 当输出是管道或文件时，`cout` 需要 `endl` 才能刷新。
+- 当输出是普通控制台时，`cout` 只需 `'\n'` 就能刷新了，根本用不着 `endl`。
+
+而且，管道或文件实际上也不存在频繁刷新的需求，反正 `ifstream` 析构时总是会自动刷新写入磁盘。
+
+因此，`endl` 操纵符大多时候都是冗余的：控制台输出的 `cout` 只需要字符或字符串中含有 `'\n'` 就刷新了，即使是文件读写也很少会使用 `endl`。
+
+如果确实需要强制刷新，也可以用 `flush` 这种更加可读的写法：
+
+```cpp
+int num;
+cout << "please input the number: " << flush;
+cin >> num;
+
+ofstream fout("log.txt");
+fout << "immediate write 1\n" << flush;
+sleep(1);
+fout << "immediate write 2\n" << flush;
+fout.close(); // 关闭文件时总是自动 flush，不会有残留未写入的字符
+```
 
 ## 多线程中 cout 出现乱序？
 
