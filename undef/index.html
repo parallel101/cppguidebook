@@ -546,13 +546,13 @@ Derived d = static_cast&lt;Derived &amp;&gt;(*bp); // 可以
 <p>只有这个最低位可以是 0 或 1，其余 7 位必须始终保持为 0。</p>
 <p>如果其余位中出现了非 0 的位，也就是出现 0 和 1 以外的取值，则是未定义行为。</p>
 <pre><code class="language-cpp">char c = 0;
-bool b = *(bool *)c;   // 可以，b = false
+bool b = *(bool *)&amp;c;   // 可以，b = false
 </code></pre>
 <pre><code class="language-cpp">char c = 1;
-bool b = *(bool *)c;   // 可以，b = true
+bool b = *(bool *)&amp;c;   // 可以，b = true
 </code></pre>
 <pre><code class="language-cpp">char c = 2;
-bool b = *(bool *)c;   // 未定义行为
+bool b = *(bool *)&amp;c;   // 未定义行为
 </code></pre>
 <h2 id="_7">算数类</h2>
 <h3 id="_8">有符号整数的加减乘除模不能溢出</h3>

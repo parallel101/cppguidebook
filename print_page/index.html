@@ -421,7 +421,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年09月24日 11:54:32 (UTC+08:00)</p>
+<p>更新时间：2024年10月09日 16:02:13 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -18125,13 +18125,13 @@ Derived d = static_cast&lt;Derived &amp;&gt;(*bp); // 可以
 <p>只有这个最低位可以是 0 或 1，其余 7 位必须始终保持为 0。</p>
 <p>如果其余位中出现了非 0 的位，也就是出现 0 和 1 以外的取值，则是未定义行为。</p>
 <pre><code class="language-cpp">char c = 0;
-bool b = *(bool *)c;   // 可以，b = false
+bool b = *(bool *)&amp;c;   // 可以，b = false
 </code></pre>
 <pre><code class="language-cpp">char c = 1;
-bool b = *(bool *)c;   // 可以，b = true
+bool b = *(bool *)&amp;c;   // 可以，b = true
 </code></pre>
 <pre><code class="language-cpp">char c = 2;
-bool b = *(bool *)c;   // 未定义行为
+bool b = *(bool *)&amp;c;   // 未定义行为
 </code></pre>
 <h2 id="undef-_7">算数类</h2>
 <h3 id="undef-_8">有符号整数的加减乘除模不能溢出</h3>
