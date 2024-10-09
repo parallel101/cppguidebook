@@ -255,17 +255,17 @@ bool 虽然占据 1 字节（8 位）内存空间，但其中只有一个有效�
 
 ```cpp
 char c = 0;
-bool b = *(bool *)c;   // 可以，b = false
+bool b = *(bool *)&c;   // 可以，b = false
 ```
 
 ```cpp
 char c = 1;
-bool b = *(bool *)c;   // 可以，b = true
+bool b = *(bool *)&c;   // 可以，b = true
 ```
 
 ```cpp
 char c = 2;
-bool b = *(bool *)c;   // 未定义行为
+bool b = *(bool *)&c;   // 未定义行为
 ```
 
 ## 算数类
