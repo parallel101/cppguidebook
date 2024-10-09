@@ -1059,7 +1059,7 @@ std::osyncstream(std::cout) << "the answer is " << 42 << '\n';
 
 `std::osyncstream` 可以保证：1. 不会产生数据竞争；2. 不会发生穿插和截断。可以理解为 `std::osyncstream` 在构造时对缓冲区上锁，在析构时解锁。
 
-如果你的标准库支持 C++23，还可以用 `std::println`，这一整个打印操作也是原子的（第三方库如 `fmt::println` 亦可）：
+如果你的标准库支持 C++23，还可以用 `std::println`，这个函数的输出也是原子的（第三方库如 `fmt::println` 亦可）：
 
 ```cpp
 std::println("the answer is {}", 42);
