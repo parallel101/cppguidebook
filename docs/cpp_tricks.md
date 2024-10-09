@@ -1,6 +1,6 @@
 # 应知应会 C++ 小技巧
 
-[TOC]
+[toc]
 
 ## 交换两个变量
 
@@ -1029,6 +1029,8 @@ cout << '\n';
 
 > {{ icon.fun }} 而是分子了 :)
 
+`std::cout` 的 `operator<<` 调用是线程安全的，不会被打断，但多个 `operator<<` 的调用在多线程环境中可能会 **交错** ，导致输出结果混乱
+
 他们中间可能穿插了其他线程的 cout，从而导致你 `"the answer is"` 打印完后，被其他线程的 `'\n'` 插入进来，导致换行混乱。
 
 > {{ icon.tip }} 更多细节请看我们的 [多线程专题](threading.md)。
@@ -1047,9 +1049,17 @@ cout << oss.str();
 cout << std::format("the answer is {}\n", 42);
 ```
 
-总之，就是要让 `operator<<` 只有一次。
+总之，就是要让 `operator<<` 只有一次，自然就是没有交错。
 
-建议各位升级到 C++23，然后改用 `std::println` 吧：
+如果可以使用 C++20，就可改用 `std::osyncstream{ std::cout }` :
+
+```cpp
+std::osyncstream{ std::cout } << "the answer is " << 42 << '\n';
+```
+
+`std::osyncstream` 提供保证：所有对最终目标缓冲区（上例中是 [std::cout](https://zh.cppreference.com/w/cpp/io/cout "cpp/io/cout")）作出的输出将免除数据竞争，而且将不以任何方式穿插或截断。
+
+如果可以使用 C++23，就可改用 `std::println` ：
 
 ```cpp
 std::println("the answer is {}", 42);
