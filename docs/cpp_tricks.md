@@ -1,6 +1,6 @@
 # 应知应会 C++ 小技巧
 
-[toc]
+[TOC]
 
 ## 交换两个变量
 
@@ -1029,9 +1029,9 @@ cout << '\n';
 
 > {{ icon.fun }} 而是分子了 :)
 
-`std::cout` 的 `operator<<` 调用是线程安全的，不会被打断，但多个 `operator<<` 的调用在多线程环境中可能会 **交错** ，导致输出结果混乱
-
 他们中间可能穿插了其他线程的 cout，从而导致你 `"the answer is"` 打印完后，被其他线程的 `'\n'` 插入进来，导致换行混乱。
+
+> {{ icon.warn }} `std::cout` 的 `operator<<` 调用是线程安全的，不会被打断，但多个 `operator<<` 的调用在多线程环境中可能会 **交错** ，导致输出结果混乱。
 
 > {{ icon.tip }} 更多细节请看我们的 [多线程专题](threading.md)。
 
@@ -1051,15 +1051,15 @@ cout << std::format("the answer is {}\n", 42);
 
 总之，就是要让 `operator<<` 只有一次，自然就是没有交错。
 
-如果可以使用 C++20，就可改用 `std::osyncstream{ std::cout }` :
+在 C++20 中，可以改用 `std::osyncstream(std::cout)` 代替 `std::cout` :
 
 ```cpp
-std::osyncstream{ std::cout } << "the answer is " << 42 << '\n';
+std::osyncstream(std::cout) << "the answer is " << 42 << '\n';
 ```
 
-`std::osyncstream` 提供保证：所有对最终目标缓冲区（上例中是 [std::cout](https://zh.cppreference.com/w/cpp/io/cout "cpp/io/cout")）作出的输出将免除数据竞争，而且将不以任何方式穿插或截断。
+`std::osyncstream` 可以保证：1. 不会产生数据竞争；2. 不会发生穿插和截断。可以理解为 `std::osyncstream` 在构造时对缓冲区上锁，在析构时解锁。
 
-如果可以使用 C++23，就可改用 `std::println` ：
+如果你的标准库支持 C++23，还可以用 `std::println`，这一整个打印操作也是原子的（第三方库如 `fmt::println` 亦可）：
 
 ```cpp
 std::println("the answer is {}", 42);
