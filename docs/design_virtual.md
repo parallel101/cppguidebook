@@ -298,8 +298,8 @@ struct Inputer {
 
 int reduce(Inputer *inputer, Reducer *reducer) {
     int res = reducer->init();
-    while (int tmp = inputer->fetch()) {
-        res = reducer->add(res, tmp);
+    while (auto tmp = inputer->fetch()) {
+        res = reducer->add(res, tmp.value());
     }
     return res;
 }
@@ -354,8 +354,8 @@ Inputer 负责告诉 reduce 函数如何读取数据，Reducer 负责告诉 redu
 ```cpp
 int reduce(Reducer *reducer) {
     int res = reducer->init();
-    while (int tmp = reducer->fetch()) {  // fetch 凭什么和 init、add 放在一起？
-        res = reducer->add(res, tmp);
+    while (auto tmp = reducer->fetch()) {  // fetch 凭什么和 init、add 放在一起？
+        res = reducer->add(res, tmp.value());
     }
     return res;
 }
