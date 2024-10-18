@@ -88,13 +88,13 @@ std::wstring utf8_to_wstring(std::string const &s) {
 
 ```cpp
 int a = 14, b = 5;
-int c = a / b;                // c = 14 / 5 = 3
+int c = a / b;                // c = 14 / 5 = 2
 ```
 
 等价于
 
 ```cpp
-int c = floor((float)a / b);  // c = floor(2.8) = 3
+int c = floor((float)a / b);  // c = floor(2.8) = 2
 ```
 
 如果 `a` 除以 `b` 除不尽，那么会找到比他大的第一个整数作为结果，这就是**地板除 (floor div)**。
