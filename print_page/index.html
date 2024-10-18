@@ -421,7 +421,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年10月18日 15:45:31 (UTC+08:00)</p>
+<p>更新时间：2024年10月18日 15:46:00 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -15945,7 +15945,7 @@ for (char32_t c : Utf8Range(s)) {
 <blockquote>
 <p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> Java 的 <code>Character</code> 类型是一个 32 位的值，这个值包含了一个 Unicode 码位。<code>char</code> 类型是一个 16 位的值，它包含了一个 UTF-16 编码的码点。<code>String</code> 的 <code>charAt()</code> 方法返回的是 <code>char</code> 类型的码位（类似于字节），如果要获取 <code>Character</code> 类型的完整字符，必须使用 <code>codePointAt()</code> 方法。这是 Java 语言设计上的一个失误，已经无法改变。</p>
 </blockquote>
-<p>而后续新出的 Kotlin 是 Java 的合法继承者，他果断放弃 UTF-16，加入了 UTF-32 阵营。可见，老软件坚持用 UTF-32 是因为他们积重难返，新软件再 UTF-16 就是自作孽了！</p>
+<p>而后续新出的 Kotlin 是 Java 的合法继承者，他果断放弃 UTF-16，加入了 UTF-32 阵营。可见，老软件坚持用 UTF-16 是因为他们积重难返，新软件再用 UTF-16 就是自作孽了！</p>
 <p><strong>总结：不要支持 UTF-16 阵营，除非你被迫维护史山。</strong></p>
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如小彭老师发微信朋友圈时，输入 Emoji 表情后剪切，再粘贴，就和发现一个 Emoji 被切断成了两个代理对，以乱码的形式显现。估计是因为微信基于 Java 编写，疼逊程序员对 UTF-16 代理对处理的不利索。</p>
