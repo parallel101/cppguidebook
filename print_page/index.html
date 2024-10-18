@@ -421,7 +421,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年10月09日 16:02:13 (UTC+08:00)</p>
+<p>更新时间：2024年10月18日 15:45:31 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -1201,10 +1201,10 @@ read(1, mem.data(), mem.size());
 <p>众所周知，C语言中 <code>int</code> 相除 <code>/</code>，得到的结果也是 <code>int</code>，如果除法产生了余数，那么只会保留整数部分。</p>
 <p>例如 <code>14 / 5</code>，本来应该得到 2.8。但是因为 C 语言的除法返回 <code>int</code>，结果会自动向下取整，导致得到 2。</p>
 <pre><code class="language-cpp">int a = 14, b = 5;
-int c = a / b;                // c = 14 / 5 = 3
+int c = a / b;                // c = 14 / 5 = 2
 </code></pre>
 <p>等价于</p>
-<pre><code class="language-cpp">int c = floor((float)a / b);  // c = floor(2.8) = 3
+<pre><code class="language-cpp">int c = floor((float)a / b);  // c = floor(2.8) = 2
 </code></pre>
 <p>如果 <code>a</code> 除以 <code>b</code> 除不尽，那么会找到比他大的第一个整数作为结果，这就是<strong>地板除 (floor div)</strong>。</p>
 <p>C 语言默认的就是地板除。</p>
