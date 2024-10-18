@@ -314,7 +314,7 @@ int main() {
 
 > {{ icon.tip }} 高层封装 API 应当可以完全通过调用底层 API 实现，提供高层 API 只是方便初级用户使用和理解。
 
-> {{ icon.story }} 
+> {{ icon.story }}
     例如 `libcurl` 就提供了 `curl_easy` 和 `curl_multi` 两套 API。
 
     - `curl_multi` 提供了超详细的参数，把每个操作分拆成多步，方便用户插手细节，满足高级用户的定制化需求，但太过复杂，难以学习。
@@ -525,6 +525,20 @@ int generic_sum(std::vector<int> const &v, Op op) {
 ```
 
 > {{ icon.fun }} C++11：auto 只能用于定义变量；C++14：函数返回类型可以是 auto；C++17：模板参数也可以 auto；C++20：函数参数也可以是 auto 了；（狂想）C++47：auto 现在是 C++47 的唯一关键字，用户只需不断输入 auto-auto-auto，编译器内建人工智能自动识别你的意图生成机器码。
+
+使用模板调用时，通常需要指定模板参数 `Op` 的类型：
+
+```cpp
+generic_sum<std::function<int(int, int)>>(a, add);
+```
+
+`std::function<int(int, int)>` 是什么鬼画符？别担心小彭老师会在下文讲解 `function` 这个容器。这里可以简单理解为这是一个接受两个 `int` 类型的参数，返回值也是 `int` 类型的函数容器，容纳 `add` 这个函数。不过也可以让编译器去自动推导模板参数：
+
+```cpp
+generic_sum(a, add);
+```
+
+这和上面的代码是等价的。
 
 ### 函数也是对象！
 
@@ -1629,7 +1643,7 @@ auto lambda = [b] (int a) {
 
 ```cpp
 int b = 2;
-std::function<void(int)> lambda = [b] (int a) {
+std::function<int(int)> lambda = [b] (int a) {
     return a + b;
 };
 ```
@@ -1638,15 +1652,15 @@ std::function<void(int)> lambda = [b] (int a) {
 
 ```cpp
 // vector<auto> lambda_list;             // 错误：不支持的语法
-vector<function<void(int)>> lambda_list; // OK
+vector<function<int(int)>> lambda_list; // OK
 
 int b = 2;
 lambda_list.push_back([b] (int a) {
     return a + b;
-};
+});
 lambda_list.push_back([b] (int a) {
     return a * b;
-};
+});
 
 for (auto lambda: lambda_list) {
     int ret = lambda(2);
