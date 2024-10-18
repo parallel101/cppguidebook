@@ -1031,6 +1031,8 @@ cout << '\n';
 
 他们中间可能穿插了其他线程的 cout，从而导致你 `"the answer is"` 打印完后，被其他线程的 `'\n'` 插入进来，导致换行混乱。
 
+> {{ icon.warn }} `std::cout` 的 `operator<<` 调用是线程安全的，不会被打断，但多个 `operator<<` 的调用在多线程环境中可能会 **交错** ，导致输出结果混乱。
+
 > {{ icon.tip }} 更多细节请看我们的 [多线程专题](threading.md)。
 
 解决方法是，先创建一个只属于当前线程的 `ostringstream`，最后一次性调用一次 cout 的 `operator<<`，让“原子”的单位变成“一行”而不是一个字符串。
@@ -1047,9 +1049,17 @@ cout << oss.str();
 cout << std::format("the answer is {}\n", 42);
 ```
 
-总之，就是要让 `operator<<` 只有一次。
+总之，就是要让 `operator<<` 只有一次，自然就是没有交错。
 
-建议各位升级到 C++23，然后改用 `std::println` 吧：
+在 C++20 中，可以改用 `std::osyncstream(std::cout)` 代替 `std::cout` :
+
+```cpp
+std::osyncstream(std::cout) << "the answer is " << 42 << '\n';
+```
+
+`std::osyncstream` 可以保证：1. 不会产生数据竞争；2. 不会发生穿插和截断。可以理解为 `std::osyncstream` 在构造时对缓冲区上锁，在析构时解锁。
+
+如果你的标准库支持 C++23，还可以用 `std::println`，这个函数的输出也是原子的（第三方库如 `fmt::println` 亦可）：
 
 ```cpp
 std::println("the answer is {}", 42);
