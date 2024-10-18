@@ -1282,6 +1282,7 @@ cout &lt;&lt; '\n';
 </blockquote>
 <p>他们中间可能穿插了其他线程的 cout，从而导致你 <code>"the answer is"</code> 打印完后，被其他线程的 <code>'\n'</code> 插入进来，导致换行混乱。</p>
 <blockquote>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>std::cout</code> 的 <code>operator&lt;&lt;</code> 调用是线程安全的，不会被打断，但多个 <code>operator&lt;&lt;</code> 的调用在多线程环境中可能会 <strong>交错</strong> ，导致输出结果混乱。</p>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 更多细节请看我们的 <a href="../threading/">多线程专题</a>。</p>
 </blockquote>
 <p>解决方法是，先创建一个只属于当前线程的 <code>ostringstream</code>，最后一次性调用一次 cout 的 <code>operator&lt;&lt;</code>，让“原子”的单位变成“一行”而不是一个字符串。</p>
@@ -1292,8 +1293,12 @@ cout &lt;&lt; oss.str();
 <p>或者，使用 <code>std::format</code>：</p>
 <pre><code class="language-cpp">cout &lt;&lt; std::format(&quot;the answer is {}\n&quot;, 42);
 </code></pre>
-<p>总之，就是要让 <code>operator&lt;&lt;</code> 只有一次。</p>
-<p>建议各位升级到 C++23，然后改用 <code>std::println</code> 吧：</p>
+<p>总之，就是要让 <code>operator&lt;&lt;</code> 只有一次，自然就是没有交错。</p>
+<p>在 C++20 中，可以改用 <code>std::osyncstream(std::cout)</code> 代替 <code>std::cout</code> :</p>
+<pre><code class="language-cpp">std::osyncstream(std::cout) &lt;&lt; &quot;the answer is &quot; &lt;&lt; 42 &lt;&lt; '\n';
+</code></pre>
+<p><code>std::osyncstream</code> 可以保证：1. 不会产生数据竞争；2. 不会发生穿插和截断。可以理解为 <code>std::osyncstream</code> 在构造时对缓冲区上锁，在析构时解锁。</p>
+<p>如果你的标准库支持 C++23，还可以用 <code>std::println</code>，这个函数的输出也是原子的（第三方库如 <code>fmt::println</code> 亦可）：</p>
 <pre><code class="language-cpp">std::println(&quot;the answer is {}&quot;, 42);
 </code></pre>
 <h2 id="cerr-cout">cerr 与 cout 的抉择</h2>
