@@ -421,7 +421,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年10月18日 15:48:05 (UTC+08:00)</p>
+<p>更新时间：2024年10月25日 12:47:54 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -1083,7 +1083,8 @@ static int f(int x) {}  // 函数声明并定义为“外部链接”
 <li><a href="#cpp_tricks-_4">别再 [] 啦！</a></li>
 <li><a href="#cpp_tricks-_5">别再写构造函数啦！</a></li>
 <li><a href="#cpp_tricks-_6">别再写拷贝构造函数啦！</a></li>
-<li><a href="#cpp_tricks-_7">提前返回</a></li>
+<li><a href="#cpp_tricks-_7">继承构造函数</a></li>
+<li><a href="#cpp_tricks-_8">提前返回</a></li>
 <li><a href="#cpp_tricks-lambda">立即调用的 Lambda</a></li>
 <li><a href="#cpp_tricks-lambda_1">Lambda 复用代码</a></li>
 <li><a href="#cpp_tricks-inline">类内静态成员 inline</a></li>
@@ -1096,35 +1097,35 @@ static int f(int x) {}  // 函数声明并定义为“外部链接”
 <li><a href="#cpp_tricks-c_1">C++ 随机数的正确生成方式</a></li>
 <li><a href="#cpp_tricks-const">const 居然应该后置&hellip;</a></li>
 <li><a href="#cpp_tricks-auto">函数参数也可以 auto</a></li>
-<li><a href="#cpp_tricks-_8">读取整个文件到字符串</a></li>
-<li><a href="#cpp_tricks-_9">逐行读取文本文件</a></li>
-<li><a href="#cpp_tricks-_10">字符串切片</a></li>
+<li><a href="#cpp_tricks-_9">读取整个文件到字符串</a></li>
+<li><a href="#cpp_tricks-_10">逐行读取文本文件</a></li>
+<li><a href="#cpp_tricks-_11">字符串切片</a></li>
 <li><a href="#cpp_tricks-cout-endl">cout 不需要 endl</a></li>
 <li><a href="#cpp_tricks-cout">多线程中 cout 出现乱序？</a></li>
 <li><a href="#cpp_tricks-cerr-cout">cerr 与 cout 的抉择</a></li>
-<li><a href="#cpp_tricks-_11">智能指针防止大对象移动</a></li>
+<li><a href="#cpp_tricks-_12">智能指针防止大对象移动</a></li>
 <li><a href="#cpp_tricks-optional">optional 实现延迟初始化</a></li>
 <li><a href="#cpp_tricks-if-auto-while-auto">if-auto 与 while-auto</a></li>
 <li><a href="#cpp_tricks-bind-lambda">bind 是历史糟粕，应该由 Lambda 表达式取代</a><ul>
 <li><a href="#cpp_tricks-bind">bind 的历史</a></li>
 <li><a href="#cpp_tricks-thread">thread 膝盖中箭</a></li>
-<li><a href="#cpp_tricks-_12">举个绑定随机数生成器例子</a></li>
+<li><a href="#cpp_tricks-_13">举个绑定随机数生成器例子</a></li>
 </ul>
 </li>
 <li><a href="#cpp_tricks-forward-fwd">forward 迷惑性地不好用，建议改用 FWD 宏</a></li>
 <li><a href="#cpp_tricks-bind-lambda-bind_front">bind 绑定成员函数是陋习，改用 lambda 或 bind_front</a></li>
-<li><a href="#cpp_tricks-_13">救命！为什么我的全局函数不能作为函数对象？</a></li>
+<li><a href="#cpp_tricks-_14">救命！为什么我的全局函数不能作为函数对象？</a></li>
 <li><a href="#cpp_tricks-map-any">map + any 外挂属性</a></li>
 <li><a href="#cpp_tricks-shared_ptr-deleter">自定义 shared_ptr 的 deleter</a></li>
 <li><a href="#cpp_tricks-check_cuda">CHECK_CUDA 类错误检测宏</a></li>
-<li><a href="#cpp_tricks-_14">函数默认参数求值的位置是调用者</a></li>
+<li><a href="#cpp_tricks-_15">函数默认参数求值的位置是调用者</a></li>
 <li><a href="#cpp_tricks-locale-utf8">设置 locale 为 .utf8</a></li>
-<li><a href="#cpp_tricks-_15">花括号实现安全的类型转换检查</a></li>
+<li><a href="#cpp_tricks-_16">花括号实现安全的类型转换检查</a></li>
 <li><a href="#cpp_tricks-this">成员函数针对 this 的移动重载</a></li>
 <li><a href="#cpp_tricks-check_cuda_1">CHECK_CUDA 类错误检测宏</a></li>
-<li><a href="#cpp_tricks-_16">函数默认参数求值的位置是调用者</a></li>
-<li><a href="#cpp_tricks-_17">花括号实现安全的类型转换检查</a></li>
-<li><a href="#cpp_tricks-_18">临时右值转左值</a></li>
+<li><a href="#cpp_tricks-_17">函数默认参数求值的位置是调用者</a></li>
+<li><a href="#cpp_tricks-_18">花括号实现安全的类型转换检查</a></li>
+<li><a href="#cpp_tricks-_19">临时右值转左值</a></li>
 <li><a href="#cpp_tricks-ostringstream">ostringstream 格式化字符串</a></li>
 <li><a href="#cpp_tricks-adl">ADL 机制实现静态多态</a></li>
 <li><a href="#cpp_tricks-shared_from_this">shared_from_this</a></li>
@@ -1134,7 +1135,7 @@ static int f(int x) {}  // 函数声明并定义为“外部链接”
 <li><a href="#cpp_tricks-bit-field">位域（bit-field）</a></li>
 <li><a href="#cpp_tricks-vector-unordered_map-lru-cache">vector + unordered_map = LRU cache</a></li>
 <li><a href="#cpp_tricks-lambda-unique_ptr-function">Lambda 捕获 unique_ptr 导致 function 报错怎么办</a></li>
-<li><a href="#cpp_tricks-_19">多线程通信应基于队列，而不是共享全局变量</a></li>
+<li><a href="#cpp_tricks-_20">多线程通信应基于队列，而不是共享全局变量</a></li>
 <li><a href="#cpp_tricks-raii-finally">RAII 的 finally 帮手类</a></li>
 <li><a href="#cpp_tricks-swap-mutex">swap 缩小 mutex 区间代价</a></li>
 <li><a href="#cpp_tricks-namespace">namespace 别名</a></li>
@@ -1354,7 +1355,61 @@ assert(stu2.name == &quot;侯捷老师&quot;);
 <p>总之，很多 C++ 教材把拷贝/移动构造函数过于夸大，搞得好像每个类都需要自己定义一样。</p>
 <p>实际上，只有在“自己实现容器”的情况下，才需要自定义拷贝构造函数。可是谁会整天手搓容器？</p>
 <p>大多数情况下，我们只需要在类里面存 vector、string 等封装好的容器，编译器默认生成的拷贝构造函数会自动调用他们的拷贝构造函数，用户只需专注于业务逻辑即可，不需要操心底层细节。</p>
-<h2 id="cpp_tricks-_7">提前返回</h2>
+<p>对于持有资源的 RAII 类，我们都会直接删除其拷贝构造函数和拷贝赋值函数：</p>
+<pre><code class="language-cpp">struct RAIIHandle {
+    int handle;
+    RAIIHandle() {
+        handle = CreateObject();
+    }
+    RAIIHandle(RAIIHandle const &amp;) = delete;
+    RAIIHandle &amp;operator=(RAIIHandle const &amp;) = delete;
+    RAIIHandle() {
+        DeleteObject(handle);
+    }
+};
+</code></pre>
+<h2 id="cpp_tricks-_7">继承构造函数</h2>
+<p>C++ 特色：子类不会自动继承父类的构造函数！（除非父类的构造函数是没有参数的默认构造函数）</p>
+<pre><code class="language-cpp">struct Parent {
+    Parent(int age, const char *name) { ... }
+    void parent_func() { ... }
+};
+
+struct Child : Parent {
+    void child_func() { ... }
+};
+
+Child child(23, &quot;peng&quot;);  // 错误！Child 没有构造函数！
+</code></pre>
+<p>可以在子类里面写 <code>using 父类::父类</code>，就能自动继承父类所有的构造函数了。</p>
+<pre><code class="language-cpp">struct Parent {
+    Parent(int age, const char *name) { ... }
+    void parent_func() { ... }
+};
+
+struct Child : Parent {
+    using Parent::Parent;  // 加上这一行！
+    void child_func() { ... }
+};
+
+Child child(23, &quot;peng&quot;);  // 编译通过，自动调用到父类的构造函数 Parent(int, const char *)
+</code></pre>
+<p>在 C++98 中，没有 using 的这个语法，只能自己定义一个构造函数，然后使用“委任构造”的语法转发所有参数给父类，非常繁琐。</p>
+<pre><code class="language-cpp">struct Parent {
+    Parent(int age, const char *name) { ... }
+    void parent_func() { ... }
+};
+
+struct Child : Parent {
+    Child(int age, const char *name)
+        : Parent(age, name)
+    { ... }
+    void child_func() { ... }
+};
+
+Child child(23, &quot;peng&quot;);  // 编译通过，调用到子类的构造函数后转发到父类
+</code></pre>
+<h2 id="cpp_tricks-_8">提前返回</h2>
 <pre><code class="language-cpp">void babysitter(Baby *baby) {
     if (!baby-&gt;is_alive()) {
         puts(&quot;宝宝已经去世了&quot;);
@@ -1772,7 +1827,7 @@ T square(T x) {
     return x * x;
 }
 </code></pre>
-<h2 id="cpp_tricks-_8">读取整个文件到字符串</h2>
+<h2 id="cpp_tricks-_9">读取整个文件到字符串</h2>
 <pre><code class="language-cpp">std::string file_get_content(std::string const &amp;filename) {
     std::ifstream ifs(filename, std::ios::in | std::ios::binary);
     std::istreambuf_iterator&lt;char&gt; iit(ifs), iite;
@@ -1789,14 +1844,14 @@ void file_put_content(std::string const &amp;filename, std::string const &amp;co
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 推荐用 <code>std::ios::binary</code> 选项打开二进制文件，否则字符串中出现 <code>'\n'</code> 时，会被 MSVC 标准库自动转换成 <code>'\r\n'</code> 来写入，妨碍我们跨平台。</p>
 </blockquote>
-<h2 id="cpp_tricks-_9">逐行读取文本文件</h2>
+<h2 id="cpp_tricks-_10">逐行读取文本文件</h2>
 <pre><code class="language-cpp">std::ifstream fin(&quot;test.txt&quot;);
 std::string line;
 while (std::getline(fin, line)) {
     std::cout &lt;&lt; &quot;读取到一行：&quot; &lt;&lt; line &lt;&lt; '\n';
 }
 </code></pre>
-<h2 id="cpp_tricks-_10">字符串切片</h2>
+<h2 id="cpp_tricks-_11">字符串切片</h2>
 <pre><code class="language-cpp">#include &lt;sstream&gt;
 #include &lt;string&gt;
 #include &lt;vector&gt;
@@ -1939,7 +1994,7 @@ $ cat output.txt
 1 3 5 7
 11 13 17 19
 </code></pre>
-<h2 id="cpp_tricks-_11">智能指针防止大对象移动</h2>
+<h2 id="cpp_tricks-_12">智能指针防止大对象移动</h2>
 <p>我们说一个类型大，有两种情况。</p>
 <ol>
 <li>类本身很大：例如 array</li>
@@ -2217,7 +2272,7 @@ std::thread t([&amp;x] {  // [&amp;x] 表示按引用捕获 x；如果写作 [x]
 t.join();
 printf(&quot;%d\n&quot;, x); // 42
 </code></pre>
-<h3 id="cpp_tricks-_12">举个绑定随机数生成器例子</h3>
+<h3 id="cpp_tricks-_13">举个绑定随机数生成器例子</h3>
 <p>bind 写法：</p>
 <pre><code class="language-cpp">std::mt19937 gen(seed);
 std::uniform_real_distribution&lt;double&gt; uni(0, 1);
@@ -2429,7 +2484,7 @@ int main() {
 auto memfn = BIND(world, this);                    // 小彭老师的 BIND 宏，C++14 起可用
 </code></pre>
 <p>你更喜欢哪一种呢？</p>
-<h2 id="cpp_tricks-_13">救命！为什么我的全局函数不能作为函数对象？</h2>
+<h2 id="cpp_tricks-_14">救命！为什么我的全局函数不能作为函数对象？</h2>
 <p>当你的全局函数是模板函数，或带有重载的函数时：</p>
 <pre><code class="language-cpp">template &lt;class T&gt;
 T square(T const t) {
@@ -2501,14 +2556,14 @@ test.cpp:14:21: note:   couldn't deduce template parameter 'Fn'
 <p>TODO</p>
 <h2 id="cpp_tricks-shared_ptr-deleter">自定义 shared_ptr 的 deleter</h2>
 <h2 id="cpp_tricks-check_cuda">CHECK_CUDA 类错误检测宏</h2>
-<h2 id="cpp_tricks-_14">函数默认参数求值的位置是调用者</h2>
+<h2 id="cpp_tricks-_15">函数默认参数求值的位置是调用者</h2>
 <h2 id="cpp_tricks-locale-utf8">设置 locale 为 .utf8</h2>
-<h2 id="cpp_tricks-_15">花括号实现安全的类型转换检查</h2>
+<h2 id="cpp_tricks-_16">花括号实现安全的类型转换检查</h2>
 <h2 id="cpp_tricks-this">成员函数针对 this 的移动重载</h2>
 <h2 id="cpp_tricks-check_cuda_1">CHECK_CUDA 类错误检测宏</h2>
-<h2 id="cpp_tricks-_16">函数默认参数求值的位置是调用者</h2>
-<h2 id="cpp_tricks-_17">花括号实现安全的类型转换检查</h2>
-<h2 id="cpp_tricks-_18">临时右值转左值</h2>
+<h2 id="cpp_tricks-_17">函数默认参数求值的位置是调用者</h2>
+<h2 id="cpp_tricks-_18">花括号实现安全的类型转换检查</h2>
+<h2 id="cpp_tricks-_19">临时右值转左值</h2>
 <p>C++ 有个特性：支持纯右值(prvalue)隐式转换成 const 的左值引用。</p>
 <p>翻译：<code>int &amp;&amp;</code> 可以自动转换成 <code>int const &amp;</code>。</p>
 <pre><code class="language-cpp">void func(int const &amp;i);
@@ -2593,7 +2648,7 @@ int b = f &gt;&gt; 4;  // 0x2
 </code></pre>
 <h2 id="cpp_tricks-vector-unordered_map-lru-cache">vector + unordered_map = LRU cache</h2>
 <h2 id="cpp_tricks-lambda-unique_ptr-function">Lambda 捕获 unique_ptr 导致 function 报错怎么办</h2>
-<h2 id="cpp_tricks-_19">多线程通信应基于队列，而不是共享全局变量</h2>
+<h2 id="cpp_tricks-_20">多线程通信应基于队列，而不是共享全局变量</h2>
 <h2 id="cpp_tricks-raii-finally">RAII 的 finally 帮手类</h2>
 <h2 id="cpp_tricks-swap-mutex">swap 缩小 mutex 区间代价</h2>
 <h2 id="cpp_tricks-namespace">namespace 别名</h2></section><section class="print-page" id="lambda"><h1 id="lambda-_1">小彭老师带你学函数式编程</h1>
