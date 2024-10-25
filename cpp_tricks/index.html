@@ -436,7 +436,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#locale-utf8_1" class="nav-link">设置 locale 为 .utf8 解决编码问题</a>
+            <li class="nav-item" data-bs-level="2"><a href="#locale-utf8-windows" class="nav-link">设置 locale 为 .utf8 解决 Windows 编码难问题</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -536,7 +536,7 @@
 <li><a href="#adl">ADL 机制实现静态多态</a></li>
 <li><a href="#shared_from_this">shared_from_this</a></li>
 <li><a href="#requires">requires 语法检测是否存在指定成员函数</a></li>
-<li><a href="#locale-utf8_1">设置 locale 为 .utf8 解决编码问题</a></li>
+<li><a href="#locale-utf8-windows">设置 locale 为 .utf8 解决 Windows 编码难问题</a></li>
 <li><a href="#this_1">成员函数针对 this 的移动重载</a></li>
 <li><a href="#bit-field">位域（bit-field）</a></li>
 <li><a href="#vector-unordered_map-lru-cache">vector + unordered_map = LRU cache</a></li>
@@ -787,7 +787,7 @@ struct Child : Parent {
 
 Child child(23, &quot;peng&quot;);  // 错误！Child 没有构造函数！
 </code></pre>
-<p>可以在子类里面写 <code>using 父类::父类</code>，就能自动继承父类所有的构造函数了。</p>
+<p>C++11 中可以在子类里面写 <code>using 父类::父类</code>，就能自动继承父类所有的构造函数了。</p>
 <pre><code class="language-cpp">struct Parent {
     Parent(int age, const char *name) { ... }
     void parent_func() { ... }
@@ -2030,7 +2030,13 @@ auto str = oss.str();
 <p>TODO</p>
 <h2 id="shared_from_this">shared_from_this</h2>
 <h2 id="requires">requires 语法检测是否存在指定成员函数</h2>
-<h2 id="locale-utf8_1">设置 locale 为 .utf8 解决编码问题</h2>
+<h2 id="locale-utf8-windows">设置 locale 为 .utf8 解决 Windows 编码难问题</h2>
+<pre><code class="language-cpp">system(&quot;chcp 65001&quot;);
+setlocale(&quot;LC_ALL&quot;, &quot;.utf-8&quot;);
+</code></pre>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 详见 <a href="../unicode/">Unicode 专题章节</a>。</p>
+</blockquote>
 <h2 id="this_1">成员函数针对 this 的移动重载</h2>
 <h2 id="bit-field">位域（bit-field）</h2>
 <p>在互联网编程和各种与硬盘、序列化打交道的场景中，常常需要按位拆分单个字节。</p>
@@ -2057,7 +2063,36 @@ int b = f &gt;&gt; 4;  // 0x2
 <h2 id="_20">多线程通信应基于队列，而不是共享全局变量</h2>
 <h2 id="raii-finally">RAII 的 finally 帮手类</h2>
 <h2 id="swap-mutex">swap 缩小 mutex 区间代价</h2>
-<h2 id="namespace">namespace 别名</h2></div>
+<h2 id="namespace">namespace 别名</h2>
+<p>有些嵌套很深的名字空间每次都要复读非常啰嗦。</p>
+<pre><code class="language-cpp">#include &lt;filesystem&gt;
+
+int main() {
+    std::filesystem::path p = &quot;/var/www/html&quot;;
+    ...
+}
+</code></pre>
+<p>如果 <code>using namespace</code> 的话，又觉得污染全局名字空间了。</p>
+<pre><code class="language-cpp">#include &lt;filesystem&gt;
+
+using namespace std::filesystem;
+
+int main() {
+    std::filesystem::path p = &quot;/var/www/html&quot;;
+    ...
+}
+</code></pre>
+<p>可以用 C++11 的 <code>namespace =</code> 语法，给名字空间取个别名。</p>
+<pre><code class="language-cpp">#include &lt;filesystem&gt;
+
+namespace fs = std::filesystem;
+
+int main() {
+    fs::path p = &quot;/var/www/html&quot;;
+    ...
+}
+</code></pre>
+<p>这样以后就可以 <code>fs</code> 这个简称访问了。</p></div>
             </div>
         </div>
 
