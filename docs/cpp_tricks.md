@@ -310,6 +310,73 @@ assert(stu2.name == "侯捷老师");
 
 大多数情况下，我们只需要在类里面存 vector、string 等封装好的容器，编译器默认生成的拷贝构造函数会自动调用他们的拷贝构造函数，用户只需专注于业务逻辑即可，不需要操心底层细节。
 
+对于持有资源的 RAII 类，我们都会直接删除其拷贝构造函数和拷贝赋值函数：
+
+```cpp
+struct RAIIHandle {
+    int handle;
+    RAIIHandle() {
+        handle = CreateObject();
+    }
+    RAIIHandle(RAIIHandle const &) = delete;
+    RAIIHandle &operator=(RAIIHandle const &) = delete;
+    RAIIHandle() {
+        DeleteObject(handle);
+    }
+};
+```
+
+## 继承构造函数
+
+C++ 特色：子类不会自动继承父类的构造函数！（除非父类的构造函数是没有参数的默认构造函数）
+
+```cpp
+struct Parent {
+    Parent(int age, const char *name) { ... }
+    void parent_func() { ... }
+};
+
+struct Child : Parent {
+    void child_func() { ... }
+};
+
+Child child(23, "peng");  // 错误！Child 没有构造函数！
+```
+
+可以在子类里面写 `using 父类::父类`，就能自动继承父类所有的构造函数了。
+
+```cpp
+struct Parent {
+    Parent(int age, const char *name) { ... }
+    void parent_func() { ... }
+};
+
+struct Child : Parent {
+    using Parent::Parent;  // 加上这一行！
+    void child_func() { ... }
+};
+
+Child child(23, "peng");  // 编译通过，自动调用到父类的构造函数 Parent(int, const char *)
+```
+
+在 C++98 中，没有 using 的这个语法，只能自己定义一个构造函数，然后使用“委任构造”的语法转发所有参数给父类，非常繁琐。
+
+```cpp
+struct Parent {
+    Parent(int age, const char *name) { ... }
+    void parent_func() { ... }
+};
+
+struct Child : Parent {
+    Child(int age, const char *name)
+        : Parent(age, name)
+    { ... }
+    void child_func() { ... }
+};
+
+Child child(23, "peng");  // 编译通过，调用到子类的构造函数后转发到父类
+```
+
 ## 提前返回
 
 ```cpp
