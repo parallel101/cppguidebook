@@ -343,7 +343,7 @@ struct Child : Parent {
 Child child(23, "peng");  // 错误！Child 没有构造函数！
 ```
 
-可以在子类里面写 `using 父类::父类`，就能自动继承父类所有的构造函数了。
+C++11 中可以在子类里面写 `using 父类::父类`，就能自动继承父类所有的构造函数了。
 
 ```cpp
 struct Parent {
@@ -2038,7 +2038,14 @@ TODO
 
 ## requires 语法检测是否存在指定成员函数
 
-## 设置 locale 为 .utf8 解决编码问题
+## 设置 locale 为 .utf8 解决 Windows 编码难问题
+
+```cpp
+system("chcp 65001");
+setlocale("LC_ALL", ".utf-8");
+```
+
+> {{ icon.tip }} 详见 [Unicode 专题章节](unicode.md)。
 
 ## 成员函数针对 this 的移动重载
 
@@ -2082,3 +2089,42 @@ int b = f >> 4;  // 0x2
 ## swap 缩小 mutex 区间代价
 
 ## namespace 别名
+
+有些嵌套很深的名字空间每次都要复读非常啰嗦。
+
+```cpp
+#include <filesystem>
+
+int main() {
+    std::filesystem::path p = "/var/www/html";
+    ...
+}
+```
+
+如果 `using namespace` 的话，又觉得污染全局名字空间了。
+
+```cpp
+#include <filesystem>
+
+using namespace std::filesystem;
+
+int main() {
+    std::filesystem::path p = "/var/www/html";
+    ...
+}
+```
+
+可以用 C++11 的 `namespace =` 语法，给名字空间取个别名。
+
+```cpp
+#include <filesystem>
+
+namespace fs = std::filesystem;
+
+int main() {
+    fs::path p = "/var/www/html";
+    ...
+}
+```
+
+这样以后就可以 `fs` 这个简称访问了。
