@@ -1586,9 +1586,12 @@ public:
 ```cpp
 struct Name : Typed<Name, std::string> {};
 
-struct Meter : Typed<Meter, double> {};
+struct Meter : Typed<Meter, double> {
+    using Typed<Kilometer, double>::Typed;
+};
 
 struct Kilometer : Typed<Kilometer, double> {
+    using Typed<Kilometer, double>::Typed;
     operator Meter() const {
         // 允许隐式转换为米
         return Meter(value * 1000);
