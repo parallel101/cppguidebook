@@ -1793,9 +1793,12 @@ public:
 </code></pre>
 <pre><code class="language-cpp">struct Name : Typed&lt;Name, std::string&gt; {};
 
-struct Meter : Typed&lt;Meter, double&gt; {};
+struct Meter : Typed&lt;Meter, double&gt; {
+    using Typed&lt;Kilometer, double&gt;::Typed;
+};
 
 struct Kilometer : Typed&lt;Kilometer, double&gt; {
+    using Typed&lt;Kilometer, double&gt;::Typed;
     operator Meter() const {
         // 允许隐式转换为米
         return Meter(value * 1000);
