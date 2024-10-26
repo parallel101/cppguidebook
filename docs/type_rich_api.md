@@ -597,7 +597,7 @@ struct Span {
         auto restSize = size - start;
         if (length > restSize) // 如果长度超过上限，则自动截断
             length = restSize;
-        return Span(data + start, restSize + length);
+        return Span(data + start, length);
     }
 };
 ```
@@ -819,7 +819,7 @@ parseInt("233").value_or(0);
 
 parseInt 内部实现可能如下：
 ```cpp
-std::optional<int> parseInt(std::string_view sv) {
+std::optional<int> parseInt(std::string_view str) {
     int value;
     auto result = std::from_chars(str.data(), str.data() + str.size(), std::ref(value));
     if (result.ec == std::errc())
@@ -1666,9 +1666,9 @@ auto modeLut = std::map<OpenMode, std::string>{
 
 FileHandle file_open(std::filesystem::path path, OpenMode mode) {
 #ifdef _WIN32
-    return std::shared_ptr<FILE>(_wfopen(path.wstring().c_str(), modeLut.at(mode)), fclose);
+    return std::shared_ptr<FILE>(_wfopen(path.wstring().c_str(), modeLut.at(mode).c_str()), fclose);
 #else
-    return std::shared_ptr<FILE>(fopen(path.string().c_str(), modeLut.at(mode)), fclose);
+    return std::shared_ptr<FILE>(fopen(path.string().c_str(), modeLut.at(mode).c_str()), fclose);
 #endif
 }
 
@@ -1682,7 +1682,7 @@ template <class T>
 FileResult file_read(FileHandle file, std::span<T> elements) {
     auto n = fread(elements.data(), sizeof(T), elements.size(), file.get());
     return {
-        .numElements = n == 0 ? n : std::nullopt,
+        .numElements = n == 0 ? std::optional(n) : std::nullopt,
         .errorCode = std::errc(ferror(file.get())),
         .isEndOfFile = (bool)feof(file.get()),
     };
