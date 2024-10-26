@@ -421,7 +421,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年10月26日 15:16:22 (UTC+08:00)</p>
+<p>更新时间：2024年10月26日 15:20:27 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -2915,7 +2915,7 @@ int main() {
 <p>不仅完全没有可读性、可维护性，甚至都没有可移植性。</p>
 <p>除非你只写应付导师的“一次性”程序，一旦要实现复杂的业务需求，不可避免的要自己封装函数或类。网上所有鼓吹“不封装”“设计模式是面子工程”的反智言论，都是没有做过大型项目的。</p>
 <h3 id="lambda-_4">设计模式追求的是“可改”而不是“可读”！</h3>
-<p>很多设计模式教材片面强调<strong>可读性</strong>，仿佛设计模式就是为了“优雅”“高大上”“美学”？使得很多人认为，“我这个是自己的项目，不用美化给领导看”而拒绝设计模式。实际上设计模式的主要价值在于<em>方便后续修改</em>*！</p>
+<p>很多设计模式教材片面强调<strong>可读性</strong>，仿佛设计模式就是为了“优雅”“高大上”“美学”？使得很多人认为，“我这个是自己的项目，不用美化给领导看”而拒绝设计模式。实际上设计模式的主要价值在于<strong>方便后续修改</strong>！</p>
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 例如 B 站以前只支持上传普通视频，现在叔叔突然提出：要支持互动视频，充电视频，视频合集，还废除了视频分 p，还要支持上传短视频，竖屏开关等……每一个叔叔的要求，都需要大量程序员修改代码，无论涉及前端还是后端。</p>
 </blockquote>
@@ -5298,7 +5298,7 @@ read(fd, Span(buf).subspan(0, 10));  // 只读取前 10 个字节！
         auto restSize = size - start;
         if (length &gt; restSize) // 如果长度超过上限，则自动截断
             length = restSize;
-        return Span(data + start, restSize + length);
+        return Span(data + start, length);
     }
 };
 </code></pre>
@@ -5467,7 +5467,7 @@ int parseInt(const char *str, size_t n);
 <pre><code class="language-cpp">parseInt(&quot;233&quot;).value_or(0);
 </code></pre>
 <p>parseInt 内部实现可能如下：</p>
-<pre><code class="language-cpp">std::optional&lt;int&gt; parseInt(std::string_view sv) {
+<pre><code class="language-cpp">std::optional&lt;int&gt; parseInt(std::string_view str) {
     int value;
     auto result = std::from_chars(str.data(), str.data() + str.size(), std::ref(value));
     if (result.ec == std::errc())
@@ -6067,9 +6067,9 @@ auto modeLut = std::map&lt;OpenMode, std::string&gt;{
 
 FileHandle file_open(std::filesystem::path path, OpenMode mode) {
 #ifdef _WIN32
-    return std::shared_ptr&lt;FILE&gt;(_wfopen(path.wstring().c_str(), modeLut.at(mode)), fclose);
+    return std::shared_ptr&lt;FILE&gt;(_wfopen(path.wstring().c_str(), modeLut.at(mode).c_str()), fclose);
 #else
-    return std::shared_ptr&lt;FILE&gt;(fopen(path.string().c_str(), modeLut.at(mode)), fclose);
+    return std::shared_ptr&lt;FILE&gt;(fopen(path.string().c_str(), modeLut.at(mode).c_str()), fclose);
 #endif
 }
 
@@ -6083,7 +6083,7 @@ template &lt;class T&gt;
 FileResult file_read(FileHandle file, std::span&lt;T&gt; elements) {
     auto n = fread(elements.data(), sizeof(T), elements.size(), file.get());
     return {
-        .numElements = n == 0 ? n : std::nullopt,
+        .numElements = n == 0 ? std::optional(n) : std::nullopt,
         .errorCode = std::errc(ferror(file.get())),
         .isEndOfFile = (bool)feof(file.get()),
     };
