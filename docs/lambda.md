@@ -314,7 +314,7 @@ int main() {
 
 > {{ icon.tip }} 高层封装 API 应当可以完全通过调用底层 API 实现，提供高层 API 只是方便初级用户使用和理解。
 
-> {{ icon.story }} 
+> {{ icon.story }}
     例如 `libcurl` 就提供了 `curl_easy` 和 `curl_multi` 两套 API。
 
     - `curl_multi` 提供了超详细的参数，把每个操作分拆成多步，方便用户插手细节，满足高级用户的定制化需求，但太过复杂，难以学习。
@@ -1629,7 +1629,7 @@ auto lambda = [b] (int a) {
 
 ```cpp
 int b = 2;
-std::function<void(int)> lambda = [b] (int a) {
+std::function<int(int)> lambda = [b] (int a) {
     return a + b;
 };
 ```
@@ -1638,15 +1638,15 @@ std::function<void(int)> lambda = [b] (int a) {
 
 ```cpp
 // vector<auto> lambda_list;             // 错误：不支持的语法
-vector<function<void(int)>> lambda_list; // OK
+vector<function<int(int)>> lambda_list; // OK
 
 int b = 2;
 lambda_list.push_back([b] (int a) {
     return a + b;
-};
+});
 lambda_list.push_back([b] (int a) {
     return a * b;
-};
+});
 
 for (auto lambda: lambda_list) {
     int ret = lambda(2);
