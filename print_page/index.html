@@ -421,7 +421,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年10月26日 15:20:27 (UTC+08:00)</p>
+<p>更新时间：2024年10月31日 13:23:02 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -14334,16 +14334,74 @@ void test(function&lt;int (int)&gt; func) {
 <p>TODO</p></section><section class="print-page" id="design_concept"><h1 id="design_concept-c20-concept">鸭子类型与 C++20 concept (未完工)</h1>
 <div class="toc">
 <ul>
-<li><a href="#design_concept-c20-concept">鸭子类型与 C++20 concept (未完工)</a><ul>
-<li><a href="#design_concept-_1">虚函数的缺点</a></li>
-<li><a href="#design_concept-_2">模板函数的缺点</a></li>
-</ul>
-</li>
+<li><a href="#design_concept-c20-concept">鸭子类型与 C++20 concept (未完工)</a></li>
 </ul>
 </div>
-<h2 id="design_concept-_1">虚函数的缺点</h2>
-<p>TODO</p>
-<h2 id="design_concept-_2">模板函数的缺点</h2>
+<p>如果一个东西叫起来像一只鸭，走起路来像一只鸭，那么不妨认为他就是一只鸭。</p>
+<p>我们有三种类型的狗：拉布拉多犬，藏獒，张心欣。</p>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 请勿侮辱拉布拉多和藏獒！</p>
+</blockquote>
+<p>他们有一个共同点，那就是它们都会狗叫（bark）以及自我介绍（intro）。</p>
+<pre><code class="language-cpp">struct Labrador {
+    void intro() {
+        puts(&quot;我能帮你捡回棍棍！&quot;);
+    }
+
+    void bark() {
+        puts(&quot;汪汪！&quot;);
+    }
+};
+
+struct Mastiff {
+    void intro() {
+        puts(&quot;我能保卫国王荣耀！&quot;);
+    }
+
+    void bark() {
+        puts(&quot;汪汪！&quot;);
+    }
+};
+
+struct Xinxin {
+    void intro() {
+        puts(&quot;我能祝您裁员滚滚！&quot;);
+    }
+
+    void bark() {
+        puts(&quot;从未贡献任何核心功能！&quot;);
+    }
+};
+</code></pre>
+<p>现在，我们需要设计一个“饲养员”函数，他会让狗狗先自我介绍，然后叫两声。</p>
+<p>传统的基于重载的写法，需要连续写三个一模一样的函数体，非常麻烦，违反“避免重复”原则，不利于代码未来的维护。</p>
+<pre><code class="language-cpp">void feeder(Labrador dog) {
+    dog.intro();
+    dog.bark();
+    dog.bark();
+}
+
+void feeder(Mastiff dog) {
+    dog.intro();
+    dog.bark();
+    dog.bark();
+}
+
+void feeder(Xinxin dog) {
+    dog.intro();
+    dog.bark();
+    dog.bark();
+}
+</code></pre>
+<p>方案1：模板函数</p>
+<pre><code class="language-cpp">template &lt;typename Dog&gt;
+void feeder(Dog dog) {
+    dog.intro();
+    dog.bark();
+    dog.bark();
+}
+</code></pre>
+<p>此处把 <code>Dog</code> 定义为模板函数</p>
 <p>TODO</p></section><section class="print-page" id="error_code"><h1 id="error_code-c">现代 C++ 错误处理知多少（未完工）</h1>
 <p>配套视频：<a href="https://www.bilibili.com/video/BV1QpWSekEJY">BV1QpWSekEJY</a></p>
 <div class="toc">
