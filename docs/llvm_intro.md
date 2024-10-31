@@ -70,7 +70,7 @@ Clang 编译 C++ 程序的整个过程：
 
 > {{ icon.fun }} 源码面前，了无秘密。
 
-虽然 LLVM 几乎是无依赖的，只需要 CMake 和编译器就能构建，但依然推荐使用 Linux 系统进行实验，以获得和小彭老师同样的开发体验。Windows 用户建议使用 Virtual Studio 或 CLion 等强大 IDE 帮助阅读理解源码；Linux 用户建议安装 [小彭老师 vimrc](https://github.com/archibate/vimrc)；或者如果你是远程 Linux，可以试试看 VSCode 的远程 SSH 连接插件；CLion 似乎也有远程插件，只不过需要在远程安装好客户端。
+虽然 LLVM 几乎是无依赖的，只需要 CMake 和编译器就能构建，但依然推荐使用 Linux 系统进行实验，以获得和小彭老师同样的开发体验。Windows 用户建议使用 Visual Studio 或 CLion 等强大 IDE 帮助阅读理解源码；Linux 用户建议安装 [小彭老师 vimrc](https://github.com/archibate/vimrc)；或者如果你是远程 Linux，可以试试看 VSCode 的远程 SSH 连接插件；CLion 似乎也有远程插件，只不过需要在远程安装好客户端。
 
 强大的 IDE 和编辑器对学习任何大型项目都是必不可少的，特别是跳转到定义，以及返回这两个操作，是使用频率最高的，在源码之间的快速跳转将大大有助于快速理解和掌握代码结构。
 
