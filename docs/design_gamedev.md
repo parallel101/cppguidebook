@@ -86,6 +86,10 @@ inline Game Game::instance;  // 如果定义在头文件中，需要 inline！
 Game::instance.updatePlayers();
 ```
 
+> {{ icon.warn }} 警告：只定义在头文件中并使用 `inline` 这种写法，不适用于多 DLL 的情况！这会使 DLL 和 EXE 各自持有一份互不共通的 `instance`。如果需要在多 DLL 环境中使用这种饿汗模式单例，请乖乖[分离声明和定义](symbols.md)，别用 `inline` 了。
+
+> {{ icon.detail }} 这是因为 Windows 中的每个 DLL 和 EXE 都是一座孤岛，互相不知道对方有没有这个符号，所以 `inline` 的效果从“全局只保留一份定义”变成在每个“孤岛”内各自在内部只保留一份，从而 DLL 和 EXE 各自一份，总共有两份了，互相内容不互通，从而不是单例模式。而 Linux 没有这个问题，因为 SO 动态库是运行时才由 `ld-linux.so` 完成链接的，SO 内部仍保有编译时产生的函数符号信息，为的是被可执行 ELF 加载进来以后，`ld-linux.so` 可以自动根据把可执行 ELF 和 SO 内部的 `call` 指令后的地址更新为加载后的符号的动态地址。而 Windows 的 DLL 中所有符号在编译时就已经被 `ld` 已经焊死，无法修改，这就是为什么 Windows 的每个 DLL 都会自动额外生成一个同名 LIB 文件，这个 LIB 里面实际上是一个个“插桩”函数，这些函数名字和 DLL 中的相同，但是函数的内容，是会动态 `LoadLibrary` 加载同名 DLL，并通过 `GetProcAddress` 动态获取所有 `dllexport` 的函数，而链接时候指定的实际上是原 DLL 对应的这个插桩 LIB，DLL 本身是无法被链接器链接的。
+
 2. 作为函数内部的 static 变量（懒汗模式）
 
 ```cpp
@@ -107,6 +111,8 @@ public:
 Game::instance().updatePlayers();
 ```
 
+> {{ icon.warn }} 警告：这种写法同样不适用于多 DLL 的情况！如果需要在多 DLL 环境中使用，请乖乖[分离声明和定义](symbols.md)。
+
 ### 通用的单例模式模板
 
 ```cpp
@@ -123,6 +129,8 @@ singleton<Other>().someMethod();
 ```
 
 任何类型 T，只要以 `singleton<T>()` 形式获取，都能保证每个 T 都只有一份对象。（前提是你不要再 `T()` 创建对象）
+
+> {{ icon.warn }} 警告：这种写法同样不适用于多 DLL 的情况！如果需要在多 DLL 环境中使用，请乖乖[分离模板的声明和定义](symbols.md)。
 
 ## 模板模式
 
