@@ -314,7 +314,7 @@ int main() {
 
 > {{ icon.tip }} 高层封装 API 应当可以完全通过调用底层 API 实现，提供高层 API 只是方便初级用户使用和理解。
 
-> {{ icon.story }} 
+> {{ icon.story }}
     例如 `libcurl` 就提供了 `curl_easy` 和 `curl_multi` 两套 API。
 
     - `curl_multi` 提供了超详细的参数，把每个操作分拆成多步，方便用户插手细节，满足高级用户的定制化需求，但太过复杂，难以学习。
@@ -524,7 +524,7 @@ int generic_sum(std::vector<int> const &v, Op op) {
 }
 ```
 
-> {{ icon.fun }} C++11：auto 只能用于定义变量；C++14：函数返回类型可以是 auto；C++17：模板参数也可以 auto；C++20：函数参数也可以是 auto 了；（狂想）C++47：auto 现在是 C++47 的唯一关键字，用户只需不断输入 auto-auto-auto，编译器内建人工智能自动识别你的意图生成机器码。
+> {{ icon.fun }} C++11：auto 只能用于定义变量以及作为函数返回类型的占位符（无法自行推导）；C++14：函数返回类型可以是 auto 并自动推导；C++17：模板非类型参数也可以 auto；C++20：函数参数也可以是 auto 了；（狂想）C++47：auto 现在是 C++47 的唯一关键字，用户只需不断输入 auto-auto-auto，编译器内建人工智能自动识别你的意图生成机器码。
 
 ### 函数也是对象！
 
@@ -1766,8 +1766,8 @@ TODO：延迟回调
 - 在当前函数体内创建，当前函数体内立即调用，可以引用捕获 `[&]`，但值捕获 `[=]` 也没错。
 - 返回一个 lambda，必须值捕获 `[=]`。
 - 接受一个 lambda 做参数，需要进一步分为两种情况：
-    - 在当前函数体内立即调用，可以引用捕获 `[&]`，但值捕获 `[=]` 也没错。
-    - 作为回调函数，延迟调用，那就必须值捕获 `[=]`。
+  - 在当前函数体内立即调用，可以引用捕获 `[&]`，但值捕获 `[=]` 也没错。
+  - 作为回调函数，延迟调用，那就必须值捕获 `[=]`。
 
 以上四种情况，分别代码演示：
 
@@ -1895,35 +1895,34 @@ TODO: count_if, erase_if, argsort
 
 二元运算符
 
-| 运算符 | 仿函数类型 |
-|-|-|
-|`a < b`|`std::less`|
-|`a > b`|`std::greater`|
-|`a <= b`|`std::less_equal`|
-|`a >= b`|`std::greater_equal`|
-|`a == b`|`std::equal_to`|
-|`a != b`|`std::not_equal_to`|
-|`a <=> b`|`std::compare_three_way` (C++20)|
-|`a && b`|`std::logical_and`|
-|`a \|\| b`|`std::logical_or`|
-|`a & b`|`std::bit_and`|
-|`a \| b`|`std::bit_or`|
-|`a ^ b`|`std::bit_xor`|
-|`a + b`|`std::plus`|
-|`a - b`|`std::minus`|
-|`a * b`|`std::multiplies`|
-|`a / b`|`std::divides`|
-|`a % b`|`std::modulus`|
-
+| 运算符      | 仿函数类型                         |
+| ----------- | ---------------------------------- |
+| `a < b`   | `std::less`                      |
+| `a > b`   | `std::greater`                   |
+| `a <= b`  | `std::less_equal`                |
+| `a >= b`  | `std::greater_equal`             |
+| `a == b`  | `std::equal_to`                  |
+| `a != b`  | `std::not_equal_to`              |
+| `a <=> b` | `std::compare_three_way` (C++20) |
+| `a && b`  | `std::logical_and`               |
+| `a \|\| b`  | `std::logical_or`                |
+| `a & b`   | `std::bit_and`                   |
+| `a \| b`   | `std::bit_or`                    |
+| `a ^ b`   | `std::bit_xor`                   |
+| `a + b`   | `std::plus`                      |
+| `a - b`   | `std::minus`                     |
+| `a * b`   | `std::multiplies`                |
+| `a / b`   | `std::divides`                   |
+| `a % b`   | `std::modulus`                   |
 
 一元运算符
 
-| 运算符 | 仿函数类型 |
-|-|-|
-|`!a`|`std::logical_not`|
-|`~a`|`std::bit_not`|
-|`-a`|`std::negate`|
-|`a`|`std::identity`|
+| 运算符 | 仿函数类型           |
+| ------ | -------------------- |
+| `!a` | `std::logical_not` |
+| `~a` | `std::bit_not`     |
+| `-a` | `std::negate`      |
+| `a`  | `std::identity`    |
 
 ## bind 为函数对象绑定参数
 
