@@ -256,7 +256,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#auto_4" class="nav-link">auto 推导为引用</a>
+            <li class="nav-item" data-bs-level="2"><a href="#auto_5" class="nav-link">auto 推导为引用</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -279,31 +279,31 @@ int f();
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 闹了半天，还是要写返回类型，就只是挪到后面去好看一点……</p>
 <p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 当初引入后置返回类型实际的用途是 <code>auto f(int x) -&gt; decltype(x * x) { return x * x; }</code> 这种情况，但很容易被接下来 C++14 引入的真正 <code>auto</code> 返回类型推导平替了。</p>
 </blockquote>
-<p>C++14 引入了函数<strong>返回类型推导</strong>，<code>auto</code> 才算真正意义上能用做函数返回类型，它会自动根据函数中的 <code>return</code> 表达式推导出函数的返回类型。</p>
+<p>但是 C++14 引入了函数<strong>返回类型推导</strong>，<code>auto</code> 才算真正意义上能用做函数返回类型，它会自动根据函数中的 <code>return</code> 表达式推导出函数的返回类型。</p>
 <pre><code class="language-cpp">auto f(int x) {
-  return x * x;  // 表达式 `x * x` 的类型为 int，所以 auto 类型推导为 int
+    return x * x;  // 表达式 `x * x` 的类型为 int，所以 auto 类型推导为 int
 }
 // 等价于：
 int f() {
-  return x * x;
+    return x * x;
 }
 </code></pre>
 <p>如果函数中没有 <code>return</code> 语句，那么 <code>auto</code> 会被自动推导为 <code>void</code>，非常方便。</p>
 <pre><code class="language-cpp">auto f() {
-  std::println(&quot;hello&quot;);
+    std::println(&quot;hello&quot;);
 }
 // 等价于：
 void f() {
-  std::println(&quot;hello&quot;);
+    std::println(&quot;hello&quot;);
 }
 </code></pre>
 <p>值得注意的是，返回类型用 <code>auto</code> 来推导的函数，如果有多条 <code>return</code> 语句，那么他们必须都返回相同的类型，否则报错。</p>
 <pre><code class="language-cpp">auto f(int x) {
-  if (x &gt; 0) {
-    return 1;    // int
-  } else {
-    return 3.14; // double
-  }
+    if (x &gt; 0) {
+        return 1;    // int
+    } else {
+        return 3.14; // double
+    }
 } // 错误：有歧义，无法确定 auto 应该推导为 int 还是 double
 </code></pre>
 <p><code>auto</code> 还有一个缺点是，无法用于“分离声明和定义”的情况。因为推导 <code>auto</code> 类型需要知道函数体，才能看到里面的 <code>return</code> 表达式是什么类型。所以当 <code>auto</code> 返回类型被用于函数的非定义声明时，会直接报错。</p>
@@ -316,7 +316,41 @@ auto f() { // 编译通过：auto 推导为 int
 <p>因此，<code>auto</code> 通常只适用于头文件中“就地定义”的 <code>inline</code> 函数，不适合需要“分离 .cpp 文件”的函数。</p>
 <h2 id="auto_3">参数类型 <code>auto</code></h2>
 <p>C++20 引入了<strong>模板参数推导</strong>，可以让我们在函数参数中也使用 <code>auto</code>。</p>
-<p>TODO: 介绍</p>
+<p>在函数参数中也使用 <code>auto</code> 实际上等价于将该参数声明为模板参数，仅仅是一种更便捷的写法。</p>
+<pre><code class="language-cpp">void func(auto x) {
+    std::cout &lt;&lt; x;
+}
+// 等价于:
+template &lt;typename T&gt;
+void func(T x) {
+    std::cout &lt;&lt; x;
+}
+
+func(1); // 自动推导为调用 func&lt;int&gt;(1)
+func(3.14); // 自动推导为调用 func&lt;double&gt;(3.14)
+</code></pre>
+<p>如果参数类型的 <code>auto</code> 带有如 <code>auto &amp;</code> 这样的修饰，则实际上等价于相应模板函数的 <code>T &amp;</code>。</p>
+<pre><code class="language-cpp">// 自动推导为常引用
+void func(auto const &amp;x) {
+    std::cout &lt;&lt; x;
+}
+// 等价于:
+template &lt;typename T&gt;
+void func(T const &amp;x) {
+    std::cout &lt;&lt; x;
+}
+
+// 自动推导为万能引用
+void func(auto &amp;&amp;x) {
+    std::cout &lt;&lt; x;
+}
+// 等价于:
+template &lt;typename T&gt;
+void func(T &amp;&amp;x) {
+    std::cout &lt;&lt; x;
+}
+</code></pre>
+<h3 id="auto_4"><code>auto</code> 在多态中的妙用</h3>
 <p>传统的，基于类型重载的：</p>
 <pre><code class="language-cpp">int square(int x) {
     return x * x;
@@ -343,7 +377,7 @@ int main() {
     // 即使未来产生了 float 版的需求，也不用添加任何代码，因为是 square 是很方便的模板函数
 }
 </code></pre>
-<h2 id="auto_4"><code>auto</code> 推导为引用</h2>
+<h2 id="auto_5"><code>auto</code> 推导为引用</h2>
 <p>TODO: 继续介绍 <code>auto</code>, <code>auto const</code>, <code>auto &amp;</code>, <code>auto const &amp;</code>, <code>auto &amp;&amp;</code>, <code>decltype(auto)</code>, <code>auto *</code>, <code>auto const *</code></p></div>
             </div>
         </div>
