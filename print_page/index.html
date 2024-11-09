@@ -421,7 +421,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年11月09日 11:39:40 (UTC+08:00)</p>
+<p>更新时间：2024年11月09日 11:41:17 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -3104,7 +3104,7 @@ int main() {
 <p>暴露 API 时，要同时提供底层的 API 和高层封装的 API。用户如果想要控制更多细节可以调用底层 API，想要省事的用户可以调用高层封装好的 API。</p>
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 高层封装 API 应当可以完全通过调用底层 API 实现，提供高层 API 只是方便初级用户使用和理解。</p>
-<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/> 
+<p><img src="../img/book.png" height="30px" width="auto" style="margin: 0; border: none"/>
     例如 <code>libcurl</code> 就提供了 <code>curl_easy</code> 和 <code>curl_multi</code> 两套 API。</p>
 </blockquote>
 <pre><code>- `curl_multi` 提供了超详细的参数，把每个操作分拆成多步，方便用户插手细节，满足高级用户的定制化需求，但太过复杂，难以学习。
@@ -3277,7 +3277,7 @@ int generic_sum(std::vector&lt;int&gt; const &amp;v, Op op) {
 }
 </code></pre>
 <blockquote>
-<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> C++11：auto 只能用于定义变量；C++14：函数返回类型可以是 auto；C++17：模板参数也可以 auto；C++20：函数参数也可以是 auto 了；（狂想）C++47：auto 现在是 C++47 的唯一关键字，用户只需不断输入 auto-auto-auto，编译器内建人工智能自动识别你的意图生成机器码。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> C++11：auto 只能用于定义变量以及作为函数返回类型的占位符（无法自行推导）；C++14：函数返回类型可以是 auto 并自动推导；C++17：模板非类型参数也可以 auto；C++20：函数参数也可以是 auto 了；（狂想）C++47：auto 现在是 C++47 的唯一关键字，用户只需不断输入 auto-auto-auto，编译器内建人工智能自动识别你的意图生成机器码。</p>
 </blockquote>
 <h3 id="lambda-_12">函数也是对象！</h3>
 <p>在过去的<strong>面向对象编程范式<em>中，函数（代码）和对象（数据）被</em>割裂<em>开来，他们愚昧地认为</em>函数不是对象</strong>。</p>
@@ -4254,11 +4254,9 @@ int main() { // 我是调用者
 <ul>
 <li>在当前函数体内创建，当前函数体内立即调用，可以引用捕获 <code>[&amp;]</code>，但值捕获 <code>[=]</code> 也没错。</li>
 <li>返回一个 lambda，必须值捕获 <code>[=]</code>。</li>
-<li>接受一个 lambda 做参数，需要进一步分为两种情况：<ul>
+<li>接受一个 lambda 做参数，需要进一步分为两种情况：</li>
 <li>在当前函数体内立即调用，可以引用捕获 <code>[&amp;]</code>，但值捕获 <code>[=]</code> 也没错。</li>
 <li>作为回调函数，延迟调用，那就必须值捕获 <code>[=]</code>。</li>
-</ul>
-</li>
 </ul>
 <p>以上四种情况，分别代码演示：</p>
 <pre><code class="language-cpp">void func() {
