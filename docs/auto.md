@@ -16,15 +16,15 @@ int f();
 
 > {{ icon.detail }} 当初引入后置返回类型实际的用途是 `auto f(int x) -> decltype(x * x) { return x * x; }` 这种情况，但很容易被接下来 C++14 引入的真正 `auto` 返回类型推导平替了。
 
-C++14 引入了函数**返回类型推导**，`auto` 才算真正意义上能用做函数返回类型，它会自动根据函数中的 `return` 表达式推导出函数的返回类型。
+但是 C++14 引入了函数**返回类型推导**，`auto` 才算真正意义上能用做函数返回类型，它会自动根据函数中的 `return` 表达式推导出函数的返回类型。
 
 ```cpp
 auto f(int x) {
-  return x * x;  // 表达式 `x * x` 的类型为 int，所以 auto 类型推导为 int
+    return x * x;  // 表达式 `x * x` 的类型为 int，所以 auto 类型推导为 int
 }
 // 等价于：
 int f() {
-  return x * x;
+    return x * x;
 }
 ```
 
@@ -32,11 +32,11 @@ int f() {
 
 ```cpp
 auto f() {
-  std::println("hello");
+    std::println("hello");
 }
 // 等价于：
 void f() {
-  std::println("hello");
+    std::println("hello");
 }
 ```
 
@@ -44,11 +44,11 @@ void f() {
 
 ```cpp
 auto f(int x) {
-  if (x > 0) {
-    return 1;    // int
-  } else {
-    return 3.14; // double
-  }
+    if (x > 0) {
+        return 1;    // int
+    } else {
+        return 3.14; // double
+    }
 } // 错误：有歧义，无法确定 auto 应该推导为 int 还是 double
 ```
 
@@ -68,7 +68,47 @@ auto f() { // 编译通过：auto 推导为 int
 
 C++20 引入了**模板参数推导**，可以让我们在函数参数中也使用 `auto`。
 
-TODO: 介绍
+在函数参数中也使用 `auto` 实际上等价于将该参数声明为模板参数，仅仅是一种更便捷的写法。
+
+```cpp
+void func(auto x) {
+    std::cout << x;
+}
+// 等价于:
+template <typename T>
+void func(T x) {
+    std::cout << x;
+}
+
+func(1); // 自动推导为调用 func<int>(1)
+func(3.14); // 自动推导为调用 func<double>(3.14)
+```
+
+如果参数类型的 `auto` 带有如 `auto &` 这样的修饰，则实际上等价于相应模板函数的 `T &`。
+
+```cpp
+// 自动推导为常引用
+void func(auto const &x) {
+    std::cout << x;
+}
+// 等价于:
+template <typename T>
+void func(T const &x) {
+    std::cout << x;
+}
+
+// 自动推导为万能引用
+void func(auto &&x) {
+    std::cout << x;
+}
+// 等价于:
+template <typename T>
+void func(T &&x) {
+    std::cout << x;
+}
+```
+
+### `auto` 在多态中的妙用
 
 传统的，基于类型重载的：
 
