@@ -86,7 +86,7 @@
 </li>
                                     
 <li>
-    <a href="../auto/" class="dropdown-item">auto 神教 (未完工)</a>
+    <a href="../auto/" class="dropdown-item">auto 神教</a>
 </li>
                                     
 <li>
@@ -260,7 +260,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#auto" class="nav-link">6. auto 神教 (未完工)</a>
+            <li class="nav-item" data-bs-level="1"><a href="#auto" class="nav-link">6. auto 神教</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -421,7 +421,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年11月09日 11:41:17 (UTC+08:00)</p>
+<p>更新时间：2024年11月09日 12:46:32 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -929,9 +929,12 @@ void try_call_foo(T &amp;) {
 <h2 id="functions-_7">模板函数</h2>
 <p>TODO：更多介绍函数</p>
 <h2 id="functions-main">main 函数的参数</h2>
-<p>TODO</p></section><section class="print-page" id="auto"><h1 id="auto-auto"><code>auto</code> 神教 (未完工)</h1>
-<h2 id="auto-auto_1">变量 <code>auto</code></h2>
-<h2 id="auto-auto_2">返回类型 <code>auto</code></h2>
+<p>TODO</p></section><section class="print-page" id="auto"><h1 id="auto-auto"><code>auto</code> 神教</h1>
+<h2 id="auto-auto_1"><code>auto</code> 关键字的前世今生</h2>
+<p>TODO</p>
+<h2 id="auto-auto_2">变量声明为 <code>auto</code></h2>
+<p>TODO</p>
+<h2 id="auto-auto_3">返回类型 <code>auto</code></h2>
 <p>C++11 引入的 <code>auto</code> 关键字可以用作函数的返回类型，但它只是一个“占位”，让我们得以后置返回类型，并没有多大作用，非常残废。</p>
 <pre><code class="language-cpp">auto f() -&gt; int;
 // 等价于：
@@ -976,7 +979,157 @@ auto f() { // 编译通过：auto 推导为 int
 }
 </code></pre>
 <p>因此，<code>auto</code> 通常只适用于头文件中“就地定义”的 <code>inline</code> 函数，不适合需要“分离 .cpp 文件”的函数。</p>
-<h2 id="auto-auto_3">参数类型 <code>auto</code></h2>
+<h3 id="auto-_1">返回引用类型</h3>
+<p>返回类型声明为 <code>auto</code>，可以自动推导返回类型，但总是推导出普通的值类型，绝对不会带有引用或 <code>const</code> 修饰。</p>
+<p>如果需要返回一个引用，并且希望自动推导引用的类型，可以写 <code>auto &amp;</code>。</p>
+<pre><code class="language-cpp">int i;
+int &amp;ref = i;
+
+auto f() { // 返回类型推导为 int
+    return i;
+}
+
+auto f() { // 返回类型推导依然为 int
+    return ref;
+}
+
+auto &amp;f() { // 返回类型这才能推导为 int &amp;
+    return ref;
+}
+
+auto &amp;f() { // 编译期报错：1 是纯右值，不可转为左值引用
+    return 1;
+}
+
+auto &amp;f() { // 运行时出错：空悬引用是未定义行为
+    int local = 42;
+    return local;
+}
+</code></pre>
+<p>这里的 <code>auto</code> 还可以带有 <code>const</code> 修饰，例如 <code>auto const &amp;</code> 可以让返回类型变成带有 <code>const</code> 修饰的常引用。</p>
+<pre><code class="language-cpp">int i;
+int &amp;ref = i;
+
+```cpp
+int i;
+
+auto getValue() { // 返回类型推导为 int
+    return i;
+}
+
+auto &amp;getRef() { // 返回类型推导为 int &amp;
+    return i;
+}
+
+auto const &amp;getConstRef() { // 返回类型推导为 int const &amp;
+    return i;
+}
+</code></pre>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>auto const &amp;</code> 与 <code>const auto &amp;</code> 完全等价，只是代码习惯问题。</p>
+</blockquote>
+<p>有趣的是，如果 <code>i</code> 是 <code>int const</code> 类型，则 <code>auto &amp;</code> 也可以自动推导为 <code>int const &amp;</code> 且不报错。</p>
+<pre><code class="language-cpp">const int i;
+
+auto const &amp;getConstRef() { // 返回类型推导为 int const &amp;
+    return i;
+}
+
+auto &amp;getRef() { // 返回类型也会被推导为 int const &amp;
+    return i;
+}
+
+int &amp;getRef() { // 报错！
+    return i;
+}
+</code></pre>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>int const</code> 与 <code>const int</code> 是完全等价的，只是代码习惯问题。</p>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>auto &amp;</code> 可以兼容 <code>int const &amp;</code>，而 <code>int &amp;</code> 就不能兼容 <code>int const &amp;</code>！很奇怪吧？这是因为 <code>auto</code> 不一定必须是 <code>int</code>，也可以是 <code>const int</code> 这一整个类型。你可以把 <code>auto</code> 看作和模板函数参数一样，模板函数参数的 <code>T &amp;</code> 一样可以通过将 <code>T = const int</code> 从而捕获 <code>const int &amp;</code>。</p>
+</blockquote>
+<p>如果要允许 <code>auto</code> 推导为右值引用，只需写 <code>auto &amp;&amp;</code>。</p>
+<pre><code class="language-cpp">std::string str;
+
+auto &amp;&amp;getRVRef() { // std::string &amp;&amp;
+    return std::move(str);
+}
+
+auto &amp;getRef() { // std::string &amp;
+    return str;
+}
+
+auto const &amp;getConstRef() { // std::string const &amp;
+    return str;
+}
+</code></pre>
+<p>正如 <code>auto &amp;</code> 可以兼容 <code>auto const &amp;</code> 一样，由于 C++ 的某些特色机制，<code>auto &amp;&amp;</code> 其实也可以兼容 <code>auto &amp;</code>！</p>
+<p>所以 <code>auto &amp;&amp;</code> 实际上不止支持右值引用，也支持左值引用，因此被称为“万能引用”。</p>
+<p>也就是说，其实我们可以都写作 <code>auto &amp;&amp;</code>！让编译器自动根据我们 <code>return</code> 语句的表达式类型，判断返回类型是左还是右引用。</p>
+<pre><code class="language-cpp">std::string str;
+
+auto &amp;&amp;getRVRef() { // std::string &amp;&amp;
+    return std::move(str);
+}
+
+auto &amp;&amp;getRef() { // std::string &amp;
+    return str;
+}
+
+auto const &amp;getConstRef() { // std::string const &amp;
+    return str;
+}
+</code></pre>
+<p><code>auto &amp;&amp;</code> 不仅能推导为右值引用，也能推导为左值引用，常左值引用。</p>
+<p>可以理解为集合的包含关系：<code>auto &amp;&amp;</code> &gt; <code>auto &amp;</code> &gt; <code>auto const &amp;</code></p>
+<p>所以 <code>auto &amp;&amp;</code> 实际上可以推导所有引用，不论左右。</p>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 这里的原因和刚才 <code>auto = int const</code> 从而 <code>auto &amp;</code> 可以接纳 <code>int const &amp;</code> 一样，<code>auto &amp;&amp;</code> 可以接纳 <code>int &amp;</code> 是因为 C++ 特色的“引用折叠”机制：<code>&amp; &amp;&amp; = &amp;</code> 即左引用碰到右引用，会得到左引用。所以编译器可以通过令 <code>auto = int &amp;</code> 从而使得 <code>auto &amp;&amp; = int &amp; &amp;&amp; = int &amp;</code>，从而实际上 <code>auto &amp;&amp;</code> 看似是右值引用，但是因为可以给 <code>auto</code> 带入一个左值引用 <code>int &amp;</code>，然后让左引用 <code>&amp;</code> 与右引用 <code>&amp;&amp;</code> “湮灭”，最终只剩下一个左引用 <code>&amp;</code>，在之后的模板函数专题中会更详细介绍这一特色机制。</p>
+</blockquote>
+<p>这就是为什么 <code>int &amp;&amp;</code> 就只是右值引用，而 <code>auto &amp;&amp;</code> 以及 <code>T &amp;&amp;</code> 则会叫做万能引用。一旦允许前面的参数为 <code>auto</code> 或者模板参数，就可以代换，就可以实现左右通吃。</p>
+<h3 id="auto-decltypeauto">真正的万能 <code>decltype(auto)</code></h3>
+<p>以上介绍的这些引用推导规则，其实也适用于局部变量的 <code>auto</code>，例如：</p>
+<pre><code class="language-cpp">auto i = 0;             // int i = 0
+auto &amp;ref = i;          // int &amp;ref = i
+auto const &amp;cref = i;   // int const &amp;cref = i
+auto &amp;&amp;rvref = move(i); // int &amp;&amp;rvref = move(i)
+
+decltype(auto) j = i;   // int j = i
+decltype(auto) k = ref; // int &amp;k = ref
+decltype(auto) l = cref; // int const &amp;l = cref
+decltype(auto) m = move(rvref); // int &amp;&amp;m = rvref
+</code></pre>
+<h2 id="auto-for-auto">范围 for 循环中的 <code>auto &amp;</code></h2>
+<p>众所周知，在 C++11 的“范围 for 循环” (range-based for loop) 语法中，<code>auto</code> 的出镜率很高。</p>
+<p>但是如果只是写 <code>auto i: arr</code> 的话，这会从 arr 中拷贝一份新的 <code>i</code> 变量出来，不仅产生了额外的开销，还意味着你对这 <code>i</code> 变量的修改不会反映到 <code>arr</code> 中原本的元素中去。</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; arr = {1, 2, 3};
+for (auto i: arr) {  // auto i 推导为 int i，会拷贝一份新的 int 变量
+    i += 1; // 错误的写法，这样只是修改了 int 变量
+}
+print(arr); // 依然是 {1, 2, 3}
+</code></pre>
+<p>更好的写法是 <code>auto &amp;i: arr</code>，保存一份对数组中元素的引用，不仅避免了拷贝的开销（如果不是 <code>int</code> 而是其他更大的类型的话，这是一笔不小的开销），而且允许你就地修改数组中元素的值。</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; arr = {1, 2, 3};
+for (auto &amp;i: arr) {  // auto &amp;i 推导为 int &amp;i，保存的是对 arr 中原元素的一份引用，不发生拷贝
+    i += 1; // 因为 i 现在是对 arr 中真正元素的引用，对其修改也会成功反映到原 arr 中去
+}
+print(arr); // 变成了 {2, 3, 4}
+</code></pre>
+<p>如果不打算修改数组，也可以用 <code>auto const &amp;</code>，让捕获到的引用添加上 <code>const</code> 修饰，避免一不小心修改了数组，同时提升代码可读性（人家一看就懂哪些 for 循环是想要修改原值，哪些不会修改原值）。</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; arr = {1, 2, 3};
+for (auto const &amp;i: arr) {  // auto const &amp;i 推导为 int const &amp;i，保存的是对 arr 中原元素的一份常引用，不发生拷贝，且不可修改
+    i += 1; // 编译期出错！const 引用不可修改
+}
+</code></pre>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 对于遍历 <code>std::map</code>，由于刚才提到的 <code>auto &amp;</code> 实际上也兼容常引用，而 map 的值类型是 <code>std::pair&lt;const K, V&gt;</code>，所以即使你只需修改 <code>V</code> 的部分，只需使用 <code>auto &amp;</code> 配合 C++17 的“结构化绑定” (structural-binding) 语法拆包即可，<code>K</code> 的部分会自动带上 <code>const</code>，不会出现编译错误的。</p>
+</blockquote>
+<pre><code class="language-cpp">std::map&lt;std::string, std::string&gt; table;
+for (auto &amp;[k, v]: table) { // 编译通过：k 的部分会自动带上 const
+    k = &quot;hello&quot;; // 编译出错：k 推导为 std::string const &amp; 不可修改
+    v = &quot;world&quot;; // 没问题：v 推导为 std::string &amp; 可以就地修改
+}
+</code></pre>
+<h2 id="auto-auto_4">参数类型 <code>auto</code></h2>
 <p>C++20 引入了<strong>模板参数推导</strong>，可以让我们在函数参数中也使用 <code>auto</code>。</p>
 <p>在函数参数中也使用 <code>auto</code> 实际上等价于将该参数声明为模板参数，仅仅是一种更便捷的写法。</p>
 <pre><code class="language-cpp">void func(auto x) {
@@ -1012,7 +1165,7 @@ void func(T &amp;&amp;x) {
     std::cout &lt;&lt; x;
 }
 </code></pre>
-<h3 id="auto-auto_4"><code>auto</code> 在多态中的妙用</h3>
+<h3 id="auto-auto_5"><code>auto</code> 在多态中的妙用</h3>
 <p>传统的，基于类型重载的：</p>
 <pre><code class="language-cpp">int square(int x) {
     return x * x;
@@ -1039,8 +1192,79 @@ int main() {
     // 即使未来产生了 float 版的需求，也不用添加任何代码，因为是 square 是很方便的模板函数
 }
 </code></pre>
-<h2 id="auto-auto_5"><code>auto</code> 推导为引用</h2>
-<p>TODO: 继续介绍 <code>auto</code>, <code>auto const</code>, <code>auto &amp;</code>, <code>auto const &amp;</code>, <code>auto &amp;&amp;</code>, <code>decltype(auto)</code>, <code>auto *</code>, <code>auto const *</code></p></section><section class="print-page" id="symbols"><h1 id="symbols-_1">重新认识声明与定义（未完工）</h1>
+<p>实际上等价于模板函数的如下写法：</p>
+<pre><code class="language-cpp">template &lt;class T&gt;
+decltype(T() * T()) square(T x) {
+    return x * x;
+}
+</code></pre>
+<h3 id="auto-auto_6">参数 <code>auto</code> 推导为引用</h3>
+<p>和之前变量 <code>auto</code>，返回类型 <code>auto</code> 的 <code>auto &amp;</code>、<code>auto const &amp;</code>、<code>auto &amp;&amp;</code> 大差不差，C++20 这个参数 <code>auto</code> 同样也支持推导为引用。</p>
+<pre><code class="language-cpp">void passByValue(auto x) { // 参数类型推导为 int
+    x = 42;
+}
+
+void passByRef(auto &amp;x) { // 参数类型推导为 int &amp;
+    x = 42;
+}
+
+void passByConstRef(auto const &amp;x) { // 参数类型推导为 int const &amp;
+    x = 42; // 编译期错误：常引用无法写入！
+}
+
+int x = 1;
+passByValue(x);
+cout &lt;&lt; x; // 还是 1
+passByRef(x);
+cout &lt;&lt; x; // 42
+</code></pre>
+<pre><code class="language-cpp">void passByRef(auto &amp;x) {
+    x = 1;
+}
+
+int x = 1;
+const int const_x = 1;
+passByRef(i); // 参数类型推导为 int &amp;
+passByRef(const_x); // 参数类型推导为 const int &amp;
+</code></pre>
+<p>由于 <code>auto &amp;</code> 兼容 <code>auto const &amp;</code> 的尿性，此处第二个调用 <code>passByRef</code> 会把参数类型推导为 <code>const int &amp;</code>，这会导致里面的 x = 42 编译出错！</p>
+<ul>
+<li>所以 <code>auto &amp;</code> 实际上也允许传入 <code>const</code> 变量的引用，非常恼人，不要掉以轻心。</li>
+<li>而 <code>auto const &amp;</code> 则可以安心，一定是带 <code>const</code> 的。</li>
+</ul>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 所以实际上最常用的是 <code>auto const &amp;</code>。</p>
+</blockquote>
+<p>不仅如此 <code>auto const &amp;</code> 参数还可以传入纯右值（利用了 C++ 可以自动把纯右值转为 <code>const</code> 左引用的特性）。</p>
+<p>对于已有的变量传入，可以避免一次拷贝；对于就地创建的纯右值表达式，则自动转换，非常方便。</p>
+<pre><code class="language-cpp">void passByConstRef(auto const &amp;cref) {
+    std::cout &lt;&lt; cref;
+}
+
+int i = 42;
+passByConstRef(i);  // 传入 i 的引用
+passByConstRef(42); // 利用 C++ 自动把纯右值 “42” 自动转为 const 左值的特性
+</code></pre>
+<p>对于这种自动转出来的 <code>const</code> 左值引用，其实际上是在栈上自动创建了一个 <code>const</code> 变量保存你临时创建的参数，然后在当前行结束后自动析构。</p>
+<pre><code class="language-cpp">passByConstRef(42);
+// 等价于：
+{
+    const int tmp = 42;
+    passByConstRef(tmp); // 传入的是这个自动生成 tmp 变量的 const 引用
+}
+</code></pre>
+<p>这个自动生成的 <code>tmp</code> 变量的生命周期是“一条语句”，也就是当前分号结束前，该变量的生命周期都存在，直到分号结束后才会析构，所以如下代码是安全的：</p>
+<pre><code class="language-cpp">void someCFunc(const char *name);
+
+someCFunc(std::string(&quot;hello&quot;).c_str());
+</code></pre>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 此处 <code>std::string("hello")</code> 构造出的临时 <code>string</code> 类型变量的生命周期直到 <code>;</code> 才结束，而这时 <code>someCFunc</code> 早已执行完毕返回了，只要 <code>someCFunc</code> 对 <code>name</code> 的访问集中在当前这次函数调用中，没有把 <code>name</code> 参数存到全局变量中去，就不会有任何空悬指针问题。</p>
+</blockquote>
+<h3 id="auto-auto_7"><code>auto &amp;&amp;</code> 参数万能引用及其转发</h3>
+<p>TODO</p>
+<p>然而，由于 C++ “默认自动变左值”的糟糕特色，即使你将一个传入时是右值的引用直接转发给另一个函数，这个参数也会默默退化成左值类型，需要再 <code>std::move</code> 一次才能保持他一直处于右值类型。</p>
+<h3 id="auto-stdforward"><code>std::forward</code> 帮手函数介绍</h3></section><section class="print-page" id="symbols"><h1 id="symbols-_1">重新认识声明与定义（未完工）</h1>
 <div class="toc">
 <ul>
 <li><a href="#symbols-_1">重新认识声明与定义（未完工）</a><ul>
