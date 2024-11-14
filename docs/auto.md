@@ -200,18 +200,70 @@ auto const &getConstRef() { // std::string const &
 
 ### 真正的万能 `decltype(auto)`
 
+返回类型声明为 `decltype(auto)` 的效果等价于把返回类型替换为 `decltype((返回表达式))`：
+
+```cpp
+int i;
+
+decltype(auto) func() {
+    return i;
+}
+// 等价于：
+decltype((i)) func() {
+    return i;
+}
+// 等价于：
+int &func() {
+    return i;
+}
+```
+
+> {{ icon.warn }} 注意 `decltype(i)` 是 `int` 而 `decltype((i))` 是 `int &`。这是因为 `decltype` 实际上有两个版本！当 `decltype` 中的内容只是单独的一个标识符（变量名）时，会得到变量定义时的类型；而当 `decltype` 中的内容不是单纯的变量名，而是一个复杂的表达式时，就会进入 `decltype` 的第二个版本：表达式版，会求表达式的类型，例如当变量为 `int` 时，表达式 `(i)` 的类型是左值引用，`int &`，而变量本身 `i` 的类型则是 `int`。此处加上 `()` 就是为了让 `decltype` 被迫进入“表达式”的那个版本，`decltype(auto)` 遵循的也是“表达式”这个版本的结果。
+
+```cpp
+int i;
+
+decltype(auto) func() {
+    return i;
+}
+// 等价于：
+decltype((i + 1)) func() {
+    return i + 1;
+}
+// 等价于：
+int func() {
+    return i + 1;
+}
+```
+
+```cpp
+int i;
+
+decltype(auto) func() {
+    return std::move(i);
+}
+// 等价于：
+decltype((std::move(i))) func() {
+    return std::move(i);
+}
+// 等价于：
+int &&func() {
+    return std::move(i);
+}
+```
+
 以上介绍的这些引用推导规则，其实也适用于局部变量的 `auto`，例如：
 
 ```cpp
-auto i = 0;             // int i = 0
-auto &ref = i;          // int &ref = i
-auto const &cref = i;   // int const &cref = i
-auto &&rvref = move(i); // int &&rvref = move(i)
+auto i = 0;              // int i = 0
+auto &ref = i;           // int &ref = i
+auto const &cref = i;    // int const &cref = i
+auto &&rvref = std::move(i); // int &&rvref = move(i)
 
-decltype(auto) j = i;   // int j = i
-decltype(auto) k = ref; // int &k = ref
+decltype(auto) j = i;    // int j = i
+decltype(auto) k = ref;  // int &k = ref
 decltype(auto) l = cref; // int const &l = cref
-decltype(auto) m = move(rvref); // int &&m = rvref
+decltype(auto) m = std::move(rvref); // int &&m = rvref
 ```
 
 ## 范围 for 循环中的 `auto &`
