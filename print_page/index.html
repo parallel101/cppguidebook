@@ -421,7 +421,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年11月09日 12:46:32 (UTC+08:00)</p>
+<p>更新时间：2024年11月14日 18:11:41 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -1087,16 +1087,62 @@ auto const &amp;getConstRef() { // std::string const &amp;
 </blockquote>
 <p>这就是为什么 <code>int &amp;&amp;</code> 就只是右值引用，而 <code>auto &amp;&amp;</code> 以及 <code>T &amp;&amp;</code> 则会叫做万能引用。一旦允许前面的参数为 <code>auto</code> 或者模板参数，就可以代换，就可以实现左右通吃。</p>
 <h3 id="auto-decltypeauto">真正的万能 <code>decltype(auto)</code></h3>
-<p>以上介绍的这些引用推导规则，其实也适用于局部变量的 <code>auto</code>，例如：</p>
-<pre><code class="language-cpp">auto i = 0;             // int i = 0
-auto &amp;ref = i;          // int &amp;ref = i
-auto const &amp;cref = i;   // int const &amp;cref = i
-auto &amp;&amp;rvref = move(i); // int &amp;&amp;rvref = move(i)
+<p>返回类型声明为 <code>decltype(auto)</code> 的效果等价于把返回类型替换为 <code>decltype((返回表达式))</code>：</p>
+<pre><code class="language-cpp">int i;
 
-decltype(auto) j = i;   // int j = i
-decltype(auto) k = ref; // int &amp;k = ref
+decltype(auto) func() {
+    return i;
+}
+// 等价于：
+decltype((i)) func() {
+    return i;
+}
+// 等价于：
+int &amp;func() {
+    return i;
+}
+</code></pre>
+<blockquote>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意 <code>decltype(i)</code> 是 <code>int</code> 而 <code>decltype((i))</code> 是 <code>int &amp;</code>。这是因为 <code>decltype</code> 实际上有两个版本！当 <code>decltype</code> 中的内容只是单独的一个标识符（变量名）时，会得到变量定义时的类型；而当 <code>decltype</code> 中的内容不是单纯的变量名，而是一个复杂的表达式时，就会进入 <code>decltype</code> 的第二个版本：表达式版，会求表达式的类型，例如当变量为 <code>int</code> 时，表达式 <code>(i)</code> 的类型是左值引用，<code>int &amp;</code>，而变量本身 <code>i</code> 的类型则是 <code>int</code>。此处加上 <code>()</code> 就是为了让 <code>decltype</code> 被迫进入“表达式”的那个版本，<code>decltype(auto)</code> 遵循的也是“表达式”这个版本的结果。</p>
+</blockquote>
+<pre><code class="language-cpp">int i;
+
+decltype(auto) func() {
+    return i;
+}
+// 等价于：
+decltype((i + 1)) func() {
+    return i + 1;
+}
+// 等价于：
+int func() {
+    return i + 1;
+}
+</code></pre>
+<pre><code class="language-cpp">int i;
+
+decltype(auto) func() {
+    return std::move(i);
+}
+// 等价于：
+decltype((std::move(i))) func() {
+    return std::move(i);
+}
+// 等价于：
+int &amp;&amp;func() {
+    return std::move(i);
+}
+</code></pre>
+<p>以上介绍的这些引用推导规则，其实也适用于局部变量的 <code>auto</code>，例如：</p>
+<pre><code class="language-cpp">auto i = 0;              // int i = 0
+auto &amp;ref = i;           // int &amp;ref = i
+auto const &amp;cref = i;    // int const &amp;cref = i
+auto &amp;&amp;rvref = std::move(i); // int &amp;&amp;rvref = move(i)
+
+decltype(auto) j = i;    // int j = i
+decltype(auto) k = ref;  // int &amp;k = ref
 decltype(auto) l = cref; // int const &amp;l = cref
-decltype(auto) m = move(rvref); // int &amp;&amp;m = rvref
+decltype(auto) m = std::move(rvref); // int &amp;&amp;m = rvref
 </code></pre>
 <h2 id="auto-for-auto">范围 for 循环中的 <code>auto &amp;</code></h2>
 <p>众所周知，在 C++11 的“范围 for 循环” (range-based for loop) 语法中，<code>auto</code> 的出镜率很高。</p>
@@ -14600,10 +14646,34 @@ void test(function&lt;int (int)&gt; func) {
 <p>TODO</p></section><section class="print-page" id="design_concept"><h1 id="design_concept-c20-concept">鸭子类型与 C++20 concept (未完工)</h1>
 <div class="toc">
 <ul>
-<li><a href="#design_concept-c20-concept">鸭子类型与 C++20 concept (未完工)</a></li>
+<li><a href="#design_concept-c20-concept">鸭子类型与 C++20 concept (未完工)</a><ul>
+<li><a href="#design_concept-_1">为什么需要多态</a><ul>
+<li><a href="#design_concept-_2">模板函数</a></li>
+<li><a href="#design_concept-_3">“特殊照顾”</a><ul>
+<li><a href="#design_concept-_4">模板函数与普通重载函数并列</a></li>
+<li><a href="#design_concept-if">模板函数内做 if 特殊判断</a></li>
+</ul>
+</li>
+<li><a href="#design_concept-c17-if-constexpr">C++17 编译期分支 if constexpr</a><ul>
+<li><a href="#design_concept-_5">依然无法自动适配所有新增类型</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#design_concept-c20-concepts">C++20 concepts</a><ul>
+<li><a href="#design_concept-requires">requires 检查表达式合法性</a></li>
+<li><a href="#design_concept-requires_1">requires 应用案例：迭代器</a></li>
+<li><a href="#design_concept-requires_2">requires 自带干粮</a></li>
+<li><a href="#design_concept-concept">预定义好 concept 更方便</a></li>
+<li><a href="#design_concept-concepts">标准库定义好的 &lt;concepts&gt;</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 <p>如果一个东西叫起来像一只鸭，走起路来像一只鸭，那么不妨认为他就是一只鸭。</p>
+<h2 id="design_concept-_1">为什么需要多态</h2>
 <p>我们有三种类型的狗：拉布拉多犬，藏獒，张心欣。</p>
 <blockquote>
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 请勿侮辱拉布拉多和藏獒！</p>
@@ -14659,7 +14729,14 @@ void feeder(Xinxin dog) {
     dog.bark();
 }
 </code></pre>
-<p>方案1：模板函数</p>
+<p>这种写法的缺陷在两个方面：</p>
+<ol>
+<li>当需要添加一个新类型的狗狗 <code>Shiba</code> 时，需要再复制粘贴定义一个 <code>feeder(Shiba)</code> 的重载。</li>
+<li>当需要修改 <code>feeder</code> 的操作内容时，需要把三个重载都同样地修改一遍。</li>
+</ol>
+<h3 id="design_concept-_2">模板函数</h3>
+<p>可以把 <code>feeder</code> 定义为模板函数，这样他的参数可以为任意类型。</p>
+<p>只要传入的模板参数类型具有 <code>intro</code> 和 <code>bark</code> 这两个成员函数，编译就不会出错。</p>
 <pre><code class="language-cpp">template &lt;typename Dog&gt;
 void feeder(Dog dog) {
     dog.intro();
@@ -14667,8 +14744,542 @@ void feeder(Dog dog) {
     dog.bark();
 }
 </code></pre>
-<p>此处把 <code>Dog</code> 定义为模板函数</p>
-<p>TODO</p></section><section class="print-page" id="error_code"><h1 id="error_code-c">现代 C++ 错误处理知多少（未完工）</h1>
+<ol>
+<li>当添加了一个新类型的狗狗 <code>Shiba</code> 时，什么都不用做，只要 <code>Shiba</code> 定义了 <code>intro</code> 和 <code>bark</code> 成员函数，就可以直接传入 <code>feeder</code>，无需做任何适配工作。</li>
+<li>当我们需要修改 <code>feeder</code> 的操作内容时，只需修改这一个模板函数的内容就行了。</li>
+</ol>
+<p>可见，模板函数是重载函数的便民版，可用于当所有的重载函数内部代码完全一致的情况。</p>
+<h3 id="design_concept-_3">“特殊照顾”</h3>
+<p>但是，如果有些特殊类型的重载需要特殊照顾，导致内部代码不一样，这种传统的模板函数就不适用了。</p>
+<p>例如，我们现在让拉布拉多和藏獒保持原样，但张心欣因为智力原因，没有了 <code>intro</code> 的功能。</p>
+<pre><code class="language-cpp">struct Labrador {
+    void intro() {
+        puts(&quot;我能帮你捡回棍棍！&quot;);
+    }
+
+    void bark() {
+        puts(&quot;汪汪！&quot;);
+    }
+};
+
+struct Mastiff {
+    void intro() {
+        puts(&quot;我能保卫国王荣耀！&quot;);
+    }
+
+    void bark() {
+        puts(&quot;汪汪！&quot;);
+    }
+};
+
+struct Xinxin {
+    // 没有 intro() 成员函数
+
+    void bark() {
+        puts(&quot;从未贡献任何核心功能！&quot;);
+    }
+};
+</code></pre>
+<p>对于张心欣这种智力特殊丧失 <code>intro</code> 功能的狗狗，需要特殊照顾，在 <code>feeder</code> 中需要对 <code>Xinxin</code> 做特别判断，如果判断到狗狗类型是 <code>Xinxin</code>，就需要跳过对 <code>intro</code> 的调用，这该怎么做呢？</p>
+<p>传统的暴力重载函数的方法中，很简单，只需要拉布拉多和藏獒的重载版本保持不变，只对张心欣这一个 <code>feeder(Xinxin)</code> 重载里的代码做特殊修改，删掉 <code>intro</code> 调用即可。</p>
+<pre><code class="language-cpp">void feeder(Labrador dog) {
+    dog.intro();
+    dog.bark();
+    dog.bark();
+}
+
+void feeder(Mastiff dog) {
+    dog.intro();
+    dog.bark();
+    dog.bark();
+}
+
+void feeder(Xinxin dog) {
+    // dog.intro();
+    dog.bark();
+    dog.bark();
+}
+</code></pre>
+<p>模板函数要如何实现这种“特殊照顾”呢？</p>
+<h4 id="design_concept-_4">模板函数与普通重载函数并列</h4>
+<p>一种方法是额外定义一个普通的重载函数 <code>feeder(Xinxin)</code>，与模板函数并列。</p>
+<pre><code class="language-cpp">template &lt;typename Dog&gt;
+void feeder(Dog dog) {
+    dog.intro();
+    dog.bark();
+    dog.bark();
+}
+
+void feeder(Xinxin dog) {
+    // dog.intro();
+    dog.bark();
+    dog.bark();
+}
+</code></pre>
+<p>当调用 <code>feeder</code> 时，得益于 C++ 的重载机制，会优先匹配非模板的普通重载函数，如果匹配不成功，才会落入通用的模板函数作为备选方案。</p>
+<pre><code class="language-cpp">Xinxin xinxin;
+feeder(xinxin);   // 会优先匹配到 feeder(Xinxin) 这个普通函数
+Labrador labrador;
+feeder(labrador); // 会匹配到 feeder&lt;Labrador&gt;(Labrador) 这个模板函数
+</code></pre>
+<p>该方案依然存在缺陷：</p>
+<ol>
+<li>这里模板函数和普通函数中，最后都有两次 <code>bark</code> 调用，出现了代码重复。</li>
+<li>如果我们想要添加一个新类型的狗狗 <code>Yuanming</code>，他也没有 <code>intro</code>，难道又要为他单独定义一个重载么？</li>
+</ol>
+<h4 id="design_concept-if">模板函数内做 if 特殊判断</h4>
+<p>针对缺点 1，我们想到，能不能不用分离两个函数，而是在函数内部，动态判断模板参数 <code>Dog</code> 类型是否为 <code>Xinxin</code>，如果不是 <code>Xinxin</code> 才去调用 <code>dog.intro()</code>。</p>
+<pre><code class="language-cpp">template &lt;typename Dog&gt;
+void feeder(Dog dog) {
+    if (Dog != Xinxin) {
+        dog.intro();
+    }
+    dog.bark();
+    dog.bark();
+}
+</code></pre>
+<p>上面这种写法 <code>Dog != Xinxin</code> 仅为示意，实际上是编译不通过的。</p>
+<p>因为只有值表达式才能用运算符 <code>!=</code> 比较，类型表达式不能用 <code>!=</code> 比较。</p>
+<p>要两个类型是否相等，需要用到 <code>&lt;type_traits&gt;</code> 头文件中的 <code>is_same_v</code>。</p>
+<p><code>is_same_v&lt;X, Y&gt;</code> 相当于类型版本的 <code>X == Y</code>。</p>
+<p>这里因为我们要判断的是不等，<code>Dog != Xinxin</code>，所以用 <code>!is_same_v&lt;Dog, Xinxin&gt;</code> 即可。</p>
+<pre><code class="language-cpp">#include &lt;type_traits&gt;
+
+template &lt;typename Dog&gt;
+void feeder(Dog dog) {
+    if (!std::is_same_v&lt;Dog, Xinxin&gt;) {
+        dog.intro();
+    }
+    dog.bark();
+    dog.bark();
+}
+</code></pre>
+<p>试试看，你会发现编译错误：</p>
+<pre><code class="language-cpp">Labrador labrador;
+feeder(labrador); // 编译通过
+Xinxin xinxin;
+feeder(xinxin);   // 编译报错：“Xinxin 没有成员 intro”
+</code></pre>
+<p>为什么？我们不是判断了 <code>if (Dog 不为 Xinxin)</code> 才会调用 <code>dog.intro()</code> 吗？我们现在传入的是一个 <code>Xinxin</code> 类型的狗狗，为什么还是会执行到 <code>dog.intro()</code> 导致编译器找不到这个成员函数而报错呢？</p>
+<p>原来，“执行到”和“编译到”是两个概念。</p>
+<p><code>if</code> 只是避免了运行时的“执行到”，但编译期还是会“编译到”的。</p>
+<p>例如以下代码会出错：</p>
+<pre><code class="language-cpp">if (0) {
+    &quot;string&quot; = 0;
+}
+</code></pre>
+<p>虽然 <code>if</code> 的判断条件始终为 <code>false</code>，“运行时”永远不会执行到里面的代码，但是由于编译器编译时，每个他看到的代码都要生成相应的 IR 中间码，即使最终可能被优化掉，也要为其生成 IR。</p>
+<p>所以虽然 <code>if (0)</code> 会让运行时永远无法执行到或者可能被“中后端”优化掉而不会产生汇编码，但编译器的“前端”仍需完成该分支体内代码的翻译工作，而 <code>"string" = 0</code> 是非法的，根本无法生成出 IR 中间码，导致编译出错终止。</p>
+<h3 id="design_concept-c17-if-constexpr">C++17 编译期分支 <code>if constexpr</code></h3>
+<p>为了避免在“编译期”就触及 <code>xinxin.intro()</code> 这个无法通过编译的代码，我们需要使在编译期就完成分支，而不是拖到运行时或优化时。</p>
+<p>C++17 引入的 <code>if constexpr</code> 就是一个编译期版本的 <code>if</code> 分支，他要求判断的表达式必须是编译期可以确定的，并且能保证分支一定在编译期完成，保证不会在运行时生成的汇编中产生任何额外的分支指令，无论是否开启优化。</p>
+<p>如果 <code>if constexpr</code> 的分支条件不满足，则分支内的代码根本不会进行编译，即使含有本不能通过编译的代码也不会报错了。</p>
+<pre><code class="language-cpp">#include &lt;type_traits&gt;
+
+template &lt;typename Dog&gt;
+void feeder(Dog dog) {
+    if constexpr (!std::is_same_v&lt;Dog, Xinxin&gt;) { // 编译期决定要不要编译下面的代码
+        dog.intro();
+    }
+    dog.bark();
+    dog.bark();
+}
+</code></pre>
+<p>如果 Dog 是 Xinxin，则 <code>dog.intro()</code> 这条语句从编译期前端开始就不会经过编译，无论是否开启优化都会被抹除。因此即使找不到 <code>intro</code> 这个成员，也绝对不会报错了。</p>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 抹除的就和张心欣抹除小彭老师贡献一样干净！</p>
+</blockquote>
+<h4 id="design_concept-_5">依然无法自动适配所有新增类型</h4>
+<p>缺点 2 依然存在：如果我们想要添加一个新类型的狗狗 <code>Yuanming</code>，他也没有 <code>intro</code>，那就得在 if 判断中添加一个 <code>is_same_v&lt;Dog, Yuanming&gt;</code> 判断，每多一个没有 <code>intro</code> 的狗狗就得加一遍，没完没了。</p>
+<pre><code class="language-cpp">struct Xinxin {
+    // 没有 intro() 成员函数
+
+    void bark() {
+        puts(&quot;从未贡献任何核心功能！&quot;);
+    }
+};
+
+struct Yuanming {
+    // 没有 intro() 成员函数
+
+    void bark() {
+        puts(&quot;Taichi is your hobby, but yuanming's work&quot;);
+    }
+};
+
+template &lt;typename Dog&gt;
+void feeder(Dog dog) {
+    if constexpr (!std::is_same_v&lt;Dog, Xinxin&gt;
+               &amp;&amp; !std::is_same_v&lt;Dog, Yuanming&gt;) { // 搁着叠罗汉呢？
+        dog.intro();
+    }
+    dog.bark();
+    dog.bark();
+}
+</code></pre>
+<h2 id="design_concept-c20-concepts">C++20 concepts</h2>
+<h3 id="design_concept-requires"><code>requires</code> 检查表达式合法性</h3>
+<p>与其用 <code>is_same_v</code> 一个个罗列出“没有 <code>intro</code>”的类型一一判断，不如直接检测 <code>dog</code> 有没有 <code>intro</code> 这个成员。</p>
+<p>C++20 引入的 <code>requires</code> 关键字，可以帮你检测一个表达式是否“合法”，也就是能不能编译通过，如果能编译通过，会返回 <code>true</code>。</p>
+<p>过去，如果一个表达式非法（例如找不到成员函数），我们就只能眼巴巴让编译器出错终止编译……</p>
+<pre><code class="language-cpp">struct Xinxin {
+    void bark() {
+        puts(&quot;从未贡献任何核心功能！&quot;);
+    }
+};
+
+Xinxin xinxin;
+xinxin.intro(); // 编译出错
+xinxin.bark();  // 编译通过
+</code></pre>
+<p>现在，我们可以把“编译是否通过”安全地作为一个 <code>bool</code> 值返回回来，供我们后续判断处理，而不必粗暴地终止整个编译。</p>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 过去：一坨史害了一锅粥。现在：每粒米都放在一个隔离的“安全沙盒”里独立检验，检验结果通过 <code>bool</code> 返回，告诉小彭老师要不要吃这粒米。</p>
+</blockquote>
+<p>用法就是：<code>requires { 要检验的表达式; }</code></p>
+<p>所以，我们可以用 <code>requires { 要检验的变量.要检验的成员函数(参数...); }</code> 来判断某个变量类型是否有特定名字的成员函数，因为如果没有，那么表达式编译会失败，<code>requires</code> 就会返回 <code>false</code>。所以只要这个 <code>requires</code> 返回了 <code>true</code>，就可以说明该类型含有此名称的成员变量或成员函数了。对于成员函数还需要注意指定正确类型的参数，否则也无法通过编译。利用此方法还可以检测成员函数是否支持特定参数类型的重载等。</p>
+<pre><code class="language-cpp">struct Xinxin {
+    void bark() {
+        puts(&quot;从未贡献任何核心功能！&quot;);
+    }
+};
+
+Xinxin xinxin;
+bool has_intro = requires { xinxin.intro(); }; // false
+bool has_bark = requires { xinxin.bark(); };   // true
+</code></pre>
+<p><code>requires</code> 判断的结果是编译期常量（<code>constexpr bool</code>），可以作为 <code>if constexpr</code> 的条件使用。</p>
+<p>结合 <code>if constexpr</code> 可以根据一个类型有没有某个成员（通过检测访问这个成员是否可以编译通过）来决定要不要调用这个成员。</p>
+<pre><code class="language-cpp">if constexpr (requires { dog.intro(); }) {
+    dog.intro();
+}
+</code></pre>
+<pre><code class="language-cpp">template &lt;typename Dog&gt;
+void feeder(Dog dog) {
+    if constexpr (requires { dog.intro(); }) { // 如果支持 .intro() 成员函数
+        dog.intro(); // 则调用他
+    }
+    dog.bark();
+    dog.bark();
+}
+</code></pre>
+<p><code>if constexpr</code> 还可以带有 <code>else</code>，甚至 <code>else if constexpr</code>。</p>
+<pre><code class="language-cpp">template &lt;typename Dog&gt;
+void feeder(Dog dog) {
+    if constexpr (requires { dog.intro(); }) { // 如果支持 .intro() 成员函数
+        dog.intro(); // 则调用他
+    } else if constexpr (requires { dog.intro(1); }) { // 如果支持 .intro(int) 这种带一个 int 参数的重载
+        dog.intro(1); // 则尝试调用这种带有 int 参数的重载
+    } else {
+        puts(&quot;此狗狗似乎不支持自我介绍呢&quot;); // 否则打印警告信息
+    }
+    dog.bark();
+    dog.bark();
+}
+</code></pre>
+<h3 id="design_concept-requires_1"><code>requires</code> 应用案例：迭代器</h3>
+<p>众所周知，迭代器分为很多类型，例如：</p>
+<p>随机迭代器支持 <code>+=</code> 操作，可以向前步进任意整数格，也可以 <code>-=</code> 向后退步。</p>
+<p>而前向迭代器只能 <code>++</code> 向前移动一格，如果需要向前移动 n 格，就需要重复执行 <code>++</code> n 次。</p>
+<p>还有一种双向迭代器，他既可以 <code>++</code> 向前移动一格，也可以 <code>--</code> 向后退步一格，但是不支持任意整数步长的 <code>+=</code> 和 <code>-=</code>，需要用循环来模拟。</p>
+<p>比如 <code>vector</code> 的迭代器就属于随机迭代器，因为 <code>vector</code> 是连续内存的容器，他是一个线性的数组，其迭代器实际上就是一个指向元素的指针，迭代器的步进实际上就是指针在 <code>+=</code>，当然支持前进（加上）任意整数 n 格了。</p>
+<p>我们现在想要实现一个通用的迭代器“步进”函数 <code>advance</code>：</p>
+<ol>
+<li>对于随机迭代器他会直接调用 <code>+=</code> 前进 n 步，不用循环一格格 <code>++</code> 的低效。</li>
+<li>对于前向迭代器他会循环调用 <code>++</code> n 次，如果 n 为负数则报错。</li>
+<li>对于双向迭代器他会循环调用 <code>++</code> 或 <code>--</code> n 次，取决于 n 是否为正数。</li>
+</ol>
+<p>伪代码如下：</p>
+<pre><code class="language-cpp">template &lt;typename It&gt;
+void advance(It &amp;it, int n) {
+    if (随机迭代器) {
+        it += n;
+
+    } else if (双向迭代器) {
+        if (n &gt; 0) {
+            for (int i = 0; i &lt; -n; ++i) {
+                --it;
+            }
+        } else {
+            for (int i = 0; i &lt; n; ++i) {
+                ++it;
+            }
+        }
+
+    } else { // 前向迭代器
+        if (n &lt; 0) throw &quot;前向迭代器不能步进一个负数&quot;;
+        for (int i = 0; i &lt; n; ++i) {
+            ++it;
+        }
+    }
+}
+</code></pre>
+<p>如何用 <code>requires</code> 和 <code>if constexpr</code> 实现这个效果？</p>
+<pre><code class="language-cpp">template &lt;typename It&gt;
+void advance(It &amp;it, int n) {
+    if constexpr (requires { it += n; }) {
+        it += n;
+
+    } else if constexpr (requires { ++it; --it; }) {
+        if (n &gt; 0) {
+            for (int i = 0; i &lt; -n; ++i) {
+                --it;
+            }
+        } else {
+            for (int i = 0; i &lt; n; ++i) {
+                ++it;
+            }
+        }
+
+    } else {
+        if (n &lt; 0) throw &quot;前向迭代器不能步进一个负数&quot;;
+        for (int i = 0; i &lt; n; ++i) {
+            ++it;
+        }
+    }
+}
+</code></pre>
+<p>是不是很简单呢？只需要注意到随机迭代器需要支持 <code>+=</code>，那么我们就通过 <code>requires</code> 判断 <code>it</code> 是否支持 <code>+=</code>，支持了就说明应该是一个随机迭代器。否则如果是双向迭代器就应该支持 <code>++</code> 和 <code>--</code>，那就采用双向迭代器的方案。否则就只可能是前向迭代器，当 <code>n &lt; 0</code> 时需要报错因为他不支持 <code>++</code>。</p>
+<p>这里我们用了 <code>requires { ++it; --it; }</code> 这种带有多条语句的写法。没错，<code>requires</code> 支持一次性判断多条语句是否合法，只要其中一条非法就会返回 <code>false</code>，必须全部满足了才能返回 <code>true</code>。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 所以 <code>requires { ++it; --it; }</code> 实际上等价于 <code>requires { ++it; } &amp;&amp; requires { --it; }</code></p>
+</blockquote>
+<h3 id="design_concept-requires_2"><code>requires</code> 自带干粮</h3>
+<p>有时，我们的 <code>requires</code> 是在一个函数体内，已经有变量 <code>dog</code> 的情况下，这时只需写 <code>requires { dog.intro(); }</code> 即可判断 <code>dog</code> 是否支持 <code>dog.intro()</code> 成员函数。</p>
+<pre><code class="language-cpp">Dog dog;
+bool has_intro = requires { dog.intro(); };
+</code></pre>
+<p>但有时，我们需要直接判断 <code>Dog</code> 类型是否含有成员函数 <code>intro</code>，避免在函数中创建 <code>Dog dog</code> 变量。</p>
+<p>一种粗暴的方法是，直接用 <code>Dog()</code> 就地构造出一个 <code>Dog</code> 类型的对象来，然后访问这个临时对象的 <code>intro()</code>。</p>
+<pre><code class="language-cpp">bool has_intro = requires { Dog().intro(); };
+</code></pre>
+<p>但是，这会要求 <code>Dog</code> 支持默认构造函数 <code>Dog()</code>，如果 <code>Dog</code> 不支持默认构造，比如需要两个参数 <code>Dog(1, 2)</code> 这样才能构造出来，那么 <code>Dog().intro()</code> 编译就会出错，即使 <code>Dog</code> 有 <code>.intro()</code> 成员函数也会出错，因为前面的 <code>Dog()</code> 就编译不过，导致明明有 <code>.intro()</code> 却返回了 <code>false</code>。</p>
+<p>所以 <code>requires</code> 提供了一种方便的语法糖，你可以在 <code>requires</code> 和 <code>{</code> 之间加入 <code>(...)</code>，其中用类似于函数参数定义的写法，写你需要用到的变量的定义，在 <code>{...}</code> 中可以使用这些变量，变量的类型就是你在 <code>(...)</code> 中定义的类型。</p>
+<pre><code class="language-cpp">bool has_intro = requires (Dog dog) { dog.intro(); };
+</code></pre>
+<p>和需要在函数体内定义一个 <code>Dog dog</code> 变量再判断相比，<code>requires (Dog dog)</code> 这种写法仅仅只是构造出一个“编译期”象征性创建的“虚假”变量，仅供判断使用，并不会在栈上产生任何实际的空间占用，不增加任何运行时成本。</p>
+<p><code>()</code> 中也可以有多个变量的定义，用逗号分隔：</p>
+<pre><code class="language-cpp">if constexpr (requires (It it, int n) {
+    it += n;
+}) {
+    // 检测到随机迭代器时要执行的分支
+}
+</code></pre>
+<h3 id="design_concept-concept">预定义好 <code>concept</code> 更方便</h3>
+<p>推荐把常用到的条件预先定义成 <code>constexpr bool</code> 变量模板，这样以后不用每次都重写所有需要判断的表达式了。</p>
+<pre><code class="language-cpp">template &lt;typename It&gt;
+conetexpr bool random_access_iterator = requires (It it, int n) {
+    it += n;
+    it -= n;
+    ++it;
+    --it;
+};
+</code></pre>
+<p><code>conetexpr bool</code> 表示这是一个编译期就能确定值的变量，不会占用任何运行时空间。只要 <code>It</code> 这个模板参数确定，<code>bool</code> 的值就是编译期唯一确定的。</p>
+<p>更好的写法是用 <code>concept</code> 作为 <code>constexpr bool</code> 的简写，看起来更加“专业”“高B格”。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>concept</code> 并不只是个缩写，他还附赠了一些额外的好处，稍后介绍。但总的来说 <code>concept</code> 完全可以当作普通 <code>bool</code> 使用。</p>
+</blockquote>
+<p>预先定义好 <code>concept</code>，以后使用就不用“烧脑”思考需要支持哪些成员函数了，直接报 <code>concept</code> 的名字就行。</p>
+<p>这也是“概念 (concept)”得名的由来：如果一个类型支持“鸭叫”，那么他就符合“鸭子”这个概念。</p>
+<pre><code class="language-cpp">template &lt;typename It&gt;
+concept random_access_iterator = requires (It it, int n) {
+    it += n;
+    it -= n;
+    ++it;
+    --it;
+};
+
+template &lt;typename It&gt;
+concept bidirectional_iterator = requires (It it) {
+    ++it;
+    --it;
+};
+
+template &lt;typename It&gt;
+concept forward_iterator = requires (It it) {
+    ++it;
+};
+
+template &lt;typename It&gt;
+void advance(It &amp;it, int n) {
+    if constexpr (random_access_iterator&lt;It&gt;) {
+        it += n;
+
+    } else if constexpr (bidirectional_iterator&lt;It&gt;) {
+        if (n &gt; 0) {
+            for (int i = 0; i &lt; -n; ++i) {
+                --it;
+            }
+        } else {
+            for (int i = 0; i &lt; n; ++i) {
+                ++it;
+            }
+        }
+
+    } else if constexpr (forward_iterator&lt;It&gt;) {
+        if (n &lt; 0) throw &quot;前向迭代器不能步进一个负数&quot;;
+        for (int i = 0; i &lt; n; ++i) {
+            ++it;
+        }
+
+    } else {
+        throw &quot;It 不是任何一种合法的迭代器&quot;;
+    }
+}
+</code></pre>
+<p>针对满足不同的概念的参数类型采取不同的操作方式，这就是 C++20 概念。</p>
+<h3 id="design_concept-concepts">标准库定义好的 <code>&lt;concepts&gt;</code></h3>
+<p>我们自己定义的概念，难免有一些疏漏。例如前向迭代器实际上不仅要求支持 <code>++it</code> 还要支持 <code>it++</code> 这种后置的自增运算符，还要求支持拷贝构造函数等。</p>
+<p>所以，对于这种标准库就已经有的概念，推荐使用标准库头文件 <code>&lt;concepts&gt;</code> 中定义好的概念来用，而不必一个个自己手动定义。</p>
+<pre><code class="language-cpp">#include &lt;concepts&gt; // 定义了 concept 如 std::random_access_iterator
+
+if constexpr (std::random_access_iterator&lt;It&gt;) {
+    ... // 如果满足随机迭代器概念
+}
+</code></pre>
+<p>一些 C++11 <code>&lt;type_traits&gt;</code> 中就有的一些判断用的 <code>constexpr bool</code> 变量模板，在 C++20 <code>&lt;concepts&gt;</code> 中也“转正”为了 <code>concept</code>：</p>
+<pre><code class="language-cpp">#include &lt;type_traits&gt;
+
+if constexpr (std::is_integral_v&lt;T&gt;) {  // C++17
+    // T 是整数类型时
+}
+
+#include &lt;concepts&gt;
+
+if constexpr (std::integral&lt;T&gt;) {       // C++20
+    // T 是整数类型时
+}
+</code></pre>
+<p>其实际效果是相同的，只是名字更简洁，并且类型由 <code>constexpr bool</code> 变成了 <code>concept</code>。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 憋担心，如果你的编译器不支持 C++20，用 <code>std::is_integral_v</code> 实际上也和 <code>std::integral</code> 概念是一样的。</p>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> <code>&lt;concepts&gt;</code> 基本上就是去掉了 <code>is_</code> 和 <code>_v</code>。</p>
+</blockquote>
+<p>这里我们罗列一部分常见的 <code>concept</code> 和老 <code>constexpr bool</code> 对应列表：</p>
+<table>
+<thead>
+<tr>
+<th><code>&lt;concepts&gt;</code></th>
+<th><code>&lt;type_traits&gt;</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>std::same_as&lt;T, U&gt;</code></td>
+<td><code>std::is_same_v&lt;T, U&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::derived_from&lt;Base, Derived&gt;</code></td>
+<td><code>std::is_base_of_v&lt;Base, Derived&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::convertible_to&lt;From, To&gt;</code></td>
+<td><code>std::is_convertible_v&lt;From, To&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::integral&lt;T&gt;</code></td>
+<td><code>std::is_integral_v&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::floating_point&lt;T&gt;</code></td>
+<td><code>std::is_floating_point_v&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::signed_integral&lt;T&gt;</code></td>
+<td><code>std::is_signed_v&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::unsigned_integral&lt;T&gt;</code></td>
+<td><code>std::is_unsigned_v&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::move_constructible&lt;T&gt;</code></td>
+<td><code>std::is_move_constructible_v&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::copy_constructible&lt;T&gt;</code></td>
+<td><code>std::is_copy_constructible_v&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::copy_assignable&lt;T&gt;</code></td>
+<td><code>std::is_copy_assignable_v&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::move_assignable&lt;T&gt;</code></td>
+<td><code>std::is_move_assignable_v&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::copyable&lt;T&gt;</code></td>
+<td><code>std::is_copy_constructible_v&lt;T&gt; &amp;&amp; std::is_copy_assignable_v&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::movable&lt;T&gt;</code></td>
+<td><code>std::is_move_constructible_v&lt;T&gt; &amp;&amp; std::is_move_assignable_v&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::constructible_from&lt;T, Args...&gt;</code></td>
+<td><code>std::is_constructible_v&lt;T, Args...&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::assignable_from&lt;T, U&gt;</code></td>
+<td><code>std::is_assignable_v&lt;T, U&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::default_initializable&lt;T&gt;</code></td>
+<td><code>std::is_default_constructible_v&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::destructible&lt;T&gt;</code></td>
+<td><code>std::is_destructible_v&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::semiregular&lt;T&gt;</code></td>
+<td><code>std::is_default_constructible_v&lt;T&gt; &amp;&amp; std::is_copy_constructible_v&lt;T&gt; &amp;&amp; std::is_copy_assignable_v&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::regular&lt;T&gt;</code></td>
+<td><code>std::semiregular&lt;T&gt; &amp;&amp; std::is_equality_comparable_v&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::equality_comparable&lt;T&gt;</code></td>
+<td><code>std::is_equality_comparable&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::totally_ordered&lt;T&gt;</code></td>
+<td><code>std::equality_comparable&lt;T&gt; &amp;&amp; std::is_less_comparable&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::input_or_output_iterator&lt;It&gt;</code></td>
+<td><code>std::is_base_of_v&lt;std::input_iterator_tag, typename std::iterator_traits&lt;It&gt;::iterator_category&gt; \|\| std::is_base_of_v&lt;std::output_iterator_tag, typename std::iterator_traits&lt;It&gt;::iterator_category&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::input_iterator&lt;It&gt;</code></td>
+<td><code>std::is_base_of_v&lt;std::input_iterator_tag, typename std::iterator_traits&lt;It&gt;::iterator_category&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::output_iterator&lt;It&gt;</code></td>
+<td><code>std::is_base_of_v&lt;std::output_iterator_tag, typename std::iterator_traits&lt;It&gt;::iterator_category&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::forward_iterator&lt;It&gt;</code></td>
+<td><code>std::is_base_of_v&lt;std::forward_iterator_tag, typename std::iterator_traits&lt;It&gt;::iterator_category&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::bidirectional_iterator&lt;It&gt;</code></td>
+<td><code>std::is_base_of_v&lt;std::bidirectional_iterator_tag, typename std::iterator_traits&lt;It&gt;::iterator_category&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::random_access_iterator&lt;It&gt;</code></td>
+<td><code>std::is_base_of_v&lt;std::random_access_iterator_tag, typename std::iterator_traits&lt;It&gt;::iterator_category&gt;</code></td>
+</tr>
+<tr>
+<td><code>std::invocable&lt;F, Args...&gt;</code></td>
+<td><code>std::is_invocable_v&lt;F, Args...&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>更多细节请自行前往 <a href="https://en.cppreference.com/w/cpp/concepts">cppreference</a> 慢慢查阅。</p></section><section class="print-page" id="error_code"><h1 id="error_code-c">现代 C++ 错误处理知多少（未完工）</h1>
 <p>配套视频：<a href="https://www.bilibili.com/video/BV1QpWSekEJY">BV1QpWSekEJY</a></p>
 <div class="toc">
 <ul>
