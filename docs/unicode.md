@@ -3051,10 +3051,10 @@ QString str = codec->toUnicode(bytes);
 #### 字符串常量
 
 ```cpp
-QString str = QStringLiterial("你好，世界");
+QString str = QStringLiteral("你好，世界");
 ```
 
-`QStringLiterial` 可以保证，转换时采用的是所谓“运行字符集”（实际应该叫字面量字符编码），也就是我们开发者电脑上的“区域设置”，是编译期确定的。而如果写 `QString::fromLocal8Bits("")` 就变成 “ANSI”，客户的“区域设置”了。这两个字符编码，比如在之前跨国 galgame 的案例中，就是不同的。
+`QStringLiteral` 可以保证，转换时采用的是所谓“运行字符集”（实际应该叫字面量字符编码），也就是我们开发者电脑上的“区域设置”，是编译期确定的。而如果写 `QString::fromLocal8Bits("")` 就变成 “ANSI”，客户的“区域设置”了。这两个字符编码，比如在之前跨国 galgame 的案例中，就是不同的。
 
 #### QTextStream
 
