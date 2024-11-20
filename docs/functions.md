@@ -36,6 +36,7 @@ void compute()
 ```
 
 > {{ icon.warn }} 对于返回类型不为 `void` 的函数，必须写 `return` 语句，如果漏写，会出现可怕的未定义行为 (undefined behaviour)。编译器不一定会报错，而是到运行时才出现崩溃等现象。建议 GCC 用户开启 `-Werror=return-type` 让编译器在编译时就检测此类错误，MSVC 则是开启 `/we4716`。更多未定义行为可以看我们的[未定义行为列表](undef.md)章节。
+
 > {{ icon.detail }} 但有两个例外：1. main 函数是特殊的可以不写 return 语句，默认会自动帮你 `return 0;`。2. 具有 co_return 或 co_await 的协程函数可以不写 return 语句。
 
 注意：`void`仅仅只是无返回值，而非不返回。那有没有函数确实不返回的情况呢？还真有！比如程序炸掉的时候：
