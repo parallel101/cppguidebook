@@ -314,6 +314,8 @@ i << 0;   // 可以
 i << -1;  // 错！
 ```
 
+不过一个例外是[整数提升](https://zh.cppreference.com/w/cpp/language/implicit_conversion#.E6.95.B4.E6.95.B0.E6.8F.90.E5.8D.87)
+
 对于有符号整数，左移还不得破坏符号位
 
 ```cpp
