@@ -2851,8 +2851,7 @@ int main() {
 #elif __unix__
     // 反正 Unix 系统默认都是 UTF-8，不设置也行，这里设置全局 locale 是为了让 iswspace 接受全角空格、iswpunct 接受全角逗号 L'，' 等
     //setlocale(LC_ALL, "zh_CN.utf-8"); // 设置使用中文本地化，可使 strerror 输出中文（但用户必须 locale-gen 过中文！）
-    //setlocale(LC_ALL, "C.utf-8");     // 设置使用语言中性 locale，只影响 iswspace、iswpunct 等函数，不会使 strerror 等输出中文
-    setlocale(LC_ALL, "");        // 若使用空字符串（推荐），则默认使用当前系统环境变量中的语言 $LANG，使 strerror 自动适应
+    setlocale(LC_ALL, "C.utf-8");     // 设置使用语言中性 locale（推荐），只影响 iswspace、iswpunct 等函数，不会使 strerror 等输出中文
 #endif
     // 这里开始写你的主程序吧！
     // ...
