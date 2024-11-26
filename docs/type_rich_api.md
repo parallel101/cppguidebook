@@ -1232,7 +1232,7 @@ Sleep(MilliSeconds(3));
 this_thread::sleep_for(chrono::seconds(3));
 ```
 
-如果你 `using namespace std::literials;` 还可以这样快捷地创建字面量：
+如果你 `using namespace std::literals;` 还可以这样快捷地创建字面量：
 ```cpp
 this_thread::sleep_for(3ms);  // 3 毫秒
 this_thread::sleep_for(3s);  // 3 秒

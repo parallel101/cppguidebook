@@ -276,7 +276,7 @@ ls build/bin
 
 编译器的前端负责解析 C++ 这类高级语言的源代码，生成抽象语法树（Abstract Syntax Tree，AST）。AST 是源代码的一种抽象表示，其中每个节点代表源代码中的一个语法结构，例如 if、while、for、函数调用、运算符、变量声明等。每个 AST 节点都有自己的属性，例如类型、作用域、修饰符等。
 
-不同类型的 AST 节点有不同的类型名，例如 IntegerLiterial 就表示这是一个整数类型的常量，而 BinaryOperator 就表示这是一个二元运算符（可能是加减乘除等二元运算）。
+不同类型的 AST 节点有不同的类型名，例如 IntegerLiteral 就表示这是一个整数类型的常量，而 BinaryOperator 就表示这是一个二元运算符（可能是加减乘除等二元运算）。
 
 AST 节点可以有一个或多个子节点，许多节点就构成了一颗语法树。每个 .cpp 文件都可以解析得到一颗语法树，在 C++ 的语法中，每颗树的根部总是一个 TranslationUnitDecl 类型的节点。这是整个翻译单元（TU）的声明，其中包含了任意多的变量、函数、类型的声明等，作为 TU 的子节点存在其中。
 
@@ -342,9 +342,9 @@ clang -fsyntax-only -Xclang -ast-dump test.cpp
 
 接下来可以看到 CompountStmt 内部，又有两个子节点：CallExpr 和 ReturnStmt，分别是我们对 printf 函数的调用，和 `return 0` 这两条子语句。
 
-+ ReturnStmt 很好理解，他只有一个子节点，类型是 IntegerLiterial，表示一个整形常数，整数的类型是 int，值是 0。这种有一个子节点的 ReturnStmt 节点，就表示一个有返回值的 return 语句，整体来看也就是我们代码里写的 `return 0`。
++ ReturnStmt 很好理解，他只有一个子节点，类型是 IntegerLiteral，表示一个整形常数，整数的类型是 int，值是 0。这种有一个子节点的 ReturnStmt 节点，就表示一个有返回值的 return 语句，整体来看也就是我们代码里写的 `return 0`。
 
-> {{ icon.story }} 举一反三，可以想象：如果代码里写的是 `return x + 1`，那么 ReturnStmt 的子节点就会变成运算符为 `+` 的 BinaryOperator。其又具有两个子节点：左侧是 DeclRefExpr 节点，标识符为 `x`；右侧是 IntegerLiterial 节点，值为 1。
+> {{ icon.story }} 举一反三，可以想象：如果代码里写的是 `return x + 1`，那么 ReturnStmt 的子节点就会变成运算符为 `+` 的 BinaryOperator。其又具有两个子节点：左侧是 DeclRefExpr 节点，标识符为 `x`；右侧是 IntegerLiteral 节点，值为 1。
 
 然后我们来看 printf 函数调用这条语句：
 ![](img/clang-ast-example.png)
@@ -358,7 +358,7 @@ clang -fsyntax-only -Xclang -ast-dump test.cpp
 
     注意到这里 printf 发生了一个隐式转换 ImplicitCastExpr 后才作为 CallExpr 的第一个子节点（回答了调用哪个函数的问题），并且后面注释了说 `FunctionToPointerDecay`。也就是说，`printf` 这个标识符（DeclRefExpr）本来是一个对函数标识符的引用，还没有变成函数指针，这时候还没有完成函数的重载决议。是等到函数被 `()` 调用时，才会触发重载决议，而实现区分重载的方式，实际上就是函数引用自动隐式转换成函数指针的过程所触发的，也就是这里的 ImplicitCastExpr 隐式转换节点了。这种自动发生的隐式转换被称为“退化”（decay）。所以，函数引用无法直接调用，Clang 里一直都是需要退化成指针才调用的。
 
-    然后，这里的函数参数是一个字符串常量，按理说一个 StringLiterial 节点就可以了，为什么还有个 ImplicitCastExpr？这里有个常见误区需要纠正：很多同学常常想当然以为字符串常量的类型是 `const char *`。实际上，字符串常量的类型是 `const char []`，是一个数组类型！数组不是指针，他们是两个完全不同的类型。之所以你会有数组是指针的错觉，是因为数组可以隐式转换为元素类型的指针。而这是“退化”规则之一，这个过程在函数参数、auto 推导的时候是自动发生的（正如上面说的函数引用会在调用时自动“退化”成函数指针一样）。
+    然后，这里的函数参数是一个字符串常量，按理说一个 StringLiteral 节点就可以了，为什么还有个 ImplicitCastExpr？这里有个常见误区需要纠正：很多同学常常想当然以为字符串常量的类型是 `const char *`。实际上，字符串常量的类型是 `const char []`，是一个数组类型！数组不是指针，他们是两个完全不同的类型。之所以你会有数组是指针的错觉，是因为数组可以隐式转换为元素类型的指针。而这是“退化”规则之一，这个过程在函数参数、auto 推导的时候是自动发生的（正如上面说的函数引用会在调用时自动“退化”成函数指针一样）。
 
     数组能自动退化成指针，不代表数组就是指针。例如 int 可以隐式转换为 double，难道就可以说“int 就是 double”吗？同样地，不能说“数组就是指针”。字符串常量的类型，从来都是 `const char [N]`，其中 `N` 是字符串中字符的个数（包括末尾自动加上的 `'\0'` 结束符）。只不过是在传入函数参数（此处是 printf 函数的字符串参数）时，自动隐式转换为 `const char *` 了而已。正如这个 ImplicitCastExpr 后面尖括号的提示中所说，ArrayToPointerDecay，是数组类型到指针类型的自动退化，从 `const char [14]` 自动隐式转换到了 `const char *`。
 
