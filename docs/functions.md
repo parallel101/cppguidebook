@@ -39,18 +39,15 @@ void compute()
 
 > {{ icon.detail }} 但有两个例外：1. main 函数是特殊的可以不写 return 语句，默认会自动帮你 `return 0;`。2. 具有 co_return 或 co_await 的协程函数可以不写 return 语句。
 
-注意：`void`仅仅只是无返回值，而非不返回。那有没有函数确实不返回的情况呢？还真有！比如程序炸掉的时候：
+`void`只是说明该函数没有返回值，返回还是能返回的。相当于你出门跑了一趟，但是没有带任何东西回家，并不代表你无法回家死外面了。也有一种真无法返回的函数，一旦调用了，就“无期徒刑”直到死亡都无法离开：
 
 ```cpp
-#include <exception>
-
-[[noreturn]]
-void func() {
-    ::std::terminate();
+[[noreturn]] void func() {
+    std::terminate();
 }
 ```
 
-当程序运行到`::std::terminate()`的时候直接炸掉了，自然就不需用`return`。一个好的建议是对这种情况加上`[[noreturn]]`以辅助编译器进行优化。
+`std::terminate()`的效果是终止当前进程。而我们的函数`func`所有可能的分支都会走向`std::terminate()`，一旦调用了`std::terminate()`，程序就退出了，不可能再执行下面的语句，这种函数叫做“无返回函数”。C语言可以用`noreturn`关键字修饰，而现代C++可以用`[[noreturn]]`修饰，提醒编译器这是一个不可能正常返回的函数，从而帮助它优化和诊断你的程序。例如：`std::exit`，`throw`、`std::terminate`、`std::abort`、`while (1)`都会让函数变成无返回函数（除非有其他能正常返回的分支）。
 
 ### 接住返回值
 
