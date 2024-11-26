@@ -421,7 +421,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2024年11月26日 12:26:35 (UTC+08:00)</p>
+<p>更新时间：2024年11月26日 12:32:42 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -18357,11 +18357,13 @@ int main() {
     setlocale(LC_ALL, &quot;.utf-8&quot;);  // 设置标准库调用系统 API 所用的编码，用于 fopen，ifstream 等函数
     SetConsoleOutputCP(CP_UTF8); // 设置控制台输出编码，或者写 system(&quot;chcp 65001&quot;) 也行，这里 CP_UTF8 = 65001
     SetConsoleCP(CP_UTF8); // 设置控制台输入编码，用于 std::cin
+#elif __APPLE__
+    // 通常来说 MacOS 的默认编码就是 UTF-8，这里设置全局 locale 是为了让 iswspace 接受全角空格、iswpunct 接受全角逗号 L'，' 等
+    setlocale(LC_ALL, &quot;UTF-8&quot;);  // MacOS 设置 UTF-8 编码，让 iswspace 接受全角空格等
 #elif __unix__
     // 反正 Unix 系统默认都是 UTF-8，不设置也行，这里设置全局 locale 是为了让 iswspace 接受全角空格、iswpunct 接受全角逗号 L'，' 等
     //setlocale(LC_ALL, &quot;zh_CN.utf-8&quot;); // 设置使用中文本地化，可使 strerror 输出中文（但用户必须 locale-gen 过中文！）
-    //setlocale(LC_ALL, &quot;C.utf-8&quot;);     // 设置使用语言中性 locale，只影响 iswspace、iswpunct 等函数，不会使 strerror 等输出中文
-    setlocale(LC_ALL, &quot;.utf-8&quot;);        // 若不带任何前缀（推荐），则默认使用当前系统环境变量中的语言 $LANG，使 strerror 自动适应
+    setlocale(LC_ALL, &quot;C.utf-8&quot;);       // 设置使用语言中性 locale（推荐），只影响 iswspace、iswpunct 等函数，不会使 strerror 等输出中文
 #endif
     // 这里开始写你的主程序吧！
     // ...
