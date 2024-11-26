@@ -3360,9 +3360,9 @@ QByteArray bytes = codec-&gt;fromUnicode(str);
 QString str = codec-&gt;toUnicode(bytes);
 </code></pre>
 <h4 id="_21">字符串常量</h4>
-<pre><code class="language-cpp">QString str = QStringLiterial(&quot;你好，世界&quot;);
+<pre><code class="language-cpp">QString str = QStringLiteral(&quot;你好，世界&quot;);
 </code></pre>
-<p><code>QStringLiterial</code> 可以保证，转换时采用的是所谓“运行字符集”（实际应该叫字面量字符编码），也就是我们开发者电脑上的“区域设置”，是编译期确定的。而如果写 <code>QString::fromLocal8Bits("")</code> 就变成 “ANSI”，客户的“区域设置”了。这两个字符编码，比如在之前跨国 galgame 的案例中，就是不同的。</p>
+<p><code>QStringLiteral</code> 可以保证，转换时采用的是所谓“运行字符集”（实际应该叫字面量字符编码），也就是我们开发者电脑上的“区域设置”，是编译期确定的。而如果写 <code>QString::fromLocal8Bits("")</code> 就变成 “ANSI”，客户的“区域设置”了。这两个字符编码，比如在之前跨国 galgame 的案例中，就是不同的。</p>
 <h4 id="qtextstream">QTextStream</h4>
 <p><code>QTextStream</code> 是 Qt 提供的文本流类（带有缓冲），它可以将文本写入到文件、套接字、标准输出等设备。</p>
 <p>文本流和二进制流不同，他需要指定一个编码格式，通过 <code>QTextStream</code> 构造函数的第二个参数指定。</p>

@@ -1544,7 +1544,7 @@ void Sleep(MilliSeconds delay);
 <p>标准库的 chrono 模块就大量运用了这种强类型封装：</p>
 <pre><code class="language-cpp">this_thread::sleep_for(chrono::seconds(3));
 </code></pre>
-<p>如果你 <code>using namespace std::literials;</code> 还可以这样快捷地创建字面量：</p>
+<p>如果你 <code>using namespace std::literals;</code> 还可以这样快捷地创建字面量：</p>
 <pre><code class="language-cpp">this_thread::sleep_for(3ms);  // 3 毫秒
 this_thread::sleep_for(3s);  // 3 秒
 this_thread::sleep_for(3m);  // 3 分钟
