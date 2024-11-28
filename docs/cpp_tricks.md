@@ -320,7 +320,7 @@ struct RAIIHandle {
     }
     RAIIHandle(RAIIHandle const &) = delete;
     RAIIHandle &operator=(RAIIHandle const &) = delete;
-    RAIIHandle() {
+    ~RAIIHandle() {
         DeleteObject(handle);
     }
 };
