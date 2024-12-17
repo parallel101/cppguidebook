@@ -583,6 +583,15 @@ i &lt;&lt; 32;  // 错！
 i &lt;&lt; 0;   // 可以
 i &lt;&lt; -1;  // 错！
 </code></pre>
+<p>但是你还需要考虑一件事情：<strong>隐式转换</strong>，或者直接点说：<strong>整数提升</strong>。</p>
+<ul>
+<li>在 C++ 中算术运算符不接受小于 int 的类型进行运算。如果你觉得可以，那只是隐式转换，整形提升了。</li>
+</ul>
+<pre><code class="language-cpp">std::uint8_t c{ '0' };
+using T1 = decltype(c &lt;&lt; 1); // int
+</code></pre>
+<p>即使移位大于等于 8 也不成问题。</p>
+<hr />
 <p>对于有符号整数，左移还不得破坏符号位</p>
 <pre><code class="language-cpp">int i = 0;
 i &lt;&lt; 1;   // 可以
