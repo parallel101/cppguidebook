@@ -769,7 +769,7 @@ assert(stu2.name == &quot;侯捷老师&quot;);
     }
     RAIIHandle(RAIIHandle const &amp;) = delete;
     RAIIHandle &amp;operator=(RAIIHandle const &amp;) = delete;
-    RAIIHandle() {
+    ~RAIIHandle() {
         DeleteObject(handle);
     }
 };
