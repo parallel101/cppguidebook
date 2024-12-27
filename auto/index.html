@@ -252,7 +252,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#auto_3" class="nav-link">返回类型 auto</a>
+            <li class="nav-item" data-bs-level="2"><a href="#auto_5" class="nav-link">返回类型 auto</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -260,7 +260,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#auto_4" class="nav-link">参数类型 auto</a>
+            <li class="nav-item" data-bs-level="2"><a href="#auto_6" class="nav-link">参数类型 auto</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -275,9 +275,115 @@
 <h2 id="auto_1"><code>auto</code> 关键字的前世今生</h2>
 <p>TODO</p>
 <h2 id="auto_2">变量声明为 <code>auto</code></h2>
+<pre><code class="language-cpp">int i = 0;
+</code></pre>
+<h3 id="auto_3">用 <code>auto</code> 声明万物的好处</h3>
+<h4 id="_1">避免复读类型</h4>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 人类的本质是复读机。</p>
+</blockquote>
+<pre><code class="language-cpp">QSlider *slider = new QSlider();
+</code></pre>
+<pre><code class="language-cpp">auto slider = new QSlider();
+</code></pre>
 <p>TODO</p>
-<h2 id="auto_3">返回类型 <code>auto</code></h2>
-<p>C++11 引入的 <code>auto</code> 关键字可以用作函数的返回类型，但它只是一个“占位”，让我们得以后置返回类型，并没有多大作用，非常残废。</p>
+<h4 id="_2">模板编程产生的超长类型名喧宾夺主</h4>
+<p>在 C++98 时代，仅仅只是保存个迭代器作为变量，就得写一长串：</p>
+<pre><code class="language-cpp">std::map&lt;std::string, int&gt; tab;
+std::map&lt;std::string, int&gt;::iterator it = tab.find(&quot;key&quot;);
+</code></pre>
+<p>这踏码的类型名比右侧的表达式都长了！</p>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 哮点解析：张心欣的第三条腿比另外两条腿都长。</p>
+</blockquote>
+<p>有了 <code>auto</code> 以后，无需复读类型名和繁琐的 <code>::iterator</code> 废话，自动从右侧 <code>find</code> 函数的返回值推导出正确的类型。</p>
+<pre><code class="language-cpp">std::map&lt;std::string, int&gt; tab;
+auto it = tab.find(&quot;key&quot;);
+</code></pre>
+<h4 id="_3">避免未初始化</h4>
+<p>因为 <code>auto</code> 规定必须右侧有赋初始值（否则无法推导类型）。</p>
+<p>所以只要你的代码规范能一直使用 <code>auto</code> 的话，就可以避免未初始化。</p>
+<p>众所周知，读取一个未初始化的变量是未定义行为，C/C++ 程序员饱受其苦，小彭老师也好几次因为忘记初始化成员指针。</p>
+<p>例如，你平时可能一不小心写：</p>
+<pre><code class="language-cpp">int i;
+cout &lt;&lt; i; // 未定义行为！此时 i 还没有初始化
+</code></pre>
+<p>但是如果你用了 <code>auto</code>，那么 <code>auto i</code> 就会直接报错，提醒你没有赋初始值：</p>
+<pre><code class="language-cpp">auto i;  // 编译出错，强制提醒你必须赋初始值！
+cout &lt;&lt; i;
+</code></pre>
+<p>你意识到自己漏写了 <code>= 0</code>！于是你写上了初始值，编译才能通过。</p>
+<pre><code class="language-cpp">auto i = 0;
+cout &lt;&lt; i;
+</code></pre>
+<p>可见，只要你养成“总是 <code>auto</code>”的好习惯，就绝对不会忘记变量未初始化，因为 <code>auto</code> 会强制要求有初始值。</p>
+<h4 id="_4">自动适配类型，避免类型隐式转换</h4>
+<p>假设你有一个能返回 <code>int</code> 的函数：</p>
+<pre><code class="language-cpp">int getNum();
+</code></pre>
+<p>有多处使用了这个函数：</p>
+<pre><code class="language-cpp">int a = getNum();
+...
+int b = getNum() + 1;
+...
+</code></pre>
+<p>假如你哪天遇到牢板需求改变，它说现在我们的 <code>Num</code> 需要是浮点数了！</p>
+<pre><code class="language-cpp">float getNum();
+</code></pre>
+<p>哎呀，你需要把之前那些“多处使用”里写的 <code>int</code> 全部一个个改成 <code>float</code>！</p>
+<pre><code class="language-cpp">float a = getNum();
+...
+float b = getNum() + 1;
+...
+</code></pre>
+<p>如果漏改一个的话，就会发生隐式转换，并且只是警告，不会报错，你根本注意不到，精度就丢失了！</p>
+<p>现在“马后炮”一下，如果当时你的“多处使用”用的是 <code>auto</code>，那该多好！自动适应！</p>
+<pre><code class="language-cpp">auto a = getNum();
+...
+auto b = getNum() + 1;
+...
+</code></pre>
+<p>无论你今天 <code>getNum</code> 想返回 <code>float</code> 还是 <code>double</code>，只需要修改 <code>getNum</code> 的返回值一处，所有调用了 <code>getNum</code> 的地方都会自动适配！</p>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 专治张心欣这种小计级扒皮牢板骚动反复跳脚的情况，无需你一个个去狼狈的改来改回，一处修改，处处生效。</p>
+</blockquote>
+<h4 id="_5">统一写法，更可读</h4>
+<pre><code class="language-cpp">std::vector&lt;int&gt; aVeryLongName(5);
+</code></pre>
+<pre><code class="language-cpp">auto aVeryLongName = std::vector&lt;int&gt;(5);
+</code></pre>
+<p>TODO</p>
+<h4 id="_6">强制写明字面量类型，避免隐式转换</h4>
+<p>有同学反映，他想要创建一个 <code>size_t</code> 类型的整数，初始化为 3。</p>
+<pre><code class="language-cpp">size_t i = 3;  // 3 是 int 类型，这里初始化时发生了隐式转换，int 转为了 size_t
+i = 0xffffffffff; // OK，在 size_t 范围内（64 位编译器）
+</code></pre>
+<p>如果直接改用 <code>auto</code> 的话，因为 <code>3</code> 这个字面量是 <code>int</code> 类型的，所以初始化出来的 <code>auto i</code> 也会被推导成 <code>int i</code>！</p>
+<p>虽然目前初始只用到了 <code>3</code>，然而这位同学后面可能会用到 <code>size_t</code> 范围的更大整数存入，就存不下了。</p>
+<pre><code class="language-cpp">auto i = 3; // 错误！auto 会推导为 int 了！
+i = 0xffffffffff; // 超出 int 范围！
+</code></pre>
+<p>由于 C++ 是静态编译，变量类型一旦确定就无法更改，我们必须在定义时就指定号范围更大的 <code>size_t</code>。</p>
+<p>为了让 <code>auto</code> 推导出这位同学想要的 <code>size_t</code> 类型，我们可以在 <code>3</code> 这个字面量周围显式写出类型转换，将其转换为 <code>size_t</code>。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 显式类型转换总比隐式的要好！</p>
+</blockquote>
+<pre><code>auto i = (size_t)3; // 正确
+</code></pre>
+<p>这里的类型转换用的是 C 语言的强制类型转换语法 <code>(size_t)3</code>，更好的写法是用括号包裹的 C++ 构造函数风格的强制类型转换语法：</p>
+<pre><code>auto i = size_t(3); // 正确
+</code></pre>
+<p>看起来就和调用了 <code>size_t</code> 的“构造函数”一样。这也符合我们前面说的统一写法，类型统一和值写在一起，以括号结合，更可读。</p>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 顺便一提，<code>0xffffffffff</code> 会是 <code>long</code> (Linux) 或 <code>long long</code> (Windows) 类型字面量，因为它已经超出了 <code>int</code> 范围，所以实际上 <code>auto i = 0xffffffffff</code> 会推导为 <code>long i</code>。字面量类型的规则是，如果还在 <code>int</code> 范围内（0x7fffffff 以内），那这个字面量就是 <code>int</code>；如果超过了 0x7fffffff 但不超过 0xffffffff，就会变成 <code>unsigned int</code>；如果超过了 0xffffffff 就会自动变成 <code>long</code> (Linux) 或 <code>long long</code> (Windows) ；超过 0x7fffffffffffffff 则变成 <code>unsigned long</code> (Linux) 或 <code>unsigned long long</code> (Windows) ——这时和手动加 <code>ULL</code> 等后缀等价，无后缀时默认 <code>int</code>，如果超过了 <code>int</code> 编译器会自动推测一个最合适的。</p>
+</blockquote>
+<p>如果需要其他类型的变量，改用 <code>short(3)</code>，<code>uint8_t(3)</code> 配合 <code>auto</code> 不就行了，根本没必要把类型前置。</p>
+<h4 id="_7">避免语法歧义</h4>
+<p>TODO</p>
+<h3 id="auto_4"><code>auto</code> 的小插曲：初始化列表</h3>
+<p>TODO</p>
+<h2 id="auto_5">返回类型 <code>auto</code></h2>
+<p>C++11 引入的 <code>auto</code> 关键字可以用作函数的返回类型，但它只是一个“占位”，让我们得以后置返回类型，并没有多大作用，所以 C++11 这版的 <code>auto</code> 非常残废。</p>
 <pre><code class="language-cpp">auto f() -&gt; int;
 // 等价于：
 int f();
@@ -286,7 +392,7 @@ int f();
 <p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 闹了半天，还是要写返回类型，就只是挪到后面去好看一点……</p>
 <p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 当初引入后置返回类型实际的用途是 <code>auto f(int x) -&gt; decltype(x * x) { return x * x; }</code> 这种情况，但很容易被接下来 C++14 引入的真正 <code>auto</code> 返回类型推导平替了。</p>
 </blockquote>
-<p>但是 C++14 引入了函数<strong>返回类型推导</strong>，<code>auto</code> 才算真正意义上能用做函数返回类型，它会自动根据函数中的 <code>return</code> 表达式推导出函数的返回类型。</p>
+<p>终于，C++14 引入了函数<strong>返回类型推导</strong>，<code>auto</code> 才算真正意义上能用做函数返回类型！它会自动根据函数中的 <code>return</code> 表达式推导出函数的返回类型。</p>
 <pre><code class="language-cpp">auto f(int x) {
     return x * x;  // 表达式 `x * x` 的类型为 int，所以 auto 类型推导为 int
 }
@@ -321,7 +427,7 @@ auto f() { // 编译通过：auto 推导为 int
 }
 </code></pre>
 <p>因此，<code>auto</code> 通常只适用于头文件中“就地定义”的 <code>inline</code> 函数，不适合需要“分离 .cpp 文件”的函数。</p>
-<h3 id="_1">返回引用类型</h3>
+<h3 id="_8">返回引用类型</h3>
 <p>返回类型声明为 <code>auto</code>，可以自动推导返回类型，但总是推导出普通的值类型，绝对不会带有引用或 <code>const</code> 修饰。</p>
 <p>如果需要返回一个引用，并且希望自动推导引用的类型，可以写 <code>auto &amp;</code>。</p>
 <pre><code class="language-cpp">int i;
@@ -517,7 +623,7 @@ for (auto &amp;[k, v]: table) { // 编译通过：k 的部分会自动带上 con
     v = &quot;world&quot;; // 没问题：v 推导为 std::string &amp; 可以就地修改
 }
 </code></pre>
-<h2 id="auto_4">参数类型 <code>auto</code></h2>
+<h2 id="auto_6">参数类型 <code>auto</code></h2>
 <p>C++20 引入了<strong>模板参数推导</strong>，可以让我们在函数参数中也使用 <code>auto</code>。</p>
 <p>在函数参数中也使用 <code>auto</code> 实际上等价于将该参数声明为模板参数，仅仅是一种更便捷的写法。</p>
 <pre><code class="language-cpp">void func(auto x) {
@@ -553,7 +659,7 @@ void func(T &amp;&amp;x) {
     std::cout &lt;&lt; x;
 }
 </code></pre>
-<h3 id="auto_5"><code>auto</code> 在多态中的妙用</h3>
+<h3 id="auto_7"><code>auto</code> 在多态中的妙用</h3>
 <p>传统的，基于类型重载的：</p>
 <pre><code class="language-cpp">int square(int x) {
     return x * x;
@@ -586,7 +692,7 @@ decltype(T() * T()) square(T x) {
     return x * x;
 }
 </code></pre>
-<h3 id="auto_6">参数 <code>auto</code> 推导为引用</h3>
+<h3 id="auto_8">参数 <code>auto</code> 推导为引用</h3>
 <p>和之前变量 <code>auto</code>，返回类型 <code>auto</code> 的 <code>auto &amp;</code>、<code>auto const &amp;</code>、<code>auto &amp;&amp;</code> 大差不差，C++20 这个参数 <code>auto</code> 同样也支持推导为引用。</p>
 <pre><code class="language-cpp">void passByValue(auto x) { // 参数类型推导为 int
     x = 42;
@@ -649,7 +755,7 @@ someCFunc(std::string(&quot;hello&quot;).c_str());
 <blockquote>
 <p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 此处 <code>std::string("hello")</code> 构造出的临时 <code>string</code> 类型变量的生命周期直到 <code>;</code> 才结束，而这时 <code>someCFunc</code> 早已执行完毕返回了，只要 <code>someCFunc</code> 对 <code>name</code> 的访问集中在当前这次函数调用中，没有把 <code>name</code> 参数存到全局变量中去，就不会有任何空悬指针问题。</p>
 </blockquote>
-<h3 id="auto_7"><code>auto &amp;&amp;</code> 参数万能引用及其转发</h3>
+<h3 id="auto_9"><code>auto &amp;&amp;</code> 参数万能引用及其转发</h3>
 <p>TODO</p>
 <p>然而，由于 C++ “默认自动变左值”的糟糕特色，即使你将一个传入时是右值的引用直接转发给另一个函数，这个参数也会默默退化成左值类型，需要再 <code>std::move</code> 一次才能保持他一直处于右值类型。</p>
 <h3 id="stdforward"><code>std::forward</code> 帮手函数介绍</h3></div>
