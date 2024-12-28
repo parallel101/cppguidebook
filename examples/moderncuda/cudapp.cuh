@@ -1,20 +1,28 @@
 #pragma once
 
+#include "debug.hpp"
+#include <cuda_runtime.h>
+#include <version>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
 #include <cstdarg>
-#include <cuda_runtime.h>
 #include <memory>
 #include <new>
 #include <string>
 #include <system_error>
 #include <utility>
 #include <vector>
+#if __cpp_lib_source_location
+#include <source_location>
+#endif
+// #if __cpp_lib_memory_resource
+// #include <memory_resource>
+// #endif
 
 namespace cudapp {
 
-std::error_category const &cudaErrorCategory() noexcept {
+inline std::error_category const &cudaErrorCategory() noexcept {
     static struct : std::error_category {
         char const *name() const noexcept override {
             return "cuda";
@@ -28,14 +36,39 @@ std::error_category const &cudaErrorCategory() noexcept {
     return category;
 }
 
-std::error_code makeCudaErrorCode(cudaError_t e) noexcept {
+inline std::error_code makeCudaErrorCode(cudaError_t e) noexcept {
     return std::error_code(static_cast<int>(e), cudaErrorCategory());
 }
 
-void throwCudaError(cudaError_t err, char const *file, int line) {
+inline void throwCudaError(cudaError_t err, char const *file, int line) {
     throw std::system_error(makeCudaErrorCode(err),
-                            std::string(file) + ":" + std::to_string(line));
+                            std::string(file ? file : "??") + ":" + std::to_string(line));
 }
+
+struct CheckCuda {
+    const char *file = nullptr;
+    int line = 0;
+
+#if __cpp_lib_source_location
+    constexpr CheckCuda(std::source_location const &loc = std::source_location::current())
+        : file(loc.file_name()), line(loc.line())
+    {}
+#else
+#if defined(__GNUC__) && defined(__has_builtin)
+#if __has_builtin(__builtin_FILE) && __has_builtin(__builtin_LINE)
+    constexpr CheckCuda(const char *file = __builtin_FILE(), int line = __builtin_LINE())
+        : file(file), line(line)
+    {}
+#endif
+#endif
+#endif
+
+    void operator=(cudaError_t err) {
+        if (err != cudaSuccess) [[unlikely]] {
+            ::cudapp::throwCudaError(err, file, line);
+        }
+    }
+};
 
 #define CHECK_CUDA(expr) \
     do { \
@@ -47,7 +80,7 @@ void throwCudaError(cudaError_t err, char const *file, int line) {
 
 struct CudaHostArena {
     static cudaError_t doMalloc(void **ptr, size_t size) noexcept {
-        return cudaMallocHost(&ptr, size);
+        return cudaMallocHost(ptr, size);
     }
 
     static cudaError_t doFree(void *ptr) noexcept {
@@ -57,7 +90,7 @@ struct CudaHostArena {
 
 struct CudaDeviceArena {
     static cudaError_t doMalloc(void **ptr, size_t size) noexcept {
-        return cudaMalloc(&ptr, size);
+        return cudaMalloc(ptr, size);
     }
 
     static cudaError_t doFree(void *ptr) noexcept {
@@ -67,7 +100,7 @@ struct CudaDeviceArena {
 
 struct CudaManagedArena {
     static cudaError_t doMalloc(void **ptr, size_t size) noexcept {
-        return cudaMallocManaged(&ptr, size);
+        return cudaMallocManaged(ptr, size);
     }
 
     static cudaError_t doFree(void *ptr) noexcept {
@@ -423,7 +456,7 @@ struct CudaAllocator : private Arena {
 
     T *allocate(size_t size) {
         void *ptr = nullptr;
-        if (sizeof(T) <= 1 || size > std::numeric_limits<size_t>::max() /
+        if (sizeof(T) > 1 && size > std::numeric_limits<size_t>::max() /
                                          sizeof(T)) [[unlikely]] {
             throw std::bad_array_new_length();
         }
@@ -439,21 +472,41 @@ struct CudaAllocator : private Arena {
         CHECK_CUDA(Arena::doFree(ptr));
     }
 
+#if __cpp_constexpr_dynamic_alloc && __cpp_if_constexpr
     template <class... Args>
-    static constexpr std::enable_if_t<sizeof...(Args)>
+    static std::enable_if_t<sizeof...(Args)>
     construct(T *p, Args &&...args) noexcept(noexcept(
-        ::new(static_cast<void *>(p)) T(std::forward<Args>(args)...))) {
+        std::construct_at(p, std::forward<Args>(args)...))) {
+        std::construct_at(p, std::forward<Args>(args)...);
+    }
+
+    static void
+    construct(T *p) noexcept(noexcept(std::construct_at(p))) {
+        if constexpr (!std::is_trivial_v<T>) {
+            std::construct_at(p);
+        }
+    }
+
+    static void destroy(T *p) noexcept(noexcept(std::destroy_at(p))) {
+        std::destroy_at(p);
+    }
+#else
+    template <class... Args>
+    static std::enable_if_t<sizeof...(Args)>
+    construct(T *p, Args &&...args) noexcept(noexcept(
+        ::new (static_cast<void *>(p)) T(std::forward<Args>(args)...))) {
         ::new (static_cast<void *>(p)) T(std::forward<Args>(args)...);
     }
 
-    static constexpr void
-    construct(T *p) noexcept(noexcept(::new(static_cast<void *>(p)) T)) {
+    static void
+    construct(T *p) noexcept(noexcept(::new (static_cast<void *>(p)) T)) {
         ::new (static_cast<void *>(p)) T;
     }
 
-    static constexpr void destroy(T *p) noexcept(noexcept(p->~T())) {
+    static void destroy(T *p) noexcept(noexcept(p->~T())) {
         p->~T();
     }
+#endif
 
     template <class U>
     constexpr CudaAllocator(CudaAllocator<U> const &other) noexcept {}
@@ -485,6 +538,36 @@ __host__ __device__ static void printf(const char *fmt, ...) {
 }
 #else
 using ::printf;
+#endif
+
+template <class Vector>
+struct CudaVectorResizer {
+private:
+    Vector &m_vec;
+    size_t m_size;
+
+public:
+    explicit CudaVectorResizer(Vector &vec) noexcept
+    : m_vec(vec), m_size(vec.size()) {}
+
+    CudaVectorResizer &operator=(CudaVectorResizer &&) = delete;
+
+    operator size_t &() noexcept {
+        return m_size;
+    }
+
+    operator size_t *() noexcept {
+        return &m_size;
+    }
+
+    ~CudaVectorResizer() noexcept(noexcept(m_vec.resize(m_size))) {
+        m_vec.resize(m_size);
+    }
+};
+
+#if __cpp_deduction_guides
+template <class Vector>
+CudaVectorResizer(Vector &vec) -> CudaVectorResizer<Vector>;
 #endif
 
 // #if __cpp_lib_memory_resource
