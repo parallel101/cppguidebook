@@ -430,6 +430,38 @@ bool find(const vector<int> &v, int target) {
 }
 ```
 
+但有时，我们的函数可能写了额外的操作，做完查找后不想直接返回。用 `return` 提前返回的话，下面 `do_final` 部分就无法执行到，只能复读一遍。
+
+```cpp
+void find(const vector<int> &v, int target) {
+    for (int i = 0; i < v.size(); ++i) {
+        if (v[i] == target) {
+            do_something();
+            do_final();
+            return;
+        }
+    }
+    do_other();
+    do_final();
+}
+```
+
+改用 `goto` 来打断循环，又不美观了。
+
+```cpp
+void find(const vector<int> &v, int target) {
+    for (int i = 0; i < v.size(); ++i) {
+        if (v[i] == target) {
+            do_something();
+            goto final;
+        }
+    }
+    do_other();
+final:
+    do_final();
+}
+```
+
 可以包裹一个立即调用的 Lambda 块 `[&] { ... } ()`，限制提前返回的范围：
 
 ```cpp
@@ -448,7 +480,78 @@ void find(const vector<int> &v, int target) {
 }
 ```
 
+这样，return 最多只能打断到当前 Lambda 函数结束的位置，而不能打断整个大函数了。
+
 ## Lambda 复用代码
+
+```cpp
+void calc_average() {
+    int res = 0;
+    int count = 0;
+    for (int i = 0; i < cat_arr.size(); i++) {
+        res += cat_arr[i].age;
+        count += cat_arr[i].count;
+    }
+    for (int i = 0; i < dog_arr.size(); i++) {
+        res += dog_arr[i].age;
+        count += dog_arr[i].count;
+    }
+    for (int i = 0; i < pig_arr.size(); i++) {
+        res += pig_arr[i].age;
+        count += pig_arr[i].count;
+    }
+}
+```
+
+你是否被迫写出以上这种复读代码？大部分内容都是重复的，每次只有一小部分修改，导致不得不复读很多遍，非常恼人！
+
+“设计模式”官腔的做法是额外定义一个函数，把重复的部分代码功能抽出来变成一个 `cihou` 模板函数，然后再 `calc_average` 里只需要调用三次这个 `cihou` 函数即可实现复用：
+
+```cpp
+template <class T>
+void cihou(int &res, int &count, std::vector<T> const &arr) {
+    for (int i = 0; i < arr.size(); i++) {
+        res += arr[i].age;
+        count += arr[i].count;
+    }
+}
+
+void calc_average() {
+    int res = 0;
+    int count = 0;
+    cihou(res, count, cat_arr);
+    cihou(res, count, dog_arr);
+    cihou(res, count, pig_arr);
+}
+```
+
+然而，额外定义一个函数也太大费周章了，而且还需要把所有用到的局部变量作为参数传进去！参数部分依然需要反复复读，并且还需要一个个指定所有参数的类型，写一长串模板等。最重要的是定义外部函数会污染了全局名字空间。
+
+> {{ icon.fun }} 洁癖程序员：脏了我的眼！
+
+使用 Lambda，就可以让你在 `calc_average` 当前函数里“就地解决”，无需定义外部函数。
+
+更妙的是：Lambda 支持 `[&]` 语法，自动捕获所有用到的局部变量为引用！无需一个个传递局部变量引用作为函数参数，没有复读，更加无感。只有重复代码中真正区别的部分需要传参数。
+
+```cpp
+void calc_average() {
+    int res = 0;
+    int count = 0;
+    auto cihou = [&] {  // 局部 Lambda 的好处：自动帮你捕获 res 和 count！
+        for (int i = 0; i < arr.size(); i++) {
+            res += arr[i].age;
+            count += arr[i].count;
+        }
+    };
+    cihou(cat_arr);
+    cihou(dog_arr);
+    cihou(pig_arr);
+}
+```
+
+> {{ icon.tip }} 现在只有两个变量 `res` 和 `count` 可能还没什么，如果重复的部分用到一大堆变量，同时还有时候用到，有时候用不到的话，你就觉得 Lambda 好用了。
+
+例如字符串切片函数典型的一种实现中，因为“尾巴”的伺候和“主体”的伺候，就会产生重复代码：
 
 ```cpp
 vector<string> spilt(string str) {
@@ -457,9 +560,9 @@ vector<string> spilt(string str) {
     for (char c: str) {
         if (c == ' ') {
             list.push_back(last);
-            last.clear();
+            last = "";
         } else {
-            last.push_back(c);
+            last += c;
         }
     }
     list.push_back(last);
@@ -467,27 +570,29 @@ vector<string> spilt(string str) {
 }
 ```
 
-上面的代码可以用 Lambda 复用：
+上面的代码中重复的部分 `list.push_back(last);` 可以用 Lambda 复用，把重复的操作封装成局部的 Lambda：
 
 ```cpp
 vector<string> spilt(string str) {
     vector<string> list;
     string last;
-    auto push = [&] {
+    auto push_last = [&] {
         list.push_back(last);
-        last.clear();
+        last = "";
     };
     for (char c: str) {
         if (c == ' ') {
-            push();
+            push_last();
         } else {
-            last.push_back(c);
+            last += c;
         }
     }
-    push();
+    push_last();
     return list;
 }
 ```
+
+## 打表法代替 if-else
 
 ## 类内静态成员 inline
 
