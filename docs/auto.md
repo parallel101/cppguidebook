@@ -18,10 +18,12 @@ int i = 0;
 
 ```cpp
 QSlider *slider = new QSlider();
+std::shared_ptr<Test> test = std::make_shared<Test>();
 ```
 
 ```cpp
 auto slider = new QSlider();
+auto test = std::make_shared<Test>();
 ```
 
 TODO
