@@ -421,7 +421,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2025年01月02日 15:39:09 (UTC+08:00)</p>
+<p>更新时间：2025年01月05日 10:51:26 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -1504,7 +1504,8 @@ static int f(int x) {}  // 函数声明并定义为“外部链接”
 <li><a href="#cpp_tricks-_7">继承构造函数</a></li>
 <li><a href="#cpp_tricks-_8">提前返回</a></li>
 <li><a href="#cpp_tricks-lambda">立即调用的 Lambda</a></li>
-<li><a href="#cpp_tricks-lambda_1">Lambda 复用代码</a></li>
+<li><a href="#cpp_tricks-lambda_1">立即调用的 Lambda 初始化变量</a></li>
+<li><a href="#cpp_tricks-lambda_2">Lambda 复用代码</a></li>
 <li><a href="#cpp_tricks-if-else">打表法代替 if-else</a></li>
 <li><a href="#cpp_tricks-inline">类内静态成员 inline</a></li>
 <li><a href="#cpp_tricks-make_pair">别再 make_pair 啦！</a></li>
@@ -1913,7 +1914,60 @@ final:
 }
 </code></pre>
 <p>这样，return 最多只能打断到当前 Lambda 函数结束的位置，而不能打断整个大函数了。</p>
-<h2 id="cpp_tricks-lambda_1">Lambda 复用代码</h2>
+<h2 id="cpp_tricks-lambda_1">立即调用的 Lambda 初始化变量</h2>
+<p>有些变量的初始化，需要大量的准备工作。</p>
+<p>例如创建一个 2048 大小的随机数组，里面填满 0 到 7 的随机整数。</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v(2048);
+std::mt19937 gen;
+std::uniform_int_distribution&lt;int&gt; dis(0, 7);
+std::generate(v.begin(), v.end(), [&amp;] {
+    return dis(gen);
+});
+</code></pre>
+<p>然而为了产生随机数，我们需要定义大量的临时变量，和函数调用。</p>
+<p>如果有很多个这样初始化工序复杂的变量，每个用到的局部变量名字就会互相冲突，导致无法编译。</p>
+<p>例如我们还想要随机一个 <code>float</code> 类型的数组 <code>v2</code>，其随机值是 0 到 1 的浮点数。</p>
+<p>为了不报错，必须把 <code>v2</code> 使用的所有中间变量都从 <code>dis</code> 改名为 <code>dis2</code>，非常麻烦。</p>
+<p>最重要的是很不直观，你永远不知道某个变量是属于哪个变量的初始化，全部平摊在一个作用域里，影响可读性。</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v1(2048);
+std::mt19937 gen1;
+std::uniform_int_distribution&lt;int&gt; dis1(0, 7);
+std::generate(v1.begin(), v1.end(), [&amp;] {
+    return dis1(gen1);
+});
+
+std::vector&lt;float&gt; v2(2048);
+std::mt19937 gen2;
+std::uniform_real_distribution&lt;float&gt; dis2(0, 1);
+std::generate(v2.begin(), v2.end(), [&amp;] {
+    return dis2(gen2);
+});
+</code></pre>
+<p>这时，可以用 Lambda 创建一个作用域，然后用返回的形式初始化变量。</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = [] {
+    std::vector&lt;int&gt; v(2048);
+    std::mt19937 gen;
+    std::uniform_int_distribution&lt;int&gt; dis(0, 7);
+    std::generate(v.begin(), v.end(), [&amp;] {
+        return dis(gen);
+    });
+    return v;
+}();
+
+std::vector&lt;float&gt; v = [] {
+    std::vector&lt;float&gt; v(2048);
+    std::mt19937 gen;
+    std::uniform_int_distribution&lt;float&gt; dis(0, 1);
+    std::generate(v.begin(), v.end(), [&amp;] {
+        return dis(gen);
+    });
+    return v;
+}();
+</code></pre>
+<p>每个 Lambda 内都有自己独立的变量作用域，不会互相干扰。</p>
+<p>所有只在初始化 <code>v1</code> <code>v2</code> 用到的临时变量，即使名字重复也不会打架。</p>
+<p>而且能通过 Lambda 的范围和缩进，明确分辨谁属于谁。</p>
+<h2 id="cpp_tricks-lambda_2">Lambda 复用代码</h2>
 <pre><code class="language-cpp">void calc_average() {
     int res = 0;
     int count = 0;
