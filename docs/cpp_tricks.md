@@ -482,6 +482,77 @@ void find(const vector<int> &v, int target) {
 
 这样，return 最多只能打断到当前 Lambda 函数结束的位置，而不能打断整个大函数了。
 
+## 立即调用的 Lambda 初始化变量
+
+有些变量的初始化，需要大量的准备工作。
+
+例如创建一个 2048 大小的随机数组，里面填满 0 到 7 的随机整数。
+
+```cpp
+std::vector<int> v(2048);
+std::mt19937 gen;
+std::uniform_int_distribution<int> dis(0, 7);
+std::generate(v.begin(), v.end(), [&] {
+    return dis(gen);
+});
+```
+
+然而为了产生随机数，我们需要定义大量的临时变量，和函数调用。
+
+如果有很多个这样初始化工序复杂的变量，每个用到的局部变量名字就会互相冲突，导致无法编译。
+
+例如我们还想要随机一个 `float` 类型的数组 `v2`，其随机值是 0 到 1 的浮点数。
+
+为了不报错，必须把 `v2` 使用的所有中间变量都从 `dis` 改名为 `dis2`，非常麻烦。
+
+最重要的是很不直观，你永远不知道某个变量是属于哪个变量的初始化，全部平摊在一个作用域里，影响可读性。
+
+```cpp
+std::vector<int> v1(2048);
+std::mt19937 gen1;
+std::uniform_int_distribution<int> dis1(0, 7);
+std::generate(v1.begin(), v1.end(), [&] {
+    return dis1(gen1);
+});
+
+std::vector<float> v2(2048);
+std::mt19937 gen2;
+std::uniform_real_distribution<float> dis2(0, 1);
+std::generate(v2.begin(), v2.end(), [&] {
+    return dis2(gen2);
+});
+```
+
+这时，可以用 Lambda 创建一个作用域，然后用返回的形式初始化变量。
+
+```cpp
+std::vector<int> v = [] {
+    std::vector<int> v(2048);
+    std::mt19937 gen;
+    std::uniform_int_distribution<int> dis(0, 7);
+    std::generate(v.begin(), v.end(), [&] {
+        return dis(gen);
+    });
+    return v;
+}();
+
+std::vector<float> v = [] {
+    std::vector<float> v(2048);
+    std::mt19937 gen;
+    std::uniform_int_distribution<float> dis(0, 1);
+    std::generate(v.begin(), v.end(), [&] {
+        return dis(gen);
+    });
+    return v;
+}();
+```
+
+每个 Lambda 内都有自己独立的变量作用域，不会互相干扰。
+
+所有只在初始化 `v1` `v2` 用到的临时变量，即使名字重复也不会打架。
+
+而且能通过 Lambda 的范围和缩进，明确分辨谁属于谁。
+
 ## Lambda 复用代码
 
 ```cpp
