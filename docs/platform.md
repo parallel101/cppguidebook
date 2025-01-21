@@ -187,7 +187,69 @@ MSVC：`/Dmacro=value`
 
 ### 标准库的调试模式
 
-TODO
+不少标准库都有提供
+
+#### GCC 开启标准库调试模式
+
+如果你用的是 GCC 默认的 libstdc++ 库，可以定义宏 `#define _GLIBCXX_DEBUG` 以开启调试模式，此模式下会帮助检测标准库用法上出现的未定义行为，例如尝试解引用 `end()` 迭代器时，会抛出错误信息，帮助你检查代码中有没有未定义行为。
+
+也可以通过命令行选项 `-D_GLIBCXX_DEBUG` 开启。
+
+在 CMake 中添加以下选项，即可对特定目标程序启用标准库调试模式：
+
+```cmake
+target_compile_definitions(你的程序 PRIVATE _GLIBCXX_DEBUG)
+```
+
+> {{ icon.fun }} 有的人会老老实实的复制粘贴，连“你的程序”都忘记改成你真正的程序名。
+
+在 CMakeLists.txt 最前面加上可以对所有接下来的目标启用：
+
+```cmake
+add_compile_definitions(_GLIBCXX_DEBUG)
+
+add_executable(你的程序1)  # 示例
+add_executable(你的程序2)  # 示例
+```
+
+注意：
+
+开启此选项后，如果你的 exe 程序链接了其他用 C++ 写的库，那么这些库也必须开启调试模式！否则 ABI 会出现不兼容，导致奔溃。这是因为  `_GLIBCXX_DEBUG` 开启后，会改变 C++ 容器的布局和大小（为了调试而塞入的额外帮手变量导致容器结构与开启前不同），链接其他用 C 语言写的库不会有问题，因为此宏仅会影响标准库中 C++ 的部分。
+
+开启标准库调试模式后，因为需要做很多参数安全性检查，性能会受损，建议仅在调试环节启用！等你调试完消除了未定义行为后，在最终发布的版本中中关闭，恢复正常性能。
+
+你可以通过判定 `CMAKE_BUILD_TYPE` 是否等于 `Debug`，实现只在 Debug 模式下启用标准库安全检查。
+
+```cmake
+if (CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
+    add_compile_definitions(-D_GLIBCXX_DEBUG)
+endif()
+```
+
+#### MSVC 的标准库调试模式
+
+MSVC 有两个“config”，其中 Debug config 就是标准库调试模式，会帮助你检查迭代器越界等常见未定义行为。
+
+### 警告选项
+
+#### GCC 建议开启的警告选项
+
+建议初学者开启以下选项，可以避免很多常见错误写法，改善你的代码质量：
+
+```
+-Wall -Wextra -Weffc++
+-Werror=uninitialized
+-Werror=return-type
+-Wconversion -Wsign-compare
+-Werror=unused-result
+-Werror=suggest-override
+-Wzero-as-null-pointer-constant
+-Wmissing-declarations
+-Wold-style-cast -Werror=vla
+-Wnon-virtual-dtor
+```
+
+视频介绍：https://www.bilibili.com/video/BV1qT421a7zj
 
 ### C++11 ABI 问题
 
@@ -199,4 +261,8 @@ TODO
 
 或者命令行选项 `-D_GLIBCXX_USE_CXX11_ABI=0`。
 
-> {{ icon.warn }} 为了更好的学习现代 C++，还是建议安装新的发行版。
+由于 Linux 发行版大多会捆绑特定 GCC 版本（往往是很低的版本！），为了更好的学习现代 C++，我建议：
+
+1. 安装新的 Linux 发行版，最好是 Arch Linux，Tumbleweed 这类**滚动更新**的发行版，它们的所有包永久保持最新。
+2. 自己从源码编译 Clang，LLVM 团队打造优秀的代码品质使得 Clang 对系统底层解耦，不像 GCC 那么难伺候环境依赖。
+3. 或者使用 Wendous 等可以自由安装最新版 MSVC 的系统。
