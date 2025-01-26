@@ -421,7 +421,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2025年01月21日 12:26:11 (UTC+08:00)</p>
+<p>更新时间：2025年01月26日 17:01:15 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -3399,7 +3399,14 @@ int main() {
 </ul>
 </li>
 <li><a href="#lambda-lambda_3">lambda 进阶案例</a><ul>
-<li><a href="#lambda-lambda_4">lambda 实现递归</a></li>
+<li><a href="#lambda-lambda_4">lambda 实现递归</a><ul>
+<li><a href="#lambda-_42">初始化定义可以包含自己？！</a></li>
+<li><a href="#lambda-auto_4">auto 才是罪魁祸首</a></li>
+<li><a href="#lambda-_43">写明类型</a></li>
+<li><a href="#lambda-_44">性能焦虑！</a></li>
+<li><a href="#lambda-c23">没有 C++23？</a></li>
+</ul>
+</li>
 <li><a href="#lambda-lambda_5">lambda 避免全局重载函数捕获为变量时恼人的错误</a></li>
 <li><a href="#lambda-lambda-if-constexpr">lambda 配合 if-constexpr 实现编译期三目运算符</a></li>
 <li><a href="#lambda-c23-stdmove_only_function-stdfunction">推荐用 C++23 的 std::move_only_function 取代 std::function</a></li>
@@ -5368,9 +5375,132 @@ auto memfn = BIND(world, this);                    // 小彭老师的 BIND 宏�
 <h3 id="lambda-bind_3">bind 与标准库自带的运算符仿函数配合</h3>
 <p>TODO：<code>std::less</code> 和 <code>std::bind</code></p>
 <h3 id="lambda-c">函数指针是 C 语言陋习，改掉</h3>
+<p>无法保存状态</p>
 <h2 id="lambda-lambda_3">lambda 进阶案例</h2>
 <h3 id="lambda-lambda_4">lambda 实现递归</h3>
+<pre><code class="language-cpp">int fib(int n) {
+    if (n &lt;= 2) {
+        return 1;
+    }
+    return fib(n - 1) + fib(n - 2);
+}
+</code></pre>
+<p>以上代码是众所周知的，典中典之斐波那契数列第 n 项的递归求法。</p>
+<p>然而这需要定义一个全局函数 fib，污染了全局名字空间不说，还无法捕获到局部变量。</p>
+<p>有时你可能希望在局部定义一个递归函数，就适合用 Lambda 语法，在一个现有的函数体内就地创建 Lambda 函数对象，而无需污染全局。</p>
+<pre><code class="language-cpp">int main() {
+    auto fib = [&amp;] (int n) {
+        if (n &lt;= 2) {
+            return 1;
+        }
+        return fib(n - 1) + fib(n - 2);
+    };
+}
+</code></pre>
+<p>然而以上代码会编译出错！因为 <code>fib</code> 的<strong>初始化定义</strong>用的表达式 <code>[&amp;] (int n) { return fib(); }</code> 用到了 <code>fib</code> 自己！</p>
+<h4 id="lambda-_42">初始化定义可以包含自己？！</h4>
+<p>那 C++ 中，什么情况下一个变量的<strong>初始化定义</strong>可以包含自己呢？让我们回顾一下：</p>
+<pre><code class="language-cpp">int i = i + 1;
+</code></pre>
+<p>虽然编译能够通过，显然会产生运行时未定义行为。</p>
+<p>因为在执行变量 <code>i</code> 的初始化定义表达式 <code>i + 1</code> 时，<code>i</code> 还没有初始化呢！读取未初始化的变量是未定义行为。</p>
+<pre><code class="language-cpp">int i = (int) &amp;i;
+</code></pre>
+<p>可以编译通过（假设为 32 位环境）。</p>
+<p>则是允许的，因为虽然 <code>i</code> 的初始化表达式 <code>(int) &amp;i</code> 包含了尚未初始化的自己 <code>i</code>，但却是以他的地址形态出现的（使用了取地址运算符 <code>&amp;</code>）。</p>
+<p>也就是说我们初始化 <code>i</code> 只是用到了 <code>i</code> 变量的地址 <code>&amp;i</code>，而不是用到 <code>i</code> 里面的值。</p>
+<p>用变量自己的地址，初始化自己的值，没有问题。</p>
+<p>因为一个变量的生命周期中，总是先确定了其地址，再初始化其中的值的；无论是 new 还是局部变量，都是先有地址再初始化其值。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 顺序：分配地址 -&gt; 初始化值</p>
+</blockquote>
+<p>所以我们初始化 <code>fib</code> 的表达式中，用 <code>[&amp;]</code> 捕获了 <code>fib</code> 自己的引用（变量的地址），是没问题的。</p>
+<h4 id="lambda-auto_4"><code>auto</code> 才是罪魁祸首</h4>
+<p>真正导致无法编译的问题在于：我们使用 <code>auto</code> 来推导 <code>fib</code> 的类型，而 <code>auto</code> 变量的类型，取决于右侧表达式的类型，必须先知道右侧表达式的类型，才能知道变量是什么类型，才能为变量分配地址，然后赋初始值。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 顺序：确定类型 -&gt; 分配地址 -&gt; 初始化值</p>
+</blockquote>
+<p>分配地址需要用到类型信息，而 <code>auto</code> 变量的类型信息取决于右侧表达式的类型。</p>
+<p>要知道右侧表达式的类型，就需要右侧表达式完成编译。</p>
+<p>而右侧表达式中包含了 <code>fib</code> 变量自己的引用捕获 <code>[&amp;]</code>。</p>
+<p>这导致 <code>fib</code> 的类型还没有确定时，就需要被捕获进 Lambda 了，这就出现了循环引用，编译不通过。</p>
+<blockquote>
+<p><img src="../img/awesomeface.png" height="30px" width="auto" style="margin: 0; border: none"/> 一场由 <code>auto</code> 推导机制引发的血案。</p>
+</blockquote>
+<h4 id="lambda-_43">写明类型</h4>
+<p>要避免这种循环引用，我们只能避免使用 <code>auto</code>，在 <code>fib</code> 定义中，就写一个具体的类型。</p>
+<pre><code class="language-cpp">int main() {
+    std::function&lt;int(int)&gt; fib = [&amp;] (int n) {
+        if (n &lt;= 2) {
+            return 1;
+        }
+        return fib(n - 1) + fib(n - 2);
+    };
+}
+</code></pre>
+<p><code>function</code> 类型的大小，在 <code>fib</code> 初始化之前就已经确定，与 <code>fib</code> 初始化为什么值无关。</p>
+<p>这样在编译 <code>fib</code> 的初始化表达式时，<code>fib</code> 就是已经确定类型，并分配好内存地址了的，就可以被他自己的初始化表达式中的 Lambda 捕获。</p>
+<h4 id="lambda-_44">性能焦虑！</h4>
+<p>但是有的同学说，<code>function</code> 是类型擦除容器，虽然很方便，但是低性能呀？我有性能焦虑症😩，能不能还用 <code>auto</code> 呀？</p>
+<p>的确，因为 Lambda 表达式本身的类型是一个匿名类型，并不是 <code>function&lt;int(int)&gt;</code> 类型，这之间发生了隐式转换。</p>
+<p>为了伺候你的性能焦虑😩，小彭老师隆重介绍一种能让 Lambda 递归的 C++23 语法 deducing-this：</p>
+<pre><code class="language-cpp">auto fib = [] (this auto &amp;self, int n) {
+    if (n &lt;= 2) {
+        return 1;
+    }
+    return self(n - 1) + self(n - 2);
+};
+</code></pre>
+<p>且无需用 <code>[&amp;]</code> 捕获 <code>fib</code> 自己，用 <code>self</code> 这个特殊的参数就能访问到自身的引用！</p>
+<p>之前也说了，Lambda 无非是编译器自动帮你生成了一个带有 <code>operator()</code> 成员函数的匿名类，他实际上等价于：</p>
+<pre><code class="language-cpp">struct Fib {
+    int operator()(int n) const {
+        if (n &lt;= 2) {
+            return 1;
+        }
+        return (*this)(n - 1) + (*this)(n - 2);  // deducing-this 定义的 self 引用等价于 *this
+    };
+};
+auto fib = Fib();
+</code></pre>
+<p>毕竟 <code>this</code> 是调用 <code>Fib::operator()</code> 时本来就会传入的参数，根本没必要储存在 <code>Fib</code> 类型体内，更节省了内存。</p>
+<p>只是由于 C++23 之前在 Lambda 体内写 this，含义是外部类的指针，而不是 Lambda 对象自己的 this 指针。</p>
+<p>所以 C++23 才提出了 deducing-this，把本就属于 Fib 的 this 作为参数传入，获取 Lambda 自己的地址。</p>
+<blockquote>
+<p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> deducing-this 的语法固定为 <code>this auto</code>，这里的 <code>auto</code> 会自动推导为当前 Lambda 对象的类型（是个匿名类）。而前缀 <code>this</code> 是固定的语法，无特殊含义。</p>
+</blockquote>
+<h4 id="lambda-c23">没有 C++23？</h4>
+<p>如果你无法使用 C++23，还患有性能焦虑，不想用 function，还有一种小技巧可以让 Lambda 支持递归：在参数中传入自身的引用！</p>
+<pre><code class="language-cpp">auto fib = [] (auto &amp;fib, int n) -&gt; int {
+    if (n &lt;= 2) {
+        return 1;
+    }
+    return fib(fib, n - 1) + fib(fib, n - 2);
+};
+</code></pre>
+<blockquote>
+<p><img src="../img/question.png" height="30px" width="auto" style="margin: 0; border: none"/> 这在函数式编程范式中称为“自递归”技巧，可以让无法一个捕获到自身的匿名函数对象也能实现递归自我调用。</p>
+</blockquote>
+<p>缺点：</p>
+<ol>
+<li>每次使用时就需要把 <code>fib</code> 作为引用参数传入用自己！</li>
+</ol>
+<pre><code class="language-cpp">fib(fib, 1);
+</code></pre>
+<ol start="2">
+<li>必须写明返回类型 <code>-&gt; int</code>，否则编译会失败！</li>
+</ol>
+<p>因为 C++ 编译器递归解析表达式的设计，需要先确定 Lambda 表达式中每一条子语句————例如 <code>fib(fib, n - 1)</code>————的返回类型，才能确定 Lambda 自身的返回类型。</p>
+<p>而 <code>fib(fib, n - 1)</code> 这个表达式又需要用到 <code>fib</code> 的类型，其又进一步需要 <code>fib</code> 自身体内每一条子语句，也就是 <code>fib(fib, n - 1)</code> 的类型，无限递归，无法确定唯一的类型，编译器只能报错。</p>
+<blockquote>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 使用这种“自递归”技巧的 Lambda，哪怕没有返回值，也必须写明 <code>-&gt; void</code>！非常麻烦……</p>
+</blockquote>
 <h3 id="lambda-lambda_5">lambda 避免全局重载函数捕获为变量时恼人的错误</h3>
+<pre><code class="language-cpp">void print(int i);
+void print(std::string s);
+
+auto f = print; // 出错！无法确定是哪一个重载！
+</code></pre>
 <h3 id="lambda-lambda-if-constexpr">lambda 配合 if-constexpr 实现编译期三目运算符</h3>
 <h3 id="lambda-c23-stdmove_only_function-stdfunction">推荐用 C++23 的 <code>std::move_only_function</code> 取代 <code>std::function</code></h3>
 <p>通过按值移动捕获 <code>[p = std::move(p)]</code>，lambda 可以持有一个 unique_ptr 作为捕获变量。</p>
