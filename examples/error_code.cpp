@@ -1,5 +1,6 @@
 #include <fmt/core.h>
 #include <system_error>
+#include <span>
 #include "tl-expected.hpp"
 #include <fcntl.h>
 // 今日主题：现代 C++ 中的错误处理
@@ -139,54 +140,54 @@ int main() {
     return 0;
 }
 
-namespace screenshot1 {
-
-namespace std {
-using namespace ::tl;
-using namespace ::std;
-}
-
-std::expected<int, std::error_code> expectedStdError(int ret) {
-    if (ret == -1) {
-        return std::unexpected{std::error_code(errno, std::generic_category())};
-    }
-    return ret;
-}
-
-struct File {
-    int fd;
-
-    explicit File(const char *path, int flags) {
-        fd = expectedStdError(::open(path, flags)).value();
-    }
-
-    tl::expected<size_t, std::error_code> write(std::span<const char> buf) {
-        return expectedStdError(::write(fd, buf.data(), buf.size()));
-    }
-};
-
-std::expected<int, std::error_code> sqrt(int x) {
-    if (x < 0)
-        return std::unexpected{make_error_code(std::errc::argument_out_of_domain)};
-
-    for (int i = 0;; i++)
-        if (i * i >= x)
-            return i;
-}
-
-}
-
-namespace screenshot2 {
-
-int sqrt(int x) {
-    if (x < 0) {
-        errno = EDOM;
-        return -1;
-    }
-
-    for (int i = 0;; i++)
-        if (i * i >= x)
-            return i;
-}
-
-}
+// namespace screenshot1 {
+//
+// namespace std {
+// using namespace ::tl;
+// using namespace ::std;
+// }
+//
+// std::expected<int, std::error_code> expectedStdError(int ret) {
+//     if (ret == -1) {
+//         return std::unexpected{std::error_code(errno, std::generic_category())};
+//     }
+//     return ret;
+// }
+//
+// struct File {
+//     int fd;
+//
+//     explicit File(const char *path, int flags) {
+//         fd = expectedStdError(::open(path, flags)).value();
+//     }
+//
+//     tl::expected<size_t, std::error_code> write(std::span<const char> buf) {
+//         return expectedStdError(::write(fd, buf.data(), buf.size()));
+//     }
+// };
+//
+// std::expected<int, std::error_code> sqrt(int x) {
+//     if (x < 0)
+//         return std::unexpected{make_error_code(std::errc::argument_out_of_domain)};
+//
+//     for (int i = 0;; i++)
+//         if (i * i >= x)
+//             return i;
+// }
+//
+// }
+//
+// namespace screenshot2 {
+//
+// int sqrt(int x) {
+//     if (x < 0) {
+//         errno = EDOM;
+//         return -1;
+//     }
+//
+//     for (int i = 0;; i++)
+//         if (i * i >= x)
+//             return i;
+// }
+//
+// }
