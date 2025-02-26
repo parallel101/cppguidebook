@@ -421,7 +421,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2025年02月26日 10:10:17 (UTC+08:00)</p>
+<p>更新时间：2025年02月26日 10:11:15 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -16933,12 +16933,12 @@ fmt::println(&quot;UTF-32 下，“公”前的所有字符：{}&quot;, utf8::ut
 </blockquote>
 <p>UTF-8 无法取出单个非 ASCII 字符，对于单个中文字符，仍然只能以字符串形式表达（由多个字节组成）。</p>
 <pre><code class="language-cpp">std::string s = &quot;小彭老师公开课万岁&quot;;
-fmt::print(&quot;UTF-8 下第一个字节：{}&quot;, s[0]);
+fmt::println(&quot;UTF-8 下第一个字节：{}&quot;, s[0]);
 // 可能会打印 ‘å’ (0xE5)，因为“小”的 UTF-8 编码是 0xE5 0xB0 0x8F
 // 也可能是乱码“�”，取决于终端理解的编码格式
 </code></pre>
 <pre><code class="language-cpp">std::u32string s = U&quot;小彭老师公开课万岁&quot;;
-fmt::print(&quot;UTF-32 下第一个字符：{}&quot;, utf8::utf32to8(s.substr(0, 1)));
+fmt::println(&quot;UTF-32 下第一个字符：{}&quot;, utf8::utf32to8(s.substr(0, 1)));
 // 会打印 ‘小’
 </code></pre>
 <p>UTF-8 字符串的反转也会出问题：</p>
