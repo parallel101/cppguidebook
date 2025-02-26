@@ -1192,7 +1192,7 @@ fmt::println(&quot;UTF-8 下，前四个字节：{}&quot;, s.substr(0, 4));
 // 会打印 “小�”
 </code></pre>
 <pre><code class="language-cpp">std::u32string s = U&quot;小彭老师公开课万岁&quot;;
-fmt::println(&quot;UTF-32 下，前四个字符：{}&quot;, s.substr(0, 4));
+fmt::println(&quot;UTF-32 下，前四个字符：{}&quot;, utf8::utf32to8(s.substr(0, 4)));
 // 会打印 “小彭老师”
 </code></pre>
 <p>只有当索引是来自 <code>find</code> 的结果时，UTF-8 字符串的切片才能正常工作：</p>
@@ -1203,7 +1203,7 @@ fmt::println(&quot;UTF-8 下，“公”前的所有字节：{}&quot;, s.substr(
 </code></pre>
 <pre><code class="language-cpp">std::u32string s = U&quot;小彭老师公开课万岁&quot;;
 size_t pos = s.find(U'公'); // pos = 4
-fmt::println(&quot;UTF-32 下，“公”前的所有字符：{}&quot;, s.substr(0, pos));
+fmt::println(&quot;UTF-32 下，“公”前的所有字符：{}&quot;, utf8::utf32to8(s.substr(0, pos)));
 // 会打印 “小彭老师”
 </code></pre>
 <blockquote>
@@ -1216,7 +1216,7 @@ fmt::print(&quot;UTF-8 下第一个字节：{}&quot;, s[0]);
 // 也可能是乱码“�”，取决于终端理解的编码格式
 </code></pre>
 <pre><code class="language-cpp">std::u32string s = U&quot;小彭老师公开课万岁&quot;;
-fmt::print(&quot;UTF-32 下第一个字符：{}&quot;, s[0]);
+fmt::print(&quot;UTF-32 下第一个字符：{}&quot;, utf8::utf32to8(s.substr(0, 1)));
 // 会打印 ‘小’
 </code></pre>
 <p>UTF-8 字符串的反转也会出问题：</p>
@@ -1603,8 +1603,8 @@ for b in s.bytes() {
 <p>方法1：使用 <code>utf8to32</code> 一次性完成转换，用完后再转回去。</p>
 <pre><code class="language-cpp">std::string s = &quot;你好&quot;;
 std::u32string u32 = utf8::utf8to32(s);
-fmt::println(&quot;U+{:04X}&quot;, u32[0]);
-fmt::println(&quot;U+{:04X}&quot;, u32[1]);
+fmt::println(&quot;U+{:04X}&quot;, static_cast&lt;std::uint32_t&gt;(u32[0]));
+fmt::println(&quot;U+{:04X}&quot;, static_cast&lt;std::uint32_t&gt;(u32[1]));
 u32[1] = U'坏';
 s = utf8::utf32to8(u32);
 fmt::println(&quot;{}&quot;, s); // 你坏
@@ -1615,7 +1615,7 @@ utf8::unchecked::iterator&lt;char *&gt; bit(s);
 utf8::unchecked::iterator&lt;char *&gt; eit(s + strlen(s));
 for (auto it = bit; it != eit; ++it) {
     // *it: char32_t
-    fmt::println(&quot;U+{:04X}&quot;, *it);
+    fmt::println(&quot;U+{:04X}&quot;, static_cast&lt;std::uint32_t&gt;(*it));
 }
 
 // 安全（带边界检测）的版本
@@ -1624,7 +1624,7 @@ utf8::iterator&lt;char *&gt; bit(s, s, s + strlen(s));
 utf8::iterator&lt;char *&gt; eit(s + strlen(s), s, s + strlen(s));
 for (auto it = bit; it != eit; ++it) {
     // *it: char32_t
-    fmt::println(&quot;U+{:04X}&quot;, *it);
+    fmt::println(&quot;U+{:04X}&quot;, static_cast&lt;std::uint32_t&gt;(*it));
 }
 
 // 基于 std::string 的版本
@@ -1633,7 +1633,7 @@ utf8::iterator&lt;std::string::iterator&gt; bit(s.begin(), s.begin(), s.end());
 utf8::iterator&lt;std::string::iterator&gt; eit(s.end(), s.begin(), s.end());
 for (auto it = bit; it != eit; ++it) {
     // *it: char32_t
-    fmt::println(&quot;U+{:04X}&quot;, *it);
+    fmt::println(&quot;U+{:04X}&quot;, static_cast&lt;std::uint32_t&gt;(*it));
 }
 </code></pre>
 <p>由于迭代器接口复杂难懂，建议先封装成带有 <code>begin()</code> 和 <code>end()</code> 的 range 对象，方便使用 C++17 range-based loop 语法直观遍历：</p>
@@ -1656,7 +1656,7 @@ Utf8Range(T &amp;&amp;t) -&gt; Utf8Range&lt;decltype(std::begin(t))&gt;;
 // 以下是新类的使用方法
 std::string s = &quot;你好&quot;;
 for (char32_t c : Utf8Range(s)) {
-    fmt::println(&quot;U+{:04X}&quot;, c);
+    fmt::println(&quot;U+{:04X}&quot;, static_cast&lt;std::uint32_t&gt;(c));
 }
 </code></pre>
 <h3 id="utf-16_2">UTF-16 阵营</h3>
@@ -1719,8 +1719,8 @@ for (char c : s.toCharArray()) {
 <p>在刚刚介绍的 C++ 库 <code>utfcpp</code> 中，也有针对 UTF-16 的转换函数，如 <code>utf16to32</code>：</p>
 <pre><code class="language-cpp">std::u16string s = u&quot;你好&quot;;
 std::u32string u32 = utf16::utf16to32(s);
-fmt::println(&quot;U+{:04X}&quot;, u32[0]);
-fmt::println(&quot;U+{:04X}&quot;, u32[1]);
+fmt::println(&quot;U+{:04X}&quot;, static_cast&lt;std::uint32_t&gt;(u32[0]));
+fmt::println(&quot;U+{:04X}&quot;, static_cast&lt;std::uint32_t&gt;(u32[1]));
 u32[1] = U'𰻞';
 s = utf16::utf32to16(u32);
 fmt::println(&quot;{}&quot;, s);          // 你𰻞
