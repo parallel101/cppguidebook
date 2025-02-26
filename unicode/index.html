@@ -1776,7 +1776,7 @@ int main() {
     // UTF-8 转 UTF-32：
     std::u32string s32 = utf_to_utf&lt;char32_t&gt;(s8);
     // UTF-32 转 UTF-16：
-    std::u16string s16 = utf_to_utf&lt;char16_t&gt;(s8);
+    std::u16string s16 = utf_to_utf&lt;char16_t&gt;(s32);
     // UTF-32 转 UTF-8：
     s8 = utf_to_utf&lt;char&gt;(s32);
     std::cout &lt;&lt; s8 &lt;&lt; '\n';
@@ -1897,52 +1897,52 @@ int main() {
 </thead>
 <tbody>
 <tr>
-<td><code>to_utf&lt;char&gt;("GBK", string)</code></td>
+<td><code>to_utf&lt;char&gt;(string, "GBK")</code></td>
 <td>GBK</td>
 <td>UTF-8</td>
 </tr>
 <tr>
-<td><code>to_utf&lt;char8_t&gt;("GBK", string)</code></td>
+<td><code>to_utf&lt;char8_t&gt;(string, "GBK")</code></td>
 <td>GBK</td>
 <td>UTF-8</td>
 </tr>
 <tr>
-<td><code>to_utf&lt;char16_t&gt;("GBK", string)</code></td>
+<td><code>to_utf&lt;char16_t&gt;(string, "GBK")</code></td>
 <td>GBK</td>
 <td>UTF-16</td>
 </tr>
 <tr>
-<td><code>to_utf&lt;char32_t&gt;("GBK", string)</code></td>
+<td><code>to_utf&lt;char32_t&gt;(string, "GBK")</code></td>
 <td>GBK</td>
 <td>UTF-32</td>
 </tr>
 <tr>
-<td><code>to_utf&lt;wchar_t&gt;("GBK", string)</code></td>
+<td><code>to_utf&lt;wchar_t&gt;(string, "GBK")</code></td>
 <td>GBK</td>
 <td>Linux 上 UTF-32；Win 上 UTF-16</td>
 </tr>
 <tr>
-<td><code>to_utf&lt;char&gt;("", string)</code></td>
+<td><code>to_utf&lt;char&gt;(string, "")</code></td>
 <td>区域设置</td>
 <td>UTF-8</td>
 </tr>
 <tr>
-<td><code>to_utf&lt;char8_t&gt;("", string)</code></td>
+<td><code>to_utf&lt;char8_t&gt;(string, "")</code></td>
 <td>区域设置</td>
 <td>UTF-8</td>
 </tr>
 <tr>
-<td><code>to_utf&lt;char16_t&gt;("", string)</code></td>
+<td><code>to_utf&lt;char16_t&gt;(string, "")</code></td>
 <td>区域设置</td>
 <td>UTF-16</td>
 </tr>
 <tr>
-<td><code>to_utf&lt;char32_t&gt;("", string)</code></td>
+<td><code>to_utf&lt;char32_t&gt;(string, "")</code></td>
 <td>区域设置</td>
 <td>UTF-32</td>
 </tr>
 <tr>
-<td><code>to_utf&lt;wchar_t&gt;("", string)</code></td>
+<td><code>to_utf&lt;wchar_t&gt;(string, "")</code></td>
 <td>区域设置</td>
 <td>Linux 上 UTF-32；Win 上 UTF-16</td>
 </tr>
@@ -1958,42 +1958,42 @@ int main() {
 </thead>
 <tbody>
 <tr>
-<td><code>from_utf("GBK", string)</code></td>
+<td><code>from_utf(string, "GBK")</code></td>
 <td>UTF-8</td>
 <td>GBK</td>
 </tr>
 <tr>
-<td><code>from_utf("GBK", u16string)</code></td>
+<td><code>from_utf(u16string,"GBK")</code></td>
 <td>UTF-16</td>
 <td>GBK</td>
 </tr>
 <tr>
-<td><code>from_utf("GBK", u32string)</code></td>
+<td><code>from_utf(u32string, "GBK")</code></td>
 <td>UTF-32</td>
 <td>GBK</td>
 </tr>
 <tr>
-<td><code>from_utf("GBK", wstring)</code></td>
+<td><code>from_utf(wstring, "GBK")</code></td>
 <td>Linux 上 UTF-32；Win 上 UTF-16</td>
 <td>GBK</td>
 </tr>
 <tr>
-<td><code>from_utf("", string)</code></td>
+<td><code>from_utf(string, "")</code></td>
 <td>UTF-8</td>
 <td>区域设置</td>
 </tr>
 <tr>
-<td><code>from_utf("", u16string)</code></td>
+<td><code>from_utf(u16string, "")</code></td>
 <td>UTF-16</td>
 <td>区域设置</td>
 </tr>
 <tr>
-<td><code>from_utf("", u32string)</code></td>
+<td><code>from_utf(u32string, "")</code></td>
 <td>UTF-32</td>
 <td>区域设置</td>
 </tr>
 <tr>
-<td><code>from_utf("", wstring)</code></td>
+<td><code>from_utf(wstring, "")</code></td>
 <td>Linux 上 UTF-32；Win 上 UTF-16</td>
 <td>区域设置</td>
 </tr>
