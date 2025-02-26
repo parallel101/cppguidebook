@@ -1553,9 +1553,9 @@ int main() {
 
 |函数名称|从|到|
 |-|-|-|
-|`from_utf( string,"GBK")`|UTF-8|GBK|
+|`from_utf(string, "GBK")`|UTF-8|GBK|
 |`from_utf(u16string,"GBK")`|UTF-16|GBK|
-|`from_utf( u32string,"GBK")`|UTF-32|GBK|
+|`from_utf(u32string, "GBK")`|UTF-32|GBK|
 |`from_utf(wstring, "GBK")`|Linux 上 UTF-32；Win 上 UTF-16|GBK|
 |`from_utf(string, "")`|UTF-8|区域设置|
 |`from_utf(u16string, "")`|UTF-16|区域设置|
