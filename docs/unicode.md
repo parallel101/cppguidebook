@@ -765,14 +765,14 @@ UTF-8 无法取出单个非 ASCII 字符，对于单个中文字符，仍然只�
 
 ```cpp
 std::string s = "小彭老师公开课万岁";
-fmt::print("UTF-8 下第一个字节：{}", s[0]);
+fmt::println("UTF-8 下第一个字节：{}", s[0]);
 // 可能会打印 ‘å’ (0xE5)，因为“小”的 UTF-8 编码是 0xE5 0xB0 0x8F
 // 也可能是乱码“�”，取决于终端理解的编码格式
 ```
 
 ```cpp
 std::u32string s = U"小彭老师公开课万岁";
-fmt::print("UTF-32 下第一个字符：{}", utf8::utf32to8(s.substr(0, 1)));
+fmt::println("UTF-32 下第一个字符：{}", utf8::utf32to8(s.substr(0, 1)));
 // 会打印 ‘小’
 ```
 
