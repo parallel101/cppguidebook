@@ -739,7 +739,7 @@ fmt::println("UTF-8 下，前四个字节：{}", s.substr(0, 4));
 
 ```cpp
 std::u32string s = U"小彭老师公开课万岁";
-fmt::println("UTF-32 下，前四个字符：{}", s.substr(0, 4));
+fmt::println("UTF-32 下，前四个字符：{}", utf8::utf32to8(s.substr(0, 4)));
 // 会打印 “小彭老师”
 ```
 
@@ -755,7 +755,7 @@ fmt::println("UTF-8 下，“公”前的所有字节：{}", s.substr(0, pos));
 ```cpp
 std::u32string s = U"小彭老师公开课万岁";
 size_t pos = s.find(U'公'); // pos = 4
-fmt::println("UTF-32 下，“公”前的所有字符：{}", s.substr(0, pos));
+fmt::println("UTF-32 下，“公”前的所有字符：{}", utf8::utf32to8(s.substr(0, pos)));
 // 会打印 “小彭老师”
 ```
 
@@ -772,7 +772,7 @@ fmt::print("UTF-8 下第一个字节：{}", s[0]);
 
 ```cpp
 std::u32string s = U"小彭老师公开课万岁";
-fmt::print("UTF-32 下第一个字符：{}", s[0]);
+fmt::print("UTF-32 下第一个字符：{}", utf8::utf32to8(s.substr(0, 1)));
 // 会打印 ‘小’
 ```
 
@@ -1233,8 +1233,8 @@ https://github.com/nemtrif/utfcpp
 ```cpp
 std::string s = "你好";
 std::u32string u32 = utf8::utf8to32(s);
-fmt::println("U+{:04X}", u32[0]);
-fmt::println("U+{:04X}", u32[1]);
+fmt::println("U+{:04X}", static_cast<std::uint32_t>(u32[0]));
+fmt::println("U+{:04X}", static_cast<std::uint32_t>(u32[1]));
 u32[1] = U'坏';
 s = utf8::utf32to8(u32);
 fmt::println("{}", s); // 你坏
@@ -1248,7 +1248,7 @@ utf8::unchecked::iterator<char *> bit(s);
 utf8::unchecked::iterator<char *> eit(s + strlen(s));
 for (auto it = bit; it != eit; ++it) {
     // *it: char32_t
-    fmt::println("U+{:04X}", *it);
+    fmt::println("U+{:04X}", static_cast<std::uint32_t>(*it));
 }
 
 // 安全（带边界检测）的版本
@@ -1257,7 +1257,7 @@ utf8::iterator<char *> bit(s, s, s + strlen(s));
 utf8::iterator<char *> eit(s + strlen(s), s, s + strlen(s));
 for (auto it = bit; it != eit; ++it) {
     // *it: char32_t
-    fmt::println("U+{:04X}", *it);
+    fmt::println("U+{:04X}", static_cast<std::uint32_t>(*it));
 }
 
 // 基于 std::string 的版本
@@ -1266,7 +1266,7 @@ utf8::iterator<std::string::iterator> bit(s.begin(), s.begin(), s.end());
 utf8::iterator<std::string::iterator> eit(s.end(), s.begin(), s.end());
 for (auto it = bit; it != eit; ++it) {
     // *it: char32_t
-    fmt::println("U+{:04X}", *it);
+    fmt::println("U+{:04X}", static_cast<std::uint32_t>(*it));
 }
 ```
 
@@ -1292,7 +1292,7 @@ Utf8Range(T &&t) -> Utf8Range<decltype(std::begin(t))>;
 // 以下是新类的使用方法
 std::string s = "你好";
 for (char32_t c : Utf8Range(s)) {
-    fmt::println("U+{:04X}", c);
+    fmt::println("U+{:04X}", static_cast<std::uint32_t>(c));
 }
 ```
 
@@ -1355,8 +1355,8 @@ for (char c : s.toCharArray()) {
 ```cpp
 std::u16string s = u"你好";
 std::u32string u32 = utf16::utf16to32(s);
-fmt::println("U+{:04X}", u32[0]);
-fmt::println("U+{:04X}", u32[1]);
+fmt::println("U+{:04X}", static_cast<std::uint32_t>(u32[0]));
+fmt::println("U+{:04X}", static_cast<std::uint32_t>(u32[1]));
 u32[1] = U'𰻞';
 s = utf16::utf32to16(u32);
 fmt::println("{}", s);          // 你𰻞
