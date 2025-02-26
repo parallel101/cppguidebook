@@ -1429,7 +1429,7 @@ int main() {
     // UTF-8 转 UTF-32：
     std::u32string s32 = utf_to_utf<char32_t>(s8);
     // UTF-32 转 UTF-16：
-    std::u16string s16 = utf_to_utf<char16_t>(s8);
+    std::u16string s16 = utf_to_utf<char16_t>(s32);
     // UTF-32 转 UTF-8：
     s8 = utf_to_utf<char>(s32);
     std::cout << s8 << '\n';
@@ -1540,27 +1540,27 @@ int main() {
 
 |函数名称|从|到|
 |-|-|-|
-|`to_utf<char>("GBK", string)`|GBK|UTF-8|
-|`to_utf<char8_t>("GBK", string)`|GBK|UTF-8|
-|`to_utf<char16_t>("GBK", string)`|GBK|UTF-16|
-|`to_utf<char32_t>("GBK", string)`|GBK|UTF-32|
-|`to_utf<wchar_t>("GBK", string)`|GBK|Linux 上 UTF-32；Win 上 UTF-16|
-|`to_utf<char>("", string)`|区域设置|UTF-8|
-|`to_utf<char8_t>("", string)`|区域设置|UTF-8|
-|`to_utf<char16_t>("", string)`|区域设置|UTF-16|
-|`to_utf<char32_t>("", string)`|区域设置|UTF-32|
-|`to_utf<wchar_t>("", string)`|区域设置|Linux 上 UTF-32；Win 上 UTF-16|
+|`to_utf<char>(string, "GBK")`|GBK|UTF-8|
+|`to_utf<char8_t>(string, "GBK")`|GBK|UTF-8|
+|`to_utf<char16_t>(string, "GBK")`|GBK|UTF-16|
+|`to_utf<char32_t>(string, "GBK")`|GBK|UTF-32|
+|`to_utf<wchar_t>(string, "GBK")`|GBK|Linux 上 UTF-32；Win 上 UTF-16|
+|`to_utf<char>(string, "")`|区域设置|UTF-8|
+|`to_utf<char8_t>(string, "")`|区域设置|UTF-8|
+|`to_utf<char16_t>(string, "")`|区域设置|UTF-16|
+|`to_utf<char32_t>(string, "")`|区域设置|UTF-32|
+|`to_utf<wchar_t>(string, "")`|区域设置|Linux 上 UTF-32；Win 上 UTF-16|
 
 |函数名称|从|到|
 |-|-|-|
-|`from_utf("GBK", string)`|UTF-8|GBK|
-|`from_utf("GBK", u16string)`|UTF-16|GBK|
-|`from_utf("GBK", u32string)`|UTF-32|GBK|
-|`from_utf("GBK", wstring)`|Linux 上 UTF-32；Win 上 UTF-16|GBK|
-|`from_utf("", string)`|UTF-8|区域设置|
-|`from_utf("", u16string)`|UTF-16|区域设置|
-|`from_utf("", u32string)`|UTF-32|区域设置|
-|`from_utf("", wstring)`|Linux 上 UTF-32；Win 上 UTF-16|区域设置|
+|`from_utf(string, "GBK")`|UTF-8|GBK|
+|`from_utf(u16string,"GBK")`|UTF-16|GBK|
+|`from_utf(u32string, "GBK")`|UTF-32|GBK|
+|`from_utf(wstring, "GBK")`|Linux 上 UTF-32；Win 上 UTF-16|GBK|
+|`from_utf(string, "")`|UTF-8|区域设置|
+|`from_utf(u16string, "")`|UTF-16|区域设置|
+|`from_utf(u32string, "")`|UTF-32|区域设置|
+|`from_utf(wstring, "")`|Linux 上 UTF-32；Win 上 UTF-16|区域设置|
 
 #### GBK 和 Shift-JIS 互转
 
