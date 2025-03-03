@@ -77,6 +77,7 @@
 - parallel101/openglslides
 - parallel101/cppguidebook
 - parallel101/simdtutor
+- parallel101/qtguide
 
 ### 小彭老师自研
 
