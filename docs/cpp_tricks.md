@@ -625,7 +625,7 @@ void calc_average() {
 例如字符串切片函数典型的一种实现中，因为“尾巴”的伺候和“主体”的伺候，就会产生重复代码：
 
 ```cpp
-vector<string> spilt(string str) {
+vector<string> split(string str) {
     vector<string> list;
     string last;
     for (char c: str) {
@@ -644,7 +644,7 @@ vector<string> spilt(string str) {
 上面的代码中重复的部分 `list.push_back(last);` 可以用 Lambda 复用，把重复的操作封装成局部的 Lambda：
 
 ```cpp
-vector<string> spilt(string str) {
+vector<string> split(string str) {
     vector<string> list;
     string last;
     auto push_last = [&] {
