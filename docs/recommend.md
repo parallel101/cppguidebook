@@ -78,6 +78,7 @@
 - parallel101/openglslides
 - parallel101/cppguidebook
 - parallel101/simdtutor
+- parallel101/qtguide
 
 ### 小彭老师自研
 
@@ -110,18 +111,3 @@
 - archibate/logisim
 - archibate/newton
 - archibate/vimrc
-
-## GCC 建议开启的警告选项
-
-```
--Wall -Wextra -Weffc++
--Werror=uninitialized
--Werror=return-type
--Wconversion -Wsign-compare
--Werror=unused-result
--Werror=suggest-override
--Wzero-as-null-pointer-constant
--Wmissing-declarations
--Wold-style-cast -Werror=vla
--Wnon-virtual-dtor
-```

@@ -739,7 +739,7 @@ fmt::println("UTF-8 下，前四个字节：{}", s.substr(0, 4));
 
 ```cpp
 std::u32string s = U"小彭老师公开课万岁";
-fmt::println("UTF-32 下，前四个字符：{}", s.substr(0, 4));
+fmt::println("UTF-32 下，前四个字符：{}", utf8::utf32to8(s.substr(0, 4)));
 // 会打印 “小彭老师”
 ```
 
@@ -755,7 +755,7 @@ fmt::println("UTF-8 下，“公”前的所有字节：{}", s.substr(0, pos));
 ```cpp
 std::u32string s = U"小彭老师公开课万岁";
 size_t pos = s.find(U'公'); // pos = 4
-fmt::println("UTF-32 下，“公”前的所有字符：{}", s.substr(0, pos));
+fmt::println("UTF-32 下，“公”前的所有字符：{}", utf8::utf32to8(s.substr(0, pos)));
 // 会打印 “小彭老师”
 ```
 
@@ -765,14 +765,14 @@ UTF-8 无法取出单个非 ASCII 字符，对于单个中文字符，仍然只�
 
 ```cpp
 std::string s = "小彭老师公开课万岁";
-fmt::print("UTF-8 下第一个字节：{}", s[0]);
+fmt::println("UTF-8 下第一个字节：{}", s[0]);
 // 可能会打印 ‘å’ (0xE5)，因为“小”的 UTF-8 编码是 0xE5 0xB0 0x8F
 // 也可能是乱码“�”，取决于终端理解的编码格式
 ```
 
 ```cpp
 std::u32string s = U"小彭老师公开课万岁";
-fmt::print("UTF-32 下第一个字符：{}", s[0]);
+fmt::println("UTF-32 下第一个字符：{}", utf8::utf32to8(s.substr(0, 1)));
 // 会打印 ‘小’
 ```
 
@@ -1233,8 +1233,8 @@ https://github.com/nemtrif/utfcpp
 ```cpp
 std::string s = "你好";
 std::u32string u32 = utf8::utf8to32(s);
-fmt::println("U+{:04X}", u32[0]);
-fmt::println("U+{:04X}", u32[1]);
+fmt::println("U+{:04X}", static_cast<std::uint32_t>(u32[0]));
+fmt::println("U+{:04X}", static_cast<std::uint32_t>(u32[1]));
 u32[1] = U'坏';
 s = utf8::utf32to8(u32);
 fmt::println("{}", s); // 你坏
@@ -1248,7 +1248,7 @@ utf8::unchecked::iterator<char *> bit(s);
 utf8::unchecked::iterator<char *> eit(s + strlen(s));
 for (auto it = bit; it != eit; ++it) {
     // *it: char32_t
-    fmt::println("U+{:04X}", *it);
+    fmt::println("U+{:04X}", static_cast<std::uint32_t>(*it));
 }
 
 // 安全（带边界检测）的版本
@@ -1257,7 +1257,7 @@ utf8::iterator<char *> bit(s, s, s + strlen(s));
 utf8::iterator<char *> eit(s + strlen(s), s, s + strlen(s));
 for (auto it = bit; it != eit; ++it) {
     // *it: char32_t
-    fmt::println("U+{:04X}", *it);
+    fmt::println("U+{:04X}", static_cast<std::uint32_t>(*it));
 }
 
 // 基于 std::string 的版本
@@ -1266,7 +1266,7 @@ utf8::iterator<std::string::iterator> bit(s.begin(), s.begin(), s.end());
 utf8::iterator<std::string::iterator> eit(s.end(), s.begin(), s.end());
 for (auto it = bit; it != eit; ++it) {
     // *it: char32_t
-    fmt::println("U+{:04X}", *it);
+    fmt::println("U+{:04X}", static_cast<std::uint32_t>(*it));
 }
 ```
 
@@ -1292,7 +1292,7 @@ Utf8Range(T &&t) -> Utf8Range<decltype(std::begin(t))>;
 // 以下是新类的使用方法
 std::string s = "你好";
 for (char32_t c : Utf8Range(s)) {
-    fmt::println("U+{:04X}", c);
+    fmt::println("U+{:04X}", static_cast<std::uint32_t>(c));
 }
 ```
 
@@ -1355,8 +1355,8 @@ for (char c : s.toCharArray()) {
 ```cpp
 std::u16string s = u"你好";
 std::u32string u32 = utf16::utf16to32(s);
-fmt::println("U+{:04X}", u32[0]);
-fmt::println("U+{:04X}", u32[1]);
+fmt::println("U+{:04X}", static_cast<std::uint32_t>(u32[0]));
+fmt::println("U+{:04X}", static_cast<std::uint32_t>(u32[1]));
 u32[1] = U'𰻞';
 s = utf16::utf32to16(u32);
 fmt::println("{}", s);          // 你𰻞
@@ -1429,7 +1429,7 @@ int main() {
     // UTF-8 转 UTF-32：
     std::u32string s32 = utf_to_utf<char32_t>(s8);
     // UTF-32 转 UTF-16：
-    std::u16string s16 = utf_to_utf<char16_t>(s8);
+    std::u16string s16 = utf_to_utf<char16_t>(s32);
     // UTF-32 转 UTF-8：
     s8 = utf_to_utf<char>(s32);
     std::cout << s8 << '\n';
@@ -1540,27 +1540,27 @@ int main() {
 
 |函数名称|从|到|
 |-|-|-|
-|`to_utf<char>("GBK", string)`|GBK|UTF-8|
-|`to_utf<char8_t>("GBK", string)`|GBK|UTF-8|
-|`to_utf<char16_t>("GBK", string)`|GBK|UTF-16|
-|`to_utf<char32_t>("GBK", string)`|GBK|UTF-32|
-|`to_utf<wchar_t>("GBK", string)`|GBK|Linux 上 UTF-32；Win 上 UTF-16|
-|`to_utf<char>("", string)`|区域设置|UTF-8|
-|`to_utf<char8_t>("", string)`|区域设置|UTF-8|
-|`to_utf<char16_t>("", string)`|区域设置|UTF-16|
-|`to_utf<char32_t>("", string)`|区域设置|UTF-32|
-|`to_utf<wchar_t>("", string)`|区域设置|Linux 上 UTF-32；Win 上 UTF-16|
+|`to_utf<char>(string, "GBK")`|GBK|UTF-8|
+|`to_utf<char8_t>(string, "GBK")`|GBK|UTF-8|
+|`to_utf<char16_t>(string, "GBK")`|GBK|UTF-16|
+|`to_utf<char32_t>(string, "GBK")`|GBK|UTF-32|
+|`to_utf<wchar_t>(string, "GBK")`|GBK|Linux 上 UTF-32；Win 上 UTF-16|
+|`to_utf<char>(string, "")`|区域设置|UTF-8|
+|`to_utf<char8_t>(string, "")`|区域设置|UTF-8|
+|`to_utf<char16_t>(string, "")`|区域设置|UTF-16|
+|`to_utf<char32_t>(string, "")`|区域设置|UTF-32|
+|`to_utf<wchar_t>(string, "")`|区域设置|Linux 上 UTF-32；Win 上 UTF-16|
 
 |函数名称|从|到|
 |-|-|-|
-|`from_utf("GBK", string)`|UTF-8|GBK|
-|`from_utf("GBK", u16string)`|UTF-16|GBK|
-|`from_utf("GBK", u32string)`|UTF-32|GBK|
-|`from_utf("GBK", wstring)`|Linux 上 UTF-32；Win 上 UTF-16|GBK|
-|`from_utf("", string)`|UTF-8|区域设置|
-|`from_utf("", u16string)`|UTF-16|区域设置|
-|`from_utf("", u32string)`|UTF-32|区域设置|
-|`from_utf("", wstring)`|Linux 上 UTF-32；Win 上 UTF-16|区域设置|
+|`from_utf(string, "GBK")`|UTF-8|GBK|
+|`from_utf(u16string,"GBK")`|UTF-16|GBK|
+|`from_utf(u32string, "GBK")`|UTF-32|GBK|
+|`from_utf(wstring, "GBK")`|Linux 上 UTF-32；Win 上 UTF-16|GBK|
+|`from_utf(string, "")`|UTF-8|区域设置|
+|`from_utf(u16string, "")`|UTF-16|区域设置|
+|`from_utf(u32string, "")`|UTF-32|区域设置|
+|`from_utf(wstring, "")`|Linux 上 UTF-32；Win 上 UTF-16|区域设置|
 
 #### GBK 和 Shift-JIS 互转
 
