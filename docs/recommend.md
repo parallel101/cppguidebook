@@ -1,4 +1,4 @@
-# 参考资料与项目
+# 参考资料与项目推荐
 
 ## 资源推荐
 
@@ -24,13 +24,21 @@
 
 ### 现代
 
-- utfcpp
 - fmt
 - spdlog
-- rapidjson
 - nlohmann-json
 - ranges-v3
 - matchit.cpp
+- utfcpp
+
+### 实用扩展
+
+- absl
+- tsl-robin-map
+- backward-cpp
+- iguana
+- magic_enum
+- structopt
 
 ### 高性能
 
@@ -39,9 +47,9 @@
 - cutlass
 - thrust
 - highway
-- numcpp
 - amgcl
 - eigen
+- numcpp
 
 ### 图形学
 
@@ -50,19 +58,12 @@
 - openvdb
 - cgal
 
-### 实用扩展
-
-- tsl-robin-map
-- absl
-- backward-cpp
-- iguana
-- magic_enum
-
 ### 古代
 
 - opencv
 - nothings/stb
 - google/benchmark
+- rapidjson
 - jsoncpp
 - gtest
 - catch3

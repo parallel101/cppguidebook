@@ -4,7 +4,7 @@
 
 using namespace cudapp;
 
-extern "C" __global__ void kernel(int x) {
+__global__ void kernel(int x) {
     printf("内核参数 x = %d\n", x);
     printf("线程编号 (%d, %d)\n", blockIdx.x, threadIdx.x);
 }
