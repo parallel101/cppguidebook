@@ -17,12 +17,6 @@
         <link href="../css/base.css" rel="stylesheet">
         <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
         <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
-        <link href="../css/print-site-enum-headings1.css" rel="stylesheet">
-        <link href="../css/print-site-enum-headings2.css" rel="stylesheet">
-        <link href="../css/print-site-enum-headings3.css" rel="stylesheet">
-        <link href="../css/print-site-enum-headings4.css" rel="stylesheet">
-        <link href="../css/print-site-enum-headings5.css" rel="stylesheet">
-        <link href="../css/print-site-enum-headings6.css" rel="stylesheet">
         <link href="../css/print-site.css" rel="stylesheet">
         <link href="../css/print-site-mkdocs.css" rel="stylesheet">
         <link href="../extra.css" rel="stylesheet">
@@ -1023,7 +1017,7 @@ void calc_average() {
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 现在只有两个变量 <code>res</code> 和 <code>count</code> 可能还没什么，如果重复的部分用到一大堆变量，同时还有时候用到，有时候用不到的话，你就觉得 Lambda 好用了。</p>
 </blockquote>
 <p>例如字符串切片函数典型的一种实现中，因为“尾巴”的伺候和“主体”的伺候，就会产生重复代码：</p>
-<pre><code class="language-cpp">vector&lt;string&gt; spilt(string str) {
+<pre><code class="language-cpp">vector&lt;string&gt; split(string str) {
     vector&lt;string&gt; list;
     string last;
     for (char c: str) {
@@ -1039,7 +1033,7 @@ void calc_average() {
 }
 </code></pre>
 <p>上面的代码中重复的部分 <code>list.push_back(last);</code> 可以用 Lambda 复用，把重复的操作封装成局部的 Lambda：</p>
-<pre><code class="language-cpp">vector&lt;string&gt; spilt(string str) {
+<pre><code class="language-cpp">vector&lt;string&gt; split(string str) {
     vector&lt;string&gt; list;
     string last;
     auto push_last = [&amp;] {
