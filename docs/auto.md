@@ -402,7 +402,7 @@ int &func() {
 int i;
 
 decltype(auto) func() {
-    return i;
+    return i + 1;
 }
 // 等价于：
 decltype((i + 1)) func() {
