@@ -224,7 +224,7 @@ void f() {
 }
 ```
 
-值得注意的是，返回类型用 `auto` 来推导的函数，如果有多条 `return` 语句，那么他们必须都返回相同的类型，否则报错。
+值得注意的是，一般来说，返回类型用 `auto` 来推导的函数，如果有多条 `return` 语句，那么他们必须都返回相同的类型，否则报错。
 
 ```cpp
 auto f(int x) {
@@ -235,6 +235,21 @@ auto f(int x) {
     }
 } // 错误：有歧义，无法确定 auto 应该推导为 int 还是 double
 ```
+然而，通过模板和 `if constexpr` ，当为函数传递不同的模板实参时，编译器根据 `if constexpr` 中的表达式在编译期间选择编译某个分支而忽略其他分支，使得返回类型用 `auto` 来推导的函数可以返回不同的类型。
+```cpp
+template<int I>
+auto f(){
+    if constexpr (I == 0){
+        return I; // 返回 int 类型
+    } else {
+        return std::to_string(I); // 返回 std::string 类型
+    }
+}
+
+auto x = f<0>(); // x 是 int 类型的 0
+auto y = f<1>(); // y 是 std::string 类型的 "1"
+```
+
 
 `auto` 还有一个缺点是，无法用于“分离声明和定义”的情况。因为推导 `auto` 类型需要知道函数体，才能看到里面的 `return` 表达式是什么类型。所以当 `auto` 返回类型被用于函数的非定义声明时，会直接报错。
 
