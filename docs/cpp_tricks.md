@@ -397,8 +397,11 @@ void babysitter(Baby *baby) {
 ```
 
 这个函数有很多层嵌套，很不美观。用**提前返回**的写法来优化：
+鉴于多return违反了单一出口原则，我们尽可能采用do while(0) +break的方式来打断分支。
+注:但这种方法对于涉及到内层有多重循环的时候并不好用。
 
 ```cpp
+/*return版*/
 void babysitter(Baby *baby) {
     if (!baby->is_alive()) {
         puts("宝宝已经去世了");
@@ -412,6 +415,23 @@ void babysitter(Baby *baby) {
     puts("正在喂食宝宝...");
     puts("正在调教宝宝...");
     puts("正在安抚宝宝...");
+}
+/*do while版*/
+void babysitter(Baby *baby) {
+do{
+    if (!baby->is_alive()) {
+        puts("宝宝已经去世了");
+        break;
+    }
+    puts("正在检查宝宝喂食情况...");
+    if (baby->is_feeded()) {
+        puts("宝宝已经喂食过了");
+        break;
+    }
+    puts("正在喂食宝宝...");
+    puts("正在调教宝宝...");
+    puts("正在安抚宝宝...");
+    }while(0);
 }
 ```
 
@@ -608,7 +628,7 @@ void calc_average() {
 void calc_average() {
     int res = 0;
     int count = 0;
-    auto cihou = [&] {  // 局部 Lambda 的好处：自动帮你捕获 res 和 count！
+    auto cihou = [&](auto const& arr ) {  // 局部 Lambda 的好处：自动帮你捕获 res 和 count！
         for (int i = 0; i < arr.size(); i++) {
             res += arr[i].age;
             count += arr[i].count;
