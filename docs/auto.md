@@ -378,7 +378,7 @@ auto const &getConstRef() { // std::string const &
 
 ### 真正的万能 `decltype(auto)`
 
-返回类型声明为 `decltype(auto)` 的效果等价于把返回类型替换为 `decltype((返回表达式))`：
+返回类型声明为 `decltype(auto)` 的效果等价于把返回类型替换为 `decltype(返回操作数)`：
 
 ```cpp
 int i;
@@ -387,22 +387,40 @@ decltype(auto) func() {
     return i;
 }
 // 等价于：
-decltype((i)) func() {
+decltype(i) func() {
     return i;
 }
 // 等价于：
-int &func() {
+int func() {
     return i;
 }
 ```
 
-> {{ icon.warn }} 注意 `decltype(i)` 是 `int` 而 `decltype((i))` 是 `int &`。这是因为 `decltype` 实际上有两个版本！当 `decltype` 中的内容只是单独的一个标识符（变量名）时，会得到变量定义时的类型；而当 `decltype` 中的内容不是单纯的变量名，而是一个复杂的表达式时，就会进入 `decltype` 的第二个版本：表达式版，会求表达式的类型，例如当变量为 `int` 时，表达式 `(i)` 的类型是左值引用，`int &`，而变量本身 `i` 的类型则是 `int`。此处加上 `()` 就是为了让 `decltype` 被迫进入“表达式”的那个版本，`decltype(auto)` 遵循的也是“表达式”这个版本的结果。
+对于变量名，在 `return` 语句中加括号可以产生不同结果。
 
 ```cpp
 int i;
 
 decltype(auto) func() {
-    return i;
+    return (i);
+}
+// 等价于：
+decltype((i)) func() {
+    return (i);
+}
+// 等价于：
+int& func() {
+    return (i);
+}
+```
+
+> {{ icon.warn }} 注意 `decltype(i)` 是 `int` 而 `decltype((i))` 是 `int &`。这是因为 `decltype` 实际上有两个版本！当 `decltype` 中的内容只是单独的一个标识符（变量名）时，会得到变量定义时的类型；而当 `decltype` 中的内容不是单纯的变量名，而是一个复杂的表达式时，就会进入 `decltype` 的第二个版本：表达式版，会求表达式的类型，例如当变量为 `int` 时，表达式 `(i)` 的类型是左值引用，`int &`，而变量本身 `i` 的类型则是 `int`。此处加上 `()` 使得 `decltype` 进入“表达式”的那个版本，`decltype(auto)` 就会遵循“表达式”这个版本的结果。
+
+```cpp
+int i;
+
+decltype(auto) func() {
+    return i + 1;
 }
 // 等价于：
 decltype((i + 1)) func() {
