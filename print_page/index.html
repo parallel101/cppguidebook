@@ -415,7 +415,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2025年03月29日 17:32:39 (UTC+08:00)</p>
+<p>更新时间：2025年08月15日 09:04:19 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -1245,28 +1245,43 @@ auto const &amp;getConstRef() { // std::string const &amp;
 </blockquote>
 <p>这就是为什么 <code>int &amp;&amp;</code> 就只是右值引用，而 <code>auto &amp;&amp;</code> 以及 <code>T &amp;&amp;</code> 则会叫做万能引用。一旦允许前面的参数为 <code>auto</code> 或者模板参数，就可以代换，就可以实现左右通吃。</p>
 <h3 id="auto-decltypeauto">真正的万能 <code>decltype(auto)</code></h3>
-<p>返回类型声明为 <code>decltype(auto)</code> 的效果等价于把返回类型替换为 <code>decltype((返回表达式))</code>：</p>
+<p>返回类型声明为 <code>decltype(auto)</code> 的效果等价于把返回类型替换为 <code>decltype(返回操作数)</code>：</p>
 <pre><code class="language-cpp">int i;
 
 decltype(auto) func() {
     return i;
 }
 // 等价于：
-decltype((i)) func() {
+decltype(i) func() {
     return i;
 }
 // 等价于：
-int &amp;func() {
+int func() {
     return i;
 }
 </code></pre>
+<p>对于变量名，在 <code>return</code> 语句中加括号可以产生不同结果。</p>
+<pre><code class="language-cpp">int i;
+
+decltype(auto) func() {
+    return (i);
+}
+// 等价于：
+decltype((i)) func() {
+    return (i);
+}
+// 等价于：
+int&amp; func() {
+    return (i);
+}
+</code></pre>
 <blockquote>
-<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意 <code>decltype(i)</code> 是 <code>int</code> 而 <code>decltype((i))</code> 是 <code>int &amp;</code>。这是因为 <code>decltype</code> 实际上有两个版本！当 <code>decltype</code> 中的内容只是单独的一个标识符（变量名）时，会得到变量定义时的类型；而当 <code>decltype</code> 中的内容不是单纯的变量名，而是一个复杂的表达式时，就会进入 <code>decltype</code> 的第二个版本：表达式版，会求表达式的类型，例如当变量为 <code>int</code> 时，表达式 <code>(i)</code> 的类型是左值引用，<code>int &amp;</code>，而变量本身 <code>i</code> 的类型则是 <code>int</code>。此处加上 <code>()</code> 就是为了让 <code>decltype</code> 被迫进入“表达式”的那个版本，<code>decltype(auto)</code> 遵循的也是“表达式”这个版本的结果。</p>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意 <code>decltype(i)</code> 是 <code>int</code> 而 <code>decltype((i))</code> 是 <code>int &amp;</code>。这是因为 <code>decltype</code> 实际上有两个版本！当 <code>decltype</code> 中的内容只是单独的一个标识符（变量名）时，会得到变量定义时的类型；而当 <code>decltype</code> 中的内容不是单纯的变量名，而是一个复杂的表达式时，就会进入 <code>decltype</code> 的第二个版本：表达式版，会求表达式的类型，例如当变量为 <code>int</code> 时，表达式 <code>(i)</code> 的类型是左值引用，<code>int &amp;</code>，而变量本身 <code>i</code> 的类型则是 <code>int</code>。此处加上 <code>()</code> 使得 <code>decltype</code> 进入“表达式”的那个版本，<code>decltype(auto)</code> 就会遵循“表达式”这个版本的结果。</p>
 </blockquote>
 <pre><code class="language-cpp">int i;
 
 decltype(auto) func() {
-    return i;
+    return i + 1;
 }
 // 等价于：
 decltype((i + 1)) func() {
@@ -21995,169 +22010,169 @@ target_link_libraries(${PROJECT_NAME} PRIVATE cusparse cublas)
 </ul></section></section></div><style>.print-site-enumerate-headings #section-1 > h1:before { content: '1 ' }
 .print-site-enumerate-headings #index > h1:before { content: '1.1 ' }
 
-                .print-site-enumerate-headings #index h3 { counter-reset: ; counter-increment: counter-index-3 }
-                .print-site-enumerate-headings #index h3:before { content: '1.1.' counter(counter-index-3) ' ' }
+                .print-site-enumerate-headings #index h2:before { content: '1.1.' counter(counter-index-2) ' ' }
+                .print-site-enumerate-headings #index h2 {  counter-increment: counter-index-2 }
             
 .print-site-enumerate-headings #hello_world > h1:before { content: '1.2 ' }
 
-                .print-site-enumerate-headings #hello_world h3 { counter-reset: ; counter-increment: counter-hello_world-3 }
-                .print-site-enumerate-headings #hello_world h3:before { content: '1.2.' counter(counter-hello_world-3) ' ' }
+                .print-site-enumerate-headings #hello_world h2:before { content: '1.2.' counter(counter-hello_world-2) ' ' }
+                .print-site-enumerate-headings #hello_world h2 {  counter-increment: counter-hello_world-2 }
             
 .print-site-enumerate-headings #platform > h1:before { content: '1.3 ' }
 
-                .print-site-enumerate-headings #platform h3 { counter-reset: ; counter-increment: counter-platform-3 }
-                .print-site-enumerate-headings #platform h3:before { content: '1.3.' counter(counter-platform-3) ' ' }
+                .print-site-enumerate-headings #platform h2:before { content: '1.3.' counter(counter-platform-2) ' ' }
+                .print-site-enumerate-headings #platform h2 {  counter-increment: counter-platform-2 }
             
 .print-site-enumerate-headings #variable_types > h1:before { content: '1.4 ' }
 
-                .print-site-enumerate-headings #variable_types h3 { counter-reset: ; counter-increment: counter-variable_types-3 }
-                .print-site-enumerate-headings #variable_types h3:before { content: '1.4.' counter(counter-variable_types-3) ' ' }
+                .print-site-enumerate-headings #variable_types h2:before { content: '1.4.' counter(counter-variable_types-2) ' ' }
+                .print-site-enumerate-headings #variable_types h2 {  counter-increment: counter-variable_types-2 }
             
 .print-site-enumerate-headings #functions > h1:before { content: '1.5 ' }
 
-                .print-site-enumerate-headings #functions h3 { counter-reset: ; counter-increment: counter-functions-3 }
-                .print-site-enumerate-headings #functions h3:before { content: '1.5.' counter(counter-functions-3) ' ' }
+                .print-site-enumerate-headings #functions h2:before { content: '1.5.' counter(counter-functions-2) ' ' }
+                .print-site-enumerate-headings #functions h2 {  counter-increment: counter-functions-2 }
             
 .print-site-enumerate-headings #auto > h1:before { content: '1.6 ' }
 
-                .print-site-enumerate-headings #auto h3 { counter-reset: ; counter-increment: counter-auto-3 }
-                .print-site-enumerate-headings #auto h3:before { content: '1.6.' counter(counter-auto-3) ' ' }
+                .print-site-enumerate-headings #auto h2:before { content: '1.6.' counter(counter-auto-2) ' ' }
+                .print-site-enumerate-headings #auto h2 {  counter-increment: counter-auto-2 }
             
 .print-site-enumerate-headings #symbols > h1:before { content: '1.7 ' }
 
-                .print-site-enumerate-headings #symbols h3 { counter-reset: ; counter-increment: counter-symbols-3 }
-                .print-site-enumerate-headings #symbols h3:before { content: '1.7.' counter(counter-symbols-3) ' ' }
+                .print-site-enumerate-headings #symbols h2:before { content: '1.7.' counter(counter-symbols-2) ' ' }
+                .print-site-enumerate-headings #symbols h2 {  counter-increment: counter-symbols-2 }
             
 .print-site-enumerate-headings #cpp_tricks > h1:before { content: '1.8 ' }
 
-                .print-site-enumerate-headings #cpp_tricks h3 { counter-reset: ; counter-increment: counter-cpp_tricks-3 }
-                .print-site-enumerate-headings #cpp_tricks h3:before { content: '1.8.' counter(counter-cpp_tricks-3) ' ' }
+                .print-site-enumerate-headings #cpp_tricks h2:before { content: '1.8.' counter(counter-cpp_tricks-2) ' ' }
+                .print-site-enumerate-headings #cpp_tricks h2 {  counter-increment: counter-cpp_tricks-2 }
             
 .print-site-enumerate-headings #lambda > h1:before { content: '1.9 ' }
 
-                .print-site-enumerate-headings #lambda h3 { counter-reset: ; counter-increment: counter-lambda-3 }
-                .print-site-enumerate-headings #lambda h3:before { content: '1.9.' counter(counter-lambda-3) ' ' }
+                .print-site-enumerate-headings #lambda h2:before { content: '1.9.' counter(counter-lambda-2) ' ' }
+                .print-site-enumerate-headings #lambda h2 {  counter-increment: counter-lambda-2 }
             
 .print-site-enumerate-headings #type_rich_api > h1:before { content: '1.10 ' }
 
-                .print-site-enumerate-headings #type_rich_api h3 { counter-reset: ; counter-increment: counter-type_rich_api-3 }
-                .print-site-enumerate-headings #type_rich_api h3:before { content: '1.10.' counter(counter-type_rich_api-3) ' ' }
+                .print-site-enumerate-headings #type_rich_api h2:before { content: '1.10.' counter(counter-type_rich_api-2) ' ' }
+                .print-site-enumerate-headings #type_rich_api h2 {  counter-increment: counter-type_rich_api-2 }
             
 .print-site-enumerate-headings #no_more_new > h1:before { content: '1.11 ' }
 
-                .print-site-enumerate-headings #no_more_new h3 { counter-reset: ; counter-increment: counter-no_more_new-3 }
-                .print-site-enumerate-headings #no_more_new h3:before { content: '1.11.' counter(counter-no_more_new-3) ' ' }
+                .print-site-enumerate-headings #no_more_new h2:before { content: '1.11.' counter(counter-no_more_new-2) ' ' }
+                .print-site-enumerate-headings #no_more_new h2 {  counter-increment: counter-no_more_new-2 }
             
 .print-site-enumerate-headings #stl_map > h1:before { content: '1.12 ' }
 
-                .print-site-enumerate-headings #stl_map h3 { counter-reset: ; counter-increment: counter-stl_map-3 }
-                .print-site-enumerate-headings #stl_map h3:before { content: '1.12.' counter(counter-stl_map-3) ' ' }
+                .print-site-enumerate-headings #stl_map h2:before { content: '1.12.' counter(counter-stl_map-2) ' ' }
+                .print-site-enumerate-headings #stl_map h2 {  counter-increment: counter-stl_map-2 }
             
 .print-site-enumerate-headings #design_overview > h1:before { content: '1.13 ' }
 
-                .print-site-enumerate-headings #design_overview h3 { counter-reset: ; counter-increment: counter-design_overview-3 }
-                .print-site-enumerate-headings #design_overview h3:before { content: '1.13.' counter(counter-design_overview-3) ' ' }
+                .print-site-enumerate-headings #design_overview h2:before { content: '1.13.' counter(counter-design_overview-2) ' ' }
+                .print-site-enumerate-headings #design_overview h2 {  counter-increment: counter-design_overview-2 }
             
 .print-site-enumerate-headings #design_virtual > h1:before { content: '1.14 ' }
 
-                .print-site-enumerate-headings #design_virtual h3 { counter-reset: ; counter-increment: counter-design_virtual-3 }
-                .print-site-enumerate-headings #design_virtual h3:before { content: '1.14.' counter(counter-design_virtual-3) ' ' }
+                .print-site-enumerate-headings #design_virtual h2:before { content: '1.14.' counter(counter-design_virtual-2) ' ' }
+                .print-site-enumerate-headings #design_virtual h2 {  counter-increment: counter-design_virtual-2 }
             
 .print-site-enumerate-headings #design_gamedev > h1:before { content: '1.15 ' }
 
-                .print-site-enumerate-headings #design_gamedev h3 { counter-reset: ; counter-increment: counter-design_gamedev-3 }
-                .print-site-enumerate-headings #design_gamedev h3:before { content: '1.15.' counter(counter-design_gamedev-3) ' ' }
+                .print-site-enumerate-headings #design_gamedev h2:before { content: '1.15.' counter(counter-design_gamedev-2) ' ' }
+                .print-site-enumerate-headings #design_gamedev h2 {  counter-increment: counter-design_gamedev-2 }
             
 .print-site-enumerate-headings #design_functor > h1:before { content: '1.16 ' }
 
-                .print-site-enumerate-headings #design_functor h3 { counter-reset: ; counter-increment: counter-design_functor-3 }
-                .print-site-enumerate-headings #design_functor h3:before { content: '1.16.' counter(counter-design_functor-3) ' ' }
+                .print-site-enumerate-headings #design_functor h2:before { content: '1.16.' counter(counter-design_functor-2) ' ' }
+                .print-site-enumerate-headings #design_functor h2 {  counter-increment: counter-design_functor-2 }
             
 .print-site-enumerate-headings #design_variant > h1:before { content: '1.17 ' }
 
-                .print-site-enumerate-headings #design_variant h3 { counter-reset: ; counter-increment: counter-design_variant-3 }
-                .print-site-enumerate-headings #design_variant h3:before { content: '1.17.' counter(counter-design_variant-3) ' ' }
+                .print-site-enumerate-headings #design_variant h2:before { content: '1.17.' counter(counter-design_variant-2) ' ' }
+                .print-site-enumerate-headings #design_variant h2 {  counter-increment: counter-design_variant-2 }
             
 .print-site-enumerate-headings #design_erasure > h1:before { content: '1.18 ' }
 
-                .print-site-enumerate-headings #design_erasure h3 { counter-reset: ; counter-increment: counter-design_erasure-3 }
-                .print-site-enumerate-headings #design_erasure h3:before { content: '1.18.' counter(counter-design_erasure-3) ' ' }
+                .print-site-enumerate-headings #design_erasure h2:before { content: '1.18.' counter(counter-design_erasure-2) ' ' }
+                .print-site-enumerate-headings #design_erasure h2 {  counter-increment: counter-design_erasure-2 }
             
 .print-site-enumerate-headings #design_concept > h1:before { content: '1.19 ' }
 
-                .print-site-enumerate-headings #design_concept h3 { counter-reset: ; counter-increment: counter-design_concept-3 }
-                .print-site-enumerate-headings #design_concept h3:before { content: '1.19.' counter(counter-design_concept-3) ' ' }
+                .print-site-enumerate-headings #design_concept h2:before { content: '1.19.' counter(counter-design_concept-2) ' ' }
+                .print-site-enumerate-headings #design_concept h2 {  counter-increment: counter-design_concept-2 }
             
 .print-site-enumerate-headings #error_code > h1:before { content: '1.20 ' }
 
-                .print-site-enumerate-headings #error_code h3 { counter-reset: ; counter-increment: counter-error_code-3 }
-                .print-site-enumerate-headings #error_code h3:before { content: '1.20.' counter(counter-error_code-3) ' ' }
+                .print-site-enumerate-headings #error_code h2:before { content: '1.20.' counter(counter-error_code-2) ' ' }
+                .print-site-enumerate-headings #error_code h2 {  counter-increment: counter-error_code-2 }
             
 .print-site-enumerate-headings #cpp_lifetime > h1:before { content: '1.21 ' }
 
-                .print-site-enumerate-headings #cpp_lifetime h3 { counter-reset: ; counter-increment: counter-cpp_lifetime-3 }
-                .print-site-enumerate-headings #cpp_lifetime h3:before { content: '1.21.' counter(counter-cpp_lifetime-3) ' ' }
+                .print-site-enumerate-headings #cpp_lifetime h2:before { content: '1.21.' counter(counter-cpp_lifetime-2) ' ' }
+                .print-site-enumerate-headings #cpp_lifetime h2 {  counter-increment: counter-cpp_lifetime-2 }
             
 .print-site-enumerate-headings #cpp_memory > h1:before { content: '1.22 ' }
 
-                .print-site-enumerate-headings #cpp_memory h3 { counter-reset: ; counter-increment: counter-cpp_memory-3 }
-                .print-site-enumerate-headings #cpp_memory h3:before { content: '1.22.' counter(counter-cpp_memory-3) ' ' }
+                .print-site-enumerate-headings #cpp_memory h2:before { content: '1.22.' counter(counter-cpp_memory-2) ' ' }
+                .print-site-enumerate-headings #cpp_memory h2 {  counter-increment: counter-cpp_memory-2 }
             
 .print-site-enumerate-headings #unicode > h1:before { content: '1.23 ' }
 
-                .print-site-enumerate-headings #unicode h3 { counter-reset: ; counter-increment: counter-unicode-3 }
-                .print-site-enumerate-headings #unicode h3:before { content: '1.23.' counter(counter-unicode-3) ' ' }
+                .print-site-enumerate-headings #unicode h2:before { content: '1.23.' counter(counter-unicode-2) ' ' }
+                .print-site-enumerate-headings #unicode h2 {  counter-increment: counter-unicode-2 }
             
 .print-site-enumerate-headings #threading > h1:before { content: '1.24 ' }
 
-                .print-site-enumerate-headings #threading h3 { counter-reset: ; counter-increment: counter-threading-3 }
-                .print-site-enumerate-headings #threading h3:before { content: '1.24.' counter(counter-threading-3) ' ' }
+                .print-site-enumerate-headings #threading h2:before { content: '1.24.' counter(counter-threading-2) ' ' }
+                .print-site-enumerate-headings #threading h2 {  counter-increment: counter-threading-2 }
             
 .print-site-enumerate-headings #test_and_safe > h1:before { content: '1.25 ' }
 
-                .print-site-enumerate-headings #test_and_safe h3 { counter-reset: ; counter-increment: counter-test_and_safe-3 }
-                .print-site-enumerate-headings #test_and_safe h3:before { content: '1.25.' counter(counter-test_and_safe-3) ' ' }
+                .print-site-enumerate-headings #test_and_safe h2:before { content: '1.25.' counter(counter-test_and_safe-2) ' ' }
+                .print-site-enumerate-headings #test_and_safe h2 {  counter-increment: counter-test_and_safe-2 }
             
 .print-site-enumerate-headings #undef > h1:before { content: '1.26 ' }
 
-                .print-site-enumerate-headings #undef h3 { counter-reset: ; counter-increment: counter-undef-3 }
-                .print-site-enumerate-headings #undef h3:before { content: '1.26.' counter(counter-undef-3) ' ' }
+                .print-site-enumerate-headings #undef h2:before { content: '1.26.' counter(counter-undef-2) ' ' }
+                .print-site-enumerate-headings #undef h2 {  counter-increment: counter-undef-2 }
             
 .print-site-enumerate-headings #llvm_intro > h1:before { content: '1.27 ' }
 
-                .print-site-enumerate-headings #llvm_intro h3 { counter-reset: ; counter-increment: counter-llvm_intro-3 }
-                .print-site-enumerate-headings #llvm_intro h3:before { content: '1.27.' counter(counter-llvm_intro-3) ' ' }
+                .print-site-enumerate-headings #llvm_intro h2:before { content: '1.27.' counter(counter-llvm_intro-2) ' ' }
+                .print-site-enumerate-headings #llvm_intro h2 {  counter-increment: counter-llvm_intro-2 }
             
 .print-site-enumerate-headings #cuda_intro > h1:before { content: '1.28 ' }
 
-                .print-site-enumerate-headings #cuda_intro h3 { counter-reset: ; counter-increment: counter-cuda_intro-3 }
-                .print-site-enumerate-headings #cuda_intro h3:before { content: '1.28.' counter(counter-cuda_intro-3) ' ' }
+                .print-site-enumerate-headings #cuda_intro h2:before { content: '1.28.' counter(counter-cuda_intro-2) ' ' }
+                .print-site-enumerate-headings #cuda_intro h2 {  counter-increment: counter-cuda_intro-2 }
             
 .print-site-enumerate-headings #cmake_tutor > h1:before { content: '1.29 ' }
 
-                .print-site-enumerate-headings #cmake_tutor h3 { counter-reset: ; counter-increment: counter-cmake_tutor-3 }
-                .print-site-enumerate-headings #cmake_tutor h3:before { content: '1.29.' counter(counter-cmake_tutor-3) ' ' }
+                .print-site-enumerate-headings #cmake_tutor h2:before { content: '1.29.' counter(counter-cmake_tutor-2) ' ' }
+                .print-site-enumerate-headings #cmake_tutor h2 {  counter-increment: counter-cmake_tutor-2 }
             
 .print-site-enumerate-headings #section-2 > h1:before { content: '2 ' }
 .print-site-enumerate-headings #about > h1:before { content: '2.1 ' }
 
-                .print-site-enumerate-headings #about h3 { counter-reset: ; counter-increment: counter-about-3 }
-                .print-site-enumerate-headings #about h3:before { content: '2.1.' counter(counter-about-3) ' ' }
+                .print-site-enumerate-headings #about h2:before { content: '2.1.' counter(counter-about-2) ' ' }
+                .print-site-enumerate-headings #about h2 {  counter-increment: counter-about-2 }
             
 .print-site-enumerate-headings #donate > h1:before { content: '2.2 ' }
 
-                .print-site-enumerate-headings #donate h3 { counter-reset: ; counter-increment: counter-donate-3 }
-                .print-site-enumerate-headings #donate h3:before { content: '2.2.' counter(counter-donate-3) ' ' }
+                .print-site-enumerate-headings #donate h2:before { content: '2.2.' counter(counter-donate-2) ' ' }
+                .print-site-enumerate-headings #donate h2 {  counter-increment: counter-donate-2 }
             
 .print-site-enumerate-headings #interview > h1:before { content: '2.3 ' }
 
-                .print-site-enumerate-headings #interview h3 { counter-reset: ; counter-increment: counter-interview-3 }
-                .print-site-enumerate-headings #interview h3:before { content: '2.3.' counter(counter-interview-3) ' ' }
+                .print-site-enumerate-headings #interview h2:before { content: '2.3.' counter(counter-interview-2) ' ' }
+                .print-site-enumerate-headings #interview h2 {  counter-increment: counter-interview-2 }
             
 .print-site-enumerate-headings #recommend > h1:before { content: '2.4 ' }
 
-                .print-site-enumerate-headings #recommend h3 { counter-reset: ; counter-increment: counter-recommend-3 }
-                .print-site-enumerate-headings #recommend h3:before { content: '2.4.' counter(counter-recommend-3) ' ' }
+                .print-site-enumerate-headings #recommend h2:before { content: '2.4.' counter(counter-recommend-2) ' ' }
+                .print-site-enumerate-headings #recommend h2 {  counter-increment: counter-recommend-2 }
             </style></div>
             </div>
         </div>

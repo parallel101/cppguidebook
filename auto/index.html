@@ -531,28 +531,43 @@ auto const &amp;getConstRef() { // std::string const &amp;
 </blockquote>
 <p>这就是为什么 <code>int &amp;&amp;</code> 就只是右值引用，而 <code>auto &amp;&amp;</code> 以及 <code>T &amp;&amp;</code> 则会叫做万能引用。一旦允许前面的参数为 <code>auto</code> 或者模板参数，就可以代换，就可以实现左右通吃。</p>
 <h3 id="decltypeauto">真正的万能 <code>decltype(auto)</code></h3>
-<p>返回类型声明为 <code>decltype(auto)</code> 的效果等价于把返回类型替换为 <code>decltype((返回表达式))</code>：</p>
+<p>返回类型声明为 <code>decltype(auto)</code> 的效果等价于把返回类型替换为 <code>decltype(返回操作数)</code>：</p>
 <pre><code class="language-cpp">int i;
 
 decltype(auto) func() {
     return i;
 }
 // 等价于：
-decltype((i)) func() {
+decltype(i) func() {
     return i;
 }
 // 等价于：
-int &amp;func() {
+int func() {
     return i;
 }
 </code></pre>
+<p>对于变量名，在 <code>return</code> 语句中加括号可以产生不同结果。</p>
+<pre><code class="language-cpp">int i;
+
+decltype(auto) func() {
+    return (i);
+}
+// 等价于：
+decltype((i)) func() {
+    return (i);
+}
+// 等价于：
+int&amp; func() {
+    return (i);
+}
+</code></pre>
 <blockquote>
-<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意 <code>decltype(i)</code> 是 <code>int</code> 而 <code>decltype((i))</code> 是 <code>int &amp;</code>。这是因为 <code>decltype</code> 实际上有两个版本！当 <code>decltype</code> 中的内容只是单独的一个标识符（变量名）时，会得到变量定义时的类型；而当 <code>decltype</code> 中的内容不是单纯的变量名，而是一个复杂的表达式时，就会进入 <code>decltype</code> 的第二个版本：表达式版，会求表达式的类型，例如当变量为 <code>int</code> 时，表达式 <code>(i)</code> 的类型是左值引用，<code>int &amp;</code>，而变量本身 <code>i</code> 的类型则是 <code>int</code>。此处加上 <code>()</code> 就是为了让 <code>decltype</code> 被迫进入“表达式”的那个版本，<code>decltype(auto)</code> 遵循的也是“表达式”这个版本的结果。</p>
+<p><img src="../img/warning.png" height="30px" width="auto" style="margin: 0; border: none"/> 注意 <code>decltype(i)</code> 是 <code>int</code> 而 <code>decltype((i))</code> 是 <code>int &amp;</code>。这是因为 <code>decltype</code> 实际上有两个版本！当 <code>decltype</code> 中的内容只是单独的一个标识符（变量名）时，会得到变量定义时的类型；而当 <code>decltype</code> 中的内容不是单纯的变量名，而是一个复杂的表达式时，就会进入 <code>decltype</code> 的第二个版本：表达式版，会求表达式的类型，例如当变量为 <code>int</code> 时，表达式 <code>(i)</code> 的类型是左值引用，<code>int &amp;</code>，而变量本身 <code>i</code> 的类型则是 <code>int</code>。此处加上 <code>()</code> 使得 <code>decltype</code> 进入“表达式”的那个版本，<code>decltype(auto)</code> 就会遵循“表达式”这个版本的结果。</p>
 </blockquote>
 <pre><code class="language-cpp">int i;
 
 decltype(auto) func() {
-    return i;
+    return i + 1;
 }
 // 等价于：
 decltype((i + 1)) func() {
