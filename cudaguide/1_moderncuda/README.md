@@ -4,6 +4,7 @@
 
 - https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
 - https://www.cs.sfu.ca/~ashriram/Courses/CS431/assets/lectures/Part8/GPU1.pdf
+- https://developer.nvidia.com/gpugems/gpugems/contributors
 
 ## 配置 CUDA 开发环境
 
@@ -18,6 +19,8 @@ Wendous 用户可能在安装完后遇到“找不到 cuxxx.dll”报错，说�
 WSL 用户要注意，WSL 环境和真正的 Linux 相差甚远。很多 Linux 下的教程，你会发现在 WSL 里复刻不出来。这是 WSL 的 bug，应该汇报去让微软统一修复，而不是让教程的作者零零散散一个个代它擦屁股。建议直接在 Wendous 本地安装 CUDA 反而比伺候 WSL 随机拉的 bug 省力。
 
 Ubuntu 用户可能考虑卸载 Ubuntu，因为 Ubuntu 源中的版本永不更新。想要安装新出的软件都非常困难，基本只能安装到五六年前的古董软件，要么只能从网上下 deb 包，和 Wendous 一个软耸样。所有官方 apt 源中包的版本从 Ubuntu 发布那一天就定死了，永远不会更新了。这是为了起夜级服务器安全稳定的需要，对于个人电脑而言却只是白白阻碍我们学习，Arch Linux 这样的滚动更新的发行版才更适合个人桌面用户。
+
+> {{ icon.tip }} 我使用的 CUDA / C++ 开发环境为 [小彭老师 vimrc 整合包](https://github.com/archibate/vimrc)，你也可以用其他支持 CUDA 的 IDE。
 
 ### 安装 NVIDIA 驱动
 
