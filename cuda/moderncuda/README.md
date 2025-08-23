@@ -75,7 +75,7 @@ pacman -S cuda
 
 ```bash
 export PATH="/opt/cuda/bin:$PATH"    # 这是默认的 cuda 安装位置
-export NVCC_CCBIN="/usr/bin/g++-13"  # Arch Linux 用户才需要这一行
+export NVCC_CCBIN="/usr/bin/g++-14"  # Arch Linux 用户才需要这一行
 ```
 
 然后重启 `bash`，或者执行以下命令重载环境变量：
@@ -106,7 +106,9 @@ CMake 报错找不到 CUDA？添加环境变量：
 
 ```bash
 export PATH="/opt/cuda/bin:$PATH"    # 这里换成你的 cuda 安装位置
-export NVCC_CCBIN="/usr/bin/g++-13"  # 只有 Arch Linux 需要这一行
+export NVCC_CCBIN="/usr/bin/g++-14"  # 只有 Arch Linux 需要这一行
+
+nvcc --version                       # 检查是否成功
 ```
 
 IDE 使用了 Clangd 静态检查插件，报错不认识 `-forward-unknown-to-host-compiler` 选项？
@@ -178,7 +180,7 @@ set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr --expt-extend
 
 ```cmake
 set(CMAKE_CUDA_ARCHITECTURES 86)      # 表示针对 RTX 30xx 系列（Ampere 架构）生成
-set(CMAKE_CUDA_ARCHITECTURES native)  # 如果 CMake 版本高于 3.24，该变量可以设为 "native"，让 CMake 自动检测当前显卡的架构版本号
+set(CMAKE_CUDA_ARCHITECTURES native)  # 如果 CMake 版本高于 3.24，该变量可以设为 "native"，让 CMake 自动检测当前显卡的架构版本号，非常方便！
 ```
 
 架构版本号：例如 75 表示 RTX 20xx 系列（Turing 架构）；86 表示 RTX 30xx 系列（Ampere 架构）；89 表示 RTX 40xx 系列（Ada 架构）等。
