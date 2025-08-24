@@ -11,7 +11,8 @@ __global__ void kernel(int x) {
 
 int main() {
     // 启动内核的3种方式
-    // 1. 三箭头语法糖（常用）
+    // 1. 官方三箭头语法糖（常用）
+    // kernel<<<blockDim, gridDim, dynamicSmemBytes, stream>>>(...)
     int x = 42;
     kernel<<<3, 4, 0, 0>>>(x);
 
