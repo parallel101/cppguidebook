@@ -620,4 +620,12 @@ CudaVectorResizer(Vector &vec) -> CudaVectorResizer<Vector>;
 // };
 // #endif
 
+template <class Index, class Func>
+__global__ void paralelFor(Index n, Func func) {
+    // grid-stride-loop (网格跨步循环)
+    for (Index i = blockIdx.x * Index(blockDim.x) + threadIdx.x; i < n; i += Index(gridDim.x) * blockDim.x) {
+        func(i);
+    }
+}
+
 } // namespace cupp

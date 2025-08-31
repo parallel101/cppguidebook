@@ -22,14 +22,15 @@ int main() {
 
     // 3. cudaLaunchKernelEx
     cudaLaunchConfig_t cfg{};
-    cfg.blockDim = dim3(3);
-    cfg.gridDim = dim3(4);
-    cfg.dynamicSmemBytes = 0;
-    cfg.stream = 0;
+    cfg.blockDim = dim3(3); // threadIdx 的变化范围
+    cfg.gridDim = dim3(4); // blockIdx 的变化范围
+    cfg.dynamicSmemBytes = 0; // shared-memory 大小（暂不使用）
+    cfg.stream = 0; // 在 0 号流（默认流）上启动
     cfg.attrs = nullptr;
     cfg.numAttrs = 0;
     CHECK_CUDA(cudaLaunchKernelEx(&cfg, kernel, x));
 
+    // 还能查询内核名字
     const char *name;
     CHECK_CUDA(cudaFuncGetName(&name, kernel));
     printf("内核名字：%s\n", name);
@@ -37,11 +38,11 @@ int main() {
     // 1. 强制同步：等待此前启动过的所有内核执行完成
     CHECK_CUDA(cudaDeviceSynchronize());
 
-    // 2. 仅同步 0 号流（null-stream）
+    // 2. 仅同步 0 号流（默认流）：等待此前在 0 号流上启动过的所有内核执行完成
     CHECK_CUDA(cudaStreamSynchronize(0));
 
     // 3. 仅同步 0 号流，但使用小彭老师现代 CUDA 框架
-    CudaStream::nullStream().join();
+    CudaStream::defaultStream().join();
 
     return 0;
 }
