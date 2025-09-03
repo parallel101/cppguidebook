@@ -3,6 +3,7 @@ site_description: 小彭大典是一本关于现代 C++ 编程的权威指南，
 site_author: 小彭老师
 copyright: 小彭老师倾 ♥ 制作
 repo_url: https://github.com/parallel101/cppguidebook
+edit_uri: blob/main/docs/
 nav:
   - 章节列表:
     - 前言: index.md
