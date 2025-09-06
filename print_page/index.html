@@ -423,7 +423,7 @@
 <blockquote>
 <p><img src="../img/bulb.png" height="30px" width="auto" style="margin: 0; border: none"/> 本书还在持续更新中……要追番的话，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 点一下右上角的 “Watch” 按钮，每当小彭老师提交新 commit，GitHub 会向你发送一封电子邮件，提醒你小彭老师更新了。</p>
 </blockquote>
-<p>更新时间：2025年08月31日 13:08:02 (UTC+08:00)</p>
+<p>更新时间：2025年09月06日 15:13:35 (UTC+08:00)</p>
 <p><a href="https://parallel101.github.io/cppguidebook">在 GitHub Pages 浏览本书</a> | <a href="https://142857.red/book">在小彭老师自己维护的镜像上浏览本书</a></p>
 <h2 id="index-_2">格式约定</h2>
 <blockquote>
@@ -7970,7 +7970,7 @@ for ... in ...:
 <p>后面为了方便研究，以 <code>map&lt;K, V&gt;</code> 形式书写得出的结论，对于任何实际键和值类型，只需代入 K 和 V 即可。</p>
 <blockquote>
 <p>已知：要想使用 <code>map&lt;K, V&gt;</code>，就得满足 <code>K</code> 必须支持比较运算符 <code>&lt;</code>。</p>
-<p>可得：要想使用 <code>map&lt;string, int&gt;</code>，就得满足 <code>string</code> 必须支持比较运算符 <code>&lt;</code><sup id="fnref4:2"><a class="footnote-ref" href="#stl_map-fn:2">2</a></sup>。</p>
+<p>可得：要想使用 <code>map&lt;string, int&gt;</code>，就得满足 <code>string</code> 必须支持比较运算符 <code>&lt;</code><sup id="fnref3:2"><a class="footnote-ref" href="#stl_map-fn:2">2</a></sup>。</p>
 <p>已知：遍历 <code>map&lt;K, V&gt;</code> 时，是以键 <code>K</code> 部分从小到大的顺序遍历的。</p>
 <p>可得：遍历 <code>map&lt;int, string&gt;</code> 时，是以键 <code>int</code> 部分从小到大的顺序遍历的。</p>
 </blockquote>
@@ -10283,7 +10283,7 @@ void assign(InputIt first, InputIt last);
 <p>然而 map 作为红黑树应该始终保持有序，插入位置可以由 K 唯一确定，为啥还要提示？</p>
 <p>是为了在已知要插入的大致位置时，能够提升性能。</p>
 <blockquote>
-<p>（带提示的 insert 版本）中传入的迭代器，仅是给 map 容器提供一个建议，并不一定会被容器采纳。该迭代器表明将新键值对添加到容器中的位置。需要注意的是，新键值对添加到容器中的位置，并不是此迭代器说了算，最终仍取决于该键值对的键的值。<sup id="fnref3:2"><a class="footnote-ref" href="#stl_map-fn:2">2</a></sup></p>
+<p>（带提示的 insert 版本）中传入的迭代器，仅是给 map 容器提供一个建议，并不一定会被容器采纳。该迭代器表明将新键值对添加到容器中的位置。需要注意的是，新键值对添加到容器中的位置，并不是此迭代器说了算，最终仍取决于该键值对的键的值。<sup id="fnref4:2"><a class="footnote-ref" href="#stl_map-fn:2">2</a></sup></p>
 <p>也就是说这玩意还不一定管用，只是提示性质的（和 mmap 函数的 start 参数很像，你可以指定，但只是个提示，指定了不一定有什么软用，具体什么地址还是操作系统说了算，他从返回值里给你的地址才是正确答案）。例如已知指向 &ldquo;key&rdquo; 的迭代器，想要插入 &ldquo;kea&rdquo;，那么指定指向 &ldquo;key&rdquo; 的迭代器就会让 insert 能更容易定位到 &ldquo;kea&rdquo; 要插入的位置。</p>
 </blockquote>
 <h3 id="stl_map-_35">复杂度分类讨论</h3>
