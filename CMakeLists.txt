@@ -11,6 +11,7 @@ else()
         add_compile_options(-finput-charset=utf-8 -fexec-charset=utf-8)
     endif()
     add_compile_options(-Wall -Wextra -Werror=return-type)
+add_compile_options(-Wno-unused)
 endif()
 
 
