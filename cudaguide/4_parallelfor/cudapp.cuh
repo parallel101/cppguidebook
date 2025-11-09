@@ -1,11 +1,12 @@
 #pragma once
 
-#include "debug.hpp"
 #include <cuda_runtime.h>
+#include <nvfunctional>
 #include <version>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
+#include <cstdarg>
 #include <cstdarg>
 #include <memory>
 #include <new>
@@ -187,6 +188,8 @@ private:
 
 public:
     CudaMemPool(std::nullptr_t) noexcept {}
+    CudaMemPool(CudaMemPool &&) = default;
+    CudaMemPool &operator=(CudaMemPool &&) = default;
 
     struct Builder {
     private:
@@ -259,12 +262,17 @@ private:
 
 public:
     CudaEvent(std::nullptr_t) noexcept {}
+    CudaEvent(CudaEvent &&) = default;
+    CudaEvent &operator=(CudaEvent &&) = default;
 
     struct Builder {
     private:
         int flags = cudaEventDefault;
 
     public:
+        Builder() = default;
+        explicit Builder(int flags) noexcept : flags(flags) {}
+
         Builder &withBlockingSync(bool blockingSync = true) noexcept {
             if (blockingSync) {
                 flags |= cudaEventBlockingSync;
@@ -303,7 +311,7 @@ public:
         CHECK_CUDA(cudaEventSynchronize(*this));
     }
 
-    bool joinReady() const {
+    bool poll() const {
         cudaError_t res = cudaEventQuery(*this);
         if (res == cudaSuccess) {
             return true;
@@ -311,14 +319,18 @@ public:
         if (res == cudaErrorNotReady) {
             return false;
         }
-        CHECK_CUDA(res);
+        CHECK_CUDA(res /* cudaEventQuery */);
         return false;
     }
 
     float elapsedMillis(CudaEvent const &event) const {
         float result;
-        CHECK_CUDA(cudaEventElapsedTime(&result, *this, event));
+        CHECK_CUDA(cudaEventElapsedTime(&result, event, *this));
         return result;
+    }
+
+    float operator-(CudaEvent const &event) const {
+        return elapsedMillis(event);
     }
 
     ~CudaEvent() {
@@ -335,12 +347,17 @@ private:
 
 public:
     CudaStream(std::nullptr_t) noexcept {}
+    CudaStream(CudaStream &&) = default;
+    CudaStream &operator=(CudaStream &&) = default;
 
     struct Builder {
     private:
         int flags = cudaStreamDefault;
 
     public:
+        Builder() = default;
+        explicit Builder(int flags) noexcept : flags(flags) {}
+
         Builder &withNonBlocking(bool nonBlocking = true) noexcept {
             if (nonBlocking) {
                 flags |= cudaStreamNonBlocking;
@@ -357,8 +374,12 @@ public:
         }
     };
 
-    static CudaStream nullStream() noexcept {
+    static CudaStream defaultStream() noexcept {
         return CudaStream(nullptr);
+    }
+
+    static CudaStream perThreadStream() noexcept {
+        return CudaStream(cudaStreamPerThread);
     }
 
     void copy(void *dst, void *src, size_t size, cudaMemcpyKind kind) const {
@@ -381,11 +402,17 @@ public:
         copy(dst, src, size, cudaMemcpyHostToHost);
     }
 
-    void record(CudaEvent const &event) const {
+    void recordEvent(CudaEvent const &event) const {
         CHECK_CUDA(cudaEventRecord(event, *this));
     }
 
-    void wait(CudaEvent const &event,
+    CudaEvent recordEvent() const {
+        CudaEvent event = CudaEvent::Builder().build();
+        recordEvent(event);
+        return event;
+    }
+
+    void waitEvent(CudaEvent const &event,
               unsigned int flags = cudaEventWaitDefault) const {
         CHECK_CUDA(cudaStreamWaitEvent(*this, event, flags));
     }
@@ -403,14 +430,15 @@ public:
         auto userData = std::make_unique<Func>();
         cudaStreamCallback_t callback = [](cudaStream_t stream,
                                            cudaError_t status, void *userData) {
+            CHECK_CUDA(status /* joinAsync cudaStreamCallback */);
             std::unique_ptr<Func> func(static_cast<Func *>(userData));
-            (*func)(stream, status);
+            (*func)();
         };
         joinAsync(callback, userData.get());
         userData.release();
     }
 
-    bool joinReady() const {
+    bool poll() const {
         cudaError_t res = cudaStreamQuery(*this);
         if (res == cudaSuccess) {
             return true;
@@ -418,7 +446,7 @@ public:
         if (res == cudaErrorNotReady) {
             return false;
         }
-        CHECK_CUDA(res);
+        CHECK_CUDA(res /* cudaStreamQuery */);
         return false;
     }
 
@@ -428,7 +456,7 @@ public:
     }
 
     ~CudaStream() {
-        if (*this) {
+        if (*this && *this != cudaStreamPerThread) {
             CHECK_CUDA(cudaStreamDestroy(*this));
         }
     }
@@ -522,8 +550,8 @@ struct CudaAllocator : private Arena {
     };
 };
 
-template <class T>
-using CudaVector = std::vector<T, CudaAllocator<T>>;
+template <class T, class Arena = CudaManagedArena>
+using CudaVector = std::vector<T, CudaAllocator<T, Arena>>;
 
 #if defined(__clang__) && defined(__CUDACC__) && defined(__GLIBCXX__)
 __host__ __device__ static void printf(const char *fmt, ...) {
@@ -591,5 +619,13 @@ CudaVectorResizer(Vector &vec) -> CudaVectorResizer<Vector>;
 //     }
 // };
 // #endif
+
+template <class Index, class Func>
+__global__ void paralelFor(Index n, Func func) {
+    // grid-stride-loop (网格跨步循环)
+    for (Index i = blockIdx.x * Index(blockDim.x) + threadIdx.x; i < n; i += Index(gridDim.x) * blockDim.x) {
+        func(i);
+    }
+}
 
 } // namespace cupp

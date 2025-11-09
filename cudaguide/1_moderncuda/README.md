@@ -4,6 +4,7 @@
 
 - https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
 - https://www.cs.sfu.ca/~ashriram/Courses/CS431/assets/lectures/Part8/GPU1.pdf
+- https://developer.nvidia.com/gpugems/gpugems/contributors
 
 ## 配置 CUDA 开发环境
 
@@ -18,6 +19,8 @@ Wendous 用户可能在安装完后遇到“找不到 cuxxx.dll”报错，说�
 WSL 用户要注意，WSL 环境和真正的 Linux 相差甚远。很多 Linux 下的教程，你会发现在 WSL 里复刻不出来。这是 WSL 的 bug，应该汇报去让微软统一修复，而不是让教程的作者零零散散一个个代它擦屁股。建议直接在 Wendous 本地安装 CUDA 反而比伺候 WSL 随机拉的 bug 省力。
 
 Ubuntu 用户可能考虑卸载 Ubuntu，因为 Ubuntu 源中的版本永不更新。想要安装新出的软件都非常困难，基本只能安装到五六年前的古董软件，要么只能从网上下 deb 包，和 Wendous 一个软耸样。所有官方 apt 源中包的版本从 Ubuntu 发布那一天就定死了，永远不会更新了。这是为了起夜级服务器安全稳定的需要，对于个人电脑而言却只是白白阻碍我们学习，Arch Linux 这样的滚动更新的发行版才更适合个人桌面用户。
+
+> {{ icon.tip }} 我使用的 CUDA / C++ 开发环境为 [小彭老师 vimrc 整合包](https://github.com/archibate/vimrc)，你也可以用其他支持 CUDA 的 IDE。
 
 ### 安装 NVIDIA 驱动
 
@@ -75,7 +78,7 @@ pacman -S cuda
 
 ```bash
 export PATH="/opt/cuda/bin:$PATH"    # 这是默认的 cuda 安装位置
-export NVCC_CCBIN="/usr/bin/g++-13"  # Arch Linux 用户才需要这一行
+export NVCC_CCBIN="/usr/bin/g++-14"  # Arch Linux 用户才需要这一行
 ```
 
 然后重启 `bash`，或者执行以下命令重载环境变量：
@@ -106,7 +109,9 @@ CMake 报错找不到 CUDA？添加环境变量：
 
 ```bash
 export PATH="/opt/cuda/bin:$PATH"    # 这里换成你的 cuda 安装位置
-export NVCC_CCBIN="/usr/bin/g++-13"  # 只有 Arch Linux 需要这一行
+export NVCC_CCBIN="/usr/bin/g++-14"  # 只有 Arch Linux 需要这一行
+
+nvcc --version                       # 检查是否成功
 ```
 
 IDE 使用了 Clangd 静态检查插件，报错不认识 `-forward-unknown-to-host-compiler` 选项？
@@ -178,7 +183,7 @@ set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr --expt-extend
 
 ```cmake
 set(CMAKE_CUDA_ARCHITECTURES 86)      # 表示针对 RTX 30xx 系列（Ampere 架构）生成
-set(CMAKE_CUDA_ARCHITECTURES native)  # 如果 CMake 版本高于 3.24，该变量可以设为 "native"，让 CMake 自动检测当前显卡的架构版本号
+set(CMAKE_CUDA_ARCHITECTURES native)  # 如果 CMake 版本高于 3.24，该变量可以设为 "native"，让 CMake 自动检测当前显卡的架构版本号，非常方便！
 ```
 
 架构版本号：例如 75 表示 RTX 20xx 系列（Turing 架构）；86 表示 RTX 30xx 系列（Ampere 架构）；89 表示 RTX 40xx 系列（Ada 架构）等。
@@ -315,13 +320,23 @@ CUDA 中的函数分为三大类：
 
 但是，CPU 上的每个进程只会调用一次 `main` 入口点，而 GPU 上的 `__global__` 会被调用 n 次（n 的大小在 host 函数中指定），所有启动的 n 个 `__global__` 函数互相之间是并行执行的，每个线程的入口点都是 `__global__`，因此一个“网格”含有多个“线程”。
 
+通过在函数的定义前加上关键字前缀，可以改变函数的类型。
+
+其中 `__host__` 可以省略，不带任何前缀时默认就算 `__host__`。因此 C++ 的代码可以无缝植入到 CUDA 代码中，C++ 的函数默认就会被视为 `__host__`，放在 CPU 侧编译。
+
+以下是一个案例：
+
 ```cuda
 #include <cuda_runtime.h>
 
-/*__host__*/ void host_func() {
+/*__host__*/ void host_func() {  // 仅为此函数编译 CPU 版本
+    printf("hello from host!\n");
+    std::cout << "cout from host!" << std::endl;
 }
 
-__device__ void device_func() {
+__device__ void device_func() {  // 仅为此函数编译 GPU 版本
+    printf("hello from device!\n"); // OK！CUDA 为 printf 做了个特殊的 device 版重载，可以在 GPU 中调用的一个特供版本
+    std::cout << "cout from host!" << std::endl; // 编译错误，cout 是 C++ 的华丽胡哨垃圾，CUDA 官方没有适配，无法在 GPU 调用
 }
 
 __host__ __device__ void host_device_func() {
@@ -348,5 +363,97 @@ int main() {
         return i * 2;
     };
     host_lambda(1);
+}
+```
+
+### 第一个 CUDA 程序
+
+```cuda
+#include <cuda_runtime.h>
+#include <nvfunctional>
+#include "cudapp.cuh" // 小彭老师现代 CUDA 框架，更符合现代 C++ 风格，减少官方 C 风格接口的繁琐
+
+using namespace cudapp;
+
+__global__ void kernel(int x) {
+    printf("线程编号 (%d, %d)\n", blockIdx.x, threadIdx.x);
+}
+
+int main() {
+    // 三箭头语法糖启动内核
+    // kernel<<<blockDim, gridDim>>>(...)
+    kernel<<<3, 4>>>();
+
+    // CUDA 内核的启动都是异步的，类似于 std::thread(kernel).detach() 的效果
+    // 因此需要强制同步，等待此前启动过的所有内核执行完成，才退出程序
+    // 否则可能内核还没来得及启动，CPU 程序就被你退出了，导致收不到 printf 的信息
+    cudaDeviceSynchronize();
+
+    return 0;
+}
+```
+
+重要知识点：CUDA 为了极致性能，会使用**异步**的方式启动内核。
+
+使用三箭头语法调用内核函数，只是把内核提交到 GPU 上去而已，不代表内核已经在 GPU 上执行完毕。
+
+而 `cudaDeviceSynchronize()` 的作用就是等待**此前提交的所有内核**执行完毕，然后才能继续往下执行 `return 0`。
+
+> {{ icon.warn }} 如果不在程序退出前强制同步，则内核可能未执行！printf 语句会不生效！
+
+### 类比
+
+为了方便理解，可以把 `kernel<<<3, 4>>>()` 看作是启动了一个**后台线程**，而且还是以 `detach` 的方式，启动后就在后台默默运行，不会阻塞启动了内核的 CPU 线程。
+
+| GPU 操作 | CPU 类比 |
+|-|-|
+| 启动内核 `kernel<<<3, 4>>>()` | `std::async` 或 `std::thread` |
+| `cudaDeviceSynchronize` | `future.wait()` 或 `thread.join()` |
+
+### 小彭老师赋能 CUDA 现代化
+
+```cuda
+#include <cuda_runtime.h>
+#include <nvfunctional>
+#include "cudapp.cuh" // 小彭老师现代 CUDA 框架，更符合现代 C++ 风格，减少官方 C 风格接口的繁琐
+
+using namespace cudapp;
+
+__global__ void kernel(int x) {
+    printf("内核参数 x = %d\n", x);
+    printf("线程编号 (%d, %d)\n", blockIdx.x, threadIdx.x);
+}
+
+int main() {
+    // 启动内核的3种方式
+    // 1. 官方三箭头语法糖（常用）
+    // kernel<<<blockDim, gridDim, dynamicSmemBytes, stream>>>(...)
+    int x = 42;
+    kernel<<<3, 4, 0, 0>>>(x);
+
+    // 2. cudaLaunchKernel
+    void *args[] = {&x};
+    CHECK_CUDA(cudaLaunchKernel(kernel, dim3(3), dim3(4), args, 0, 0));
+
+    // 3. cudaLaunchKernelEx
+    cudaLaunchConfig_t cfg{};
+    cfg.blockDim = dim3(3);
+    cfg.gridDim = dim3(4);
+    cfg.dynamicSmemBytes = 0;
+    cfg.stream = 0;
+    cfg.attrs = nullptr;
+    cfg.numAttrs = 0;
+    CHECK_CUDA(cudaLaunchKernelEx(&cfg, kernel, x));
+
+    // 1. 强制同步：等待此前启动过的所有内核执行完成
+    CHECK_CUDA(cudaDeviceSynchronize());
+
+    // 2. 仅同步 0 号流（null-stream）
+    CHECK_CUDA(cudaStreamSynchronize(0));
+
+    // 3. 仅同步 0 号流，但使用小彭老师现代 CUDA 框架
+    CudaStream::defaultStream().join();
+
+    return 0;
 }
 ```
