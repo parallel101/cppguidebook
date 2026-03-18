@@ -1,0 +1,461 @@
+<!DOCTYPE HTML>
+<html lang="zh" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>函数式设计模式 - 小彭大典</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="小彭大典是一本关于现代 C++ 编程的权威指南，它涵盖了从基础知识到高级技巧的内容，适合初学者和有经验的程序员阅读。">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/custom.css">
+        <link rel="stylesheet" href="theme/mdbook-admonish.css">
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">小彭大典</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook/edit/main/src/design_functor.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="函数式设计模式"><a class="header" href="#函数式设计模式">函数式设计模式</a></h1>
+<h2 id="函数指针"><a class="header" href="#函数指针">函数指针</a></h2>
+<p>首先需要定义函数指针类型：</p>
+<pre><code class="language-cpp">using func_t = int (*)(int i);
+// 等价于
+typedef int (*func_t)(int i);
+</code></pre>
+<p>函数指针可以用于实现策略模式：</p>
+<pre><code class="language-cpp">void test(func_t func) {
+    cout &lt;&lt; func(2);
+    cout &lt;&lt; func(3);
+}
+
+int twice(int i) {
+    return i * 2;
+}
+
+int main() {
+    test(twice); // 4 6
+}
+</code></pre>
+<h3 id="函数指针实现多态"><a class="header" href="#函数指针实现多态">函数指针实现多态</a></h3>
+<pre><code class="language-cpp">int twice(int i) {
+    return i * 2;
+}
+
+int triple(int i) {
+    return i * 3;
+}
+
+int main() {
+    test(twice);  // 4 6
+    test(triple); // 6 9
+}
+</code></pre>
+<h3 id="函数指针的缺陷"><a class="header" href="#函数指针的缺陷">函数指针的缺陷</a></h3>
+<p>缺点：函数指针只能指向全局函数，无法保存状态。</p>
+<pre><code class="language-cpp">int ntimes(int scale, int i) {
+    return i * scale;
+}
+
+int main() {
+    test(ntimes(2)); // 错误：没有这种语法
+    test(ntimes(3)); // 错误：没有这种语法
+}
+</code></pre>
+<h2 id="函数调用运算符"><a class="header" href="#函数调用运算符">函数调用运算符</a></h2>
+<pre><code class="language-cpp">struct myclass {
+    void run(string name) {
+        cout &lt;&lt; name &lt;&lt; "，你好\n";
+    }
+};
+
+myclass mc;
+mc.run("小切");
+</code></pre>
+<pre><code class="language-cpp">struct myclass {
+    void operator() (string name) {
+        cout &lt;&lt; name &lt;&lt; "，你好\n";
+    }
+};
+
+myclass mc;
+mc. operator() ("小切");
+</code></pre>
+<pre><code class="language-cpp">struct myclass {
+    void operator() (string name) {
+        cout &lt;&lt; name &lt;&lt; "，你好\n";
+    }
+};
+
+myclass mc;
+mc("小切");
+</code></pre>
+<p>重载了 <code>operator()</code> 后的 myclass 对象，调用起来就和普通函数一样。</p>
+<h3 id="仿函数"><a class="header" href="#仿函数">仿函数</a></h3>
+<p>仿函数是一种重载了<strong>函数调用运算符</strong>的类，可以像函数一样使用：</p>
+<pre><code class="language-cpp">struct twice_t {
+    int operator() (int i) {
+        return i * 2;
+    }
+};
+
+void test(twice_t func) {
+    cout &lt;&lt; func(2);
+    cout &lt;&lt; func(3);
+}
+
+twice_t twice;
+
+int main() {
+    test(twice); // 4 6
+}
+</code></pre>
+<p>仿函数的优势是可以保存<strong>状态</strong>：</p>
+<pre><code class="language-cpp">struct ntimes_t {
+    int scale;
+
+    ntimes_t(int scale) : scale(scale) {}
+
+    int operator() (int i) {
+        return i * scale;
+    }
+};
+
+void test(ntimes_t func) {
+    cout &lt;&lt; func(2);
+    cout &lt;&lt; func(3);
+}
+
+int main() {
+    ntimes_t twice(2);
+    ntimes_t triple(3);
+    ntimes_t quadric(4);
+    test(twice);   // 4 6
+    test(triple);  // 6 9
+    test(quadric); // 8 12
+}
+</code></pre>
+<h3 id="仿函数的缺陷"><a class="header" href="#仿函数的缺陷">仿函数的缺陷</a></h3>
+<p>缺点：需要在 test 中写明仿函数的具体类型，无法实现多态。</p>
+<pre><code class="language-cpp">struct twice_t {
+    int operator() (int i) {
+        return i * 2;
+    }
+};
+
+struct triple_t {
+    int operator() (int i) {
+        return i * 2;
+    }
+};
+
+void test(twice_t func) {
+    cout &lt;&lt; func(2);
+    cout &lt;&lt; func(3);
+}
+
+twice_t twice;
+triple_t triple;
+
+int main() {
+    test(twice);  // 4 6
+    test(triple); // 错误：test 只兼容了 twice_t 做参数
+}
+</code></pre>
+<p>如何解决？</p>
+<h3 id="利用模板"><a class="header" href="#利用模板">利用模板</a></h3>
+<pre><code class="language-cpp">template &lt;class Func&gt;
+void test(Func func) {
+    cout &lt;&lt; func(2);
+    cout &lt;&lt; func(3);
+}
+
+twice_t twice;
+triple_t triple;
+
+int main() {
+    test(twice);  // 4 6
+    test(triple); // 6 9
+}
+</code></pre>
+<p>这样就实现了<strong>编译期多态</strong>，因为 test 函数的参数类型可以根据传入的具体函数类型进行推导。</p>
+<h3 id="模板传仿函数的缺陷"><a class="header" href="#模板传仿函数的缺陷">模板传仿函数的缺陷</a></h3>
+<p>缺点：必须编译期确定，无法动态决定类型。</p>
+<pre><code class="language-cpp">template &lt;class Func&gt;
+void test(Func func) {
+    cout &lt;&lt; func(2);
+    cout &lt;&lt; func(3);
+}
+
+twice_t twice;
+triple_t triple;
+
+int main() {
+    bool ok;
+    cin &gt;&gt; ok;
+    test(ok ? twice : triple); // 错误：不兼容的类型之间不能三目
+}
+</code></pre>
+<h3 id="万能的-function-容器"><a class="header" href="#万能的-function-容器">万能的 function 容器</a></h3>
+<p>std::function 采用了<strong>类型擦除技术</strong>，无需写明仿函数类的具体类型，能容纳任何仿函数或函数指针。</p>
+<p>只需在模板参数中写明函数的参数和返回值类型即可，所有具有同样参数和返回值类型的仿函数或函数指针都可以传入。</p>
+<pre><code class="language-cpp">struct twice_t {
+    int operator() (int i) {
+        return i * 2;
+    }
+};
+
+function&lt;int (int)&gt; twice = twice_t();  // 没问题，能接受仿函数
+
+
+int triple(int i) {
+    return i * 3;
+}
+
+function&lt;int (int)&gt; function_triple = triple; // 没问题，能接受函数指针
+
+
+struct ntimes_t {
+    int scale;
+
+    ntimes_t(int scale) : scale(scale) {}
+
+    int operator() (int i) {
+        return i * scale;
+    }
+};
+
+function&lt;int (int)&gt; quadric = ntimes_t(4); // 没问题，能接受带状态的仿函数
+</code></pre>
+<p>可以用 function 容器作为参数，就可以避免使用模板。</p>
+<pre><code class="language-cpp">// 模板：性能优先
+template &lt;class Func&gt;
+void test(Func func) {
+    cout &lt;&lt; func(2);
+    cout &lt;&lt; func(3);
+}
+
+// 容器：灵活性优先
+void test(function&lt;int (int)&gt; func) {
+    cout &lt;&lt; func(2);
+    cout &lt;&lt; func(3);
+}
+</code></pre>
+<h3 id="函数式为什么好"><a class="header" href="#函数式为什么好">函数式为什么好？</a></h3>
+<p>有人说，function 底层依然是基于函数指针实现的，不是和虚函数一样低效吗？函数式相比传统面向对象好在哪里呢？</p>
+<ol>
+<li>性能与灵活性的选择权</li>
+</ol>
+<p>现实工程中，往往是 20% 的代码耗费了 80% 的计算机时间。我们只要优化这 20% 的瓶颈代码就可以。</p>
+<p>虚函数实现的多态，是强制的，一旦用了虚函数，就没法把虚表去掉了，永远卡在你的对象类型里占 8 字节空间，永远只能以指针形态使用。</p>
+<p>如果选择函数式编程范式，你可以在次要的业务逻辑代码中选择更灵活的 function 容器。</p>
+<p>而在需要性能的瓶颈代码处，可以随时切换到基于模板的，更高性能的编译期多态。函数式给了你根据情况选择的自由度。</p>
+<ol start="2">
+<li>function 有小对象优化</li>
+</ol>
+<p>而且 function 内部具有类似于 string 小对象优化机制，对于较小的状态或没有状态的仿函数，就无需指针！无需堆内存分配！</p>
+<p>而虚函数哪怕没有状态，由于虚表指针的存在，也总是需要用 new 创建，总是会造成大量的碎片化内存，因此即使同样选择了灵活性，function 依然比虚函数高效一点。</p>
+<p>而且即使你的状态非常多，导致 function 不得不需要堆内存分配了，这一分配也不用你自己操心，不用手动 new，也不用手动 make_shared，function 内部自动帮你完成一切。</p>
+<ol start="3">
+<li>lambda 表达式很方便</li>
+</ol>
+<p>最重要的是，函数式编程范式可以便捷地利用 lambda 表达式就地创建仿函数对象，而面向对象需要大费周章定义一个类接口，然后再定义一个类实现虚函数，有时还需要分离声明和定义。</p>
+<p>绕了个大圈子，不仅写起来痛苦，需要起名强迫症，而且看得人也头疼。lambda 表达式，就地创建，无需名字，更适合敏捷开发。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="design_gamedev.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="design_variant.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="design_gamedev.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="design_variant.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="theme/custom.js"></script>
+
+
+    </div>
+    </body>
+</html>

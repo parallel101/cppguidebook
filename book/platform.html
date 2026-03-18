@@ -1,0 +1,503 @@
+<!DOCTYPE HTML>
+<html lang="zh" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>开发环境与平台选择 - 小彭大典</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="小彭大典是一本关于现代 C++ 编程的权威指南，它涵盖了从基础知识到高级技巧的内容，适合初学者和有经验的程序员阅读。">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/custom.css">
+        <link rel="stylesheet" href="theme/mdbook-admonish.css">
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">小彭大典</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook/edit/main/src/platform.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="开发环境与平台选择"><a class="header" href="#开发环境与平台选择">开发环境与平台选择</a></h1>
+<h2 id="ide-不是编译器"><a class="header" href="#ide-不是编译器">IDE 不是编译器！</a></h2>
+<p>TODO</p>
+<h2 id="编译器是"><a class="header" href="#编译器是">编译器是？</a></h2>
+<p>编译器是将源代码 (<code>.cpp</code>) 编译成可执行程序 (<code>.exe</code>) 的工具。</p>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
+</div>
+<div>
+<p>C++ 是<strong>编译型语言</strong>，源代码不能直接执行哦！刚开始学编程的小彭老师曾经把网上的 “Hello, World” 代码拷贝到 <code>.c</code> 源码文件中，然后把后缀名改成 <code>.exe</code>，发现这样根本执行不了……后来才知道需要通过一种叫做<strong>编译器</strong>编译 <code>.c</code> 文件，才能得到计算机可以直接执行的 <code>.exe</code> 文件。</p>
+</div>
+</div>
+<p>C++ 源码 <code>.cpp</code> 是写给人类看的！计算机并不认识，计算机只认识二进制的机器码。要把 C++ 源码转换为计算机可以执行的机器码。</p>
+<h2 id="编译器御三家"><a class="header" href="#编译器御三家">编译器御三家</a></h2>
+<p>最常见的编译器有：GCC、Clang、MSVC</p>
+<div id="admonition-note-1" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-1-title">
+<div class="admonition-title">
+<div id="admonition-note-1-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-1"></a>
+</div>
+<div>
+<p>俗称“御三家”。</p>
+</div>
+</div>
+<p>这些编译器都支持了大部分 C++20 标准和小部分 C++23 标准，而 C++17 标准都是完全支持的。</p>
+<div id="admonition-note-2" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-2-title">
+<div class="admonition-title">
+<div id="admonition-note-2-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-2"></a>
+</div>
+<div>
+<p>有人说过：“如果你不知道一个人是用的什么编译器，那么你可以猜他用的是 GCC。”</p>
+</div>
+</div>
+<ul>
+<li>GCC 主要只在 Linux 和 MacOS 等 Unix 类系统可用，不支持 Windows 系统。但是 GCC 有着大量好用的扩展功能，例如大名鼎鼎的 <code>pbds</code>（基于策略的数据结构），还有各种 <code>__attribute__</code>，各种 <code>__builtin_</code> 系列函数。不过随着新标准的出台，很多原本属于 GCC 的功能都成了标准的一部分，例如 <code>__attribute__((warn_unused))</code> 变成了标准的 <code>[[nodiscard]]</code>，<code>__builtin_clz</code> 变成了标准的 <code>std::countl_zero</code>，<code>__VA_OPT__</code> 名字都没变就进了 C++20 标准。</li>
+</ul>
+<div id="admonition-note-3" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-3-title">
+<div class="admonition-title">
+<div id="admonition-note-3-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-3"></a>
+</div>
+<div>
+<p>PBDS 又称 “平板电视”</p>
+</div>
+</div>
+<ul>
+<li>
+<p>也有 MinGW 这样的魔改版 GCC 编译器，把 GCC 移植到了 Windows 系统上，同时也能用 GCC 的一些特性。不过 MinGW 最近已经停止更新，最新的 GCC Windows 移植版由 MinGW-w64 继续维护。</p>
+</li>
+<li>
+<p>Clang 是跨平台的编译器，支持大多数主流平台，包括操作系统界的御三家：Linux、MacOS、Windows。Clang 支持了很大一部分 GCC 特性和部分 MSVC 特性。其所属的 LLVM 项目更是编译器领域的中流砥柱，不仅支持 C、C++、Objective-C、Fortran 等，Rust 和 Swift 等语言也是基于 LLVM 后端编译的，不仅如此，还有很多显卡厂商的 OpenGL 驱动也是基于 LLVM 实现编译的。并且 Clang 身兼数职，不仅可以编译，还支持静态分析。许多 IDE 常见的语言服务协议 (LSP) 就是基于 Clang 的服务版————Clangd 实现的 (例如你可以按 Ctrl 点击，跳转到函数定义，这样的功能就是 IDE 通过调用 Clangd 的 LSP 接口实现）。不过 Clang 的性能优化比较激进，虽然有助于性能提升，如果你不小心犯了未定义行为，Clang 可能优化出匪夷所思的结果，如果你要实验未定义行为，Clang 是最擅长复现的。且 Clang 对一些 C++ 新标准特性支持相对较慢，没有 GCC 和 MSVC 那么上心。</p>
+</li>
+</ul>
+<div id="admonition-info" class="admonition admonish-info" role="note" aria-labelledby="admonition-info-title">
+<div class="admonition-title">
+<div id="admonition-info-title">
+<p>Info</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-info"></a>
+</div>
+<div>
+<p>例如 C++20 早已允许 lambda 表达式捕获 structural-binding 变量，而 Clang 至今还没有支持，尽管 Clang 已经支持了很多其他 C++20 特性。</p>
+</div>
+</div>
+<ul>
+<li>Apple Clang 是苹果公司自己魔改的 Clang 版本，只在 MacOS 系统上可用，支持 Objective-C 和 Swift 语言。但是版本较官方 Clang 落后一些，很多新特性都没有跟进，基本上只有专门伺候苹果的开发者会用。</li>
+</ul>
+<div id="admonition-tip" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-title">
+<div class="admonition-title">
+<div id="admonition-tip-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip"></a>
+</div>
+<div>
+<p>GCC 和 Clang 也支持 Objective-C。</p>
+</div>
+</div>
+<ul>
+<li>
+<p>MSVC 是 Windows 限定的编译器，提供了很多 MSVC 特有的扩展。也有人在 Clang 上魔改出了 MSVC 兼容模式，兼顾 Clang 特性的同时，支持了 MSVC 的一些特性（例如 <code>__declspec</code>），可以编译用了 MSVC 特性的代码，即 <code>clang-cl</code>，在最新的 VS2022 IDE 中也集成了 <code>clang-cl</code>。值得注意的是，MSVC 的优化能力是比较差的，比 GCC 和 Clang 都差，例如 MSVC 几乎总是假定所有指针 aliasing，这意味着当遇到很多指针操作的循环时，几乎没法做循环矢量化。但是也使得未定义行为不容易产生 Bug，另一方面，这也导致一些只用 MSVC 的人不知道某些写法是未定义行为。</p>
+</li>
+<li>
+<p>Intel C++ compiler 是英特尔开发的 C++ 编译器，由于是硬件厂商开发的，特别擅长做性能优化。但由于更新较慢，基本没有更上新特性，也没什么人在用了。</p>
+</li>
+</ul>
+<div id="admonition-abstract" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-title">
+<div class="admonition-title">
+<div id="admonition-abstract-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract"></a>
+</div>
+<div>
+<p>最近他们又出了个 Intel DPC++ compiler，支持最新的并行编程领域特定语言 SyCL。</p>
+</div>
+</div>
+<h2 id="使用编译器编译源码"><a class="header" href="#使用编译器编译源码">使用编译器编译源码</a></h2>
+<h3 id="msvc"><a class="header" href="#msvc">MSVC</a></h3>
+<pre><code class="language-bash">cl.exe main.cpp
+</code></pre>
+<p>这样就可以得到可执行文件 <code>main.exe</code> 了。</p>
+<h3 id="gcc"><a class="header" href="#gcc">GCC</a></h3>
+<pre><code class="language-bash">g++ main.cpp -o main
+</code></pre>
+<p>这样就可以得到可执行文件 <code>main</code> 了。</p>
+<div id="admonition-tip-1" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-1-title">
+<div class="admonition-title">
+<div id="admonition-tip-1-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-1"></a>
+</div>
+<div>
+<p>Linux 系统的可执行文件并没有后缀名，所以没有 <code>.exe</code> 后缀。</p>
+</div>
+</div>
+<h3 id="clang"><a class="header" href="#clang">Clang</a></h3>
+<p>Windows 上：</p>
+<pre><code class="language-bash">clang++.exe main.cpp -o main.exe
+</code></pre>
+<p>Linux / MacOS 上：</p>
+<pre><code class="language-bash">clang++ main.cpp -o main
+</code></pre>
+<h2 id="编译器选项"><a class="header" href="#编译器选项">编译器选项</a></h2>
+<p>编译器选项是用来控制编译器的行为的。不同的编译器有不同的选项，语法有微妙的不同，但大致功效相同。</p>
+<p>例如当我们说“编译这个源码时，我用了 GCC 编译器，<code>-O3</code> 和 <code>-std=c++20</code> 选项”，说的就是把这些选项加到了 <code>g++</code> 的命令行参数中：</p>
+<pre><code class="language-bash">g++ -O3 -std=c++20 main.cpp -o main
+</code></pre>
+<p>其中 Clang 和 GCC 的编译器选项有很大交集。而 MSVC 基本自成一派。</p>
+<p>Clang 和 GCC 的选项都是 <code>-xxx</code> 的形式，MSVC 的选项是 <code>/xxx</code> 的形式。</p>
+<p>常见的编译器选项有：</p>
+<h3 id="c-标准"><a class="header" href="#c-标准">C++ 标准</a></h3>
+<p>指定要选用的 C++ 标准。</p>
+<p>Clang 和 GCC：<code>-std=c++98</code>、<code>-std=c++03</code>、<code>-std=c++11</code>、<code>-std=c++14</code>、<code>-std=c++17</code>、<code>-std=c++20</code>、<code>-std=c++23</code></p>
+<p>MSVC：<code>/std:c++98</code>、<code>/std:c++11</code>、<code>/std:c++14</code>、<code>/std:c++17</code>、<code>/std:c++20</code>、<code>/std:c++latest</code></p>
+<p>例如要编译一个 C++20 源码文件，分别用 GCC、Clang、MSVC：</p>
+<p>GCC（Linux）：</p>
+<pre><code class="language-bash">g++ -std=c++20 main.cpp -o main
+</code></pre>
+<p>Clang（Linux）：</p>
+<pre><code class="language-bash">clang++ -std=c++20 main.cpp -o main
+</code></pre>
+<p>MSVC（Windows）：</p>
+<pre><code class="language-bash">cl.exe /std:c++20 /c main.cpp
+</code></pre>
+<h3 id="优化等级"><a class="header" href="#优化等级">优化等级</a></h3>
+<p>Clang 和 GCC：<code>-O0</code>、<code>-O1</code>、<code>-O2</code>、<code>-O3</code>、<code>-Ofast</code>、<code>-Os</code>、<code>-Oz</code>、<code>-Og</code></p>
+<ul>
+<li><code>-O0</code>：不进行任何优化，编译速度最快，忠实复刻你写的代码，未定义行为不容易产生诡异的结果，一般用于开发人员内部调试阶段。</li>
+<li><code>-O1</code>：最基本的优化，会把一些简单的死代码（编译器检测到的不可抵达代码）删除，去掉没有用的变量，把部分变量用寄存器代替等，编译速度较快，执行速度也比 <code>-O0</code> 快。但是会丢失函数的行号信息，影响诸如 gdb 等调试，如需快速调试可以用 <code>-Og</code> 选项。</li>
+<li><code>-O2</code>：比 <code>-O1</code> 更强的优化，会把一些循环展开，把一些函数内联，减少函数调用，把一些简单的数组操作用更快的指令替代等，执行速度更快。</li>
+<li><code>-O3</code>：比 <code>-O2</code> 更激进的优化，会把一些复杂的循环用 SIMD 矢量指令优化加速，把一些复杂的数组操作用更快的指令替代等。性能提升很大，但是如果你的程序有未定义行为，可能会导致一些 Bug。如果你的代码没有未定义行为则绝不会有问题，对自己的代码质量有自信就可以放心开，编译速度也会很慢，一般用于程序最终成品发布阶段。</li>
+<li><code>-Ofast</code>：在 <code>-O3</code> 的基础上，进一步对浮点数的运算进行更深层次的优化，但是可能会导致一些浮点数计算结果不准确。如果你的代码不涉及到 NaN 和 Inf 的处理，那么 <code>-Ofast</code> 不会有太大的问题，一般用于科学计算领域的终极性能优化。</li>
+<li><code>-Os</code>：在 <code>-O2</code> 的基础上，专门优化代码大小，性能被当作次要需求，但是会禁止会导致可执行文件变大的优化。会把一些循环展开、内联等优化关闭，把一些代码用更小的指令实现，尽可能减小可执行文件的尺寸，比 <code>-O0</code>、<code>-O1</code>、<code>-O2</code> 都要小，通常用于需要节省内存的嵌入式系统开发。</li>
+<li><code>-Oz</code>：在 <code>-Os</code> 的基础上，进一步把代码压缩，可能把本可以一条大指令完成的任务也拆成多条小指令，为了缩小尺寸牺牲运行时性能，大幅减少了函数内联的机会，有时用于嵌入式系统开发。</li>
+<li><code>-Og</code>：在 <code>-O0</code> 的基础上，尽可能保留更多调试信息，不做破坏函数行号等信息的优化，建议配合产生更多调试信息的 <code>-g</code> 选项使用。但还是会做一些简单的优化，比 <code>-O0</code> 执行速度更快。但 <code>-Og</code> 的所有优化都不会涉及到未定义行为，因此非常适合调试未定义行为。但是由于插入了调试信息，最终的可执行文件会变得很大，一般在开发人员调试时使用。</li>
+</ul>
+<p>MSVC：<code>/Od</code>、<code>/O1</code>、<code>/O2</code>、<code>/Ox</code>、<code>/Ob1</code>、<code>/Ob2</code>、<code>/Os</code></p>
+<ul>
+<li><code>/Od</code>：不进行任何优化，忠实复刻你写的代码，未定义行为不容易产生诡异的结果，一般用于调试阶段。</li>
+<li><code>/O1</code>：最基本的优化，会把一些简单的死代码删除，去掉没有用的变量，把变量用寄存器代替等。</li>
+<li><code>/O2</code>：比 <code>/O1</code> 更强的优化，会把一些循环展开，把一些函数内联，减少函数调用，还会尝试把一些循环矢量化，把一些简单的数组操作用更快的指令替代等。一般用于发布阶段。</li>
+<li><code>/Ox</code>：在 <code>/O2</code> 的基础上，进一步优化，但是不会导致未定义行为，一般用于发布阶段。</li>
+<li><code>/Ob1</code>：启用函数内联。</li>
+<li><code>/Ob2</code>：启用函数内联，但是会扩大内联范围，一般比 <code>/Ob1</code> 更快，但是也会导致可执行文件变大。</li>
+<li><code>/Os</code>：在 <code>/O2</code> 的基础上，专门优化代码大小，性能被当作次要需求，但是会禁止会导致可执行文件变大的优化。会把一些循环展开、内联等优化关闭，把一些代码用更小的指令实现，尽可能减小可执行文件的尺寸，通常用于需要节省内存的嵌入式系统开发。</li>
+</ul>
+<div id="admonition-abstract-1" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-1-title">
+<div class="admonition-title">
+<div id="admonition-abstract-1-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-1"></a>
+</div>
+<div>
+<p>注意：函数内联是一种优化策略，和 <code>inline</code> 关键字毫无关系，请看稍后推出的符号链接专题课程或抢先看<a href="https://www.bilibili.com/video/BV1Mg4y1d79w">小彭老师视频</a>了解 <code>inline</code>，以后的性能优化专题课程也会介绍函数内联优化的成功案例。</p>
+</div>
+</div>
+<h3 id="调试信息"><a class="header" href="#调试信息">调试信息</a></h3>
+<p>Clang 和 GCC：<code>-g</code>、<code>-g0</code>、<code>-g1</code>、<code>-g2</code>、<code>-g3</code></p>
+<p>MSVC：<code>/Z7</code>、<code>/Zi</code></p>
+<h3 id="头文件搜索路径"><a class="header" href="#头文件搜索路径">头文件搜索路径</a></h3>
+<h3 id="指定要链接的库"><a class="header" href="#指定要链接的库">指定要链接的库</a></h3>
+<h3 id="库文件搜索路径"><a class="header" href="#库文件搜索路径">库文件搜索路径</a></h3>
+<h3 id="定义宏"><a class="header" href="#定义宏">定义宏</a></h3>
+<p>Clang 和 GCC：<code>-Dmacro=value</code></p>
+<p>MSVC：<code>/Dmacro=value</code></p>
+<p>例如：</p>
+<h3 id="警告开关"><a class="header" href="#警告开关">警告开关</a></h3>
+<h2 id="标准库御三家"><a class="header" href="#标准库御三家">标准库御三家</a></h2>
+<ul>
+<li>
+<p>libstdc++ 是 GCC 官方的 C++ 标准库实现，由于 GCC 是 Linux 系统的主流编译器，所以 libstdc++ 也是 Linux 上最常用的标准库。你可以在这里看到他的源码：https://github.com/gcc-mirror/gcc/tree/master/libstdc%2B%2B-v3</p>
+</li>
+<li>
+<p>libc++ 是 Clang 官方编写的 C++ 标准库实现，由于 Clang 是 MacOS 系统的主流编译器，所以 libc++ 也是 MacOS 上最常用的标准库。libc++ 也是 C++ 标准库中最早实现 C++11 标准的。项目的开源地址是：https://github.com/llvm/llvm-project/tree/main/libcxx</p>
+</li>
+<li>
+<p>MSVC STL 是 MSVC 官方的 C++ 标准库实现，由于 MSVC 是 Windows 系统的主流编译器，所以 MSVC STL 也是 Windows 上最常用的标准库。MSVC STL 也是 C++ 标准库中最晚实现 C++11 标准的，但是现在他已经完全支持 C++20，并且也完全开源了：https://github.com/microsoft/STL</p>
+</li>
+</ul>
+<p>值得注意的是，标准库和编译器并不是绑定的，例如 Clang 可以用 libstdc++ 或 MSVC STL，GCC 也可以被配置使用 libc++。</p>
+<p>在 Linux 系统中，Clang 默认用的就是 libstdc++。需要为 Clang 指定 <code>-stdlib=libc++</code> 选项，才能使用。</p>
+<div id="admonition-note-4" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-4-title">
+<div class="admonition-title">
+<div id="admonition-note-4-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-4"></a>
+</div>
+<div>
+<p>牛头人笑话：“如果你不知道一个人是用的什么标准库，那么你可以猜他用的是 libstdc++。因为即使他的编译器是 Clang，他用的大概率依然是 libstdc++。”</p>
+</div>
+</div>
+<h3 id="标准库的调试模式"><a class="header" href="#标准库的调试模式">标准库的调试模式</a></h3>
+<p>不少标准库都有提供</p>
+<h4 id="gcc-开启标准库调试模式"><a class="header" href="#gcc-开启标准库调试模式">GCC 开启标准库调试模式</a></h4>
+<p>如果你用的是 GCC 默认的 libstdc++ 库，可以定义宏 <code>#define _GLIBCXX_DEBUG</code> 以开启调试模式，此模式下会帮助检测标准库用法上出现的未定义行为，例如尝试解引用 <code>end()</code> 迭代器时，会抛出错误信息，帮助你检查代码中有没有未定义行为。</p>
+<p>也可以通过命令行选项 <code>-D_GLIBCXX_DEBUG</code> 开启。</p>
+<p>在 CMake 中添加以下选项，即可对特定目标程序启用标准库调试模式：</p>
+<pre><code class="language-cmake">target_compile_definitions(你的程序 PRIVATE _GLIBCXX_DEBUG)
+</code></pre>
+<div id="admonition-note-5" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-5-title">
+<div class="admonition-title">
+<div id="admonition-note-5-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-5"></a>
+</div>
+<div>
+<p>有的人会老老实实的复制粘贴，连“你的程序”都忘记改成你真正的程序名。</p>
+</div>
+</div>
+<p>在 CMakeLists.txt 最前面加上可以对所有接下来的目标启用：</p>
+<pre><code class="language-cmake">add_compile_definitions(_GLIBCXX_DEBUG)
+
+add_executable(你的程序1)  # 示例
+add_executable(你的程序2)  # 示例
+</code></pre>
+<p>注意：</p>
+<p>开启此选项后，如果你的 exe 程序链接了其他用 C++ 写的库，那么这些库也必须开启调试模式！否则 ABI 会出现不兼容，导致奔溃。这是因为  <code>_GLIBCXX_DEBUG</code> 开启后，会改变 C++ 容器的布局和大小（为了调试而塞入的额外帮手变量导致容器结构与开启前不同），链接其他用 C 语言写的库不会有问题，因为此宏仅会影响标准库中 C++ 的部分。</p>
+<p>开启标准库调试模式后，因为需要做很多参数安全性检查，性能会受损，建议仅在调试环节启用！等你调试完消除了未定义行为后，在最终发布的版本中中关闭，恢复正常性能。</p>
+<p>你可以通过判定 <code>CMAKE_BUILD_TYPE</code> 是否等于 <code>Debug</code>，实现只在 Debug 模式下启用标准库安全检查。</p>
+<pre><code class="language-cmake">if (CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
+    add_compile_definitions(-D_GLIBCXX_DEBUG)
+endif()
+</code></pre>
+<h4 id="msvc-的标准库调试模式"><a class="header" href="#msvc-的标准库调试模式">MSVC 的标准库调试模式</a></h4>
+<p>MSVC 有两个“config”，其中 Debug config 就是标准库调试模式，会帮助你检查迭代器越界等常见未定义行为。</p>
+<h3 id="警告选项"><a class="header" href="#警告选项">警告选项</a></h3>
+<h4 id="gcc-建议开启的警告选项"><a class="header" href="#gcc-建议开启的警告选项">GCC 建议开启的警告选项</a></h4>
+<p>建议初学者开启以下选项，可以避免很多常见错误写法，改善你的代码质量：</p>
+<pre><code>-Wall -Wextra -Weffc++
+-Werror=uninitialized
+-Werror=return-type
+-Wconversion -Wsign-compare
+-Werror=unused-result
+-Werror=suggest-override
+-Wzero-as-null-pointer-constant
+-Wmissing-declarations
+-Wold-style-cast -Werror=vla
+-Wnon-virtual-dtor
+</code></pre>
+<p>视频介绍：https://www.bilibili.com/video/BV1qT421a7zj</p>
+<h3 id="c11-abi-问题"><a class="header" href="#c11-abi-问题">C++11 ABI 问题</a></h3>
+<p>在一些特别古老的发行版上（比如 Ubuntu 16.04、CentOS），他们的标准库不支持 C++11，可以开启这个宏：</p>
+<pre><code class="language-cpp">#define _GLIBCXX_USE_CXX11_ABI 0
+</code></pre>
+<p>或者命令行选项 <code>-D_GLIBCXX_USE_CXX11_ABI=0</code>。</p>
+<p>由于 Linux 发行版大多会捆绑特定 GCC 版本（往往是很低的版本！），为了更好的学习现代 C++，我建议：</p>
+<ol>
+<li>安装新的 Linux 发行版，最好是 Arch Linux，Tumbleweed 这类<strong>滚动更新</strong>的发行版，它们的所有包永久保持最新。</li>
+<li>自己从源码编译 Clang，LLVM 团队打造优秀的代码品质使得 Clang 对系统底层解耦，不像 GCC 那么难伺候环境依赖。</li>
+<li>或者使用 Wendous 等可以自由安装最新版 MSVC 的系统。</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="hello_world.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="variable_types.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="hello_world.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="variable_types.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="theme/custom.js"></script>
+
+
+    </div>
+    </body>
+</html>

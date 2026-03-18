@@ -1,0 +1,419 @@
+<!DOCTYPE HTML>
+<html lang="zh" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>现代 C++ 的 CUDA 编程 - 小彭大典</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="小彭大典是一本关于现代 C++ 编程的权威指南，它涵盖了从基础知识到高级技巧的内容，适合初学者和有经验的程序员阅读。">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/custom.css">
+        <link rel="stylesheet" href="theme/mdbook-admonish.css">
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">小彭大典</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook/edit/main/src/cuda_intro.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="现代-c-的-cuda-编程"><a class="header" href="#现代-c-的-cuda-编程">现代 C++ 的 CUDA 编程</a></h1>
+<p>参考资料：</p>
+<ul>
+<li>https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html</li>
+<li>https://www.cs.sfu.ca/~ashriram/Courses/CS431/assets/lectures/Part8/GPU1.pdf</li>
+</ul>
+<h2 id="配置-cuda-开发环境"><a class="header" href="#配置-cuda-开发环境">配置 CUDA 开发环境</a></h2>
+<p>硬件方面建议使用至少 GTX 1060 以上显卡，但是更老的显卡也可以运行。</p>
+<p>软件方面则可以尽可能最新，以获得 CUDA C++20 支持，我安装的版本是 CUDA 12.5。</p>
+<p>以下仅演示 Arch Linux 中安装 CUDA 的方法，因为 Arch Linux 官方源中就自带 <code>nvidia</code> 驱动和 <code>cuda</code> 包，而且开箱即用，其他发行版请自行如法炮制。</p>
+<p>Wendous 用户可能在安装完后遇到“找不到 cuxxx.dll”报错，说明你需要拷贝 CUDA 安装目录下的所有 DLL 到 <code>C:\\Windows\\System32</code>。</p>
+<p>WSL 用户要注意，WSL 环境和真正的 Linux 相差甚远。很多 Linux 下的教程，你会发现在 WSL 里复刻不出来。这是 WSL 的 bug，应该汇报去让微软统一修复，而不是让教程的作者零零散散一个个代它擦屁股。建议直接在 Wendous 本地安装 CUDA 反而比伺候 WSL 随机拉的 bug 省力。</p>
+<p>Ubuntu 用户可能考虑卸载 Ubuntu，因为 Ubuntu 源中的版本永不更新。想要安装新出的软件都非常困难，基本只能安装到五六年前的古董软件，要么只能从网上下 deb 包，和 Wendous 一个软耸样。所有官方 apt 源中包的版本从 Ubuntu 发布那一天就定死了，永远不会更新了。这是为了起夜级服务器安全稳定的需要，对于个人电脑而言却只是白白阻碍我们学习，Arch Linux 这样的滚动更新的发行版才更适合个人桌面用户。</p>
+<h3 id="安装-nvidia-驱动"><a class="header" href="#安装-nvidia-驱动">安装 NVIDIA 驱动</a></h3>
+<p>首先确保你安装了 NVIDIA 最新驱动：</p>
+<pre><code class="language-bash">pacman -S nvidia
+</code></pre>
+<p>运行以下命令，确认显卡驱动正常工作：</p>
+<pre><code class="language-bash">nvidia-smi
+</code></pre>
+<p>应该能得到：</p>
+<pre><code>Mon Aug 26 14:09:15 2024
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 555.58.02              Driver Version: 555.58.02      CUDA Version: 12.5     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 4070 ...    Off |   00000000:01:00.0  On |                  N/A |
+|  0%   30C    P8             17W /  285W |     576MiB /  16376MiB |     41%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A       583      G   /usr/lib/Xorg                                 370MiB |
+|    0   N/A  N/A       740      G   xfwm4                                           4MiB |
+|    0   N/A  N/A       783      G   /usr/lib/firefox/firefox                      133MiB |
+|    0   N/A  N/A      4435      G   obs                                            37MiB |
++-----------------------------------------------------------------------------------------+
+</code></pre>
+<p>如果不行，那就重启。</p>
+<h3 id="安装-cuda"><a class="header" href="#安装-cuda">安装 CUDA</a></h3>
+<p>然后安装 CUDA Toolkit（即 nvcc 编译器）：</p>
+<pre><code class="language-bash">pacman -S cuda
+</code></pre>
+<p>打开 <code>.bashrc</code>（如果你是 zsh 用户就打开 <code>.zshrc</code>），在末尾添加两行：</p>
+<pre><code class="language-bash">export PATH="/opt/cuda/bin:$PATH"    # 这是默认的 cuda 安装位置
+export NVCC_CCBIN="/usr/bin/g++-13"  # Arch Linux 用户才需要这一行
+</code></pre>
+<p>然后重启 <code>bash</code>，或者执行以下命令重载环境变量：</p>
+<pre><code class="language-bash">source .bashrc
+</code></pre>
+<p>运行以下命令测试 CUDA 编译器是否可用：</p>
+<pre><code class="language-bash">nvcc --version
+</code></pre>
+<p>应该能得到：</p>
+<pre><code>nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2024 NVIDIA Corporation
+Built on Thu_Jun__6_02:18:23_PDT_2024
+Cuda compilation tools, release 12.5, V12.5.82
+Build cuda_12.5.r12.5/compiler.34385749_0
+</code></pre>
+<h3 id="常见问题解答"><a class="header" href="#常见问题解答">常见问题解答</a></h3>
+<p>CMake 报错找不到 CUDA？添加环境变量：</p>
+<pre><code class="language-bash">export PATH="/opt/cuda/bin:$PATH"    # 这里换成你的 cuda 安装位置
+export NVCC_CCBIN="/usr/bin/g++-13"  # 只有 Arch Linux 需要这一行
+</code></pre>
+<p>IDE 使用了 Clangd 静态检查插件，报错不认识 <code>-forward-unknown-to-host-compiler</code> 选项？</p>
+<p>创建文件 <code>~/.config/clangd/config.yaml</code>：</p>
+<pre><code class="language-yaml">CompileFlags:
+  Add:     # 要额外添加到 Clang 的 NVCC 没有的参数
+    - --no-cuda-version-check
+  Remove:  # 移除 Clang 不认识的 NVCC 参数
+    - -forward-unknown-to-host-compiler
+    - --expt-*
+    - --generate-code=*
+    - -arch=*
+    - -rdc=*
+</code></pre>
+<h3 id="建议开启的-cmake-选项"><a class="header" href="#建议开启的-cmake-选项">建议开启的 CMake 选项</a></h3>
+<h4 id="cuda-编译器路径"><a class="header" href="#cuda-编译器路径">CUDA 编译器路径</a></h4>
+<p>如果你无法搞定环境变量，也可以通过 <code>CMAKE_CUDA_COMPILER</code> 直接设置 <code>nvcc</code> 编译器的路径：</p>
+<pre><code class="language-cmake">set(CMAKE_CUDA_COMPILER "/opt/cuda/bin/nvcc")  # 这里换成你的 cuda 安装位置
+</code></pre>
+<p>不建议这样写，因为会让使用你项目的人也被迫把 CUDA 安装到这个路径去。</p>
+<p>建议是把你的 <code>nvcc</code> 安装好后，通过 <code>PATH</code> 环境变量，<code>cmake</code> 就能找到了，不需要设置这个变量。</p>
+<h4 id="cuda-c-版本"><a class="header" href="#cuda-c-版本">CUDA C++ 版本</a></h4>
+<p>CUDA 是一种基于 C++ 的领域特定语言，CUDA C++ 的版本和正规 C++ 一一对应。</p>
+<p>目前最新的是 CUDA C++20，可以完全使用 C++20 特性的同时书写 CUDA 代码。</p>
+<ul>
+<li>在 <code>__host__</code> 函数（未经特殊修饰的函数默认就是此类，在 CPU 端执行）中，CUDA 和普通 C++ 没有区别，任何普通 C++ 代码，都可以用 CUDA 编译器编译。</li>
+<li>在 <code>__device__</code> 函数（CUDA kernel，在 GPU 端执行）中，能使用的函数和类就有一定限制了：
+<ul>
+<li>例如你不能在 <code>__device__</code> 函数里使用仅限 <code>__host__</code> 用的 <code>std::cout</code>（但 <code>printf</code> 可以，因为 CUDA 团队为了方便用户调试，为你做了 <code>printf</code> 的 <code>__device__</code> 版特化）。</li>
+<li><code>__device__</code> 中不能使用绝大多数非 <code>constexpr</code> 的 STL 容器，例如 <code>std::map</code> 等，但是在 <code>__host__</code> 侧还是可以用的！</li>
+<li>所有的 <code>constexpr</code> 函数也是可以使用的，例如各种 C++ 风格的数学函数如 <code>std::max</code>，<code>std::sin</code>，这些函数都是 <code>constexpr</code> 的，在 <code>__host__</code> 和 <code>__device__</code> 都能用。</li>
+<li>如果一个容器的成员全是 <code>constexpr</code> 的，那么他可以在 <code>__device__</code> 函数中使用。例如 <code>std::tuple</code>、<code>std::array</code> 等等，因为不涉及 I/O 和内存分配，都是可以在 <code>__device__</code> 中使用的。</li>
+<li>例如 C++20 增加了 constexpr-new 的支持，让 <code>std::vector</code> 和 <code>std::string</code> 变成了 <code>constexpr</code> 的容器，因此可以在 <code>__device__</code> 中使用 <code>std::vector</code>（会用到 <code>__device__</code> 版本的 <code>malloc</code> 函数，这是 CUDA 的一大特色：你可以在 kernel 内部用 <code>malloc</code> 动态分配设备内存，并且从 CUDA C++20 开始 <code>new</code> 也可以了）。</li>
+<li><code>std::variant</code> 现在也是 <code>constexpr</code> 的容器，也可以在 <code>__device__</code> 函数中使用了。</li>
+<li>异常目前还不是 <code>constexpr</code> 的，因此无法在 <code>__device__</code> 函数中使用 <code>try/catch/throw</code> 系列关键字。</li>
+<li>总之，随着，我们可以期待越来越多纯计算的函数和容器能在 CUDA kernel（<code>__device__</code> 环境）中使用。</li>
+</ul>
+</li>
+</ul>
+<p>正如 <code>CMAKE_CXX_STANDARD</code> 设置了 <code>.cpp</code> 文件所用的 C++ 版本，也可以用 <code>CMAKE_CUDA_STANDARD</code> 设置 <code>.cu</code> 文件所用的 CUDA C++ 版本。</p>
+<pre><code class="language-cmake">set(CMAKE_CXX_STANDARD 20)       # .cpp 文件采用的 C++ 版本是 C++20
+set(CMAKE_CUDA_STANDARD 20)      # .cu 文件采用的 CUDA C++ 版本是 C++20
+</code></pre>
+<h3 id="赋能现代-c-语法糖"><a class="header" href="#赋能现代-c-语法糖">赋能现代 C++ 语法糖</a></h3>
+<pre><code class="language-cmake">set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr --expt-extended-lambda")
+</code></pre>
+<ul>
+<li><code>--expt-relaxed-constexpr</code>: 让所有 <code>constexpr</code> 函数默认自动带有 <code>__host__ __device__</code></li>
+<li><code>--expt-extended-lambda</code>: 允许为 lambda 表达式指定 <code>__host__</code> 或 <code>__device__</code></li>
+</ul>
+<h4 id="显卡架构版本号"><a class="header" href="#显卡架构版本号">显卡架构版本号</a></h4>
+<p>不同的显卡有不同的“架构版本号”，架构版本号必须与你的硬件匹配才能最佳状态运行，可以略低，但将不能发挥完整性能。</p>
+<pre><code class="language-cmake">set(CMAKE_CUDA_ARCHITECTURES 86)      # 表示针对 RTX 30xx 系列（Ampere 架构）生成
+set(CMAKE_CUDA_ARCHITECTURES native)  # 如果 CMake 版本高于 3.24，该变量可以设为 "native"，让 CMake 自动检测当前显卡的架构版本号
+</code></pre>
+<p>架构版本号：例如 75 表示 RTX 20xx 系列（Turing 架构）；86 表示 RTX 30xx 系列（Ampere 架构）；89 表示 RTX 40xx 系列（Ada 架构）等。</p>
+<p>完整的架构版本号列表可以在 <a href="https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html#virtual-architecture-feature-list">CUDA 文档</a> 中找到。</p>
+<p>也可以运行如下命令（如果有的话）查询当前显卡的架构版本号：</p>
+<pre><code class="language-bash">__nvcc_device_query
+</code></pre>
+<h4 id="设备函数分离定义"><a class="header" href="#设备函数分离定义">设备函数分离定义</a></h4>
+<p>默认只有 <code>__host__</code> 函数可分离声明和定义。如果你需要分离 <code>__device__</code> 函数的声明和定义，就要开启这个选项：</p>
+<pre><code class="language-cmake">set(CMAKE_CUDA_SEPARABLE_COMPILATION ON)  # 可选
+</code></pre>
+<h4 id="创建-cuda-项目"><a class="header" href="#创建-cuda-项目">创建 CUDA 项目</a></h4>
+<p>完成以上选项的设定后，使用 <code>project</code> 命令正式创建 CUDA C++ 项目。</p>
+<pre><code class="language-cmake">project(这里填你的项目名 LANGUAGES CXX CUDA)
+</code></pre>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
+</div>
+<div>
+<p>我见过有人照抄代码把“这里填你的项目名”抄进去的。</p>
+</div>
+</div>
+<p>如需在特定条件下才开启 CUDA，可以用 <code>enable_language()</code> 命令延迟 CUDA 环境在 CMake 中的初始化：</p>
+<pre><code class="language-cmake">project(这里填你的项目名 LANGUAGES CXX)
+
+...
+
+option(ENABLE_CUDA "Enable CUDA" ON)
+
+if (ENABLE_CUDA)
+    enable_language(CUDA)
+endif()
+</code></pre>
+<h4 id="cmake-配置总结"><a class="header" href="#cmake-配置总结">CMake 配置总结</a></h4>
+<p>注意！以上这些选项设定都必须在 <code>project()</code> 命令之前！否则设定了也无效。</p>
+<p>因为实际上是 <code>project()</code> 命令会检测这些选项，用这些选项来找到编译器和 CUDA 版本等信息。</p>
+<p>总之，我的选项是：</p>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.12)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CUDA_STANDARD 20)
+set(CMAKE_CUDA_SEPARABLE_COMPILATION OFF)
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr --expt-extended-lambda")
+if (NOT DEFINED CMAKE_CUDA_ARCHITECTURES AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
+    set(CMAKE_CUDA_ARCHITECTURES native)
+endif()
+
+project(你的项目名 LANGUAGES CXX CUDA)
+
+file(GLOB sources "*.cpp" "*.cu")
+add_executable(${PROJECT_NAME} ${sources})
+target_link_libraries(${PROJECT_NAME} PRIVATE cusparse cublas)
+</code></pre>
+<h2 id="开始编写-cuda"><a class="header" href="#开始编写-cuda">开始编写 CUDA</a></h2>
+<p>CUDA 有两套 API：</p>
+<ul>
+<li><a href="https://docs.nvidia.com/cuda/cuda-runtime-api/index.html">CUDA runtime API</a>：更加简单，兼顾性能，无需手动编译 kernel，都替你包办好了，但不够灵活。</li>
+<li><a href="https://docs.nvidia.com/cuda/cuda-driver-api/index.html">CUDA driver API</a>：更加灵活多变，但操作繁琐，需要手动编译 kernel，适合有特殊需求的用户。</li>
+</ul>
+<p>他们都提供了大量用于管理 CUDA 资源和内存的函数。</p>
+<p>我们要学习的是比较易懂、用的也最多的 CUDA runtime API。</p>
+<p>使用 <code>&lt;cuda_runtime.h&gt;</code> 头文件即可导入所有 CUDA runtime API 的函数和类型：</p>
+<pre><code class="language-cpp">#include &lt;cuda_runtime.h&gt;
+</code></pre>
+<div id="admonition-tip" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-title">
+<div class="admonition-title">
+<div id="admonition-tip-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip"></a>
+</div>
+<div>
+<p>虽然 CUDA 基于 C++（而不是 C 语言），支持所有 C++ 语言特性。但其 CUDA runtime API 依然是仿 C 风格的接口，可能是照顾了部分从 C 语言转过来的土木老哥，也可能是为了方便被第三方二次封装。</p>
+</div>
+</div>
+<p>TODO: 更多话题</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="llvm_intro.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="cmake_tutor.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="llvm_intro.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="cmake_tutor.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="theme/custom.js"></script>
+
+
+    </div>
+    </body>
+</html>

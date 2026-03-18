@@ -1,0 +1,311 @@
+<!DOCTYPE HTML>
+<html lang="zh" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>C++ 多线程编程 - 小彭大典</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="小彭大典是一本关于现代 C++ 编程的权威指南，它涵盖了从基础知识到高级技巧的内容，适合初学者和有经验的程序员阅读。">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/custom.css">
+        <link rel="stylesheet" href="theme/mdbook-admonish.css">
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">小彭大典</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook/edit/main/src/threading.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="c-多线程编程未完工"><a class="header" href="#c-多线程编程未完工">C++ 多线程编程（未完工）</a></h1>
+<h2 id="创建线程"><a class="header" href="#创建线程">创建线程</a></h2>
+<p>TODO</p>
+<h2 id="为什么数据竞争"><a class="header" href="#为什么数据竞争">为什么数据竞争</a></h2>
+<pre><code class="language-cpp">if (table.count("小彭老师")) {
+    return table.at("小彭老师");
+} else {
+    return 0;
+}
+</code></pre>
+<pre><code class="language-cpp">auto it = table.find("小彭老师");
+if (it != table.end()) {
+    return it-&gt;second;
+} else {
+    return 0;
+}
+</code></pre>
+<h2 id="小彭老师对话一则"><a class="header" href="#小彭老师对话一则">小彭老师对话一则</a></h2>
+<p>关于 SharedPtr 的原子安全实现。</p>
+<ul>
+<li>对话地址：https://github.com/parallel101/stl1weekend/issues/4</li>
+<li>代码地址：https://github.com/parallel101/stl1weekend/blob/main/SharedPtr.hpp</li>
+</ul>
+<p>sharedptr引用计数减被封装成如下的函数</p>
+<pre><code class="language-c++">void _M_decref() noexcept {
+        if (_M_refcnt.fetch_sub(1, std::memory_order_relaxed) == 1) {
+            delete this;
+        }
+    }
+</code></pre>
+<p>该if块先判断原始引用计数是否等于1，如果为真则进行delete。然而判断和delete是两个操作，并不是一个原子操作。是否存在这样一种情况：判断条件成立，但在delete前有其它线程给引用计数+1？此时进行delete就出错了吧</p>
+<p><strong>小彭老师</strong></p>
+<p>没有问题的，因为fetch_sub返回1，实际上说明引用计数已经是0了，fetch_sub返回的是“旧值”，相当于后置i--，知道吧。如果已经为0，那就没有任何其他人持有该指针，我是独占的，那随便delete。</p>
+<p>这样吧，我也听不懂你在讲什么，你来写一份你认为会产生问题的代码，让我分析。</p>
+<p><strong>同学</strong></p>
+<p>我设想了如下的代码：</p>
+<pre><code class="language-cpp">shared_ptr&lt;int&gt; a = make_shared&lt;int&gt;();
+void fun1() {
+  a = nullptr;  // 析构a
+}
+void func2() {
+  auto b = a; // 拷贝a到b
+}
+
+int main(){
+  auto t1=std::thread(func1);
+  auto t2=std::thread(func2);
+  t1.join();
+  t2.join();
+  return 0;
+}
+</code></pre>
+<p>在这段代码中，线程1析构a，而线程2拷贝a到b。由于多线程的缘故，我认为会出现以下的情况，线程1执行判断时</p>
+<pre><code class="language-cpp">if (_M_refcnt.fetch_sub(1, std::memory_order_relaxed) == 1)
+</code></pre>
+<p>由于func2刚进入尚未执行拷贝，此时引用计数等于1还不是2，所以该判断为true。于是，线程1准备执行<code>delete this</code>将_SpCounter释放，就在这时线程2将func2彻底执行了，此时引用计数又从0变为了1，然而线程1并不知道这个变化，它仍然按照原本的轨迹去执行delete this。所以我认为这就出错了，而出错的原因是</p>
+<pre><code class="language-cpp">void _M_decref() noexcept {
+        if (_M_refcnt.fetch_sub(1, std::memory_order_relaxed) == 1) {
+            delete this;
+        }
+    }
+</code></pre>
+<p>此处的判断和delete是两个操作，而非一个原子操作。</p>
+<p>很抱歉之前未能及时回复</p>
+<p><strong>小彭老师</strong></p>
+<p>是的，这段代码有未定义行为！
+然而 C++ 标准只要求了：</p>
+<ul>
+<li>析构+拷贝 同时发生，是未定义行为。</li>
+<li>拷贝+拷贝 同时发生，是安全的。
+我的原子变量已经保证了 拷贝+拷贝 的安全，符合 C++ 标准的要求。
+析构+拷贝 的情况，C++ 标准就并不要求安全，所以我的 shared_ptr 也没有责任去保证这种情况下的安全。</li>
+</ul>
+<p>比如标准不要求 vector 的 clear 和 push_back 同时调用是线程安全的，那么我就不需要把 vector 实现为安全的。
+如果标准规定了哪两个函数同时调用是安全的，我再去做。
+比如标准就规定了 size 和 data 两个函数同时调用是线程安全的，我只需要符合这个就可以。
+标准都没有规定必须安全的情况，我的容器如果产生未定义行为，我不负责任。</p>
+<p>例如，C++ 标准对 <code>shared_ptr&lt;T&gt;</code> 的要求：
+析构+拷贝 同时发生，是未定义行为。
+拷贝+拷贝 同时发生，是安全的。
+C++ 标准对 <code>atomic&lt;shared_ptr&lt;T&gt;&gt;</code> 的要求：
+析构+拷贝 同时发生，是安全的。
+拷贝+拷贝 同时发生，是安全的。
+所以，只有当我是在实现atomic_shared_ptr时，才需要考虑你说的这种情况，而我现在实现的是shared_ptr，不需要考虑 析构+拷贝 的安全。</p>
+<p>为什么拷贝+拷贝是安全的？我怎么没看到cppreference说？这很复杂，是另一句话里透露的通用规则，适用于所有容器，包括shared_ptr、unique_ptr、vector等全部的容器：
+两个const成员函数，同时发生，没有未定义行为。
+一个非const成员函数+一个const成员函数，同时发生，是未定义行为。
+这句话自动适用于所有的容器了，所以你看到shared_ptr里没有说，但是我知道他是在另一个关于线程安全的页面上。</p>
+<p>那么很明显，拷贝构造函数<code>shared_ptr(shared_ptr const &amp;that)</code>是const的（对于被拷贝的that），而析构函数都是非const的，所以如果没有特别说明，一个容器同时调用拷贝+析构是未定义行为。而atomic_shared_ptr就属于特别说明了，所以他特别地同时访问const和非const函数是安全的。</p>
+<p>完整的多线程安全规则表：
+读+读=安全
+读+写=未定义行为
+写+写=未定义行为</p>
+<p>所以实际上sharedptr所谓的“线程安全”，只不过是拷贝+拷贝这一情况的安全和拷贝+析构不同<code>shared_ptr</code>实例，同一个<code>shared_ptr</code>的并发非const访问是没保证的，<code>shared_ptr&lt;T&gt;</code>指向的那个<code>T</code>也是不保证的（由<code>T</code>的实现者“你”来保证）。
+<code>shared_ptr</code>不是有三层吗？通俗的说就是他只需要保证中间这层控制块的线程安全性，不保证<code>shared_ptr</code>对象和<code>T</code>对象的安全性。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="unicode.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="test_and_safe.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="unicode.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="test_and_safe.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="theme/custom.js"></script>
+
+
+    </div>
+    </body>
+</html>

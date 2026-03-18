@@ -29,14 +29,7 @@ footerHtml = ` `;
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'networkidle2' });
     await page.evaluate(async () => {
-        var header = document.getElementById('section-章节列表');
-        if (header) {
-            header.parentNode.removeChild(header);
-        }
-        var toc = document.querySelector('h1.print-page-toc-title');
-        if (toc) {
-            toc.parentNode.removeChild(toc);
-        }
+        // mdBook print page: no MkDocs-specific cleanup needed
     });
     await new Promise(r => setTimeout(r, 2000));
     // sleep for a while to ensure all content is loaded

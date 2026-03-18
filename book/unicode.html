@@ -1,0 +1,3504 @@
+<!DOCTYPE HTML>
+<html lang="zh" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>字符编码那些事 - 小彭大典</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="小彭大典是一本关于现代 C++ 编程的权威指南，它涵盖了从基础知识到高级技巧的内容，适合初学者和有经验的程序员阅读。">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/custom.css">
+        <link rel="stylesheet" href="theme/mdbook-admonish.css">
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">小彭大典</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook/edit/main/src/unicode.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="字符编码那些事"><a class="header" href="#字符编码那些事">字符编码那些事</a></h1>
+<h2 id="字符集"><a class="header" href="#字符集">字符集</a></h2>
+<p>计算机不能直接存储字符，而是用数字来代替，这就是字符集，为每个字符指定一个数字。</p>
+<h3 id="ascii"><a class="header" href="#ascii">ASCII</a></h3>
+<p>ASCII 为英文字母、阿拉伯数组、标点符号等 128 个字符，每个都用一个 0 到 127 范围内的数字对应。</p>
+<p>如果你想要表示一个字符，就在这个表里寻找到相应的数字编号，然后存这个编号即可。</p>
+<p><img src="img/ascii.png" alt="" /></p>
+<p>例如下面的一串数字：</p>
+<pre><code class="language-txt">80 101 110 103
+</code></pre>
+<p>在 ASCII 表中查找，发现这些数字分别对应 <code>P</code>、<code>e</code>、<code>n</code>、<code>g</code> 四个字母，连起来就还原得到了原本的字符串“Peng”。</p>
+<h3 id="latin-1"><a class="header" href="#latin-1">Latin-1</a></h3>
+<p>Latin-1 扩充了 ASCII 字符集，保持 ASCII 原有 0 到 127 的部分映射不变，额外追加了 128 到 255 的映射关系。因此也被称为 EASCII（扩展 ASCII）。</p>
+<p><img src="img/latin1.svg" alt="" /></p>
+<h3 id="unicode"><a class="header" href="#unicode">Unicode</a></h3>
+<p>Unicode 字符集为全世界的所有字符都对应了一个整数。</p>
+<div class="table-wrapper"><table><thead><tr><th>字符</th><th>编号</th></tr></thead><tbody>
+<tr><td>我</td><td>25105</td></tr>
+<tr><td>戒</td><td>25106</td></tr>
+<tr><td>戓</td><td>25107</td></tr>
+<tr><td>戔</td><td>25108</td></tr>
+<tr><td>戕</td><td>25109</td></tr>
+<tr><td>或</td><td>25110</td></tr>
+<tr><td>戗</td><td>25111</td></tr>
+<tr><td>战</td><td>25112</td></tr>
+<tr><td>戙</td><td>25113</td></tr>
+<tr><td>戚</td><td>25114</td></tr>
+</tbody></table>
+</div>
+<p>出于历史兼容性考虑，Unicode 在 0 到 256 区间内的映射和 ASCII、Latin-1 是完全相同的。</p>
+<div class="table-wrapper"><table><thead><tr><th>字符</th><th>编号</th></tr></thead><tbody>
+<tr><td>P</td><td>80</td></tr>
+<tr><td>e</td><td>101</td></tr>
+<tr><td>n</td><td>110</td></tr>
+<tr><td>g</td><td>103</td></tr>
+</tbody></table>
+</div>
+<p>Unicode 经过了许多版本的发展，早期的 Unicode 只收录了 65536 (0x10000) 个字符，后来扩充到了 1114112 (0x110000) 个字符。</p>
+<p>总之，现在 Unicode 字符映射的整数范围是 0x0 到 0x10FFFF。</p>
+<div id="admonition-tip" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-title">
+<div class="admonition-title">
+<div id="admonition-tip-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip"></a>
+</div>
+<div>
+<p>虽然占用了 1114112 这多格码点空间，不过其中很多都是空号，留待未来扩充使用。</p>
+</div>
+</div>
+<p>Unicode 字符映射表可以在网上找到：</p>
+<ul>
+<li>https://symbl.cc/en/unicode-table/</li>
+<li>https://www.compart.com/en/unicode/</li>
+</ul>
+<h3 id="总结"><a class="header" href="#总结">总结</a></h3>
+<ul>
+<li>字符集: 从字符到整数的一一映射。</li>
+<li>ASCII: 只收录了英文字母、阿拉伯数字、标点符号的字符集。</li>
+<li>Latin-1: 在 ASCII 基础上追加了注音字母，满足欧洲用户需要。</li>
+<li>Unicode: 收录了全世界所有文字和符号的字符集。</li>
+</ul>
+<p>计算机存储字符时，实际上是存储了那个对应的整数。</p>
+<p>这些整数就被称为 <strong>码点 (code point)</strong>，每个字符对应一个码点。</p>
+<p>不过，程序员通常喜欢用十六进制书写数字：</p>
+<div class="table-wrapper"><table><thead><tr><th>字符</th><th>编号</th></tr></thead><tbody>
+<tr><td>我</td><td>0x6211</td></tr>
+<tr><td>戒</td><td>0x6212</td></tr>
+<tr><td>戓</td><td>0x6213</td></tr>
+<tr><td>戔</td><td>0x6214</td></tr>
+<tr><td>戕</td><td>0x6215</td></tr>
+<tr><td>或</td><td>0x6216</td></tr>
+<tr><td>戗</td><td>0x6217</td></tr>
+<tr><td>战</td><td>0x6218</td></tr>
+<tr><td>戙</td><td>0x6219</td></tr>
+<tr><td>戚</td><td>0x621A</td></tr>
+</tbody></table>
+</div>
+<p>例如“我”这个字，在 Unicode 表中编号为 0x6211。于是当计算机需要表示“我”这个字符时，就用 0x6211 这个整数代替。</p>
+<p>如果要表示多个字符，那就用一个整数的数组吧！</p>
+<p>例如当计算机要处理“我爱𰻞𰻞面!”这段文字，就可以用：</p>
+<pre><code>0x6211 0x7231 0x30EDE 0x30EDE 0x9762 0x21
+</code></pre>
+<p>这一串数字代替。</p>
+<div id="admonition-tip-1" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-1-title">
+<div class="admonition-title">
+<div id="admonition-tip-1-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-1"></a>
+</div>
+<div>
+<p>如果你这里看到的是“我爱口口面!”说明你的字体不支持“biáng”这个字。当浏览器遇到当前字体不支持的 Unicode 字符时，就会替换为方块。建议安装支持中文字符较多的 “Noto Sans CJK SC” 字体，也可以安装支持一切 Unicode 字符的 “UniFonts”。</p>
+</div>
+</div>
+<pre><code class="language-bash">sudo apt-get install -y fonts-noto-cjk
+</code></pre>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
+</div>
+<div>
+<p>“𰻞(biáng)𰻞(biáng)面”是流行于中国陕西关中地区的一种知名传统风味面食，属于扯面，通过揉、抻、甩、扯等步骤制作，面宽而厚，犹如“裤腰带”，口感劲道，食用前加入各色臊子或油泼辣子。但是，小彭老师其实并没有吃过，只是因为稀有字体看起来比较好玩。</p>
+</div>
+</div>
+<h2 id="字符编码"><a class="header" href="#字符编码">字符编码</a></h2>
+<p>Unicode 只是指定了整数，没有规定整数如何在内存中存在。</p>
+<ul>
+<li>字符编码: 将字符的整数编号序列化为计算机可直接存储的一个或多个实际存在的整数类型。</li>
+</ul>
+<p>Unicode 字符可以选用以下这些字符编码来序列化：</p>
+<ul>
+<li>UTF-32: 每个 Unicode 字符用 1 个 <code>uint32_t</code> 整数存储。</li>
+<li>UTF-16: 每个 Unicode 字符用 1 至 2 个 <code>uint16_t</code> 整数存储。</li>
+<li>UTF-8: 每个 Unicode 字符用 1 至 4 个 <code>uint8_t</code> 整数存储。</li>
+</ul>
+<p>翻译出来的这些小整数叫 <strong>码位 (code unit)</strong>。例如对于 UTF-8 而言，每个 <code>uint8_t</code> 就是他的码位。</p>
+<h3 id="utf-32"><a class="header" href="#utf-32">UTF-32</a></h3>
+<p>Unicode 字符映射的整数范围是 0x0 到 0x10FFFF。</p>
+<p>最大值 0x10FFFF 有 21 个二进制位，C 语言中 <code>uint32_t</code> 能容纳 32 个二进制位，所以最简单的方法是直接用 <code>uint32_t</code> 数组来一个个容纳 Unicode 字符码点。虽然浪费了 11 位，但至少所有 Unicode 字符都能安全容纳。</p>
+<p>例如当计算机要存储“我爱𰻞𰻞面!”这段文字，就可以用：</p>
+<pre><code class="language-cpp">std::vector&lt;uint32_t&gt; s = {
+    0x00006211, // 我
+    0x00007231, // 爱
+    0x00030EDE, // 𰻞
+    0x00030EDE, // 𰻞
+    0x00009762, // 面
+    0x00000021, // !
+};
+</code></pre>
+<p>这个数组表示。</p>
+<p>UTF-32 中，一个码点固定对应一个码位，所以说 UTF-32 是<strong>定长编码</strong>。定长编码的优点是：</p>
+<ul>
+<li>数组的长度，就是字符串中实际字符的个数。</li>
+<li>要取出单个字符，可以直接用数组的索引操作。</li>
+<li>无论对数组如何切片，都不会把一个独立的字符破坏。</li>
+<li>反转数组，就可以把字符串反转，不会产生破坏字符的问题。</li>
+</ul>
+<p>缺点是：</p>
+<ul>
+<li>浪费存储空间。</li>
+</ul>
+<p>定长编码很方便，我们推荐在计算机内存中，统一采用 UTF-32 形式处理文字。</p>
+<div id="admonition-tip-2" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-2-title">
+<div class="admonition-title">
+<div id="admonition-tip-2-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-2"></a>
+</div>
+<div>
+<p>UTF-32 也被称为 UCS-4，他俩是同义词。</p>
+</div>
+</div>
+<h3 id="utf-8"><a class="header" href="#utf-8">UTF-8</a></h3>
+<p>UTF-32 虽然方便了文字处理，然而，却浪费了大量的存储空间，不利于文字存储！一个字符，无论他是常用还是不常用，都要霸占 4 个字节的空间。</p>
+<p>Unicode 编码字符时，特意把常用的字符靠前排列了。</p>
+<p>世界上常用语言文字都被刻意编码在了 0 到 0xFFFF 区间内，超过 0x10000 的基本都是不常用的字符，例如甲骨文、埃及象形文字、Emoji 等，很多都是已经无人使用的古代文字和生僻字，例如“𰻞”。仅仅是为了这些偶尔使用的罕见文字，就要求所有文字都用同样的 4 字节宽度存储，实在是有点浪费。</p>
+<p>在 0 到 0xFFFF 区间内，同样有按照常用度排序：</p>
+<ul>
+<li>0 到 0x7F 是（欧美用户）最常用的英文字母、阿拉伯数字、半角标点。</li>
+<li>0x80 到 0x7FF 是表音文字区，常用的注音字母、拉丁字母、希腊字母、西里尔字母、希伯来字母等。</li>
+<li>0x800 到 0xFFFF 是表意文字，简繁中文、日文、韩文、泰文、马来文、阿拉伯文等。</li>
+<li>0x10000 到 0x10FFFF 是不常用的稀有字符，例如甲骨文、埃及象形文字、Emoji 等。</li>
+</ul>
+<p>UTF-8 就是为了解决压缩问题而诞生的。</p>
+<p>UTF-8 把一个码点序列化为一个或多个码位，一个码位用 1 至 4 个 <code>uint8_t</code> 整数表示。</p>
+<ul>
+<li>0 到 0x7F 范围内的字符，用 1 个字节表示。</li>
+<li>0x80 到 0x7FF 范围内的字符，用 2 个字节表示。</li>
+<li>0x800 到 0xFFFF 范围内的字符，用 3 个字节表示。</li>
+<li>0x10000 到 0x10FFFF 范围内的字符，用 4 个字节表示。</li>
+</ul>
+<p>序列化规则如下：</p>
+<h4 id="兼容-ascii"><a class="header" href="#兼容-ascii">兼容 ASCII</a></h4>
+<p>对于 0 到 0x7F 的字符，这个范围的字符需要 7 位存储。</p>
+<p>我们选择直接存储其值。</p>
+<p>例如 'P' 会被直接存储其 Unicode 值的 80（0x50）：</p>
+<pre><code class="language-txt">01010000
+</code></pre>
+<p>由于 Unicode 在 0 到 0x7F 范围内与 ASCII 表相同，而 UTF-8 又把 0 到 0x7F 的值直接存储，所以说 UTF-8 兼容 ASCII。这使得原本设计于处理 ASCII 的 C 语言函数，例如 strlen、strcat、sprintf 等，都可以直接无缝切换到 UTF-8。反之亦然，任何设计用于 UTF-8 的程序都可以完全接受 ASCII 格式的输入文本。</p>
+<div id="admonition-abstract" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-title">
+<div class="admonition-title">
+<div id="admonition-abstract-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract"></a>
+</div>
+<div>
+<p>但部分涉及字符长度的函数会有些许不兼容，例如 strlen 求出的长度会变成字节的数量而不是字符的数量了，例如 <code>strlen("我们")</code> 会得到 6 而不是 2，稍后讲解。</p>
+</div>
+</div>
+<h4 id="解码规则"><a class="header" href="#解码规则">解码规则</a></h4>
+<p>UTF-8 的构造就像一列小火车一样，不同范围内的码位会被编码成不同长度的列车，但他们都有一个车头。</p>
+<p>根据火车头的“等级”，我们可以推断出后面拉着几节车厢。</p>
+<p>火车头是什么等级由他的二进制前缀决定：</p>
+<ul>
+<li>如果是 <code>0</code> 开头，就说明是单独一台火车头，后面没有车厢了，这表示车头里面直接装着 0 到 0x7F 范围的普通 ASCII 字符。</li>
+<li>如果是 <code>110</code> 开头，就说明后面拖着一节车厢，里面装着 0x80 到 0x7FF 范围内的欧洲字符。</li>
+<li>如果是 <code>1110</code> 开头，就说明后面拖着两节车厢，里面装着 0x800 到 0xFFFF 范围内的世界常用字符。</li>
+<li>如果是 <code>11110</code> 开头，就说明后面拖着三节车厢，里面装着 0x10000 到 0x10FFFF 范围内的生僻字符。</li>
+<li>如果是 <code>10</code> 开头，就说明这是一节车厢，车厢不会单独出现，只会跟在火车头屁股后面。如果你看到一节单独的车厢在前面无头驾驶，就说明出错了。</li>
+</ul>
+<div id="admonition-note-1" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-1-title">
+<div class="admonition-title">
+<div id="admonition-note-1-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-1"></a>
+</div>
+<div>
+<p>小朋友用小号列车装，大朋友用大号列车装。</p>
+</div>
+</div>
+<p>例如下面这一串二进制：</p>
+<pre><code class="language-txt">11100110 10000010 10000001
+</code></pre>
+<p>首先，看到第一个字节，是 <code>1110</code> 开头的三级车头！说明后面还有两节车厢是属于他的。火车头中 4 位用于表示车头等级了，剩下还有 4 位用于装乘客。</p>
+<p>车厢也有固定的前缀，所有的车厢都必须是 <code>10</code> 开头的。去除这开头的 2 位，剩下的 6 位就是乘客。</p>
+<p>对于这种三级列车，4 + 6 + 6 总共 16 位二进制，刚好可以装得下 0xFFFF 内的乘客。</p>
+<pre><code class="language-txt">0110 000010 000001
+</code></pre>
+<p>编码时则是反过来。</p>
+<p>乘客需要被拆分成三片，例如对于“我”这个乘客，“我”的码点是 0x6211，转换成二进制是：</p>
+<pre><code class="language-txt">110001000010001
+</code></pre>
+<p>把乘客切分成高 4 位、中 6 位和低 6 位（不足时在前面补零）：</p>
+<pre><code class="language-txt">0110 001000 010001
+</code></pre>
+<p>加上 <code>1110</code>、<code>10</code> 和 <code>10</code> 前缀后，形成一列火车：</p>
+<pre><code class="language-txt">11100110 10001000 10010001
+</code></pre>
+<p>这样，我们就把“我”这个字符，编码成了三节列车，塞进字节流的网络隧道里了。</p>
+<p>总结：</p>
+<ul>
+<li>前缀是 0 的火车头：火车头直接载客 7 名。</li>
+<li>前缀是 10 的是车厢：车厢不会单独出现，只会跟在火车头屁股后面。</li>
+<li>前缀是 110 的火车头：火车头直接载客 5 名 + 1 节车厢载客 6 名 = 共 11 名。</li>
+<li>前缀是 1110 的火车头：火车头直接载客 4 名 + 2 节车厢各载客 6 名 = 共 16 名。</li>
+<li>前缀是 11110 的火车头：火车头直接载客 3 名 + 3 节车厢各载客 6 名 = 共 21 名。</li>
+</ul>
+<div id="admonition-note-2" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-2-title">
+<div class="admonition-title">
+<div id="admonition-note-2-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-2"></a>
+</div>
+<div>
+<p>高级车头装了防弹钢板，载客空间变少，只好匀到后面的车厢。</p>
+</div>
+</div>
+<h4 id="utf-8-的抗干扰能力"><a class="header" href="#utf-8-的抗干扰能力">UTF-8 的抗干扰能力</a></h4>
+<p>如果发现 <code>10</code> 开头的独立车厢，就说明出问题了，可能是火车被错误拦腰截断，也可能是字符串被错误地反转。因为 <code>10</code> 只可能是火车车厢，不可能出现在火车头部。此时解码器应产生一个报错，或者用错误字符“�”替换。</p>
+<pre><code class="language-txt">10000010 10000001
+</code></pre>
+<div id="admonition-tip-3" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-3-title">
+<div class="admonition-title">
+<div id="admonition-tip-3-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-3"></a>
+</div>
+<div>
+<p>在网络收发包时，如果你不妥善处理 TCP 粘包问题，就可能火车头进去了，火车尾巴还露在隧道外面，一段完整的列车被切断，导致 UTF-8 解读的时候出错。正确的做法是设立一个状态机来解码 UTF-8。C 语言的 <code>mbstate_t</code> 就是这种状态机，稍后讲解。</p>
+</div>
+</div>
+<p>除此之外，如果检测到一个三级火车头，却发现里面装着 0x394 (“Δ”)，这是一个用二级火车头就能装下的欧洲字符，却用了三级火车头装，说明装箱那边的人偷懒滥用资源了！这种情况下 UTF-8 解码器也要产生一个报错，因为 UTF-8 要保证编码的唯一性，0x394 是 0x7F 到 0x7FF 范围的，就应该用二级火车头装。</p>
+<p>以及，如果发现 <code>11111</code> 开头的五级火车头，也要报错，因为 UTF-8 最多只支持四级火车头。</p>
+<p>如果检测到一个四级火车头拆开后的字符范围超过了 0x10FFFF，这超出了 Unicode 的范围，也要产生一个报错。如果一个三级火车头拆开后发现字符范围处在保留区 0xD800 到 0xDFFF 内，这是 Unicode 承诺永不加入字符的区间（稍后讲解 UTF-16 时会解释为什么），也要报错。总之 Unicode 码点的合法范围是 0x0 到 0xD7FF，0xE000 到 0x10FFFF。</p>
+<p>总之，UTF-8 具有一定的冗余和自纠错能力，如果传输过程中出现差错，可能会爆出错误字符“�”。这个特殊字符是 Unicode 官方规定的，码点为 0xFFFD，出现他就意味着 UTF-8 解码失败了。</p>
+<h4 id="我爱𰻞𰻞面"><a class="header" href="#我爱𰻞𰻞面">“我爱𰻞𰻞面!”</a></h4>
+<p>例如当计算机要以 UTF-8 格式存储“我爱𰻞𰻞面!”这段文字：</p>
+<pre><code class="language-cpp">std::vector&lt;uint8_t&gt; s = {
+    0xE6, 0x88, 0x91, // 我，需要三级列车
+    0xE7, 0x88, 0xB1, // 爱，需要三级列车
+    0xF0, 0xB0, 0xAF, 0x9B, // 𰻞，需要四级列车
+    0xF0, 0xB0, 0xAF, 0x9B, // 𰻞，需要四级列车
+    0xE9, 0x9D, 0xA2, // 面，需要三级列车
+    0x21, // !，这是个 ASCII 范围的字符，直接用单个火车头装
+};
+</code></pre>
+<p>UTF-8 中，一个码点可能对应多个码位，所以说 UTF-8 是一种<strong>变长编码</strong>。变长编码的缺点是：</p>
+<ul>
+<li>数组的长度，不一定是字符串中实际字符的个数。因此，要取出单个字符，需要遍历数组，逐个解析码位。</li>
+<li>数组的单个元素索引，无法保证取出一个完整的字符。</li>
+<li>对数组的切片，可能会把一个独立的字符切坏。</li>
+<li>反转数组，不一定能把字符串的反转，因为可能不慎把一个字符的多个码位反转，导致字符破坏。</li>
+</ul>
+<p>优点是：</p>
+<ul>
+<li>节约存储空间。</li>
+</ul>
+<p>我们推荐只在网络通信、硬盘存储时，采用 UTF-8 形式存储文字。</p>
+<p>总结：<strong>UTF-8 适合存储，UTF-32 适合处理</strong>。</p>
+<p>我们建议计算机从硬盘或网络中读出 UTF-8 字符串后，立即将其转换为 UTF-32，以方便后续文字处理。当需要写入硬盘或网络时，再转换回 UTF-8，避免硬盘容量和网络带宽的浪费。</p>
+<p>计算机需要外码和内码两种：</p>
+<ul>
+<li>外码=硬盘中的文本=UTF-8</li>
+<li>内码=内存中的文本=UTF-32</li>
+</ul>
+<h3 id="utf-16"><a class="header" href="#utf-16">UTF-16</a></h3>
+<p>UTF-16 的策略是：既然大多数常用字符的码点都在 0x0 到 0xFFFF 内，用 <code>uint32_t</code> 来存储也太浪费了。他的方案如下：</p>
+<p>对于 0x0 到 0xFFFF 范围内的字符，就用一个 <code>uint16_t</code> 直接存。</p>
+<p>对于 0xFFFF 到 0x10FFFF 范围的稀有字符，反正不常见，就拆成两个 <code>uint16_t</code> 存。这个拆的方案很有讲究，如果只是普通的拆，由于解码时收到的是个没头没尾的字节序列，无法分辨这到底是两个 <code>uint16_t</code> 的稀有字符，还是一个 <code>uint16_t</code> 的普通字符。</p>
+<p>例如，我们把一个稀有字符“𰻞”，0x30EDE。拆成两个 <code>uint16_t</code>，得到 0x3 和 0x0EDE。如果直接存储这两个 <code>uint16_t</code>：</p>
+<pre><code class="language-txt">0x0003 0x0EDE
+</code></pre>
+<p>之后解码时，先读到 0x0003，还会以为他是单独的一个 <code>uint16_t</code>，表示 3 号字符“”。后面的 0x0EDE 就变成了一个单独的 0x0EDE，变成了 0x0EDE 号字符 “ໞ”。这样一来，“𰻞”就变成了两个毫不相干的字符，“ໞ”了。</p>
+<p>为了避免与普通字符产生歧义，两个 <code>uint16_t</code> 需要采用一种特殊的方式以示区分。让解码器一看到，就能确定这两个 <code>uint16_t</code> 需要组装成同一个字符。</p>
+<p>这就用到了一个“漏洞”：Unicode 并没有把码点分配的满满当当，或许是出于先见之明，在 0xD800 到 0xDFFF 之间预留了一大段空号：</p>
+<p><img src="img/ucs2range.png" alt="" /></p>
+<p>UTF-16 就是利用了这一段空间，他规定：0xD800 到 0xDFFF 之间的码点将永远不用来表示字符，而是作为<strong>代理对 (surrogate-pair)</strong>。其中  0xD800 到 0xDBFF 是<strong>高位代理 (high surrogate)</strong>，0xDC00 到 0xDFFF 是<strong>低位代理 (low surrogate)</strong>。高代理在前，低代理在后。</p>
+<p>一个超过 0xFFFF 的稀有字符，会被拆成两段，一段放在高位代理里，一段放在低位代理里，一前一后放入 <code>uint16_t</code> 序列中。</p>
+<div id="admonition-note-3" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-3-title">
+<div class="admonition-title">
+<div id="admonition-note-3-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-3"></a>
+</div>
+<div>
+<p>搭载超宽超限货物的车辆需要被拆分成两段再进入隧道。</p>
+</div>
+</div>
+<p>具体拆分方法如下：</p>
+<p>对于 0xFFFF 到 0x10FFFF 范围的码点，首先将其值减去 0x10000，变成一个范围 0x0 到 0xFFFFF 范围内的数字，这能保证他们只需 20 个二进制位即可表示。</p>
+<p>例如“𰻞”对应的码点 0x30EDE，减去后就变成 0x20EDE。</p>
+<p>然后，写出 0x20EDE 的二进制表示：</p>
+<pre><code class="language-txt">00100000111011011110
+</code></pre>
+<p>总共 20 位，我们将其拆成高低各 10 位：</p>
+<pre><code class="language-txt">0010000011 1011011110
+</code></pre>
+<p>各自写出相应的十六进制数：</p>
+<pre><code class="language-txt">0x083 0x2DE
+</code></pre>
+<p>因为最多只有 10 位，这两个数都会在 0 到 0x3FF 的范围内。</p>
+<p>而 0xD800 到 0xDBFF，和 0xDC00 到 0xDFFF 预留的空间，刚好可以分别容纳 0x400 个数！</p>
+<p>所以，我们将拆分出来的两个 10 位数，分别加上 0xD800 和 0xDC00：</p>
+<pre><code class="language-txt">0xD800+0x083=0xD883
+0xDC00+0x2DE=0xDFDE
+</code></pre>
+<p>这两个数，必定是 0xD800 到 0xDBFF，和 0xDC00 到 0xDFFF 范围内的数。而这两个范围都是 Unicode 委员会预留的代理对区间，绝对没有普通字符。所以，生成的两个代理对不会与普通字符产生歧义，可以放心放进 <code>uint16_t</code> 数组，解码器如果检测到代理对，就说明是两节车厢，可以放心连续读取两个 <code>uint16_t</code>。</p>
+<p>所以，<code>0xD883 0xDFDE</code> 就是“𰻞”用 UTF-16 编码后的结果。</p>
+<p>代理字符不是一个完整的字符，当解码器检测到一个 0xD800 到 0xDBFF 范围内的高代理时，就预示着还需要再读取一个低代理，才能拼接成一个稀有字符。</p>
+<p>如果接下来读到的不是 0xDC00 到 0xDFFF 范围的低代理字符，而是普通字符的话，那就说明出错了，可能是中间被人丢包了，需要报错或者用错误字符“�”顶替。</p>
+<p>另外，如果读到了一个单独存在的 0xD800 到 0xDFFF 范围内的低代理字符，那也说明出错了，因为代理字符只有成对出现才有意义，低代理字符不可能单独在开头出现。</p>
+<p>可见，UTF-16 和 UTF-8 一样，都是“小火车”式的变长编码，UTF-16 同样也有着类似于 UTF-8 的抗干扰机制。</p>
+<h3 id="字节序问题大小端之争"><a class="header" href="#字节序问题大小端之争">字节序问题，大小端之争</a></h3>
+<p>在计算机中，多字节的整数类型（如 <code>uint16_t</code> 和 <code>uint32_t</code>）需要被拆成多个字节来存储。拆开后的高位和低位按什么顺序存入内存？不同的硬件架构产生了争执：</p>
+<ul>
+<li>大端派 (bit endian)：低地址存放整数的高位，高地址存放整数的低位，也就是大数靠前！这样数值的高位和低位和人类的书写习惯一致。例如，0x12345678，在内存中就是：</li>
+</ul>
+<pre><code class="language-txt">0x12 0x34 0x56 0x78
+</code></pre>
+<ul>
+<li>小端派 (little endian)：低地址存放整数的低位，高地址存放整数的高位，也就是小数靠前！这样数值的高位和低位和计算机电路的计算习惯一致。例如，0x12345678，在内存中就是：</li>
+</ul>
+<pre><code class="language-txt">0x78 0x56 0x34 0x12
+</code></pre>
+<p>例如，Intel 的 x86 架构和 ARM 公司的 ARM 架构都是小端派，而 Motorola 公司的 68k 架构和 Sun 公司的 SPARC 架构都是大端派。</p>
+<div id="admonition-tip-4" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-4-title">
+<div class="admonition-title">
+<div id="admonition-tip-4-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-4"></a>
+</div>
+<div>
+<p>这其实是很无聊的争执，为人类的书写习惯改变计算机的设计毫无道理，毕竟世界上也有从右往左书写的文字和从上往下书写的文字，甚至有左右来回书写的文字……如果要伺候人类，你怎么不改成十进制呢？总之，我认为小端才是最适合计算机的，市面上大多数主流硬件都是小端架构。</p>
+</div>
+</div>
+<p>在网络通信时，发消息和收消息的可能是不同的架构，如果发消息的是小端架构，收消息的是大端架构，那么发出去的是 0x12345678，收到的就会变成 0x78563421 了。</p>
+<p>因此互联网一般规定，所有多字节的数据在网络包中统一采用大端。对于大端架构，他们什么都不需要做，对于小端架构，在发包前需要把自己的小端数据做字节序反转，变成大端的以后，再发送。之后的网络专题课中我们会详解这一块。</p>
+<div id="admonition-info" class="admonition admonish-info" role="note" aria-labelledby="admonition-info-title">
+<div class="admonition-title">
+<div id="admonition-info-title">
+<p>Info</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-info"></a>
+</div>
+<div>
+<p>基于字节码的虚拟机语言通常会规定一个字节序：像 Java 这种面向互联网语言，索性也规定了统一采用大端，无论 JVM 运行在大端机器还是小端机器上。这使得他与互联网通信比较方便，而在 x86 和 ARM 架构上，与本地只接受小端数据的 API，例如 OpenGL，沟通较为困难，需要做额外的字节序转换。而 C# 主打游戏业务（例如 Unity），需要考虑性能，所以规定全部采用小端。作为底层编程语言的 C++ 则是入乡随俗，你的硬件是什么端，他就是什么端，不主动做任何额外的转换。</p>
+</div>
+</div>
+<p>UTF-16 和 UTF-32 的码位都是多字节的，也会有大小端问题。例如，UTF-16 中的 <code>uint16_t</code> 序列：</p>
+<pre><code class="language-txt">0x1234 0x5678
+</code></pre>
+<p>在大端派的机器中，就是：</p>
+<pre><code class="language-txt">0x12 0x34 0x56 0x78
+</code></pre>
+<p>在小端派的机器中，就是：</p>
+<pre><code class="language-txt">0x34 0x12 0x78 0x56
+</code></pre>
+<p>这样一来，UTF-16 和 UTF-32 的字节流，在不同的机器上，可能会有不同的顺序。这给跨平台的文本处理带来了麻烦。</p>
+<p>所以当你需要把 UTF-16 存入硬盘和在网络发送时，还需要额外指明你用的是大端的 UTF-16 还是小端的 UTF-16。</p>
+<p>因此 UTF-16 和 UTF-32 进一步分裂为：</p>
+<ul>
+<li>UTF-16LE：小端的 UTF-16</li>
+<li>UTF-16BE：大端的 UTF-16</li>
+<li>UTF-32LE：小端的 UTF-32</li>
+<li>UTF-32BE：大端的 UTF-32</li>
+</ul>
+<p>如果只在内存的 <code>wchar_t</code> 中使用就不用区分，默认跟随当前机器的大小端。所以 UTF-16 和 UTF-32 通常只会出现在内存中用于快速处理和计算，很少用在存储和通信中。</p>
+<p>UTF-8 是基于单字节的码位，火车头的顺序也有严格规定，火车头总是在最前，根本不受字节序大小端影响，也就没有影响。</p>
+<p>由于压缩率低，又存在大小端字节序不同的问题。而互联网数据需要保证相同的大小端，在收发包时需要额外转换，因而可能不太适合网络。而 UTF-8 的存储单位是字节，天生没有大小端困扰。更妙的是，他且完全兼容 ASCII，而互联网又是古董中间件最多的地方……</p>
+<p>总之，完全基于字节的 UTF-8 是最适合网络通信和硬盘存储的文本编码格式，而 UTF-32 是最适合在内存中处理的格式。</p>
+<h3 id="bom-标记"><a class="header" href="#bom-标记">BOM 标记</a></h3>
+<p>0xFEFF 是一个特殊的不可见字符“﻿”，这是一个零宽空格，没有任何效果。</p>
+<p>你可以把这个字符加在文本文件的头部，告诉读取该文件的软件，这个文件是用什么编码的。</p>
+<p>如果是 UTF-16 和 UTF-32，因为 0xFEFF 不对称，他还能告诉你是大端还是小端。因此 0xFEFF 被称为字节序标志（Byte-order-mark，BOM）。</p>
+<p>如果读取该文件的软件不支持解析 BOM，那么他照常读出 0xFEFF，一个零宽空格，在文本中不显示，不影响视觉结果。</p>
+<div id="admonition-info-1" class="admonition admonish-info" role="note" aria-labelledby="admonition-info-1-title">
+<div class="admonition-title">
+<div id="admonition-info-1-title">
+<p>Info</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-info-1"></a>
+</div>
+<div>
+<p>一些老的编译器（远古 MinGW，现在已经没有了）不支持解析 BOM，会把带有 BOM 的 UTF-8 的 .cpp 源码文件，当作头部带有错误字符的乱码文件，从而报错。这是因为 Windows 的记事本保存为 UTF-8 时，总是会加上 BOM。如果记事本发现一个文件没有 BOM，会当作 ANSI（GBK）来读取。</p>
+</div>
+</div>
+<p>0xFEFF 在不同的编码下会产生不同的结果：</p>
+<ul>
+<li>UTF-8：<code>0xEF 0xBB 0xBF</code>，他会占用 3 字节，而且不会告诉你是大端还是小端，因为 UTF-8 是没有大小端问题的。</li>
+<li>UTF-16：如果是大端，就是 <code>0xFE 0xFF</code>，如果是小端，就是 <code>0xFF 0xFE</code>。</li>
+<li>UTF-32：如果是大端，就是 <code>0x00 0x00 0xFE 0xFF</code>，如果是小端，就是 <code>0xFF 0xFE 0x00 0x00</code>。</li>
+</ul>
+<p>因此，在文本头部加上 BOM 有助于软件推测该文件是什么编码的（如果那软件支持解析 BOM 的话）。</p>
+<div id="admonition-info-2" class="admonition admonish-info" role="note" aria-labelledby="admonition-info-2-title">
+<div class="admonition-title">
+<div id="admonition-info-2-title">
+<p>Info</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-info-2"></a>
+</div>
+<div>
+<p>例如 Windows 环境中，所有的文本文件都被默认假定为 ANSI（GBK）编码，如果你要保存文本文件为 UTF-8 编码，就需要加上 BOM 标志。当 MSVC 读取时，看到开头是 <code>0xEF 0xBB 0xBF</code>，就明白这是一个 UTF-8 编码的文件。这样，MSVC 就能正确地处理中文字符串常量了。如果 MSVC 没看到 BOM，会默认以为是 ANSI（GBK）编码的，从而中文字符串常量会乱码。开启 <code>/utf-8</code> 选项也能让 MSVC 把没有 BOM 的源码文件当作 UTF-8 来解析，适合跨平台宝宝体质。</p>
+</div>
+</div>
+<div id="admonition-abstract-1" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-1-title">
+<div class="admonition-title">
+<div id="admonition-abstract-1-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-1"></a>
+</div>
+<div>
+<p>其实 Windows 用户可以在控制面板的“时钟和区域”里，找到“区域”选项。在“区域”选项卡里，点击“更改系统区域设置”，然后弹出的对话框里，勾选“Beta 版：使用 Unicode UTF-8 提供全球语言支持”，重启后，就可以在程序中默认使用 UTF-8，而不是糟糕的 GBK 了。这会把 ANSI 变成 UTF-8，让记事本等软件把无 BOM 的文件都当作 UTF-8，让各种软件都认为字符串是 UTF-8 等等。这可以解决部分美国软件无法处理中文、乱码等问题，因为美国程序员常常无意识地用 UTF-8 字符串未经处理直接调用 <code>A</code> 函数。不过，这会导致你运行其他假定了 GBK 的中国特供程序乱码，也会导致你的毕业答辩导师发来的 ZIP 变成乱码。而且我们作为客户端的开发者，我们总不能强求所有客户用我们的软件前，改变他们的控制面板来适应我们的程序吧？所以还是需要绕开 GBK，直接调用 UTF-16 的 <code>W</code> 类 API。</p>
+</div>
+</div>
+<h3 id="gb2312gbkgb18030-的关系"><a class="header" href="#gb2312gbkgb18030-的关系">GB2312、GBK、GB18030 的关系</a></h3>
+<h4 id="gb2312"><a class="header" href="#gb2312">GB2312</a></h4>
+<p>GB2312 发布于 1980 年，是一个古老的汉字编码标准，兼容 ASCII。</p>
+<div id="admonition-note-4" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-4-title">
+<div class="admonition-title">
+<div id="admonition-note-4-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-4"></a>
+</div>
+<div>
+<p>“GB” 表示 Guo Biao（国标）的意思。</p>
+</div>
+</div>
+<p>GB2312 规定了 6763 个汉字和 682 个特殊符号，共 7445 个字符。</p>
+<p>GB2312 让英文和数字采用和 ASCII 相同的单字节编码，而对于汉字和特殊符号采用双字节编码。</p>
+<p>其中汉字和特殊符号的双字节编码，两个字节都在 0xA1 到 0xFE 的范围内，避免了与单字节的 ASCII 编码空间冲突。</p>
+<pre><code class="language-txt">  H    i      彭       宝
+0x48 0x69 0xC5 0xED 0xB1 0xA6
+</code></pre>
+<p>2 个字节分别被称为“区码”和“位码”，范围都是在 0xA1 到 0xFE 区间内。</p>
+<p>“特殊符号”，共 682 个，这些字符的编码从 0xA1A1 到 0xA9FE。</p>
+<p>“一级汉字”，都是比较常用的汉字，按拼音顺序排序，共 3755 个，这些字符的编码从 0xB0A1 到 0xF7FE。</p>
+<p>“二级汉字”，是一些生僻字，按部首/笔画排序，共 3008 个，这些汉字的字符从 0x8140 到 0xA0FE。</p>
+<p>GBK 中汉字的编号和 Unicode 并不是相同的，这也是 GB2312 编码的文本文件用 UTF-8 或 UTF-16 打开会产生乱码的根本原因。</p>
+<p>例如汉字 “彭” 就属于 “二级汉字”，在 GB2312 中编号为 0xC5ED，Unicode 中编号为 0x5F6D。</p>
+<p>全角空格 “　”，在 GB2312 中的编号为 0xA1A1，Unicode 中的编号为 0x3000。</p>
+<h4 id="gb2312-的缺陷"><a class="header" href="#gb2312-的缺陷">GB2312 的缺陷</a></h4>
+<p>GBK 和 UTF-8 的共同点在于，他们都避开了 0 ~ 127 的 ASCII 空间，所以完全兼容 ASCII。</p>
+<p>不同点在于，如果在一个 GBK 编码的中文字符串中查找中文，可能得到错误的结果，而 UTF-8 不会。这是因为 GBK 没有自纠错机制，他前后两个车厢并没有不同。</p>
+<p>当 GBK 被切片时，就容易出现连锁反应。</p>
+<pre><code class="language-cpp">std::string s = "沉迷圆神";  // 0xB3 0xC1 0xC3 0xD4 0xD4 0xAD 0xC9 0xF1
+std::cout &lt;&lt; s.substr(1); // "撩栽采�"
+// 复现方式: MSVC 中国区 Windows，/std:c++17，不开启 /utf-8 参数（这时字符串常量都是 GBK 编码的）
+</code></pre>
+<div id="admonition-note-5" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-5-title">
+<div class="admonition-title">
+<div id="admonition-note-5-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-5"></a>
+</div>
+<div>
+<p>核反应堆，启动！</p>
+</div>
+</div>
+<p>特别是当你试图 find 一个中文子字符串时，GBK 编码的多字节字符串可能产生找到了的假象。实际上找到的位置根本是切断了单个完整的中文字符。</p>
+<pre><code class="language-cpp">std::string s = "沉迷圆神";  // 0xB3 0xC1 0xC3 0xD4 0xD4 0xAD 0xC9 0xF1
+std::cout &lt;&lt; s.find("采"); // 5，把“圆”的后半段 0xAD 和“神”的前半段 0xC9 当成一个字“采” (0xAD 0xC9) 了
+</code></pre>
+<p>而 UTF-8 则能有效限制错误的传播。</p>
+<pre><code class="language-cpp">std::string u8s = "沉迷圆神";  // 0xE6 0xB2 0x89 0xE8 0xBF 0xB7 0xE5 0x9C 0x86 0xE7 0xA5 0x9E
+std::cout &lt;&lt; u8s.substr(1); // "�迷圆神"
+std::cout &lt;&lt; u8s.find("采"); // 找不到，返回 -1
+</code></pre>
+<div id="admonition-abstract-2" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-2-title">
+<div class="admonition-title">
+<div id="admonition-abstract-2-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-2"></a>
+</div>
+<div>
+<p>因为 UTF-8 的头部小火车和尾部车厢采用了独立的编码，find 不可能通过任何合法的 UTF-8 子字符串定位到错误的中间位置。</p>
+</div>
+</div>
+<div id="admonition-abstract-3" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-3-title">
+<div class="admonition-title">
+<div id="admonition-abstract-3-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-3"></a>
+</div>
+<div>
+<p>GB2312 和 GBK 的特殊性：他既是字符集，又是字符编码。除 Unicode 外大多数字符集都是这样，自己就是自己的字符编码，没有其他编码方式。只有 Unicode 把字符集和字符编码的概念分的很清楚，因为 Unicode 字符集有 UTF-8、UTF-。</p>
+</div>
+</div>
+<h4 id="gbk"><a class="header" href="#gbk">GBK</a></h4>
+<p>GBK 同样是双字节编码，是对 GB2312 的扩展。</p>
+<p>GBK 在保持 GB2312 部分不变的基础上，额外追加了 21886 个汉字。收录的有：</p>
+<ul>
+<li>GB2312 中的全部汉字和特殊符号</li>
+<li>BIG-5（繁体中文的编码）中的全部汉字</li>
+<li>GB13000（即 Unicode）中的其他中日韩汉字</li>
+<li>其他尚未收录的特殊汉字、部首、符号等</li>
+</ul>
+<div id="admonition-note-6" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-6-title">
+<div class="admonition-title">
+<div id="admonition-note-6-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-6"></a>
+</div>
+<div>
+<p>“K” 表示 Kuo（扩展）的意思。</p>
+</div>
+</div>
+<ul>
+<li>GB2312：首字节 0xA1 到 0xFE，尾字节 0xA1 到 0xFE。</li>
+<li>GBK：首字节 <strong>0x81 到 0xFE</strong>，尾字节 <strong>0x40 到 0xFE</strong>。</li>
+</ul>
+<p>注意到 GBK 的尾字节进入了 0x40，ASCII 的范围。</p>
+<p>这使得 GBK 比 GB2312 更危险，例如 “侰” 这个字，会被编码成 0x82 0x43。</p>
+<p>而 0x43 刚好是 ASCII 字符 “C” 的编码。如果发生字符串切片，可能导致 “侰” 变成 “�C”。并且如果刚好程序在 <code>.find('C')</code>，那么 “侰” 的后半个字节会被当作 “C” 而找到。</p>
+<p>不过，GBK 设计时特意避开了 0x40 以下的 ASCII 字符，例如 0x2F 是 “/” 的 ASCII 编码，常用于文件系统的路径分隔符。</p>
+<p>然而，Windows 所用的路径分隔符是反斜杠 “\”，他的 ASCII 编码是 0x5C。</p>
+<p>例如 “俓”，GBK 编码 0x82 0x5C，这个字就可能被错误解读成 “�\”，使程序误认为这是一个文件夹的路径，从而导致程序出错，或留下被黑客攻击的隐患。</p>
+<p>虽然 Windows 系统内部统一采用 Unicode（UTF-16）来存储和处理路径，但总架不住一些劳保程序，依然执着于 ANSI（GBK），如果用户无意或恶意输入“俓啊.txt”，就有可能产生隐患。</p>
+<p>而 UTF-8 同样兼容 ASCII，得益于冗余的自纠错机制，就没有这样的问题。</p>
+<div id="admonition-note-7" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-7-title">
+<div class="admonition-title">
+<div id="admonition-note-7-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-7"></a>
+</div>
+<div>
+<p>“GBK” 虽然冠以“国标”之名，但实际上是微软擅自推出的！根本不是什么国家标准（你猜他为什么没有国家文件编号）。本来我国官方都打算推出 GB13000 了，直接完全兼容 Unicode 字符集。然而微软自作主张把他 Wendous 的 GB2312 升级到 GBK（比尔盖子以为自己兼容压倒一切，拽死了），本来好好的 GB13000 标准只好作罢。为了兼容已经升级成 GBK 的 Wendous 系统，国家只好重新制作了一份 GB18030 标准，兼容 GBK 和 GB2312。</p>
+</div>
+</div>
+<h4 id="gb18030"><a class="header" href="#gb18030">GB18030</a></h4>
+<p>于 2000 年 3 月发布的汉字编码国家标准，完全兼容 GBK 和 GB2312。</p>
+<p>采用多字节编码，每个字符可以编码为 1 字节、2 字节、或 4 字节。</p>
+<p>其中 1 字节的部分取值范围是 0 到 0x7F，和 ASCII 相同。
+2 字节的部分首字节范围 0x81 到 0xFE，尾字节范围 0x40 到 0xFE，和 GBK 相同。
+4 字节的部分第一字节范围 0x81 到 0xFE，第二字节范围 0x30 到 0x39，第三字节范围 0x81 到 0xFE，第四字节范围 0x30 到 0x39。</p>
+<p>字符处理软件在处理 GB18030 的文本时，从左往右依次扫描每个字节：</p>
+<ul>
+<li>如果遇到的字节的最高位是 0，那么就会断定该字符只占用了一个字节</li>
+<li>如果遇到的字节的最高位是 1，那么该字符可能占用了两个字节，也可能占用了四个字节，不能妄下断论，所以还要继续往后扫描：
+<ul>
+<li>如果第二个字节的高位有两个连续的 0，那么就会断定该字符占用了四个字节</li>
+<li>如果第二个字节的高位没有连续的 0，那么就会断定该字符占用了两个字节</li>
+</ul>
+</li>
+</ul>
+<p>当字符占用两个或者四个字节时，GB18030 编码总要检测两次，处理效率比 GB2312 和 GBK 都低。而且和 GBK 一样，有着不能自纠错，容易使编码错误连锁反应的问题。</p>
+<p>GB18030 编码空间巨大，不仅囊括了中日韩汉字，所有 Unicode 中的字符也都被纳入其中！也就是说，Unicode 字符用 GB18030 编码是无损的，和 UTF-8 一样，而且还完全兼容了 GBK（中国区 Windows 的默认编码）。</p>
+<p>所以，GB18030 字符编码对应的字符集实际上是 Unicode。</p>
+<div id="admonition-note-8" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-8-title">
+<div class="admonition-title">
+<div id="admonition-note-8-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-8"></a>
+</div>
+<div>
+<p>尽管如此，Windows 至今（我测的是 Win10，不知道 Win11 它们改进没有）采用的依然是 GBK 编码：<code>A</code> 系 API 无法正确识别 GB18030 编码的字符串，文件路径名。明明中国政府都给你做完全兼容你的 GBK 了，还收录所有 Unicode 字符了，完全可以无缝增量升级的东西，泥码沟槽的比尔盖子还不快点默认切换到 GB18030，想不通（致敬传奇阴井盖比尔盖子）</p>
+</div>
+</div>
+<h4 id="总结-1"><a class="header" href="#总结-1">总结</a></h4>
+<p>字符编码兼容性：UTF-8 != GB18030 &gt; GBK &gt; GB2312 &gt; ASCII</p>
+<p>字符集大小：Unicode = GB18030 &gt; GBK &gt; GB2312 &gt; ASCII</p>
+<p>总之，GB 系列编码面对切片和查找存在一定的问题，有条件的话，建议 Windows 程序尽快升级到 UTF-8 外码、UTF-16 内码的工作流上来，回避掉史山的影响。</p>
+<h2 id="cc-中的字符编码"><a class="header" href="#cc-中的字符编码">C/C++ 中的字符编码</a></h2>
+<h3 id="字符类型"><a class="header" href="#字符类型">字符类型</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>类型</th><th>大小</th><th>编码</th><th>字面量</th></tr></thead><tbody>
+<tr><td>Linux <code>char</code></td><td>1 字节</td><td>取决于 <code>$LC_ALL</code></td><td>"hello"</td></tr>
+<tr><td>Windows <code>char</code></td><td>1 字节</td><td>取决于系统区域设置</td><td>"hello"</td></tr>
+<tr><td>Linux <code>wchar_t</code></td><td>4 字节</td><td>UTF-32</td><td>L"hello"</td></tr>
+<tr><td>Windows <code>wchar_t</code></td><td>2 字节</td><td>UTF-16LE</td><td>L"hello"</td></tr>
+<tr><td><code>char8_t</code></td><td>1 字节</td><td>UTF-8</td><td>u8"hello"</td></tr>
+<tr><td><code>char16_t</code></td><td>2 字节</td><td>UTF-16</td><td>u"hello"</td></tr>
+<tr><td><code>char32_t</code></td><td>4 字节</td><td>UTF-32</td><td>U"hello"</td></tr>
+</tbody></table>
+</div>
+<p>由此可见，<code>char</code> 和 <code>wchar_t</code> 是不跨平台的。</p>
+<p>对于中国区 Windows 来说，区域设置默认是 GBK。对于美国区 Windows 来说，区域设置默认是 UTF-8。</p>
+<p>对于 Linux 用户来说，如果你没有专门修改过，<code>$LC_ALL</code> 默认是 <code>en_US.UTF-8</code> 或 <code>C.UTF-8</code>。</p>
+<p>这带来了巨大的混淆！很多美国程序员潜意识里会想当然地把 <code>char</code> 当作 UTF-8 来用。很多开源项目，第三方库，甚至很多国人做的项目，都被这种“想当然”传染了。</p>
+<div id="admonition-tip-5" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-5-title">
+<div class="admonition-title">
+<div id="admonition-tip-5-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-5"></a>
+</div>
+<div>
+<p>好消息是无论“区域设置”是什么，肯定兼容 ASCII。例如 GBK 和 UTF-8 都兼容 ASCII，否则就和所有的 C 语言经典函数如 <code>strlen</code>，换行符 <code>'\n'</code>，路径分隔符 <code>'/'</code> 和 <code>'\\'</code> 冲突了。</p>
+</div>
+</div>
+<p><code>wchar_t</code> 就好一些，虽然在 Windows 系统上是糟糕的 UTF-16，但至少稳定了，不会随着系统区域设置而随意改变，只要你不打算跨平台，<code>wchar_t</code> 就是 Windows 程序的标配。</p>
+<div id="admonition-abstract-4" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-4-title">
+<div class="admonition-title">
+<div id="admonition-abstract-4-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-4"></a>
+</div>
+<div>
+<p>根据 Windows 官方文档的说法，<code>wchar_t</code> 是 UTF-16LE。</p>
+</div>
+</div>
+<h3 id="思考utf-8-为什么完美能兼容-ascii"><a class="header" href="#思考utf-8-为什么完美能兼容-ascii">思考：UTF-8 为什么完美能兼容 ASCII</a></h3>
+<p>UTF-8 的火车头和车厢，都是 <code>1</code> 开头的，而 ASCII 的单体火车头永远是 <code>0</code> 开头。这很重要，不仅火车头需要和 ASCII 区分开来，车厢也需要。考虑这样一个场景：</p>
+<pre><code class="language-cpp">std::u32string path = "一个老伯.txt";
+</code></pre>
+<p>“一个老伯” 转换为 Unicode 码点分别是：</p>
+<pre><code class="language-txt">0x4E00 0x4E2A 0x8001 0x4F2F
+</code></pre>
+<p>如果让他们原封不动直接存储进 char 数组里：</p>
+<pre><code class="language-txt">0x4E 0x00 0x4E 0x2A 0x80 0x01 0x4F 0x2F
+</code></pre>
+<p>就出问题了！首先，这里 0x4E00 的 0x00 部分，会被 C 语言当作是字符串的结尾。如果拿这样的字符串去调用操作系统的 open 函数，他会以为你在打开 0x4E 单个字符的文件名，也就是 <code>"N"</code>。</p>
+<p>更糟糕的是，0x2F 对应的 ASCII 字符是 <code>'/'</code>，是路径分隔符。操作系统会以为你要创建一个子文件夹下的文件 <code>"N\x00N*\x80\x01O/.txt"</code>，文件夹名字叫 <code>"N\x00N*\x80\x01O"</code> 而文件叫 <code>".txt"</code>。</p>
+<p>为了能让针对 ASCII 设计的操作系统 API 支持中文文件名，就只能绕开所有 0x7F 以下的值。这就是为什么 UTF-8 对车厢也全部抬高到 0x80 以上，避免操作系统不慎把车厢当作是 <code>'/'</code> 或 <code>'\0'</code>。</p>
+<h3 id="utf-8-确实几乎完美支持字符串所有操作"><a class="header" href="#utf-8-确实几乎完美支持字符串所有操作">UTF-8 确实几乎完美支持字符串所有操作</a></h3>
+<p>由于巨大的惯性，很多人都想当然的把 <code>std::string</code> 当作 UTF-8 来使用。对于简单的打印，常规的字符串操作，是没问题的。</p>
+<p>字符串操作有下面这几种，得益于 UTF-8 优秀的序列化涉及和冗余抗干扰机制，绝大多数 ASCII 支持的操作，UTF-8 字符串都能轻松胜任，唯独其中<strong>涉及“索引”和“长度”的</strong>一部分操作不行。这是由于变长编码的固有缺陷，如果需要做“索引”类操作，还是建议先转换成定长的 UTF-32 编码。</p>
+<div class="table-wrapper"><table><thead><tr><th>操作</th><th>UTF-8</th><th>UTF-32</th><th>GBK</th></tr></thead><tbody>
+<tr><td>求字符串长度</td><td>×</td><td>√</td><td>×</td></tr>
+<tr><td>判断相等</td><td>√</td><td>√</td><td>√</td></tr>
+<tr><td>字典序的大小比较</td><td>√</td><td>√</td><td>×</td></tr>
+<tr><td>字符串拼接</td><td>√</td><td>√</td><td>√</td></tr>
+<tr><td>搜索子字符串</td><td>√</td><td>√</td><td>×</td></tr>
+<tr><td>搜索单个字符</td><td>×</td><td>√</td><td>×</td></tr>
+<tr><td>按索引切下子字符串</td><td>×</td><td>√</td><td>×</td></tr>
+<tr><td>按索引获取单个字符</td><td>×</td><td>√</td><td>×</td></tr>
+<tr><td>遍历所有字符</td><td>×</td><td>√</td><td>×</td></tr>
+<tr><td>按子字符串切片</td><td>√</td><td>√</td><td>×</td></tr>
+<tr><td>按索引切片</td><td>×</td><td>√</td><td>×</td></tr>
+<tr><td>查找并替换子字符串</td><td>√</td><td>√</td><td>×</td></tr>
+<tr><td>查找并删除子字符串</td><td>√</td><td>√</td><td>×</td></tr>
+<tr><td>按索引删除子字符串</td><td>×</td><td>√</td><td>×</td></tr>
+<tr><td>删除单个字符</td><td>×</td><td>√</td><td>×</td></tr>
+</tbody></table>
+</div>
+<p>为什么？我们来看一个实验：</p>
+<pre><code class="language-cpp">std::string s = "你好";
+fmt::println("s 的长度：{}", s.size());
+</code></pre>
+<p>（使用 <code>/utf-8</code> 编译）运行后，会得到 6。</p>
+<p>因为 <code>std::string</code> 的 <code>size()</code> 返回的是 <code>char</code> 的数量，而不是真正字符的数量。在 UTF-8 中，一个非 ASCII 的字符会被编码为多个 <code>char</code>，对于中文而言，中文都在 0x2E80 到 0x9FFF 范围内，属于三级列车，也就是每个汉字会被编码成 3 个 <code>char</code>。</p>
+<p><code>char</code> 是字节（码位）而不是真正的字符（码点）。真正的 Unicode 字符应该是 <code>char32_t</code> 类型的。调用 <code>std::string</code> 的 <code>size()</code> 或者 <code>strlen</code> 得到的只是“字节数量”。</p>
+<p>而 UTF-32 中，每个字符（码点）都对应一个独立的 <code>char32_t</code>（码位），<code>size()</code> 就是真正的“字符数量”，这就是定长编码的优势。</p>
+<pre><code class="language-cpp">std::u32string s = U"你好";
+fmt::println("s 的长度：{}", s.size());
+</code></pre>
+<p>如果你的操作只涉及字符串查拼接与查找，那就可以用 UTF-8。如果大量涉及索引，切片，单个字符的操作，那就必须用 UTF-32（否则一遇到汉字就会出错）。</p>
+<pre><code class="language-cpp">std::vector&lt;std::string&gt; slogan = {
+    "小彭老师公开课万岁", "全世界程序员大团结万岁",
+};
+std::string joined;
+for (auto const &amp;s: slogan) {
+    joined += s; // 只是拼接而已，UTF-8 没问题
+}
+</code></pre>
+<p>UTF-8 按索引切片的出错案例：</p>
+<pre><code class="language-cpp">std::string s = "小彭老师公开课万岁";
+fmt::println("UTF-8 下，前四个字节：{}", s.substr(0, 4));
+// 会打印 “小�”
+</code></pre>
+<pre><code class="language-cpp">std::u32string s = U"小彭老师公开课万岁";
+fmt::println("UTF-32 下，前四个字符：{}", utf8::utf32to8(s.substr(0, 4)));
+// 会打印 “小彭老师”
+</code></pre>
+<p>只有当索引是来自 <code>find</code> 的结果时，UTF-8 字符串的切片才能正常工作：</p>
+<pre><code class="language-cpp">std::string s = "小彭老师公开课万岁";
+size_t pos = s.find("公"); // pos = 12
+fmt::println("UTF-8 下，“公”前的所有字节：{}", s.substr(0, pos));
+// 会打印 “小彭老师”
+</code></pre>
+<pre><code class="language-cpp">std::u32string s = U"小彭老师公开课万岁";
+size_t pos = s.find(U'公'); // pos = 4
+fmt::println("UTF-32 下，“公”前的所有字符：{}", utf8::utf32to8(s.substr(0, pos)));
+// 会打印 “小彭老师”
+</code></pre>
+<div id="admonition-tip-6" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-6-title">
+<div class="admonition-title">
+<div id="admonition-tip-6-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-6"></a>
+</div>
+<div>
+<p>注意到这里 UTF-8 的 <code>"公"</code> 需要是字符串，而不是单个字符。</p>
+</div>
+</div>
+<p>UTF-8 无法取出单个非 ASCII 字符，对于单个中文字符，仍然只能以字符串形式表达（由多个字节组成）。</p>
+<pre><code class="language-cpp">std::string s = "小彭老师公开课万岁";
+fmt::println("UTF-8 下第一个字节：{}", s[0]);
+// 可能会打印 ‘å’ (0xE5)，因为“小”的 UTF-8 编码是 0xE5 0xB0 0x8F
+// 也可能是乱码“�”，取决于终端理解的编码格式
+</code></pre>
+<pre><code class="language-cpp">std::u32string s = U"小彭老师公开课万岁";
+fmt::println("UTF-32 下第一个字符：{}", utf8::utf32to8(s.substr(0, 1)));
+// 会打印 ‘小’
+</code></pre>
+<p>UTF-8 字符串的反转也会出问题：</p>
+<pre><code class="language-cpp">std::string s = "小彭老师公开课万岁";
+strrev(s.data()); // 会以字节为单位反转，导致乱码
+</code></pre>
+<pre><code class="language-cpp">std::u32string s = U"小彭老师公开课万岁";
+strrev(s.data()); // 会把按字符正常反转，得到 “岁万课开公师老彭小”
+</code></pre>
+<p><strong>总结：UTF-8 只能拼接、查找、打印。不能索引、切片、反转。</strong></p>
+<div id="admonition-tip-7" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-7-title">
+<div class="admonition-title">
+<div id="admonition-tip-7-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-7"></a>
+</div>
+<div>
+<p>按索引切片不行，但如果索引是 find 出来的就没问题。</p>
+</div>
+</div>
+<h3 id="轶事ansi-与-unicode-是什么"><a class="header" href="#轶事ansi-与-unicode-是什么">轶事：“ANSI” 与 “Unicode” 是什么</a></h3>
+<p>在 Windows 官方的说辞中，有“Unicode 编码”和“ANSI 编码”的说法。当你使用 Windows 自带的记事本程序 (<code>notepad.exe</code>) 保存文本文件时，就会看到这样的选单：</p>
+<p><img src="img/notepad.png" alt="" /></p>
+<p>翻译一下：</p>
+<ul>
+<li>“ANSI”指的是“区域设置”里设置的那个编码格式。</li>
+<li>所谓“Unicode”其实指的是 UTF-16。</li>
+<li>所谓“Unicode big endian”指的是大端 UTF-16。</li>
+<li>“UTF-8”指的是 UTF-8 with BOM 而不是正常的 UTF-8。</li>
+</ul>
+<p>实际上 Unicode 只是一个字符集，只是把字符映射到整数，更没有什么大端小端，UTF-16 才是编码格式。</p>
+<p>而 ANSI 本来应该是 ASCII 的意思，<code>char</code> 本来就只支持 ASCII。</p>
+<p>但由于当时各国迫切需要支持自己本国的文字，就在兼容 ASCII 的基础上，发展出了自己的字符集和字符编码。这些当地特供的字符集里只包含了本国文字，所有这些各国的字符编码也都和 UTF-8 类似，采用火车头式的变长编码，对 0 开头的 ASCII 部分也都是兼容。所以 Windows 索性把 ANSI 当作“各国本地文字编码”的简称了。但后来互联网的出现，“区域设置”带来了巨大的信息交换困难。</p>
+<div id="admonition-note-9" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-9-title">
+<div class="admonition-title">
+<div id="admonition-note-9-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-9"></a>
+</div>
+<div>
+<p>例如你在玩一些日本的 galgame 时，会发现里面文字全部乱码。这是因为 Windows 在各个地区发行的是“特供版”：在中国大陆地区，他发行的 Windows 采用 GBK 字符集，在日本地区，他发行的 Windows 采用 Shift-JIS 字符集。日本程序员编译程序时，程序内部存储的是 Shift-JIS 的那些“整数”。这导致日本的 galgame 在中国大陆特供的 Windows 中，把 Shift-JIS 的“整数”用 GBK 的表来解读了，从而乱码（GBK 里的日文区域并没有和 Shift-JIS 重叠）。需要用 Locale Emulator 把 Shift-JIS 翻译成 Unicode 读给 Windows 听。如果日本程序员从一开始就统一用 Unicode 来存储，中国区玩家的 Windows 也统一用 Unicode 解析，就没有这个问题。</p>
+</div>
+</div>
+<p>这种情况下，Unicode 组织出现了，他的使命就是统一全世界的字符集，保证全世界所有的文字都能在全世界所有的计算机上显示出来。首先创办了 Unicode 字符集，然后规定了 UTF-8、UTF-16、UTF-32 三种字符编码，最终 UTF-8 成为外码的主流，UTF-32 成为内码的主流。</p>
+<p>接下来为了方便记忆，我们索性就顺着微软的这个说法：</p>
+<ul>
+<li>管 <code>char</code> 叫 ANSI：随“区域设置”而变。</li>
+<li>管 <code>wchar_t</code> 叫 Unicode：在 Windows 上是 UTF-16，在 Linux 上是 UTF-32。</li>
+</ul>
+<h3 id="小笑话utf-16-的背刺"><a class="header" href="#小笑话utf-16-的背刺">小笑话：UTF-16 的背刺</a></h3>
+<p>微软管 UTF-16 叫 Unicode 是纯粹的历史遗留问题：</p>
+<p>因为当年 Unicode 5.0 的时候只有 0 到 0xFFFF 的字符，16 位就装得下，所以当时 UTF-16 还是一个<strong>定长编码</strong>。微软于是决定把 <code>wchar_t</code> 定义成 2 字节，并在 NT 内核中，为每个系统调用都升级成了基于 <code>wchar_t</code> 字符串的 “W 系” API。</p>
+<p>比尔盖子当时以为这样 UTF-16 定长内码就一劳永逸了，并号召所有程序都改用 UTF-16 做内码，别用 “A 系” API 了。</p>
+<div id="admonition-note-10" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-10-title">
+<div class="admonition-title">
+<div id="admonition-note-10-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-10"></a>
+</div>
+<div>
+<p>起初，所有人都以为 UTF-16 就是最终答案。</p>
+</div>
+</div>
+<p>没想到后来 Unicode 委员会“背刺”了比尔盖子！偷偷把范围更新到了 0x10FFFF，突破了 16 位整数的容量。原来的 UTF-16 已经容纳不下，只好利用之前预留的 0xD800 到 0xDFFF 空号区间丑陋地实现了变长编码。</p>
+<div id="admonition-note-11" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-11-title">
+<div class="admonition-title">
+<div id="admonition-note-11-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-11"></a>
+</div>
+<div>
+<p>直到 UTF-16 一夜之间成了丑陋的<strong>变长编码</strong>。</p>
+</div>
+</div>
+<p>闹了半天，Windows 费心费力替 Unicode 委员会好不容易推广的 <code>wchar_t</code>，既没有 UTF-8 兼容 ASCII 的好处，又没有 UTF-32 <strong>定长编码</strong>的好处。可 “W 系” API 却又焊死在了 NT 内核最底层，反复来坑第一次用 Windows 编程的初学者。</p>
+<div id="admonition-note-12" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-12-title">
+<div class="admonition-title">
+<div id="admonition-note-12-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-12"></a>
+</div>
+<div>
+<p>比尔盖子：你这样显得我很小丑诶？</p>
+</div>
+</div>
+<p>除 Windows 外，Java 也是“UTF-16 背刺”的受害者，他们想当然的把 char 定义为 UTF-16，以为这就是未来永久的定长内码，一劳永逸…… 直到 Unicode 加入了 0x10FFFF，Java 不得不重新定义了个 Character 作为 UTF-32 字符，还弄个 char 到 Character 的转换，好不尴尬！</p>
+<div id="admonition-note-13" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-13-title">
+<div class="admonition-title">
+<div id="admonition-note-13-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-13"></a>
+</div>
+<div>
+<p>Linux 成立于 1991 年，当时 Unicode 也才刚刚出现。Unicode 宣布加入 0x10FFFF 后，Linux 才开始引入支持 Unicode。在知道了 Unicode 包含 0x10FFFF 后，他们一开始就把 <code>wchar_t</code> 定义成 4 字节，逃过了 UTF-16 的背刺。</p>
+</div>
+</div>
+<div id="admonition-tip-8" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-8-title">
+<div class="admonition-title">
+<div id="admonition-tip-8-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-8"></a>
+</div>
+<div>
+<p>后来新出的语言，如 Python 3、Go、Rust、Swift、Kotlin，把字符钦定为 UTF-32 了。他们只有在调用 Windows API 时，才会临时转换为 UTF-16 来调用，除此之外再无 UTF-16 出现。</p>
+</div>
+</div>
+<div id="admonition-note-14" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-14-title">
+<div class="admonition-title">
+<div id="admonition-note-14-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-14"></a>
+</div>
+<div>
+<p>许多糟糕的博客声称：是因为“UTF-16 最有利于中文压缩”，所以 Java 和 Windows 才采用的？然而就我了解到的实际情况是因为他们错误的以为 0xFFFF 是 Unicode 的上限才错误采用了，不然为什么后来的新语言都采用了 UTF-32 内码 + UTF-8 外码的组合？而且在外码中采用 UTF-8 或 UTF-16 压缩确实没问题，但是 Java 和 Windows 的失误在于把 UTF-16 当作内码了！内码就理应是定长编码的才方便，如果你有不同想法，欢迎留言讨论。</p>
+</div>
+</div>
+<p>总之，UTF-16 是糟粕，但他是 Windows 唯一完整支持的 Unicode 接口。不建议软件内部用 UTF-16 存储文字，你可以用更紧凑的 UTF-8 或更方便切片的 UTF-32，只需在调用操作系统 API 前临时转换成 UTF-16 就行。</p>
+<h3 id="强类型的-stdu8string-只是君子协议"><a class="header" href="#强类型的-stdu8string-只是君子协议">强类型的 <code>std::u8string</code> 只是君子协议</a></h3>
+<p>必须指出：在 <code>std::string</code> 中装 UTF-8 并不是未定义行为，在 <code>std::u8string</code> 里同样可以装 GBK。这就好比一个名叫 <code>Age</code> 的枚举类型，实际却装着性别一样。</p>
+<pre><code class="language-cpp">enum Age { // 错误示范
+    Male,
+    Female,
+    Custom,
+};
+// 除了迷惑同事外，把年龄和性别的类型混用没有好处
+void registerStudent(Age age, Age sex);
+</code></pre>
+<p>区分类型只是大多数人设计接口的规范，只是方便你通过看函数接口一眼区分这个函数接受的是什么格式的字符串，并没有强制性。例如下面这段代码一看就知道这些函数需要的是什么编码的字符串。</p>
+<pre><code class="language-cpp">void thisFuncAcceptsANSI(std::string msg);
+void thisFuncAcceptsUTF8(std::u8string msg);
+void thisFuncAcceptsUTF16(std::u16string msg);
+void thisFuncAcceptsUnicode(std::wstring msg);
+void thisFuncAcceptsUTF32(std::u32string msg);
+</code></pre>
+<p>没有 <code>char8_t</code> 之前，用类型别名同样可以起到差不多的说明效果（缺点是无法重载）：</p>
+<pre><code class="language-cpp">using ANSIString = std::string;
+using UTF8String = std::string;
+using UTF16String = std::vector&lt;uint16_t&gt;;
+void thisFuncAcceptsANSI(ANSIString msg);
+void thisFuncAcceptsUTF8(UTF8String msg);
+void thisFuncAcceptsUTF16(UTF16String msg);
+</code></pre>
+<p>之所以我会说，<code>std::string</code> 应该装 ANSI 字符串，是因为所有标准库官方提供的函数，都会假定 <code>std::string</code> 类型是 ANSI 编码格式（GBK）。并不是说，你不能用 <code>std::string</code> 存其他编码格式的内容。</p>
+<p>如果你就是想用 <code>std::string</code> 装 UTF-8 也可以，只不过你要注意在传入所有使用了文件路径的函数，如 <code>fopen</code>，<code>std::ifstream</code> 的构造函数前，需要做一个转换，转成 GBK 的 <code>std::string</code> 或 UTF-16 的 <code>std::wstring</code> 后，才能使用，很容易忘记。</p>
+<p>而如果你始终用 <code>std::u8string</code> 装 UTF-8，那么当你把它输入一个接受 ANSI 的普通 <code>std::string</code> 参数时，就会发生类型不匹配错误，强迫你重新清醒，或是强迫你使用一个转换函数，稍后会介绍这个转换函数的写法。</p>
+<p>例如当你使用 <code>std::cout &lt;&lt; u8string</code> 时会报错，迫使你改为 <code>std::cout &lt;&lt; u8toansi(u8string)</code> 才能编译通过，从而避免了把 UTF-8 的字符串打印到了只支持 GBK 的控制台上。</p>
+<div id="admonition-abstract-5" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-5-title">
+<div class="admonition-title">
+<div id="admonition-abstract-5-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-5"></a>
+</div>
+<div>
+<p>其中转换函数签名为 <code>std::string u8toansi(std::u8string s)</code>，很可惜，标准库并没有提供这个函数，直到 C++26 前，标准库对字符编码支持一直很差，你不得不自己实现或依赖第三方库。</p>
+</div>
+</div>
+<p>总之，<code>char8_t</code> 是 C++20 引入的新字符类型，用于强类型的君子协议，和 <code>char</code> 并没有实际区别。只是方便了函数类型签名更加一目了然，向调用者暗示这个参数只能接受 UTF-8 编码的字符串。</p>
+<p>例如这样一个函数：</p>
+<pre><code class="language-cpp">thisFuncAcceptUTF8(std::u8string msg);
+</code></pre>
+<p>如果调用者喜欢用 <code>std::string</code> 装 UTF-8 字符串，可以用：</p>
+<pre><code class="language-cpp">std::string msg;
+// 调用者确信，这个 msg 虽然是 `std::string`，但里面的内容就是 UTF-8
+// 那么他可以强制转换为 u8string，来证明自己头脑清醒
+thisFuncAcceptUTF8(std::u8string((char8_t *)msg.data(), msg.size()));
+</code></pre>
+<h3 id="源码字符集与运行字符集"><a class="header" href="#源码字符集与运行字符集">源码字符集与运行字符集</a></h3>
+<p>C++ 官方定义中，存在两种字符集。一种是 <strong>源码字符集 (source charset)</strong>，一种是 <strong>运行字符集 (execution charset)</strong>。</p>
+<ul>
+<li>这真是糟糕的术语，运行字符集这个名字具有误导性，他和运行时根本没有关系，明明是编译期就确定的。所以小彭老师替他改个名字，实际应该叫“字面量字符集”。</li>
+<li>而且他们叫字符集也不合理，应该叫字符编码才对，UTF-8 和 UTF-16 都是 Unicode 字符集的两种字符编码格式，但他们明显是不同的。</li>
+<li>然后，再引入一个真正的，运行时的字符编码，也就是软件客户电脑的区域设置。</li>
+</ul>
+<p>最终，经过小彭老师改良的术语如下：</p>
+<ul>
+<li>源码字符编码: <code>.cpp</code> 源码文件时用的字符编码。例如程序员用记事本保存 <code>.cpp</code> 源码文件时，选择 “UTF-8” 保存就是 UTF-8，选择 “ANSI” 保存就是 GBK。</li>
+<li>字面量字符编码: 指的是 <code>char</code> 字符串常量在内存中存储的字符编码。默认是我们程序员（开发者）电脑的“区域设置”。</li>
+<li>运行时字符编码: 指的是我们的程序在客户的操作系统中运行时，客户的操作系统 API 的 <code>const char *</code> 期望接受怎样编码的字符串。默认是客户电脑的“区域设置”。</li>
+</ul>
+<p>这三个可以各有不同。</p>
+<p>其中 <strong>字面量字符编码</strong> 和 <strong>运行时字符编码</strong> 的不匹配，是 Windows 软件出现乱码的主要原因。</p>
+<div id="admonition-tip-9" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-9-title">
+<div class="admonition-title">
+<div id="admonition-tip-9-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-9"></a>
+</div>
+<div>
+<p>而源码字符编码只事关你如何保存源码，只是让编译器能够成功读取你的源码，对运行时的乱码问题没有影响。编译器读完源码后，要在常量区生成字符串常量时，还是会将其转换为字面量字符编码的。</p>
+</div>
+</div>
+<p>例如之前说的日本 galgame 在中国电脑上打开爆出乱码，就是因为是日本程序员编译了 galgame（字面量字符编码为 Shift-JIS），在中国客户电脑上打开（运行时字符编码为 GBK）导致的。</p>
+<p>日本程序员使用什么源码字符编码根本无关紧要……哪怕他们使用了 UTF-8 保存源码，MSVC 编译时仍然会将其转换为 Shift-JIS 编码的字面量来存储在可执行文件的常量区中。</p>
+<div id="admonition-tip-10" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-10-title">
+<div class="admonition-title">
+<div id="admonition-tip-10-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-10"></a>
+</div>
+<div>
+<p>你可能会问，为什么不把这些花里胡哨玩应统一为 UTF-8，这样就不用转换来转换去了？还不是因为历史遗留，一些劳保程序员不肯把他们 GBK 编码的源码改成 UTF-8 保存，而且，Windows 也完全不提供基于 UTF-8 的跨平台 API（只提供 GBK 和 UTF-16 两种，就是不给 UTF-8 的，非常恶心人）。所以 MSVC 至今仍然默认是 GBK 编码的（更准确的说是 ANSI，跟随你系统的区域设置而变，在中国就 GBK，在美国就 UTF-8，在欧洲就 Latin-1，非常的双标）。微软各种扯皮效率低下，API 弄了一套又一套互相极限拉扯，而我们 Linux 和 GCC 早已默认就是 UTF-8……</p>
+</div>
+</div>
+<div id="admonition-note-15" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-15-title">
+<div class="admonition-title">
+<div id="admonition-note-15-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-15"></a>
+</div>
+<div>
+<p>我理解你现在大脑干烧的心情。伺候这些历史答辩很复杂，也很无聊，毫无意义！只是为了擦反 Unicode 劳保的屁股。</p>
+</div>
+</div>
+<h3 id="跨平台程序应该怎么做"><a class="header" href="#跨平台程序应该怎么做">跨平台程序应该怎么做</a></h3>
+<p>对于跨平台软件来说，我推荐大家把三个全部设为 UTF-8！（要做到这一点，主要是伺候 MSVC）</p>
+<ul>
+<li>Linux + GCC 用户什么都不需要做，你们所有字符集默认的设定就是 UTF-8。</li>
+<li>Windows + MSVC 用户请开启 <code>/utf-8</code>，这会把“源码字符编码”和“字面量字符编码”都设为 UTF-8，现在字符串常量在内存中都是 UTF-8 了。</li>
+<li>Windows + MinGW 用户请开启 <code>-finput-charset=utf-8</code> 和 <code>-fexec-charset=utf-8</code>，这会把“源码字符编码”和“字面量字符编码”都设为 UTF-8。</li>
+<li>所有源码文件统一以 UTF-8 编码保存，且尽量在最前面加上 0xFEFF 这个 BOM 标记，防止 MSVC 脑抽当作 GBK 来读取。</li>
+<li>在 main 函数前，加两行：</li>
+</ul>
+<pre><code class="language-cpp">// 编译选项：/std:c++17 /utf-8
+int main() {
+#if _WIN32 // 热知识：64 位 Windows 也会定义 _WIN32 宏，所以 _WIN32 可以用于检测是否是 Windows 系统
+    setlocale(LC_ALL, ".utf-8");  // 设置标准库调用系统 API 所用的编码，用于 fopen，ifstream 等函数
+    SetConsoleOutputCP(CP_UTF8); // 设置控制台输出编码，或者写 system("chcp 65001") 也行，这里 CP_UTF8 = 65001
+#endif
+    // 这里开始写你的主程序吧！
+    // ...
+    std::cout &lt;&lt; "你好，世界\n";   // 没问题！
+    std::ifstream fin("你好.txt"); // 没问题！
+    return 0;
+}
+</code></pre>
+<p>这样一套打下来，就可以保证，无论你使用什么编译器，无论你使用什么操作系统，无论你使用什么文本编辑器，无论你使用什么编码，你的程序都可以正确的以 UTF-8 编码来读取源码，正确的以 UTF-8 编码来存储字符串常量，正确的把 UTF-8 编码的字符串路径转为 UTF-16 后调用 W 系 API。</p>
+<p>在 CMake 中，只对 MSVC 开启 <code>/utf-8</code> 选项可以这样写：</p>
+<pre><code class="language-cmake">if (MSVC)
+    target_compile_options(你的程序 PRIVATE /utf-8)
+else()
+</code></pre>
+<p>也可以在最前面 <code>add_compile_options</code>，实现对所有之后定义的程序全局启用该选项。</p>
+<p>在我自己的项目中，我都会这样开启，解决 MSVC 不跨平台的问题：</p>
+<pre><code class="language-cmake">if (MSVC)
+    add_compile_options(/Zc:preprocessor /utf-8 /DNOMINMAX /D_USE_MATH_DEFINES /EHsc /bigobj)
+else()
+    if (WIN32)
+        add_compile_options(-finput-charset=utf-8 -fexec-charset=utf-8)
+    endif()
+    add_compile_options(-Wall -Wextra -Werror=return-type)
+endif()
+
+add_executable(你的程序 你的文件.cpp)  # 自动继承了上面所有的编译器选项
+</code></pre>
+<h4 id="utf-8-locale-是如何工作的"><a class="header" href="#utf-8-locale-是如何工作的"><code>.utf-8</code> locale 是如何工作的</a></h4>
+<p>Windows 官方提供的真正 API 是 <code>_wfopen</code>。<code>fopen</code> 只是他们提供的“POSIX 兼容层” 包装，其会把输入的字符串参数通过 “GBK 到 UTF-16” 转换后，转发给 <code>_wfopen</code>。</p>
+<p>出于跨平台的要求，我们不能使用 <code>_wfopen</code> 这种其他平台没有的函数，也不想用那连 2 字节 4 字节都飘忽不定的 <code>wchar_t</code>，更不想让 <code>std::string</code> 存根本不能跨平台的 GBK。</p>
+<p>只要让 <code>fopen</code> 的 “GBK 到 UTF-16” 转换函数替换成 “UTF-8 到 UTF-16” 就行了。过去，我们无法替换，最新的 Windows 在一次更新中，支持了 <code>".utf-8"</code> locale 这一黑科技，专门满足跨平台程序员的需要。</p>
+<pre><code class="language-cpp">// 默认 locale
+fopen("你好.txt") == _wfopen(gbk_to_utf16("你好.txt"));
+// 设置了 utf-8 locale 后
+fopen("你好.txt") == _wfopen(utf8_to_utf16("你好.txt"));
+</code></pre>
+<p>若不设置 <code>setlocale(LC_ALL, ".utf-8")</code>，则 fopen 和 ifstream 默认会把你提供的 <code>const char *</code> 文件路径，当作 GBK 编码的，而我们设置了 <code>/utf-8</code> 或 <code>-fexec-charset=utf-8</code> 后，字符串字面量编码已经是 UTF-8 了，这样 UTF-8 的字符串常量输入进期望 <code>const char *</code> 的 fopen 参数，就会出乱码问题了。</p>
+<div id="admonition-info-3" class="admonition admonish-info" role="note" aria-labelledby="admonition-info-3-title">
+<div class="admonition-title">
+<div id="admonition-info-3-title">
+<p>Info</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-info-3"></a>
+</div>
+<div>
+<p>不过要注意，<code>.utf-8</code> locale 只是影响了标准库！并不改变系统 API。</p>
+</div>
+</div>
+<p>直接调用系统 API 时，A 系 API 仍然有问题。</p>
+<pre><code class="language-cpp">    MessageBoxA(NULL, "你好，世界", "提示", MB_OK); // 不行，.utf-8 只是让标准库变成 UTF-8 接口了，A 系 Windows API 仍然是 GBK
+    MessageBoxW(NULL, L"你好，世界", L"提示", MB_OK); // 没问题！用 UTF-16 的 wchar_t 字面量来调用 W 接口总是没问题的
+</code></pre>
+<p>还是需要我们手动转换 UTF-8 到 UTF-16 后调用 W 系 API……但是反正跨平台程序员很少需要直接调用 Windows API，都是通过通用的 C/C++ 标准库，因此 <code>.utf-8</code> locale 可能是跨平台程序员想进军 UTF-8 的最佳选择。</p>
+<h4 id="方案-b投奔-wchar_t-流派"><a class="header" href="#方案-b投奔-wchar_t-流派">方案 B：投奔 <code>wchar_t</code> 流派</a></h4>
+<p>运行字符集和区域设置，都是针对 <code>char</code> 的，只有 <code>char</code> 被故意针对了，存在字符编码不统一的问题。</p>
+<p>如果全部用 <code>wchar_t</code> 的话，虽然在 Linux 上是 UTF-32，在 Windows 上是 UTF-16，不统一了。但至少在同一个 Windows 操作系统上，都是统一的 UTF-16。</p>
+<p>所以还有一种方式是全面采用 <code>wchar_t</code> 和 <code>std::wstring</code>，这样无论你的运行字符集和区域设置如何，都对 <code>wchar_t</code> 和基于 <code>const wchar_t *</code> 的函数没有任何影响。</p>
+<p>C 语言标准没有 <code>_wfopen</code>，但是 <code>std::ifstream</code> 有基于 <code>std::wstring</code> 的构造函数，就 C++ 标准库来看 <code>std::wstring</code> 的支持还是很丰富的，基本 <code>std::string</code> 有的 <code>std::wstring</code> 都有，例如 <code>std::to_string</code> 和 <code>std::to_wstring</code>，<code>std::cout</code> 和 <code>std::wcout</code>。本章节最后我们会详细介绍宽字符流的用法。</p>
+<p>缺点是，首先每次都需要写 <code>L"你好"</code> 这个 L 前缀很麻烦，容易忘记。</p>
+<p>而且很多第三方库都在用 <code>std::string</code>，并没有提供 <code>std::wstring</code> 的 API。</p>
+<p>例如 openvdb 的文件写入函数：</p>
+<pre><code class="language-cpp">void openvdb::io::File::write(std::string const &amp;filename);
+</code></pre>
+<p>这样就很麻烦了，如果你内部全是 UTF-16 的 <code>std::wstring</code> 来表示字符串，调用第三方库前就需要转成 GBK 的 <code>std::string</code>。可以用 <code>boost::locale::conv::to_utf&lt;wchar_t&gt;</code> 这个函数转换，但也很麻烦，而且如果 <code>std::wstring</code> 含有 GBK 范围之外的 “𰻞”，GBK 无法表示，又会有编码失败的问题。</p>
+<p>还有 <code>stbi_load</code> 这些第三方库提供的函数，都是只提供了 <code>const char *</code> 的接口，多了去了。</p>
+<p><code>setlocale(LC_ALL, ".utf-8")</code> 的好处是可以让这些第三方库全自动都从 GBK 无缝切换到 UTF-8，而不用对他们的源码做任何更改。因为他们内部都是调用的 <code>fopen</code> 和 <code>ifstream</code>。</p>
+<h4 id="u8-字符串常量的作用"><a class="header" href="#u8-字符串常量的作用">u8 字符串常量的作用</a></h4>
+<blockquote>
+<p>中国区 Windows，MSVC，编译选项：<code>/std:c++17</code></p>
+</blockquote>
+<pre><code class="language-cpp">std::string s = "你好";
+hexdump(s); // C4 E3 BA C3 (GBK)
+std::string s = u8"你好";
+hexdump(s); // E4 BD A0 E5 A5 BD (UTF-8)
+</code></pre>
+<p><code>u8</code> 前缀告诉编译器，这个字符串常量必须以 UTF-8 格式编码存储。无论运行字符集 (execution charset) 是不是 UTF-8。</p>
+<p>编译器保证会把这个字符串常量转换为 UTF-8 编码的 <code>char</code> 字节序列，存储在字符串常量区。</p>
+<p>这对于已经设置了 <code>/utf-8</code> 选项，运行字符集已经保证是 UTF-8 的我们来说毫无作用。只是对于不用 <code>/utf-8</code> 的同学，他们想要临时创建一个 UTF-8 编码的字符串常量，就可以用 u8 前缀。</p>
+<p>在 C++17 和之前，<code>u8"你好"</code> 产生的是 <code>const char []</code> 类型的常量。</p>
+<p>在 C++20 中，引入了 <code>char8_t</code>。然后，他们规定，<code>u8"你好"</code> 现在产生的是 <code>const char8_t []</code> 类型的常量了。</p>
+<p>这导致了一些兼容性问题，比如以前你写的：</p>
+<pre><code class="language-cpp">std::string s = u8"你好";
+</code></pre>
+<p>现在无法编译通过了，因为 <code>const char8_t []</code> 无法用于构造只支持 <code>const char []</code> 的 <code>std::string</code>。</p>
+<p>好在 C++23 又修复了这个问题，他们允许 <code>const char8_t []</code> 隐式转换为 <code>const char []</code>，C++17 之前的这种代码又能正常通过编译。所以，如果想快乐地用 u8 字面量，要么 C++17，要么 C++23，跳过 C++20 比较好。</p>
+<div id="admonition-tip-11" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-11-title">
+<div class="admonition-title">
+<div id="admonition-tip-11-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-11"></a>
+</div>
+<div>
+<p>你可以看到，C++ 版本的更新并不是 100% 完全向前兼容的，有时也会有破坏性的变更，但比较少，平时感觉不到。比如 C++11 之前 auto 就有其他的功能，后来决定这个功能没什么用，就把 auto 改成另一个意思了。</p>
+</div>
+</div>
+<p>除了 u8 以外，还有这些：</p>
+<div class="table-wrapper"><table><thead><tr><th>前缀</th><th>编码</th><th>字符类型</th></tr></thead><tbody>
+<tr><td>"你好"</td><td>运行字符集 (默认是开发者电脑的“区域设置”，而不是客户的)</td><td><code>const char []</code></td></tr>
+<tr><td>L"你好"</td><td>Windows 上 UTF-16；Linux 上 UTF-32</td><td><code>const wchar_t []</code></td></tr>
+<tr><td>u8"你好"</td><td>UTF-8</td><td><code>const char8_t []</code></td></tr>
+<tr><td>u"你好"</td><td>UTF-16</td><td><code>const char16_t []</code></td></tr>
+<tr><td>U"你好"</td><td>UTF-32</td><td><code>const char32_t []</code></td></tr>
+</tbody></table>
+</div><div id="admonition-tip-12" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-12-title">
+<div class="admonition-title">
+<div id="admonition-tip-12-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-12"></a>
+</div>
+<div>
+<p>只不过是开发者和客户往往处于同一个地区，所以 <code>"你好"</code> 看起来好像可以直接输入到 <code>std::cout</code> 中一样。实际上他只是开发者电脑的 ANSI，而不是客户电脑的 ANSI，如果直接拿来打印，会导致以 <code>""</code> 常量形式写死的字符串会在客户电脑上出现乱码。除非这个字符串只包含 ASCII，因为所有 ANSI 都兼容 ASCII，才恰好避免了乱码。</p>
+</div>
+</div>
+<h2 id="选择你的阵营"><a class="header" href="#选择你的阵营">选择你的阵营！</a></h2>
+<p><img src="img/utfwar.png" alt="" /></p>
+<h3 id="ansi-阵营"><a class="header" href="#ansi-阵营">ANSI 阵营</a></h3>
+<p>把字符串当作纯粹的“字节流”，无视字符编码。或者说，你从系统输入进来的是什么编码，我就存储的什么编码。对于 Unicode 则采取完全摆烂的态度，完全无视 Unicode 的存在。</p>
+<ul>
+<li>适用场景：通常与文字处理领域无关的软件会采取这种方案。</li>
+<li>优点：方便，且内部对字符串无任何转换和判断，效率最高。</li>
+<li>缺点：在调用 Windows 系统 API，读写带有中文的文件路径时，会饱受乱码和找不到文件的困扰。</li>
+<li>方法：完全使用 <code>const char *</code> 和 <code>std::string</code>。</li>
+<li>代表作：Linux 文件系统 ext4、Lua 编程语言、现代 Python 中的 <code>bytes</code> 类型、HTTP 的 <code>?</code> 参数、早期 FAT32 文件系统等。</li>
+</ul>
+<p>这类软件是最常见的初学者写法，如果你从未想过字符编码问题，从不了解 <code>wchar_t</code>、<code>char32_t</code> 之间的战争，只知道 <code>char</code>，那么你已经自动在此阵营里。</p>
+<div id="admonition-abstract-6" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-6-title">
+<div class="admonition-title">
+<div id="admonition-abstract-6-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-6"></a>
+</div>
+<div>
+<p>有人说 Linux 文件系统是 UTF-8？并不是！Linux 文件系统根本不会检验你的文件名是不是合法的 UTF-8，只不过是因为你设定了 <code>export LC_ALL=zh_CN.UTF-8</code>，这会使所有程序（包括终端模拟器）假定文件名和文件内容都按 UTF-8 编码，从而调用操作系统各类 API 时（如 open、write）都会使用 UTF-8 编码的 <code>const char *</code> 输入，在 Linux 系统 API 看来，所谓“文件名”只是纯粹的字节流，只要保证不包含 <code>'/'</code> 和 <code>'\0'</code>，无论你是什么编码，他都不在乎。而所有的 locale 都兼容 ASCII，所以绝不会出现一个中文汉字编码后产生 <code>'/'</code> 的情况（例如 GB2312 会把一个中文编码成两个 0x80 到 0xFF 区间的字节，和 ASCII 的范围没有重叠，更不可能出现 <code>'/'</code>），即使换成 <code>export LC_ALL=zh_CN.GB2312</code>，Linux 文件系统一样能正常工作，只不过读取你之前以 UTF-8 写入的文件会变成乱码而已。</p>
+</div>
+</div>
+<p>对于中国区的 Windows 而言，他的所有 A 函数只支持 GBK 编码。这意味着如果你 Lua 中把字符串“当作” UTF-8 来用。那么当你在调用 Lua 的 io.open 前，需要先做一个 UTF-8 到 GBK 的转换，这还会导致丢失部分不在 GBK 内的字符，比如如果你的文件名包含 Emoji，那就会变成 <code>???</code> 乱码。而使用 W 函数的 UTF-16 就不会，因为 UTF-16 能容纳完整的 Unicode 映射。而完全摆烂的 Lua，其 <code>io.open</code> 只是使用 C 语言库函数 <code>fopen</code>，<code>fopen</code> 又是基于 Windows 的 A 系列函数，Lua 又没有提供对 Windows C 运行时库特有的 <code>_wfopen</code> 函数的封装，从而永远不可能打开一个带有 Emoji 的文件。</p>
+<p><strong>总结：要支持 ANSI 阵营，你什么都不需要做，char 满天飞摆烂。</strong></p>
+<h3 id="utf-8-阵营"><a class="header" href="#utf-8-阵营">UTF-8 阵营</a></h3>
+<p>支持 Unicode，字符串统一以 UTF-8 形式存储、处理和传输。</p>
+<ul>
+<li>应用场景：常见于文字处理需求不大，但有强烈的跨平台需求，特别是互联网方面的软件。他们通常只用到字符串的拼接、查找、切片通常也只是在固定的位置（例如文件分隔符 <code>'/'</code>）。也非常适合主要面对的是以 ASCII 为主的“代码”类文本，UTF-8 是对英文类文本压缩率最高的，所以也广泛用于编译器、数据库之类的场景。同时因为 UTF-8 完全兼容 ASCII，使得他能轻易适配远古的 C 语言程序和库。</li>
+<li>方法：始终以 UTF-8 编码存储和处理字符串。</li>
+<li>优点：跨平台，在网络传输时无需任何转码，UTF-8 是互联网的主流编码格式，不同平台上运行的 UTF-8 软件可以随意共享文本数据。兼容 ASCII，方便复用现有库和生态。对英文类文本压缩率高，对中文文本也不算太差。</li>
+<li>缺点：对于底层 API 均采用 UTF-16 的 Windows 系统，需要进行字符编码转换，有少量性能损失。且字符串的正确切片、求长度等操作的复杂度会变成 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span> 而不是通常的 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span>。</li>
+<li>代表作：Rust 语言、Go 语言、CMake 构建系统、Julia 语言等。</li>
+</ul>
+<p>在 C++ 中，可以通过 <code>u8"你好"</code> 创建一个保证内部是 UTF-8 编码的字符串常量，类型为 <code>char8_t []</code>。</p>
+<p>如果用无前缀的 <code>"你好"</code> 创建，则 MSVC 默认会以编译者所在系统的“区域设置 (locale)” 作为字符串常量的编码格式（而不是运行者的区域设置！），开启 <code>/utf-8</code> 选项可以让 MSVC 编译器默认采用 UTF-8 编码，即让 <code>"你好"</code> 和 <code>u8"你好"</code> 一样采用 UTF-8。而 GCC 默认就是 UTF-8，除非手动指定 <code>-fexec-charset=GBK</code> 来切换到 GBK。稍后会详细讨论编译器的字符编码问题。</p>
+<p>假设你通过 <code>/utf-8</code> 或 <code>-fexec-charset=utf-8</code> 搞定了编译期常量字符串的编码。接下来还有一个问题，文件系统。</p>
+<p>Linux 文件系统内部，均使用 8 位类型 <code>char</code> 存储，将文件名当作平凡的字节流，不会做任何转换。因此你用 UTF-8 创建和打开的文件，其他使用 UTF-8 区域设置的软件都可以照常打开，不会有乱码问题。</p>
+<div id="admonition-info-4" class="admonition admonish-info" role="note" aria-labelledby="admonition-info-4-title">
+<div class="admonition-title">
+<div id="admonition-info-4-title">
+<p>Info</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-info-4"></a>
+</div>
+<div>
+<p>其实 Windows 上以 GBK 编码的压缩文件或文本文件，拷贝到 Linux 上打开出现乱码问题，就是因为 Linux 的区域设置默认都是 UTF-8 的。实际上如果把你的文件拷给一个美国的 Windows 用户，他也会看到乱码，因为美国大区的 Windows 区域设置默认是 UTF-8，而中国大区的是 GBK，稍后我们会讲到解决方案。</p>
+</div>
+</div>
+<p>而 Windows 的 NTFS 文件系统，采用 16 位的 <code>wchar_t</code> 存储，Windows 的所有 API，也都是基于 <code>wchar_t</code> 的，Windows 内核内部也都用 <code>wchar_t</code> 储存文本字符串，只有二进制的字节流会用 <code>char</code> 存储。这类基于 <code>wchar_t</code> 的系统 API 都有一个 <code>W</code> 后缀，例如：</p>
+<pre><code class="language-cpp">MessageBoxW(NULL, L"你好", L"标题", MB_OK);
+</code></pre>
+<div id="admonition-abstract-7" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-7-title">
+<div class="admonition-title">
+<div id="admonition-abstract-7-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-7"></a>
+</div>
+<div>
+<p>这个 <code>MessageBoxW</code> 函数，只接受 <code>const wchar_t *</code> 类型的字符串。<code>L"你好"</code> 是一个 <code>wchar_t []</code> 类型的字符串常量，它的内部编码类型固定是 UTF-16，不会随着“区域设置”而变。之后的一节中会详细讲解 W 和 A 函数的问题。</p>
+</div>
+</div>
+<p>虽然也有提供 <code>A</code> 后缀的系列函数，他们和 <code>W</code> 一样，只不过是接受 <code>const char *</code> 类型的字符串。问题在于，这些字符串都必须是“区域设置”里的那个编码格式，也就是 GBK 编码！而且无法修改。</p>
+<p>当调用 <code>A</code> 系函数时，他们内部会把 GBK 编码转换为 UTF-16 编码，然后调用 Windows 内核。</p>
+<p>这是一个糟糕的设计，而所有的 C/C++ 标准库都是基于 <code>A</code> 函数的！如果你用 <code>const char *</code> 字符串调用 C 标准库，相当于调用了 <code>A</code> 函数。而 <code>A</code> 函数只接受 GBK，但你却输入了 UTF-8！从而 UTF-8 中所有除 ASCII 以外的，各种中文字符、Emoji 都会变成乱码。</p>
+<p>例如 <code>fopen</code> 函数，只有 <code>fopen(const char *path, const char *mode)</code> 这一个基于 <code>char</code> 的版本，里面也是直接调用的 <code>A</code> 函数，完全不给我选择的空间。虽然 Windows 也提供了 <code>_wfopen(const wchar_t *path, const wchar_t *mode)</code>，但那既不是 POSIX 标准的一部分，也不是 C 语言标准的一部分，使用这样的函数就意味着无法跨平台。</p>
+<div id="admonition-note-16" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-16-title">
+<div class="admonition-title">
+<div id="admonition-note-16-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-16"></a>
+</div>
+<div>
+<p>Windows 官方认为：<code>W</code> 函数才是真正的 API，<code>A</code> 函数只是应付不听话的宝宝。可你就没发现你自己的 C/C++ 标准库也全部在调用的 <code>A</code> 函数么？</p>
+</div>
+</div>
+<p>总之，<code>A</code> 函数是残废的，我们只能用 <code>W</code> 函数，尽管 UTF-16 是历史债，但我们别无选择，<code>W</code> 函数是唯一能支持完整 Unicode 字符输入的方式。</p>
+<pre><code class="language-cpp">// 假设这段 C++ 代码使用 /utf-8 选项编译：
+std::ifstream f("你好.txt"); // 找不到文件，即使“你好.txt”存在
+std::ofstream f("你好.txt"); // 会创建一个乱码文件
+</code></pre>
+<p>正确的做法是采用 <code>std::filesystem::u8path</code> 这个函数做 UTF-8 到 UTF-16 的转换：</p>
+<pre><code class="language-cpp">// C++17，需要用 u8path 这个函数构造 path 对象：
+std::ifstream f(std::filesystem::u8path("你好.txt"));
+std::ofstream f(std::filesystem::u8path("你好.txt"));
+
+// C++20 引入 char8_t，区分于普通 char，path 类也有了针对 const char8_t * 的构造函数重载：
+std::ifstream f(std::filesystem::path(u8"你好.txt"));
+std::ofstream f(std::filesystem::path(u8"你好.txt"));
+</code></pre>
+<div id="admonition-abstract-8" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-8-title">
+<div class="admonition-title">
+<div id="admonition-abstract-8-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-8"></a>
+</div>
+<div>
+<p><code>std::filesystem::path</code> 类的 <code>c_str()</code> 在 Windows 上返回 <code>const wchar_t *</code>，在 Linux 上返回 <code>const char *</code>。这很合理，因为 Windows 文件系统确实以 <code>wchar_t</code> 存储路径名，而 Linux 文件系统完全用 <code>char</code>。</p>
+</div>
+</div>
+<p>每次需要加 <code>std::filesystem::u8path</code> 也挺麻烦的，容易忘记，一忘记就无法访问中文目录。</p>
+<div id="admonition-info-5" class="admonition admonish-info" role="note" aria-labelledby="admonition-info-5-title">
+<div class="admonition-title">
+<div id="admonition-info-5-title">
+<p>Info</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-info-5"></a>
+</div>
+<div>
+<p>很多软件在 Windows 上无法支持中文路径名，就是因为他们习惯了 Linux 或 MacOS 的全 UTF-8 环境，对文件路径没有任何转换。而 Windows 底层全是 UTF-16，根本没有提供 UTF-8 的 API，你 UTF-8 只能转换成 UTF-16 才能避免中文乱码。个人认为，死活不肯接受明摆着已经是国际通用标准的 UTF-8，A 函数的编码连当前进程切换的方法都不给一个，这个应该由 Windows 全责承担。</p>
+</div>
+</div>
+<p>好消息是，最近 MSVC 标准库提供了一种方案，在你的程序开头，加上 <code>setlocale(LC_ALL, ".utf-8")</code> 就可以让 C 和 C++ 标准库进入 UTF-8 模式：不再调用 <code>A</code> 系函数操作文件，而是会把文件名从 UTF-8 转换成 UTF-16 后再调用真正稳定的 <code>W</code> 系函数。</p>
+<pre><code class="language-cpp">setlocale(LC_ALL, ".utf-8");          // 只需要这一行
+FILE *fp = fopen(u8"你好.txt", "r"); // 可以了
+std::ifstream fin(u8"你好.txt");     // 可以了
+</code></pre>
+<div id="admonition-tip-13" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-13-title">
+<div class="admonition-title">
+<div id="admonition-tip-13-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-13"></a>
+</div>
+<div>
+<p><code>setlocale(LC_ALL, ".utf-8");</code> 只是把 C 标准库的 <code>const char *</code> 参数变成了接受 UTF-8，并不会让系统的 <code>A</code> 函数也变成 UTF-8 哦，调用本地 API 时仍需 UTF-8 到 UTF-16 的转换。</p>
+</div>
+</div>
+<p><em>总结：要支持 UTF-8 阵营，开启 <code>/utf-8</code>，程序开头写 <code>setlocale(LC_ALL, ".utf-8")</code>。Linux 用户则什么都不用做。</em></p>
+<p>看看各大软件站在 UTF-8 阵营的理由：</p>
+<p>CMake：作为跨平台的构建系统，为了让项目的 <code>CMakeLists.txt</code> 能跨平台共用而不必重写，他理所当然地站在了 UTF-8 阵营：所有 <code>CMakeLists.txt</code> 都必须以 UTF-8 格式书写，且统一使用正斜杠 <code>'/'</code> 路径分隔符。</p>
+<p>CMake 会自动在 Windows 系统上，将 UTF-8 字符串转换成 UTF-16 后，调用 Windows 系统 API，在 Linux 系统上则不做转换。在 Windows 系统上还会自动把文件路径中的正斜杠 <code>'/'</code> 转换成 Windows 专属的反斜杠 <code>'\\'</code>，无需用户操心。</p>
+<p>小彭老师自主研发的 Zeno 节点仿真软件：由于保存的项目工程文件需要在 Linux 和 Windows 平台上互通，不能采用 Windows 各自为政的 GBK 格式，且工程文件内容是以 ASCII 为主的“代码”类文本，所以我们也站在了 UTF-8 阵营中。</p>
+<p>Rust 和 Go：严格区分“字符 (32 位)”和“字节 (8 位)”的概念。在字符串类型中存储字节，但可以选择以字节方式读取或以字符方式读取。</p>
+<p>这相当于是把 UTF-8 当作了内码，但 UTF-8 是一种变长编码，处理切片和索引时不方便。</p>
+<div class="table-wrapper"><table><thead><tr><th>编程语言</th><th>字符类型 (32 位)</th><th>字节类型 (8 位)</th></tr></thead><tbody>
+<tr><td>Rust</td><td><code>char</code></td><td><code>u8</code></td></tr>
+<tr><td>Go</td><td><code>rune</code></td><td><code>byte</code></td></tr>
+<tr><td>Julia</td><td><code>Char</code></td><td><code>UInt8</code></td></tr>
+</tbody></table>
+</div>
+<p>为此，这些语言都为字符串提供了两套 API，一种是按字符索引，一种是按字节索引。按字符索引时，会从头开始，逐个解析码位，直到解析到想要的字符为止，复杂度 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span>。按字节索引时，直接跳到指定字节，无需解析，复杂度 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span>。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let s = "你好";
+// 按字符遍历
+for c in s.chars() {
+    // c: char
+    println!("{}", c);
+}
+// 按字节遍历
+for b in s.bytes() {
+    // b: u8
+    println!("{:02x}", b);
+}
+<span class="boring">}</span></code></pre></pre>
+<p>在 C++ 中，若要采用这种 UTF-8 方案，可以使用 <code>utfcpp</code> 这个库：</p>
+<p>https://github.com/nemtrif/utfcpp</p>
+<div id="admonition-tip-14" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-14-title">
+<div class="admonition-title">
+<div id="admonition-tip-14-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-14"></a>
+</div>
+<div>
+<p>稍后我们会以案例详细演示这个库的用法，也会尝试自己手搓。</p>
+</div>
+</div>
+<p>方法1：使用 <code>utf8to32</code> 一次性完成转换，用完后再转回去。</p>
+<pre><code class="language-cpp">std::string s = "你好";
+std::u32string u32 = utf8::utf8to32(s);
+fmt::println("U+{:04X}", static_cast&lt;std::uint32_t&gt;(u32[0]));
+fmt::println("U+{:04X}", static_cast&lt;std::uint32_t&gt;(u32[1]));
+u32[1] = U'坏';
+s = utf8::utf32to8(u32);
+fmt::println("{}", s); // 你坏
+</code></pre>
+<p>方法2：<code>utfcpp</code> 也封装了一个 utf8::iterator 迭代器适配器，效果类似于 Rust 的 <code>.chars()</code>，可以字符而不是字节遍历字符串容器。</p>
+<pre><code class="language-cpp">char s[] = "你好";
+utf8::unchecked::iterator&lt;char *&gt; bit(s);
+utf8::unchecked::iterator&lt;char *&gt; eit(s + strlen(s));
+for (auto it = bit; it != eit; ++it) {
+    // *it: char32_t
+    fmt::println("U+{:04X}", static_cast&lt;std::uint32_t&gt;(*it));
+}
+
+// 安全（带边界检测）的版本
+char s[] = "你好";
+utf8::iterator&lt;char *&gt; bit(s, s, s + strlen(s));
+utf8::iterator&lt;char *&gt; eit(s + strlen(s), s, s + strlen(s));
+for (auto it = bit; it != eit; ++it) {
+    // *it: char32_t
+    fmt::println("U+{:04X}", static_cast&lt;std::uint32_t&gt;(*it));
+}
+
+// 基于 std::string 的版本
+std::string s = "你好";
+utf8::iterator&lt;std::string::iterator&gt; bit(s.begin(), s.begin(), s.end());
+utf8::iterator&lt;std::string::iterator&gt; eit(s.end(), s.begin(), s.end());
+for (auto it = bit; it != eit; ++it) {
+    // *it: char32_t
+    fmt::println("U+{:04X}", static_cast&lt;std::uint32_t&gt;(*it));
+}
+</code></pre>
+<p>由于迭代器接口复杂难懂，建议先封装成带有 <code>begin()</code> 和 <code>end()</code> 的 range 对象，方便使用 C++17 range-based loop 语法直观遍历：</p>
+<pre><code class="language-cpp">template &lt;class It&gt;
+struct Utf8Range {
+    utf8::iterator&lt;It&gt; bit;
+    utf8::iterator&lt;It&gt; eit;
+
+    template &lt;class T&gt;
+    Utf8Range(T &amp;&amp;t)
+        : bit(std::begin(t), std::begin(t), std::end(t))
+        , eit(std::end(t), std::begin(t), std::end(t)) {}
+    auto begin() const { return bit; }
+    auto end() const { return eit; }
+};
+
+template &lt;class T&gt;
+Utf8Range(T &amp;&amp;t) -&gt; Utf8Range&lt;decltype(std::begin(t))&gt;;
+
+// 以下是新类的使用方法
+std::string s = "你好";
+for (char32_t c : Utf8Range(s)) {
+    fmt::println("U+{:04X}", static_cast&lt;std::uint32_t&gt;(c));
+}
+</code></pre>
+<h3 id="utf-16-阵营"><a class="header" href="#utf-16-阵营">UTF-16 阵营</a></h3>
+<p>支持 Unicode 过早，误以为 0xFFFF 就是 Unicode 的上限。</p>
+<p>一开始，人们错误地把 UTF-16 当成永远的定长编码，一劳永逸解决乱码问题，所以那段时期的软件都大举使用 UTF-16 作为内码。没想到后来 Unicode 又引入 0x10FFFF 范围的稀有字符，而现有的已经采用了 16 位内码的软件又已经无法根除，只好使用“代理对”机制，增量更新修复了现有的 16 位内码软件。UTF-16 既没有 UTF-8 兼容 ASCII 的好处，又没有 UTF-32 定长编码的好处，留下历史债。</p>
+<div id="admonition-info-6" class="admonition admonish-info" role="note" aria-labelledby="admonition-info-6-title">
+<div class="admonition-title">
+<div id="admonition-info-6-title">
+<p>Info</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-info-6"></a>
+</div>
+<div>
+<p>事实上，Unicode 已经无法继续扩容突破 0x10FFFF，就是因为双 <code>uint16_t</code> 编码的代理对最多只能容纳额外 0x100000 个字符的空间。本来 UTF-8 一开始的草案是打算最多支持 8 节列车，完全容纳高达 0x7FFFFFFF 范围的字符。为了让 Windows 还能继续用，Unicode 才被迫止步 0x10FFFF，UTF-8 也终结于 4 节列车。</p>
+</div>
+</div>
+<ul>
+<li>应用场景：通常认为，UTF-16 是纯粹的历史遗留糟粕，新软件不应该再使用 UTF-16。只有在和这些糟粕软件的 API 打交道时，才必须转换为 UTF-16。但也有人指出：UTF-16 是纯中文压缩率最高的编码格式，所以 UTF-16 还比较适合纯中文或以中文内容为主的文本数据压缩。</li>
+<li>方法：始终以 UTF-16 编码存储和处理字符串。</li>
+<li>优点：调用 Windows 系统 API 时无需任何转换，直接就能调用，最适合 Windows 本地开发，非跨平台。且对纯中文内容可比 UTF-8 额外节省 33% 空间。</li>
+<li>缺点：对于 Windows 以外的系统就需要转换回 UTF-8，有少量性能开销。且如果存储的内容主要是纯英文，如 XML 代码等，内存占用会比 UTF-8 翻倍。而且 UTF-16 仍然是变长编码，虽然出现变长的概率较低，但不为 0，仍需要开发者做特殊处理。字符串的按码位反转会导致生僻字符出错，字符串以码点为单位的的正确切片、求长度等操作的复杂度仍然 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span> 而不是通常的 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span>。并且 UTF-16 有大小端转换的问题。</li>
+<li>代表作：Windows 系统 API、Java 语言、Windows 文件系统 (NTFS)、Qt、Word、JSON，他们都是 UTF-16 的受害者。</li>
+</ul>
+<p>这相当于是把 UTF-16 当作了内码，但 UTF-16 依然是一种变长编码，对常见的中文处理没问题，生僻字就容易出问题，且因为出现概率低，很容易不发现，埋下隐患。</p>
+<p>Java 就是受到了 UTF-16 历史债影响，<code>char</code> 是 16 位的码位，而不是字符，真正的一个字符是 32 位的 <code>Character</code> 类型。</p>
+<div class="table-wrapper"><table><thead><tr><th>编程语言</th><th>码点类型 (32 位)</th><th>码位类型 (16 位)</th></tr></thead><tbody>
+<tr><td>Java</td><td><code>Character</code></td><td><code>char</code></td></tr>
+</tbody></table>
+</div><div id="admonition-abstract-9" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-9-title">
+<div class="admonition-title">
+<div id="admonition-abstract-9-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-9"></a>
+</div>
+<div>
+<p>Java 的 <code>Character</code> 类型是一个 32 位的值，这个值包含了一个 Unicode 码位。<code>char</code> 类型是一个 16 位的值，它包含了一个 UTF-16 编码的码点。<code>String</code> 的 <code>charAt()</code> 方法返回的是 <code>char</code> 类型的码位（类似于字节），如果要获取 <code>Character</code> 类型的完整字符，必须使用 <code>codePointAt()</code> 方法。这是 Java 语言设计上的一个失误，已经无法改变。</p>
+</div>
+</div>
+<p>而后续新出的 Kotlin 是 Java 的合法继承者，他果断放弃 UTF-16，加入了 UTF-32 阵营。可见，老软件坚持用 UTF-16 是因为他们积重难返，新软件再用 UTF-16 就是自作孽了！</p>
+<p><strong>总结：不要支持 UTF-16 阵营，除非你被迫维护史山。</strong></p>
+<div id="admonition-note-17" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-17-title">
+<div class="admonition-title">
+<div id="admonition-note-17-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-17"></a>
+</div>
+<div>
+<p>例如小彭老师发微信朋友圈时，输入 Emoji 表情后剪切，再粘贴，就和发现一个 Emoji 被切断成了两个代理对，以乱码的形式显现。估计是因为微信基于 Java 编写，疼逊程序员对 UTF-16 代理对处理的不利索。</p>
+</div>
+</div>
+<p>Java 中以码点遍历一个字符串的写法：</p>
+<pre><code class="language-java">String s = "你好";
+// 按码点遍历
+for (int i = 0; i &lt; s.length();) {
+    Character c = s.codePointAt(i);
+    System.out.println(String.format("U+%04X", c));
+    i += Character.charCount(c);
+}
+// 按码位遍历
+for (char c : s.toCharArray()) {
+    System.out.println(String.format("U+%04X", (int) c));
+}
+</code></pre>
+<p>由于 JSON 是和 Java 一块发明的。对于超出 0xFFFF 范围的字符，采用的转义，也是基于 UTF-16 编码。即同一个字会变成两个代理对，以保证 JSON 文件总是 ASCII 格式，避免 Windows 的 GBK 编码乱做额外的干扰。</p>
+<pre><code class="language-json">// 以下两种写法等价
+{"name": "𰻞"}
+{"name": "\ud883\udfde"}
+</code></pre>
+<p>在刚刚介绍的 C++ 库 <code>utfcpp</code> 中，也有针对 UTF-16 的转换函数，如 <code>utf16to32</code>：</p>
+<pre><code class="language-cpp">std::u16string s = u"你好";
+std::u32string u32 = utf16::utf16to32(s);
+fmt::println("U+{:04X}", static_cast&lt;std::uint32_t&gt;(u32[0]));
+fmt::println("U+{:04X}", static_cast&lt;std::uint32_t&gt;(u32[1]));
+u32[1] = U'𰻞';
+s = utf16::utf32to16(u32);
+fmt::println("{}", s);          // 你𰻞
+fmt::println("{}", u32.size()); // 2
+fmt::println("{}", s.size());   // 3
+</code></pre>
+<h3 id="utf-32-阵营"><a class="header" href="#utf-32-阵营">UTF-32 阵营</a></h3>
+<p>支持 Unicode，每个码点都用一个 <code>uint32_t</code> 或 <code>char32_t</code> 表示。</p>
+<ul>
+<li>应用场景：适合需要经常处理文字的领域，如文本编辑器、浏览器等。但不适合存储和传输，因为浪费硬盘和网络带宽。字符串一般都长期以 UTF-8 存储，只有在需要频繁索引码位时，才需要转换为 UTF-32。</li>
+<li>方法：始终以 UTF-32 编码存储和处理字符串。</li>
+<li>优点：字符串的按码位反转、切片、求长度等操作都是 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span> 的复杂度，可以当作普通数组一样，随意处理。例如你可以设想一个文本编辑框，需要支持“退格”操作，如果是 UTF-8 和 UTF-16 就需要繁琐的判断代理对、各种车厢，而 UTF-32 的字符串只需要一次 <code>pop_back</code> 就搞定了。</li>
+<li>缺点：浪费空间大，通常在保存时，仍然需要转换回 UTF-8 后再写入文件，有一定性能开销。</li>
+</ul>
+<p><em>总结：要支持 UTF-32 阵营，请全部使用 <code>char32_t</code> 和 <code>std::u32string</code>。字面量全用 <code>U"你好"</code> 的形式书写，读文件时转为 UTF-32，写文件时转回 UTF-8。</em></p>
+<h2 id="字符编码的转换"><a class="header" href="#字符编码的转换">字符编码的转换</a></h2>
+<p>由于 C++26 前标准库对编码转换几乎没有支持，在 C++ 中转换编码格式，通常都需要第三方库。</p>
+<h3 id="不同-utf-之间互转utfcpp"><a class="header" href="#不同-utf-之间互转utfcpp">不同 UTF 之间互转：<code>utfcpp</code></a></h3>
+<p>如果你只是需要不同 UTF 格式之间的转换，没有处理 GBK 等的需求：那么之前已经介绍了 <code>utfcpp</code> 这个方便的库，已经够用。</p>
+<pre><code class="language-cpp">#include "utf8/cpp20.h"
+
+std::u8string s8 = u8"你好";
+std::u16string s16 = utf8::utf8to16(s8);
+std::u32string s32 = utf8::utf8to32(s8);
+std::string s = utf8::utf16to8(s16);
+s8 = utf8::utf16tou8(s16);
+</code></pre>
+<div id="admonition-tip-15" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-15-title">
+<div class="admonition-title">
+<div id="admonition-tip-15-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-15"></a>
+</div>
+<div>
+<p>最后这两个区别在于，<code>utf16to8</code> 返回 <code>std::string</code>，<code>utf16tou8</code> 返回 <code>std::u8string</code>，里面都是 UTF-8 编码的，不过有的人喜欢用 <code>std::string</code> 来存储 UTF-8，不喜欢 <code>std::u8string</code>，或者说他们没有 C++20，不支持 <code>std::u8string</code>，因此这个库满足他们的不同需要。但是 <code>std::u8string</code> 作为参数时不需要，因为参数可以自动重载，而返回值不行。</p>
+</div>
+</div>
+<p>缺点是他不能处理 GBK、Shift-JIS 等非 Unicode 编码，也不能自动检测当前的 ANSI 区域设置。</p>
+<h3 id="跨平台的任意编码转换boostlocale"><a class="header" href="#跨平台的任意编码转换boostlocale">跨平台的任意编码转换：<code>boost::locale</code></a></h3>
+<p>如果你还要支持其他编码格式，比如 GBK、Shift-JIS、Latin-1。</p>
+<p>一种是 C 语言的 <code>iconv</code>，另一种是现代 C++ 的 <code>boost::locale</code>。</p>
+<p>虽然功能差不多，底层都是调用 <code>icu</code> 的。<code>boost::locale</code> 的 API 更加友好，而且是现代 C++ 风格的。</p>
+<pre><code class="language-bash"># Ubuntu 用户安装 Boost.locale 方法：
+$ sudo apt-get install libboost-locale-dev
+# Arch Linux 用户安装 Boost 全家桶方法：
+$ sudo pacman -S boost
+</code></pre>
+<div id="admonition-note-18" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-18-title">
+<div class="admonition-title">
+<div id="admonition-note-18-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-18"></a>
+</div>
+<div>
+<p>不喜欢 Boost 的人有难了。</p>
+</div>
+</div>
+<h4 id="utf-之间互转"><a class="header" href="#utf-之间互转">UTF 之间互转</a></h4>
+<p>使用 <code>boost::locale::conv::utf_to_utf</code> 就能轻易做到。</p>
+<pre><code class="language-cpp">#include &lt;boost/locale.hpp&gt;
+#include &lt;iostream&gt;
+
+using boost::locale::conv::utf_to_utf;
+
+int main() {
+    std::string s8 = u8"你好";
+    // UTF-8 转 UTF-32：
+    std::u32string s32 = utf_to_utf&lt;char32_t&gt;(s8);
+    // UTF-32 转 UTF-16：
+    std::u16string s16 = utf_to_utf&lt;char16_t&gt;(s32);
+    // UTF-32 转 UTF-8：
+    s8 = utf_to_utf&lt;char&gt;(s32);
+    std::cout &lt;&lt; s8 &lt;&lt; '\n';
+    return 0;
+}
+</code></pre>
+<p>模板参数中，只需指定转换到的是什么类型就行，来自什么类型，他自己会重载的。</p>
+<p>比如从 <code>char32_t</code> 转到 <code>char16_t</code>，只需要 <code>utf_to_utf&lt;char32_t&gt;</code> 就可以，非常方便。</p>
+<p>编译：</p>
+<pre><code class="language-bash">$ g++ -std=c++17 -lboost_locale main.cpp
+</code></pre>
+<p>输出：</p>
+<pre><code>你好
+</code></pre>
+<p>建议用同样跨平台的 CMake 链接 Boost，否则 Windows 用户要有难了……</p>
+<pre><code class="language-cmake">find_package(Boost REQUIRED COMPONENTS locale)
+target_link_libraries(你的程序 Boost::locale)
+</code></pre>
+<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+<div class="admonition-title">
+<div id="admonition-warning-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-warning"></a>
+</div>
+<div>
+<p>不过 <code>boost::locale</code> 有一个缺点，那就是不支持 <code>char8_t</code> 和 <code>std::u8string</code>。</p>
+</div>
+</div>
+<div id="admonition-tip-16" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-16-title">
+<div class="admonition-title">
+<div id="admonition-tip-16-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-16"></a>
+</div>
+<div>
+<p><code>char8_t</code> 是 C++20 引入的新字符类型，用于强类型的君子协议，和 <code>char</code> 并没有实际区别。只是方便了函数类型签名更加一目了然，这个参数只能接受 UTF-8 编码的字符串！</p>
+</div>
+</div>
+<p>由于 Boost 较老，没有及时跟进，所以他并没有实现针对 <code>char8_t</code> 的特化，如果使用了 <code>utf_to_utf&lt;char8_t&gt;</code> 会报 <code>undefined reference</code> 错误，即找不到符号。改成 <code>utf_to_utf&lt;char&gt;</code> 就没问题了。</p>
+<h4 id="gbk-和-utf-互转"><a class="header" href="#gbk-和-utf-互转">GBK 和 UTF 互转</a></h4>
+<p>使用 <code>boost::locale::conv::to/from_utf</code> 就能轻易做到。</p>
+<pre><code class="language-cpp">#include &lt;boost/locale.hpp&gt;
+#include &lt;iostream&gt;
+
+using boost::locale::conv::to_utf;
+using boost::locale::conv::from_utf;
+
+int main() {
+    std::string s = "你好";
+    // 从 GBK 转到 UTF-16
+    std::wstring ws = to_utf&lt;wchar_t&gt;(s, "GBK");
+    std::wcout &lt;&lt; ws &lt;&lt; '\n';
+    // 从 UTF-16 转回 GBK
+    s = from_utf(ws, "GBK");
+    std::wcout &lt;&lt; s &lt;&lt; '\n';
+    return 0;
+}
+</code></pre>
+<p>第二个参数可以是 <code>GBK</code>、<code>Shift-JIS</code>、<code>Latin1</code> 等其他编码格式，完整的列表可以在看到。</p>
+<p>这里 <code>to_utf&lt;wchar_t&gt;</code> 会自动判断 <code>wchar_t</code> 的大小。如果是 2 字节（Windows 平台情况）会认为你要转为 UTF-16，如果是 4 字节（Linux 平台情况），会认为你要转为 UTF-32。</p>
+<p>而 <code>to_char&lt;char16_t&gt;</code> 则是无论什么平台，都会转为 UTF-16。</p>
+<p><code>from_utf</code> 不需要指定任何模板参数，因为他总是返回 <code>std::string</code>（ANSI 或 GBK 编码的字符串），参数是什么编码，会自动通过重载判断，例如 <code>from_utf(ws, "GBK")</code> 这里的参数是 <code>wchar_t</code>，那么在 Windows 上，他会检测到 <code>wchar_t</code> 是 2 字节，就认为是 UTF-16 到 GBK 的转换。</p>
+<h4 id="utf-和-ansi-互转"><a class="header" href="#utf-和-ansi-互转">UTF 和 ANSI 互转</a></h4>
+<p>我们程序的用户不一定是中国用户（GBK），也可能是俄罗斯用户（CP1251）、日本用户（Shift-JIS）、西班牙用户（CP1252）等。</p>
+<p>如果要采用用户的区域设置，即“ANSI”，可以把字符串留空（<code>""</code>）。</p>
+<p>空字符串就表示采用当前系统区域设置了，在中国大区等价于 <code>"GBK"</code>，俄罗斯大区等价于 <code>"CP1251"</code> 等。</p>
+<pre><code class="language-cpp">#include &lt;boost/locale.hpp&gt;
+#include &lt;iostream&gt;
+
+using boost::locale::conv::from_utf;
+using boost::locale::conv::to_utf;
+
+int main() {
+    setlocale(LC_ALL, ""); // 如果你想给 Boost 用空字符串，首先需要设置一下这一行
+
+    std::string u8s = u8"你好";
+    // UTF-8 转 ANSI
+    std::string s = from_utf(u8s, "");
+    // ANSI 转 UTF-8
+    u8s = to_utf&lt;char&gt;(s, "");
+    return 0;
+}
+</code></pre>
+<div id="admonition-abstract-10" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-10-title">
+<div class="admonition-title">
+<div id="admonition-abstract-10-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-10"></a>
+</div>
+<div>
+<p><code>setlocale(LC_ALL, "");</code> 中的空字符串表示</p>
+</div>
+</div>
+<h4 id="大总结"><a class="header" href="#大总结">大总结</a></h4>
+<div class="table-wrapper"><table><thead><tr><th>函数名称</th><th>从</th><th>到</th></tr></thead><tbody>
+<tr><td><code>utf_to_utf&lt;char&gt;</code></td><td>UTF-x</td><td>UTF-8</td></tr>
+<tr><td><code>utf_to_utf&lt;char8_t&gt;</code></td><td>UTF-x</td><td>UTF-8</td></tr>
+<tr><td><code>utf_to_utf&lt;char16_t&gt;</code></td><td>UTF-x</td><td>UTF-16</td></tr>
+<tr><td><code>utf_to_utf&lt;char32_t&gt;</code></td><td>UTF-x</td><td>UTF-32</td></tr>
+<tr><td><code>utf_to_utf&lt;wchar_t&gt;</code></td><td>UTF-x</td><td>Linux 上 UTF-32；Win 上 UTF-16</td></tr>
+</tbody></table>
+</div><div id="admonition-tip-17" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-17-title">
+<div class="admonition-title">
+<div id="admonition-tip-17-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-17"></a>
+</div>
+<div>
+<p>UTF-x 表示取决于参数类型的大小，如果参数是 <code>char16_t</code> 的字符串 <code>std::u16string</code>，那 x 就是 16。</p>
+</div>
+</div>
+<div class="table-wrapper"><table><thead><tr><th>函数名称</th><th>从</th><th>到</th></tr></thead><tbody>
+<tr><td><code>to_utf&lt;char&gt;(string, "GBK")</code></td><td>GBK</td><td>UTF-8</td></tr>
+<tr><td><code>to_utf&lt;char8_t&gt;(string, "GBK")</code></td><td>GBK</td><td>UTF-8</td></tr>
+<tr><td><code>to_utf&lt;char16_t&gt;(string, "GBK")</code></td><td>GBK</td><td>UTF-16</td></tr>
+<tr><td><code>to_utf&lt;char32_t&gt;(string, "GBK")</code></td><td>GBK</td><td>UTF-32</td></tr>
+<tr><td><code>to_utf&lt;wchar_t&gt;(string, "GBK")</code></td><td>GBK</td><td>Linux 上 UTF-32；Win 上 UTF-16</td></tr>
+<tr><td><code>to_utf&lt;char&gt;(string, "")</code></td><td>区域设置</td><td>UTF-8</td></tr>
+<tr><td><code>to_utf&lt;char8_t&gt;(string, "")</code></td><td>区域设置</td><td>UTF-8</td></tr>
+<tr><td><code>to_utf&lt;char16_t&gt;(string, "")</code></td><td>区域设置</td><td>UTF-16</td></tr>
+<tr><td><code>to_utf&lt;char32_t&gt;(string, "")</code></td><td>区域设置</td><td>UTF-32</td></tr>
+<tr><td><code>to_utf&lt;wchar_t&gt;(string, "")</code></td><td>区域设置</td><td>Linux 上 UTF-32；Win 上 UTF-16</td></tr>
+</tbody></table>
+</div><div class="table-wrapper"><table><thead><tr><th>函数名称</th><th>从</th><th>到</th></tr></thead><tbody>
+<tr><td><code>from_utf(string, "GBK")</code></td><td>UTF-8</td><td>GBK</td></tr>
+<tr><td><code>from_utf(u16string,"GBK")</code></td><td>UTF-16</td><td>GBK</td></tr>
+<tr><td><code>from_utf(u32string, "GBK")</code></td><td>UTF-32</td><td>GBK</td></tr>
+<tr><td><code>from_utf(wstring, "GBK")</code></td><td>Linux 上 UTF-32；Win 上 UTF-16</td><td>GBK</td></tr>
+<tr><td><code>from_utf(string, "")</code></td><td>UTF-8</td><td>区域设置</td></tr>
+<tr><td><code>from_utf(u16string, "")</code></td><td>UTF-16</td><td>区域设置</td></tr>
+<tr><td><code>from_utf(u32string, "")</code></td><td>UTF-32</td><td>区域设置</td></tr>
+<tr><td><code>from_utf(wstring, "")</code></td><td>Linux 上 UTF-32；Win 上 UTF-16</td><td>区域设置</td></tr>
+</tbody></table>
+</div>
+<h4 id="gbk-和-shift-jis-互转"><a class="header" href="#gbk-和-shift-jis-互转">GBK 和 Shift-JIS 互转</a></h4>
+<pre><code class="language-cpp">#include &lt;boost/locale.hpp&gt;
+#include &lt;iostream&gt;
+
+using boost::locale::conv::between;
+using boost::locale::conv::from_utf;
+
+int main() {
+    // 创建一个 Shift-JIS 字符串
+    std::string jis = from_utf(u8"日本語", "Shift-JIS");
+    // 从 Shift-JIS 转到 GBK
+    std::string gbk = between(jis, "GBK", "Shift-JIS");
+    std::cout &lt;&lt; gbk &lt;&lt; '\n';
+    // 从 GBK 转回 Shift-JIS
+    jis = between(gbk, "Shift-JIS", "GBK");
+    std::cout &lt;&lt; jis &lt;&lt; '\n';
+    return 0;
+}
+</code></pre>
+<div id="admonition-warning-1" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-1-title">
+<div class="admonition-title">
+<div id="admonition-warning-1-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-warning-1"></a>
+</div>
+<div>
+<p>注意！是目标编码在前！如果你要从 Shift-JIS 转成 GBK，那么需要 <code>between(jis, "GBK", "Shift-JIS")</code>，这真是一个糟糕的设计。不仅 GBK 和 Shift-JIS 可能不小心弄反了，编译器，一点提示都没有，而且 jis 和 "GBK" 都是字符串，很容易大脑搞混。让我来设计的话，我会这样提供 API：<code>decode(jis, Encoding::ShiftJIS).encode(Encoding::GBK)</code>，其中 <code>Encoding</code> 是一个枚举，强大的类型系统，不仅避免犯错的机会，看起来也更轻松。之后的设计模式专题课中，会再详细讲解什么是好的 API 设计。</p>
+</div>
+</div>
+<h4 id="指定处理错误的方法"><a class="header" href="#指定处理错误的方法">指定处理错误的方法</a></h4>
+<p>如果遇到无法编码的字符，该如何处置？</p>
+<p>默认情况下 Boost 会忽视错误，编码失败的字符会被丢弃。</p>
+<pre><code class="language-cpp">#include &lt;boost/locale.hpp&gt;
+#include &lt;iostream&gt;
+
+using boost::locale::conv::from_utf;
+
+int main() {
+    std::string utf8 = u8"我爱𰻞𰻞面";
+    // UTF-8 转 GBK
+    std::string gbk = from_utf(utf8, "GBK");
+    // 错误，“𰻞”无法用 GBK 表示！
+    std::cout &lt;&lt; gbk &lt;&lt; '\n';
+    // 在 Windows 的 GBK 终端上，只显示“我爱面”
+    return 0;
+}
+</code></pre>
+<p>可以用 <code>method_type</code> 这个枚举来指定错误处理的方式。</p>
+<p>默认是 <code>skip</code>，跳过所有解码出错的地方（导致“𰻞”丢失）。</p>
+<p>我们可以切换到 <code>stop</code>，当遇到解码错误时，会直接抛出异常，终止程序执行。</p>
+<pre><code class="language-cpp">#include &lt;boost/locale.hpp&gt;
+#include &lt;iostream&gt;
+
+using boost::locale::conv::from_utf;
+using boost::locale::conv::method_type;
+
+int main() {
+    std::string utf8 = u8"我爱𰻞𰻞面";
+    // UTF-8 转 GBK
+    std::string gbk = from_utf(utf8, "GBK",
+                               method_type::stop);
+    // 错误，“𰻞”无法用 GBK 表示！
+    // from_utf 会抛出 `conversion_error` 异常
+    std::cout &lt;&lt; gbk &lt;&lt; '\n';
+    return 0;
+}
+</code></pre>
+<p>举例：尝试以 GBK 保存，如果失败，则改为带有 BOM 的 UTF-8。</p>
+<pre><code class="language-cpp">#include &lt;boost/locale.hpp&gt;
+#include &lt;fstream&gt;
+
+using boost::locale::conv::from_utf;
+using boost::locale::conv::method_type;
+using boost::locale::conv::conversion_error;
+
+void try_save(std::u32string content, std::wstring path) {
+    std::string binary;
+    try {
+        // 尝试将 UTF-32 转成 GBK 编码
+        binary = from_utf(content, "GBK",
+                                method_type::stop);
+    } catch (conversion_error const &amp;e) { // 若 GBK 无法表示
+        // 改用前面带有 BOM 的 UTF-8 编码
+        binary = "\xEF\xBB\xBF" + utf_to_utf&lt;char&gt;(content);
+    }
+    std::ofstream(path) &lt;&lt; binary;
+}
+</code></pre>
+<p>举例：支持 UTF-8 字符串（而不是 ANSI 字符串）的打印函数。</p>
+<pre><code class="language-cpp">#include &lt;boost/locale.hpp&gt;
+#include &lt;iostream&gt;
+
+using boost::locale::conv::from_utf;
+using boost::locale::conv::utf_to_utf;
+
+static int dummy_init = (setlocale(LC_ALL, ""), 0); // 需要设置过 setlocale(LC_ALL, "") 后，才能使用 Boost 的空字符串写法
+
+void u8print(std::string msg) {
+    std::cout &lt;&lt; from_utf(msg, "");
+    // 或者：
+    // std::wcout &lt;&lt; utf_to_utf&lt;wchar_t&gt;(msg);
+}
+</code></pre>
+<div id="admonition-abstract-11" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-11-title">
+<div class="admonition-title">
+<div id="admonition-abstract-11-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-11"></a>
+</div>
+<div>
+<p>此处 <code>static int dummy_init =</code> 是一种静态初始化钩子的小技巧，之后设计模式课程的单例模式中会详细讲解。</p>
+</div>
+</div>
+<h4 id="更多功能"><a class="header" href="#更多功能">更多功能？！</a></h4>
+<div class="table-wrapper"><table><thead><tr><th>函数</th><th>从</th><th>到</th></tr></thead><tbody>
+<tr><td>utf_to_utf</td><td>UTF 系列</td><td>UTF 系列</td></tr>
+<tr><td>from_utf</td><td>UTF 系列</td><td>杂牌字符编码</td></tr>
+<tr><td>to_utf</td><td>杂牌字符编码</td><td>UTF 系列</td></tr>
+<tr><td>between</td><td>杂牌字符编码</td><td>杂牌字符编码</td></tr>
+</tbody></table>
+</div>
+<p>更多细节用法见官方文档：https://www.boost.org/doc/libs/1_81_0/libs/locale/doc/html/group__codepage.html</p>
+<p>不可思议的是：编码转换只是 <code>boost::locale::conv</code> 这个子模块下的一个小功能而已！<code>boost::locale</code> 还提供了更多功能，如按照地域语言规范格式化数字、货币、日期、时间等，下一小节中我们继续介绍。完全是 <code>std::locale</code> 的上位替代。</p>
+<div id="admonition-note-19" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-19-title">
+<div class="admonition-title">
+<div id="admonition-note-19-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-19"></a>
+</div>
+<div>
+<p>Boost 哪里都好，你想要的功能应有尽有。而且不需要 C++20，很低版本的 C++ 也能用。唯一缺点可能就是太肥了，编译慢。</p>
+</div>
+</div>
+<h3 id="windows-用户multibytetowidechar"><a class="header" href="#windows-用户multibytetowidechar">Windows 用户：MultiByteToWideChar</a></h3>
+<p>如果你是 Windows 程序员，没有跨平台需求，不想用 Boost，且需要在 Windows 系统区域设置规定的 ANSI（在中国区是 GBK）编码和 UTF-16 之间转换：</p>
+<p>可以用 Windows 官方提供的 <code>MultiByteToWideChar</code> 和 <code>WideCharToMultiByte</code> 函数。</p>
+<p>这两个函数因为 C 语言特色的缘故，参数比较多而杂，建议自己动手封装成更易用的 C++ 函数：</p>
+<pre><code class="language-cpp">std::wstring ansi_to_wstring(const std::string &amp;s) {
+    // ACP = ANSI Code Page，告诉他字符串里的是当前区域设置指定的编码（在中国区，ANSI 就是 GBK 了）
+    int len = MultiByteToWideChar(CP_ACP, 0,
+                                  s.c_str(), s.size(),
+                                  nullptr, 0);
+    std::wstring ws(len, 0);
+    MultiByteToWideChar(CP_ACP, 0,
+                        s.c_str(), s.size(), 
+                        ws.data(), ws.size());
+    return ws;
+}
+
+std::string wstring_to_ansi(const std::wstring &amp;ws) {
+    int len = WideCharToMultiByte(CP_ACP, 0,
+                                  ws.c_str(), ws.size(),
+                                  nullptr, 0,
+                                  nullptr, nullptr);
+    std::string s(len, 0);
+    WideCharToMultiByte(CP_ACP, 0,
+                        ws.c_str(), ws.size(),
+                        s.data(), s.size(),
+                        nullptr, nullptr);
+    return s;
+}
+
+std::wstring utf8_to_wstring(const std::string &amp;s) {
+    int len = MultiByteToWideChar(CP_UTF8, 0,
+                                  s.c_str(), s.size(),
+                                  nullptr, 0);
+    std::wstring ws(len, 0);
+    MultiByteToWideChar(CP_UTF8, 0,
+                        s.c_str(), s.size(), 
+                        ws.data(), ws.size());
+    return ws;
+}
+
+std::string wstring_to_utf8(const std::wstring &amp;ws) {
+    int len = WideCharToMultiByte(CP_UTF8, 0,
+                                  ws.c_str(), ws.size(),
+                                  nullptr, 0,
+                                  nullptr, nullptr);
+    std::string s(len, 0);
+    WideCharToMultiByte(CP_UTF8, 0,
+                        ws.c_str(), ws.size(),
+                        s.data(), s.size(),
+                        nullptr, nullptr);
+    return s;
+}
+</code></pre>
+<div id="admonition-abstract-12" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-12-title">
+<div class="admonition-title">
+<div id="admonition-abstract-12-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-12"></a>
+</div>
+<div>
+<p>C 语言特色：所有要返回字符串的函数，都需要调用两遍，第一波先求出长度，第二波才写入。这是为了避免与内存分配器耦合，所有的 C 风格 API 都是这样。</p>
+</div>
+</div>
+<h4 id="messageboxa-出现乱码问题解决案例"><a class="header" href="#messageboxa-出现乱码问题解决案例">MessageBoxA 出现乱码问题解决案例</a></h4>
+<p>复现条件：</p>
+<ul>
+<li>Windows 系统区域设置为中文 (GBK)。</li>
+<li>使用 MSVC 的 <code>/utf-8</code> 选项编译。</li>
+</ul>
+<pre><code class="language-cpp">#include &lt;windows.h&gt;
+
+int main() {
+    MessageBoxA(nullptr, "我爱𰻞𰻞面", "标题", MB_OK);
+    // 会变成乱码
+    return 0;
+}
+</code></pre>
+<h3 id="linux-用户iconv"><a class="header" href="#linux-用户iconv">Linux 用户：<code>iconv</code></a></h3>
+<p>如果你是 Linux 用户，且没有跨平台需求，不想用 Boost，可以使用 C 语言的 <code>iconv</code> 库。</p>
+<div id="admonition-tip-18" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-18-title">
+<div class="admonition-title">
+<div id="admonition-tip-18-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-18"></a>
+</div>
+<div>
+<p><code>iconv</code> 也有 Windows 的版本，但安装比较困难。如果你连 <code>iconv</code> 都搞得定，没理由 Boost 搞不定。</p>
+</div>
+</div>
+<pre><code class="language-cpp">#include &lt;iconv.h&gt;
+#include &lt;string&gt;
+
+std::string convert(std::string const &amp;s,
+                    char const *from, char const *to) {
+    iconv_t cd = iconv_open(to, from);
+    if (cd == (iconv_t)-1) {
+        throw std::runtime_error("iconv_open failed");
+    }
+    auto in = s.data();
+    auto inbytesleft = s.size();
+    size_t outbytesleft = inbytesleft * 4;
+    std::string buffer(outbytesleft, 0);
+    auto out = buffer.data();
+    iconv(cd, &amp;in, &amp;inbytesleft, &amp;out, &amp;outbytesleft);
+    iconv_close(cd);
+    buffer.resize(buffer.size() - outbytesleft);
+    return buffer;
+}
+
+// 举例：UTF-8 转 GBK
+std::string utf8_to_gbk(std::string const &amp;s) {
+    return convert(s, "UTF-8", "GBK");
+}
+
+// 举例：GBK 转 UTF-8
+std::string gbk_to_utf8(std::string const &amp;s) {
+    return convert(s, "GBK", "UTF-8");
+}
+</code></pre>
+<h4 id="iconv-命令行工具"><a class="header" href="#iconv-命令行工具"><code>iconv</code> 命令行工具</a></h4>
+<p><code>iconv</code> 不仅是一个库，也是一个命令行工具（大多 Linux 发行版都自带了）。用法如下：</p>
+<pre><code class="language-bash">iconv -f 来自什么编码 -t 到什么编码 (输入文件名...) &gt; 输出文件名
+</code></pre>
+<p>如不指定输入文件名，默认从终端输入流读取。</p>
+<p>如不使用 <code>&gt; 输出文件名</code> 重定向输出，则默认输出到终端。</p>
+<p>可以用 <code>echo</code> 配合管道来创建输入流：</p>
+<pre><code class="language-bash">$ echo 我爱小彭老师 | iconv -f UTF-8 -t GBK
+�Ұ�С����ʦ
+</code></pre>
+<div id="admonition-tip-19" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-19-title">
+<div class="admonition-title">
+<div id="admonition-tip-19-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-19"></a>
+</div>
+<div>
+<p>此处显示乱码是因为我的终端是 UTF-8 格式，无法正确解析 iconv 输出的 GBK 格式数据。</p>
+</div>
+</div>
+<p>把“我爱小彭老师”转换为 GBK 格式写入 <code>gbk.txt</code>，然后再重新还原回 UTF-8 格式查看：</p>
+<pre><code class="language-bash">$ echo 我爱小彭老师 | iconv -f UTF-8 -t GBK &gt; gbk.txt
+$ cat gbk.txt
+�Ұ�С����ʦ
+$ iconv -f GBK -t UTF-8 gbk.txt
+我爱小彭老师
+</code></pre>
+<div id="admonition-note-20" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-20-title">
+<div class="admonition-title">
+<div id="admonition-note-20-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-20"></a>
+</div>
+<div>
+<p>Windows 可能也有类似的工具，比如 <code>iconv.exe</code>，但我没找到。</p>
+</div>
+</div>
+<h2 id="本地化-locale"><a class="header" href="#本地化-locale">本地化 (locale)</a></h2>
+<p>本地化是指根据用户的语言、地区等环境，显示不同的界面。比如说，同样是文件菜单，中文用户看到的是“文件”、英文用户看到的是“File”。</p>
+<h3 id="区分字符类型"><a class="header" href="#区分字符类型">区分字符类型</a></h3>
+<p>C 语言提供了 <code>&lt;ctype.h&gt;</code> 头文件，里面封装了大量形如 <code>isspace</code>、<code>isdigit</code> 这样的判断字符分类的函数。</p>
+<pre><code class="language-c">#include &lt;ctype.h&gt;
+</code></pre>
+<p>C++ 对其实施了再封装，改名为 <code>&lt;cctype&gt;</code>。若你导入的是该头文件，那么这些函数可以带有 <code>std</code> 名字空间前缀的方式 <code>std::isspace</code>，<code>std::isdigit</code> 访问了，看起来更加专业（确信）。</p>
+<pre><code class="language-cpp">#include &lt;cctype&gt;
+</code></pre>
+<p>函数清单：</p>
+<div class="table-wrapper"><table><thead><tr><th>函数名称</th><th>判断的字符类型</th></tr></thead><tbody>
+<tr><td>isascii</td><td>0 到 0x7F 的所有 ASCII 字符</td></tr>
+<tr><td>isalpha</td><td>大小写字母 A-Z a-z</td></tr>
+<tr><td>isupper</td><td>大写字母 A-Z</td></tr>
+<tr><td>islower</td><td>小写字母 a-z</td></tr>
+<tr><td>isdigit</td><td>数字 0-9</td></tr>
+<tr><td>isxdigit</td><td>十六进制数字 A-F a-f 0-9</td></tr>
+<tr><td>isprint</td><td>可打印字符，包括字母、数字和标点等</td></tr>
+<tr><td>isgraph</td><td>可打印字符，不包括空格</td></tr>
+<tr><td>iscntrl</td><td>控制字符，除可打印字符外的全部</td></tr>
+<tr><td>isspace</td><td>空白字符，如空格、换行、回车、制表符等</td></tr>
+<tr><td>ispunct</td><td>标点符号</td></tr>
+<tr><td>isalnum</td><td>字母或数字</td></tr>
+</tbody></table>
+</div><div id="admonition-tip-20" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-20-title">
+<div class="admonition-title">
+<div id="admonition-tip-20-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-20"></a>
+</div>
+<div>
+<p>更详细的表格可以看：https://en.cppreference.com/w/cpp/string/byte/isspace</p>
+</div>
+</div>
+<p><img src="img/cctype.png" alt="" /></p>
+<h3 id="宽字符类型"><a class="header" href="#宽字符类型">宽字符类型</a></h3>
+<p>之前提到的字符都是 <code>char</code> 类型的 ASCII 字符，范围最多在 0 到 0x7F 内。</p>
+<div id="admonition-warning-2" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-2-title">
+<div class="admonition-title">
+<div id="admonition-warning-2-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-warning-2"></a>
+</div>
+<div>
+<p>对只接受 <code>char</code> 的 <code>isspace</code>，<code>ispunct</code> 系列函数，参数如果超过 0 到 0x7F 范围，结果是未定义行为。</p>
+</div>
+</div>
+<p>要支持更大范围的字符，我们需要用 <code>wchar_t</code> 类型，或者 <code>char16_t</code> 和 <code>char32_t</code>。</p>
+<p>与字符串常量一样，单个字符也可以用 <code>L</code>、<code>u</code>、<code>U</code> 来分别产生 <code>wchar_t</code>、<code>char16_t</code>、<code>char32_t</code> 类型的字符。</p>
+<pre><code class="language-cpp">char c = '我';       // 编译出错！char 类型无法容纳我 (0x6211)
+wchar_t wc = L'我';  // 编译通过，等价于 wc = 0x6211
+</code></pre>
+<p>和 <code>const char *</code> 一样，也有 <code>const wchar_t</code> 表示这种由 Unicode 编码的字符串：</p>
+<pre><code class="language-cpp">const wchar_t *ws = L"你好，世界";
+assert(ws[2] == L'，');
+</code></pre>
+<p><code>wchar_t</code> 的提出起初是为了避免 <code>char</code> 的区域设置各自为政，编码混乱的问题，因为 <code>wchar_t</code> 始终是 UTF-16 (Windows) 或 UTF-32 (Linux)。</p>
+<h3 id="wchar_t-应用案例"><a class="header" href="#wchar_t-应用案例"><code>wchar_t</code> 应用案例</a></h3>
+<pre><code class="language-cpp">std::string str = "hello,world,universe";
+std::stringstream ss(str);
+std::string line;
+while (std::getline(ss, line, ',')) {
+    std::cout &lt;&lt; line &lt;&lt; '\n';
+}
+</code></pre>
+<p>这是一个简单的字符串分割函数，它会把 <code>hello</code> 按照逗号 “,” (0x2C) 分割，然后输出。</p>
+<p>但是，它无法处理 Unicode 字符 “，” (0xFF0C)，这是一个全角的逗号。因为 “，” 会被 UTF-8 编码成三个 <code>char</code>：0xEF 0xBC 0x8C。</p>
+<pre><code class="language-cpp">std::string str = "你好，世界，宇宙";
+std::stringstream ss(str);
+std::string line;
+while (std::getline(ss, line, '，')) { // 编译错误：等价于 '\xEF\xBC\x8C'，一个 char 常量里不得包含三个 char！
+    std::cout &lt;&lt; line &lt;&lt; '\n';
+}
+</code></pre>
+<p>而 <code>wchar_t</code> 就没有这个问题，因为 “，” 在 0xFFFF 范围内，即使考虑到 Windows 是 UTF-16 编码，“，” 只会产生一个 <code>wchar_t</code>。这对以单个 <code>wchar_t</code> 为单位的 <code>std::getline</code> 来说没有问题。</p>
+<pre><code class="language-cpp">std::wstring str = L"你好，世界，宇宙";
+std::wstringstream ss(str);
+std::wstring line;
+while (std::getline(ss, line, L'，')) { // 编译通过，'，' 是单个 UTF-16 码位
+    std::wcout &lt;&lt; line &lt;&lt; L'\n';
+}
+</code></pre>
+<h3 id="区域设置与-locale"><a class="header" href="#区域设置与-locale">区域设置与 <code>locale</code></a></h3>
+<p>要让 <code>iswspace</code> 和 <code>iswpunct</code> 识别中文逗号和中文空格，我们需要先使用下面这一行代码：</p>
+<pre><code class="language-cpp">setlocale(LC_ALL, "C.utf-8");
+</code></pre>
+<p>这会启用 Unicode 字符集，使 <code>isw*****</code> 系列函数，能够基于 Unicode 字符集去判断字符类型，而不是默认的 ASCII 字符集。</p>
+<pre><code class="language-cpp">assert(ispunct(',') == true);   // 0x2C 对应的半角逗号是 ispunct 认同的标点符号
+assert(iswpunct(L',') == true); // 0x2C 对应的半角逗号是 iswpunct 认同的标点符号
+assert(iswpunct(L'，') == true);// 0xFF0C 对应的全角逗号也是 iswpunct 认同的标点符号
+</code></pre>
+<p>每个 C 语言程序一开始，默认的全局 locale 是 <code>"C"</code>。需要设置为 <code>"C.UTF-8"</code> 或者 <code>"zh_CN.UTF-8"</code>，总之是支持 Unicode 字符的编码格式，才能让 <code>isw*****</code> 系列函数识别超过 ASCII 范围的字符的类型。</p>
+<pre><code class="language-cpp">fmt::println("默认: {}", iswpunct(L'，'));
+
+setlocale(LC_ALL, "C");
+fmt::println("C: {}", iswpunct(L'，'));
+
+setlocale(LC_ALL, "C.UTF-8");
+fmt::println("C.UTF-8: {}", iswpunct(L'，'));
+
+setlocale(LC_ALL, "zh_CN.UTF-8");
+fmt::println("zh_CN.UTF-8: {}", iswpunct(L'，'));
+</code></pre>
+<p>输出：</p>
+<pre><code>默认: 0
+C: 0
+C.UTF-8: 1
+zh_CN.UTF-8: 1
+</code></pre>
+<p>总之，<code>isw*****</code> 系列函数接受的参数 <code>wchar_t</code> 表示范围更广，在 Linux 上能表示所有 Unicode 字符，在 Windows 上能表示所有 0xFFFF 以内的常用 Unicode 字符。</p>
+<p><code>is*****</code> 系列函数遇到超过 0 到 0x7F 范围的 <code>char</code> 还会出现未定义行为，非常烦人。既然 <code>char</code> 可以隐式转换为 <code>wchar_t</code>，所以我的建议是设置了 <code>".utf-8"</code> locale 后，全部用 <code>isw*****</code> 取代 <code>is*****</code>。</p>
+<h3 id="locale-的命名规范"><a class="header" href="#locale-的命名规范">locale 的命名规范</a></h3>
+<p><code>"zh_CN.UTF-8"</code> 这样的字符串，就是 locale 的名字，locale 名字由两部分组成，分别是语言和编码格式。</p>
+<pre><code>语言.字符编码
+</code></pre>
+<p><code>"zh_CN.UTF-8"</code> 就表示，一个语言为简体中文，编码格式为 UTF-8 的区域设置。</p>
+<p>要注意的是，用户必须已经安装过该区域设置，程序才能使用 setlocale 设置，否则会出现找不到 locale 的错误。</p>
+<div id="admonition-abstract-13" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-13-title">
+<div class="admonition-title">
+<div id="admonition-abstract-13-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-13"></a>
+</div>
+<div>
+<p>这几乎导致你没法用除默认外的任何 locale，比如 <code>"zh_CN.UTF-8"</code>，因为你不能确定用户有没有安装他。但你可以用 <code>boost::locale::generator</code> 凭空生成一个系统里没有安装过的 locale，绕开标准库的限制，稍后介绍。</p>
+</div>
+</div>
+<p>Linux 用户可以通过 修改 <code>/etc/locale.gen</code> 取消注释要启用的语言和编码格式，保存后，运行 <code>locale-gen</code> 即可安装所有没注释的语言。</p>
+<pre><code class="language-bash">sudo vim /etc/locale.gen
+sudo locale-gen
+</code></pre>
+<p>可以用 <code>locale -a</code> 命令查看已经安装了哪些 locale：</p>
+<pre><code class="language-bash">$ locale -a
+C
+C.utf8
+POSIX
+en_US
+en_US.iso88591
+en_US.utf8
+zh_CN.gb18030
+zh_CN.gbk
+zh_CN.utf8
+</code></pre>
+<p>注意到，locale 中 <code>'.'</code> 号右边的编码格式，是无视大小写的，而且可以省略掉 <code>'-'</code>。所以 <code>ISO-8859-1</code> 可以被简写成 <code>iso88591</code>，<code>UTF-8</code> 被简写成 <code>utf8</code>。</p>
+<p>左边的语言也是用 <code>'_'</code> 一分为二，固定是 <code>'语言_地区'</code> 的写法。比如加拿大既有英语用户又有法语用户，英语的代号是 <code>'en'</code>，法语的代号是 <code>'fr'</code>，加拿大的代号是 <code>'CA'</code>，所以就存在着 <code>'en_CA'</code> 和 <code>'fr_CA'</code> 两种 locale。</p>
+<p>也有一种语言被多个地区使用的情况，例如中文的代号是 <code>'zh'</code>，他被中国大陆使用时就叫 <code>'zh_CN'</code>，被香港使用时叫 <code>'zh_HK'</code>，被台湾省使用时就叫 <code>'zh_TW'</code>，被新加坡使用时就叫 <code>'zh_SG'</code>。</p>
+<p>Windows 也有类似的安装语言和地区的选项，但比尔盖子对 locale 命名的语法稍有不同：</p>
+<pre><code class="language-cpp">setlocale(LC_ALL, "Chinese_China.936"); // 表示简体中文，代码页 936（也就是 GBK）
+</code></pre>
+<p>他的语言名不是按照国际规范的 <code>zh_CN</code> 这样的简写，而是 <code>Chinese_China</code>。</p>
+<p>而且后面的 <code>936</code> 是 Windows 私自定义的一套所谓的“代码页”，这里 936 其实就是 <code>&lt;windows.h&gt;</code> 中宏 <code>CP_GBK</code> 的值，表示 GBK 代码页。同样地还有 65001 表示 UTF-8 代码页。</p>
+<pre><code class="language-cpp">setlocale(LC_ALL, "Chinese_China.65001"); // 表示简体中文，但是启用 UTF-8 支持
+setlocale(LC_ALL, "Chinese_China.utf-8"); // 等价的写法
+</code></pre>
+<blockquote>
+<p><code>.65001</code> 可以用别名 <code>.UTF-8</code> 取代。但只有 <code>.UTF-8</code> 支持这个别名，例如 <code>.GBK</code> 他就不能识别。</p>
+</blockquote>
+<p>设置了 <code>"Chinese_China.utf-8"</code> 效果和你在控制面板全局开了那个 “Beta 版：使用 Unicode UTF-8 全球语言实验支持” 一样，只不过这是仅限当前进程的 C/C++ 标准库。</p>
+<div id="admonition-abstract-14" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-14-title">
+<div class="admonition-title">
+<div id="admonition-abstract-14-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-14"></a>
+</div>
+<div>
+<p>而且由于 <code>argv</code> 在你来得及 <code>setlocale</code> 之前就已经初始化，所以 <code>main</code> 的 <code>argv</code> 参数依然是 GBK 编码的，除非你使用的是 <code>_wmain</code>，那将能收到 UTF-16 的 <code>argv</code>，然后你自己转换回 UTF-8。</p>
+</div>
+</div>
+<h3 id="特殊-locale空字符串"><a class="header" href="#特殊-locale空字符串">特殊 locale：空字符串</a></h3>
+<p>空字符串表示接受环境中的设置，对于 Linux 而言是 <code>$LC_ALL</code> 环境变量，对于 Windows 而言是控制面板中的“区域设置”。</p>
+<pre><code class="language-cpp">setlocale(LC_ALL, ""); // 是的，空的字符串
+</code></pre>
+<div id="admonition-warning-3" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-3-title">
+<div class="admonition-title">
+<div id="admonition-warning-3-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-warning-3"></a>
+</div>
+<div>
+<p>注意是空字符串 <code>""</code> 才有这样的效果，而不是 NULL！<code>setlocale(LC_ALL, NULL)</code> 没有任何效果，他的效果是返回当前的 locale（没想到吧？setlocale 有返回值）。这就是 C 语言的魅力，同一个函数拆成好几分用，又能 set 又能 get，屁股十分灵活。</p>
+</div>
+</div>
+<p>也可以指定一个部分为空的 locale 名字，比如 <code>".utf-8"</code>，他表示保留当前环境中的“语言”部分，但“编码”部分替换为“.utf-8”。</p>
+<pre><code class="language-cpp">setlocale(LC_ALL, ".utf-8");
+// 在中国区 Windows 上，等价于
+setlocale(LC_ALL, "Chinese_China.utf-8");
+// 在美国区 Windows 上，等价于
+setlocale(LC_ALL, "English_United States.utf-8");
+</code></pre>
+<h3 id="特殊-localec"><a class="header" href="#特殊-localec">特殊 locale：<code>"C"</code></a></h3>
+<p>不喜欢本地化这一套设定？</p>
+<p>你可以设置 <code>LC_ALL</code> 为 <code>"C"</code> 或 <code>"POSIX"</code>，这是标准库预先定义好的两个 locale，他们的特点是永远不会被本地化，而是始终以英文显示。这在调试程序时非常有用，因为这样你可以确定输出的格式是固定的，不会被用户的环境和本地化的信息而改变。</p>
+<p>事实上，只要你没有 <code>setlocale</code> 过，C 语言默认就是 <code>"C"</code> locale，不会受到用户环境变量的任何影响（Windows 的文件系统 API 除外，确实会受到 GBK 影响）。</p>
+<pre><code class="language-cpp">setlocale(LC_ALL, "C");
+setlocale(LC_ALL, "POSIX"); // 等价的写法
+</code></pre>
+<p>不过，<code>"C"</code> 意味着他假定字符串是完全的 ASCII，超过 ASCII 的部分是实现定义行为：对于 Linux 而言是 UTF-8（更准确的说是不做任何处理，因为 Linux 的 ext4 文件系统没有字符编码的区分），对于 Windows 而言是 GBK（中国区）。</p>
+<p>因此，也有 <code>"C.utf-8"</code> 这样的 locale，他表示采用 UTF-8 编码，可以让 <code>isw*****</code> 系列函数支持 Unicode 范围的字符，也可以让 <code>std::wcout</code> 能打印 ASCII 以外的字符了。只是没有指定语言，通常来说这时 <code>strerror</code> 一类函数会默认返回英语的消息。</p>
+<div id="admonition-warning-4" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-4-title">
+<div class="admonition-title">
+<div id="admonition-warning-4-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-warning-4"></a>
+</div>
+<div>
+<p>但似乎只在 Linux 上有效，Windows 只支持 <code>"C"</code> 而不支持 <code>"C.utf-8"</code>。</p>
+</div>
+</div>
+<h3 id="lc_-系列环境变量"><a class="header" href="#lc_-系列环境变量"><code>LC_***</code> 系列环境变量</a></h3>
+<p>locale 分为许多个“方面 (facet)”，不同的方面可以有不同的取值（大多数情况下是一样的），可以客制化标准库不同部分涉及语言和编码相关的行为。这些方面在 C 语言中都有一个 <code>LC_</code> 开头的枚举来表示。</p>
+<ul>
+<li><code>LC_CTYPE</code> 只影响 ctype.h 中的函数，也就是 <code>isw*****</code> 系列函数，还有 <code>toupper</code>，<code>tolower</code> 等，他还影响字符编码格式，是最重要的一个方面。</li>
+<li><code>LC_TIME</code> 影响时间和日期的格式化，例如 <code>asctime</code> 等。</li>
+<li><code>LC_NUMERIC</code> 影响数字的格式化。</li>
+<li><code>LC_MONETARY</code> 影响货币的格式化。</li>
+<li><code>LC_MESSAGES</code> 影响 <code>strerror</code> 等信息类函数返回的字符串。例如在中文 locale 下 <code>strerror(EPERM)</code> 会返回 <code>"权限不够"</code>，而在英文 locale 下返回 <code>"Permission denied."</code>。</li>
+</ul>
+<p><code>LC_ALL</code> 是全局 locale，它会影响以上所有标准库函数的行为。设置 <code>LC_ALL</code> 为一个值，等同于为以上所有都赋予统一的值。</p>
+<p>你可以在环境变量中设置 <code>$LC_ALL</code>、`$LC_CTYPE</p>
+<p>所有 GNU/Linux 自带的命令行程序都在 <code>main</code> 函数开头，配备了 <code>setlocale(LC_ALL, "");</code>。这会读取用户配置在环境变量中的区域偏好设置，并设为全局的 locale。</p>
+<div id="admonition-tip-21" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-21-title">
+<div class="admonition-title">
+<div id="admonition-tip-21-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-21"></a>
+</div>
+<div>
+<p>可以理解为 locale 是一个隐藏在标准库中的全局变量，所有的 <code>iswpunct</code>、<code>asctime</code>、<code>strerror</code> 都会读取该全局变量里的区域设置，来决定自己的运行时行为。</p>
+</div>
+</div>
+<h4 id="lc_messages报错信息"><a class="header" href="#lc_messages报错信息"><code>LC_MESSAGES</code>：报错信息</a></h4>
+<p>例如 <code>touch</code> 这些命令，都是基于 <code>strerror</code> 打印报错消息的，而 <code>strerror</code> 又基于区域设置的 <code>LC_MESSAGES</code> 方面。</p>
+<p>这些命令行程序的作者无需懂得所有语言，他们只需要调用 <code>strerror</code> 和各种 messages 查找函数，获得相应的字符串常量后，输出即可自动适应不同语言用户的需求。</p>
+<p>只需要语言的用户，在他的环境变量中，设置 <code>LC_ALL=zh_CN.UTF-8</code> 就可以让命令行程序们始终输出中文消息了。</p>
+<pre><code class="language-bash">$ export LC_MESSAGES=en_US.UTF-8
+$ touch /root/a
+touch: cannot touch '/root/a': Permission denied
+$ export LC_MESSAGES=zh_CN.UTF-8
+$ touch /root/a
+touch: 无法 touch '/root/a': 权限不够
+</code></pre>
+<p>例如 GCC 的报错信息，就是基于你的 <code>&lt;span class="katex"&gt;&lt;span class="katex-html" aria-hidden="true"&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"&gt;&lt;/span&gt;&lt;span class="mord mathnormal"&gt;L&lt;/span&gt;&lt;span class="mord"&gt;&lt;span class="mord mathnormal" style="margin-right:0.07153em;"&gt;C&lt;/span&gt;&lt;span class="msupsub"&gt;&lt;span class="vlist-t vlist-t2"&gt;&lt;span class="vlist-r"&gt;&lt;span class="vlist" style="height:0.3283em;"&gt;&lt;span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"&gt;&lt;span class="pstrut" style="height:2.7em;"&gt;&lt;/span&gt;&lt;span class="sizing reset-size6 size3 mtight"&gt;&lt;span class="mord mathnormal mtight" style="margin-right:0.10903em;"&gt;M&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="vlist-s"&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class="vlist-r"&gt;&lt;span class="vlist" style="height:0.15em;"&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.05764em;"&gt;ESS&lt;/span&gt;&lt;span class="mord mathnormal"&gt;A&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.05764em;"&gt;GES&lt;/span&gt;&lt;span class="mord"&gt;‘&lt;/span&gt;&lt;span class="mord cjk_fallback"&gt;环境变量来决定输出何种语言的信息的。你也可以只设置一个&lt;/span&gt;&lt;span class="mord"&gt;‘&lt;/span&gt;&lt;span class="mord mathnormal"&gt;e&lt;/span&gt;&lt;span class="mord mathnormal"&gt;x&lt;/span&gt;&lt;span class="mord mathnormal"&gt;p&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.02778em;"&gt;or&lt;/span&gt;&lt;span class="mord mathnormal"&gt;t&lt;/span&gt;&lt;span class="mord mathnormal"&gt;L&lt;/span&gt;&lt;span class="mord"&gt;&lt;span class="mord mathnormal" style="margin-right:0.07153em;"&gt;C&lt;/span&gt;&lt;span class="msupsub"&gt;&lt;span class="vlist-t vlist-t2"&gt;&lt;span class="vlist-r"&gt;&lt;span class="vlist" style="height:0.3283em;"&gt;&lt;span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"&gt;&lt;span class="pstrut" style="height:2.7em;"&gt;&lt;/span&gt;&lt;span class="sizing reset-size6 size3 mtight"&gt;&lt;span class="mord mathnormal mtight"&gt;A&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="vlist-s"&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class="vlist-r"&gt;&lt;span class="vlist" style="height:0.15em;"&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="mord mathnormal"&gt;LL&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;span class="mrel"&gt;=&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:0.8444em;vertical-align:-0.15em;"&gt;&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.04398em;"&gt;z&lt;/span&gt;&lt;span class="mord"&gt;&lt;span class="mord mathnormal"&gt;h&lt;/span&gt;&lt;span class="msupsub"&gt;&lt;span class="vlist-t vlist-t2"&gt;&lt;span class="vlist-r"&gt;&lt;span class="vlist" style="height:0.3283em;"&gt;&lt;span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"&gt;&lt;span class="pstrut" style="height:2.7em;"&gt;&lt;/span&gt;&lt;span class="sizing reset-size6 size3 mtight"&gt;&lt;span class="mord mathnormal mtight" style="margin-right:0.07153em;"&gt;C&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="vlist-s"&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class="vlist-r"&gt;&lt;span class="vlist" style="height:0.15em;"&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.10903em;"&gt;N&lt;/span&gt;&lt;span class="mord"&gt;.&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.10903em;"&gt;U&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.13889em;"&gt;TF&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2222em;"&gt;&lt;/span&gt;&lt;span class="mbin"&gt;−&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2222em;"&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:1em;vertical-align:-0.25em;"&gt;&lt;/span&gt;&lt;span class="mord"&gt;8‘&lt;/span&gt;&lt;span class="mord cjk_fallback"&gt;，这样就无需设置其他所有的方面&lt;/span&gt;&lt;span class="mopen"&gt;(&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.10764em;"&gt;f&lt;/span&gt;&lt;span class="mord mathnormal"&gt;a&lt;/span&gt;&lt;span class="mord mathnormal"&gt;ce&lt;/span&gt;&lt;span class="mord mathnormal"&gt;t&lt;/span&gt;&lt;span class="mclose"&gt;)&lt;/span&gt;&lt;span class="mord cjk_fallback"&gt;，如无单独设置，其他方面会自动变得和&lt;/span&gt;&lt;span class="mord"&gt;‘&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;LC_ALL</code> 一样。</p>
+<h4 id="lc_ctype字符编码"><a class="header" href="#lc_ctype字符编码"><code>LC_CTYPE</code>：字符编码</a></h4>
+<p>这是最重要的一个，他决定了字符串的编码格式。</p>
+<p>GNU/Linux 的命令行程序内部都以内码（<code>const wchar_t *</code> 或 <code>std::wstring</code>）来处理字符串。</p>
+<p>当输出时，程序内部的内码字符串（<code>wchar_t *</code>）会以 <code>LC_CTYPE</code> 指定的编码格式编码成二进制流（<code>const char *</code> 或 <code>std::string</code>）后输出到控制台。</p>
+<p>因此，<code>LC_CTYPE</code> 中的“语言”部分是无关紧要的，重要的是后半段，例如 <code>"zh_CN.UTF-8"</code>，那有影响的就只是后面这段 <code>".UTF-8"</code>。</p>
+<p>务必使用和你终端配置相同的编码格式，否则会出现乱码。例如当我欺骗 <code>touch</code>，让他误以为我的终端输出需要是 GBK 编码：</p>
+<pre><code class="language-bash">$ export LC_MESSAGES=zh_CN.UTF-8
+$ export LC_CTYPE=zh_CN.GBK   # 欺骗 touch！好坏
+$ touch /root/a
+touch: �޷� touch '/root/a': Ȩ�޲���
+</code></pre>
+<p>他就输出了诡异的乱码。这不是 touch 的问题，touch 只是按照你环境变量 <code>$LC_CTYPE</code> 说的 GBK 编码，输出了 GBK 的二进制流。而终端的设置却是 UTF-8，用 UTF-8 解码 GBK 的二进制流当然出错了，不过由于 GBK 和 UTF-8 都兼容 ASCII，所以这里面英文部分才侥幸正常显示。</p>
+<div id="admonition-tip-22" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-22-title">
+<div class="admonition-title">
+<div id="admonition-tip-22-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-22"></a>
+</div>
+<div>
+<p>解决方法是要么你 <code>$LC_CTYPE</code> 设回 UTF-8，要么把终端改成 GBK，总之 `<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord mathnormal">L</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="mord mathnormal" style="margin-right:0.05764em;">PE</span><span class="mord">‘</span><span class="mord cjk_fallback">必须和终端字符编码配置一样。也可以调用</span><span class="mord">‘</span><span class="mord mathnormal">i</span><span class="mord mathnormal">co</span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord">‘</span><span class="mord cjk_fallback">把</span><span class="mord">‘</span><span class="mord mathnormal">t</span><span class="mord mathnormal">o</span><span class="mord mathnormal">u</span><span class="mord mathnormal">c</span><span class="mord mathnormal">h</span><span class="mord">‘</span><span class="mord cjk_fallback">的</span><span class="mord mathnormal" style="margin-right:0.05017em;">GB</span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mord cjk_fallback">输出转换回</span><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="mord mathnormal" style="margin-right:0.13889em;">TF</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">8</span><span class="mord cjk_fallback">，供</span><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="mord mathnormal" style="margin-right:0.13889em;">TF</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord">8</span><span class="mord cjk_fallback">的终端读取：</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">/</span><span class="mord mathnormal">d</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">/</span><span class="mord mathnormal">d</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord">‘‘‘</span><span class="mord mathnormal">ba</span><span class="mord mathnormal">s</span><span class="mord mathnormal">h</span></span></span></span> touch /root/a 2&gt;&amp;1 | iconv -f GBK -t UTF-8
+touch: 无法 touch '/root/a': 权限不够</p>
+<pre><code>
+#### `LC_TIME`：时间日期格式化
+
+`LC_TIME` 影响的是和时间有关函数的输出格式，因为不同的地区有不同的时间显示习惯，比如英文是 `Jan  1 00:00`，中文是 `1月  1日 00时00分`，而日本人则是 `1月1日 0時0分`。
+
+```bash
+&lt;span class="katex"&gt;&lt;span class="katex-html" aria-hidden="true"&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"&gt;&lt;/span&gt;&lt;span class="mord mathnormal"&gt;e&lt;/span&gt;&lt;span class="mord mathnormal"&gt;x&lt;/span&gt;&lt;span class="mord mathnormal"&gt;p&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.02778em;"&gt;or&lt;/span&gt;&lt;span class="mord mathnormal"&gt;t&lt;/span&gt;&lt;span class="mord mathnormal"&gt;L&lt;/span&gt;&lt;span class="mord"&gt;&lt;span class="mord mathnormal" style="margin-right:0.07153em;"&gt;C&lt;/span&gt;&lt;span class="msupsub"&gt;&lt;span class="vlist-t vlist-t2"&gt;&lt;span class="vlist-r"&gt;&lt;span class="vlist" style="height:0.3283em;"&gt;&lt;span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"&gt;&lt;span class="pstrut" style="height:2.7em;"&gt;&lt;/span&gt;&lt;span class="sizing reset-size6 size3 mtight"&gt;&lt;span class="mord mathnormal mtight" style="margin-right:0.13889em;"&gt;T&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="vlist-s"&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class="vlist-r"&gt;&lt;span class="vlist" style="height:0.15em;"&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.07847em;"&gt;I&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.05764em;"&gt;ME&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;span class="mrel"&gt;=&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:0.8333em;vertical-align:-0.15em;"&gt;&lt;/span&gt;&lt;span class="mord mathnormal"&gt;e&lt;/span&gt;&lt;span class="mord"&gt;&lt;span class="mord mathnormal"&gt;n&lt;/span&gt;&lt;span class="msupsub"&gt;&lt;span class="vlist-t vlist-t2"&gt;&lt;span class="vlist-r"&gt;&lt;span class="vlist" style="height:0.3283em;"&gt;&lt;span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"&gt;&lt;span class="pstrut" style="height:2.7em;"&gt;&lt;/span&gt;&lt;span class="sizing reset-size6 size3 mtight"&gt;&lt;span class="mord mathnormal mtight" style="margin-right:0.10903em;"&gt;U&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="vlist-s"&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class="vlist-r"&gt;&lt;span class="vlist" style="height:0.15em;"&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.05764em;"&gt;S&lt;/span&gt;&lt;span class="mord"&gt;.&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.10903em;"&gt;U&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.13889em;"&gt;TF&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2222em;"&gt;&lt;/span&gt;&lt;span class="mbin"&gt;−&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2222em;"&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:0.6444em;"&gt;&lt;/span&gt;&lt;span class="mord"&gt;8&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; date
+Fri Jul 19 04:01:49 PM CST 2024
+&lt;span class="katex"&gt;&lt;span class="katex-html" aria-hidden="true"&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"&gt;&lt;/span&gt;&lt;span class="mord mathnormal"&gt;e&lt;/span&gt;&lt;span class="mord mathnormal"&gt;x&lt;/span&gt;&lt;span class="mord mathnormal"&gt;p&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.02778em;"&gt;or&lt;/span&gt;&lt;span class="mord mathnormal"&gt;t&lt;/span&gt;&lt;span class="mord mathnormal"&gt;L&lt;/span&gt;&lt;span class="mord"&gt;&lt;span class="mord mathnormal" style="margin-right:0.07153em;"&gt;C&lt;/span&gt;&lt;span class="msupsub"&gt;&lt;span class="vlist-t vlist-t2"&gt;&lt;span class="vlist-r"&gt;&lt;span class="vlist" style="height:0.3283em;"&gt;&lt;span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"&gt;&lt;span class="pstrut" style="height:2.7em;"&gt;&lt;/span&gt;&lt;span class="sizing reset-size6 size3 mtight"&gt;&lt;span class="mord mathnormal mtight" style="margin-right:0.13889em;"&gt;T&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="vlist-s"&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class="vlist-r"&gt;&lt;span class="vlist" style="height:0.15em;"&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.07847em;"&gt;I&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.05764em;"&gt;ME&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;span class="mrel"&gt;=&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:0.8444em;vertical-align:-0.15em;"&gt;&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.04398em;"&gt;z&lt;/span&gt;&lt;span class="mord"&gt;&lt;span class="mord mathnormal"&gt;h&lt;/span&gt;&lt;span class="msupsub"&gt;&lt;span class="vlist-t vlist-t2"&gt;&lt;span class="vlist-r"&gt;&lt;span class="vlist" style="height:0.3283em;"&gt;&lt;span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"&gt;&lt;span class="pstrut" style="height:2.7em;"&gt;&lt;/span&gt;&lt;span class="sizing reset-size6 size3 mtight"&gt;&lt;span class="mord mathnormal mtight" style="margin-right:0.07153em;"&gt;C&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="vlist-s"&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class="vlist-r"&gt;&lt;span class="vlist" style="height:0.15em;"&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.10903em;"&gt;N&lt;/span&gt;&lt;span class="mord"&gt;.&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.10903em;"&gt;U&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.13889em;"&gt;TF&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2222em;"&gt;&lt;/span&gt;&lt;span class="mbin"&gt;−&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2222em;"&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:0.6444em;"&gt;&lt;/span&gt;&lt;span class="mord"&gt;8&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; date
+2024年 07月 19日 星期五 16:01:07 CST
+</code></pre>
+<p>在 C 语言中，你可以用这样格式化时间和日期：</p>
+<pre><code class="language-c">#include &lt;time.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;locale.h&gt;
+
+int main() {
+    setlocale(LC_ALL, "zh_CN.UTF-8");
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&amp;t);
+    char buf[32];
+    strftime(buf, sizeof(buf), "%Y年 %m月 %d日 %A %H时 %M分", tm);
+    puts(buf);
+}
+</code></pre>
+<p>C++ 提供了基于流的，更“时尚”的写法：</p>
+<pre><code class="language-cpp">#include &lt;ctime&gt;
+#include &lt;iostream&gt;
+#include &lt;locale&gt;
+
+int main() {
+    setlocale(LC_ALL, "zh_CN.UTF-8");
+    time_t t = time(NULL);
+    tm *tm = localtime(&amp;t);
+    std::cout &lt;&lt; std::put_time(tm, "%Y年 %m月 %d日 %A %H时 %M分") &lt;&lt; '\n';
+}
+</code></pre>
+<p>输出：</p>
+<pre><code>2024年 07月 19日 星期五 16时 01分
+</code></pre>
+<h3 id="stdlocale-对象"><a class="header" href="#stdlocale-对象"><code>std::locale</code> 对象</a></h3>
+<p>C 语言的 <code>setlocale</code> 设置的是全局 locale，全局 locale 只有一个，一设就影响所有线程，非常沙雕。因此提倡“不要状态机要对象”的 C++，封装了 <code>std::locale</code> 对象。</p>
+<p><code>std::locale</code> 的构造函数接受一个字符串，和 <code>setlocale</code> 的情况一样，有空字符串表示环境 locale，<code>"C"</code> 表示 POSIX locale，还有自定义字符串比如 <code>"zh_CN.UTF-8"</code> 的 locale。</p>
+<p>然后，C++ 的流类型，如 <code>std::cout</code>，都有一个 <code>.imbue</code> 可以设置一个局部 locale（只对 <code>std::cout</code> 生效的），接受的就是这个 <code>std::locale</code> 对象。</p>
+<pre><code class="language-cpp">#include &lt;ctime&gt;
+#include &lt;iostream&gt;
+#include &lt;locale&gt;
+
+int main() {
+    time_t t = time(NULL);
+    tm *tm = localtime(&amp;t);
+
+    auto locale_zh = std::locale("zh_CN.UTF-8");
+    std::cout.imbue(locale_zh);
+    std::cout &lt;&lt; std::put_time(tm, "%Y年 %m月 %d日 %A %H时 %M分") &lt;&lt; '\n';
+
+    auto locale_en = std::locale("en_US.UTF-8");
+    std::cout.imbue(locale_en);
+    std::cout &lt;&lt; std::put_time(tm, "%Y年 %m月 %d日 %A %H时 %M分") &lt;&lt; '\n';
+}
+</code></pre>
+<p>输出：</p>
+<pre><code>2024年 07月 19日 星期五 16时 01分
+2024年 07月 19日 Fri 16时 01分
+</code></pre>
+<div id="admonition-tip-23" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-23-title">
+<div class="admonition-title">
+<div id="admonition-tip-23-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-23"></a>
+</div>
+<div>
+<p>可以看到这里只有星期的字符串受到了影响。如果要使整个日期格式都跟随 <code>LC_TIME</code> 的设定，可用 <code>"%c"</code>：</p>
+</div>
+</div>
+<pre><code class="language-cpp">#include &lt;ctime&gt;
+#include &lt;iostream&gt;
+#include &lt;iomanip&gt;
+#include &lt;locale&gt;
+
+int main() {
+    time_t t = time(NULL);
+    tm *tm = localtime(&amp;t);
+
+    auto locale_zh = std::locale("zh_CN.UTF-8");
+    std::cout.imbue(locale_zh);
+    std::cout &lt;&lt; std::put_time(tm, "%c") &lt;&lt; '\n';
+
+    auto locale_en = std::locale("en_US.UTF-8");
+    std::cout.imbue(locale_en);
+    std::cout &lt;&lt; std::put_time(tm, "%c") &lt;&lt; '\n';
+}
+</code></pre>
+<p>输出：</p>
+<pre><code>2024年07月19日 星期五 16时33分39秒
+Fri 19 Jul 2024 04:33:39 PM CST
+</code></pre>
+<div id="admonition-tip-24" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-24-title">
+<div class="admonition-title">
+<div id="admonition-tip-24-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-24"></a>
+</div>
+<div>
+<p>关于 <code>"%c"</code>、<code>"%Y"</code> 这些格式化字符串的更多详细用法，参见 <a href="http://man7.org/linux/man-pages/man3/strftime.3.html"><code>man strftime</code></a>。我们作为字符编码的课程不再赘述，之后的时间与日期专题课也会稍微讲一下。</p>
+</div>
+</div>
+<h4 id="boostlocalegenerator-凭空创建一个用户没安装过的-locale"><a class="header" href="#boostlocalegenerator-凭空创建一个用户没安装过的-locale"><code>boost::locale::generator</code> 凭空创建一个用户没安装过的 locale</a></h4>
+<pre><code class="language-cpp">boost::locale::generator gen;
+auto loc = gen("zh_CN.UTF-8");
+boost::locale::date_time dt = boost::locale::date_time::now(loc);
+std::cout &lt;&lt; boost::locale::as::date(dt) &lt;&lt; '\n';
+</code></pre>
+<h2 id="宽字符流"><a class="header" href="#宽字符流">宽字符流</a></h2>
+<p>之所以把宽字符流放到最后，是因为，首先 <code>iostream</code> 本来就是一个失败的设计。</p>
+<div id="admonition-note-21" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-21-title">
+<div class="admonition-title">
+<div id="admonition-note-21-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-21"></a>
+</div>
+<div>
+<p>小彭老师在本书开头就多次强调过他是 <code>format</code> 孝子。</p>
+</div>
+</div>
+<p>而宽字符 <code>wchar_t</code> 本身就充斥着历史遗留糟粕（例如 Windows 被 UTF-16 背刺）。</p>
+<p>现在 <code>iostream</code> 与 <code>wchar_t</code> 一起出现在我面前，不能说是梦幻联动吧，至少也可以说是答辩超人了。</p>
+<p>总之，我个人还是推荐程序内部以 UTF-8（<code>char8_t</code>）或 UTF-32（<code>char32_t</code>）的字符串来处理万物。</p>
+<div id="admonition-tip-25" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-25-title">
+<div class="admonition-title">
+<div id="admonition-tip-25-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-25"></a>
+</div>
+<div>
+<p>UTF-8 或 UTF-32 的选择取决于你的中文处理需求是否旺盛，是否在乎空间，是否需要切片和索引等。</p>
+</div>
+</div>
+<p>当需要调用操作系统 API 读写文件时，再用 <code>boost::locale</code>、<code>utfcpp</code> 等工具转换成 ANSI（<code>char</code>）或 UTF-16（<code>wchar_t</code>）。</p>
+<p>对于 Linux 用户，也可以检测如果是 Linux 系统，则什么转换都不做，因为 Linux 用户几乎都是 UTF-8，那么 <code>const char8_t *</code> 可以强转为 <code>const char *</code> 而不用任何额外开销。</p>
+<pre><code class="language-cpp">std::string to_os_string(std::string const &amp;u8s) {
+#if _WIN32
+    // UTF-8 到 ANSI
+    return boost::locale::conv::from_utf(u8s, "");
+#elif __linux__
+    // 不转换
+    return u8s;
+#else
+#error "Unsupported system."
+#endif
+}
+</code></pre>
+<p>总之，如果你实在要学糟糕的宽字符流，那我也奉陪到底。</p>
+<h3 id="官方眼中的-stdwstring"><a class="header" href="#官方眼中的-stdwstring">官方眼中的 <code>std::wstring</code></a></h3>
+<p>在他们看来，<code>std::string</code> 是已经废弃的。他们认为 <code>std::wstring</code> 才是真正跨平台的字符串。</p>
+<ul>
+<li><code>std::wstring</code>: 字符串</li>
+<li><code>std::string</code>: 字节数组</li>
+<li><code>std::wifstream</code>: 文本流</li>
+<li><code>std::ifstream</code>: 二进制流</li>
+</ul>
+<p>看起来只要全部统一 <code>wchar_t</code> 就能实现跨平台了？是的，除了 Windows……</p>
+<p>标准认为 <code>wchar_t</code> 应该包含 0 到 0x10FFFF 的所有的 Unicode 字符码点，需要是 32 位的。然而 Windows 的 <code>wchar_t</code> 由于历史原因，是 16 位的，需要用代理对才能表示稀有字符，并不能一个 <code>wchar_t</code> 对应一个码点。这导致即使用了 <code>wchar_t</code> 还是存在跨平台困难的问题：一个 Linux 程序用 <code>wchar_t</code> 可能会利用 UTF-32 定长编码的特性，方便了文本处理，但移植到 Windows 时，发现变成了 UTF-16，需要对代理对做特殊判断……没有满足跨平台的初衷，也做不到定长编码。<code>char32_t</code> 做到了跨平台的 UTF-32，也能容纳全部 Unicode 码点，可标准库提供了 <code>std::to_wstring</code>，却根本没有 <code>std::to_u32string</code>；提供了 <code>std::wcout</code>，却没有提供 <code>std::u32cout</code>……</p>
+<p>这就是为什么宽字符流很糟糕，说是跨平台，跨了个寂寞。</p>
+<h3 id="stdwcout-的使用坑点科普"><a class="header" href="#stdwcout-的使用坑点科普"><code>std::wcout</code> 的使用坑点科普</a></h3>
+<h4 id="stdwcout-必须设了-locale-才能用"><a class="header" href="#stdwcout-必须设了-locale-才能用"><code>std::wcout</code> 必须设了 locale 才能用</a></h4>
+<p>要使用 <code>std::wcout</code> 之前，需要用 <code>.imbue</code> 设置带有正确 <code>LC_CTYPE</code> 方面的 locale，或者设置了 C 语言的全局的 <code>setlocale</code>，否则中文字符会被丢掉。</p>
+<pre><code class="language-cpp">int main() {
+    std::wcout &lt;&lt; L"Hello, 你好!\n"; // 错误！你还没设置 locale 呢！
+    return 0;
+}
+</code></pre>
+<p>输出：</p>
+<pre><code>Hello, ??!
+</code></pre>
+<p>这是因为默认的全局 locale 是 <code>"C"</code>，他只支持 ASCII 的。而当 <code>std::wcout</code> 遇到超出当前 locale 字符集表示范围的字符时，会丢弃，替换为 <code>?</code> 字符，表示出错了。</p>
+<p>因此，<code>std::wcout</code> 的正确用法必须是在你打印第一条输出前，就 <code>setlocale(LC_ALL, "")</code> ，默认的 <code>"C"</code> 肯定是不行的。</p>
+<pre><code class="language-cpp">int main() {
+    setlocale(LC_ALL, "");
+    std::wcout &lt;&lt; L"Hello, 你好!\n"; // 可以成功输出中文了
+    return 0;
+}
+</code></pre>
+<p>输出：</p>
+<pre><code>Hello, 你好!
+</code></pre>
+<p>或者用 <code>std::wcout</code> 的 <code>.imbue</code> 也可以，但是这样对于 <code>std::wcerr</code> 和 <code>std::wclog</code> 你也需要做同样的动作，感觉不如索性全局设置了 <code>setlocale</code> 方便。</p>
+<pre><code class="language-cpp">int main() {
+    std::wcout.imbue(std::locale(""));
+    std::wcout &lt;&lt; L"Hello, 你好!\n"; // 可以成功输出中文了
+    return 0;
+}
+</code></pre>
+<p>如果你是 UTF-8 流派，选择 <code>setlocale(LC_ALL, ".utf-8")</code> 也是可以的，只要是支持中文字符的 locale 就可以让 <code>std::wcout</code> 能正常输出中文，只要你终端的设置也是相同的编码格式绝对不会乱码。</p>
+<p>例如当你 <code>setlocale(LC_ALL, ".utf-8")</code> 后就需要 <code>system("chcp 65001")</code>；当你 <code>setlocale(LC_ALL, "Chinese_China.936")</code> 后就需要 <code>system("chcp 936")</code>。总之，始终保证终端（<code>cmd</code> 或 <code>xfce4-terminal</code>）设置的编码和你程序里 <code>setlocale(LC_CTYPE, ...)</code> 设置的编码一致。</p>
+<h4 id="stdwcout-不应用于打印-stdstring"><a class="header" href="#stdwcout-不应用于打印-stdstring"><code>std::wcout</code> 不应用于打印 <code>std::string</code></a></h4>
+<p>有的人会用 <code>std::wcout</code> 似乎也能打印 <code>char</code> 的字符串？</p>
+<pre><code class="language-cpp">int main() {
+    setlocale(LC_ALL, "");
+    std::wcout &lt;&lt; "Hello, 你好!\n"; // 不一定能稳定打印出中文！
+    std::wcout &lt;&lt; L"Hello, 你好!\n"; // OK，能稳定打印出中文
+    return 0;
+}
+</code></pre>
+<p>这是一种错误的用法，理想情况下应该要报错，但是糟糕的标准库却没有，设计的失误。</p>
+<p>设计的初衷是，可以在打印带中文的字符串后，方便你临时打印一些 <code>char</code> 的字符串和字符，例如 <code>'\n'</code>（因为总是有的人想偷懒不写 <code>L""</code> 前缀）</p>
+<p><code>std::wcout</code> 支持打印 <code>char</code> 和 <code>const char *</code>，他会自动帮你把这部分 <code>char</code> 转成 <code>wchar_t</code> 再打印。</p>
+<pre><code class="language-cpp">int main() {
+    setlocale(LC_ALL, "");
+    std::wcout &lt;&lt; L"Hello, 你好!" &lt;&lt; L'\n'; // 正常写法
+    std::wcout &lt;&lt; L"Hello, 你好!" &lt;&lt; '\n';  // 懒惰狗狗写法
+    return 0;
+}
+</code></pre>
+<p>但是，这部分 <code>char</code> 应当只包含 ASCII 字符，不应该有中文字符，否则可能又要出现之前提到的 “galgame” 乱码问题了。</p>
+<h4 id="超级坑点stdwcout-和-stdcout-只能用一个"><a class="header" href="#超级坑点stdwcout-和-stdcout-只能用一个">超级坑点：<code>std::wcout</code> 和 <code>std::cout</code> 只能用一个！</a></h4>
+<p>非常坑的一个点：一旦你决定用 <code>std::wcout</code> 后，就不能再用 <code>std::cout</code> 了！</p>
+<p>小彭老师实测用过 <code>std::wcout</code> 后，你的 <code>std::cout</code> 会废掉，打印不出任何东西。</p>
+<div id="admonition-tip-26" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-26-title">
+<div class="admonition-title">
+<div id="admonition-tip-26-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-26"></a>
+</div>
+<div>
+<p>上了贼船就上到底吧！如果确实需要临时打印一些 <code>std::string</code>，并且确保里面是 ASCII 的话，可以利用上面一节说的“懒惰狗狗写法”糊弄下，如果是 GBK 或 UTF-8 的 <code>std::string</code> 需要打印到 <code>std::wcout</code>，就召唤一下 <code>boost::locale</code> 吧。</p>
+</div>
+</div>
+<p><code>std::wprintf</code> 也有这个问题，当你第一次使用 <code>FILE *</code> 的 <code>wchar_t</code> 系列函数后，这个文件流会被“宽化” (<code>fwiden</code>)，用我们的话说叫<strong>上贼船</strong>，上了就下不来，再也无法当作“窄”流用了。</p>
+<p>反之亦然，一旦你用过一次 <code>std::cout</code> 后，<code>std::wcout</code> 就会废掉，打印任何东西都打印不出来。取决于你第一次调用输出流用的是宽字符还是窄字符，之后就只能一直用那个宽或窄了，不让跳船。</p>
+<div id="admonition-note-22" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-22-title">
+<div class="admonition-title">
+<div id="admonition-note-22-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-22"></a>
+</div>
+<div>
+<p>上贼船不行，上警船也不行，上定一个就没法变，真恶心呀！</p>
+</div>
+</div>
+<pre><code class="language-cpp">// 先 wcout
+int main() {
+    setlocale(LC_ALL, "");
+    std::wcout &lt;&lt; L"我是 wcout!" &lt;&lt; L'\n';
+    std::cout &lt;&lt; "我是 cout!" &lt;&lt; '\n';
+    return 0;
+}
+</code></pre>
+<p>输出：</p>
+<pre><code>我是 wcout!
+</code></pre>
+<pre><code class="language-cpp">// 先 cout
+int main() {
+    setlocale(LC_ALL, "");
+    std::cout &lt;&lt; "我是 cout!" &lt;&lt; '\n';
+    std::wcout &lt;&lt; L"我是 wcout!" &lt;&lt; L'\n';
+    return 0;
+}
+</code></pre>
+<p>输出：</p>
+<pre><code>我是 cout!
+/ wcout!
+</code></pre>
+<div id="admonition-note-23" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-23-title">
+<div class="admonition-title">
+<div id="admonition-note-23-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-23"></a>
+</div>
+<div>
+<p>这里 <code>/ wcout!</code> 好像是出 BUG 了……估计是贼被警察打掉一半耳朵变成 <code>/</code> 了？总之各种混乱，记住不要混用贼船和警船就行了。</p>
+</div>
+</div>
+<h4 id="stdwfstream-读取任意编码的文本文件"><a class="header" href="#stdwfstream-读取任意编码的文本文件"><code>std::wfstream</code> 读取任意编码的文本文件</a></h4>
+<p>有同学反映，Python 中可以通过 <code>open('path.txt', encoding='gbk')</code> 来用指定编码格式，而 C++ 似乎没有等效的替代品。</p>
+<p>其实一直都有，不过你一直用的是 <code>std::ifstream</code> 实际上是个“二进制流”！这种纯二进制的流根本就没打算支持字符编码。即使指定 <code>.imbue</code> 也没有任何效果，因为 <code>.imbue</code> 的前提是存在“外码 (<code>char</code>) 到内码 (<code>wchar_t</code>) 的转换”，你二进制流至始至终都是外码，哪来的转换？又没有规定 <code>char</code> 必须是 UTF-8。</p>
+<p>C++ 真正的文本流实际上是宽字符流 <code>std::wifstream</code>，而指定编码格式，实际上就是用 <code>.imbue(std::locale("zh_CN.GBK"))</code>……读取时会调用 <code>std::locale</code> 类的 <code>std::codecvt</code>（是 <code>LC_CTYPE</code> 的一部分）方面，转换为 <code>wchar_t</code>，然后输入你的 <code>std::wstring</code>。</p>
+<div id="admonition-abstract-15" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-15-title">
+<div class="admonition-title">
+<div id="admonition-abstract-15-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-15"></a>
+</div>
+<div>
+<p>C 和 C++ 委员会官方就认为 <code>char *</code> 是二进制字节流，<code>wchar_t *</code> 才是文本流！所有 GNU/Linux 的命令行程序里都是用 <code>wchar_t</code> 来处理文本性质的字符串，包括 GCC 也是大量使用 <code>wchar_t</code> 作为字符内部表示。GCC 读取源码文件就是用宽字符流读取和解码到内存中的 UTF-32 字符串 <code>std::wstring</code> 的。</p>
+</div>
+</div>
+<div id="admonition-note-24" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-24-title">
+<div class="admonition-title">
+<div id="admonition-note-24-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-24"></a>
+</div>
+<div>
+<p>理论上所有的程序都应该像这样，只不过是因为劳保教材从来不提，一口一个 <code>char []</code> 就是字符串，搞得 <code>wchar_t</code> 在除了 GNU 这种“体制内”环境之外，根本没人用了。现在为了处理中文字符，才闹出了 <code>char</code> 当 UTF-8 使这种招数，令人唏嘘。</p>
+</div>
+</div>
+<p>总之，<code>.imbue(std::locale("zh_CN.GBK"))</code> 可以把 <code>GBK</code> 设为当前文本文件的编码格式，宽文件流将会按照这个编码和解码所有的字符串。</p>
+<p><code>std::locale</code> 的字符串构造函数，他的参数必须是用户系统里已经安装过的 locale（通过修改 <code>/etc/locale.gen</code> 和 <code>locale-gen</code> 命令安装）。但是，你无法确保用户的系统安装了 <code>"GBK"</code> locale。<code>std::locale("zh_CN.GBK")</code> 在没有安装 GBK 的用户电脑上运行就会抛出错误表示找不到该 locale。因此，如果要指定按 GBK 读取文件，不建议依赖系统中自带的 <code>std::locale("zh_CN.GBK"))</code>，而是调用 <code>boost::locale::generator</code> 就地生成一个 locale，这样程序无论系统有没有安装都能运行了：</p>
+<pre><code class="language-cpp">#include &lt;boost/locale.hpp&gt;
+#include &lt;fstream&gt;
+
+int main() {
+    std::wofstream fout;
+    boost::locale::generator gen;
+    std::locale loc = gen("zh_CN.GBK");
+    fout.imbue(loc);
+    fout &lt;&lt; L"你好，世界\n"; // 以 GBK 编码写出文本文件
+}
+</code></pre>
+<pre><code>&lt;span class="katex"&gt;&lt;span class="katex-html" aria-hidden="true"&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:1em;vertical-align:-0.25em;"&gt;&lt;/span&gt;&lt;span class="mord mathnormal"&gt;c&lt;/span&gt;&lt;span class="mord mathnormal"&gt;a&lt;/span&gt;&lt;span class="mord mathnormal"&gt;t&lt;/span&gt;&lt;span class="mord mathnormal"&gt;b&lt;/span&gt;&lt;span class="mord mathnormal"&gt;u&lt;/span&gt;&lt;span class="mord mathnormal"&gt;i&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.01968em;"&gt;l&lt;/span&gt;&lt;span class="mord mathnormal"&gt;d&lt;/span&gt;&lt;span class="mord"&gt;/&lt;/span&gt;&lt;span class="mord cjk_fallback"&gt;你好&lt;/span&gt;&lt;span class="mord"&gt;.&lt;/span&gt;&lt;span class="mord mathnormal"&gt;t&lt;/span&gt;&lt;span class="mord mathnormal"&gt;x&lt;/span&gt;&lt;span class="mord mathnormal"&gt;t&lt;/span&gt;&lt;span class="mord"&gt;��&lt;/span&gt;&lt;span class="mord accent"&gt;&lt;span class="vlist-t"&gt;&lt;span class="vlist-r"&gt;&lt;span class="vlist" style="height:0.6679em;"&gt;&lt;span style="top:-3em;"&gt;&lt;span class="pstrut" style="height:3em;"&gt;&lt;/span&gt;&lt;span class="mord mathnormal"&gt;a&lt;/span&gt;&lt;/span&gt;&lt;span style="top:-3.35em;"&gt;&lt;span class="pstrut" style="height:3em;"&gt;&lt;/span&gt;&lt;span class="accent-body" style="left:-0.25em;"&gt;&lt;span class="mord"&gt;~&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="mord"&gt;���&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; cat build/你好.txt | iconv -f GBK -t UTF-8
+你好，世界
+$ 
+</code></pre>
+<div id="admonition-abstract-16" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-16-title">
+<div class="admonition-title">
+<div id="admonition-abstract-16-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-16"></a>
+</div>
+<div>
+<p>这是因为 <code>boost_locale</code> 链接了 <code>icu</code>，其内部包含了所有编码格式的字符映射表。<code>boost::locale::generator</code> 首先创建了一个 <code>std::locale</code>，然后通过虚函数重载的方式把 <code>std::locale</code> 对象中的 <code>std::codecvt</code> 替换成 <code>icu</code> 的映射表。从而让 <code>std::wofstream</code> 调用这个 <code>icu</code> 的映射函数，实现了 UTF-32 到 GBK 的转换。</p>
+</div>
+</div>
+<p>此外，你还可以选择覆盖 locale 的部分方面 (facet)，比如在文件编码时，我们只需要用 <code>"zh_CN.GBK"</code> 的 <code>LC_CTYPE</code> 方面就可以了，其他的例如时间格式、语言信息等，我们还是想保留默认的。为此，我们可以利用 locale 的“杂交”拷贝构造函数，保留老 locale 的绝大部分方面，只替换一个方面为新 locale 的：</p>
+<pre><code class="language-cpp">std::locale old_loc = std::locale(""); // 环境 locale
+boost::locale::generator gen;
+std::locale new_loc = gen("zh_CN.GBK"); // 全 GBK locale
+std::locale loc = std::locale(old_loc, new_loc, std::locale::ctype); // 杂交：继承 old_loc 的其余全部，只替换掉 LC_CTYPE 部分为 new_loc 的
+fout.imbue(loc);
+</code></pre>
+<h3 id="locale-用于字符编码转换"><a class="header" href="#locale-用于字符编码转换">locale 用于字符编码转换</a></h3>
+<pre><code class="language-cpp">// 以 loc 规定的编码，把内码编码成外码
+std::string narrow(std::locale const &amp;loc, std::wstring const &amp;wstr) {
+    // use_facet 函数获得 locale 在字符转换 方面的 facet
+    auto const &amp;cvt = std::use_facet&lt;Codecvt&gt;(loc);
+    std::string str(wstr.size() * 4, '\0');  // 预留 4 倍空间
+    wchar_t const *from_next;
+    char *to_next;
+    std::mbstate_t state{};
+    auto res = cvt.in(state, wstr.data(), wstr.data() + wstr.size(), from_next, str.data(), str.data() + str.size(), to_next);
+    if (res == Codecvt::ok) {
+        // 转换成功
+        str.resize(to_next - str.data());
+        return str;
+    } else if (res == Codecvt::partial) {
+        // 转换部分成功
+        str.resize(to_next - str.data());
+        return str;
+    } else {
+        // 转换失败
+        return "";
+    }
+}
+
+// 以 loc 规定的编码，把外码解码成内码
+std::wstring widen(std::locale const &amp;loc, std::string const &amp;str) {
+    // use_facet 函数获得 locale 在字符转换 方面的 facet
+    auto const &amp;cvt = std::use_facet&lt;Codecvt&gt;(loc);
+    std::wstring wstr(str.size(), L'\0');  // 预留空间
+    char const *from_next;
+    wchar_t *to_next;
+    std::mbstate_t state{};
+    auto res = cvt.out(state, str.data(), str.data() + str.size(), from_next, wstr.data(), wstr.data() + wstr.size(), to_next);
+    if (res == Codecvt::ok) {
+        // 转换成功
+        wstr.resize(to_next - wstr.data());
+        return wstr;
+    } else if (res == Codecvt::partial) {
+        // 转换部分成功
+        wstr.resize(to_next - wstr.data());
+        return wstr;
+    } else {
+        // 转换失败
+        return L"";
+    }
+}
+</code></pre>
+<pre><code class="language-cpp">std::wstring wstr = L"你好";
+std::cout &lt;&lt; narrow(std::locale("zh_CN.GBK"), wstr);
+</code></pre>
+<p>不过，我们都有更方便的 <code>boost::locale::conv</code> 了，还何必还用这么繁琐的 <code>std::locale</code> 呢？所以我是不推荐再用这破玩意，无论是易用性还是扩展性都是 Boost 完胜。</p>
+<h3 id="c-语言中的-wchar_t-系列函数"><a class="header" href="#c-语言中的-wchar_t-系列函数">C 语言中的 <code>wchar_t</code> 系列函数</a></h3>
+<p>对于所有的 <code>strcpy</code>、<code>strcmp</code>、<code>strlen</code> 这类 <code>str***</code> 系函数，都有一个相应的 <code>wcs***</code> 函数。</p>
+<p>例如 <code>wcscpy</code>、<code>wcscmp</code>、<code>wcslen</code>。</p>
+<p>它们的原型如下：</p>
+<pre><code class="language-c">wchar_t *wcscpy(wchar_t *dest, const wchar_t *src);
+int wcscmp(const wchar_t *s1, const wchar_t *s2);
+size_t wcslen(const wchar_t *s);
+</code></pre>
+<p>它们的作用和 <code>str***</code> 系函数一样，但是它们操作的是 <code>wchar_t</code> 字符串。</p>
+<p>对于所有的 <code>fputc</code>、<code>printf</code>，<code>fprintf</code>，<code>fgets</code> 这类操作文件的函数，也都有一个配套的 <code>fw***</code> 函数。</p>
+<p>第一次使用过这些函数后，<code>FILE *</code> 将会被“宽化”（<code>fwiden</code>）。宽化的文件流今后将只能输入宽字符串。</p>
+<div id="admonition-tip-27" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-27-title">
+<div class="admonition-title">
+<div id="admonition-tip-27-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-27"></a>
+</div>
+<div>
+<p>但是，既然 C++ 已经有 <code>std::wstring</code>，就不建议再学 C 语言 <code>L'\0'</code> 结尾字符串了。</p>
+</div>
+</div>
+<h4 id="c-语言标准库的字符编码转换"><a class="header" href="#c-语言标准库的字符编码转换">C 语言标准库的字符编码转换</a></h4>
+<p>TODO</p>
+<h4 id="c-标准库的字符编码转换-codecvt"><a class="header" href="#c-标准库的字符编码转换-codecvt">C++ 标准库的字符编码转换 <code>&lt;codecvt&gt;</code></a></h4>
+<p><code>wchar_t</code>、<code>char16_t</code>、<code>char32_t</code> 与 <code>char</code> 之间的转换，可以用 <code>std::mbrtoc16</code>、<code>std::mbrtoc32</code>、<code>std::c16rtomb</code>、<code>std::c32rtomb</code> 函数。</p>
+<p>然而，又臭又长，用封装好的 <code>boost::locale::utf_to_utf/from_utf/to_utf/between</code> 不香吗？</p>
+<!--
+//=== 跨平台软件何去何从？
+//
+//理论上，跨平台软件都应该采用 `char{n}_t` 系列字符类型。
+//
+//然而，所有的操作系统 API，甚至标准库，都是基于 `char` 和 `wchar_t` 来构建的。例如标准库有 `std::cout` 和 `std::wcout`，却并没有 `std::u8cout` 和 `std::u32cout`。使用这些所谓的跨平台字符类型，相当于每次调用标准库和系统 API 时，都需要做一次编码转换（转换方法我们稍后介绍）。
+//
+//刚刚说了，任何文字处理软件都需要内码和外码两套。外码 (UTF-8) 是不能直接用于文字处理的，会出现码点截断问题，读到内存中后必然要转成定长的内码 (UTF-32) 再处理。
+//
+//为应对这种情况，有多种流派，以用他们采用的内码来命名。
+//
+//==== Unicode 派
+//
+//- `char` 作外码，ANSI
+//- `wchar_t` 作内码，Unicode
+//
+//这似乎是 C++ 官方推荐的流派。
+//
+//典型案例：GCC、
+//
+//缺点是这样的软件会无法跨平台，因为 `wchar_t` 在 Linux 上是安全的内码 UTF-32。而 Windows 上是 UTF-16，是不定长的编码，如果存在“𰻞”和“😉”这样超过 0x10000 的生僻字，就会产生两个 `wchar_t`！如果文字处理涉及切片，就会出问题。概率很低，但不为零，软件仍然需要对可能存在的双 `wchar_t` 做特殊处理。若不处理，轻则乱码，重则留下漏洞，被黑客攻击，加重了 Windows 和 Java 程序员的心智负担。
+//
+//如果一个程序（例如 GCC）只适配了 `wchar_t` 是 UTF-32 的平台，想当然的把 `wchar_t` 当作安全的定长内码使用，那移植到 Windows 上后就会丧失处理“𰻞”和“😉”的能力。要么就需要对所有代码大改，把原本 $O(1)<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord cjk_fallback">的字符串求长度改成</span></span></span></span>O(N)$ 的；要么出现乱码，被黑客攻击。
+//
+//当需要读写二进制文件时，使用 `fstream`，原封不动地按“字节”为单位读取。
+//
+//当需要读写文本文件时，使用 `wfstream`，`w` 系的流会自动把文本文件中的 ANSI 转换成 Unicode，存入 `wstring` 字符串。
+//
+//但是，程序启动前，必须加上这一行：
+//
+//C 和 C++ 标准库才能会读取 Linux 的环境变量，或 Windows 的“区域设置”，将其设为默认的 char 编码格式。
+//
+//```cpp
+//int main() {
+    //setlocale(LC_ALL, "");
+    //std::wcout << L"你好，世界\n";
+//}
+//```
+//
+//上述代码会将 “你好，世界”
+//
+//==== ANSI 派
+//
+//- `char` 作外码，ANSI
+//- `char` 作内码，ANSI
+//
+//==== TCHAR 派
+//
+//==== UTF-8 派
+//
+//=== 跨平台字符类型
+//
+//`char8_t` 是无符号 8 位整数类型，可用范围是 0 到 255。
+//- `char8_t` 字符的编码格式固定是 UTF-8。
+//- 相应的字符串类型是 `std::u8string`。
+//
+//`char16_t` 是无符号 8 位整数类型，可用范围是 0 到 65535。
+//- `char16_t` 字符的编码格式固定是 UTF-16。
+//- 相应的字符串类型是 `std::u16string`。
+//
+//`char32_t` 是无符号 8 位整数类型，可用范围是 0 到 1114111。
+//- `char32_t` 字符的编码格式固定是 UTF-32。
+//- 相应的字符串类型是 `std::u32string`。
+//
+//理论上，现代程序应该都采用 `char8_t` 和 `char32_t`，他们是跨平台的。
+//
+//=== 不跨平台字符类型
+//
+//`char` 字符的编码格式随 locale 而变，并不固定。
+//- 如果你的环境变量 `LC_ALL` 设为 `zh_CN.UTF-8`，那他就是 UTF-8。如果你的 `LC_ALL` 设为 `zh_CN.GBK`，那他里面就是 GBK。
+//
+//`wchar_t` 是无符号 32 位整数类型，可用范围是 0 到 1114111。
+//- `wchar_t` 字符的编码格式在 Linux 系统上固定是 UTF-32。
+//
+//虽然都保证是 Unicode，但不同操作系统影响，是系统 ABI 的一部分，非常麻烦，不跨平台。
+//
+//C 语言提供了大量针对 `char` 的字符串函数，`const char *` 成了事实上的字符串标准。
+//
+//=== 变长编码带来的问题
+//
+//如果把 UTF-8 编码的火车序列直接当普通数组来处理文字，会出现哪些问题？
+//
+//例如，当我们写下：
+//
+//```cpp
+//std::string s = "我爱𰻞𰻞面!";
+//```
+//
+//这段代码，实际上会被编译器解释为：
+//
+//```cpp
+//std::string s = {
+    //0xE6, 0x88, 0x91, // 我
+    //0xE7, 0x88, 0xB1, // 爱
+    //0xF0, 0xB0, 0xAF, 0x9B, // 𰻞
+    //0xF0, 0xB0, 0xAF, 0x9B, // 𰻞
+    //0xE9, 0x9D, 0xA2, // 面
+    //0x21, // !
+//};
+//```
+-->
+<h2 id="windows-专题"><a class="header" href="#windows-专题">Windows 专题</a></h2>
+<p>遇到字符编码难题的，主要是 Windows 程序员。</p>
+<h3 id="windows-api-的本源是-w-系函数"><a class="header" href="#windows-api-的本源是-w-系函数">Windows API 的本源是 W 系函数</a></h3>
+<p>从 Windows NT 版本开始，对于所有涉及字符串的，其操作系统 API 提供了两套函数。</p>
+<ul>
+<li>一套是 <code>A</code> 系列函数，以 <code>A</code> 结尾，例如 <code>CreateFileA</code>，这些函数接收 ANSI（即 GBK）编码的字符串。</li>
+<li>另一套是 <code>W</code> 系列函数，以 <code>W</code> 结尾，例如 <code>CreateFileW</code>，这些函数接收 Unicode（即 UTF-16）编码的字符串。</li>
+</ul>
+<p>其中 <code>CreateFileW</code> 才是 Windows 系统真正的 API。</p>
+<p>而 <code>CreateFileA</code> 是为了兼容基于 ANSI 的老程序.</p>
+<div id="admonition-warning-5" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-5-title">
+<div class="admonition-title">
+<div id="admonition-warning-5-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-warning-5"></a>
+</div>
+<div>
+<p>由于 ANSI 在不同地区会变得不同，使用这类函数写出的程序不具有国际通用性。</p>
+</div>
+</div>
+<p>其内部的实现只是简简单单地给 <code>const char *</code> 做个转换，从 GBK 转到 UTF-16，然后直接调用 CreateFileW。</p>
+<pre><code class="language-cpp">HANDLE CreateFileA(const char *lpFileName) {
+    return CreateFileW(gbk_to_utf16(lpFileName));
+}
+</code></pre>
+<h3 id="tchar-流派"><a class="header" href="#tchar-流派">TCHAR 流派</a></h3>
+<p>除了又定义了一个宏，这个宏没有任何后缀，例如 <code>CreateFile</code>。</p>
+<p>其定义如下：</p>
+<pre><code class="language-cpp">#ifdef UNICODE
+#define MessageBox MessageBoxW
+#else
+#define MessageBox MessageBoxA
+#endif
+</code></pre>
+<p>这样做的初衷是，程序员只可以写出一套针对 <code>MessageBox</code> 的代码。</p>
+<ul>
+<li>当老板想要基于 Unicode 时，他就 <code>#define UNICODE</code>，这样 <code>MessageBox</code> 就变成了 <code>MessageBoxW</code>，程序员的代码就会自动变成 Unicode 的，国际通用。</li>
+<li>当劳保老板想要基于 ANSI 时，他就不定义 <code>UNICODE</code> 宏，这样所有的 <code>MessageBox</code> 又变回了 <code>MessageBoxA</code>，程序员的代码又变成 ANSI 的了。</li>
+</ul>
+<p>所有有 A/W 区分的的 Windows API 都有这样一个宏，根据 UNICODE 宏是否定义，决定采取哪套 API。</p>
+<div id="admonition-note-25" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-25-title">
+<div class="admonition-title">
+<div id="admonition-note-25-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-25"></a>
+</div>
+<div>
+<p>我们伟大的 Linux 系统就没有这个苦恼，早就统一 UTF-8 了。</p>
+</div>
+</div>
+<p>除此之外，<code>&lt;windows.h&gt;</code> 中还定义了 <code>TEXT</code> 这个宏函数。</p>
+<pre><code class="language-cpp">#ifdef UNICODE
+#define TEXT(s) L##s
+#else
+#define TEXT(s) s
+#endif
+</code></pre>
+<p>用法：要求程序员把所有的字符串常量，都用 TEXT 宏包裹。</p>
+<div id="admonition-info-7" class="admonition admonish-info" role="note" aria-labelledby="admonition-info-7-title">
+<div class="admonition-title">
+<div id="admonition-info-7-title">
+<p>Info</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-info-7"></a>
+</div>
+<div>
+<p>Qt 也有类似的宏包裹字符串常量的做法，<code>tr</code>，但它并不是为了解决编码问题，而是为了解决多语言翻译问题，稍后会专门介绍一下 Qt 中的字符串。</p>
+</div>
+</div>
+<p>当 <code>UNICODE</code> 宏定义时，<code>TEXT</code> 会自动为字符串常量添加 <code>L</code> 前缀，使得字符串变成 Unicode 的。如果没有定义，则又变回 ANSI 编码的字符串（跟随“运行字符集”的设定）。</p>
+<p>例如下面这一段代码：</p>
+<pre><code class="language-cpp">#include &lt;windows.h&gt;
+
+int main() {
+    MessageBox(NULL, TEXT("你好，世界"), TEXT("标题"), MB_OK);
+}
+</code></pre>
+<p>当定义 <code>UNICODE</code> 时，等价于：</p>
+<pre><code class="language-cpp">#include &lt;windows.h&gt;
+
+int main() {
+    MessageBoxW(NULL, L"你好，世界", L"标题", MB_OK);
+}
+</code></pre>
+<p>当没有定义 <code>UNICODE</code> 时，等价于：</p>
+<pre><code class="language-cpp">#include &lt;windows.h&gt;
+
+int main() {
+    MessageBoxA(NULL, "你好，世界", "标题", MB_OK);
+}
+</code></pre>
+<p>此外，还定义了 <code>TCHAR</code> 这个类型别名，同样是针对是否定义 <code>UNICODE</code> 宏而定义了两套版本。</p>
+<pre><code class="language-cpp">#ifdef UNICODE
+typedef wchar_t TCHAR;
+#else
+typedef char TCHAR;
+#endif
+</code></pre>
+<p>还为 <code>printf</code> 和 <code>wprintf</code> 定义了 <code>TCHAR</code> 版本，不仅如此，还有 <code>strlen</code> 和 <code>wcslen</code>，<code>strcpy</code> 和 <code>wcscpy</code>，等等。</p>
+<pre><code class="language-cpp">#ifdef UNICODE
+#define _tprintf wprintf
+#define _tcscpy wcscpy
+#define _tcslen wcslen
+#else
+#define _tprintf printf
+#define _tcscpy strcpy
+#define _tcslen strlen
+#endif
+</code></pre>
+<div id="admonition-note-26" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-26-title">
+<div class="admonition-title">
+<div id="admonition-note-26-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-26"></a>
+</div>
+<div>
+<p>不觉得这很酷吗？很符合我对强迫症的想象，科技并且带着臭味。</p>
+</div>
+</div>
+<pre><code class="language-cpp">int main() {
+    TCHAR str[] = TEXT("比尔盖子我测试你的码");
+}
+</code></pre>
+<div id="admonition-note-27" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-27-title">
+<div class="admonition-title">
+<div id="admonition-note-27-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-27"></a>
+</div>
+<div>
+<p>(* 哦，我是说，我要测试你的编码格式 *)</p>
+</div>
+</div>
+<p>需要切换时，在 MSVC 中，打开或关闭 <code>/DUNICODE</code> 编译选项即可。</p>
+<div id="admonition-note-28" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-28-title">
+<div class="admonition-title">
+<div id="admonition-note-28-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-28"></a>
+</div>
+<div>
+<p>不要觉得这是什么好主意，这样做的后果是，你写出的代码只能在 Windows 下编译。</p>
+</div>
+</div>
+<p>写起来累死人，实际哪有那么多一直在 ANSI 和 Unicode 之间来回切换的需求？</p>
+<p>我的建议是，统一 <code>wchar_t</code>，统一全用 W 函数，憋抠抠索索的半进半退。</p>
+<h3 id="utf-8-派的跨平台软件何去何从"><a class="header" href="#utf-8-派的跨平台软件何去何从">UTF-8 派的跨平台软件何去何从？</a></h3>
+<p>之前说过了，Windows 平台到处都默认 GBK 非常麻烦，要切换到 UTF-8 工作流：</p>
+<ol>
+<li>编译器开启 <code>/utf-8</code> 选项</li>
+<li>设置控制台输出编码，<code>system("chcp 65001")</code></li>
+<li>设置文件系统字符串编码，<code>setlocale(LC_ALL, ".utf-8")</code></li>
+</ol>
+<pre><code class="language-cpp">// 编译选项：/std:c++17 /utf-8
+int main() {
+#if _WIN32 // 热知识：64 位 Windows 也会定义 _WIN32 宏，所以 _WIN32 可以用于检测是否是 Windows 系统
+    setlocale(LC_ALL, ".utf-8");  // 设置标准库调用系统 API 所用的编码，用于 fopen，ifstream 等函数
+    SetConsoleOutputCP(CP_UTF8); // 设置控制台输出编码，或者写 system("chcp 65001") 也行，这里 CP_UTF8 = 65001
+    SetConsoleCP(CP_UTF8); // 设置控制台输入编码，用于 std::cin
+#elif __APPLE__
+    // 通常来说 MacOS 的默认编码就是 UTF-8，这里设置全局 locale 是为了让 iswspace 接受全角空格、iswpunct 接受全角逗号 L'，' 等
+    setlocale(LC_ALL, "UTF-8");  // MacOS 设置 UTF-8 编码，让 iswspace 接受全角空格等
+#elif __unix__
+    // 反正 Unix 系统默认都是 UTF-8，不设置也行，这里设置全局 locale 是为了让 iswspace 接受全角空格、iswpunct 接受全角逗号 L'，' 等
+    //setlocale(LC_ALL, "zh_CN.utf-8"); // 设置使用中文本地化，可使 strerror 输出中文（但用户必须 locale-gen 过中文！）
+    setlocale(LC_ALL, "C.utf-8");       // 设置使用语言中性 locale（推荐），只影响 iswspace、iswpunct 等函数，不会使 strerror 等输出中文
+#endif
+    // 这里开始写你的主程序吧！
+    // ...
+    std::cout &lt;&lt; "你好，世界\n";   // 没问题！
+    std::ifstream fin("你好.txt"); // 没问题！
+    std::wcout &lt;&lt; L"你好，世界\n"; // 你都统一 UTF-8 了，这破 UTF-16 和 UTF-32 之间来回跳的破 wchar_t 就别用了呗！
+    return 0;
+}
+</code></pre>
+<h3 id="wndproc-接受输入法的中文输入"><a class="header" href="#wndproc-接受输入法的中文输入">WndProc 接受输入法的中文输入</a></h3>
+<pre><code class="language-cpp">LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    switch (uMsg) {
+    case WM_CHAR: // 对于 IsWindowUnicode(hwnd) == false 的窗口，会进入这里
+        std::cout &lt;&lt; char(wParam); // 此时 wParam 输入的是 GBK 编码的 char 序列
+        // 如果是中文字符，WndProc(WM_CHAR) 会被调用多次，每次一个字节，程序员需要自己判断和拼接 GBK 字符串
+        return 0;
+    case WM_UNICHAR: // 对于 IsWindowUnicode(hwnd) == true 的窗口，会进入这里
+        std::wcout &lt;&lt; wchar_t(wParam); // 此时 wParam 输入的是 UTF-16 编码的 wchar_t 序列
+        // 如果是代理对，WndProc(WM_UNICHAR) 会被调用多次，每次一个码位，程序员需要自行把代理对组装成完整的 Unicode 码点
+        return 0;
+    default:
+        return DefWindowProc(hwnd, uMsg, wParam, lParam);
+    }
+}
+</code></pre>
+<p>把 WndProc 的输入存入 <code>std::u32string</code> 的案例：</p>
+<pre><code class="language-cpp">std::u32string result;
+std::string ansi_buf;
+std::wstring utf16_buf;
+
+std::optional&lt;std::u32string&gt; try_ansi_to_utf32(std::string const &amp;s) {
+    try {
+        return boost::locale::conv::to_utf&lt;char32_t&gt;(s, "");
+    } catch (boost::locale::conv::conversion_error const &amp;) {
+        return std::nullopt;
+    }
+}
+
+std::optional&lt;std::u32string&gt; try_utf16_to_utf32(std::wstring const &amp;s) {
+    try {
+        return boost::locale::conv::utf_to_utf&lt;char32_t&gt;(s);
+    } catch (boost::locale::conv::conversion_error const &amp;) {
+        return std::nullopt;
+    }
+}
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    switch (uMsg) {
+    case WM_CHAR:
+        ansi_buf.push_back(char(wParam));
+        if (auto u = try_ansi_to_utf32(ansi_buf)) {
+            result += u.value();
+            ansi_buf.clear();
+        }
+        return 0;
+    case WM_UNICHAR:
+        utf16_buf.push_back(wchar_t(wParam));
+        if (auto u = try_utf16_to_utf32(utf16_buf)) {
+            result += u.value();
+            utf16_buf.clear();
+        }
+        return 0;
+    default:
+        return DefWindowProc(hwnd, uMsg, wParam, lParam);
+    };
+</code></pre>
+<h2 id="常见的字符串实现探究"><a class="header" href="#常见的字符串实现探究">常见的字符串实现探究</a></h2>
+<p>标准库的 <code>std::string</code> 我们不再赘述，刚才在“宽字符流”中也介绍了官方的想法，之后的字符串专题课会继续详解。</p>
+<p>这里我们主要探究关于字符编码的问题，探索各大常见的编程语言和库，是如何封装字符串类，如何解决 UTF-8 变长编码，UTF-32 压缩率低的问题的，希望在你的项目中提供一点灵感。</p>
+<p>通常来说，一个好的库或语言，都要明确区分字符串和字节数组的概念，前者是文本内容，后者是纯二进制内容。</p>
+<p>字符串可以通过“编码”得到纯二进制的字节数组，而字节数组可以“解码”得到原始字符串。</p>
+<div id="admonition-tip-28" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-28-title">
+<div class="admonition-title">
+<div id="admonition-tip-28-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-28"></a>
+</div>
+<div>
+<p>早期的 C 语言就是因为把字符和字节混为一谈，都使用了 <code>char</code> 类型，才产生了后来这么多乱象。后来通过打补丁打上真正的字符 <code>wchar_t</code>，却没什么人用，而且还被 Windows 搞成 16 位，反而不跨平台了。</p>
+</div>
+</div>
+<p>此处先列一个不同编程语言眼中字符串和字节数组的表，方便你理解。</p>
+<div class="table-wrapper"><table><thead><tr><th>语言</th><th>字符</th><th>字符串</th><th>文本流</th><th>字节数组</th><th>二进制流</th><th>编码/解码</th></tr></thead><tbody>
+<tr><td>C</td><td><code>char</code></td><td><code>wchar_t *</code></td><td><code>FILE *</code>+<code>fgetwc</code></td><td><code>char *</code></td><td><code>FILE *</code>+<code>fgetc</code></td><td><code>wcstomb</code>/<code>mbstowc</code></td></tr>
+<tr><td>C++</td><td><code>wchar_t</code></td><td><code>std::wstring</code></td><td><code>std::wistream</code></td><td><code>std::string</code>/<code>std::vector&lt;char&gt;</code></td><td><code>std::istream</code></td><td><code>std::codecvt</code></td></tr>
+<tr><td>Qt</td><td><code>QChar</code></td><td><code>QString</code></td><td><code>QTextStream</code></td><td><code>QByteArray</code></td><td><code>QDataStream</code></td><td><code>QTextCodec</code></td></tr>
+<tr><td>Python3</td><td><code>str</code></td><td><code>str</code></td><td><code>open('r')</code></td><td><code>bytes</code></td><td><code>open('rb')</code></td><td><code>str.encode()</code></td></tr>
+<tr><td>Python2</td><td><code>unicode</code></td><td><code>unicode</code></td><td>无</td><td><code>str</code></td><td><code>open('r')</code></td><td><code>unicode.encode()</code></td></tr>
+<tr><td>Java</td><td><code>Character</code></td><td><code>String</code></td><td><code>Reader</code></td><td><code>byte[]</code></td><td><code>InputStream</code></td><td><code>Charset.encode</code></td></tr>
+<tr><td>C#</td><td><code>char</code></td><td><code>string</code></td><td><code>StreamReader</code></td><td><code>byte[]</code></td><td><code>Stream</code></td><td><code>Encoding</code></td></tr>
+<tr><td>Rust</td><td><code>char</code></td><td><code>String</code></td><td><code>BufRead</code></td><td><code>u8</code></td><td><code>Read</code></td><td><code>str::from_utf8</code></td></tr>
+<tr><td>JS</td><td><code>char</code></td><td><code>String</code></td><td><code>ReadableStream</code></td><td><code>Uint8Array</code></td><td><code>ReadableStream</code></td><td><code>TextEncoder</code></td></tr>
+<tr><td>Go</td><td><code>rune</code></td><td><code>string</code></td><td><code>Reader</code></td><td><code>byte</code></td><td><code>Reader</code></td><td><code>utf8.DecodeRune</code></td></tr>
+<tr><td>PHP</td><td><code>string</code></td><td><code>string</code></td><td><code>fopen</code></td><td><code>string</code></td><td><code>fopen</code></td><td><code>mb_convert_encoding</code></td></tr>
+<tr><td>Swift</td><td><code>Character</code></td><td><code>String</code></td><td><code>String.UnicodeScalarView</code></td><td><code>UInt8</code></td><td><code>Data</code></td><td><code>String.Encoding</code></td></tr>
+<tr><td>Kotlin</td><td><code>Char</code></td><td><code>String</code></td><td><code>Reader</code></td><td><code>ByteArray</code></td><td><code>InputStream</code></td><td><code>Charset.encode</code></td></tr>
+<tr><td>Obj-C</td><td><code>unichar</code></td><td><code>NSString</code></td><td><code>NSInputStream</code></td><td><code>uint8_t</code></td><td><code>NSInputStream</code></td><td><code>NSStringEncoding</code></td></tr>
+<tr><td>Lua</td><td><code>integer</code></td><td><code>table</code></td><td>无</td><td><code>string</code></td><td><code>io.open</code></td><td><code>require'utf8'</code></td></tr>
+</tbody></table>
+</div><div id="admonition-tip-29" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-29-title">
+<div class="admonition-title">
+<div id="admonition-tip-29-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-29"></a>
+</div>
+<div>
+<p>本课不会讲解这些语言的字符串具体用法，只提供一些概念，让你知道大家都是怎么实现的，触类旁通。</p>
+</div>
+</div>
+<div id="admonition-note-29" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-29-title">
+<div class="admonition-title">
+<div id="admonition-note-29-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-29"></a>
+</div>
+<div>
+<p>Lua 中 UTF-32 的定长编码，要这样实现：<code>{80, 101, 110, 103}</code>。而他所谓的 <code>utf8</code> 库，就是负责把 Lua 自己的 <code>string</code> 假设为 <code>utf8</code> 编码，解码出一个个 Unicode 码点，返回一个这样的数组。他甚至不是 Lua 标准的一部分，是个第三方的库，还是需要编译的 C 语言 <code>.so</code> 文件。还有 Lua 孝子借此硬说我们 Lua 是天生 UTF-8！然而拿着个 UTF-8 编码的“字节数组” <code>string</code> 来打开 <code>io.open</code> 文件，就会报错找不到文件（因为中国区 Windows 的 GBK），是不是很好笑呢？</p>
+</div>
+</div>
+<h3 id="qt-qstring"><a class="header" href="#qt-qstring">Qt <code>QString</code></a></h3>
+<p>Qt 的字符串类型是 <code>QString</code>。它可以容纳任意 Unicode 字符集的字符串。</p>
+<p>Qt 的字节数组类型是 <code>QString</code>。它可以容纳任意 Unicode 字符集的字符串。</p>
+<p>它的数据结构实际上是个 <code>QChar</code> 数组，而 <code>QChar</code> 是 <code>unsigned short</code>，即 16 位无符号整数，也就是 UTF-16 编码的码位。</p>
+<pre><code class="language-cpp">QString str = "你好，世界";
+// str.size() = 5
+// str[0] = QChar(0x4f60) = u'你'
+// str[1] = QChar(0x597d) = u'好'
+// str[2] = QChar(0xff0c) = u'，'
+// str[3] = QChar(0x4e16) = u'世'
+// str[4] = QChar(0x754c) = u'界'
+</code></pre>
+<p>可见，<code>QString</code> 是 UTF-16 编码的，就和 Java 一样，Qt 也是 UTF-16 潮的受害者。</p>
+<p>所以，QString 也存在着代理对变长编码的问题。但至少对常见的中文字符来说，一个 16 位的 <code>QChar</code> 都容纳的下了。</p>
+<h4 id="qtextcodec"><a class="header" href="#qtextcodec">QTextCodec</a></h4>
+<p>Qt 定义了一系列的编码转换函数，用于将 <code>QString</code> 转换成 <code>QByteArray</code>，或者从 <code>QByteArray</code> 转换成 <code>QString</code>，这些函数名都是以 <code>to</code> 或者 <code>from</code> 开头的，后面跟着编码名，例如 <code>fromUtf8</code>、<code>toUtf8</code>、<code>toLocal8Bits</code>。</p>
+<p>这些函数的内部，都是调用 <code>QTextCodec</code> 类实现的转换。</p>
+<p><code>QTextCodec</code> 是 Qt 用于处理各种文本编码之间转换的类。它的静态方法 <code>codecForLocale</code> 返回了当前系统的编码，<code>toUnicode</code> 和 <code>fromUnicode</code> 分别是将 <code>QByteArray</code> 转换成 <code>QString</code>，或者将 <code>QString</code> 转换成 <code>QByteArray</code>。</p>
+<pre><code class="language-cpp">QTextCodec *codec = QTextCodec::codecForLocale(); // 返回当前系统编码
+QByteArray bytes = codec-&gt;fromUnicode(str);       // 将 QString 转换成 QByteArray，即 char[]
+QString str = codec-&gt;toUnicode(bytes);           // 将 QByteArray 转换成 QString
+</code></pre>
+<p>QTextCodec 还提供了一些更加细粒度的转换接口，例如 <code>fromUnicode</code> 除了接受 <code>QString</code>，还接受 <code>QChar</code> 数组，可以指定转换范围。</p>
+<h4 id="fromtolocal8bitsutf8latin1ascii"><a class="header" href="#fromtolocal8bitsutf8latin1ascii">from/toLocal8Bits/Utf8/Latin1/Ascii</a></h4>
+<p>为了方便使用，Qt 封装了一些常用字符编码的转换函数，这样你不必每次都创建一个 QTextCodec。都是 <code>to</code> 和 <code>from</code> 开头，后面跟着编码的名称。</p>
+<p><code>Local8Bits</code> 表示运行时检测到当前系统的字符编码，也就是客户电脑上的“区域设置”。</p>
+<pre><code class="language-cpp">QByteArray bytes = str.toLocal8Bits(); // 将 UTF-16 的 QString 转换成 QByteArray，使用当前系统的字符编码
+QString::fromLocal8Bits(bytes); // 再从当前系统的字符编码转换回 UTF-16 的 QString
+// 等价于：
+QTextCodec *codec = QTextCodec::codecForLocale();
+QByteArray bytes = codec-&gt;fromUnicode(str);
+QString str = codec-&gt;toUnicode(bytes);
+</code></pre>
+<p><code>Utf8</code> 表示使用 UTF-8 编码。</p>
+<pre><code class="language-cpp">QByteArray bytes = str.toUtf8(); // 将 UTF-16 的 QString 转换成 QByteArray，使用 UTF-8 编码
+QString::fromUtf8(bytes); // 再从 UTF-8 编码转换回 UTF-16 的 QString
+// 等价于：
+QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+QByteArray bytes = codec-&gt;fromUnicode(str);
+QString str = codec-&gt;toUnicode(bytes);
+</code></pre>
+<p><code>Latin1</code> 表示 ISO-8859-1 编码，又称为西欧编码，它是一个单字节编码，和 ASCII 编码相似，但是多了 128-255 的字符，包括了法语、德语、西班牙语、葡萄牙语等字符。</p>
+<pre><code class="language-cpp">QByteArray bytes = str.toLatin1(); // 将 UTF-16 的 QString 转换成 QByteArray，使用 Latin1 编码
+QString::fromLatin1(bytes); // 再从 Latin1 编码转换回 UTF-16 的 QString
+// 等价于：
+QTextCodec *codec = QTextCodec::codecForName("ISO-8859-1");
+QByteArray bytes = codec-&gt;fromUnicode(str);
+QString str = codec-&gt;toUnicode(bytes);
+</code></pre>
+<p><code>Ascii</code> 表示 ASCII 编码，和 <code>Latin1</code> 的情况类似，只不过他无法处理 128-255 这一段的字符。</p>
+<pre><code class="language-cpp">QByteArray bytes = str.toAscii(); // 将 UTF-16 的 QString 转换成 QByteArray，使用 ASCII 编码
+QString::fromAscii(bytes); // 再从 ASCII 编码转换回 UTF-16 的 QString
+// 等价于：
+QTextCodec *codec = QTextCodec::codecForName("ASCII");
+QByteArray bytes = codec-&gt;fromUnicode(str);
+QString str = codec-&gt;toUnicode(bytes);
+</code></pre>
+<h4 id="字符串常量"><a class="header" href="#字符串常量">字符串常量</a></h4>
+<pre><code class="language-cpp">QString str = QStringLiteral("你好，世界");
+</code></pre>
+<p><code>QStringLiteral</code> 可以保证，转换时采用的是所谓“运行字符集”（实际应该叫字面量字符编码），也就是我们开发者电脑上的“区域设置”，是编译期确定的。而如果写 <code>QString::fromLocal8Bits("")</code> 就变成 “ANSI”，客户的“区域设置”了。这两个字符编码，比如在之前跨国 galgame 的案例中，就是不同的。</p>
+<h4 id="qtextstream"><a class="header" href="#qtextstream">QTextStream</a></h4>
+<p><code>QTextStream</code> 是 Qt 提供的文本流类（带有缓冲），它可以将文本写入到文件、套接字、标准输出等设备。</p>
+<p>文本流和二进制流不同，他需要指定一个编码格式，通过 <code>QTextStream</code> 构造函数的第二个参数指定。</p>
+<ul>
+<li>当你往 <code>QTextStream</code>写入 <code>QString</code> 时，会调用这个编码格式自动转换为 <code>QByteArray</code>，然后才写入。</li>
+<li>读取时也同理，会把读到的 <code>QByteArray</code> 通过编码格式解码，得到 <code>QString</code> 字符串。</li>
+</ul>
+<p>Qt 值得称道的一点是：他把文件和文件流区分开来，文件 <code>QFile</code> 只需要负责打开文件就可以了；而文本流 <code>QTextStream</code> 才真正负责数据的缓冲，解码等操作。体现了面向对象的职责单一原则。</p>
+<pre><code class="language-cpp">QFile file("hello.txt");
+file.open(QIODevice::ReadWrite);
+QTextStream stream(&amp;file);
+stream.setCodec("UTF-8"); // 设置文件的编码格式
+stream &lt;&lt; "你好，世界\n"; // 写入 QString，QTextStream 会自动将其用 UTF-8 编码为 QByteArray 后写入 QFile
+</code></pre>
+<p>如果你确实需要直接写入二进制的 <code>QByteArray</code>，Qt 也提供了一个 <code>QDataStream</code> 类，方便二进制文件的读写。</p>
+<p>如此把二进制和文本严格区分，而不是像古代 C 语言那样字节与字符混淆不清，全用糟糕的 <code>char</code> 来表示，充分体现了强类型的安全。</p>
+<h3 id="python-3-str"><a class="header" href="#python-3-str">Python 3 <code>str</code></a></h3>
+<div id="admonition-tip-30" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-30-title">
+<div class="admonition-title">
+<div id="admonition-tip-30-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-30"></a>
+</div>
+<div>
+<p>如何解决 UTF-32 占用空间大的痛点？Python 的字符串实现绝对值得一看！</p>
+</div>
+</div>
+<p>为了方便文本处理，最好以定长编码，也就是 UTF-32，存储字符串。</p>
+<p>如果用 UTF-8 或 UTF-16 来存储的话，会遇到变长编码的固有缺陷：</p>
+<p>例如像字符串索引，字符串求长度等操作，要么索引出来的是字节而不是字符了；要么就需要 $O(N)$ 的复杂度，逐一遍历每个字节，才能确定真正的位置；哪怕全是 ASCII 也得这么做，因为万一刚好有一个是中文字符呢？</p>
+<p>所以，对于经常需要处理字符串的 Python 来说，UTF-8 是无法接受的，似乎只能以 UTF-32 来存储？</p>
+<p>Python 想到了一个小妙招：</p>
+<pre><code class="language-c">enum PyUnicodeType {
+    PyUnicodeType_Latin1,
+    PyUnicodeType_UCS2,
+    PyUnicodeType_UCS4,
+};
+
+struct PyUnicodeString {
+    PyUnicodeType type;
+    union {
+        uint8_t *latin1;
+        uint16_t *ucs2;
+        uint32_t *ucs4;
+    };
+};
+</code></pre>
+<p>这里的 <code>union</code> 是一个 C 语言特性，他允许你把多个成员共享同一片内存空间。通常来说需要配合一个 <code>enum</code> 表示类型，才能安全使用。现代 C++ 的 <code>std::variant</code> 更安全的取代了他，而且不需要外挂一个 <code>enum</code>。CPython 解释器因为是 C 语言实现，只能用 union 模拟 <code>std::variant</code> 的效果。</p>
+<p>当一个字符串中只包含 0 到 0xFF 的字符（Latin-1 范围）时，实际上没必要全用超大的 <code>uint32_t</code> 来存储。完全可以只取出低 8 位，存入一个更紧凑的 <code>uint8_t</code> 数组，就像 Latin-1 编码一样。</p>
+<p>但是当按索引读取元素时，会判断当前 union 里装的是哪种类型，如果是 Latin-1 的，那就会用结构体里的 <code>uint8_t *</code> 指针来索引。</p>
+<p>这样，对于全 ASCII 的字符串，相比老老实实存 UTF-32 内存占用直接减少了 75%！唯一的代价是按索引读字符元素时需要做个 if-else 判断。同时又不失去定长编码的优势。</p>
+<p>当一个字符串中只包含 0 到 0xFFFF 的字符（早期 Unicode 范围）时，则是取出低 16 位，存入一个 <code>uint16_t</code> 的数组，这种存储方案也称为 UCS-2。</p>
+<div id="admonition-warning-6" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-6-title">
+<div class="admonition-title">
+<div id="admonition-warning-6-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-warning-6"></a>
+</div>
+<div>
+<p>注意 UCS-2 并不等同于 UTF-16，UTF-16 是能够表示完整的 Unicode 的变长编码（有代理对）；而 UCS-2 是没有代理对的定长编码，缺点是只能表示 0xFFFF 的范围。</p>
+</div>
+</div>
+<p>对于大部分中文字符串，内存占用就减少了 50%，也不亏。</p>
+<p>如果字符串中出现“𰻞”这样的，超过 0xFFFF 的字符，才会采用 <code>uint32_t</code> 老老实实存储真正的 UTF-32，又称 UCS-4。</p>
+<div id="admonition-tip-31" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-31-title">
+<div class="admonition-title">
+<div id="admonition-tip-31-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-31"></a>
+</div>
+<div>
+<p>这两种叫法是等价的，反正 Unicode 从来没有超过 0xFFFFFFFF 的，现在他们都是定长编码。</p>
+</div>
+</div>
+<p>对于一个经常需要处理字符串的虚拟机语言来说，反正本来就不在乎 if-else 分支这点小开销，这确实是最好的方案。</p>
+<p>缺点就是，当你往一个完全是 ASCII 的字符串中，突然插入一个“𰻞”时，会产生巨大的内存重分配。虽然只有一个“𰻞”，但为此，其他所有 ASCII 字符都得为他扩张到 32 位的大小。而 UTF-8 和传统的 UTF-32 就没有这个问题，因此我也不建议 C++ 程序员自己手搓个这样的 union 字符串。</p>
+<h3 id="rust-str-和-string"><a class="header" href="#rust-str-和-string">Rust <code>&amp;str</code> 和 <code>String</code></a></h3>
+<p>而 Rust 则采用了字符串全员 UTF-8 的策略，这是因为 Rust 最常用于互联网方面的底层系统软件，互联网最常用的文本编码就是 UTF-8，没有大小端问题，且国际通用。除此之外，互联网基建最常见的平台就是 Linux，使用 UTF-8 存储字符串，调用 Linux 系统 API 无需任何转换。且文本文件基本都可以假定是 UTF-8 编码，写入时无需任何转换，复杂度低至 $O(1)<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord cjk_fallback">。作为代价，这导致文本处理上的一些困难，例如字符串的索引，需要区分是按字节索引还是按字符索引，如果确实需要按字符索引的话，复杂度就会是</span></span></span></span>O(N)$ 了。</p>
+<p>无论如何，如果你选择了 UTF-8 流派的话，Rust 字符串的“迭代器双轨制”确实值得称道：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let s = "你好，世界";
+for c in s.chars() { // 按字符迭代
+    println!("{}", c);
+}
+for b in s.bytes() { // 按字节迭代
+    println!("{:02X}", b); // 打印：E4 BD A0 E5 A5 BD EF BC 8C E4 B8 96 E7 95 8C
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="java-string"><a class="header" href="#java-string">Java <code>String</code></a></h3>
+<p>Java 也是 UTF-16 的双字节编码。</p>
+<p>亮点：他的 <code>String</code> 类型是不可变的，也就是说，你无法就地修改一个 <code>String</code> 对象，每次产生你调用 <code>+=</code> 的都是一个新 String，而不会覆盖。</p>
+<p>也就是说：Java 的 <code>String</code> 虽然是“堆”中的对象，却无法以引用传递。</p>
+<p>这避免了以下这种情况：</p>
+<pre><code class="language-cpp">void registerStudent(String name) {
+    name += ".txt";
+    File file(name);
+    file.write(...);
+}
+
+void myTransaction() {
+    String name = "小彭";
+    lib.registerStudent(name);
+    office.registerStudent(name); // 这里 name 是否被修改？
+}
+</code></pre>
+<p>如果 Java 的 <code>String</code> 和普通对象一样，被调用者的修改可以对外部可见，那岂不是我每次调用一个以 <code>String</code> 为参数的函数时，都需要操心：这个函数会不会把我的字符串修改掉？</p>
+<p>所以，Java 给他的对象模型开了个后门：规定所有对象都是按引用传递，除了 <code>String</code>！就只有 <code>String</code> 是不可变对象，被调用者内部的修改对外不可见。</p>
+<div id="admonition-note-30" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-30-title">
+<div class="admonition-title">
+<div id="admonition-note-30-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-30"></a>
+</div>
+<div>
+<p>C++ 和 Rust 只需要加个常引用就行，而 Java 受害者要考虑的就多了。</p>
+</div>
+</div>
+<p>总之，这就是没有 <code>const</code> 的垃圾语言的丑态，需要靠各种语法规则上开洞才能弥补设计时考虑不周的缺陷，就为了伺候这帮引用都弄不明白的垃圾小白。</p>
+<div id="admonition-note-31" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-31-title">
+<div class="admonition-title">
+<div id="admonition-note-31-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-31"></a>
+</div>
+<div>
+<p>我是说垃圾回收 (garbage-collect) 语言，简称垃圾语言。没有说 Java 垃圾的意思，你说对吧？垃圾语言。</p>
+</div>
+</div>
+<h3 id="cow-字符串"><a class="header" href="#cow-字符串">COW 字符串</a></h3>
+<p>担忧：那岂不是每次我 <code>+=</code> 实际上都白白深拷贝了一份新的 <code>String</code>？别担心，因为具体实现上，Java 的 <code>String</code> 在底层采用了和 Qt 的 <code>QString</code> 一样的 COW 机制：</p>
+<p>当一个 <code>QString</code> 被拷贝构造时，并不会对其中的 <code>QByteArray</code> 进行深拷贝，而是共享同一片内存。只有当其中一个 <code>QString</code> 被 <code>+=</code> 等带有副作用操作修改时，才会深拷贝一份新的，让你修改。这样大大降低了内存占用和性能开销。</p>
+<p>COW 字符串的缺点是：当你写多线程并发时，本来多线程只读访问同一个字符串是安全的，但如果字符串有 COW，连只读访问都会不安全了。之后我们的多线程专题课会详细分析这是为什么。</p>
+<div id="admonition-abstract-17" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-17-title">
+<div class="admonition-title">
+<div id="admonition-abstract-17-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-17"></a>
+</div>
+<div>
+<p>其实早期的 C++98 中，<code>std::string</code> 也采用了 COW 机制，但后来因为不符合线程安全要求，被追求多线程的 C++11 责令改正，才有了后来 <code>std::__cxx11::basic_string</code> 的 ABI 不兼容问题。毕竟线程不安全实在太伤了，基本意味着多线程就没法共享 <code>std::string</code>。事实上，Qt 所有的对象 <code>QObject</code>，包括 <code>QString</code> 在多线程中传递时，就需要调用 <code>moveTo(QThread)</code> 转移所有权，才能安全地传递给另一个线程，就是因为 Qt 大量使用了 COW 机制。</p>
+</div>
+</div>
+<h2 id="unicode-知识进阶"><a class="header" href="#unicode-知识进阶">Unicode 知识进阶</a></h2>
+<h3 id="字符的显示宽度计算"><a class="header" href="#字符的显示宽度计算">字符的显示宽度计算</a></h3>
+<p>TODO</p>
+<h3 id="grapheme"><a class="header" href="#grapheme">Grapheme</a></h3>
+<p>TODO</p>
+<h3 id="正规化"><a class="header" href="#正规化">正规化</a></h3>
+<p>TODO</p>
+<h3 id="零宽空格"><a class="header" href="#零宽空格">零宽空格</a></h3>
+<p>TODO</p>
+<h3 id="特殊控制字符"><a class="header" href="#特殊控制字符">特殊控制字符</a></h3>
+<p>TODO</p>
+<h3 id="根据编号输入-unicode-字符"><a class="header" href="#根据编号输入-unicode-字符">根据编号输入 Unicode 字符</a></h3>
+<p>“𰻞”的 Unicode 编号是 0x30EDE。</p>
+<p>在 Linux 系统中，通常可以输入 Ctrl+Shift+U 然后输入十六进制编号，3 0 E D E，然后 Enter，就输入了“𰻞”。</p>
+<p>在 Windows 系统中，可以按 Win+R，然后输入 <code>charmap</code>，打开字符映射表，找到“𰻞”，双击可以复制到剪贴板。</p>
+<p>在 macOS 系统中，可以按 Ctrl+Cmd+空格，打开特殊字符输入面板，选择“Unicode”分类，找到“𰻞”，然后双击就输入到光标处。</p>
+<h3 id="unifont-字体"><a class="header" href="#unifont-字体">UniFont 字体</a></h3>
+<p>TODO</p>
+<h2 id="黑暗小技巧"><a class="header" href="#黑暗小技巧">黑暗小技巧</a></h2>
+<h3 id="正则表达式匹配汉字"><a class="header" href="#正则表达式匹配汉字">正则表达式匹配汉字？</a></h3>
+<ul>
+<li>狭义的汉字：0x4E00 到 0x9FA5（“一”到“龥”）</li>
+<li>广义的汉字：0x2E80 到 0x9FFF（“⺀”到“鿿”）</li>
+</ul>
+<p>广义的汉字包含了几乎所有中日韩使用的汉字字符，而狭义的汉字只是中文里最常用的一部分。</p>
+<p>TODO</p>
+<h3 id="latin-1-的转换"><a class="header" href="#latin-1-的转换">Latin-1 的转换</a></h3>
+<p>Latin-1 是一个 8 位编码，能表示 256 个字符，包括了拉丁字母、阿拉伯数字、标点符号、常用的西欧字符，以及一些特殊字符。</p>
+<p><img src="img/latin1.svg" alt="" /></p>
+<p>因此，如果你需要把一个 Latin-1 编码的 <code>char</code> 字符串转换为 <code>wchar_t</code> 字符串，可以通过迭代器接口构造 <code>std::wstring</code>，这样 <code>char</code> 会被逐个转换为 <code>wchar_t</code>。</p>
+<pre><code class="language-cpp">std::string latin1 = "I love P\xE9ng"; // 0xE9: é
+std::wstring wstr(latin1.begin(), latin1.end());
+std::wcout &lt;&lt; wstr &lt;&lt; '\n';
+</code></pre>
+<p>输出：</p>
+<pre><code>I love Péng
+</code></pre>
+<div id="admonition-abstract-18" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-18-title">
+<div class="admonition-title">
+<div id="admonition-abstract-18-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-18"></a>
+</div>
+<div>
+<p>并不标准的做法，还是建议用 <code>boost::locale::conv::to_utf&lt;char&gt;(latin1, "Latin-1")</code>。</p>
+</div>
+</div>
+<h3 id="latin-1-的妙用"><a class="header" href="#latin-1-的妙用">Latin-1 的妙用</a></h3>
+<p>由于 Latin-1 覆盖了所有的 256 个 <code>char</code> 的可能值，任何字节流都可以成功解码。</p>
+<p>GBK 和 UTF-8 有自纠错性，有些输入会被塌缩成错误“�”。Latin-1 就没有这个问题，他照单全收！</p>
+<p>因此有时，人们可以欺骗一个编码器说“我采用的字符编码是 Latin-1”！这样编码器就不会对输入的字节流做任何转换，从而可以把二进制数据当文本来传，解码时也指定 Latin-1，原原本本的取出数据。</p>
+<h3 id="base64-防乱码"><a class="header" href="#base64-防乱码">Base64 防乱码</a></h3>
+<p>如果要把一串中文输入一个不支持 UTF-8 的软件，发送让对方收到，怎么办？</p>
+<p>可以用 Latin-1 编码，骗这个软件，让他以为自己收到的是 Latin-1 字符串，反正他也不看内容，从而让他不要做任何转换操作。</p>
+<p>不过有时候，文本框无法输入部分特殊的控制字符，而 UTF-8 字符串编码出来的文本，超过 0x80 的部分，可能落入 Latin-1 的控制字符中，被这个软件错误地做了特殊处理。</p>
+<p>为了避免只兼容了 ASCII 的落后软件破坏我们的字符，对于这种只支持 ASCII 文本的编辑框，我们可以用 Base64 编码先把任意二进制数据转换为 ASCII 字符串。</p>
+<p>Base64 是一种把二进制数据转换为 ASCII 字符串的算法，原理很简单，就是把每 6 个二进制位转换为一个可打印的 ASCII 字符（用 A-Z a-z 0-9 - / 这 64 个字符表示）。因此，Base64 编码后的文本，每 4 个字符就有 3 个是有效字符，剩下的 1 个字符是填充字符 <code>=</code>。</p>
+<p>例如，字符串 <code>"小彭老师"</code>，你可能想要把它通过邮件发出去。而这个邮件服务器不支持 UTF-8 也不支持 GBK，只支持 ASCII！</p>
+<p>首先我们用 UTF-8 编码得到二进制字节流：</p>
+<pre><code>0xE5 0xB0 0x8F 0xE5 0xBD 0xAD 0xE8 0x80 0x81 0xE5 0xB8 0x88
+</code></pre>
+<p>然后再用 Base64 二次编码成普通的可打印字母和数字序列：</p>
+<pre><code>5bCP5b2t6ICB5biI
+</code></pre>
+<p>对方收到这串神秘字符后，再用 base64 解码，得到二进制字节流，再用支持 UTF-8 的软件解码，就能看到本来的中文了。</p>
+<pre><code class="language-python"># 发送者：
+import base64
+secret = base64.b64encode("小彭老师".encode())
+# 接收者：
+base64.b64decode(secret).decode()
+</code></pre>
+<div id="admonition-info-8" class="admonition admonish-info" role="note" aria-labelledby="admonition-info-8-title">
+<div class="admonition-title">
+<div id="admonition-info-8-title">
+<p>Info</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-info-8"></a>
+</div>
+<div>
+<p>这个方法不仅可以编码 UTF-8 字符串，还可以传输任意非文本的文件！例如，有人利用 Base64 编码，把 jpg 图像文件直接内嵌在 md 文件里！（md 文件只支持包含合法的 UTF-8 文本，不可能包含 jpg 的任意字节流，因此只能用 Base64 先编码成 ASCII 范围内的字母和数字，防止 md 编译器报 UTF-8 解码错误）</p>
+</div>
+</div>
+<p>总之，如果你输入中文实在有问题，可以考虑先 Base64 转换成纯英文试试看，反正无论谁都兼容 ASCII。如果这个文本框不区分大小写，还可以试试看只有 A-Z 0-9 的 Base32 编码。</p>
+<h3 id="utf-7"><a class="header" href="#utf-7">UTF-7</a></h3>
+<p>TODO</p>
+<h3 id="字符编码猜测"><a class="header" href="#字符编码猜测">字符编码猜测</a></h3>
+<p>TODO</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="cpp_memory.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="threading.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="cpp_memory.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="threading.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="theme/custom.js"></script>
+
+
+    </div>
+    </body>
+</html>

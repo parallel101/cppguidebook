@@ -1,0 +1,344 @@
+<!DOCTYPE HTML>
+<html lang="zh" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>结构体布局 - 小彭大典</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="小彭大典是一本关于现代 C++ 编程的权威指南，它涵盖了从基础知识到高级技巧的内容，适合初学者和有经验的程序员阅读。">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/custom.css">
+        <link rel="stylesheet" href="theme/mdbook-admonish.css">
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">小彭大典</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook/edit/main/src/struct_layout.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="结构体布局"><a class="header" href="#结构体布局">结构体布局</a></h1>
+<h2 id="认识基础类型"><a class="header" href="#认识基础类型">认识基础类型</a></h2>
+<p>首先来认识一下，C++ 中常用的基础类型有：</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">类型</th><th style="text-align: left">大小</th><th style="text-align: left">值范围</th></tr></thead><tbody>
+<tr><td style="text-align: left"><code>bool</code></td><td style="text-align: left">1 字节</td><td style="text-align: left"><code>true</code> 或 <code>false</code></td></tr>
+<tr><td style="text-align: left"><code>int8_t</code></td><td style="text-align: left">1 字节</td><td style="text-align: left">-128 到 127</td></tr>
+<tr><td style="text-align: left"><code>int16_t</code></td><td style="text-align: left">2 字节</td><td style="text-align: left">-32768 到 32767</td></tr>
+<tr><td style="text-align: left"><code>int32_t</code></td><td style="text-align: left">4 字节</td><td style="text-align: left">-2147483648 到 2147483647</td></tr>
+<tr><td style="text-align: left"><code>int64_t</code></td><td style="text-align: left">8 字节</td><td style="text-align: left">-2^63 到 2^63-1</td></tr>
+<tr><td style="text-align: left"><code>uint8_t</code></td><td style="text-align: left">1 字节</td><td style="text-align: left">0 到 255</td></tr>
+<tr><td style="text-align: left"><code>uint16_t</code></td><td style="text-align: left">2 字节</td><td style="text-align: left">0 到 65535</td></tr>
+<tr><td style="text-align: left"><code>uint32_t</code></td><td style="text-align: left">4 字节</td><td style="text-align: left">0 到 4294967295</td></tr>
+<tr><td style="text-align: left"><code>uint64_t</code></td><td style="text-align: left">8 字节</td><td style="text-align: left">0 到 2^64-1</td></tr>
+<tr><td style="text-align: left"><code>float</code></td><td style="text-align: left">4 字节</td><td style="text-align: left">3.4e-38 到 3.4e+38</td></tr>
+<tr><td style="text-align: left"><code>double</code></td><td style="text-align: left">8 字节</td><td style="text-align: left">-1.79769e+308 到 1.79769e+308</td></tr>
+</tbody></table>
+</div>
+<h2 id="认识结构体"><a class="header" href="#认识结构体">认识结构体</a></h2>
+<h3 id="结构体的好处"><a class="header" href="#结构体的好处">结构体的好处</a></h3>
+<p>为什么要发明结构体呢？有什么好处？</p>
+<p>例如，要表示一个点，需要 <code>x</code> 和 <code>y</code> 两个坐标。</p>
+<p>假如，我们现在要实现很多用于处理点运算的函数，例如，计算两点间距离的函数。</p>
+<p>如何把两个点的坐标传入函数呢？</p>
+<p>用 <code>x0</code> 和 <code>y0</code> 表示第一个点的坐标，用 <code>x1</code> 和 <code>y1</code> 表示第二个点的坐标。</p>
+<pre><code class="language-cpp">double calc_distance(double x0, double y0, double x1, double y1) {
+    double dx = x1 - x0;
+    double dy = y1 - y0;
+    return sqrt(dx * dx + dy * dy);
+}
+</code></pre>
+<p>可以看到，我们想要传入两个点的坐标，但是函数却要传入四个参数，如果要传入更多的点坐标或其他复杂的抽象概念，就需要不断增加函数的参数，导致代码混乱，最终分不清哪个参数是哪个点的坐标。</p>
+<p>因此，我们可以用结构体把两个坐标打包成一个整体：</p>
+<pre><code class="language-cpp">struct Point {
+    double x;
+    double y;
+};
+</code></pre>
+<p>这样我们在编写和调用函数的时候，关注点就从每个点的具体坐标分量，转移到“点”这个抽象概念本身，不必纠结于这个点到底需要几个 <code>double</code> 来表示了。</p>
+<pre><code class="language-cpp">double calc_distance(Point p0, Point p1) {
+    double dx = p1.x - p0.x;
+    double dy = p1.y - p0.y;
+    return sqrt(dx * dx + dy * dy);
+}
+</code></pre>
+<p>这个函数现在一目了然，输入两个点，返回这两点间的距离，比之前四个参数看起来整洁多了。</p>
+<h4 id="从属关系"><a class="header" href="#从属关系">从属关系</a></h4>
+<p>得益于结构体的 <code>.</code> 级联访问，变量的从属关系也变得一目了然，<code>p0.x</code> 就是 0 号点的 x 坐标，<code>p1.x</code> 就是 1 号点的 x 坐标，再也不用一坨浆糊的 <code>x0</code>、<code>x1</code> 混搭风变量命名。</p>
+<p>例如 <code>firstStudent.name</code> (第一个学生的名字) 和 <code>bestStudent.account.password</code> （最好学生的帐号的密码) 远比 <code>firstName</code> 和 <code>bestAccount1password</code> 直观。</p>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
+</div>
+<div>
+<p>这是的 <code>.</code> 就像中文 <code>的</code> 一样。</p>
+</div>
+</div>
+<h4 id="结构体嵌套"><a class="header" href="#结构体嵌套">结构体嵌套</a></h4>
+<p>谁说结构体只能由基本类型组成？谁说结构体里不能再含有结构体？</p>
+<p>例如我们需要计算一条直线的长度，实现函数 <code>calc_line_length</code>，这时出现了和之前一样的抉择：</p>
+<ol>
+<li>把直线的两个端点 (用我们的 <code>Point</code> 类) 分别作为参数，传入函数：</li>
+</ol>
+<pre><code class="language-cpp">double calc_line_length(Point p0, Point p1) {
+    return calc_distance(p0, p1);
+}
+</code></pre>
+<ol start="2">
+<li>把直线这个抽象的概念封装成单独一个结构体，作为一个参数，传入函数：</li>
+</ol>
+<pre><code class="language-cpp">struct Line {
+    Point p0;
+    Point p1;
+};
+
+double calc_line_length(Line line) {
+    return calc_distance(line.p0, line.p1);
+}
+</code></pre>
+<p><code>Line</code> 由两个 <code>Point</code> 组成，<code>Point</code> 又进一步由两个 <code>double</code> 组成。</p>
+<p>想要理解 <code>Line</code> 的人只需要知道两个端点 <code>Point</code> 组成即可。
+想要理解 <code>Point</code> 的人只需要知道两个 （或三个) 坐标值 <code>double</code> 组成即可。</p>
+<p>这比一个 <code>Line</code> 直接用四个 <code>double</code> 来表示要直观得多。</p>
+<p>如此层层封装，从基础类型建构出参天大树来，且每一层都以人类容易理解的方式，在保证可维护性的情况下，构造出复杂的多层逻辑。</p>
+<div id="admonition-tip" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-title">
+<div class="admonition-title">
+<div id="admonition-tip-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip"></a>
+</div>
+<div>
+<p>研究表明，人类的大脑天生擅长理解<strong>树状</strong>组织的概念——他每一次学习，只需要理解每一层之间上下的关系，而不需要全部塞进大脑内存。而如果全部摊平，<strong>扁平化</strong>地堆在一起，脑容量就不够用，无法同时理解一切。</p>
+</div>
+</div>
+<h4 id="方便升级"><a class="header" href="#方便升级">方便升级</a></h4>
+<p>不仅如此，我们还很容易升级这个函数，例如当我们的甲方需求有变，现在需要处理三维点时，只需要往 Point 结构体里添加一个 <code>z</code> 成员：</p>
+<pre><code class="language-cpp">struct Point {
+    double x;
+    double y;
+    double z;
+};
+
+double calc_distance(Point p0, Point p1) {
+    double dx = p1.x - p0.x;
+    double dy = p1.y - p0.y;
+    double dz = p1.z - p0.z;
+    return sqrt(dx * dx + dy * dy + dz * dz);
+}
+</code></pre>
+<p>而函数的接口依然是两个 <code>Point</code> 作为参数不变，不用找到所有调用 <code>calc_distance</code> 的地方一个个去修改添加 <code>z0</code>、<code>z1</code> 了，只需要改函数实现本身即可。</p>
+<h3 id="结构体的布局"><a class="header" href="#结构体的布局">结构体的布局</a></h3>
+<p>结构体的布局，是指结构体在内存中的布局方式。</p>
+<p>例如，有如下结构体：</p>
+<pre><code class="language-cpp">struct Point {
+    double x;
+    double y;
+};
+</code></pre>
+<p>这个结构体在内存中的布局，就是 <code>x</code> 和 <code>y</code> 两个成员挨在一起，没有空隙。</p>
+<p>而如果有如下结构体：</p>
+<pre><code class="language-cpp">struct Point2 {
+    double x;
+    int y;
+};
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="symbols.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="cpp_tricks.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="symbols.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="cpp_tricks.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="theme/custom.js"></script>
+
+
+    </div>
+    </body>
+</html>
