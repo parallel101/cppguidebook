@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="zh" class="light sidebar-visible" dir="ltr">
+<html lang="zh" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -7,7 +7,7 @@
 
 
         <!-- Custom HTML head -->
-
+        
         <meta name="description" content="小彭大典是一本关于现代 C++ 编程的权威指南，它涵盖了从基础知识到高级技巧的内容，适合初学者和有经验的程序员阅读。">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
@@ -31,18 +31,17 @@
         <!-- Custom theme stylesheets -->
         <link rel="stylesheet" href="theme/custom.css">
         <link rel="stylesheet" href="theme/mdbook-admonish.css">
+        <link rel="stylesheet" href="./mdbook-admonish.css">
 
-
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
-        <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
-    </head>
-    <body>
-    <div id="body-container">
+
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
@@ -64,16 +63,19 @@
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
-            const html = document.documentElement;
+            var html = document.querySelector('html');
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add("js");
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
 
         <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
+            var body = document.querySelector('body');
             var sidebar = null;
             var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
@@ -83,25 +85,45 @@
                 sidebar = 'hidden';
             }
             sidebar_toggle.checked = sidebar === 'visible';
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <!-- populated by js -->
-            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
-            <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
-            </noscript>
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> 小彭老师现代 C++ 大典</a></li><li class="chapter-item expanded "><a href="hello_world.html"><strong aria-hidden="true">2.</strong> 你好，世界</a></li><li class="chapter-item expanded "><a href="platform.html"><strong aria-hidden="true">3.</strong> 开发环境与平台选择</a></li><li class="chapter-item expanded "><a href="variable_types.html"><strong aria-hidden="true">4.</strong> 变量与类型</a></li><li class="chapter-item expanded "><a href="functions.html"><strong aria-hidden="true">5.</strong> 认识函数</a></li><li class="chapter-item expanded "><a href="auto.html"><strong aria-hidden="true">6.</strong> auto 神教</a></li><li class="chapter-item expanded "><a href="symbols.html"><strong aria-hidden="true">7.</strong> 重新认识声明与定义</a></li><li class="chapter-item expanded "><a href="struct_layout.html"><strong aria-hidden="true">8.</strong> 结构体布局</a></li><li class="chapter-item expanded "><a href="cpp_tricks.html"><strong aria-hidden="true">9.</strong> 应知应会 C++ 小技巧</a></li><li class="chapter-item expanded "><a href="lambda.html"><strong aria-hidden="true">10.</strong> 小彭老师带你学函数式编程</a></li><li class="chapter-item expanded "><a href="type_rich_api.html"><strong aria-hidden="true">11.</strong> 现代化的 API 设计指南</a></li><li class="chapter-item expanded "><a href="no_more_new.html"><strong aria-hidden="true">12.</strong> 现代 C++ 从拒绝 new 开始</a></li><li class="chapter-item expanded "><a href="stl_map.html"><strong aria-hidden="true">13.</strong> STL 精讲：std::map 和他的朋友们</a></li><li class="chapter-item expanded "><a href="design_overview.html"><strong aria-hidden="true">14.</strong> 设计模式总览</a></li><li class="chapter-item expanded "><a href="design_virtual.html"><strong aria-hidden="true">15.</strong> 让虚函数再次伟大！</a></li><li class="chapter-item expanded "><a href="design_gamedev.html"><strong aria-hidden="true">16.</strong> 游戏开发中常用的设计模式</a></li><li class="chapter-item expanded "><a href="design_functor.html"><strong aria-hidden="true">17.</strong> 函数式设计模式</a></li><li class="chapter-item expanded "><a href="design_variant.html"><strong aria-hidden="true">18.</strong> 静态多态与面向数据编程</a></li><li class="chapter-item expanded "><a href="design_erasure.html"><strong aria-hidden="true">19.</strong> 类型擦除神教及其实现</a></li><li class="chapter-item expanded "><a href="design_concept.html"><strong aria-hidden="true">20.</strong> 鸭子类型与 C++20 concept</a></li><li class="chapter-item expanded "><a href="error_code.html"><strong aria-hidden="true">21.</strong> 现代 C++ 错误处理知多少</a></li><li class="chapter-item expanded "><a href="cpp_lifetime.html"><strong aria-hidden="true">22.</strong> 深入理解析构函数与生命周期</a></li><li class="chapter-item expanded "><a href="cpp_memory.html"><strong aria-hidden="true">23.</strong> 真正的 C++ 内存模型！</a></li><li class="chapter-item expanded "><a href="unicode.html"><strong aria-hidden="true">24.</strong> 字符编码那些事</a></li><li class="chapter-item expanded "><a href="threading.html"><strong aria-hidden="true">25.</strong> C++ 多线程编程</a></li><li class="chapter-item expanded "><a href="test_and_safe.html" class="active"><strong aria-hidden="true">26.</strong> 测试与安全话题</a></li><li class="chapter-item expanded "><a href="undef.html"><strong aria-hidden="true">27.</strong> 未定义行为完整列表</a></li><li class="chapter-item expanded "><a href="llvm_intro.html"><strong aria-hidden="true">28.</strong> 小彭老师带你学 LLVM</a></li><li class="chapter-item expanded "><a href="cuda_intro.html"><strong aria-hidden="true">29.</strong> 现代 C++ 的 CUDA 编程</a></li><li class="chapter-item expanded "><a href="cmake_tutor.html"><strong aria-hidden="true">30.</strong> 学现代 C++ 从现代 CMake 学起</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded "><a href="about.html"><strong aria-hidden="true">31.</strong> 关于小彭老师</a></li><li class="chapter-item expanded "><a href="donate.html"><strong aria-hidden="true">32.</strong> 赞助名单</a></li><li class="chapter-item expanded "><a href="interview.html"><strong aria-hidden="true">33.</strong> 小彭老师面试经验</a></li><li class="chapter-item expanded "><a href="recommend.html"><strong aria-hidden="true">34.</strong> 参考资料与项目推荐</a></li></ol>
+            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
             </div>
         </nav>
 
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
+                                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
                         <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -192,6 +214,22 @@
 
         </div>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
 
