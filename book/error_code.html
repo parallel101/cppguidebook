@@ -1,0 +1,319 @@
+<!DOCTYPE HTML>
+<html lang="zh" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>现代 C++ 错误处理知多少 - 小彭大典</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="小彭大典是一本关于现代 C++ 编程的权威指南，它涵盖了从基础知识到高级技巧的内容，适合初学者和有经验的程序员阅读。">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/custom.css">
+        <link rel="stylesheet" href="theme/mdbook-admonish.css">
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">小彭大典</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook/edit/main/src/error_code.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="现代-c-错误处理知多少未完工"><a class="header" href="#现代-c-错误处理知多少未完工">现代 C++ 错误处理知多少（未完工）</a></h1>
+<p>配套视频：<a href="https://www.bilibili.com/video/BV1QpWSekEJY">BV1QpWSekEJY</a></p>
+<h2 id="错误的分类"><a class="header" href="#错误的分类">错误的分类</a></h2>
+<p>假设一个函数 <code>open</code> 的功能是打开文件。</p>
+<pre><code class="language-cpp">int open(const char *path) {
+    if (!file_exists(path)) {
+        // 如果找不到文件怎么办？
+    }
+    // 成功找到文件：
+    return get_handle(path);
+}
+
+int main() {
+    int file = open("file.txt");
+
+    char buf[64];
+    read(file, buf, sizeof buf);
+    ...
+}
+</code></pre>
+<p>理想情况下，所有的函数都能成功执行，都能正常返回结果……</p>
+<p>可现实中，我们不能假设一个程序，永远正确执行（例如文件可能被用户误删除，或者内存不够用等）。</p>
+<p>更有甚者，有时错误是计划的一部分（例如文件不存在，则创建一个新文件，而不是将其视为不可修复的错误）。</p>
+<p>特别是涉及 IO 操作的任务，出现一些细小错误的情况是很多的。要区分哪些是可以修复的错误，哪些是不可挽回的错误。</p>
+<p>例如当网络连接失败时，我们可以重新尝试连接两三次，如果还是不行，那才认为是真的失败了。</p>
+<p>因此，我们把错误分为两大类：</p>
+<ul>
+<li>可恢复错误：不是特别严重的，甚至是计划之中的，经常发生的错误。可以通过一定操作来弥补这类错误，或将其转化为其他不同类型的错误。</li>
+<li>不可恢复错误：非常严重的错误，或者是发生概率很低平时没必要特殊处理的错误。一旦发生，整个程序都无法继续执行下去，必须全身而退，整个进程或线程都将终止。</li>
+</ul>
+<h3 id="不可恢复错误"><a class="header" href="#不可恢复错误">不可恢复错误</a></h3>
+<p>不可恢复错误的处理最简单，我们只需要在被调用者检测到错误的分支中，直接调用 <code>exit</code> 函数“终止程序”即可。</p>
+<pre><code class="language-cpp">int open(const char *path) {
+    if (!file_exists(path)) {
+        // 找不到文件我就自杀！
+        exit(1);
+        // 程序不会执行到此
+    }
+    return get_handle(path);
+}
+
+int main() {
+    int file = open("file.txt");
+
+    char buf[64];
+    read(file, buf, sizeof buf);
+    ...
+}
+</code></pre>
+<ul>
+<li>缺点：<code>exit</code> 会直接退出整个进程！没有任何给调用者挽回的机会，因此只能用于“不可恢复错误”这个类型。</li>
+<li>优点：调用者无需做任何判断处理，写起来就好像被调用函数“总是成功”一样，总能返回结果。因为如果被调用者失败的话，他会调用 <code>exit</code> 自杀，就不会返回到调用者中了。</li>
+</ul>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
+</div>
+<div>
+<p>小时候看这集变成“码码的萤火虫”了。</p>
+</div>
+</div>
+<h3 id="可恢复错误"><a class="header" href="#可恢复错误">可恢复错误</a></h3>
+<p>有时候，我们对于部分错误，是有挽回机会的，不希望因为一点可以修复的小错误就把整个程序终止掉。</p>
+<p>要不要挽回应该由调用者的具体业务决定，而封装良好的 API（<code>open</code>）应该忠实地把错误报告给调用者（<code>main</code>）。</p>
+<p>让调用者来决定要杀了还是抢救，而不是自作主张地直接自杀。</p>
+<pre><code class="language-cpp">int open(const char *path) {
+    if (!file_exists(path)) {
+        // 找不到文件，就返回 -1 这个“出错特殊值”代替
+        return -1;
+    }
+    return get_handle(path);
+}
+
+int main() {
+    int file = open("file.txt");
+    if (file == -1) { // 缺点是 main 里面必须判断返回值是否为“出错特殊值”
+        // 如果找不到文件，尝试进行处理
+        create_empty_file("file.txt");
+        // 重新尝试打开
+        file = open("file.txt");
+        if (file == -1) { // 如果还是出错，那就没救了
+            exit(-1);     // 直接自杀
+        }
+    }
+
+    char buf[64];
+    read(file, buf, sizeof buf);
+    ...
+}
+</code></pre>
+<h3 id="我该如何抉择"><a class="header" href="#我该如何抉择">我该如何抉择</a></h3>
+<h2 id="调用者与被调用者"><a class="header" href="#调用者与被调用者">调用者与被调用者</a></h2>
+<p><code>main</code> 是调用者，<code>open</code> 是被调用者。</p>
+<p>被调用者函数可能产生错误，也可能正常执行。</p>
+<h2 id="提前返回是好习惯"><a class="header" href="#提前返回是好习惯">提前返回是好习惯！</a></h2>
+<h2 id="异常"><a class="header" href="#异常">异常</a></h2>
+<h2 id="错误码"><a class="header" href="#错误码">错误码</a></h2>
+<h2 id="stderror_code"><a class="header" href="#stderror_code"><code>std::error_code</code></a></h2>
+<h2 id="stdexpected"><a class="header" href="#stdexpected"><code>std::expected</code></a></h2>
+<p>也可以 <code>boost::expected</code> 替代。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="design_concept.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="cpp_lifetime.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="design_concept.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="cpp_lifetime.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="theme/custom.js"></script>
+
+
+    </div>
+    </body>
+</html>

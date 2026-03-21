@@ -1,0 +1,2165 @@
+<!DOCTYPE HTML>
+<html lang="zh" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>应知应会 C++ 小技巧 - 小彭大典</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="小彭大典是一本关于现代 C++ 编程的权威指南，它涵盖了从基础知识到高级技巧的内容，适合初学者和有经验的程序员阅读。">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/custom.css">
+        <link rel="stylesheet" href="theme/mdbook-admonish.css">
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">小彭大典</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook/edit/main/src/cpp_tricks.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="应知应会-c-小技巧"><a class="header" href="#应知应会-c-小技巧">应知应会 C++ 小技巧</a></h1>
+<h2 id="交换两个变量"><a class="header" href="#交换两个变量">交换两个变量</a></h2>
+<pre><code class="language-cpp">int a = 42;
+int b = 58;
+</code></pre>
+<p>现在你想交换这两个变量。</p>
+<pre><code class="language-cpp">int tmp = a;
+a = b;
+b = tmp;
+</code></pre>
+<p>但是标准库提供了更好的方法：</p>
+<pre><code class="language-cpp">std::swap(a, b);
+</code></pre>
+<p>这个方法可以交换任意两个同类型的值，包括结构体、数组、容器等。</p>
+<div id="admonition-tip" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-title">
+<div class="admonition-title">
+<div id="admonition-tip-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip"></a>
+</div>
+<div>
+<p>只需要 <code>#include &lt;utility&gt;</code> 就可以使用！</p>
+</div>
+</div>
+<h2 id="安全地分配一段内存空间"><a class="header" href="#安全地分配一段内存空间">安全地分配一段内存空间</a></h2>
+<p>小彭老师：不要出现 new 和 delete，不安全。</p>
+<p>同学：我想要<strong>分配一段内存空间</strong>，你不让我 new，我还能怎么办呢？</p>
+<pre><code class="language-cpp">char *mem = new char[1024];   // 同学想要 1024 字节的缓冲区
+read(1, mem, 1024);           // 用于供 C 语言的读文件函数使用
+delete[] mem;                 // 需要手动 delete
+</code></pre>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
+</div>
+<div>
+<p>可以看到，他所谓的“内存空间”实际上就是一个“char 数组”。</p>
+</div>
+</div>
+<p>小彭老师：有没有一种可能，vector 就可以分配内存空间。</p>
+<pre><code class="language-cpp">vector&lt;char&gt; mem(1024);
+read(1, mem.data(), mem.size());
+</code></pre>
+<p>vector 一样符合 RAII 思想，构造时自动申请内存，离开作用域时自动释放。</p>
+<p>只需在调用 C 语言接口时，取出原始指针：</p>
+<ul>
+<li>用 data() 即可获取出首个 char 元素的指针，用于传递给 C 语言函数使用。</li>
+<li>用 size() 取出数组的长度，即是内存空间的字节数，因为我们的元素类型是 char，char 刚好就是 1 字节的，size() 刚好就是字节的数量。</li>
+</ul>
+<p>此处 read 函数读完后，数据就直接进入了 vector 中，根本不需要什么 new。</p>
+<div id="admonition-abstract" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-title">
+<div class="admonition-title">
+<div id="admonition-abstract-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract"></a>
+</div>
+<div>
+<p>更现代的 C++ 思想家还会用 <code>vector&lt;std::byte&gt;</code>，明确区分这是“字节”不是“字符”。如果你读出来的目的是当作字符串，可以用 <code>std::string</code>。</p>
+</div>
+</div>
+<div id="admonition-warning" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-title">
+<div class="admonition-title">
+<div id="admonition-warning-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-warning"></a>
+</div>
+<div>
+<p>注意：一些愚蠢的教材中，用 <code>shared_ptr</code> 和 <code>unique_ptr</code> 来管理数组，这是错误的。</p>
+<p><code>shared_ptr</code> 和 <code>unique_ptr</code> 智能指针主要是用于管理“单个对象”的，不是管理“数组”的。</p>
+<p><code>vector</code> 一直都是数组的管理方式，且从 C++98 就有。不要看到 “new 的替代品” 只想到智能指针啊！“new [] 的替代品” 是 <code>vector</code> 啊！</p>
+</div>
+</div>
+<p>此处放出一个利用 <code>std::wstring</code> 分配 <code>wchar_t *</code> 内存的案例：</p>
+<pre><code class="language-cpp">std::wstring utf8_to_wstring(std::string const &amp;s) {
+    int len = MultiByteToWideChar(CP_UTF8, 0,
+                                  s.data(), s.size(),
+                                  nullptr, 0);  // 先确定长度
+    std::wstring ws(len, 0);
+    MultiByteToWideChar(CP_UTF8, 0,
+                        s.data(), s.size(), 
+                        ws.data(), ws.size());  // 再读出数据
+    return ws;
+}
+</code></pre>
+<h2 id="地板除与天花板除"><a class="header" href="#地板除与天花板除">地板除与天花板除</a></h2>
+<p>众所周知，C语言中 <code>int</code> 相除 <code>/</code>，得到的结果也是 <code>int</code>，如果除法产生了余数，那么只会保留整数部分。</p>
+<p>例如 <code>14 / 5</code>，本来应该得到 2.8。但是因为 C 语言的除法返回 <code>int</code>，结果会自动向下取整，导致得到 2。</p>
+<pre><code class="language-cpp">int a = 14, b = 5;
+int c = a / b;                // c = 14 / 5 = 2
+</code></pre>
+<p>等价于</p>
+<pre><code class="language-cpp">int c = floor((float)a / b);  // c = floor(2.8) = 2
+</code></pre>
+<p>如果 <code>a</code> 除以 <code>b</code> 除不尽，那么会找到比他小的第一个整数作为结果，这就是<strong>地板除 (floor div)</strong>。</p>
+<p>C 语言默认的就是地板除。</p>
+<p>如果我想要的是向上取整，该怎么写？</p>
+<p>最原始的写法是先转成浮点数来除，然后ceil函数向上取整：</p>
+<pre><code class="language-cpp">int c = ceil((float)a / b);
+</code></pre>
+<p>但是浮点数不仅低效，还有糟糕的浮点数精度误差！对于很大的整数（大于 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">23</span></span></span></span></span></span></span></span></span></span></span></span>）会产生错误的结果。</p>
+<p>更合理的写法是先把 <code>a</code> 加上 <code>b - 1</code>，然后再下取整地除以 <code>b</code>：</p>
+<pre><code class="language-cpp">int c = (a + b - 1) / b;
+</code></pre>
+<p>这样就能产生一个向上取整的除法了。</p>
+<p>如果 <code>a</code> 除以 <code>b</code> 除不尽，那么会找到比他大的第一个整数作为结果，这就是<strong>天花板除 (ceil div)</strong>。</p>
+<p>试试看：14 除以 5，应该得到 2.8；如果用地板除，会得到 2；如果用天花板除，会得到 3。</p>
+<pre><code class="language-cpp">14 / 5 = 2
+(14 + 5 - 1) / 5 = (14 + 4) / 5 = 18 / 5 = 3
+</code></pre>
+<p>试试看：10 除以 5，应该得到 2；那么无论是地板除还是天花板除，都应该得到 2。</p>
+<pre><code class="language-cpp">10 / 5 = 2
+(10 + 5 - 1) / 5 = (10 + 4) / 5 = 14 / 5 = 2
+</code></pre>
+<p>这就是 C 语言中实现天花板除的业界公认方式。</p>
+<h2 id="别再--啦"><a class="header" href="#别再--啦">别再 <code>[]</code> 啦！</a></h2>
+<p>你知道吗？在 map 中使用 <code>[]</code> 查找元素，如果不存在，会自动创建一个默认值。这个特性有时很方便，但如果你不小心写错了，就会在 map 中创建一个多余的默认元素。</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table["小彭老师"] = 24;
+
+cout &lt;&lt; table["侯捷老师"];
+</code></pre>
+<p>table 中明明没有 "侯捷老师" 这个元素，但由于 <code>[]</code> 的特性，他会默认返回一个 0，不会爆任何错误！</p>
+<p>改用更安全的 <code>at()</code> 函数，当查询的元素不存在时，会抛出异常，方便你调试：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.at("小彭老师") = 24;
+
+cout &lt;&lt; table.at("侯捷老师");  // 抛出异常
+</code></pre>
+<p><code>[]</code> 真正的用途是“写入新元素”时，如果元素不存在，他可以自动帮你创建一个默认值，供你以引用的方式赋值进去。</p>
+<p>检测元素是否存在可以用 <code>count</code>：</p>
+<pre><code class="language-cpp">if (table.count("小彭老师")) {
+    return table.at("小彭老师");
+} else {
+    return 0;
+}
+</code></pre>
+<p>即使你想要默认值 0 这一特性，<code>count</code> + <code>at</code> 也比 <code>[]</code> 更好，因为 <code>[]</code> 的默认值是会对 table 做破坏性修改的，这导致 <code>[]</code> 需要 <code>map</code> 的声明不为 <code>const</code>：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+return table["小彭老师"]; // 如果"小彭老师"这一键不存在，会创建"小彭老师"并设为默认值 0
+</code></pre>
+<pre><code class="language-cpp">const map&lt;string, int&gt; table;
+return table["小彭老师"]; // 编译失败！[] 需要非 const 的 map 对象，因为他会破坏性修改
+</code></pre>
+<div id="admonition-tip-1" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-1-title">
+<div class="admonition-title">
+<div id="admonition-tip-1-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-1"></a>
+</div>
+<div>
+<p>更多 map 知识请看我们的 <a href="stl_map.html">map 专题课</a>。</p>
+</div>
+</div>
+<h2 id="别再写构造函数啦"><a class="header" href="#别再写构造函数啦">别再写构造函数啦！</a></h2>
+<pre><code class="language-cpp">// C++98
+struct Student {
+    string name;
+    int age;
+    int id;
+
+    Student(string name_, int age_, int id_) : name(name_), age(age_), id(id_) {}
+};
+
+Student stu("侯捷老师", 42, 123);
+</code></pre>
+<p>C++98 需要手动书写构造函数，非常麻烦！而且几乎都是重复的。</p>
+<p>C++11 中，平凡的结构体类型不需要再写构造函数了，只需用 <code>{}</code> 就能对成员依次初始化：</p>
+<pre><code class="language-cpp">// C++11
+struct Student {
+    string name;
+    int age;
+    int id;
+};
+
+Student stu{"小彭老师", 24, 123};
+</code></pre>
+<p>这被称为<strong>聚合初始化</strong> (aggregate initialize)。只要你的类没有自定义构造函数，没有 private 成员，都可以用 <code>{}</code> 聚合初始化。</p>
+<p>好消息：C++20 中，聚合初始化也支持 <code>()</code> 了，用起来就和传统的 C++98 构造函数一样！</p>
+<pre><code class="language-cpp">// C++20
+Student stu("小彭老师", 24, 123);
+</code></pre>
+<p>聚合初始化还可以指定默认值：</p>
+<pre><code class="language-cpp">// C++11
+struct Student {
+    string name;
+    int age;
+    int id = 9999;
+};
+
+Student stu{"小彭老师", 24};
+// 等价于：
+Student stu{"小彭老师", 24, 9999};
+</code></pre>
+<p>C++20 开始，<code>{}</code> 聚合初始化还可以根据每个成员的名字来指定值：</p>
+<pre><code class="language-cpp">Student stu{.name = "小彭老师", .age = 24, .id = 9999};
+// 等价于：
+Student stu{"小彭老师", 24, 9999};
+</code></pre>
+<p>好处是，即使不慎写错参数顺序也不用担心。</p>
+<pre><code class="language-cpp">Student stu{.name = "小彭老师", .age = 24, .id = 9999};
+Student stu{.name = "小彭老师", .id = 9999, .age = 24};
+</code></pre>
+<h2 id="别再写拷贝构造函数啦"><a class="header" href="#别再写拷贝构造函数啦">别再写拷贝构造函数啦！</a></h2>
+<p>只有当你需要有“自定义钩子逻辑”的时候，才需要自定义构造函数。</p>
+<pre><code class="language-cpp">struct Student {
+    string name;
+    int age;
+    int id;
+
+    Student(string name_, int age_, int id_) : name(name_), age(age_), id(id_) {}
+
+    Student(Student const &amp;other) : name(other.name), age(other.age), id(other.id) {
+        std::cout &lt;&lt; "拷贝构造\n";
+    }
+
+    Student &amp;operator=(Student const &amp;other) {
+        name = other.name;
+        age = other.age;
+        id = other.id;
+        std::cout &lt;&lt; "拷贝赋值\n";
+        return *this;
+    }
+};
+
+Student stu1("侯捷老师", 42, 123);
+Student stu2 = stu1;  // 拷贝构造
+stu2 = stu1;          // 拷贝赋值
+</code></pre>
+<p>如果你不需要这个 <code>std::cout</code>，只是平凡地拷贝所有成员，完全可以不写，让编译器自动生成拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数：</p>
+<pre><code class="language-cpp">struct Student {
+    string name;
+    int age;
+    int id;
+
+    Student(string name_, int age_, int id_) : name(name_), age(age_), id(id_) {}
+
+    // 编译器自动生成 Student(Student const &amp;other)
+    // 编译器自动生成 Student &amp;operator=(Student const &amp;other)
+};
+
+Student stu1("侯捷老师", 42, 123);
+Student stu2 = stu1;  // 拷贝构造
+stu2 = stu1;          // 拷贝赋值
+assert(stu2.name == "侯捷老师");
+</code></pre>
+<p>总之，很多 C++ 教材把拷贝/移动构造函数过于夸大，搞得好像每个类都需要自己定义一样。</p>
+<p>实际上，只有在“自己实现容器”的情况下，才需要自定义拷贝构造函数。可是谁会整天手搓容器？</p>
+<p>大多数情况下，我们只需要在类里面存 vector、string 等封装好的容器，编译器默认生成的拷贝构造函数会自动调用他们的拷贝构造函数，用户只需专注于业务逻辑即可，不需要操心底层细节。</p>
+<p>对于持有资源的 RAII 类，我们都会直接删除其拷贝构造函数和拷贝赋值函数：</p>
+<pre><code class="language-cpp">struct RAIIHandle {
+    int handle;
+    RAIIHandle() {
+        handle = CreateObject();
+    }
+    RAIIHandle(RAIIHandle const &amp;) = delete;
+    RAIIHandle &amp;operator=(RAIIHandle const &amp;) = delete;
+    ~RAIIHandle() {
+        DeleteObject(handle);
+    }
+};
+</code></pre>
+<h2 id="继承构造函数"><a class="header" href="#继承构造函数">继承构造函数</a></h2>
+<p>C++ 特色：子类不会自动继承父类的构造函数！（除非父类的构造函数是没有参数的默认构造函数）</p>
+<pre><code class="language-cpp">struct Parent {
+    Parent(int age, const char *name) { ... }
+    void parent_func() { ... }
+};
+
+struct Child : Parent {
+    void child_func() { ... }
+};
+
+Child child(23, "peng");  // 错误！Child 没有构造函数！
+</code></pre>
+<p>C++11 中可以在子类里面写 <code>using 父类::父类</code>，就能自动继承父类所有的构造函数了。</p>
+<pre><code class="language-cpp">struct Parent {
+    Parent(int age, const char *name) { ... }
+    void parent_func() { ... }
+};
+
+struct Child : Parent {
+    using Parent::Parent;  // 加上这一行！
+    void child_func() { ... }
+};
+
+Child child(23, "peng");  // 编译通过，自动调用到父类的构造函数 Parent(int, const char *)
+</code></pre>
+<p>在 C++98 中，没有 using 的这个语法，只能自己定义一个构造函数，然后使用“委任构造”的语法转发所有参数给父类，非常繁琐。</p>
+<pre><code class="language-cpp">struct Parent {
+    Parent(int age, const char *name) { ... }
+    void parent_func() { ... }
+};
+
+struct Child : Parent {
+    Child(int age, const char *name)
+        : Parent(age, name)
+    { ... }
+    void child_func() { ... }
+};
+
+Child child(23, "peng");  // 编译通过，调用到子类的构造函数后转发到父类
+</code></pre>
+<h2 id="提前返回"><a class="header" href="#提前返回">提前返回</a></h2>
+<pre><code class="language-cpp">void babysitter(Baby *baby) {
+    if (!baby-&gt;is_alive()) {
+        puts("宝宝已经去世了");
+    } else {
+        puts("正在检查宝宝喂食情况...");
+        if (baby-&gt;is_feeded()) {
+            puts("宝宝已经喂食过了");
+        } else {
+            puts("正在喂食宝宝...");
+            puts("正在调教宝宝...");
+            puts("正在安抚宝宝...");
+        }
+    }
+}
+</code></pre>
+<p>这个函数有很多层嵌套，很不美观。用<strong>提前返回</strong>的写法来优化：</p>
+<pre><code class="language-cpp">void babysitter(Baby *baby) {
+    if (!baby-&gt;is_alive()) {
+        puts("宝宝已经去世了");
+        return;
+    }
+    puts("正在检查宝宝喂食情况...");
+    if (baby-&gt;is_feeded()) {
+        puts("宝宝已经喂食过了");
+        return;
+    }
+    puts("正在喂食宝宝...");
+    puts("正在调教宝宝...");
+    puts("正在安抚宝宝...");
+}
+</code></pre>
+<h2 id="立即调用的-lambda"><a class="header" href="#立即调用的-lambda">立即调用的 Lambda</a></h2>
+<p>有时，需要在一个列表里循环查找某样东西，也可以用提前返回的写法优化：</p>
+<pre><code class="language-cpp">bool find(const vector&lt;int&gt; &amp;v, int target) {
+    for (int i = 0; i &lt; v.size(); ++i) {
+        if (v[i] == target) {
+            return true;
+        }
+    }
+    return false;
+}
+</code></pre>
+<p>但有时，我们的函数可能写了额外的操作，做完查找后不想直接返回。用 <code>return</code> 提前返回的话，下面 <code>do_final</code> 部分就无法执行到，只能复读一遍。</p>
+<pre><code class="language-cpp">void find(const vector&lt;int&gt; &amp;v, int target) {
+    for (int i = 0; i &lt; v.size(); ++i) {
+        if (v[i] == target) {
+            do_something();
+            do_final();
+            return;
+        }
+    }
+    do_other();
+    do_final();
+}
+</code></pre>
+<p>改用 <code>goto</code> 来打断循环，又不美观了。</p>
+<pre><code class="language-cpp">void find(const vector&lt;int&gt; &amp;v, int target) {
+    for (int i = 0; i &lt; v.size(); ++i) {
+        if (v[i] == target) {
+            do_something();
+            goto final;
+        }
+    }
+    do_other();
+final:
+    do_final();
+}
+</code></pre>
+<p>可以包裹一个立即调用的 Lambda 块 <code>[&amp;] { ... } ()</code>，限制提前返回的范围：</p>
+<pre><code class="language-cpp">void find(const vector&lt;int&gt; &amp;v, int target) {
+    bool found = [&amp;] {
+        for (int i = 0; i &lt; v.size(); ++i) {
+            if (v[i] == target) {
+                return true;
+            }
+        }
+        return false;
+    } ();
+    if (found) {
+        ...
+    }
+}
+</code></pre>
+<p>这样，return 最多只能打断到当前 Lambda 函数结束的位置，而不能打断整个大函数了。</p>
+<h2 id="立即调用的-lambda-初始化变量"><a class="header" href="#立即调用的-lambda-初始化变量">立即调用的 Lambda 初始化变量</a></h2>
+<p>有些变量的初始化，需要大量的准备工作。</p>
+<p>例如创建一个 2048 大小的随机数组，里面填满 0 到 7 的随机整数。</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v(2048);
+std::mt19937 gen;
+std::uniform_int_distribution&lt;int&gt; dis(0, 7);
+std::generate(v.begin(), v.end(), [&amp;] {
+    return dis(gen);
+});
+</code></pre>
+<p>然而为了产生随机数，我们需要定义大量的临时变量，和函数调用。</p>
+<p>如果有很多个这样初始化工序复杂的变量，每个用到的局部变量名字就会互相冲突，导致无法编译。</p>
+<p>例如我们还想要随机一个 <code>float</code> 类型的数组 <code>v2</code>，其随机值是 0 到 1 的浮点数。</p>
+<p>为了不报错，必须把 <code>v2</code> 使用的所有中间变量都从 <code>dis</code> 改名为 <code>dis2</code>，非常麻烦。</p>
+<p>最重要的是很不直观，你永远不知道某个变量是属于哪个变量的初始化，全部平摊在一个作用域里，影响可读性。</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v1(2048);
+std::mt19937 gen1;
+std::uniform_int_distribution&lt;int&gt; dis1(0, 7);
+std::generate(v1.begin(), v1.end(), [&amp;] {
+    return dis1(gen1);
+});
+
+std::vector&lt;float&gt; v2(2048);
+std::mt19937 gen2;
+std::uniform_real_distribution&lt;float&gt; dis2(0, 1);
+std::generate(v2.begin(), v2.end(), [&amp;] {
+    return dis2(gen2);
+});
+</code></pre>
+<p>这时，可以用 Lambda 创建一个作用域，然后用返回的形式初始化变量。</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = [] {
+    std::vector&lt;int&gt; v(2048);
+    std::mt19937 gen;
+    std::uniform_int_distribution&lt;int&gt; dis(0, 7);
+    std::generate(v.begin(), v.end(), [&amp;] {
+        return dis(gen);
+    });
+    return v;
+}();
+
+std::vector&lt;float&gt; v = [] {
+    std::vector&lt;float&gt; v(2048);
+    std::mt19937 gen;
+    std::uniform_int_distribution&lt;float&gt; dis(0, 1);
+    std::generate(v.begin(), v.end(), [&amp;] {
+        return dis(gen);
+    });
+    return v;
+}();
+</code></pre>
+<p>每个 Lambda 内都有自己独立的变量作用域，不会互相干扰。</p>
+<p>所有只在初始化 <code>v1</code> <code>v2</code> 用到的临时变量，即使名字重复也不会打架。</p>
+<p>而且能通过 Lambda 的范围和缩进，明确分辨谁属于谁。</p>
+<h2 id="lambda-复用代码"><a class="header" href="#lambda-复用代码">Lambda 复用代码</a></h2>
+<pre><code class="language-cpp">void calc_average() {
+    int res = 0;
+    int count = 0;
+    for (int i = 0; i &lt; cat_arr.size(); i++) {
+        res += cat_arr[i].age;
+        count += cat_arr[i].count;
+    }
+    for (int i = 0; i &lt; dog_arr.size(); i++) {
+        res += dog_arr[i].age;
+        count += dog_arr[i].count;
+    }
+    for (int i = 0; i &lt; pig_arr.size(); i++) {
+        res += pig_arr[i].age;
+        count += pig_arr[i].count;
+    }
+}
+</code></pre>
+<p>你是否被迫写出以上这种复读代码？大部分内容都是重复的，每次只有一小部分修改，导致不得不复读很多遍，非常恼人！</p>
+<p>“设计模式”官腔的做法是额外定义一个函数，把重复的部分代码功能抽出来变成一个 <code>cihou</code> 模板函数，然后再 <code>calc_average</code> 里只需要调用三次这个 <code>cihou</code> 函数即可实现复用：</p>
+<pre><code class="language-cpp">template &lt;class T&gt;
+void cihou(int &amp;res, int &amp;count, std::vector&lt;T&gt; const &amp;arr) {
+    for (int i = 0; i &lt; arr.size(); i++) {
+        res += arr[i].age;
+        count += arr[i].count;
+    }
+}
+
+void calc_average() {
+    int res = 0;
+    int count = 0;
+    cihou(res, count, cat_arr);
+    cihou(res, count, dog_arr);
+    cihou(res, count, pig_arr);
+}
+</code></pre>
+<p>然而，额外定义一个函数也太大费周章了，而且还需要把所有用到的局部变量作为参数传进去！参数部分依然需要反复复读，并且还需要一个个指定所有参数的类型，写一长串模板等。最重要的是定义外部函数会污染了全局名字空间。</p>
+<div id="admonition-note-1" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-1-title">
+<div class="admonition-title">
+<div id="admonition-note-1-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-1"></a>
+</div>
+<div>
+<p>洁癖程序员：脏了我的眼！</p>
+</div>
+</div>
+<p>使用 Lambda，就可以让你在 <code>calc_average</code> 当前函数里“就地解决”，无需定义外部函数。</p>
+<p>更妙的是：Lambda 支持 <code>[&amp;]</code> 语法，自动捕获所有用到的局部变量为引用！无需一个个传递局部变量引用作为函数参数，没有复读，更加无感。只有重复代码中真正区别的部分需要传参数。</p>
+<pre><code class="language-cpp">void calc_average() {
+    int res = 0;
+    int count = 0;
+    auto cihou = [&amp;] {  // 局部 Lambda 的好处：自动帮你捕获 res 和 count！
+        for (int i = 0; i &lt; arr.size(); i++) {
+            res += arr[i].age;
+            count += arr[i].count;
+        }
+    };
+    cihou(cat_arr);
+    cihou(dog_arr);
+    cihou(pig_arr);
+}
+</code></pre>
+<div id="admonition-tip-2" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-2-title">
+<div class="admonition-title">
+<div id="admonition-tip-2-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-2"></a>
+</div>
+<div>
+<p>现在只有两个变量 <code>res</code> 和 <code>count</code> 可能还没什么，如果重复的部分用到一大堆变量，同时还有时候用到，有时候用不到的话，你就觉得 Lambda 好用了。</p>
+</div>
+</div>
+<p>例如字符串切片函数典型的一种实现中，因为“尾巴”的伺候和“主体”的伺候，就会产生重复代码：</p>
+<pre><code class="language-cpp">vector&lt;string&gt; split(string str) {
+    vector&lt;string&gt; list;
+    string last;
+    for (char c: str) {
+        if (c == ' ') {
+            list.push_back(last);
+            last = "";
+        } else {
+            last += c;
+        }
+    }
+    list.push_back(last);
+    return list;
+}
+</code></pre>
+<p>上面的代码中重复的部分 <code>list.push_back(last);</code> 可以用 Lambda 复用，把重复的操作封装成局部的 Lambda：</p>
+<pre><code class="language-cpp">vector&lt;string&gt; split(string str) {
+    vector&lt;string&gt; list;
+    string last;
+    auto push_last = [&amp;] {
+        list.push_back(last);
+        last = "";
+    };
+    for (char c: str) {
+        if (c == ' ') {
+            push_last();
+        } else {
+            last += c;
+        }
+    }
+    push_last();
+    return list;
+}
+</code></pre>
+<h2 id="打表法代替-if-else"><a class="header" href="#打表法代替-if-else">打表法代替 if-else</a></h2>
+<h2 id="类内静态成员-inline"><a class="header" href="#类内静态成员-inline">类内静态成员 inline</a></h2>
+<p>在头文件中定义结构体的 static 成员时：</p>
+<pre><code class="language-cpp">struct Class {
+    static int member;
+};
+</code></pre>
+<p>会报错 <code>undefined reference to 'Class::member'</code>。这是说的你需要找个 .cpp 文件，写出 <code>int Class::member</code> 才能消除该错误。</p>
+<p>C++17 中，只需加个 <code>inline</code> 就能解决！</p>
+<pre><code class="language-cpp">struct Class {
+    inline static int member;
+};
+</code></pre>
+<h2 id="别再-make_pair-啦"><a class="header" href="#别再-make_pair-啦">别再 make_pair 啦！</a></h2>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert(pair&lt;string, int&gt;("侯捷老师", 42));
+</code></pre>
+<p>为避免写出类型名的麻烦，很多老师都会让你写 make_pair：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert(make_pair("侯捷老师", 42));
+</code></pre>
+<p>然而 C++11 提供了更好的写法，那就是通过 <code>{}</code> 隐式构造，不用写出类型名或 make_pair：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert({"侯捷老师", 42});
+</code></pre>
+<div id="admonition-note-2" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-2-title">
+<div class="admonition-title">
+<div id="admonition-note-2-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-2"></a>
+</div>
+<div>
+<p>即使你出于某种“抖m”情节，还想写出类型名，也可以用 C++17 的 CTAD 语法，免去模板参数：</p>
+</div>
+</div>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert(pair("侯捷老师", 42));
+
+// tuple 也支持 CTAD：
+auto t = tuple("侯捷老师", 42, string("小彭老师"));
+// 等价于：
+auto t = make_tuple("侯捷老师", 42, string("小彭老师"));
+
+println("{}", typeid(t).name()); // tuple&lt;const char *, int, string&gt;
+</code></pre>
+<h2 id="insert-不会替换现有值哦"><a class="header" href="#insert-不会替换现有值哦">insert 不会替换现有值哦</a></h2>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert({"小彭老师", 24});
+table.insert({"小彭老师", 42});
+</code></pre>
+<p>这时，<code>table["小彭老师"]</code> 仍然会是 24，而不是 42。因为 insert 不会替换 map 里已经存在的值。</p>
+<p>如果希望如果已经存在时，替换现有元素，可以使用 <code>[]</code> 运算符：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table["小彭老师"] = 24;
+table["小彭老师"] = 42;
+</code></pre>
+<p>C++17 提供了比 <code>[]</code> 运算符更适合覆盖性插入的 <code>insert_or_assign</code> 函数：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+table.insert_or_assign("小彭老师", 24);
+table.insert_or_assign("小彭老师", 42);
+</code></pre>
+<p>好处：<code>insert_or_assign</code> 不需要值类型支持默认构造，可以避免一次默认构造函数 + 一次移动赋值函数的开销。</p>
+<div id="admonition-tip-3" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-3-title">
+<div class="admonition-title">
+<div id="admonition-tip-3-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-3"></a>
+</div>
+<div>
+<p>建议把 <code>insert_or_assign</code> 改名成 <code>set</code>，<code>at</code> 改名成 <code>get</code>；只是由于历史原因名字迷惑了。</p>
+</div>
+</div>
+<h2 id="一边遍历-map一边删除"><a class="header" href="#一边遍历-map一边删除">一边遍历 map，一边删除？</a></h2>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+for (auto it = table.begin(); it != table.end(); ++it) {
+    if (it-&gt;second &lt; 0) {
+        table.erase(it);
+    }
+}
+</code></pre>
+<p>会发生崩溃！看来 map 似乎不允许在遍历的过程中删除？不，只是你的写法有错误：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+for (auto it = table.begin(); it != table.end(); ) {
+    if (it-&gt;second &lt; 0) {
+        it = table.erase(it);
+    } else {
+        ++it;
+    }
+}
+</code></pre>
+<p>C++20 引入了更好的 erase_if 全局函数，不用手写上面这么麻烦的代码：</p>
+<pre><code class="language-cpp">map&lt;string, int&gt; table;
+erase_if(table, [](pair&lt;string, int&gt; it) {
+    return it.second &lt; 0;
+});
+</code></pre>
+<h2 id="高效删除单个-vector-元素"><a class="header" href="#高效删除单个-vector-元素">高效删除单个 vector 元素</a></h2>
+<pre><code class="language-cpp">vector&lt;int&gt; v = {48, 23, 76, 11, 88, 63, 45, 28, 59};
+</code></pre>
+<p>众所周知，在 vector 中删除元素，会导致后面的所有元素向前移动，十分低效。复杂度：<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></p>
+<pre><code class="language-cpp">// 直接删除 v[3]
+v.erase(v.begin() + 3);
+</code></pre>
+<p>如果不在乎元素的顺序，可以把要删除的元素和最后一个元素 swap，然后 pop_back。复杂度：<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></p>
+<pre><code class="language-cpp">// 把 v[3] 和 v[v.size() - 1] 位置对调
+swap(v[3], v[v.size() - 1]);
+// 然后删除 v[v.size() - 1]
+v.pop_back();
+</code></pre>
+<p>这样就不用移动一大堆元素了。这被称为 back-swap-erase。</p>
+<h2 id="批量删除部分-vector-元素"><a class="header" href="#批量删除部分-vector-元素">批量删除部分 vector 元素</a></h2>
+<p>vector 中只删除一个元素需要 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。如果一边遍历，一边删除多个符合条件的元素，就需要复杂度 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 了。</p>
+<p>标准库提供了 <code>remove</code> 和 <code>remove_if</code> 函数，其内部采用类似 back-swap-erase 的方法，先把要删除的元素移动到末尾。然后一次性 <code>erase</code> 掉末尾同样数量的元素。</p>
+<p>且他们都能保持顺序不变。</p>
+<p>删除所有值为 42 的元素：</p>
+<pre><code class="language-cpp">vector&lt;int&gt; v;
+v.erase(remove(v.begin(), v.end(), 42), v.end());
+</code></pre>
+<p>删除所有值大于 0 的元素：</p>
+<pre><code class="language-cpp">vector&lt;int&gt; v;
+v.erase(remove_if(v.begin(), v.end(), [](int x) {
+    return x &gt; 0;
+}), v.end());
+</code></pre>
+<p>现在 C++20 也引入了全局函数 erase 和 erase_if，使用起来更加直观：</p>
+<pre><code class="language-cpp">vector&lt;int&gt; v;
+erase(v, 42);       // 删除所有值为 42 的元素
+erase_if(v, [](int x) {
+    return x &gt; 0;   // 删除所有值大于 0 的元素
+});
+</code></pre>
+<h2 id="保持有序的-vector-用于二分法"><a class="header" href="#保持有序的-vector-用于二分法">保持有序的 vector 用于二分法</a></h2>
+<p>如果你想要维护一个有序的数组，用 <code>lower_bound</code> 或 <code>upper_bound</code> 来插入元素，保证插入后仍保持有序：</p>
+<pre><code class="language-cpp">vector&lt;int&gt; s;
+s.push_back(1);
+s.push_back(2);
+s.push_back(4);
+s.push_back(6);
+// s = { 1, 2, 4, 6 }
+s.insert(lower_bound(s.begin(), s.end(), 3), 3);
+// s = { 1, 2, 3, 4, 6 }
+s.insert(lower_bound(s.begin(), s.end(), 5), 5);
+// s = { 1, 2, 3, 4, 5, 6 }
+</code></pre>
+<p>有序数组中，可以利用 <code>lower_bound</code> 或 <code>upper_bound</code> 快速二分查找到想要的值：</p>
+<pre><code class="language-cpp">vector&lt;int&gt; s;
+s.push_back(1);
+s.push_back(2);
+s.push_back(4);
+s.push_back(6);
+// s = { 1, 2, 4, 6 }
+lower_bound(s.begin(), s.end(), 3); // s.begin() + 2;
+lower_bound(s.begin(), s.end(), 5); // s.begin() + 3;
+</code></pre>
+<p>有序 vector 应用案例：利用 CDF 积分 + 二分法可以实现生成任意指定分布的随机数。</p>
+<p>例如数值策划要求的抽卡概率分布是：</p>
+<ul>
+<li>2% 出金卡</li>
+<li>10% 出蓝卡</li>
+<li>80% 出白卡</li>
+<li>8% 出答辩</li>
+</ul>
+<p>那么你转换一下任务。变成随机生成一个 0 到 1 的浮点数，然后判断：</p>
+<ul>
+<li>小于 0.02 时，出金卡</li>
+<li>小于 0.12 时，出蓝卡</li>
+<li>小于 0.92 时，出白卡</li>
+<li>小于 1.00 时，出答辩</li>
+</ul>
+<p>这个转换过程就是 CDF 积分。如果你把这 4 个数按照顺序排列，就是一个有序 vector。</p>
+<p>标准库提供了 <code>std::partial_sum</code>（不精准）或 <code>std::inclusive_scan</code>（更精准，C++17 引入）都可以计算一个数组的 CDF 离散积分。</p>
+<pre><code class="language-cpp">vector&lt;double&gt; probs = {0.02, 0.1, 0.8, 0.08};
+vector&lt;double&gt; cdf;
+// 计算 probs 的 CDF 积分，存入 cdf 数组
+std::inclusive_scan(probs.begin(), probs.end(), std::back_inserter(cdf));
+// cdf = {0.02, 0.12, 0.92, 1.00} 是一个有序 vector，可以运用二分法定位
+
+vector&lt;string&gt; result = {"金卡", "蓝卡", "白卡", "答辩"};
+// 生成 100 个随机数：
+for (int i = 0; i &lt; 100; ++i) {
+    double r = rand() / (RAND_MAX + 1.0);
+    int index = lower_bound(cdf.begin(), cdf.end(), r) - cdf.begin();
+    cout &lt;&lt; "你抽到了" &lt;&lt; result[index] &lt;&lt; endl;
+}
+</code></pre>
+<div id="admonition-abstract-1" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-1-title">
+<div class="admonition-title">
+<div id="admonition-abstract-1-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-1"></a>
+</div>
+<div>
+<p>顺便一提，CDF 积分的逆运算是离散微分：<code>std::adjacent_difference</code>，可以从 <code>cdf</code> 数组复原出 <code>probs</code> 数组。</p>
+</div>
+</div>
+<h2 id="c-随机数的正确生成方式"><a class="header" href="#c-随机数的正确生成方式">C++ 随机数的正确生成方式</a></h2>
+<pre><code class="language-cpp">// 错误的写法：
+int r = rand() % 10; // 这样写是错误的！
+</code></pre>
+<p>rand() 的返回值范围是 [0, RAND_MAX]，RAND_MAX 在不同平台下不同，在 Windows 平台的是 32767，即 rand() 只能生成 0～32767 之间的随机数。</p>
+<p>如果想要生成 0～9 之间的随机数，最简单的办法是：</p>
+<pre><code class="language-cpp">int r = rand() % 10;
+</code></pre>
+<p>然而这种方法有个致命的问题：不同的随机数生成概率不一样。</p>
+<p>例如把 [0, RAND_MAX] 均匀地分成 10 份，每份 3276.7。那么 0～6 之间的数字出现的概率是 3276.7 / 32767 = 10.0003%，而 7～9 之间的数字出现的概率是 3276.7 / 32767 = 9.997%。</p>
+<p>这样就不是真正的均匀分布，这可能会影响程序的正确性。</p>
+<ul>
+<li>当模数大的时候不均匀性会变得特别明显，例如 <code>rand() % 10000</code>。</li>
+<li>RAND_MAX 在不同平台不同的特性也让跨平台开发者很头大。</li>
+<li><code>rand</code> 使用全局变量存储种子，对多线程不友好。</li>
+<li>无法独立的为多个生成序列设定独立的种子，一些游戏可能需要用到多个随机序列，各自有独立的种子。</li>
+<li>只能生成均匀分布的整数，不能生成幂率分布、正太分布等，生成浮点数也比较麻烦。</li>
+<li>使用 <code>srand(time(NULL))</code> 无法安全地生成随机数的初始种子，容易被黑客预测并攻击。</li>
+<li><code>rand</code> 的算法实现没有官方规定，在不同平台各有不同，产生的随机数序列可能不同。</li>
+</ul>
+<p>为此，C++ 提出了更加专业的随机数生成器：<code>&lt;random&gt;</code> 库。</p>
+<pre><code class="language-cpp">// 使用 &lt;random&gt; 库生成 0～9 之间的随机数：
+#include &lt;random&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    uint64_t seed = std::random_device()();
+    std::mt19937 gen(seed);
+    std::uniform_int_distribution&lt;int&gt; dis(0, 9);
+
+    for (int i = 0; i &lt; 100; ++i) {
+        int r = dis(gen);
+        std::cout &lt;&lt; r &lt;&lt; " ";
+    }
+}
+</code></pre>
+<p>这样就可以生成 0～9 之间的均匀分布的随机数了。</p>
+<ul>
+<li><code>std::random_device</code> 是一个随机数种子生成器，它会利用系统的随机设备（如果有的话，否则会抛出异常）生成一个安全的随机数种子，黑客无法预测。</li>
+<li><code>std::mt19937</code> 是一个随机数生成器，它会利用初始种子生成一个随机数序列。并且必定是 MT19937 这个高强度的随机算法，所有平台都一样。</li>
+<li><code>std::uniform_int_distribution</code> 是一个分布器，它可以把均匀分布的随机数映射到我们想要的上下界中。里面的实现类似于 <code>gen() % 10</code>，但通过数学机制保证了绝对均匀性。</li>
+</ul>
+<p>类似的还有 <code>std::uniform_real_distribution</code> 用于生成浮点数，<code>std::normal_distribution</code> 用于生成正太分布的随机数，<code>std::poisson_distribution</code> 用于生成泊松分布的随机数，等等。</p>
+<p>如果喜欢老式的函数调用风格接口，可以封装一个新的 C++ 重置版安全 <code>rand</code>：</p>
+<pre><code class="language-cpp">thread_local std::mt19937 gen(std::random_device{}()); // 每线程一个，互不冲突
+
+int randint(int min, int max) {
+    return std::uniform_int_distribution&lt;int&gt;(min, max)(gen);
+}
+
+float randfloat(float min, float max) {
+    return std::uniform_real_distribution&lt;float&gt;(min, max)(gen);
+}
+</code></pre>
+<h2 id="const-居然应该后置"><a class="header" href="#const-居然应该后置">const 居然应该后置...</a></h2>
+<p>众所周知，<code>const</code> 在指针符号 <code>*</code> 的前后，效果是不同的。</p>
+<pre><code class="language-cpp">const int *p;
+int *const p;
+</code></pre>
+<p>你能看出来上面这个 const 分别修饰的是谁吗？</p>
+<pre><code class="language-cpp">const int *p;  // 指针指向的 int 不可变
+int *const p;  // 指针本身不可改变指向
+</code></pre>
+<p>为了看起来更加明确，我通常都会后置所有的 const 修饰。</p>
+<pre><code class="language-cpp">int const *p;  // 指针指向的 int 不可变
+int *const p;  // 指针本身不可改变指向
+</code></pre>
+<p>这样就一目了然，const 总是在修饰他前面的东西，而不是后面。</p>
+<p>为什么 <code>int *const</code> 修饰的是 <code>int *</code> 也就很容易理解了。</p>
+<pre><code class="language-cpp">int const i;
+int const *p;
+int *const q;
+int const &amp;r;
+</code></pre>
+<p>举个例子：</p>
+<pre><code class="language-cpp">int i, j;
+int *const p = &amp;i;
+*p = 1;  // OK：p 指向的对象可变
+p = &amp;j;  // 错误：p 本身不可变，不能改变指向
+</code></pre>
+<pre><code class="language-cpp">int i, j;
+int const *p = &amp;i;
+*p = 1;  // 错误：p 指向的对象不可变
+p = &amp;j;  // OK：p 本身可变，可以改变指向
+</code></pre>
+<pre><code class="language-cpp">int i, j;
+int const *const p = &amp;i;
+*p = 1;  // 错误：p 指向的对象不可变
+p = &amp;j;  // 错误：p 本身也不可变，不能改变指向
+</code></pre>
+<div id="admonition-tip-4" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-4-title">
+<div class="admonition-title">
+<div id="admonition-tip-4-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-4"></a>
+</div>
+<div>
+<p><code>int const *</code> 和 <code>const int *</code> 等价！只有 <code>int *const</code> 是不同的。</p>
+</div>
+</div>
+<h2 id="函数参数也可以-auto"><a class="header" href="#函数参数也可以-auto">函数参数也可以 auto</a></h2>
+<p>大家都知道，函数的返回类型可以声明为 <code>auto</code>，让其自动推导。</p>
+<pre><code class="language-cpp">auto square() {  // int square();
+    return 1;
+}
+</code></pre>
+<p>但你知道从 C++20 开始，参数也可以声明为 auto 了吗？</p>
+<pre><code class="language-cpp">auto square(auto x) {  // T square(T x);
+    return x * x;
+}
+
+square(1);    // square(int)
+square(3.14); // square(double)
+</code></pre>
+<p>等价于以下“模板函数”的传统写法：</p>
+<pre><code class="language-cpp">template &lt;typename T&gt;
+T square(T x) {
+    return x * x;
+}
+
+square(1);    // square&lt;int&gt;(int)
+square(3.14); // square&lt;double&gt;(double)
+</code></pre>
+<p>因为是模板函数，所以也很难分离声明和定义，只适用于头文件中就地定义函数的情况。</p>
+<p><code>auto</code> 参数还可以带有引用：</p>
+<pre><code class="language-cpp">auto square(auto const &amp;x) {  // T square(T const &amp;x);
+    return x * x;
+}
+
+square(1);    // square(int const &amp;)
+square(3.14); // square(double const &amp;)
+</code></pre>
+<p>等价于：</p>
+<pre><code class="language-cpp">template &lt;typename T&gt;
+T square(T const &amp;x) {
+    return x * x;
+}
+</code></pre>
+<p><code>auto</code> 参数最好的配合莫过于是与同样 C++20 引入的 concept：</p>
+<pre><code class="language-cpp">auto square(std::integral auto x) {  // T square(T x) requires std::integral&lt;T&gt;
+    return x * x;
+}
+
+square(1);    // square(int)
+square(3.14); // 错误：double 不是整数类型
+</code></pre>
+<p>等价于：</p>
+<pre><code class="language-cpp">template &lt;typename T&gt;
+     requires std::integral&lt;T&gt;
+T square(T x) {
+    return x * x;
+}
+</code></pre>
+<p>或者：</p>
+<pre><code class="language-cpp">template &lt;std::integral T&gt;
+T square(T x) {
+    return x * x;
+}
+</code></pre>
+<h2 id="读取整个文件到字符串"><a class="header" href="#读取整个文件到字符串">读取整个文件到字符串</a></h2>
+<pre><code class="language-cpp">std::string file_get_content(std::string const &amp;filename) {
+    std::ifstream ifs(filename, std::ios::in | std::ios::binary);
+    std::istreambuf_iterator&lt;char&gt; iit(ifs), iite;
+    std::string content(iit, iite);
+    return content;
+}
+
+void file_put_content(std::string const &amp;filename, std::string const &amp;content) {
+    std::ofstream ofs(filename, std::ios::out | std::ios::binary);
+    ofs &lt;&lt; content;
+}
+</code></pre>
+<p>这样就可以把整个文件读取到内存中，很方便地进行处理后再写回文件。</p>
+<div id="admonition-tip-5" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-5-title">
+<div class="admonition-title">
+<div id="admonition-tip-5-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-5"></a>
+</div>
+<div>
+<p>推荐用 <code>std::ios::binary</code> 选项打开二进制文件，否则字符串中出现 <code>'\n'</code> 时，会被 MSVC 标准库自动转换成 <code>'\r\n'</code> 来写入，妨碍我们跨平台。</p>
+</div>
+</div>
+<h2 id="逐行读取文本文件"><a class="header" href="#逐行读取文本文件">逐行读取文本文件</a></h2>
+<pre><code class="language-cpp">std::ifstream fin("test.txt");
+std::string line;
+while (std::getline(fin, line)) {
+    std::cout &lt;&lt; "读取到一行：" &lt;&lt; line &lt;&lt; '\n';
+}
+</code></pre>
+<h2 id="字符串切片"><a class="header" href="#字符串切片">字符串切片</a></h2>
+<pre><code class="language-cpp">#include &lt;sstream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+
+std::vector&lt;std::string&gt; split_str(std::string const &amp;str, char ch) {
+    std::stringstream ss(str);
+    std::string line;
+    std::vector&lt;std::string&gt; res;
+    while (std::getline(ss, line, ch)) {
+        res.push_back(std::move(line));
+    }
+    return res;
+}
+
+auto res = split_str("hello world", ' '); // res = {"hello", "world"}
+</code></pre>
+<h2 id="cout-不需要-endl"><a class="header" href="#cout-不需要-endl">cout 不需要 endl</a></h2>
+<pre><code class="language-cpp">int a = 42;
+printf("%d\n", a);
+</code></pre>
+<p>万一你写错了 <code>%</code> 后面的类型，编译器不会有任何报错，留下隐患。</p>
+<pre><code class="language-cpp">int a = 42;
+printf("%s\n", a);  // 编译器不报错，但是运行时会崩溃！
+</code></pre>
+<p>C++ 中有更安全的输出方式 <code>cout</code>，通过 C++ 的重载机制，无需手动指定 <code>%</code>，自动就能推导类型。</p>
+<pre><code class="language-cpp">int a = 42;
+cout &lt;&lt; a &lt;&lt; endl;
+double d = 3.14;
+cout &lt;&lt; d &lt;&lt; endl;
+</code></pre>
+<pre><code class="language-cpp">cout &lt;&lt; "Hello, World!" &lt;&lt; endl;
+</code></pre>
+<p>endl 是一个特殊的流操作符，作用等价于先输出一个 <code>'\n'</code> 然后 <code>flush</code>。</p>
+<pre><code class="language-cpp">cout &lt;&lt; "Hello, World!" &lt;&lt; '\n';
+cout.flush();
+</code></pre>
+<p>但实际上，输出流 cout 默认的设置就是“行刷新缓存”，也就是说，检测到 <code>'\n'</code> 时，就会自动刷新一次，根本不需要我们手动刷新！</p>
+<p>如果还用 endl 的话，就相当于刷新了两次，浪费性能。</p>
+<p>可见，endl 是一个被很多无脑教材错误宣传，实际上根本多此一举的东西。</p>
+<p>我们只需要输出 <code>'\n'</code> 就可以了，每次换行时 cout 都会自动刷新。</p>
+<pre><code class="language-cpp">cout &lt;&lt; "Hello, World!" &lt;&lt; '\n';
+</code></pre>
+<p>endl 是一个典型的以讹传讹错误写法，只有当你的输出是指向另一个进程的管道时，其附带的刷新功能才有作用。</p>
+<ul>
+<li>当输出是管道或文件时，<code>cout</code> 需要 <code>endl</code> 才能刷新。</li>
+<li>当输出是普通控制台时，<code>cout</code> 只需 <code>'\n'</code> 就能刷新了，根本用不着 <code>endl</code>。</li>
+</ul>
+<p>而且，管道或文件实际上也不存在频繁刷新的需求，反正 <code>ifstream</code> 析构时总是会自动刷新写入磁盘。</p>
+<p>因此，<code>endl</code> 操纵符大多时候都是冗余的：控制台输出的 <code>cout</code> 只需要字符或字符串中含有 <code>'\n'</code> 就刷新了，即使是文件读写也很少会使用 <code>endl</code>。</p>
+<p>如果确实需要强制刷新，也可以用 <code>flush</code> 这种更加可读的写法：</p>
+<pre><code class="language-cpp">int num;
+cout &lt;&lt; "please input the number: " &lt;&lt; flush;
+cin &gt;&gt; num;
+
+ofstream fout("log.txt");
+fout &lt;&lt; "immediate write 1\n" &lt;&lt; flush;
+sleep(1);
+fout &lt;&lt; "immediate write 2\n" &lt;&lt; flush;
+fout.close(); // 关闭文件时总是自动 flush，不会有残留未写入的字符
+</code></pre>
+<h2 id="多线程中-cout-出现乱序"><a class="header" href="#多线程中-cout-出现乱序">多线程中 cout 出现乱序？</a></h2>
+<p>同学：小彭老师，我在多线程环境中使用：</p>
+<pre><code class="language-cpp">cout &lt;&lt; "the answer is " &lt;&lt; 42 &lt;&lt; '\n';
+</code></pre>
+<p>发现输出乱套了！这是不是说明 cout 不是<strong>多线程安全</strong>的呢？</p>
+<p>小彭老师：cout 是一个“同步流”，是<strong>多线程安全</strong>的，错误的是你的使用方式。</p>
+<div id="admonition-info" class="admonition admonish-info" role="note" aria-labelledby="admonition-info-title">
+<div class="admonition-title">
+<div id="admonition-info-title">
+<p>Info</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-info"></a>
+</div>
+<div>
+<p>如果他不多线程安全，那多线程地调用他就不是输出乱序，而是程序崩溃了。</p>
+</div>
+</div>
+<p>但是，cout 的线程安全，只能保证每一次 <code>operator&lt;&lt;</code> 都是原子的，每一次单独的 <code>operator&lt;&lt;</code> 不会被其他人打断。</p>
+<p>但众所周知，cout 为了支持级联调用，他的 <code>operator&lt;&lt;</code> 都是返回自己的，上面的代码实际上等价于分别三次调用 <code>cout</code> 的 <code>operator&lt;&lt;</code>。</p>
+<pre><code class="language-cpp">cout &lt;&lt; "the answer is " &lt;&lt; 42 &lt;&lt; '\n';
+// 等价于：
+cout &lt;&lt; "the answer is ";
+cout &lt;&lt; 42;
+cout &lt;&lt; '\n';
+</code></pre>
+<p>变成了三次 <code>operator&lt;&lt;</code>，每一次都是“各自”原子的，但三个原子加在一起就不是原子了。</p>
+<div id="admonition-note-3" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-3-title">
+<div class="admonition-title">
+<div id="admonition-note-3-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-3"></a>
+</div>
+<div>
+<p>而是分子了 :)</p>
+</div>
+</div>
+<p>他们中间可能穿插了其他线程的 cout，从而导致你 <code>"the answer is"</code> 打印完后，被其他线程的 <code>'\n'</code> 插入进来，导致换行混乱。</p>
+<div id="admonition-warning-1" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-1-title">
+<div class="admonition-title">
+<div id="admonition-warning-1-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-warning-1"></a>
+</div>
+<div>
+<p><code>std::cout</code> 的 <code>operator&lt;&lt;</code> 调用是线程安全的，不会被打断，但多个 <code>operator&lt;&lt;</code> 的调用在多线程环境中可能会 <strong>交错</strong> ，导致输出结果混乱。</p>
+</div>
+</div>
+<div id="admonition-tip-6" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-6-title">
+<div class="admonition-title">
+<div id="admonition-tip-6-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-6"></a>
+</div>
+<div>
+<p>更多细节请看我们的 <a href="threading.html">多线程专题</a>。</p>
+</div>
+</div>
+<p>解决方法是，先创建一个只属于当前线程的 <code>ostringstream</code>，最后一次性调用一次 cout 的 <code>operator&lt;&lt;</code>，让“原子”的单位变成“一行”而不是一个字符串。</p>
+<pre><code class="language-cpp">ostringstream oss;
+oss &lt;&lt; "the answer is " &lt;&lt; 42 &lt;&lt; '\n';
+cout &lt;&lt; oss.str();
+</code></pre>
+<p>或者，使用 <code>std::format</code>：</p>
+<pre><code class="language-cpp">cout &lt;&lt; std::format("the answer is {}\n", 42);
+</code></pre>
+<p>总之，就是要让 <code>operator&lt;&lt;</code> 只有一次，自然就是没有交错。</p>
+<p>在 C++20 中，可以改用 <code>std::osyncstream(std::cout)</code> 代替 <code>std::cout</code> :</p>
+<pre><code class="language-cpp">std::osyncstream(std::cout) &lt;&lt; "the answer is " &lt;&lt; 42 &lt;&lt; '\n';
+</code></pre>
+<p><code>std::osyncstream</code> 可以保证：1. 不会产生数据竞争；2. 不会发生穿插和截断。可以理解为 <code>std::osyncstream</code> 在构造时对缓冲区上锁，在析构时解锁。</p>
+<p>如果你的标准库支持 C++23，还可以用 <code>std::println</code>，这个函数的输出也是原子的（第三方库如 <code>fmt::println</code> 亦可）：</p>
+<pre><code class="language-cpp">std::println("the answer is {}", 42);
+</code></pre>
+<h2 id="cerr-与-cout-的抉择"><a class="header" href="#cerr-与-cout-的抉择">cerr 与 cout 的抉择</a></h2>
+<p>如果你的目的是调试和报错，可以考虑用 <code>cerr</code>！</p>
+<p>他会在每次 <code>&lt;&lt;</code> 时刷新，<code>cerr</code> 才是最适合打印错误和调试信息的流。</p>
+<p><code>cout</code> 的优点是不需要时刻刷新，有更好的性能。</p>
+<pre><code class="language-cpp">cout &lt;&lt; "hello\n";
+cout &lt;&lt; "the answer is ";
+cout &lt;&lt; 42;
+*(int *)1 = 1; // 崩溃！
+cout &lt;&lt; "!\n"; // 因为还没有抵达 \n 产生刷新就崩溃，导致之前尚未刷新的 the answer is 42 丢失
+</code></pre>
+<p>可能的输出：</p>
+<pre><code>hello[换行]
+</code></pre>
+<pre><code class="language-cpp">cerr &lt;&lt; "hello\n";
+cerr &lt;&lt; "the answer is ";
+cerr &lt;&lt; 42;
+*(int *)1 = 1; // 崩溃！
+cerr &lt;&lt; "!\n";
+</code></pre>
+<p>输出：</p>
+<pre><code>hello[换行]
+the answer is 42
+</code></pre>
+<p>还有一个特点：<code>cout</code> 输出到“标准输出流”，可以被输出重定向到文件管道。而 <code>cerr</code> 输出到“标准错误流”，通常不会被重定向到文件或管道。</p>
+<p>例如，可以把程序预订的计算结果写到 <code>cout</code>，把调试和报错信息写到 <code>cerr</code>，这样用户就可以通过 <code>&gt;</code> 重定向计算结果，而调试和报错信息则正常输出到屏幕上，不受重定向影响。</p>
+<pre><code class="language-cpp">cout &lt;&lt; "1 3 5 7\n";
+cerr &lt;&lt; "ERROR: this is an error message!\n";
+cout &lt;&lt; "11 13 17 19\n";
+</code></pre>
+<pre><code>$ g++ prime.cpp -o prime
+$ ./prime
+1 3 5 7
+ERROR: this is an error message!
+11 13 17 19
+$ ./prime &gt; output.txt
+ERROR: this is an error message!
+$ cat output.txt
+1 3 5 7
+11 13 17 19
+</code></pre>
+<h2 id="智能指针防止大对象移动"><a class="header" href="#智能指针防止大对象移动">智能指针防止大对象移动</a></h2>
+<p>我们说一个类型大，有两种情况。</p>
+<ol>
+<li>类本身很大：例如 array</li>
+<li>类本身不大，但其指向的对象大，且该类是深拷贝，对该类的拷贝会引起其指向对象的拷贝：例如 vector</li>
+</ol>
+<pre><code class="language-cpp">sizeof(array&lt;int, 1000&gt;);  // 本身 4000 字节
+sizeof(vector&lt;int&gt;);       // 本身 24 字节（成员是 3 个指针），指向的数组可以无限增大
+</code></pre>
+<div id="admonition-abstract-2" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-2-title">
+<div class="admonition-title">
+<div id="admonition-abstract-2-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-2"></a>
+</div>
+<div>
+<p><code>sizeof(vector)</code> 为 24 字节仅为 <code>x86_64-pc-linux-gnu</code> 平台 <code>libstdc++</code> 库的实测结果，在 32 位系统以及 MSVC 的 Debug 模式 STL 下可能得出不同的结果，不可以依赖这个平台相关的结果来编程。</p>
+</div>
+</div>
+<p>对于 vector，我们可以使用 <code>std::move</code> 移动语义，只拷贝该类本身的三个指针成员，而不对其指向的 4000 字节数组进行深拷贝。</p>
+<p>对于 array，则 <code>std::move</code> 移动语义与普通的拷贝没有区别：array 作为静态数组容器，不是通过“指针成员”来保存数组的，而是直接把数组存在他的体内，对 array 的移动和拷贝是完全一样的！</p>
+<p>总之，移动语义的加速效果，只对采用了“指针间接存储动态数据”的类型（如 vector、map、set、string）有效。对“直接存储静态大小数据”的类型（array、tuple、variant、成功“小字符串优化”的 string）无效。</p>
+<p>所以，让很多“移动语义”孝子失望了：“本身很大”的类，移动和拷贝一样慢！</p>
+<p>那么现在我们有个超大的类：</p>
+<pre><code class="language-cpp">using BigType = array&lt;int, 1000&gt;;  // 4000 字节大小的平坦类型
+
+vector&lt;BigType&gt; arr;
+
+void func(BigType x) {
+    arr.push_back(std::move(x));  // 拷贝 4000 字节，超慢，move 也没用
+}
+
+int main() {
+    BigType x;
+    func(std::move(x));  // 拷贝 4000 字节，超慢，move 也没用
+}
+</code></pre>
+<p>如何加速这种本身超大的变量转移？使用 <code>const</code> 引用：</p>
+<pre><code class="language-cpp">void func(BigType const &amp;x)
+</code></pre>
+<p>似乎可以避免传参时的拷贝，但是依然不能避免 <code>push_back</code> 推入 <code>vector</code> 时所不得已的拷贝。</p>
+<p>小技巧：改用 <code>unique_ptr&lt;BigType&gt;</code></p>
+<pre><code class="language-cpp">using BigType = array&lt;int, 1000&gt;;  // 4000 字节大小的平坦类型
+
+using BigTypePtr = unique_ptr&lt;BigType&gt;;
+
+vector&lt;BigTypePtr&gt; arr;
+
+void func(BigTypePtr x) {
+    arr.push_back(std::move(x));  // 只拷贝 8 字节的指针，其指向的 4000 字节不用深拷贝了，直接移动所有权给 vector 里的 BigTypePtr 智能指针
+    // 由于移走了所有权，x 此时已经为 nullptr
+}
+
+int main() {
+    BigTypePtr x = make_unique&lt;BigType&gt;();  // 注意：用智能指针的话，需要用 make_unique 才能创建对象了
+    func(std::move(x));  // 只拷贝 8 字节的指针
+    // 由于移走了所有权，x 此时已经为 nullptr
+}
+</code></pre>
+<p>上面整个程序中，一开始通过 <code>make_unique</code> 创建的超大对象，全程没有发生任何移动，避免了无谓的深拷贝。</p>
+<p>对于不支持移动构造函数的类型来说，也可以用这个方法，就能在函数之间穿梭自如了。</p>
+<pre><code class="language-cpp">// 热知识：std::mutex 不支持移动
+
+void func(std::mutex lock);
+
+int main() {
+    std::mutex lock;
+    func(std::move(lock));  // 错误：mutex(mutex &amp;&amp;) = delete
+}
+</code></pre>
+<pre><code class="language-cpp">void func(std::unique_ptr&lt;std::mutex&gt; lock);
+
+int main() {
+    std::unique_ptr&lt;std::mutex&gt; lock = std::make_unique&lt;std::mutex&gt;();
+    func(std::move(lock));  // OK：调用的是 unique_ptr(unique_ptr &amp;&amp;)，不关 mutex 什么事
+}
+</code></pre>
+<p>更好的是 <code>shared_ptr</code>，连 <code>std::move</code> 都不用写，更省心。</p>
+<pre><code class="language-cpp">void func(std::shared_ptr&lt;std::mutex&gt; lock);
+
+int main() {
+    std::shared_ptr&lt;std::mutex&gt; lock = std::make_shared&lt;std::mutex&gt;();
+    func(lock);  // OK：调用的是 shared_ptr(shared_ptr const &amp;)，不关 mutex 什么事
+    func(lock);  // OK：shared_ptr 的拷贝构造函数是浅拷贝，即使浅拷贝发生多次，指向的对象也不会被拷贝或移动
+}
+</code></pre>
+<h2 id="optional-实现延迟初始化"><a class="header" href="#optional-实现延迟初始化">optional 实现延迟初始化</a></h2>
+<p>假设我们有一个类，具有自定义的构造函数，且没有默认构造函数：</p>
+<pre><code class="language-cpp">struct SomeClass {
+    int m_i;
+    int m_j;
+
+    SomeClass(int i, int j) : m_i(i), m_j(j) {}
+};
+</code></pre>
+<p>当我们需要“延迟初始化”时怎么办？</p>
+<pre><code class="language-cpp">SomeClass c;
+if (test()) {
+    c = SomeClass(1, 2);
+} else {
+    c = SomeClass(2, 3);
+}
+do_something(c);
+</code></pre>
+<p>可以利用 optional 默认初始化为“空”的特性，实现延迟赋值：</p>
+<pre><code class="language-cpp">std::optional&lt;SomeClass&gt; c;
+if (test()) {
+    c = SomeClass(1, 2);
+} else {
+    c = SomeClass(2, 3);
+}
+do_something(c.value());  // 如果抵达此处前，c 没有初始化，就会报错，从而把编译期的未初始化转换为运行时异常
+</code></pre>
+<div id="admonition-info-1" class="admonition admonish-info" role="note" aria-labelledby="admonition-info-1-title">
+<div class="admonition-title">
+<div id="admonition-info-1-title">
+<p>Info</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-info-1"></a>
+</div>
+<div>
+<p>就类似于 Python 中先给变量赋值为 None，然后在循环或 if 里条件性地赋值一样。</p>
+</div>
+</div>
+<p>如果要进一步避免 <code>c =</code> 时，移动构造的开销，也可以用 <code>unique_ptr</code> 或 <code>shared_ptr</code>：</p>
+<pre><code class="language-cpp">std::shared_ptr&lt;SomeClass&gt; c;
+if (test()) {
+    c = std::make_shared&lt;SomeClass&gt;(1, 2);
+} else {
+    c = std::make_shared&lt;SomeClass&gt;(2, 3);
+}
+do_something(c);  // 如果抵达此处前，c 没有初始化，那么传入的就是一个 nullptr，do_something 内部需要负责检测指针是否为 nullptr
+</code></pre>
+<p>如果 <code>do_something</code> 参数需要的是原始指针，可以用 <code>.get()</code> 获取出来：</p>
+<pre><code class="language-cpp">do_something(c.get());  // .get() 可以把智能指针转换回原始指针，但请注意原始指针不持有引用，不会延伸指向对象的生命周期
+</code></pre>
+<div id="admonition-info-2" class="admonition admonish-info" role="note" aria-labelledby="admonition-info-2-title">
+<div class="admonition-title">
+<div id="admonition-info-2-title">
+<p>Info</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-info-2"></a>
+</div>
+<div>
+<p>实际上，Java、Python 中的一切对象（除 int、str 等“钦定”的基础类型外）都是引用计数的智能指针 <code>shared_ptr</code>，只不过因为一切皆指针了，所以看起来好像没有指针了。</p>
+</div>
+</div>
+<h2 id="if-auto-与-while-auto"><a class="header" href="#if-auto-与-while-auto">if-auto 与 while-auto</a></h2>
+<p>需要先定义一个变量，然后判断某些条件的情况，非常常见：</p>
+<pre><code class="language-cpp">extern std::optional&lt;int&gt; some_func();
+
+auto opt = some_func();
+if (opt.has_value()) {
+    std::cout &lt;&lt; opt.value();
+}
+</code></pre>
+<p>C++17 引入的 if-auto 语法，可以就地书写变量定义和判断条件：</p>
+<pre><code class="language-cpp">extern std::optional&lt;int&gt; some_func();
+
+if (auto opt = some_func(); opt.has_value()) {
+    std::cout &lt;&lt; opt.value();
+}
+</code></pre>
+<p>对于支持 <code>(bool)opt</code> 的 <code>optional</code> 类型来说，后面的条件也可以省略：</p>
+<pre><code class="language-cpp">extern std::optional&lt;int&gt; some_func();
+
+if (auto opt = some_func()) {
+    std::cout &lt;&lt; opt.value();
+}
+
+// 等价于：
+auto opt = some_func();
+if (opt) {
+    std::cout &lt;&lt; opt.value();
+}
+</code></pre>
+<p>类似的还有 while-auto：</p>
+<pre><code class="language-cpp">extern std::optional&lt;int&gt; some_func();
+
+while (auto opt = some_func()) {
+    std::cout &lt;&lt; opt.value();
+}
+
+// 等价于：
+while (true) {
+    auto opt = some_func();
+    if (!opt) break;
+    std::cout &lt;&lt; opt.value();
+}
+</code></pre>
+<p>if-auto 最常见的配合莫过于 map.find：</p>
+<pre><code class="language-cpp">std::map&lt;int, int&gt; table;
+
+int key = 42;
+if (auto it = table.find(key); it != table.end()) {
+    std::cout &lt;&lt; it-&gt;second &lt;&lt; '\n';
+} else {
+    std::cout &lt;&lt; "not found\n";
+}
+</code></pre>
+<h2 id="bind-是历史糟粕应该由-lambda-表达式取代"><a class="header" href="#bind-是历史糟粕应该由-lambda-表达式取代">bind 是历史糟粕，应该由 Lambda 表达式取代</a></h2>
+<p>众所周知， <code>std::bind</code> 可以为函数绑定一部分参数，形成一个新的函数（对象）。</p>
+<pre><code class="language-cpp">int func(int x, int y) {
+    printf("func(%d, %d)\n", x, y);
+    return x + y;
+}
+
+auto new_func = std::bind(func, 1, std::placeholders::_1);
+
+new_func(2);  // 调用 new_func(2) 时，实际上调用的是 func(1, 2)
+}
+</code></pre>
+<p>输出：</p>
+<pre><code>func(1, 2)
+</code></pre>
+<p>当我们绑定出来的函数对象还需要接受参数时，就变得尤为复杂：需要使用占位符（placeholder）。</p>
+<pre><code class="language-cpp">int func(int x, int y, int z, int &amp;w);
+
+int w = rand();
+
+auto bound = std::bind(func, std::placeholders::_2, 1, std::placeholders::_1, std::ref(w)); //
+
+int res = bound(5, 6); // 等价于 func(6, 1, 5, w);
+</code></pre>
+<p>这是一个绑定器，把 <code>func</code> 的第二个参数和第四个参数固定下来，形成一个新的函数对象，然后只需要传入前面两个参数就可以调用原来的函数了。</p>
+<p>这是一个非常旧的技术，C++98 时代就有了。但是，现在有了 Lambda 表达式，可以更简洁地实现：</p>
+<pre><code class="language-cpp">int func(int x, int y, int z, int &amp;w);
+
+int w = rand();
+
+auto lambda = [&amp;w](int x, int y) { return func(y, 1, x, w); };
+
+int res = lambda(5, 6);
+</code></pre>
+<p>Lambda 表达式有许多优势：</p>
+<ul>
+<li>简洁：不需要写一大堆看不懂的 <code>std::placeholders::_1</code>，直接写变量名就可以了。</li>
+<li>灵活：可以在 Lambda 中使用任意多的变量，调整顺序，而不仅仅是 <code>std::placeholders::_1</code>。</li>
+<li>易懂：写起来和普通函数调用一样，所有人都容易看懂。</li>
+<li>捕获引用：<code>std::bind</code> 不支持捕获引用，总是拷贝参数，必须配合 <code>std::ref</code> 才能捕获到引用。而 Lambda 可以随意捕获不同类型的变量，按值（<code>[x]</code>）或按引用（<code>[&amp;x]</code>），还可以移动捕获（<code>[x = move(x)]</code>），甚至捕获 this（<code>[this]</code>）。</li>
+<li>夹带私货：可以在 lambda 体内很方便地夹带其他额外转换操作，比如：</li>
+</ul>
+<pre><code class="language-cpp">auto lambda = [&amp;w](int x, int y) { return func(y + 8, 1, x * x, ++w) * 2; };
+</code></pre>
+<h3 id="bind-的历史"><a class="header" href="#bind-的历史">bind 的历史</a></h3>
+<p>为什么 C++11 有了 Lambda 表达式，还要提出 <code>std::bind</code> 呢？</p>
+<p>虽然 bind 和 lambda 看似都是在 C++11 引入的，实际上 bind 的提出远远早于 lambda。</p>
+<div id="admonition-note-4" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-4-title">
+<div class="admonition-title">
+<div id="admonition-note-4-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-4"></a>
+</div>
+<div>
+<p>标准委员会：我们不生产库，我们只是 boost 的搬运工。</p>
+</div>
+</div>
+<p>当时还是 C++98，由于没有 lambda，难以创建函数对象，“捕获参数”非常困难。</p>
+<p>为了解决“捕获难”问题，在第三方库 boost 中提出了 <code>boost::bind</code>，由于当时只有 C++98，很多有益于函数式编程的特性都没有，所以实现的非常丑陋。</p>
+<p>例如，因为 C++98 没有变长模板参数，无法实现 <code>&lt;class ...Args&gt;</code>。所以实际上当时 boost 所有支持多参数的函数，实际上都是通过：</p>
+<pre><code class="language-cpp">void some_func();
+void some_func(int i1);
+void some_func(int i1, int i2);
+void some_func(int i1, int i2, int i3);
+void some_func(int i1, int i2, int i3, int i4);
+// ...
+</code></pre>
+<p>这样暴力重载几十个函数来实现的，而且参数数量有上限。通常会实现 0 到 20 个参数的重载，更多就不支持了。</p>
+<p>例如，我们知道现在 bind 需要配合各种 <code>std::placeholders::_1</code> 使用，有没有想过这套丑陋的占位符是为什么？为什么不用 <code>std::placeholder&lt;1&gt;</code>，这样不是更可扩展吗？</p>
+<p>没错，当时 <code>boost::bind</code> 就是用暴力重载几十个参数数量不等的函数，排列组合，嗯是排出来的，所以我们会看到 <code>boost::placeholders</code> 只有有限个数的占位符数量。</p>
+<p>糟糕的是，标准库的 <code>std::bind</code> 把 <code>boost::bind</code> 原封不动搬了过来，甚至 <code>placeholders</code> 的暴力组合也没有变，造成了 <code>std::bind</code> 如今丑陋的接口。</p>
+<p>人家 <code>boost::bind</code> 是因为不能修改语言语法，才只能那样憋屈的啊？可现在你码是标准委员会啊，你可以修改语言语法啊？</p>
+<p>然而，C++ 标准的更新是以“提案”的方式，逐步“增量”更新进入语言标准的。即使是在 C++98 到 C++11 这段时间内，内部也是有一个很长的消化流程的，也就是说有很多子版本，只是对外看起来好像只有一个 C++11。</p>
+<p>比方说，我 2001 年提出 <code>std::bind</code> 提案，2005 年被批准进入未来将要发布的 C++11 标准。然后又一个人在 2006 年提出其实不需要 bind，完全可以用更好的 lambda 语法来代替 bind，然后等到了 2008 年才批准进入即将发布的 C++11 标准。但是已经进入标准的东西就不会再退出了，哪怕还没有发布。就这样 bind 和 lambda 同时进入了标准。</p>
+<p>所以闹了半天，lambda 实际上是 bind 的上位替代，有了 lambda 根本不需要 bind 的。只不过是由于 C++ 委员会前后扯皮的“制度优势”，导致 bind 和他的上位替代 lambda 同时进入了 C++11 标准一起发布。</p>
+<div id="admonition-note-5" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-5-title">
+<div class="admonition-title">
+<div id="admonition-note-5-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-5"></a>
+</div>
+<div>
+<p>这下看懂了。</p>
+</div>
+</div>
+<p>很多同学就不理解，小彭老师说“lambda 是 bind 的上位替代”，他就质疑“可他们不都是 C++11 提出的吗？”</p>
+<p>有没有一种可能，C++11 和 C++98 之间为什么年代差了那么久远，就是因为一个标准一拖再拖，内部实际上已经迭代了好几个小版本了，才发布出来。</p>
+<div id="admonition-info-3" class="admonition admonish-info" role="note" aria-labelledby="admonition-info-3-title">
+<div class="admonition-title">
+<div id="admonition-info-3-title">
+<p>Info</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-info-3"></a>
+</div>
+<div>
+<p>再举个例子，CTAD 和 <code>optional</code> 都是 C++17 引入的，为什么还要 <code>make_optional</code> 这个帮手函数？不是说 CTAD 是 <code>make_xxx</code> 的上位替代吗？可见，C++ 标准中这种“同一个版本内”自己打自己耳光的现象比比皆是。</p>
+</div>
+</div>
+<div id="admonition-note-6" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-6-title">
+<div class="admonition-title">
+<div id="admonition-note-6-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-6"></a>
+</div>
+<div>
+<p>所以，现在还坚持用 bind 的，都是些 2005 年前后在象牙塔接受 C++ 教育，但又不肯“终身学习”的劳保。这批劳保又去“上岸”当“教师”，继续复制 2005 年的错误毒害青少年，实现了劳保的再生产。</p>
+</div>
+</div>
+<h3 id="thread-膝盖中箭"><a class="header" href="#thread-膝盖中箭">thread 膝盖中箭</a></h3>
+<p>糟糕的是，bind 的这种荼毒，甚至影响到了线程库：<code>std::thread</code> 的构造函数就是基于 <code>std::bind</code> 的！</p>
+<p>这导致了 <code>std::thread</code> 和 <code>std::bind</code> 一样，无法捕获引用。</p>
+<pre><code class="language-cpp">void thread_func(int &amp;x) {
+    x = 42;
+}
+
+int x = 0;
+std::thread t(thread_func, x);
+t.join();
+printf("%d\n", x); // 0
+</code></pre>
+<p>为了避免踩到 bind 的坑，我建议所有同学，构造 <code>std::thread</code> 时，统一只指定“单个参数”，也就是函数本身。如果需要捕获参数，请使用 lambda。因为 lambda 中，捕获了哪些变量，参数的顺序是什么，哪些捕获是引用，哪些捕获是拷贝，非常清晰。</p>
+<pre><code class="language-cpp">void thread_func(int &amp;x) {
+    x = 42;
+}
+
+int x = 0;
+std::thread t([&amp;x] {  // [&amp;x] 表示按引用捕获 x；如果写作 [x]，那就是拷贝捕获
+    thread_func(x);
+});
+t.join();
+printf("%d\n", x); // 42
+</code></pre>
+<h3 id="举个绑定随机数生成器例子"><a class="header" href="#举个绑定随机数生成器例子">举个绑定随机数生成器例子</a></h3>
+<p>bind 写法：</p>
+<pre><code class="language-cpp">std::mt19937 gen(seed);
+std::uniform_real_distribution&lt;double&gt; uni(0, 1);
+auto frand = std::bind(uni, std::ref(gen));
+double x = frand();
+double y = frand();
+</code></pre>
+<p>改用 lambda：</p>
+<pre><code class="language-cpp">std::mt19937 gen(seed);
+std::uniform_real_distribution&lt;double&gt; uni(0, 1);
+auto frand = [uni, &amp;gen] {
+    return uni(gen);
+};
+double x = frand();
+double y = frand();
+</code></pre>
+<h2 id="forward-迷惑性地不好用建议改用-fwd-宏"><a class="header" href="#forward-迷惑性地不好用建议改用-fwd-宏">forward 迷惑性地不好用，建议改用 FWD 宏</a></h2>
+<p>众所周知，当你在转发一个“万能引用”参数时：</p>
+<pre><code class="language-cpp">template &lt;class Arg&gt;
+void some_func(Arg &amp;&amp;arg) {
+    other_func(arg);
+}
+</code></pre>
+<p>如果此处 <code>arg</code> 传入的是右值引用，那么传入 <code>other_func</code> 就会变回左值引用了，不符合完美转发的要求。</p>
+<p>因此引入了 <code>forward</code>，他会检测 <code>arg</code> 是否为“右值”：如果是，则 <code>forward</code> 等价于 <code>move</code>；如果不是，则 <code>forward</code> 什么都不做（默认就是左值引用）。</p>
+<p>这弄得 <code>forward</code> 的外观非常具有迷惑性，又是尖括号又是圆括号的。</p>
+<pre><code class="language-cpp">template &lt;class Arg&gt;
+void some_func(Arg &amp;&amp;arg) {
+    other_func(std::forward&lt;Arg&gt;(arg));
+}
+</code></pre>
+<p>实际上，forward 的用法非常单一：永远是 <code>forward&lt;T&gt;(t)</code> 的形式，其中 <code>T</code> 是 <code>t</code> 变量的类型。</p>
+<p>又是劳保的魅力，利用同样是 C++11 的 <code>decltype</code> 就能获得 <code>t</code> 定义时的 <code>T</code>。</p>
+<pre><code class="language-cpp">void some_func(auto &amp;&amp;arg) {
+    other_func(std::forward&lt;decltype(arg)&gt;(arg));
+}
+</code></pre>
+<p>所以 <code>std::forward&lt;decltype(arg)&gt;(arg)</code> 实际才是 <code>forward</code> 的正确用法，只不过因为大多数时候你是模板参数 <code>Arg &amp;&amp;</code>，有的人偷懒，就把 <code>decltype(arg)</code> 替换成已经匹配好的模板参数 <code>Arg</code> 了，实际上是等价的。</p>
+<p>这里需要复读 <code>arg</code> 太纱币了。实际上，我们可以定义一个宏：</p>
+<pre><code class="language-cpp">#define FWD(arg) std::forward&lt;decltype(arg)&gt;(arg)
+</code></pre>
+<p>这样就可以简化为：</p>
+<pre><code class="language-cpp">void some_func(auto &amp;&amp;arg) {
+    other_func(FWD(arg));
+}
+</code></pre>
+<p>少了烦人的尖括号，看起来容易懂多了。</p>
+<div id="admonition-abstract-3" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-3-title">
+<div class="admonition-title">
+<div id="admonition-abstract-3-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-3"></a>
+</div>
+<div>
+<p>但是，我们同学有一个问题，为什么 <code>std::forward</code> 要写成 <code>std::forward&lt;T&gt;</code> 的形式呢？为什么不是 <code>std::forward(t)</code> 呢？因为这样写的话，<code>forward</code> 也没法知道你的 <code>t</code> 是左是右了（函数参数始终会默认推导为左，即使定义的 <code>t</code> 是右）因此必须告诉 <code>forward</code>，<code>t</code> 的定义类型，也就是 <code>T</code>，或者通过 <code>decltype(t)</code> 来获得 <code>T</code>。</p>
+</div>
+</div>
+<p>总之，如果你用的是 <code>auto &amp;&amp;</code> 参数，那么 <code>FWD</code> 会很方便（自动帮你 <code>decltype</code>）。但是如果你用的是模板参数 <code>T &amp;&amp;</code>，那么 <code>FWD</code> 也可以用，因为 <code>decltype(t)</code> 总是得到 <code>T</code>。</p>
+<h2 id="bind-绑定成员函数是陋习改用-lambda-或-bind_front"><a class="header" href="#bind-绑定成员函数是陋习改用-lambda-或-bind_front">bind 绑定成员函数是陋习，改用 lambda 或 bind_front</a></h2>
+<p>使用“成员函数指针”语法（这一奇葩语法在 C++98 就有）配合 <code>std::bind</code>，可以实现绑定一个类型的成员函数：</p>
+<pre><code class="language-cpp">struct Class {
+    void world() {
+        puts("world!");
+    }
+
+    void hello() {
+        auto memfn = std::bind(&amp;Class::world, this); // 将 this-&gt;world 绑定成一个可以延后调用的函数对象
+        memfn();
+        memfn();
+    }
+}
+</code></pre>
+<p>不就是捕获 this 吗？我们 lambda 也可以轻易做到！且无需繁琐地写出 this 类的完整类名，还写个脑瘫 <code>&amp;::</code> 强碱你的键盘。</p>
+<pre><code class="language-cpp">struct Class {
+    void world() {
+        puts("world!");
+    }
+
+    void hello() {
+        auto memfn = [this] {
+            world(); // 等价于 this-&gt;world()
+        };
+        memfn();
+        memfn();
+    }
+}
+</code></pre>
+<p>bind 的缺点是，当我们的成员函数含有多个参数时，bind 就非常麻烦了：需要一个个写出 placeholder，而且数量必须和 <code>world</code> 的参数数量一致。每次 <code>world</code> 要新增参数时，所有 bind 的地方都需要加一下 placeholder，非常沙雕。</p>
+<pre><code class="language-cpp">struct Class {
+    void world(int x, int y) {
+        printf("world(%d, %d)\n");
+    }
+
+    void hello() {
+        auto memfn = std::bind(&amp;Class::world, this, std::placeholders::_1, std::placeholders::_2);
+        memfn(1, 2);
+        memfn(3, 4);
+    }
+}
+</code></pre>
+<p>而且，如果有要绑定的目标函数有多个参数数量不同的重载，那 bind 就完全不能工作了！</p>
+<pre><code class="language-cpp">struct Class {
+    void world(int x, int y) {
+        printf("world(%d, %d)\n");
+    }
+
+    void world(double x) {
+        printf("world(%d)\n");
+    }
+
+    void hello() {
+        auto memfn = std::bind(&amp;Class::world, this, std::placeholders::_1, std::placeholders::_2);
+        memfn(1, 2);
+        memfn(3.14); // 编译出错！死扣占位符的 bind 必须要求两个参数，即使 world 明明有单参数的重载
+
+        auto memfn_1arg = std::bind(&amp;Class::world, this, std::placeholders::_1);
+        memfn_1arg(3.14); // 必须重新绑定一个“单参数版”才 OK
+    }
+}
+</code></pre>
+<p>而 C++14 起 lambda 支持了变长参数，就不用这么死板：</p>
+<pre><code class="language-cpp">struct Class {
+    void world(int x, int y) {
+        printf("world(%d, %d)\n");
+    }
+
+    void world(double x) {
+        printf("world(%d)\n");
+    }
+
+    void hello() {
+        auto memfn = [this] (auto ...args) { // 让 lambda 接受任意参数
+            world(args...); // 拷贝转发所有参数给 world
+        };
+        memfn(1, 2); // 双参数：OK
+        memfn(3.14); // 单参数：OK
+    }
+}
+</code></pre>
+<p>更好的是配合上文提到的 <code>FWD</code> 宏实现参数的完美转发：</p>
+<pre><code class="language-cpp">struct Class {
+    void world(int &amp;x, int &amp;&amp;y) {
+        printf("world(%d, %d)\n");
+        ++x;
+    }
+
+    void world(double const &amp;x) {
+        printf("world(%d)\n");
+    }
+
+    void hello() {
+        auto memfn = [this] (auto &amp;&amp;...args) { // 让 lambda 接受万能引用做参数
+            world(FWD(args)...); // 通过 FWD 完美转发给 world，避免引用退化
+        };
+        int x = 1;
+        memfn(x, 2); // 双参数：OK
+        memfn(3.14); // 单参数：OK
+    }
+}
+</code></pre>
+<p>同样可以定义一个称手的宏：</p>
+<pre><code class="language-cpp">#define BIND(func, ...) [__VA_ARGS__] (auto &amp;&amp;..._args) { func(FWD(_args)...); }
+</code></pre>
+<div id="admonition-tip-7" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-7-title">
+<div class="admonition-title">
+<div id="admonition-tip-7-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-7"></a>
+</div>
+<div>
+<p>这里使用了宏参数包，此处 <code>__VA_ARGS__</code> 就是宏的 <code>...</code> 中的内容。注意区分宏的 <code>...</code> 和 C++ 变长模板的 <code>...</code> 是互相独立的。</p>
+</div>
+</div>
+<pre><code class="language-cpp">struct Class {
+    void world(int &amp;x, int &amp;&amp;y) {
+        printf("world(%d, %d)\n");
+        ++x;
+    }
+
+    void world(double const &amp;x) {
+        printf("world(%d)\n");
+    }
+
+    void hello() {
+        auto memfn = BIND(world, this);
+        int x = 1;
+        memfn(x, 2);
+        memfn(3.14);
+    }
+}
+
+int main() {
+    // 捕获非 this 的成员函数也 OK：
+    Class c;
+    auto memfn = BIND(c.world, &amp;c); // [&amp;c] 按引用捕获 c 变量
+    // 展开为：
+    auto memfn = [&amp;c] (auto &amp;&amp;..._args) { c.world(std::forward&lt;decltype(_args)&gt;(_args)...); }
+    memfn(3.14);
+}
+</code></pre>
+<div id="admonition-note-7" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-7-title">
+<div class="admonition-title">
+<div id="admonition-note-7-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-7"></a>
+</div>
+<div>
+<p><code>BIND</code> 这个名字是随便取的，取这个名字是为了辱 <code>std::bind</code>。</p>
+</div>
+</div>
+<p>为了解决 bind 不能捕获多参数重载的情况，C++17 还引入了 <code>std::bind_front</code> 和 <code>std::bind_back</code>，他们不需要 placeholder，但只能用于要绑定的参数在最前或者最后的特殊情况。</p>
+<p>其中 <code>std::bind_front</code> 对于我们只需要把第一个参数绑定为 <code>this</code>，其他参数如数转发的场景，简直是雪中送炭！</p>
+<pre><code class="language-cpp">struct Class {
+    void world(int x, int y) {
+        printf("world(%d, %d)\n");
+    }
+
+    void world(double x) {
+        printf("world(%d)\n");
+    }
+
+    void hello() {
+        auto memfn = std::bind_front(&amp;Class::world, this);
+        memfn(1, 2);
+        memfn(3.14); // OK！
+    }
+}
+</code></pre>
+<pre><code class="language-cpp">auto memfn = std::bind_front(&amp;Class::world, this); // C++17 的 bind 孝子补救措施
+auto memfn = BIND(world, this);                    // 小彭老师的 BIND 宏，C++14 起可用
+</code></pre>
+<p>你更喜欢哪一种呢？</p>
+<h2 id="救命为什么我的全局函数不能作为函数对象"><a class="header" href="#救命为什么我的全局函数不能作为函数对象">救命！为什么我的全局函数不能作为函数对象？</a></h2>
+<p>当你的全局函数是模板函数，或带有重载的函数时：</p>
+<pre><code class="language-cpp">template &lt;class T&gt;
+T square(T const t) {
+    return t * t;
+}
+
+template &lt;class Fn&gt;
+void do_something(Fn &amp;&amp;fn) {
+    fn(2);
+    fn(3.14);
+}
+
+int main() {
+    do_something(square); // 编译错误：有歧义的重载
+}
+</code></pre>
+<p>就会出现这样恼人的编译错误：</p>
+<pre><code>test.cpp: In instantiation of 'void do_something(Fn&amp;&amp;) [with Fn = T (*)(T) [with T = double]]':
+test.cpp:18:21:   required from here
+test.cpp:14:9: error: no matching function for call to 'do_something(&lt;unresolved overloaded function type&gt;)'
+     do_something(square);
+     ^~~~~~~~~~~~~
+test.cpp:7:3: note: candidate: 'template&lt;class Fn&gt; void do_something(Fn&amp;&amp;) [with Fn = T (*)(T) [with T = double]]'
+   void do_something(Fn &amp;&amp;fn) {
+   ^~~~~~~~~~~~~
+test.cpp:7:3: note:   template argument deduction/substitution failed:
+test.cpp:14:21: note:   couldn't deduce template parameter 'Fn'
+     do_something(square);
+     ~~~~~~~~~~~~~^~~~~~
+</code></pre>
+<div id="admonition-abstract-4" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-4-title">
+<div class="admonition-title">
+<div id="admonition-abstract-4-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-4"></a>
+</div>
+<div>
+<p>这是因为，模板函数和有重载的函数，是“多个函数对象”的“幻想联合体”，而 <code>do_something</code> 的 <code>Fn</code> 需要“单个”具体的函数对象。</p>
+<p>一般来说是需要 <code>square&lt;int&gt;</code> 和 <code>square&lt;double&gt;</code> 才能变成“具体”的“单个”函数对象，传入 <code>do_something</code> 的 <code>Fn</code> 模板参数。</p>
+<p>但是在“函数调用”的语境下，因为已知参数的类型，得益于 C++ 的“重载”机制，带有模板参数的函数，可以自动匹配那个模板参数为你参数的类型。</p>
+<p>但现在你并没有指定调用参数，而只是指定了一个函数名 <code>square</code>，那 C++ “重载”机制无法确定你需要的是 <code>square&lt;int&gt;</code> 还是 <code>square&lt;double&gt;</code> 中的哪一个函数指针，他们的类型都不同，就无法具象花出一个函数对象类型 <code>Fn</code> 来，导致 <code>&lt;unresolved overloaded function type&gt;</code> 错误。</p>
+</div>
+</div>
+<p>有趣的是，只需要套一层 lambda 就能解决：</p>
+<pre><code class="language-cpp">    do_something([] (auto x) { return square(x); }); // 编译通过
+</code></pre>
+<p>或者用我们上面推荐的 <code>BIND</code> 宏：</p>
+<pre><code class="language-cpp">#define FWD(arg) std::forward&lt;decltype(arg)&gt;(arg)
+#define BIND(func, ...) [__VA_ARGS__] (auto &amp;&amp;..._args) { func(FWD(_args)...); }
+
+    do_something(BIND(square)); // 编译通过
+</code></pre>
+<p>有时候，如果你想传递 <code>this</code> 的成员函数为函数对象，也会出现这种恼人的错误：</p>
+<pre><code class="language-cpp">struct Class {
+    int func(int x) {
+        return x + 1;
+    }
+
+    void test() {
+        do_something(this-&gt;func); // 这里又会产生烦人的 unresolved overload 错误！
+    }
+};
+</code></pre>
+<p>同样可以包一层 lambda，或者用小彭老师提供的 <code>BIND</code> 宏，麻痹的编译器就不狗叫了：</p>
+<pre><code class="language-cpp">#define FWD(arg) std::forward&lt;decltype(arg)&gt;(arg)
+#define BIND(func, ...) [__VA_ARGS__] (auto &amp;&amp;..._args) { func(FWD(_args)...); }
+
+    void test() {
+        do_something(BIND(func, this)); // 搞定
+    }
+</code></pre>
+<div id="admonition-note-8" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-8-title">
+<div class="admonition-title">
+<div id="admonition-note-8-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-8"></a>
+</div>
+<div>
+<p>建议修改标准库，把小彭老师这两个真正好用的宏塞到 <code>&lt;utility&gt;</code> 和 <code>&lt;functional&gt;</code> 里，作为 C++26 标准的一部分。</p>
+</div>
+</div>
+<h2 id="map--any-外挂属性"><a class="header" href="#map--any-外挂属性">map + any 外挂属性</a></h2>
+<p>TODO</p>
+<h2 id="自定义-shared_ptr-的-deleter"><a class="header" href="#自定义-shared_ptr-的-deleter">自定义 shared_ptr 的 deleter</a></h2>
+<h2 id="check_cuda-类错误检测宏"><a class="header" href="#check_cuda-类错误检测宏">CHECK_CUDA 类错误检测宏</a></h2>
+<h2 id="函数默认参数求值的位置是调用者"><a class="header" href="#函数默认参数求值的位置是调用者">函数默认参数求值的位置是调用者</a></h2>
+<h2 id="设置-locale-为-utf8"><a class="header" href="#设置-locale-为-utf8">设置 locale 为 .utf8</a></h2>
+<h2 id="花括号实现安全的类型转换检查"><a class="header" href="#花括号实现安全的类型转换检查">花括号实现安全的类型转换检查</a></h2>
+<h2 id="成员函数针对-this-的移动重载"><a class="header" href="#成员函数针对-this-的移动重载">成员函数针对 this 的移动重载</a></h2>
+<h2 id="check_cuda-类错误检测宏-1"><a class="header" href="#check_cuda-类错误检测宏-1">CHECK_CUDA 类错误检测宏</a></h2>
+<h2 id="函数默认参数求值的位置是调用者-1"><a class="header" href="#函数默认参数求值的位置是调用者-1">函数默认参数求值的位置是调用者</a></h2>
+<h2 id="花括号实现安全的类型转换检查-1"><a class="header" href="#花括号实现安全的类型转换检查-1">花括号实现安全的类型转换检查</a></h2>
+<h2 id="临时右值转左值"><a class="header" href="#临时右值转左值">临时右值转左值</a></h2>
+<p>C++ 有个特性：支持纯右值(prvalue)隐式转换成 const 的左值引用。</p>
+<p>翻译：<code>int &amp;&amp;</code> 可以自动转换成 <code>int const &amp;</code>。</p>
+<pre><code class="language-cpp">void func(int const &amp;i);
+
+func(1);  // OK：自动创建一个变量保存 1，然后作为 int const &amp; 参数传入
+</code></pre>
+<p>实际上就等价于：</p>
+<pre><code class="language-cpp">const int tmp = 1;
+func(tmp);
+</code></pre>
+<p>但是，<code>int &amp;&amp;</code> 却不能自动转换成 <code>int &amp;</code>。</p>
+<pre><code class="language-cpp">void func(int &amp;i);
+
+func(1);  // 错误：无法从 int &amp;&amp; 自动转换成 int &amp;
+</code></pre>
+<div id="admonition-tip-8" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-8-title">
+<div class="admonition-title">
+<div id="admonition-tip-8-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-8"></a>
+</div>
+<div>
+<p>C++ 官方设置这个限制，是出于语义安全性考虑，因为参数接受 <code>int &amp;</code> 的，一般都意味着这个是用作返回值，而如果 <code>func</code> 的参数是，<code>func(1)</code>。</p>
+</div>
+</div>
+<p>为了绕开这个规则，我们可以定义一个帮手函数：</p>
+<pre><code class="language-cpp">T &amp;temporary(T const &amp;t) {
+    return const_cast&lt;T &amp;&gt;(t);
+}
+
+// 或者：
+T &amp;temporary(T &amp;&amp;t) {
+    return const_cast&lt;T &amp;&gt;(t);
+}
+</code></pre>
+<p>然后，就可以快乐地转换纯右值为非 const 左值了：</p>
+<pre><code class="language-cpp">void func(int &amp;i);
+
+func(temporary(1));
+</code></pre>
+<div id="admonition-info-4" class="admonition admonish-info" role="note" aria-labelledby="admonition-info-4-title">
+<div class="admonition-title">
+<div id="admonition-info-4-title">
+<p>Info</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-info-4"></a>
+</div>
+<div>
+<p>在 Libreoffice 源码中就有应用这个帮手函数。</p>
+</div>
+</div>
+<div id="admonition-warning-2" class="admonition admonish-warning" role="note" aria-labelledby="admonition-warning-2-title">
+<div class="admonition-title">
+<div id="admonition-warning-2-title">
+<p>Warning</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-warning-2"></a>
+</div>
+<div>
+<p>临时变量的生命周期是一行</p>
+</div>
+</div>
+<h2 id="ostringstream-格式化字符串"><a class="header" href="#ostringstream-格式化字符串">ostringstream 格式化字符串</a></h2>
+<pre><code class="language-cpp">std::string name = "你好";
+int answer = 42;
+auto str = std::format("你好，{}！答案是 {}，十六进制：0x{:02x}\n", name, answer, answer);
+</code></pre>
+<p>没有 C++20 之前，要么使用第三方的 <code>fmt::format</code>，要么只能使用字符串的 <code>+</code> 运算符拙劣地拼接：</p>
+<pre><code class="language-cpp">auto str = std::string("你好，") + name + "！答案是 " + std::to_string(answer) + "，十六进制：0x" + std::to_string(answer) + "\n";
+</code></pre>
+<p>这样做效率低下，且不易阅读。而且也无法实现数字按“十六进制”转字符串。</p>
+<p>可以用 <code>std::ostringstream</code>，其用法与 <code>std::cout</code> 相同。只不过会把结果写入一个字符串（而不是直接输出），可以用 <code>.str()</code> 取出那个字符串。</p>
+<pre><code class="language-cpp">#include &lt;sstream&gt;
+
+std::ostringstream oss;
+oss &lt;&lt; "你好，" &lt;&lt; name &lt;&lt; "！答案是 " &lt;&lt; answer &lt;&lt; "，十六进制：0x" &lt;&lt; std::hex &lt;&lt; std::setfill('0') &lt;&lt; std::setw(2) &lt;&lt; answer &lt;&lt; "\n";
+auto str = oss.str();
+</code></pre>
+<p>利用临时变量语法，可以浓缩写在一行里，做个 format 拙劣的模仿者：</p>
+<pre><code class="language-cpp">auto str = (std::ostringstream() &lt;&lt; "你好，" &lt;&lt; name &lt;&lt; "！答案是 " &lt;&lt; answer &lt;&lt; "，十六进制：0x" &lt;&lt; std::hex &lt;&lt; std::setfill('0') &lt;&lt; std::setw(2) &lt;&lt; answer &lt;&lt; "\n").str();
+</code></pre>
+<h2 id="adl-机制实现静态多态"><a class="header" href="#adl-机制实现静态多态">ADL 机制实现静态多态</a></h2>
+<p>TODO</p>
+<h2 id="shared_from_this"><a class="header" href="#shared_from_this">shared_from_this</a></h2>
+<h2 id="requires-语法检测是否存在指定成员函数"><a class="header" href="#requires-语法检测是否存在指定成员函数">requires 语法检测是否存在指定成员函数</a></h2>
+<h2 id="设置-locale-为-utf8-解决-windows-编码难问题"><a class="header" href="#设置-locale-为-utf8-解决-windows-编码难问题">设置 locale 为 .utf8 解决 Windows 编码难问题</a></h2>
+<pre><code class="language-cpp">system("chcp 65001");
+setlocale("LC_ALL", ".utf-8");
+</code></pre>
+<div id="admonition-tip-9" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-9-title">
+<div class="admonition-title">
+<div id="admonition-tip-9-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip-9"></a>
+</div>
+<div>
+<p>详见 <a href="unicode.html">Unicode 专题章节</a>。</p>
+</div>
+</div>
+<h2 id="成员函数针对-this-的移动重载-1"><a class="header" href="#成员函数针对-this-的移动重载-1">成员函数针对 this 的移动重载</a></h2>
+<h2 id="位域bit-field"><a class="header" href="#位域bit-field">位域（bit-field）</a></h2>
+<p>在互联网编程和各种与硬盘、序列化打交道的场景中，常常需要按位拆分单个字节。</p>
+<p>C 语言有专门照顾此类工作的语法糖：位域。</p>
+<p>位域是一种特殊的结构体成员，可以对位进行分组，方便读取。例如，我们想要从一个字节中读取三个状态位：</p>
+<pre><code class="language-cpp">struct Flag {
+    uint8_t a : 4;  // 低 4 位
+    uint8_t b : 4;  // 高 4 位
+};
+
+sizeof(Flag); // 1 字节大小（共 8 位）
+
+Flag f = std::bit_cast&lt;Flag&gt;(0x21);
+f.a; // 0x1
+f.b; // 0x2
+</code></pre>
+<p>以上的代码等价于：</p>
+<pre><code class="language-cpp">uint8_t f = 0x21;
+int a = f &amp; 0xF; // 0x1
+int b = f &gt;&gt; 4;  // 0x2
+</code></pre>
+<h2 id="vector--unordered_map--lru-cache"><a class="header" href="#vector--unordered_map--lru-cache">vector + unordered_map = LRU cache</a></h2>
+<h2 id="lambda-捕获-unique_ptr-导致-function-报错怎么办"><a class="header" href="#lambda-捕获-unique_ptr-导致-function-报错怎么办">Lambda 捕获 unique_ptr 导致 function 报错怎么办</a></h2>
+<h2 id="多线程通信应基于队列而不是共享全局变量"><a class="header" href="#多线程通信应基于队列而不是共享全局变量">多线程通信应基于队列，而不是共享全局变量</a></h2>
+<h2 id="raii-的-finally-帮手类"><a class="header" href="#raii-的-finally-帮手类">RAII 的 finally 帮手类</a></h2>
+<h2 id="swap-缩小-mutex-区间代价"><a class="header" href="#swap-缩小-mutex-区间代价">swap 缩小 mutex 区间代价</a></h2>
+<h2 id="namespace-别名"><a class="header" href="#namespace-别名">namespace 别名</a></h2>
+<p>有些嵌套很深的名字空间每次都要复读非常啰嗦。</p>
+<pre><code class="language-cpp">#include &lt;filesystem&gt;
+
+int main() {
+    std::filesystem::path p = "/var/www/html";
+    ...
+}
+</code></pre>
+<p>如果 <code>using namespace</code> 的话，又觉得污染全局名字空间了。</p>
+<pre><code class="language-cpp">#include &lt;filesystem&gt;
+
+using namespace std::filesystem;
+
+int main() {
+    std::filesystem::path p = "/var/www/html";
+    ...
+}
+</code></pre>
+<p>可以用 C++11 的 <code>namespace =</code> 语法，给名字空间取个别名。</p>
+<pre><code class="language-cpp">#include &lt;filesystem&gt;
+
+namespace fs = std::filesystem;
+
+int main() {
+    fs::path p = "/var/www/html";
+    ...
+}
+</code></pre>
+<p>这样以后就可以 <code>fs</code> 这个简称访问了。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="struct_layout.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="lambda.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="struct_layout.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="lambda.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="theme/custom.js"></script>
+
+
+    </div>
+    </body>
+</html>

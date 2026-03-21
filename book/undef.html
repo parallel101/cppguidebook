@@ -1,0 +1,1061 @@
+<!DOCTYPE HTML>
+<html lang="zh" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>未定义行为完整列表 - 小彭大典</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="小彭大典是一本关于现代 C++ 编程的权威指南，它涵盖了从基础知识到高级技巧的内容，适合初学者和有经验的程序员阅读。">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/custom.css">
+        <link rel="stylesheet" href="theme/mdbook-admonish.css">
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">小彭大典</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook/edit/main/src/undef.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="未定义行为完整列表"><a class="header" href="#未定义行为完整列表">未定义行为完整列表</a></h1>
+<p>如有疏漏，可以在 <a href="https://github.com/parallel101/cppguidebook">GitHub</a> 补充。</p>
+<h2 id="建议开启标准库的调试模式"><a class="header" href="#建议开启标准库的调试模式">建议开启标准库的调试模式</a></h2>
+<p>可以帮助你监测未定义行为</p>
+<ul>
+<li>msvc: Debug 配置</li>
+<li>gcc: 定义 <code>_GLIBCXX_DEBUG</code> 宏</li>
+</ul>
+<h2 id="空指针类"><a class="header" href="#空指针类">空指针类</a></h2>
+<h3 id="不能解引用空指针通常会产生崩溃但也可能被优化产生奇怪的现象"><a class="header" href="#不能解引用空指针通常会产生崩溃但也可能被优化产生奇怪的现象">不能解引用空指针（通常会产生崩溃，但也可能被优化产生奇怪的现象）</a></h3>
+<p>只要解引用就错了，无论是否读取或写入</p>
+<pre><code class="language-cpp">int *p = nullptr;
+*p;          // 错！
+&amp;*p;         // 错！
+*p = 0;      // 错！
+int i = *p;  // 错！
+</code></pre>
+<pre><code class="language-cpp">unique_ptr&lt;int&gt; p = nullptr;
+p.get();     // 可以
+&amp;*p;         // 错！
+</code></pre>
+<p>例如在 Debug 配置的 MSVC STL 中，<code>&amp;*p</code> 会产生断言异常，而 <code>p.get()</code> 不会。</p>
+<pre><code class="language-cpp">if (&amp;*p != nullptr) { // 可能被优化为 if (1)，因为未定义行为被排除了
+}
+if (p != nullptr) {   // 不会被优化，正常判断
+}
+</code></pre>
+<h3 id="不能解引用-end-迭代器"><a class="header" href="#不能解引用-end-迭代器">不能解引用 end 迭代器</a></h3>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = {1, 2, 3, 4};
+int *begin = &amp;*v.begin();
+int *end = &amp;*v.end(); // 错！
+</code></pre>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = {};
+int *begin = &amp;*v.begin(); // 错!
+int *end = &amp;*v.end();     // 错！
+</code></pre>
+<p>建议改用 data 和 size</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = {1, 2, 3, 4};
+int *begin = v.data();
+int *end = v.data() + v.size();
+</code></pre>
+<h3 id="this-指针不能为空"><a class="header" href="#this-指针不能为空">this 指针不能为空</a></h3>
+<pre><code class="language-cpp">struct C {
+    void print() {
+        if (this == nullptr) { // 此分支可能会被优化为 if (0) { ... } 从而永不生效
+            std::cout &lt;&lt; "this 是空\n";
+        }
+    }
+};
+
+void func() {
+    C *c = nullptr;
+    c-&gt;print(); // 错！
+}
+</code></pre>
+<h3 id="空指针不能调用成员函数"><a class="header" href="#空指针不能调用成员函数">空指针不能调用成员函数</a></h3>
+<pre><code class="language-cpp">struct C{
+    void f() {}
+    static void f2() {}
+};
+
+void func(){
+    C* c = nullptr;
+    c-&gt;f();  // 行为未定义
+    c-&gt;f2(); // 行为未定义
+}
+</code></pre>
+<p>本质上是因为<strong>空指针解引用</strong>。对于内建类型，表达式 <code>E1-&gt;E2</code> 与 <code>(*E1).E2</code> 严格等价，任何指针类型都是内建类型。</p>
+<p><code>c-&gt;f()</code>、<code>c-&gt;f2()</code> 等价于：</p>
+<pre><code class="language-cpp">(*c).f();
+(*c).f2();
+</code></pre>
+<h2 id="指针别名类"><a class="header" href="#指针别名类">指针别名类</a></h2>
+<h3 id="reinterpret_cast-后以不兼容的类型访问"><a class="header" href="#reinterpret_cast-后以不兼容的类型访问">reinterpret_cast 后以不兼容的类型访问</a></h3>
+<pre><code class="language-cpp">int i;
+float f = *(float *)&amp;i; // 错！
+</code></pre>
+<p>例外：char、signed char、unsigned char 和 std::byte 总是兼容任何类型</p>
+<pre><code class="language-cpp">int i;
+char *buf = (char *)&amp;i; // 可以
+buf[0] = 1;             // 可以
+</code></pre>
+<blockquote>
+<p>uint8_t 是 unsigned char 的别名，所以也兼容任何类型</p>
+</blockquote>
+<p>例外：int 和 unsigned int 互相兼容</p>
+<pre><code class="language-cpp">int i;
+unsigned int f = *(unsigned int *)&amp;i; // 可以
+</code></pre>
+<p>例外：const int * 和 int * 互相兼容（二级指针强转）</p>
+<pre><code class="language-cpp">const int *cp;
+int *p = *(int **)&amp;cp;  // 可以
+</code></pre>
+<p>注意：只取决于访问时的类型是否正确，中间可以转换为别的类型（如 void * 和 uintptr_t），只需最后访问时转换回正确的指针类型即可</p>
+<pre><code class="language-cpp">int i;
+*(int *)(uintptr_t)&amp;i;  // 可以
+*(int *)(void *)&amp;i;  // 可以
+*(int *)(float *)&amp;i;  // 可以
+</code></pre>
+<h3 id="union-访问不是激活的成员"><a class="header" href="#union-访问不是激活的成员">union 访问不是激活的成员</a></h3>
+<pre><code class="language-cpp">float bitCast(int i) {
+    union {
+        int i;
+        float f;
+    } u;
+    u.i = i;
+    return u.f; // 错！
+}
+</code></pre>
+<p>特例：公共的前缀成员可以安全地访问</p>
+<pre><code class="language-cpp">int foo(int i) {
+    union {
+        struct {
+            int tag;
+            int value;
+        } m1;
+        struct {
+            int tag;
+            float value;
+        } m2;
+    } u;
+    u.m1.tag = i;
+    return u.m2.tag; // 可以
+}
+</code></pre>
+<p>如需在 float 和 int 之间按位转换，建议改用 memcpy，因为 memcpy 内部被认为是以 char 指针访问的，char 总是兼容任何类型</p>
+<pre><code class="language-cpp">float bitCast(int i) {
+    float f;
+    memcpy(&amp;f, &amp;i, sizeof(i));
+    return f;
+}
+</code></pre>
+<p>或 C++20 的 <code>std::bit_cast</code></p>
+<pre><code class="language-cpp">float bitCast(int i) {
+    float f = std::bit_cast&lt;float&gt;(i);
+    return f;
+}
+</code></pre>
+<h3 id="t-类型指针必须对齐到-alignoft"><a class="header" href="#t-类型指针必须对齐到-alignoft">T 类型指针必须对齐到 alignof(T)</a></h3>
+<pre><code class="language-cpp">struct alignas(64) C { // 假设 alignof(int) 是 4
+    int i;
+    char c;
+};
+
+C *p = (C *)malloc(sizeof(C)); // 错！malloc 产生的指针只保证对齐到 max_align_t（GCC 上是 16 字节）大小，并不保证对齐到 C 所需的 64 字节
+C *p = new C;  // 可以，new T 总是保证对齐到 alignof(T)
+</code></pre>
+<pre><code class="language-cpp">char buf[sizeof(int)];
+int *p = (int *)buf;  // 错！
+</code></pre>
+<pre><code class="language-cpp">alignas(alignof(int)) char buf[sizeof(int)];
+int *p = (int *)buf;  // 可以
+</code></pre>
+<pre><code class="language-cpp">char buf[sizeof(int) * 2];
+int *p = (int *)(((uintptr_t)buf + sizeof(int) - 1) &amp; ~(alignof(int) - 1));  // 可以
+</code></pre>
+<h3 id="从父类-static_cast-到不符合的子类后访问"><a class="header" href="#从父类-static_cast-到不符合的子类后访问">从父类 static_cast 到不符合的子类后访问</a></h3>
+<pre><code class="language-cpp">struct Base {};
+struct Derived : Base {};
+
+Base b;
+Derived d = *(Derived *)&amp;b;              // 错！
+Derived d = *static_cast&lt;Derived *&gt;(&amp;b); // 错！
+Derived d = static_cast&lt;Derived &amp;&gt;(b);   // 错！
+</code></pre>
+<pre><code class="language-cpp">Derived obj;
+Base *bp = &amp;obj;
+Derived d = *(Derived *)bp;              // 可以
+Derived d = *static_cast&lt;Derived *&gt;(bp); // 可以
+Derived d = static_cast&lt;Derived &amp;&gt;(*bp); // 可以
+</code></pre>
+<h3 id="bool-类型不得出现-0-和-1-以外的值"><a class="header" href="#bool-类型不得出现-0-和-1-以外的值">bool 类型不得出现 0 和 1 以外的值</a></h3>
+<p>布尔类型 bool，只有 true 和 false 两种取值。</p>
+<p>bool 虽然占据 1 字节（8 位）内存空间，但其中只有一个有效位，也就是最低位。</p>
+<p>只有这个最低位可以是 0 或 1，其余 7 位必须始终保持为 0。</p>
+<p>如果其余位中出现了非 0 的位，也就是出现 0 和 1 以外的取值，则是未定义行为。</p>
+<pre><code class="language-cpp">char c = 0;
+bool b = *(bool *)&amp;c;   // 可以，b = false
+</code></pre>
+<pre><code class="language-cpp">char c = 1;
+bool b = *(bool *)&amp;c;   // 可以，b = true
+</code></pre>
+<pre><code class="language-cpp">char c = 2;
+bool b = *(bool *)&amp;c;   // 未定义行为
+</code></pre>
+<h2 id="算数类"><a class="header" href="#算数类">算数类</a></h2>
+<h3 id="有符号整数的加减乘除模不能溢出"><a class="header" href="#有符号整数的加减乘除模不能溢出">有符号整数的加减乘除模不能溢出</a></h3>
+<pre><code class="language-cpp">int i = INT_MAX;
+i + 1;  // 错！
+</code></pre>
+<p>但无符号可以，无符号整数保证：溢出必定回环 (wrap-around)</p>
+<pre><code class="language-cpp">unsigned int i = UINT_MAX;
+i + 1;  // 可以，会得到 0
+</code></pre>
+<p>如需对有符号整数做回环，可以先转换为相应的 unsigned 类型，算完后再转回来</p>
+<pre><code class="language-cpp">int i = INT_MAX;
+(int)((unsigned int)i + 1);  // 可以，会得到一个负数 INT_MIN
+</code></pre>
+<div id="admonition-abstract" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-title">
+<div class="admonition-title">
+<div id="admonition-abstract-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract"></a>
+</div>
+<div>
+<p>如下写法更具有可移植性，因为无符号数向有符号数转型时若超出有符号数的表示范围则为实现定义行为（编译器厂商决定结果，但不是未定义行为）</p>
+</div>
+</div>
+<pre><code class="language-cpp">std::bit_cast&lt;int&gt;((unsigned int)i + i);
+</code></pre>
+<p>有符号整数的加减乘除模运算结果结果必须在表示范围内：例如对于 int a 和 int b，若 a/b 的结果不可用 int 表示，那么 a/b 和 a%b 均未定义</p>
+<pre><code class="language-cpp">INT_MIN % -1; // 错！
+INT_MIN / -1; // 错！
+</code></pre>
+<h3 id="左移或右移的位数不得超过整数类型上限不得为负"><a class="header" href="#左移或右移的位数不得超过整数类型上限不得为负">左移或右移的位数，不得超过整数类型上限，不得为负</a></h3>
+<pre><code class="language-cpp">unsigned int i = 0;
+i &lt;&lt; 31;  // 可以
+i &lt;&lt; 32;  // 错！
+i &lt;&lt; 0;   // 可以
+i &lt;&lt; -1;  // 错！
+</code></pre>
+<p>但是你还需要考虑一件事情：<strong>隐式转换</strong>，或者直接点说：<strong>整数提升</strong>。</p>
+<ul>
+<li>在 C++ 中算术运算符不接受小于 int 的类型进行运算。如果你觉得可以，那只是隐式转换，整形提升了。</li>
+</ul>
+<pre><code class="language-cpp">std::uint8_t c{ '0' };
+using T1 = decltype(c &lt;&lt; 1); // int
+</code></pre>
+<p>即使移位大于等于 8 也不成问题。</p>
+<hr />
+<p>对于有符号整数，左移还不得破坏符号位</p>
+<pre><code class="language-cpp">int i = 0;
+i &lt;&lt; 1;   // 可以
+i &lt;&lt; 31;  // 错！
+unsigned int u = 0;
+u &lt;&lt; 31; // 可以
+</code></pre>
+<p>如需处理来自用户输入的位移数量，可以先做范围检测</p>
+<pre><code class="language-cpp">int shift;
+cin &gt;&gt; shift;
+
+unsigned int u = 0;
+int i = 0;
+(shift &gt; 0 &amp;&amp; shift &lt; 32) ? (u &lt;&lt; shift) : 0; // 可以
+(shift &gt; 0 &amp;&amp; shift &lt; 31) ? (i &lt;&lt; shift) : 0; // 可以
+</code></pre>
+<h3 id="除数不能为-0"><a class="header" href="#除数不能为-0">除数不能为 0</a></h3>
+<pre><code class="language-cpp">int i = 42;
+int j = 0;
+i / j;  // 错！
+i % j;  // 错！
+</code></pre>
+<h2 id="求值顺序类"><a class="header" href="#求值顺序类">求值顺序类</a></h2>
+<h3 id="同一表达式内对同一个变量有多个自增自减运算"><a class="header" href="#同一表达式内对同一个变量有多个自增自减运算">同一表达式内，对同一个变量有多个自增/自减运算</a></h3>
+<pre><code class="language-cpp">int i = 5;
+int j = (++i) + (++i);    // j 的值未定义
+</code></pre>
+<pre><code class="language-cpp">int i = 5;
+int a[10] = {};
+int j = a[i++] + a[i++];  // j 的值未定义
+</code></pre>
+<pre><code class="language-cpp">int i = 5;
+int j = (++i) + i;        // j 的值未定义
+</code></pre>
+<pre><code class="language-cpp">int i1 = 5;
+int i2 = 5;
+int j = (++i1) + (++i2); // 正确，j 会得到 12
+</code></pre>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
+</div>
+<div>
+<p>转发给你身边的谭浩强受害者看（<code>i+++++i</code>）。</p>
+</div>
+</div>
+<h3 id="内建类型的二元运算符其左右两个参数求值的顺序是不确定的"><a class="header" href="#内建类型的二元运算符其左右两个参数求值的顺序是不确定的">内建类型的二元运算符，其左右两个参数求值的顺序是不确定的</a></h3>
+<p>在标准看来，+ 运算符两侧是“同时”求值的，即“interleaved”，实际执行顺序并不确定。</p>
+<p>对于 a + b，我们不能假定总是左侧表达式 a 先求值。</p>
+<p>不过，虽然运算符两个参数的求值顺序“未指定(unspecified)”，但并不是“未定义(undefined)”。</p>
+<blockquote>
+<p>但左右两侧涉及自增/自减运算符的情况仍然是未定义行为。</p>
+</blockquote>
+<pre><code class="language-cpp">int f1() {
+    printf("f1\n");
+    return 1;
+}
+
+int f2() {
+    printf("f2\n");
+    return 2;
+}
+
+int j = f1() + f2();   // 可能打印 f1 f2，也可能打印 f2 f1，但 j 最终的结果一定是 3
+</code></pre>
+<p>未指定和未定义是不同的！有未定义行为的程序是非法(ill-formed)的，但未指定只是会让结果无法确定，但一定能正常运行：要么 f1 先运行，要么 f2 先运行。</p>
+<h3 id="函数参数求值的顺序是不确定的"><a class="header" href="#函数参数求值的顺序是不确定的">函数参数求值的顺序是不确定的</a></h3>
+<pre><code class="language-cpp">int f1() {
+    printf("f1\n");
+    return 1;
+}
+
+int f2() {
+    printf("f2\n");
+    return 2;
+}
+
+void foo(int i, int j) {
+    printf("%d %d\n", i, j);
+}
+
+foo(f1(), f2());   // 可能打印 f1 f2 1 2，也可能打印 f2 f1 1 2
+</code></pre>
+<p>代码中，f1 和 f2 的求值顺序虽然未指定，但可以保证 foo 函数体一定在执行完毕后才会开始。</p>
+<p>同一条语句中所有子表达式的执行顺序就像一颗树，树中两个子节点执行顺序是不确定的；但可以肯定的是，树的子节点一定先于他们的父节点执行。</p>
+<p>同样地，这只是未指定(unspecified)行为而不是未定义(undefined)行为，结果必然是 f1 f2 或 f2 f1 两种可能之一，不会让程序出现未定义值的情况。</p>
+<p>注意，求值顺序未指定仅限同一语句（“同一行”）内，对于互相独立的多条语句，依然是有强先后顺序的。</p>
+<pre><code class="language-cpp">int f1() {
+    printf("f1\n");
+    return 1;
+}
+
+int f2() {
+    printf("f2\n");
+    return 2;
+}
+
+void foo(int i, int j) {
+}
+
+foo(f1(), f2());  // 可能打印 f1 f2，也可能打印 f2 f1
+
+f1(); f2();       // 必然打印 f1 f2
+</code></pre>
+<p>不过，涉及自增的话，就还是未定义行为，而不是未指定了。</p>
+<pre><code class="language-cpp">int i = 5;
+foo(i++, i++);   // 会打印出什么？未定义行为
+</code></pre>
+<pre><code class="language-cpp">int i = 5;
+int j = 5;
+foo(i++, j++);   // 必然打印出 5 5
+</code></pre>
+<h2 id="函数类"><a class="header" href="#函数类">函数类</a></h2>
+<h3 id="返回类型不为-void-的函数必须有-return-语句"><a class="header" href="#返回类型不为-void-的函数必须有-return-语句">返回类型不为 void 的函数，必须有 return 语句</a></h3>
+<pre><code class="language-cpp">int func() {
+    int i = 42;
+    // 错！会导致 func 返回时程序崩溃，且编译器只是警告，不报错
+}
+
+int func() {
+    int i = 42;
+    return i;  // 正确
+}
+
+void func() {
+    int i = 42;
+    // 返回 void 的函数，return 语句可以省略
+}
+</code></pre>
+<p>坑人之处在于，忘记写，不会报错，编译器只是警告。</p>
+<p>为了避免忘记写 return 语句，建议 gcc 编译器开启 <code>-Werror=return-type</code> 选项，将不写返回语句的警告转化为错误</p>
+<p>注意，在有分支的非 void 函数中，必须所有可达分支都有 return 语句</p>
+<pre><code class="language-cpp">int func(int x) {
+    if (x &lt; 0)
+        return -x;
+    if (x &gt; 0)
+        return x;
+    // 如果调用了 func(0)，那么会抵达没有 return 的分支，触发未定义行为
+}
+</code></pre>
+<div id="admonition-abstract-1" class="admonition admonish-abstract" role="note" aria-labelledby="admonition-abstract-1-title">
+<div class="admonition-title">
+<div id="admonition-abstract-1-title">
+<p>Abstract</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-abstract-1"></a>
+</div>
+<div>
+<p>没有 return 的分支相当于写了一个 std::unreachable()</p>
+</div>
+</div>
+<p>但也有例外：</p>
+<ol>
+<li>主函数 <code>main</code> 可以不写 <code>return</code> 语句，默认自带 <code>return 0;</code></li>
+<li>协程函数可以不写 <code>return</code> 语句，如果有 <code>co_return</code> 或者协程返回类型为 <code>void</code> 且具有至少一个 <code>co_await</code> 出现</li>
+</ol>
+<h3 id="函数指针被调用时不能为空"><a class="header" href="#函数指针被调用时不能为空">函数指针被调用时，不能为空</a></h3>
+<pre><code class="language-cpp">typedef void (*func_t)();
+
+func_t func = nullptr;
+func();    // 错！
+</code></pre>
+<p>《经典再现》</p>
+<pre><code class="language-cpp">#include &lt;cstdio&gt;
+
+static void func() {
+    printf("func called\n");
+}
+
+typedef void (*func_t)();
+
+static func_t fp = nullptr;
+
+extern void set_fp() { // 导出符号，虽然没人调用，却影响了 clang 的优化决策
+    fp = func;
+}
+
+int main() {
+    fp(); // Release 时，clang 会把这一行直接优化成 func()
+    return 0;
+}
+</code></pre>
+<h3 id="函数指针被调用时参数列表或返回值必须匹配"><a class="header" href="#函数指针被调用时参数列表或返回值必须匹配">函数指针被调用时，参数列表或返回值必须匹配</a></h3>
+<pre><code class="language-cpp">void f1(int *p) {
+    printf("f1(%p)", p);
+}
+
+void (*fp)(const int *);
+fp = (void (*)(const int *)) f1;  // 错误
+
+int i;
+fp = (void (*)(const int *)) &amp;i;  // 错误
+</code></pre>
+<h3 id="普通函数指针与成员函数指针不能互转"><a class="header" href="#普通函数指针与成员函数指针不能互转">普通函数指针与成员函数指针不能互转</a></h3>
+<pre><code class="language-cpp">struct Class {
+    void mf() {
+        printf("成员函数\n");
+    }
+};
+
+union {
+    void (Class::*member_func)();
+    void (*free_func)(Class *);
+} u;
+u.member_func = &amp;Class::mf;
+Class c;
+u.free_func(&amp;c); // 错误
+</code></pre>
+<h2 id="生命周期类"><a class="header" href="#生命周期类">生命周期类</a></h2>
+<h3 id="不能读取未初始化的变量"><a class="header" href="#不能读取未初始化的变量">不能读取未初始化的变量</a></h3>
+<pre><code class="language-cpp">int i;
+cout &lt;&lt; i; // 错！
+
+int i = 0;
+cout &lt;&lt; i; // 可以，会读到 0
+
+int arr[10];
+cout &lt;&lt; arr[0]; // 错！
+
+int arr[10] = {};
+cout &lt;&lt; arr[0]; // 可以，会读到 0
+</code></pre>
+<h3 id="指针的加减法不能超越数组边界"><a class="header" href="#指针的加减法不能超越数组边界">指针的加减法不能超越数组边界</a></h3>
+<pre><code class="language-cpp">int arr[10];
+int *p = &amp;arr[0];
+p + 1;     // 可以
+p + 10;    // 可以
+p + 11;    // 错！
+</code></pre>
+<h3 id="可以有指向数组尾部的指针类似-end-迭代器但不能解引用"><a class="header" href="#可以有指向数组尾部的指针类似-end-迭代器但不能解引用">可以有指向数组尾部的指针（类似 end 迭代器），但不能解引用</a></h3>
+<pre><code class="language-cpp">int arr[10];
+int *p = &amp;arr[0];
+int *end = p + 10; // 可以
+*end;              // 错！
+</code></pre>
+<h3 id="不能访问未初始化的指针"><a class="header" href="#不能访问未初始化的指针">不能访问未初始化的指针</a></h3>
+<pre><code class="language-cpp">int *p;
+*p; // 错！
+</code></pre>
+<pre><code class="language-cpp">struct Dog {
+    int age;
+};
+
+struct Person {
+    Dog *dog;
+};
+
+Person *p = new Person;
+cout &lt;&lt; p-&gt;dog-&gt;age; // 错！
+
+p-&gt;dog = new Dog;
+cout &lt;&lt; p-&gt;dog-&gt;age; // 可以
+</code></pre>
+<h3 id="不能访问已释放的内存"><a class="header" href="#不能访问已释放的内存">不能访问已释放的内存</a></h3>
+<pre><code class="language-cpp">int *p = new int;
+*p; // 可以
+delete p;
+*p; // 错！
+</code></pre>
+<pre><code class="language-cpp">int *p = (int *)malloc(sizeof(int));
+*p; // 可以
+free(p);
+*p; // 错！
+</code></pre>
+<pre><code class="language-cpp">int *func() {
+    int arr[10];
+    return arr; // 错！
+}
+
+int main() {
+    int *p = func();
+    p[0];  // 错！arr 已经析构，不能通过空悬指针 / 空悬引用继续访问已经析构的对象
+}
+</code></pre>
+<p>建议改用更安全的 array 或 vector 容器</p>
+<pre><code class="language-cpp">array&lt;int, 10&gt; func() {
+    array&lt;int, 10&gt; arr;
+    return arr;
+}
+
+int main() {
+    auto arr = func();
+    arr[0];  // 可以，访问到的是 main 函数局部变量 arr，是对 func 中原 arr 的一份拷贝
+}
+</code></pre>
+<h3 id="new--new--malloc-和-delete--delete--free-必须匹配"><a class="header" href="#new--new--malloc-和-delete--delete--free-必须匹配">new / new[] / malloc 和 delete / delete[] / free 必须匹配</a></h3>
+<pre><code class="language-cpp">int *p = new int;
+free(p);  // 错！
+</code></pre>
+<pre><code class="language-cpp">int *p = (int *)malloc(sizeof(int));
+free(p);  // 正确
+</code></pre>
+<pre><code class="language-cpp">int *p = new int[3];
+delete p; // 错！
+</code></pre>
+<pre><code class="language-cpp">int *p = new int[3];
+delete[] p; // 正确
+</code></pre>
+<pre><code class="language-cpp">vector&lt;int&gt; a(3);
+unique_ptr&lt;int&gt; a = make_unique&lt;int&gt;(42);
+</code></pre>
+<h3 id="不要访问已经析构的对象"><a class="header" href="#不要访问已经析构的对象">不要访问已经析构的对象</a></h3>
+<pre><code class="language-cpp">struct C {
+    int i;
+    ~C() { i = 0; }
+};
+
+C *c = (C *)malloc(sizeof(C));
+cout &lt;&lt; c-&gt;i; // 可以
+c-&gt;~C();
+cout &lt;&lt; c-&gt;i; // 错！
+free(c);
+</code></pre>
+<pre><code class="language-cpp">std::string func() {
+    std::string s = "hello";
+    std::string s2 = std::move(s);
+    return s;  // 语言：OK，标准库作者：s 不一定是空字符串
+}
+</code></pre>
+<h3 id="不能把函数指针转换为普通类型指针解引用"><a class="header" href="#不能把函数指针转换为普通类型指针解引用">不能把函数指针转换为普通类型指针解引用</a></h3>
+<pre><code class="language-cpp">void func() {}
+
+printf("*func = %d\n", *((int *)func));  // 错误
+</code></pre>
+<blockquote>
+<p>C++ 内存模型是哈佛架构（代码与数据分离），不是冯诺依曼架构（代码也是数据）</p>
+</blockquote>
+<h2 id="库函数类"><a class="header" href="#库函数类">库函数类</a></h2>
+<h3 id="ctypeh-中一系列函数的字符参数必须在-0127-范围内即只支持-ascii-字符"><a class="header" href="#ctypeh-中一系列函数的字符参数必须在-0127-范围内即只支持-ascii-字符">ctype.h 中一系列函数的字符参数，必须在 0~127 范围内（即只支持 ASCII 字符）</a></h3>
+<pre><code class="language-cpp">isdigit('0');    // 可以，返回 true
+isdigit('a');    // 可以，返回 false
+isdigit('\xef'); // 错！结果未定义，在 MSVC 的 Debug 模式下会产生断言异常
+
+char s[] = "你好A"; // UTF-8 编码的中文
+// "你好a"？
+std::transform(std::begin(s), std::end(s), std::begin(s), ::tolower); // 错！结果未定义，因为 UTF-8 编码会产生大于 128 的字节
+</code></pre>
+<p>MSVC STL 中 is 系列函数的断言：</p>
+<p><code>assert(-1 &lt;= c &amp;&amp; c &lt; 256);</code></p>
+<p>理论上可以这样断言：</p>
+<p><code>assert(0 &lt;= c &amp;&amp; c &lt;= 127);</code></p>
+<p>解决方法：要么改用 iswdigit（MSVC：0-65536，GCC：0-0x010ffff）</p>
+<pre><code class="language-cpp">iswdigit('0');       // 可以，返回 true
+iswdigit('\xef');    // 可以，返回 false
+iswspace(L'\ufeff'); // 可以，UTF-8 locale 时返回 true，ASCII locale 时返回 false
+</code></pre>
+<p>要么自己实现判断</p>
+<pre><code class="language-cpp">if ('0' &lt;= c &amp;&amp; c &lt;= '9')  // 代替 isdigit(c)
+if (strchr(" \n\t\r", c))  // 代替 isspace(c)
+</code></pre>
+<h3 id="memcpy-函数的-src-和-dst-不能为空指针"><a class="header" href="#memcpy-函数的-src-和-dst-不能为空指针">memcpy 函数的 src 和 dst 不能为空指针</a></h3>
+<pre><code class="language-cpp">void *dst = nullptr;
+void *src = nullptr;
+size_t size = 0;
+memcpy(dst, src, size); // 错！即使 size 为 0，src 和 dst 也不能为空指针
+</code></pre>
+<p>可以给 size 加个判断</p>
+<pre><code class="language-cpp">void *dst = nullptr;
+void *src = nullptr;
+size_t size = 0;
+if (size != 0) // 可以
+    memcpy(dst, src, size);
+</code></pre>
+<h3 id="memcpy-不能接受带有重叠的-src-和-dst"><a class="header" href="#memcpy-不能接受带有重叠的-src-和-dst">memcpy 不能接受带有重叠的 src 和 dst</a></h3>
+<pre><code class="language-cpp">char arr[10];
+memcpy(arr, arr + 1, 9); // 错！有的同学，以为这个是对的？错了，memcpy 的 src 和 dst
+memcpy(arr + 1, arr, 9); // 错！
+memcpy(arr + 5, arr, 5); // 可以
+memcpy(arr, arr + 5, 5); // 可以
+</code></pre>
+<p>如需拷贝带重复区间的内存，可以用 memmove</p>
+<pre><code class="language-cpp">char arr[10];
+memmove(arr, arr + 1, 9); // 可以
+memmove(arr + 1, arr, 9); // 可以
+memmove(arr + 5, arr, 5); // 可以
+memmove(arr, arr + 5, 5); // 可以
+</code></pre>
+<p>从 memcpy 的 src 和 dst 指针参数是 restrict 修饰的，而 memmove 没有，就可以看出来，memcpy 不允许任何形式的指针重叠，无论先后顺序</p>
+<h3 id="vback-当-v-为空时是未定义行为"><a class="header" href="#vback-当-v-为空时是未定义行为">v.back() 当 v 为空时是未定义行为</a></h3>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = {};
+int i = v.back();                  // 错！back() 并不会对 v 是否有最后一个元素做检查，此处相当于解引用了越界的指针
+int i = v.empty() ? 0 : v.back();  // 更安全，当 v 为空时返回 0
+</code></pre>
+<h3 id="vector-的-operator-当-i-越界时是未定义行为"><a class="header" href="#vector-的-operator-当-i-越界时是未定义行为">vector 的 operator[] 当 i 越界时，是未定义行为</a></h3>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = { 1, 2, 3 };
+v[3]; // 错！相当于解引用了越界的指针
+</code></pre>
+<p>可以用 at 成员函数</p>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = { 1, 2, 3 };
+v.at(3); // 安全，会检测到越界，抛出 std::out_of_range 异常
+</code></pre>
+<h3 id="容器迭代器失效"><a class="header" href="#容器迭代器失效">容器迭代器失效</a></h3>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = { 1, 2, 3 };
+auto it = v.begin();
+v.push_back(4); // push_back 可能导致扩容，会使之前保存的 v.begin() 迭代器失效
+*it = 0;        // 错！
+</code></pre>
+<p>如果不需要连续内存，可以改用分段内存的 deque 容器，其可以保证元素不被移动，迭代器不失效。</p>
+<pre><code class="language-cpp">std::deque&lt;int&gt; v = { 1, 2, 3 };
+auto it = v.begin();
+v.push_back(4); // deque 的 push_back 不会导致迭代器失效
+*it = 0;        // 可以
+</code></pre>
+<ul>
+<li>https://www.geeksforgeeks.org/iterator-invalidation-cpp</li>
+<li>https://en.cppreference.com/w/cpp/container</li>
+</ul>
+<h3 id="容器元素引用失效"><a class="header" href="#容器元素引用失效">容器元素引用失效</a></h3>
+<pre><code class="language-cpp">std::vector&lt;int&gt; v = {1, 2, 3};
+int &amp;ref = v[0];
+v.push_back(4); // push_back 可能导致扩容，使元素全部移动到了新的一段内存，会使之前保存的 ref 引用失效
+ref = 0;        // 错！
+</code></pre>
+<p>如果不需要连续内存，可以改用分段内存的 deque 容器，其可以保证元素不被移动，引用不失效。</p>
+<pre><code class="language-cpp">std::deque&lt;int&gt; v = {1, 2, 3};
+int &amp;ref = v[0];
+v.push_back(4); // deque 的 push_back 不会导致元素移动，使引用失效
+ref = 0;        // 可以
+</code></pre>
+<h2 id="多线程类"><a class="header" href="#多线程类">多线程类</a></h2>
+<h3 id="多个线程同时访问同一个对象其中至少一个线程的访问为写访问是未定义行为俗称数据竞争"><a class="header" href="#多个线程同时访问同一个对象其中至少一个线程的访问为写访问是未定义行为俗称数据竞争">多个线程同时访问同一个对象，其中至少一个线程的访问为写访问，是未定义行为（俗称数据竞争）</a></h3>
+<pre><code class="language-cpp">std::string s;
+
+void t1() {
+    s.push_back('a'); // 写访问，出错！
+}
+
+void t2() {
+    cout &lt;&lt; s.size(); // 读访问
+}
+</code></pre>
+<pre><code class="language-cpp">std::string s;
+
+void t1() {
+    s.push_back('a'); // 写访问，出错！
+}
+
+void t2() {
+    s.push_back('b'); // 写访问，出错！
+}
+</code></pre>
+<p>更准确的说法是：多个线程（无 happens before 关系地）访问同一个对象，其中至少一个线程的访问带有副作用（写访问或带有volatile的读访问），是未定义行为</p>
+<pre><code class="language-cpp">// 八股文教材常见的错误写法！volatile 并不保证原子性和内存序，这样写是有未定义行为的。正确的做法是改用 std::atomic&lt;int&gt;
+volatile int ready = 0;
+int data;
+
+void t1() {
+    data = 42;
+    ready = 1;
+}
+
+void t2() {
+    while (ready == 0)
+        ;
+    printf("%d\n", data);
+}
+</code></pre>
+<p>建议利用 mutex，counting_semaphore，atomic 等多线程同步工具，保证多个线程访问同一个对象时，顺序有先有后，不会“同时”发生，那就是安全的</p>
+<pre><code class="language-cpp">std::string s;
+std::mutex m;
+
+void t1() {
+    std::lock_guard l(m);
+    s.push_back('a'); // 有 mutex 保护，可以
+}
+
+void t2() {
+    std::lock_guard l(m);
+    s.push_back('b'); // 有 mutex 保护，可以
+}
+</code></pre>
+<p>在上面的例子中，互斥锁保证了要么 t1 happens before t2，要么 t2 happens before t1，不会“同时”访问，是安全的</p>
+<pre><code class="language-cpp">std::string s;
+std::counting_semaphore&lt;1&gt; sem(1);
+
+void t1() {
+    s.push_back('a');
+    sem.release(); // 令 t2 必须发生在 t1 之后
+}
+
+void t2() {
+    sem.acquire(); // t2 必须等待 t1 release 后，才能开始执行
+    s.push_back('b');
+}
+</code></pre>
+<p>在上面的例子中，信号量保证了 t1 happens before t2，不会“同时”访问，是安全的</p>
+<pre><code class="language-cpp">std::string s;
+std::atomic&lt;bool&gt; ready{false};
+
+void t1() {
+    s.push_back('a');
+    ready.store(true, std::memory_order_release); // 令 s 的修改对其他 acquire 了 ready 的线程可见
+}
+
+void t2() {
+    while (!ready.load(std::memory_order_acquire)) // t2 必须等待 t1 store 后，才能开始执行
+        ;
+    s.push_back('b');
+}
+</code></pre>
+<p>在上面的例子中，原子变量的 acquire/release 内存序保证了 t1 happens before t2，不会“同时”访问，是安全的</p>
+<h3 id="多个线程同时对两个-mutex-上锁但顺序相反会产生未定义行为俗称死锁"><a class="header" href="#多个线程同时对两个-mutex-上锁但顺序相反会产生未定义行为俗称死锁">多个线程同时对两个 mutex 上锁，但顺序相反，会产生未定义行为（俗称死锁）</a></h3>
+<pre><code class="language-cpp">std::mutex m1, m2;
+
+void t1() {
+    m1.lock();
+    m2.lock(); // 错！
+    m2.unlock();
+    m1.unlock();
+}
+
+void t2() {
+    m2.lock();
+    m1.lock(); // 错！
+    m1.unlock();
+    m2.unlock();
+}
+</code></pre>
+<p>解决方法：不要在多个 mutex 上同时上锁，如果确实要多个 mutex，保证顺序一致</p>
+<pre><code class="language-cpp">std::mutex m1, m2;
+
+void t1() {
+    m1.lock();
+    m2.lock();
+    m2.unlock();
+    m1.unlock();
+}
+
+void t2() {
+    m1.lock();
+    m2.lock();
+    m2.unlock();
+    m1.unlock();
+}
+</code></pre>
+<p>或使用 std::lock</p>
+<pre><code class="language-cpp">std::mutex m1, m2;
+
+void t1() {
+    std::lock(m1, m2);
+    std::unlock(m1, m2);
+}
+
+void t2() {
+    std::lock(m2, m1);
+    std::unlock(m2, m1);
+}
+</code></pre>
+<h3 id="对于非-recursive_mutex同一个线程对同一个-mutex-重复上锁会产生未定义行为俗称递归死锁"><a class="header" href="#对于非-recursive_mutex同一个线程对同一个-mutex-重复上锁会产生未定义行为俗称递归死锁">对于非 recursive_mutex，同一个线程对同一个 mutex 重复上锁，会产生未定义行为（俗称递归死锁）</a></h3>
+<pre><code class="language-cpp">std::mutex m;
+
+void t1() {
+    m.lock();
+    m.lock();     // 错！
+    m.try_lock(); // 错！try_lock 也不允许！
+    m.unlock();
+    m.unlock();
+}
+
+void t2() {
+    m.try_lock(); // 可以
+}
+</code></pre>
+<p>解决方法：改用 recursive_mutex，或使用适当的条件变量</p>
+<pre><code class="language-cpp">std::recursive_mutex m;
+
+void t1() {
+    m.lock();
+    m.lock(); // 可以
+    m.try_lock(); // 可以，返回 true
+    m.unlock();
+    m.unlock();
+    m.unlock();
+}
+</code></pre>
+<h1 id="总结"><a class="header" href="#总结">总结</a></h1>
+<ul>
+<li>不要玩空指针</li>
+<li>不要越界，用更安全的 at，subspan 等</li>
+<li>不要不初始化变量（auto-idiom）</li>
+<li>开启 <code>-Werror=return-type</code></li>
+<li>不要重复上锁 mutex</li>
+<li>仔细看库函数的文档</li>
+<li>用智能指针管理单个对象</li>
+<li>用 vector 管理多个对象组成的连续内存</li>
+<li>避免空悬引用</li>
+<li>开 Debug 模式的 STL</li>
+</ul>
+<p>指定 CMake 的模式：<code>cmake -B build -DCMAKE_BUILD_TYPE=Debug</code></p>
+<ul>
+<li>Debug: <code>-O0 -g</code> 编译选项</li>
+<li>Release: <code>-O3 -DNDEBUG</code> 编译选项</li>
+</ul>
+<p>指定 MSVC 的模式：<code>cmake --build build --config Debug</code></p>
+<ul>
+<li>Debug: 生成 <code>zenod.dll</code>，链接 Debug 的 ABI</li>
+<li>Release: 生成 <code>zeno.dll</code>，链接 Release 的 ABI</li>
+</ul>
+<h2 id="cppcon-相关视频"><a class="header" href="#cppcon-相关视频">CppCon 相关视频</a></h2>
+<p>顺便推个 CppCon 小视频：https://www.youtube.com/watch?v=ehyHyAIa5so</p>
+<div id="admonition-tip" class="admonition admonish-tip" role="note" aria-labelledby="admonition-tip-title">
+<div class="admonition-title">
+<div id="admonition-tip-title">
+<p>Tip</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-tip"></a>
+</div>
+<div>
+<p>标题是《CppCon 2017: Piotr Padlewski “Undefined Behaviour is awesome!”》（爆孝）</p>
+</div>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="test_and_safe.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="llvm_intro.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="test_and_safe.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="llvm_intro.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="theme/custom.js"></script>
+
+
+    </div>
+    </body>
+</html>

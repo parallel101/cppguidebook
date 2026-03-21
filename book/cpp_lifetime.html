@@ -1,0 +1,386 @@
+<!DOCTYPE HTML>
+<html lang="zh" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>深入理解析构函数与生命周期 - 小彭大典</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="小彭大典是一本关于现代 C++ 编程的权威指南，它涵盖了从基础知识到高级技巧的内容，适合初学者和有经验的程序员阅读。">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/custom.css">
+        <link rel="stylesheet" href="theme/mdbook-admonish.css">
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">小彭大典</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/parallel101/cppguidebook/edit/main/src/cpp_lifetime.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="深入理解析构函数与生命周期"><a class="header" href="#深入理解析构函数与生命周期">深入理解析构函数与生命周期</a></h1>
+<h2 id="c-对象生命周期"><a class="header" href="#c-对象生命周期">C++ 对象生命周期</a></h2>
+<p>C++ 中一个类可以具有构造函数和析构函数。</p>
+<ul>
+<li>
+<p>构造函数固定为 <code>类名(构造函数参数列表)</code>。</p>
+</li>
+<li>
+<p>析构函数固定为 <code>~类名()</code>。</p>
+</li>
+<li>
+<p>构造函数和析构函数都没有返回值类型。</p>
+</li>
+<li>
+<p>析构函数不得拥有任何参数，但构造函数可以有。</p>
+</li>
+</ul>
+<pre><code class="language-cpp">struct Class {
+    Class() {
+        puts("构造函数");
+    }
+
+    ~Class() {
+        puts("析构函数");
+    }
+};
+</code></pre>
+<pre><code class="language-cpp">int main() {
+    puts("进入 main");
+    Class c;
+    puts("离开 main");
+}
+</code></pre>
+<p>运行结果：</p>
+<pre><code>进入 main
+构造函数
+离开 main
+析构函数
+</code></pre>
+<p>这是 C++ 中最基本的现象。每当一个对象被创建时，会调用构造函数，每当一个对象离开定义了他的函数体时，会调用析构函数。</p>
+<blockquote>
+<p>函数体指的是从 <code>{</code> 到 <code>}</code> 之间的代码块。</p>
+</blockquote>
+<p>其中构造函数中通常负责创建资源，析构函数中通常销毁资源。对于智能指针和 vector 而言，这个资源就是内存。</p>
+<p>为什么要及时销毁不用的资源？只分配不释放，一个程序占用的内存和其他各种资源就会越来越多，这种程序如果长期运行，会吃光整个系统的所有资源然后被 Linux 内核视为危险进程而杀死。除非你的程序只会运行一会会，如果是长期运行的程序，例如服务器，必须严格管理所有自己曾经分配过的内存，不用时就立即释放，不要占着茅坑不拉史。</p>
+<p><code>}</code> 被誉为<strong>最伟大的运算符</strong>，就是因为他可以触发析构函数，帮你自动释放掉资源，你就不用自己费心手动释放内存，和其他各种资源了。</p>
+<h2 id="三大存储周期"><a class="header" href="#三大存储周期">三大存储周期</a></h2>
+<p>在进一步深入之前，我们必须明确以下术语：自动存储周期、动态存储周期、静态存储周期。</p>
+<p>变量定义在不同的位置，其生命周期（构造函数和析构函数调用的时机）会有所不同。</p>
+<p>比如一个变量定义在函数体内、类体内、通过 new 创建，之类的。</p>
+<ol>
+<li>自动存储周期，这种变量直接定义在<strong>函数体</strong>内。俗称“栈上”或“局部变量”</li>
+</ol>
+<pre><code class="language-cpp">void func() {
+    Class a;  // a 是自动存储周期
+}
+</code></pre>
+<ul>
+<li>构造时机：当变量定义时被调用。</li>
+<li>析构时机：当变量所在的 <code>{}</code> 代码块执行到 <code>}</code> 处时调用。</li>
+</ul>
+<ol start="2">
+<li>动态存储周期，这种变量通过 new 来创建。俗称“堆上”或“堆对象”</li>
+</ol>
+<pre><code class="language-cpp">void func() {
+    Class *p = new Class;  // *p 是动态存储周期
+    delete p;              // 释放动态分配的内存
+}
+</code></pre>
+<ul>
+<li>构造时机：当变量通过 new 创建时被调用。</li>
+<li>析构时机：当 delete 被调用时被调用。</li>
+</ul>
+<blockquote>
+<p>特别注意，<code>p</code> 依然是“栈上变量”，<code>p</code> 指向的 <code>*p</code> 才是“堆上变量”！</p>
+</blockquote>
+<blockquote>
+<p>用律师语再说一遍：<code>p</code> 是自动存储周期，<code>p</code> 指向的 <code>*p</code> 才是动态存储周期！（白律师最满意的一集）</p>
+</blockquote>
+<p>指针本身，和指针指向的对象，是两个东西，不要混淆。</p>
+<p><code>p</code> 本身会随着 func 的 <code>}</code> 而析构，但是 <code>*p</code> 的类型是 <code>Class *</code>，是一个 C 语言原始指针，原始指针属于 C 语言原始类型，没有析构函数。也就是说，抵达 <code>}</code> 时，<code>p</code> 名义上会析构，但是他没有析构函数，并不会产生任何作用。这一切和 <code>p</code> 指向的对象 <code>*p</code> 没有任何关系，你需要手动 delete 才会调用到 <code>*p</code> 的析构函数，并释放分配的内存。</p>
+<ul>
+<li>new 分为两部分：内存分配 + <strong>对象构造</strong></li>
+<li>delete 分为两部分：<strong>对象析构</strong> + 内存释放</li>
+</ul>
+<p>智能指针的优势在于，智能指针是个 C++ 类，具有定制的析构函数。当 <code>}</code> 抵达，<strong>智能指针本身</strong>由于自动存储周期的规则析构时，其会 <code>delete p</code>，利用动态存储周期的规则，触发<strong>智能指针指向对象</strong>的析构函数，也就是从而调用 <code>*p</code> 的析构函数。</p>
+<ol start="3">
+<li>静态存储周期，这种变量又要具体分三种情况，俗称“全局变量”或“静态变量”</li>
+</ol>
+<p>(1) 定义在<strong>名字空间</strong>内，不论是不是 static 或 inline（在名字空间中，static 和 inline 影响的只是“符号可见性”，而不是存储周期）</p>
+<pre><code class="language-cpp">namespace hello {
+Class s;         // s 是静态存储周期
+static Class s;  // s 是静态存储周期
+inline Class s;  // s 是静态存储周期
+}
+</code></pre>
+<ul>
+<li>构造时机：当程序启动时调用（main 函数之前）；对 DLL 来说则是 DLL 首次加载时调用。</li>
+<li>析构时机：当程序退出时调用（main 函数之后）。</li>
+</ul>
+<p>(2) 注意，<strong>全局名字空间</strong>是一个特殊的<strong>名字空间</strong>，外面没有包裹任何 <code>namespace</code> 时就属于这种情况，俗称“全局变量”。所以下面这种也属于“在 (全局) 名字空间内”：</p>
+<pre><code class="language-cpp">Class s;         // s 是静态存储周期
+static Class s;  // s 是静态存储周期
+inline Class s;  // s 是静态存储周期
+</code></pre>
+<p>(3) 定义在类内的静态成员变量，也就是通过 static 修饰过的成员变量（在类内，static 就影响存储周期了，inline 继续只影响“符号可见性”）</p>
+<pre><code class="language-cpp">struct Other {
+    static Class s;
+};
+Class Other::s;             // s 是静态存储周期
+
+struct Other {
+    inline static Class s;  // s 是静态存储周期
+};
+
+struct Other {
+    Class a;                // a 不是静态存储周期，而是跟随其所属的 Other 结构体的存储周期
+};
+</code></pre>
+<ol start="4">
+<li>定义在类内的成员变量（没有 static 的），跟随所属类的存储周期</li>
+</ol>
+<pre><code class="language-cpp">struct Other {
+    Class a;  // a 跟随 Other 结构体的存储周期
+};
+
+Other o;      // o.a 是静态存储周期
+
+int main() {
+    Other o;  // o.a  是自动存储周期
+    Other *p; // p-&gt;a 是动态存储周期
+}
+</code></pre>
+<ul>
+<li>构造时机：当 Other 结构体构造时调用。</li>
+<li>析构时机：当 Other 结构体析构时调用。</li>
+</ul>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<ul>
+<li>自动存储周期 - 函数的局部变量，自动析构</li>
+<li>动态存储周期 - 通过 new 创建的，delete 时析构</li>
+<li>静态存储周期 - 全局变量，程序结束时析构</li>
+</ul>
+<pre><code class="language-cpp"></code></pre>
+<h2 id="析构函数的逆天大坑"><a class="header" href="#析构函数的逆天大坑">析构函数的逆天大坑</a></h2>
+<p>定义了析构函数，就<strong>必须删除移动构造函数、移动赋值函数、拷贝构造函数、拷贝赋值函数</strong>！</p>
+<p>原因很复杂，整个故事要从 boost 当年如何设计出右值引用到图灵的停机问题讲起，讲了你也记不住，只需要记住结论：</p>
+<p>如果你要定义析构函数，就<strong>必须删除移动构造函数、移动赋值函数、拷贝构造函数、拷贝赋值函数</strong>！</p>
+<h2 id="虚类的析构函数必须是虚的"><a class="header" href="#虚类的析构函数必须是虚的">虚类的析构函数必须是虚的</a></h2>
+<ul>
+<li><code>-Wnon-virtual-dtor</code></li>
+<li><code>-Wdelete-non-virtual-dtor</code></li>
+</ul>
+<p>TODO: 介绍</p>
+<h2 id="临时变量的生命周期是一行"><a class="header" href="#临时变量的生命周期是一行">临时变量的生命周期是一行</a></h2>
+<p>TODO</p>
+<pre><code class="language-cpp">int main() {
+    std::string const &amp;s = std::string("hello");
+    std::cout &lt;&lt; s;  // OK
+}
+</code></pre>
+<pre><code class="language-cpp">std::string const &amp;identity(std::string const &amp;s) {
+    return s;
+}
+
+int main() {
+    std::string const &amp;s = identity(std::string("hello"));
+    std::cout &lt;&lt; s;  // BOOM!
+}
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="error_code.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="cpp_memory.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="error_code.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="cpp_memory.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="theme/custom.js"></script>
+
+
+    </div>
+    </body>
+</html>

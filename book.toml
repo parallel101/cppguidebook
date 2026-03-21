@@ -1,0 +1,25 @@
+[book]
+title = "小彭大典"
+description = "小彭大典是一本关于现代 C++ 编程的权威指南，它涵盖了从基础知识到高级技巧的内容，适合初学者和有经验的程序员阅读。"
+authors = ["小彭老师"]
+language = "zh"
+src = "src"
+
+[build]
+build-dir = "book"
+
+[output.html]
+additional-css = ["theme/custom.css", "theme/mdbook-admonish.css"]
+additional-js = ["theme/custom.js"]
+git-repository-url = "https://github.com/parallel101/cppguidebook"
+edit-url-template = "https://github.com/parallel101/cppguidebook/edit/main/{path}"
+
+[output.html.print]
+enable = true
+
+[preprocessor.admonish]
+command = "mdbook-admonish"
+assets_version = "3.1.0" # do not edit: managed by `mdbook-admonish install`
+
+[preprocessor.katex]
+command = "mdbook-katex"

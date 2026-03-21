@@ -1,7 +1,7 @@
 name: Generate Release PDF
 # 感谢 Derived Cat (@hooyuser) 提供的自动发布小脚本！
 
-on: 
+on:
   push:
     branches:
       - main
@@ -18,7 +18,7 @@ env:
   MIRROR_SITE_TOKEN: ${{ secrets.SEVEN_TOKEN }}
 
 jobs:
-  build_mkdocs:
+  build_mdbook:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -26,19 +26,31 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v4
 
-      - name: Prepare Mkdocs environment
+      - name: Install mdBook and preprocessors
         run: |
-          pip install -r requirements.txt
+          mkdir -p $HOME/.local/bin
+          curl -sSL https://github.com/rust-lang/mdBook/releases/latest/download/mdbook-v0.4.44-x86_64-unknown-linux-gnu.tar.gz | tar xz -C $HOME/.local/bin
+          curl -sSL https://github.com/tommilligan/mdbook-admonish/releases/latest/download/mdbook-admonish-v1.18.0-x86_64-unknown-linux-gnu.tar.gz | tar xz -C $HOME/.local/bin
+          curl -sSL https://github.com/lzanini/mdbook-katex/releases/latest/download/mdbook-katex-v0.9.2-x86_64-unknown-linux-gnu.tar.gz | tar xz -C $HOME/.local/bin
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: Compile Mkdocs document
+      - name: Generate admonish CSS
         run: |
-          mkdocs build
+          mdbook-admonish install --css-dir theme
+
+      - name: Inject build date
+        run: |
+          sed -i "s/BUILD_DATE_PLACEHOLDER/$(TZ=Asia/Shanghai date +'%Y年%m月%d日 %H:%M:%S (%Z)')/" src/index.md
+
+      - name: Build mdBook
+        run: |
+          mdbook build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
+          publish_dir: ./book
 
       - name: Install Fonts
         run: |
@@ -50,12 +62,12 @@ jobs:
 
       - name: Compile PDF document
         run: |
-          node misc/export_to_pdf.js file://$PWD/site/print_page/index.html cppguidebook.pdf "✝️小彭大典✝️"
+          node misc/export_to_pdf.js file://$PWD/book/print.html cppguidebook.pdf "✝️小彭大典✝️"
           du -h cppguidebook.pdf
 
       - name: Generate ZIP archive
         run: |
-          cd site && zip -r ../cppguidebook-site.zip .
+          cd book && zip -r ../cppguidebook-site.zip .
 
       - name: Delete old Release
         uses: actions/github-script@v7

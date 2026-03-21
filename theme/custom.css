@@ -1,0 +1,40 @@
+h1 {
+    font-weight: 1000;
+    margin: 1em auto;
+}
+h2 {
+    font-weight: 850;
+    margin: 1em auto;
+}
+h3 {
+    font-weight: 630;
+    margin: 1em auto;
+}
+h4 {
+    font-weight: 520;
+    margin: 1em auto;
+}
+h5 {
+    font-weight: 500;
+    margin: 1em auto;
+}
+body {
+    font-weight: 480;
+}
+blockquote {
+    color: var(--fg);
+    opacity: 0.75;
+}
+:root {
+    --sans-font: "Noto Sans SC", "Noto Serif SC", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --mono-font: "JetBrains Mono", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", "Noto Sans SC", "Noto Serif SC", monospace;
+}
+body {
+    font-family: var(--sans-font);
+}
+code {
+    font-family: var(--mono-font);
+}
+pre code {
+    font-family: var(--mono-font);
+}

@@ -1,4 +1,0 @@
-mkdocs
-mkdocs-print-site-plugin
-mkdocs-macros-plugin
-python-markdown-math
