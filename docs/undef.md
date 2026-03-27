@@ -247,25 +247,29 @@ Derived d = static_cast<Derived &>(*bp); // 可以
 
 布尔类型 bool，只有 true 和 false 两种取值。
 
-bool 虽然占据 1 字节（8 位）内存空间，但其中只有一个有效位，也就是最低位。
+bool 占据 1 字节（8 位）内存空间，其中有效的位只有最低位。这个最低位可以是 0 或 1，但其余 7 位仍然参与 bool 的值表示，而且必须始终保持为 0。
 
-只有这个最低位可以是 0 或 1，其余 7 位必须始终保持为 0。
-
-如果其余位中出现了非 0 的位，也就是出现 0 和 1 以外的取值，则是未定义行为。
+如果其余位中出现了非 0 的位，也就是出现 0 和 1 以外的取值，则读取该 bool 值或者通过 std::bit_cast 产生这种值是未定义行为。
 
 ```cpp
-char c = 0;
-bool b = *(bool *)&c;   // 可以，b = false
+bool b0;
+std::memset(&b0, 1, 0);
+if (b0) { /* ... */ } else { /* ... */ } // 可以，b0 == false
+auto b1 = std::bit_cast<bool>(char(0));  // 可以，b1 == false
 ```
 
 ```cpp
-char c = 1;
-bool b = *(bool *)&c;   // 可以，b = true
+bool b2;
+std::memset(&b2, 1, 1);
+if (b2) { /* ... */ } else { /* ... */ } // 可以，b2 == true
+auto b3 = std::bit_cast<bool>(char(1));  // 可以，b3 == true
 ```
 
 ```cpp
-char c = 2;
-bool b = *(bool *)&c;   // 未定义行为
+bool b4;
+std::memset(&b4, 1, 2);
+if (b4) { /* ... */ } else { /* ... */ } // 未定义行为
+auto b5 = std::bit_cast<bool>(char(2));  // 未定义行为
 ```
 
 ## 算数类
