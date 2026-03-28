@@ -1629,7 +1629,7 @@ auto lambda = [b] (int a) {
 
 ```cpp
 int b = 2;
-std::function<void(int)> lambda = [b] (int a) {
+std::function<int(int)> lambda = [b] (int a) {
     return a + b;
 };
 ```
@@ -1638,15 +1638,15 @@ std::function<void(int)> lambda = [b] (int a) {
 
 ```cpp
 // vector<auto> lambda_list;             // 错误：不支持的语法
-vector<function<void(int)>> lambda_list; // OK
+vector<function<int(int)>> lambda_list; // OK
 
 int b = 2;
 lambda_list.push_back([b] (int a) {
     return a + b;
-};
+});
 lambda_list.push_back([b] (int a) {
     return a * b;
-};
+});
 
 for (auto lambda: lambda_list) {
     int ret = lambda(2);
